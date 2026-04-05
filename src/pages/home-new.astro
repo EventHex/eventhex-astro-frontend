@@ -1,0 +1,79 @@
+---
+import "../styles/design-tokens.css";
+import "../styles/animations.css";
+import HeaderNew from "../components/home-new/HeaderNew.astro";
+import HeroNew from "../components/home-new/HeroNew.astro";
+import DashboardSection from "../components/home-new/DashboardSection.astro";
+import FeaturesSection from "../components/home-new/FeaturesSection.astro";
+import AISection from "../components/home-new/AISection.astro";
+import TestimonialsSection from "../components/home-new/TestimonialsSection.astro";
+import BlogSection from "../components/home-new/BlogSection.astro";
+import FooterNew from "../components/home-new/FooterNew.astro";
+
+const title = "EventHex - The AI-Powered Event Management Platform";
+const description = "Simplify Events, Amplify Results. The AI-Powered Event Management Platform for Every Event.";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="https://eventhex.ai/wp-content/uploads/2024/09/favicon-eventhex.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body>
+    <HeaderNew />
+    <main>
+      <HeroNew />
+      <DashboardSection />
+      <FeaturesSection />
+      <AISection />
+      <TestimonialsSection />
+      <BlogSection />
+    </main>
+    <FooterNew />
+
+    <!-- Entrance animations triggered on scroll -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target as HTMLElement;
+              const anim = el.dataset.animation || 'fadeIn';
+              const delay = parseInt(el.dataset.delay || '0', 10);
+              setTimeout(() => {
+                el.classList.add('is-visible');
+                el.style.animationName = anim;
+              }, delay);
+              observer.unobserve(el);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+    </script>
+
+    <style is:global>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: var(--font-body);
+        color: var(--heading-dark);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+      }
+      img { max-width: 100%; height: auto; }
+      a { color: inherit; }
+    </style>
+  </body>
+</html>
