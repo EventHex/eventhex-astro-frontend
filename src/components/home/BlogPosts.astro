@@ -18,34 +18,32 @@ const postsWithImages = await Promise.all(
 );
 ---
 
-<section class="py-20 lg:py-28 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12">
-      <div>
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">
-          Latest from the Blog
-        </h2>
-        <p class="mt-2 text-lg text-gray-600">
-          Your Countless Events Begin Here
-        </p>
-      </div>
+<!-- Blog + CTA Section - Dark background -->
+<section
+  class="bg-cover bg-center bg-no-repeat pt-[60px] pb-[60px]"
+  style="background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.webp');"
+>
+  <div class="max-w-[1200px] mx-auto px-5">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
       <a
         href="/blog/"
-        class="mt-4 sm:mt-0 inline-flex items-center text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+        class="text-eh-heading/60 text-[14px] font-medium hover:text-eh-blue transition-colors"
       >
-        View all posts
-        <svg class="ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
+        Explore More
       </a>
     </div>
+    <h2 class="font-heading text-[36px] md:text-[48px] font-bold text-eh-heading mb-10">
+      Your Countless Events Begin Here
+    </h2>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Blog Posts Carousel -->
+    <div class="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide">
       {postsWithImages.map((post) => (
-        <a href={`/blog/${post.slug}/`} class="group">
-          <article class="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300">
+        <a href={`/blog/${post.slug}/`} class="group flex-shrink-0 w-[350px] snap-start">
+          <article class="bg-white rounded-[20px] overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 h-full">
             {post.imageUrl && (
-              <div class="aspect-video overflow-hidden">
+              <div class="aspect-[16/10] overflow-hidden">
                 <img
                   src={post.imageUrl}
                   alt={post.title.rendered}
@@ -54,8 +52,8 @@ const postsWithImages = await Promise.all(
                 />
               </div>
             )}
-            <div class="p-6">
-              <time class="text-sm text-gray-500" datetime={post.date}>
+            <div class="p-5">
+              <time class="text-[13px] text-eh-desc" datetime={post.date}>
                 {new Date(post.date).toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
@@ -63,11 +61,11 @@ const postsWithImages = await Promise.all(
                 })}
               </time>
               <h3
-                class="mt-2 text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors line-clamp-2"
+                class="mt-2 text-[18px] font-bold text-eh-heading group-hover:text-eh-blue transition-colors line-clamp-2 font-heading"
                 set:html={post.title.rendered}
               />
               <div
-                class="mt-2 text-sm text-gray-600 line-clamp-2"
+                class="mt-2 text-[14px] text-eh-desc line-clamp-2"
                 set:html={post.excerpt.rendered}
               />
             </div>
@@ -77,3 +75,13 @@ const postsWithImages = await Promise.all(
     </div>
   </div>
 </section>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
