@@ -1,17 +1,27 @@
 ---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getPosts } from "../lib/wordpress";
 
+const posts = await getPosts({ per_page: "5" });
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="EventHex">
+  <h1>EventHex</h1>
+  <p>The AI-Powered Event Management Platform</p>
+
+  <section>
+    <h2>Latest Posts</h2>
+    {posts.length === 0 && <p>No posts found.</p>}
+    <ul>
+      {posts.map((post) => (
+        <li>
+          <a href={`/blog/${post.slug}`}>
+            <h3 set:html={post.title.rendered} />
+          </a>
+          <p set:html={post.excerpt.rendered} />
+        </li>
+      ))}
+    </ul>
+    <a href="/blog">View all posts &rarr;</a>
+  </section>
+</BaseLayout>

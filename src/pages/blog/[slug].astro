@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPosts, getPostBySlug } from "../../lib/wordpress";
+
+const { slug } = Astro.params;
+
+const post = slug ? await getPostBySlug(slug) : null;
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+---
+
+<BaseLayout title={`${post.title.rendered} - EventHex`}>
+  <article>
+    <h1 set:html={post.title.rendered} />
+    <time datetime={post.date}>{new Date(post.date).toLocaleDateString()}</time>
+    <div set:html={post.content.rendered} />
+  </article>
+  <a href="/blog">&larr; Back to blog</a>
+</BaseLayout>
