@@ -1,0 +1,468 @@
+---
+// Section 0: Hero — redesigned to match home page design system
+
+interface Props {
+  eyebrow: string;
+  titleHtml: string;
+  description: string;
+  ctaText: string;
+  ctaHref: string;
+  image: string;
+  imageAlt: string;
+}
+
+const {
+  eyebrow,
+  titleHtml,
+  description,
+  ctaText,
+  ctaHref,
+  image,
+  imageAlt,
+} = Astro.props;
+
+const heroStats = [
+  { value: "0%", label: "Platform fee with your own gateway" },
+  { value: "3 min", label: "To launch a branded ticket flow" },
+  { value: "24/7", label: "Real-time check-in visibility" },
+];
+
+const heroFeatures = [
+  "Custom ticket tiers & early-bird pricing",
+  "Approval-based waitlists & QR check-in",
+  "Secure payouts with your own gateway",
+];
+
+const ticketTiers = [
+  { label: "Early Bird", price: "$49", sold: 184, total: 270, colorHex: "#375DFB" },
+  { label: "VIP Pass",   price: "$149", sold: 36,  total: 85,  colorHex: "#9F81FF" },
+  { label: "Group Bundle", price: "$399", sold: 12, total: 21, colorHex: "#ABFFFF" },
+];
+---
+
+<section class="eth-hero">
+  <div class="eth-hero__inner">
+    <div class="eth-hero__container">
+
+      <!-- Left: content -->
+      <div class="eth-hero__content animate-on-scroll" data-animation="fadeInLeft">
+        <span class="eth-hero__eyebrow">{eyebrow}</span>
+        <h1 class="eth-hero__title" set:html={titleHtml}></h1>
+        <p class="eth-hero__desc">{description}</p>
+
+        <ul class="eth-hero__features">
+          {heroFeatures.map((f) => (
+            <li><span aria-hidden="true"></span>{f}</li>
+          ))}
+        </ul>
+
+        <div class="eth-hero__actions">
+          <a href={ctaHref} class="eth-hero__btn eth-hero__btn--primary">{ctaText}</a>
+          <a href="#ticket-workflows" class="eth-hero__btn eth-hero__btn--ghost">See how it works</a>
+        </div>
+      </div>
+
+      <!-- Right: live ticket widget + product screenshot -->
+      <div class="eth-hero__media animate-on-scroll" data-animation="fadeInRight">
+
+        <!-- Live ticket widget -->
+        <div class="eth-hero__widget" aria-hidden="true">
+          <div class="eth-hero__widget-hd">
+            <span class="eth-hero__widget-label">Live Ticket Sales</span>
+            <span class="eth-hero__widget-live">&#9679; Live</span>
+          </div>
+
+          {ticketTiers.map((tier) => {
+            const pct = Math.round((tier.sold / tier.total) * 100);
+            return (
+              <div class="eth-hero__tier">
+                <div class="eth-hero__tier-top">
+                  <span class="eth-hero__tier-name">{tier.label}</span>
+                  <span class="eth-hero__tier-price" style={`color: ${tier.colorHex}`}>{tier.price}</span>
+                </div>
+                <div class="eth-hero__tier-track">
+                  <div class="eth-hero__tier-fill" style={`width: ${pct}%; background: ${tier.colorHex}`}></div>
+                </div>
+                <span class="eth-hero__tier-meta">{tier.sold} / {tier.total} sold</span>
+              </div>
+            );
+          })}
+
+          <div class="eth-hero__widget-ft">
+            <div>
+              <span class="eth-hero__rev-label">Today's revenue</span>
+              <strong class="eth-hero__rev-num" data-count-to="18420">$0</strong>
+            </div>
+            <span class="eth-hero__trend">&#8593; 24% vs last event</span>
+          </div>
+        </div>
+
+        <!-- Product screenshot -->
+        <div class="eth-hero__device">
+          <img src={image} alt={imageAlt} width="900" height="660" loading="eager" />
+        </div>
+
+        <!-- Floating QR badge -->
+        <div class="eth-hero__badge" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM17 17h4M21 21h-4v-4"/></svg>
+          <span>QR check-in ready</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="eth-hero__stats">
+      {heroStats.map((s, i) => (
+        <div class="eth-hero__stat animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 100)} style="--anim-duration: 700ms">
+          <strong>{s.value}</strong>
+          <span>{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll("[data-count-to]").forEach((el) => {
+    if (!(el instanceof HTMLElement)) return;
+    const target = parseInt(el.getAttribute("data-count-to") ?? "0", 10);
+    let started = false;
+    const run = () => {
+      if (started) return;
+      started = true;
+      const duration = 2000;
+      const start = performance.now();
+      const fmt = (n: number) => "$" + n.toLocaleString("en-US");
+      const tick = (now: number) => {
+        const p = Math.min((now - start) / duration, 1);
+        el.textContent = fmt(Math.round((1 - Math.pow(1 - p, 3)) * target));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { run(); } });
+    }, { threshold: 0.5 }).observe(el);
+  });
+</script>
+
+<style>
+  .eth-hero {
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp") center center / cover no-repeat;
+    margin-top: -90px;
+    overflow: hidden;
+  }
+  .eth-hero__inner {
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp") center center / cover no-repeat;
+    padding: 164px 0 0;
+  }
+  .eth-hero__container {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 40px 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 52px;
+    align-items: center;
+  }
+  .eth-hero__content {
+    display: flex;
+    flex-direction: column;
+  }
+  .eth-hero__eyebrow {
+    display: inline-flex;
+    width: fit-content;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    border: 1px solid rgba(55, 93, 251, 0.18);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+  .eth-hero__title {
+    margin-top: 18px;
+    font-family: var(--font-heading);
+    font-size: 56px;
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -1.8px;
+    color: var(--heading-dark);
+  }
+  .eth-hero__title :global(b),
+  .eth-hero__title :global(span) { color: var(--brand-blue); }
+  .eth-hero__desc {
+    margin-top: 20px;
+    font-size: 18px;
+    line-height: 1.72;
+    color: var(--subheading-gray);
+    max-width: 480px;
+  }
+  .eth-hero__features {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    list-style: none;
+  }
+  .eth-hero__features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--body-gray);
+  }
+  .eth-hero__features li span {
+    flex-shrink: 0;
+    display: inline-flex;
+    width: 22px;
+    height: 22px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #375DFB, #89a2ff);
+    position: relative;
+  }
+  .eth-hero__features li span::after {
+    content: "";
+    display: block;
+    width: 6px;
+    height: 4px;
+    border-left: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .eth-hero__actions {
+    margin-top: 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .eth-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .eth-hero__btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(55, 93, 251, 0.32);
+  }
+  .eth-hero__btn--primary:hover {
+    background: var(--brand-blue-hover);
+    transform: scale(1.05);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.42);
+  }
+  .eth-hero__btn--ghost {
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--heading-dark);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+    backdrop-filter: blur(8px);
+  }
+  .eth-hero__btn--ghost:hover {
+    background: #fff;
+    transform: scale(1.03);
+  }
+  .eth-hero__media {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .eth-hero__widget {
+    padding: 20px 22px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+    box-shadow: 0 20px 60px rgba(19, 29, 52, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+    animation: ethheroFloat 5s ease-in-out infinite;
+  }
+  @keyframes ethheroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+  .eth-hero__widget-hd {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .eth-hero__widget-label {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading-dark);
+  }
+  .eth-hero__widget-live {
+    font-size: 12px;
+    font-weight: 700;
+    color: #027a48;
+    animation: liveBlink 1.8s ease-in-out infinite;
+  }
+  @keyframes liveBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .eth-hero__tier {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(55, 93, 251, 0.07);
+  }
+  .eth-hero__tier:last-of-type { border-bottom: none; }
+  .eth-hero__tier-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .eth-hero__tier-name { font-size: 13px; font-weight: 600; color: var(--heading-dark); }
+  .eth-hero__tier-price { font-family: var(--font-heading); font-size: 14px; font-weight: 800; }
+  .eth-hero__tier-track {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+    overflow: hidden;
+  }
+  .eth-hero__tier-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .eth-hero__tier-meta { font-size: 11px; color: var(--label-gray); }
+  .eth-hero__widget-ft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(55, 93, 251, 0.08);
+  }
+  .eth-hero__rev-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--label-gray);
+  }
+  .eth-hero__rev-num {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--heading-dark);
+  }
+  .eth-hero__trend {
+    font-size: 13px;
+    font-weight: 700;
+    color: #027a48;
+    background: rgba(18, 183, 106, 0.1);
+    padding: 6px 12px;
+    border-radius: 999px;
+  }
+  .eth-hero__device {
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(19, 29, 52, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+  }
+  .eth-hero__device:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 44px 100px rgba(19, 29, 52, 0.24);
+  }
+  .eth-hero__device img { width: 100%; display: block; }
+  .eth-hero__badge {
+    position: absolute;
+    bottom: 30px;
+    left: -14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.14);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--heading-dark);
+    animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s both;
+  }
+  @keyframes badgePop {
+    from { opacity: 0; transform: scale(0.8) translateX(-10px); }
+    to   { opacity: 1; transform: scale(1) translateX(0); }
+  }
+  .eth-hero__stats {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 40px 64px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .eth-hero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 22px 24px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    box-shadow: 0 4px 20px rgba(55, 93, 251, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .eth-hero__stat:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.12);
+  }
+  .eth-hero__stat strong {
+    font-family: var(--font-heading);
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+  }
+  .eth-hero__stat span { font-size: 14px; line-height: 1.5; color: var(--subheading-gray); }
+
+  @media (max-width: 1024px) {
+    .eth-hero__inner { padding-top: 140px; }
+    .eth-hero__container { grid-template-columns: 1fr; padding: 0 24px 40px; gap: 36px; }
+    .eth-hero__desc { max-width: none; }
+    .eth-hero__title { font-size: 44px; }
+    .eth-hero__stats { padding: 0 24px 40px; }
+    .eth-hero__badge { left: 0; }
+  }
+  @media (max-width: 767px) {
+    .eth-hero__inner { padding-top: 120px; }
+    .eth-hero__container { padding: 0 20px 32px; gap: 28px; }
+    .eth-hero__title { font-size: 34px; letter-spacing: -0.8px; }
+    .eth-hero__desc { font-size: 16px; }
+    .eth-hero__actions { flex-direction: column; }
+    .eth-hero__btn { justify-content: center; }
+    .eth-hero__stats { grid-template-columns: 1fr; gap: 10px; padding: 0 20px 36px; }
+    .eth-hero__stat strong { font-size: 30px; }
+    .eth-hero__widget { animation: none; }
+    .eth-hero__badge { position: relative; left: auto; bottom: auto; align-self: flex-start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .eth-hero__widget, .eth-hero__badge { animation: none; }
+    .eth-hero__device:hover { transform: none; }
+  }
+</style>

@@ -1,0 +1,336 @@
+---
+// Section 9: FAQ — redesigned two-column FAQ panel
+
+interface FaqItem {
+  question: string;
+  answerHtml: string;
+}
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+}
+
+const { title, items } = Astro.props;
+---
+
+<section class="ticket-faq" id="ticket-faq">
+  <div class="ticket-faq__inner">
+    <div class="ticket-faq__support animate-on-scroll" data-animation="fadeInLeft">
+      <span class="ticket-faq__eyebrow">Need a custom setup?</span>
+      <h2 class="ticket-faq__title">{title}</h2>
+      <p class="ticket-faq__copy">
+        We can help you shape branded ticket journeys, approval rules, and faster check-in experiences around the way your event team actually works.
+      </p>
+
+      <div class="ticket-faq__support-card">
+        <span>Common launch checklist</span>
+        <ul>
+          <li>Branded ticket classes and discounts</li>
+          <li>Payment routing and approval rules</li>
+          <li>QR scan + badge print readiness</li>
+        </ul>
+      </div>
+
+      <a href="/book-a-demo/" class="ticket-faq__cta">Design my ticket flow</a>
+    </div>
+
+    <div class="ticket-faq__list">
+      {items.map((item, index) => (
+        <details class="ticket-faq__item" open={index === 0}>
+          <summary>
+            <span>{item.question}</span>
+            <span class="ticket-faq__icon" aria-hidden="true">
+              <span></span>
+              <span></span>
+            </span>
+          </summary>
+          <div class="ticket-faq__answer" set:html={item.answerHtml}></div>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <script>
+    const faqGroups = document.querySelectorAll(".ticket-faq");
+
+    faqGroups.forEach((group) => {
+      const faqItems = Array.from(group.querySelectorAll(".ticket-faq__item"));
+
+      faqItems.forEach((item) => {
+        item.addEventListener("toggle", () => {
+          if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+
+          faqItems.forEach((other) => {
+            if (other !== item && other instanceof HTMLDetailsElement) {
+              other.open = false;
+            }
+          });
+        });
+      });
+    });
+  </script>
+</section>
+
+<style>
+  .ticket-faq {
+    margin-top: 36px;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(171, 255, 255, 0.1), transparent 20%),
+      #000 url("https://eventhex.ai/wp-content/uploads/2025/03/bg-back.svg") center top / cover no-repeat;
+  }
+
+  .ticket-faq__inner {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 90px 12px 120px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .ticket-faq__support {
+    position: sticky;
+    top: 110px;
+  }
+
+  .ticket-faq__eyebrow {
+    display: inline-flex;
+    width: fit-content;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #c4d2ff;
+  }
+
+  .ticket-faq__title {
+    margin-top: 18px;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -1.4px;
+    color: #fff;
+  }
+
+  .ticket-faq__copy {
+    max-width: 88%;
+    margin-top: 16px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .ticket-faq__support-card {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .ticket-faq__support-card span {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #abffff;
+  }
+
+  .ticket-faq__support-card ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    list-style: none;
+  }
+
+  .ticket-faq__support-card li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .ticket-faq__support-card li::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #abffff 0%, #375dfb 100%);
+  }
+
+  .ticket-faq__cta {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    color: #091224;
+    text-decoration: none;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+
+  .ticket-faq__cta:hover {
+    background: #edf2ff;
+    transform: translateY(-2px);
+  }
+
+  .ticket-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ticket-faq__item {
+    border: 1px solid rgba(172, 161, 241, 0.26);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .ticket-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 20px;
+    list-style: none;
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1.4;
+    font-weight: 400;
+    color: #fff;
+  }
+
+  .ticket-faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ticket-faq__icon {
+    position: relative;
+    display: inline-flex;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ticket-faq__icon span {
+    position: absolute;
+    width: 16px;
+    height: 2px;
+    border-radius: 999px;
+    background: #abffff;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .ticket-faq__icon span:last-child {
+    transform: rotate(90deg);
+  }
+
+  .ticket-faq__item[open] .ticket-faq__icon span:last-child {
+    transform: rotate(0deg);
+    opacity: 0;
+  }
+
+  .ticket-faq__answer {
+    padding: 0 20px 24px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .ticket-faq__answer :global(p) {
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .ticket-faq__inner {
+      grid-template-columns: 1fr;
+      padding: 70px 20px 90px;
+    }
+
+    .ticket-faq__support {
+      position: static;
+    }
+
+    .ticket-faq__title {
+      font-size: 38px;
+    }
+
+    .ticket-faq__copy {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ticket-faq {
+      margin-top: 24px;
+    }
+
+    .ticket-faq__inner {
+      padding: 60px 16px 72px;
+    }
+
+    .ticket-faq__title {
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .ticket-faq__item summary {
+      font-size: 18px;
+    }
+  }
+
+  /* ─── Smooth accordion open/close ─── */
+  .ticket-faq__item {
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .ticket-faq__item[open] {
+    background: rgba(55, 93, 251, 0.12);
+    border-color: rgba(55, 93, 251, 0.35);
+  }
+
+  .ticket-faq__item summary:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .ticket-faq__answer {
+    animation: faqAnswerIn 0.3s ease both;
+  }
+
+  @keyframes faqAnswerIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Support card glow pulse */
+  .ticket-faq__support-card {
+    transition: box-shadow 0.35s ease, background 0.35s ease;
+  }
+
+  .ticket-faq__support-card:hover {
+    background: rgba(55, 93, 251, 0.18);
+    box-shadow: 0 0 32px rgba(55, 93, 251, 0.2), inset 0 0 0 1px rgba(55, 93, 251, 0.24);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ticket-faq__answer { animation: none; }
+  }
+</style>

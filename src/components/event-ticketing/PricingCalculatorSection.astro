@@ -1,0 +1,560 @@
+---
+interface Props {
+  ctaHref: string;
+}
+
+const { ctaHref } = Astro.props;
+---
+
+<div class="ticket-pricing-bg">
+  <!-- section header -->
+  <div class="ticket-pricing-bg__hd animate-on-scroll" data-animation="fadeInUp" style="--anim-duration:700ms">
+    <span class="ticket-pricing-bg__eyebrow">Revenue planning</span>
+    <h2 class="ticket-pricing-bg__title">Model Your Ticket Revenue<br/>Before You Launch</h2>
+    <p class="ticket-pricing-bg__sub">Adjust attendance, price, and VIP mix to estimate what your next event can generate.</p>
+  </div>
+
+<section class="ticket-pricing" id="ticket-pricing">
+  <div class="ticket-pricing__shell">
+    <div class="ticket-pricing__content animate-on-scroll" data-animation="fadeInLeft">
+      <div class="ticket-pricing__controls" data-pricing-calculator>
+        <div class="ticket-pricing__control-group">
+          <div class="ticket-pricing__control-head">
+            <label for="ticket-attendees">Expected attendees</label>
+            <strong data-attendees-output>320</strong>
+          </div>
+          <input id="ticket-attendees" type="range" min="80" max="4000" step="20" value="320" data-attendees-input />
+        </div>
+
+        <div class="ticket-pricing__control-group">
+          <div class="ticket-pricing__control-head">
+            <label for="ticket-price">Average ticket price</label>
+            <strong data-price-output>$79</strong>
+          </div>
+          <input id="ticket-price" type="range" min="20" max="250" step="1" value="79" data-price-input />
+        </div>
+
+        <div class="ticket-pricing__control-group">
+          <div class="ticket-pricing__control-head">
+            <label for="ticket-vip">VIP share</label>
+            <strong data-vip-output>18%</strong>
+          </div>
+          <input id="ticket-vip" type="range" min="0" max="60" step="1" value="18" data-vip-input />
+        </div>
+
+        <div class="ticket-pricing__mode-row">
+          <button type="button" class="ticket-pricing__mode is-active" data-mode-button data-fee="0">
+            Your gateway
+          </button>
+          <button type="button" class="ticket-pricing__mode" data-mode-button data-fee="0.029">
+            EventHex gateway
+          </button>
+        </div>
+
+        <p class="ticket-pricing__footnote">
+          Illustrative planning estimate for internal comparison. Final payment charges depend on your gateway setup.
+        </p>
+      </div>
+    </div>
+
+    <div class="ticket-pricing__results animate-on-scroll" data-animation="fadeInRight" data-ticket-tilt-card>
+      <div class="ticket-pricing__results-head">
+        <span>Projected event total</span>
+        <strong data-gross-output>$29,050</strong>
+      </div>
+
+      <div class="ticket-pricing__metric-grid">
+        <div class="ticket-pricing__metric">
+          <span>Estimated payout</span>
+          <strong data-payout-output>$29,050</strong>
+        </div>
+        <div class="ticket-pricing__metric">
+          <span>VIP revenue</span>
+          <strong data-vip-revenue-output>$8,194</strong>
+        </div>
+        <div class="ticket-pricing__metric">
+          <span>Approval queue</span>
+          <strong data-approval-output>38</strong>
+        </div>
+        <div class="ticket-pricing__metric">
+          <span>Projected check-ins</span>
+          <strong data-checkin-output>294</strong>
+        </div>
+      </div>
+
+      <div class="ticket-pricing__mix">
+        <div class="ticket-pricing__mix-head">
+          <span>Ticket mix</span>
+          <p data-mix-copy>262 standard tickets and 58 premium tickets</p>
+        </div>
+
+        <div class="ticket-pricing__bars">
+          <div class="ticket-pricing__bar">
+            <span>Standard</span>
+            <div><i data-standard-bar style="width: 82%;"></i></div>
+          </div>
+          <div class="ticket-pricing__bar ticket-pricing__bar--vip">
+            <span>VIP</span>
+            <div><i data-vip-bar style="width: 18%;"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <a href={ctaHref} class="ticket-pricing__cta">Talk through your pricing stack</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+  const pricingRoots = document.querySelectorAll("[data-pricing-calculator]");
+
+  pricingRoots.forEach((root) => {
+    const attendeesInput = root.querySelector("[data-attendees-input]") as HTMLInputElement | null;
+    const priceInput = root.querySelector("[data-price-input]") as HTMLInputElement | null;
+    const vipInput = root.querySelector("[data-vip-input]") as HTMLInputElement | null;
+    const attendeesOutput = root.querySelector("[data-attendees-output]") as HTMLElement | null;
+    const priceOutput = root.querySelector("[data-price-output]") as HTMLElement | null;
+    const vipOutput = root.querySelector("[data-vip-output]") as HTMLElement | null;
+    const modeButtons = Array.from(root.querySelectorAll("[data-mode-button]")) as HTMLButtonElement[];
+    const results = root.parentElement?.querySelector(".ticket-pricing__results");
+
+    if (!attendeesInput || !priceInput || !vipInput || !attendeesOutput || !priceOutput || !vipOutput || !modeButtons.length || !results) {
+      return;
+    }
+
+    const grossOutput = results.querySelector("[data-gross-output]") as HTMLElement | null;
+    const payoutOutput = results.querySelector("[data-payout-output]") as HTMLElement | null;
+    const vipRevenueOutput = results.querySelector("[data-vip-revenue-output]") as HTMLElement | null;
+    const approvalOutput = results.querySelector("[data-approval-output]") as HTMLElement | null;
+    const checkinOutput = results.querySelector("[data-checkin-output]") as HTMLElement | null;
+    const mixCopy = results.querySelector("[data-mix-copy]") as HTMLElement | null;
+    const standardBar = results.querySelector("[data-standard-bar]") as HTMLElement | null;
+    const vipBar = results.querySelector("[data-vip-bar]") as HTMLElement | null;
+
+    if (!grossOutput || !payoutOutput || !vipRevenueOutput || !approvalOutput || !checkinOutput || !mixCopy || !standardBar || !vipBar) {
+      return;
+    }
+
+    const currency = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0,
+    });
+
+    let feeRate = Number(modeButtons.find((button) => button.classList.contains("is-active"))?.dataset.fee || "0");
+
+    const update = () => {
+      const attendees = Number(attendeesInput.value);
+      const avgPrice = Number(priceInput.value);
+      const vipShare = Number(vipInput.value) / 100;
+      const vipCount = Math.round(attendees * vipShare);
+      const standardCount = attendees - vipCount;
+      const vipPrice = avgPrice * 1.8;
+      const gross = standardCount * avgPrice + vipCount * vipPrice;
+      const payout = gross * (1 - feeRate);
+      const vipRevenue = vipCount * vipPrice;
+      const approvalCount = Math.max(8, Math.round(attendees * (vipShare > 0.2 ? 0.16 : 0.12)));
+      const checkins = Math.round(attendees * 0.92);
+
+      attendeesOutput.textContent = attendees.toString();
+      priceOutput.textContent = currency.format(avgPrice);
+      vipOutput.textContent = `${Math.round(vipShare * 100)}%`;
+
+      grossOutput.textContent = currency.format(gross);
+      payoutOutput.textContent = currency.format(payout);
+      vipRevenueOutput.textContent = currency.format(vipRevenue);
+      approvalOutput.textContent = approvalCount.toString();
+      checkinOutput.textContent = checkins.toString();
+      mixCopy.textContent = `${standardCount} standard tickets and ${vipCount} premium tickets`;
+
+      standardBar.style.width = `${Math.max(18, 100 - vipShare * 100)}%`;
+      vipBar.style.width = `${Math.max(12, vipShare * 100)}%`;
+    };
+
+    [attendeesInput, priceInput, vipInput].forEach((input) => {
+      input.addEventListener("input", update);
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        feeRate = Number(button.dataset.fee || "0");
+        modeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+        update();
+      });
+    });
+
+    update();
+  });
+</script>
+
+<style>
+  /* ─── Background wrapper (matches home features section) ─── */
+  .ticket-pricing-bg {
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+    padding: 80px 0 40px;
+  }
+
+  .ticket-pricing-bg__hd {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .ticket-pricing-bg__eyebrow {
+    display: inline-flex;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    border: 1px solid rgba(55, 93, 251, 0.16);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .ticket-pricing-bg__title {
+    margin-top: 16px;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    line-height: 1.06;
+    font-weight: 700;
+    letter-spacing: -1.4px;
+    color: var(--heading-dark);
+  }
+
+  .ticket-pricing-bg__sub {
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+  }
+
+  .ticket-pricing {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 8px 24px 28px;
+  }
+
+  .ticket-pricing__shell {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 22px;
+    align-items: stretch;
+  }
+
+  .ticket-pricing__content,
+  .ticket-pricing__results {
+    border-radius: 34px;
+    overflow: hidden;
+  }
+
+  .ticket-pricing__content {
+    padding: 34px;
+    background:
+      radial-gradient(circle at top left, rgba(55, 93, 251, 0.14), transparent 28%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 248, 255, 0.94));
+    box-shadow: inset 0 0 0 1px rgba(55, 93, 251, 0.08);
+  }
+
+  .ticket-pricing__eyebrow {
+    display: inline-flex;
+    width: fit-content;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .ticket-pricing__title {
+    max-width: 90%;
+    margin-top: 18px;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -1.4px;
+    color: #101827;
+  }
+
+  .ticket-pricing__copy {
+    max-width: 88%;
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+  }
+
+  .ticket-pricing__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-top: 26px;
+  }
+
+  .ticket-pricing__control-group {
+    padding: 18px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.75);
+    box-shadow: inset 0 0 0 1px rgba(55, 93, 251, 0.08);
+  }
+
+  .ticket-pricing__control-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+  }
+
+  .ticket-pricing__control-head label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #132238;
+  }
+
+  .ticket-pricing__control-head strong {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--brand-blue);
+  }
+
+  .ticket-pricing input[type="range"] {
+    width: 100%;
+    accent-color: var(--brand-blue);
+  }
+
+  .ticket-pricing__mode-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ticket-pricing__mode {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    border-radius: 16px;
+    background: #edf2ff;
+    color: #37455f;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px 16px;
+    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+  }
+
+  .ticket-pricing__mode.is-active {
+    background: #375dfb;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  .ticket-pricing__footnote {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--body-light);
+  }
+
+  .ticket-pricing__results {
+    --tilt-rotate-x: 0deg;
+    --tilt-rotate-y: 0deg;
+    padding: 30px;
+    background:
+      radial-gradient(circle at top right, rgba(171, 255, 255, 0.12), transparent 24%),
+      linear-gradient(180deg, #0a1225 0%, #10192f 100%);
+    color: #fff;
+    box-shadow: 0 28px 60px rgba(10, 18, 37, 0.18);
+    transform: perspective(1400px) rotateX(var(--tilt-rotate-x)) rotateY(var(--tilt-rotate-y));
+    transform-style: preserve-3d;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .ticket-pricing__results-head span {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .ticket-pricing__results-head strong {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-heading);
+    font-size: 56px;
+    line-height: 0.95;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+  }
+
+  .ticket-pricing__metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .ticket-pricing__metric {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .ticket-pricing__metric span {
+    display: block;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .ticket-pricing__metric strong {
+    display: block;
+    margin-top: 8px;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .ticket-pricing__mix {
+    margin-top: 22px;
+    padding: 20px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .ticket-pricing__mix-head span {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .ticket-pricing__mix-head p {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #fff;
+  }
+
+  .ticket-pricing__bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .ticket-pricing__bar {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .ticket-pricing__bar span {
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.74);
+  }
+
+  .ticket-pricing__bar div {
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .ticket-pricing__bar i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #375dfb 0%, #89a2ff 100%);
+    transition: width 0.3s ease;
+  }
+
+  .ticket-pricing__bar--vip i {
+    background: linear-gradient(90deg, #9f81ff 0%, #d3c4ff 100%);
+  }
+
+  .ticket-pricing__cta {
+    display: inline-flex;
+    width: fit-content;
+    align-items: center;
+    justify-content: center;
+    margin-top: 22px;
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: #fff;
+    color: #0e1728;
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+
+  .ticket-pricing__cta:hover {
+    transform: translateY(-2px);
+    background: #edf2ff;
+  }
+
+  @media (max-width: 1024px) {
+    .ticket-pricing {
+      padding: 8px 20px 24px;
+    }
+
+    .ticket-pricing__shell {
+      grid-template-columns: 1fr;
+    }
+
+    .ticket-pricing__title {
+      max-width: none;
+      font-size: 38px;
+    }
+
+    .ticket-pricing__copy {
+      max-width: none;
+      font-size: 17px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ticket-pricing {
+      padding: 4px 16px 20px;
+    }
+
+    .ticket-pricing__content,
+    .ticket-pricing__results {
+      padding: 24px 20px;
+      border-radius: 28px;
+    }
+
+    .ticket-pricing__title {
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .ticket-pricing__metric-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ticket-pricing__results-head strong {
+      font-size: 42px;
+    }
+  }
+</style>

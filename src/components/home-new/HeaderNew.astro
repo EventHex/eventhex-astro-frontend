@@ -1,37 +1,48 @@
 ---
-// Source: Elementor template #1951 (Header)
-// Container 6b78e6d: row, boxed 1140px, padding 20px 0, box-shadow, hidden on mobile
-// Logo: 25% width, theme-site-logo
-// Nav: 50% width, ucaddon_mega_menu with Poppins 16px/400
-// CTA: 25% width, button #375DFB, Inter 15px/600, border-radius 10px, hover grow
+// Source: Elementor template #312 (Home Header)
+// Container 3536b26: row, boxed 1140px, padding 20px 0, NO bg, NO box-shadow, z-index 1, hide_mobile
+// Logo: 25% (e781837), nav: 45% (d36622d), CTA: 30% (16964fa)
+// Mega menu 8a1fb6f: Inter 16px/400, gap 30px, active #375DFB
+// Features dropdown dafc4a4: boxed 1200px, bg #FFF, border 1px #E8ECF4, radius 16px,
+//   shadow 0 12 40 -8 rgba(55,93,251,.1), 3x3 icon-box grid + footer bar
 
 const navItems = [
   { title: "Home", url: "/" },
   { title: "About", url: "/about-us/" },
-  {
-    title: "Features",
-    url: "#",
-    children: [
-      { title: "Speaker Management Software", url: "/speaker-management/" },
-      { title: "Event Ticketing", url: "/event-ticketing/" },
-      { title: "AI Event Smart-Connect", url: "/enhance-networking-ai-smart-connect/" },
-      { title: "Event Marketing", url: "/event-marketing/" },
-      { title: "Event Registration", url: "/event-registration/" },
-      { title: "Sponsor Management", url: "/sponsor-management/" },
-      { title: "Exhibitor Management", url: "/exhibitor-management/" },
-      { title: "Centralized Dashboard", url: "/centralized-dashboard/" },
-      { title: "AI Form Builder", url: "/ai-form-builder/" },
-    ],
-  },
+  { title: "Features", url: "#", hasDropdown: true },
   { title: "Blog", url: "/blog/" },
   { title: "News", url: "/news/" },
   { title: "Contact", url: "/contact-en/" },
 ];
+
+const featureItems = [
+  { icon: "users-cog", title: "Speakers Management", desc: "Manage speaker profiles, schedules and bios", url: "/speaker-management/" },
+  { icon: "ticket", title: "Event Ticketing", desc: "Sell tickets and manage secure payments", url: "/event-ticketing/" },
+  { icon: "magic", title: "AI Event Smart-Connect", desc: "AI-powered attendee matchmaking", url: "/enhance-networking-ai-smart-connect/" },
+  { icon: "chart", title: "Event Marketing", desc: "Promote events with targeted campaigns", url: "/event-marketing/" },
+  { icon: "clipboard", title: "Event Registration", desc: "Streamlined sign-ups and check-ins", url: "/event-registration/" },
+  { icon: "handshake", title: "Sponsor Management", desc: "Organize sponsors and track ROI", url: "/sponsor-management/" },
+  { icon: "desktop", title: "Exhibitor Management", desc: "Booth assignments and exhibitor portals", url: "/exhibitor-management/" },
+  { icon: "grid", title: "Centralized Dashboard", desc: "Real-time analytics at a glance", url: "/centralized-dashboard/" },
+  { icon: "file", title: "AI Form Builder", desc: "Drag-and-drop AI-powered forms", url: "/ai-form-builder/" },
+];
+
+const iconPaths: Record<string, string> = {
+  "users-cog": "M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2m7-10a4 4 0 100-8 4 4 0 000 8zm10 2a3 3 0 100-6 3 3 0 000 6zm1 8v-2a3 3 0 00-2-2.83",
+  "ticket": "M2 9a3 3 0 013-3h14a3 3 0 013 3v0a3 3 0 01-3 3H5a3 3 0 01-3-3zm8-2v4m4-4v4M5 6l1.5-3h11L19 6M5 12l1.5 3h11l1.5-3",
+  "magic": "M12 2l2.09 6.26L20 10.27l-4.74 3.74L16.18 21 12 17.27 7.82 21l.92-6.99L4 10.27l5.91-2.01z",
+  "chart": "M3 3v18h18M7 16l4-4 4 4 5-5",
+  "clipboard": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 0a2 2 0 100-4 2 2 0 000 4zm-4 8l2 2 4-4",
+  "handshake": "M2 14l4-4 3 3 5-5 3 3 3-3m-16 6h3m11 0h3M9 18H6m12 0h-3",
+  "desktop": "M3 4h18v12H3zm5 16h8m-4-4v4",
+  "grid": "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z",
+  "file": "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-2 0v6h6M8 13h8M8 17h5",
+};
 ---
 
 <header class="site-header" id="site-header">
   <div class="header-inner">
-    <!-- Logo (25%) -->
+    <!-- Logo 25% -->
     <a href="/" class="header-logo">
       <img
         src="https://eventhex.ai/wp-content/uploads/2024/09/EventHex-Logo.svg"
@@ -41,32 +52,27 @@ const navItems = [
       />
     </a>
 
-    <!-- Desktop Nav (50%) -->
+    <!-- Desktop Nav 45% -->
     <nav class="header-nav" aria-label="Main navigation">
       {navItems.map((item) => (
-        <div class="nav-item">
-          <a href={item.url} class:list={["nav-link", item.children && "has-dropdown"]}>
+        <div class:list={["nav-item", item.hasDropdown && "nav-item--dropdown"]}>
+          <a
+            href={item.url}
+            class:list={["nav-link", item.hasDropdown && "has-dropdown"]}
+            aria-haspopup={item.hasDropdown ? "true" : undefined}
+          >
             {item.title}
-            {item.children && (
+            {item.hasDropdown && (
               <svg class="dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" fill="none">
                 <path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             )}
           </a>
-          {item.children && (
-            <div class="dropdown">
-              <div class="dropdown-inner">
-                {item.children.map((child) => (
-                  <a href={child.url} class="dropdown-link">{child.title}</a>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       ))}
     </nav>
 
-    <!-- CTA (25%) -->
+    <!-- CTA 30% -->
     <div class="header-cta">
       <a href="/book-a-demo/" class="cta-button">Get a demo</a>
     </div>
@@ -79,13 +85,46 @@ const navItems = [
     </button>
   </div>
 
+  <!-- Features Mega Menu Dropdown — Elementor dafc4a4 -->
+  <div class="mega-dropdown" id="mega-dropdown" role="menu">
+    <div class="mega-inner">
+      <div class="mega-header">
+        <h6 class="mega-label">PLATFORM FEATURES</h6>
+      </div>
+      <div class="mega-grid">
+        {featureItems.map((item) => (
+          <a href={item.url} class="mega-card">
+            <span class="mega-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d={iconPaths[item.icon]} />
+              </svg>
+            </span>
+            <span class="mega-text">
+              <span class="mega-title">{item.title}</span>
+              <span class="mega-desc">{item.desc}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+      <div class="mega-footer">
+        <span class="mega-footer-text">Discover the complete platform</span>
+        <a href="/book-a-demo/" class="mega-footer-link">
+          Request a demo
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="mobile-menu" hidden>
     <nav class="mobile-nav">
       {navItems.map((item) => (
         <>
           <a href={item.url} class="mobile-link">{item.title}</a>
-          {item.children?.map((child) => (
+          {item.hasDropdown && featureItems.map((child) => (
             <a href={child.url} class="mobile-link mobile-link--sub">{child.title}</a>
           ))}
         </>
@@ -96,14 +135,10 @@ const navItems = [
 </header>
 
 <style>
-  /* Header: Elementor 6b78e6d */
+  /* Header: 3536b26 — NO background, relative position, z-index 1 */
   .site-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    position: relative;
     z-index: 100;
-    background: #fff;
   }
 
   .header-inner {
@@ -115,7 +150,7 @@ const navItems = [
     gap: 0;
   }
 
-  /* Logo: 25% — Elementor ed18255 */
+  /* Logo: 25% */
   .header-logo {
     flex: 0 0 25%;
     display: flex;
@@ -126,9 +161,9 @@ const navItems = [
     width: auto;
   }
 
-  /* Nav: 50% — Elementor 9270f11 mega menu, Poppins 16px/400, gap 30px */
+  /* Nav: 45% — Inter 16px/400, gap 30px */
   .header-nav {
-    flex: 0 0 50%;
+    flex: 0 0 45%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -136,79 +171,41 @@ const navItems = [
   }
   .nav-item { position: relative; }
   .nav-link {
-    font-family: 'Poppins', var(--font-body);
+    font-family: 'Inter', var(--font-body);
     font-size: 16px;
     font-weight: 400;
-    color: var(--nav-text);
+    color: #000;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 4px;
     transition: color 0.2s;
   }
-  .nav-link:hover, .nav-link:focus-visible {
-    color: var(--brand-blue);
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: var(--brand-blue, #375DFB);
   }
   .dropdown-arrow {
     transition: transform 0.2s;
   }
-  .nav-item:hover .dropdown-arrow {
+  .nav-item--dropdown:hover .dropdown-arrow {
     transform: rotate(180deg);
   }
 
-  /* Dropdown: box-shadow 0 0 10px -3px rgba(0,0,0,0.5), padding 20px 30px */
-  .dropdown {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding-top: 12px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
-    z-index: 10;
-  }
-  .nav-item:hover .dropdown {
-    opacity: 1;
-    visibility: visible;
-  }
-  .dropdown-inner {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px 30px;
-    min-width: 260px;
-    box-shadow: 0 0 10px -3px rgba(0, 0, 0, 0.5);
-  }
-  .dropdown-link {
-    display: block;
-    padding: 8px 0;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--heading-dark);
-    text-decoration: none;
-    transition: color 0.15s, background 0.15s;
-    border-radius: 6px;
-  }
-  .dropdown-link:hover {
-    color: var(--brand-blue);
-    background: rgba(55, 93, 251, 0.04);
-  }
-
-  /* CTA: 25% — Elementor 40bfb5b, button #375DFB, Inter 15px/600, radius 10px */
+  /* CTA: 30% — button Inter 15px/600, #375DFB, radius 10px */
   .header-cta {
-    flex: 0 0 25%;
+    flex: 0 0 30%;
     display: flex;
     justify-content: flex-end;
   }
   .cta-button {
-    font-family: var(--font-body);
+    font-family: 'Inter', var(--font-body);
     font-size: 15px;
     font-weight: 600;
     line-height: 24px;
     letter-spacing: -0.48px;
     color: #fff;
-    background: var(--brand-blue);
+    background: var(--brand-blue, #375DFB);
     padding: 10px 24px;
     border-radius: 10px;
     text-decoration: none;
@@ -220,21 +217,130 @@ const navItems = [
     border: none;
   }
   .cta-button:hover {
-    background: var(--brand-blue-hover);
+    background: #1C46D4;
     transform: scale(1.05);
   }
 
-  /* Mobile toggle — hidden on desktop */
+  /* Mega Dropdown: dafc4a4 — boxed 1200px, white bg, border, radius 16px */
+  .mega-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    padding-top: 8px;
+    z-index: 200;
+    pointer-events: none;
+  }
+  .mega-dropdown.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .mega-inner {
+    background: #FFFFFF;
+    border: 1px solid #E8ECF4;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px -8px rgba(55, 93, 251, 0.10);
+    overflow: hidden;
+  }
+
+  .mega-header { padding: 24px 28px 4px 28px; }
+  .mega-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #375DFB;
+    margin: 0;
+  }
+
+  .mega-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding: 4px 16px 8px 16px;
+  }
+  .mega-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  .mega-card:hover { background: #F5F8FF; }
+  .mega-icon {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EEF2FF;
+    border-radius: 50%;
+  }
+  .mega-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mega-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #375DFB;
+  }
+  .mega-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: #475467;
+  }
+
+  .mega-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 28px;
+    background: #F8F9FC;
+    border-top: 1px solid #E5EBFF;
+  }
+  .mega-footer-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #475467;
+  }
+  .mega-footer-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #375DFB;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: opacity 0.2s;
+  }
+  .mega-footer-link:hover { opacity: 0.8; }
+
   .mobile-toggle {
     display: none;
     background: none;
     border: none;
     cursor: pointer;
     padding: 8px;
-    color: var(--heading-dark);
+    color: #22272F;
   }
 
-  /* Mobile menu */
   .mobile-menu {
     background: #fff;
     border-top: 1px solid #f0f0f0;
@@ -244,10 +350,10 @@ const navItems = [
   .mobile-link {
     display: block;
     padding: 10px 12px;
-    font-family: var(--font-body);
+    font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 500;
-    color: var(--heading-dark);
+    color: #22272F;
     text-decoration: none;
     border-radius: 8px;
     transition: background 0.15s;
@@ -257,7 +363,7 @@ const navItems = [
     padding-left: 28px;
     font-weight: 400;
     font-size: 14px;
-    color: var(--body-gray);
+    color: #475467;
   }
   .cta-button--mobile {
     margin-top: 12px;
@@ -265,29 +371,19 @@ const navItems = [
     justify-content: center;
   }
 
-  /* Box shadow matches Elementor: 0 0 10px -3px #B6C4FF */
-  @media (min-width: 768px) {
-    .site-header {
-      box-shadow: 0 0 10px -3px #B6C4FF;
-    }
-  }
-
-  /* Tablet: 1024px */
   @media (max-width: 1024px) {
     .header-inner { padding: 20px 20px; }
     .header-nav { gap: 20px; }
     .nav-link { font-size: 15px; }
   }
 
-  /* Mobile: 767px */
   @media (max-width: 767px) {
     .header-nav { display: none; }
     .header-cta { display: none; }
     .mobile-toggle { display: block; }
-    .header-inner {
-      padding: 12px 16px;
-    }
+    .header-inner { padding: 12px 16px; }
     .header-logo { flex: 1; }
+    .mega-dropdown { display: none; }
   }
 </style>
 
@@ -298,5 +394,25 @@ const navItems = [
     const isHidden = menu?.hasAttribute('hidden');
     if (isHidden) menu?.removeAttribute('hidden');
     else menu?.setAttribute('hidden', '');
+    btn?.setAttribute('aria-expanded', String(isHidden));
   });
+
+  const featuresItem = document.querySelector('.nav-item--dropdown');
+  const megaDropdown = document.getElementById('mega-dropdown');
+  if (featuresItem && megaDropdown) {
+    let hideTimeout: ReturnType<typeof setTimeout>;
+    const show = () => { clearTimeout(hideTimeout); megaDropdown.classList.add('is-open'); };
+    const hide = () => { hideTimeout = setTimeout(() => megaDropdown.classList.remove('is-open'), 200); };
+    featuresItem.addEventListener('mouseenter', show);
+    featuresItem.addEventListener('mouseleave', hide);
+    megaDropdown.addEventListener('mouseenter', show);
+    megaDropdown.addEventListener('mouseleave', hide);
+    featuresItem.querySelector('.nav-link')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      megaDropdown.classList.toggle('is-open');
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') megaDropdown.classList.remove('is-open');
+    });
+  }
 </script>

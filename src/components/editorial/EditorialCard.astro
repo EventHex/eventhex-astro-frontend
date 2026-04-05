@@ -1,0 +1,232 @@
+---
+import type { EditorialEntry } from "../../lib/editorial";
+
+interface Props {
+  item: EditorialEntry;
+  variant?: "feature" | "stack" | "standard";
+  showDescription?: boolean;
+}
+
+const { item, variant = "standard", showDescription = true } = Astro.props;
+---
+
+<article class={`editorial-card editorial-card--${variant}`}>
+  <a class="editorial-card__media" href={item.href} aria-label={`Open ${item.title}`}>
+    {item.image ? (
+      <img
+        src={item.image.src}
+        alt={item.image.alt}
+        loading="lazy"
+        width={item.image.width}
+        height={item.image.height}
+      />
+    ) : (
+      <div class="editorial-card__media-fallback">
+        <span>{item.category}</span>
+      </div>
+    )}
+  </a>
+
+  <div class="editorial-card__body">
+    <div class="editorial-card__meta">
+      <span class="editorial-card__pill">{item.category}</span>
+      <span>{item.formattedDate}</span>
+    </div>
+
+    <h3 class="editorial-card__title">
+      <a href={item.href}>{item.title}</a>
+    </h3>
+
+    {showDescription && <p class="editorial-card__description">{item.description}</p>}
+
+    <div class="editorial-card__footer">
+      <span>{item.author}</span>
+      <span>{item.readingTime} min read</span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .editorial-card {
+    display: grid;
+    overflow: hidden;
+    border-radius: 28px;
+    border: 1px solid rgba(34, 39, 47, 0.08);
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 24px 70px rgba(15, 23, 42, 0.08);
+    backdrop-filter: blur(18px);
+    transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  }
+
+  .editorial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 32px 80px rgba(15, 23, 42, 0.12);
+    border-color: rgba(55, 93, 251, 0.18);
+  }
+
+  .editorial-card__media {
+    display: block;
+    min-height: 240px;
+    background: linear-gradient(135deg, rgba(55, 93, 251, 0.14), rgba(171, 255, 255, 0.22));
+  }
+
+  .editorial-card__media img,
+  .editorial-card__media-fallback {
+    width: 100%;
+    height: 100%;
+  }
+
+  .editorial-card__media img {
+    display: block;
+    object-fit: cover;
+  }
+
+  .editorial-card__media-fallback {
+    display: grid;
+    place-items: end start;
+    padding: 24px;
+    background:
+      radial-gradient(circle at top right, rgba(171, 255, 255, 0.7), transparent 42%),
+      linear-gradient(160deg, rgba(55, 93, 251, 0.18), rgba(245, 248, 255, 0.92));
+  }
+
+  .editorial-card__media-fallback span {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    background: rgba(255, 255, 255, 0.82);
+  }
+
+  .editorial-card__body {
+    display: grid;
+    gap: 18px;
+    padding: 26px;
+  }
+
+  .editorial-card__meta,
+  .editorial-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--font-body);
+    font-size: 0.94rem;
+    color: var(--body-gray);
+  }
+
+  .editorial-card__pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .editorial-card__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.15;
+    color: var(--heading-dark);
+  }
+
+  .editorial-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .editorial-card__description {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--subheading-gray);
+  }
+
+  .editorial-card--feature {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  }
+
+  .editorial-card--feature .editorial-card__media {
+    min-height: 100%;
+  }
+
+  .editorial-card--feature .editorial-card__body {
+    align-content: center;
+    padding: 32px;
+  }
+
+  .editorial-card--feature .editorial-card__title {
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+  }
+
+  .editorial-card--feature .editorial-card__description {
+    font-size: 1.04rem;
+  }
+
+  .editorial-card--stack {
+    grid-template-columns: 180px minmax(0, 1fr);
+  }
+
+  .editorial-card--stack .editorial-card__media {
+    min-height: 100%;
+  }
+
+  .editorial-card--stack .editorial-card__body {
+    gap: 14px;
+    padding: 22px;
+  }
+
+  .editorial-card--stack .editorial-card__title {
+    font-size: 1.28rem;
+  }
+
+  @media (max-width: 1024px) {
+    .editorial-card--feature,
+    .editorial-card--stack {
+      grid-template-columns: 1fr;
+    }
+
+    .editorial-card--feature .editorial-card__media,
+    .editorial-card--stack .editorial-card__media {
+      min-height: 240px;
+    }
+
+    .editorial-card--feature .editorial-card__body {
+      padding: 28px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .editorial-card {
+      border-radius: 22px;
+    }
+
+    .editorial-card__media {
+      min-height: 220px;
+    }
+
+    .editorial-card__body {
+      padding: 22px;
+      gap: 16px;
+    }
+
+    .editorial-card__title {
+      font-size: 1.3rem;
+    }
+  }
+</style>

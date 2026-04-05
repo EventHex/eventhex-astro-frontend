@@ -1,20 +1,60 @@
 const WP_URL = import.meta.env.WP_URL || "https://eventhex.ai";
 const WP_API = `${WP_URL}/wp-json/wp/v2`;
 
-export interface WPPost {
+export interface WPRenderedField {
+  rendered: string;
+}
+
+export interface WPMedia {
+  id: number;
+  source_url: string;
+  alt_text: string;
+  media_details?: {
+    width?: number;
+    height?: number;
+    sizes?: Record<string, { source_url: string; width: number; height: number }>;
+  };
+}
+
+export interface WPAuthorRecord {
+  id: number;
+  name: string;
+  slug?: string;
+}
+
+export interface WPTermRecord {
+  id: number;
+  name: string;
+  slug: string;
+  taxonomy?: string;
+}
+
+export interface WPEmbedded {
+  author?: WPAuthorRecord[];
+  "wp:featuredmedia"?: WPMedia[];
+  "wp:term"?: WPTermRecord[][];
+}
+
+export interface WPBaseEntry {
   id: number;
   date: string;
   slug: string;
   status: string;
   link: string;
-  title: { rendered: string };
-  content: { rendered: string };
-  excerpt: { rendered: string };
+  title: WPRenderedField;
+  content: WPRenderedField;
+  excerpt?: WPRenderedField | null;
   author: number;
   featured_media: number;
+  _embedded?: WPEmbedded;
+}
+
+export interface WPPost extends WPBaseEntry {
   categories: number[];
   tags: number[];
 }
+
+export interface WPNews extends WPBaseEntry {}
 
 export interface WPPage {
   id: number;
@@ -22,21 +62,10 @@ export interface WPPage {
   slug: string;
   status: string;
   link: string;
-  title: { rendered: string };
-  content: { rendered: string };
+  title: WPRenderedField;
+  content: WPRenderedField;
   author: number;
   featured_media: number;
-}
-
-export interface WPMedia {
-  id: number;
-  source_url: string;
-  alt_text: string;
-  media_details: {
-    width: number;
-    height: number;
-    sizes: Record<string, { source_url: string; width: number; height: number }>;
-  };
 }
 
 export interface WPCategory {
@@ -72,12 +101,22 @@ export async function getPosts(params: Record<string, string> = {}): Promise<WPP
 }
 
 export async function getPostBySlug(slug: string): Promise<WPPost | null> {
-  const posts = await fetchAPI<WPPost[]>("/posts", { slug });
+  const posts = await fetchAPI<WPPost[]>("/posts", { slug, _embed: "true" });
   return posts[0] ?? null;
 }
 
 export async function getPostById(id: number): Promise<WPPost> {
-  return fetchAPI<WPPost>(`/posts/${id}`);
+  return fetchAPI<WPPost>(`/posts/${id}`, { _embed: "true" });
+}
+
+// News
+export async function getNews(params: Record<string, string> = {}): Promise<WPNews[]> {
+  return fetchAPI<WPNews[]>("/news", { per_page: "10", _embed: "true", ...params });
+}
+
+export async function getNewsBySlug(slug: string): Promise<WPNews | null> {
+  const newsEntries = await fetchAPI<WPNews[]>("/news", { slug, _embed: "true" });
+  return newsEntries[0] ?? null;
 }
 
 // Pages

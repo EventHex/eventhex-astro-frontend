@@ -1,22 +1,26 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import EditorialIndexPage from "../../components/editorial/EditorialIndexPage.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { normalizeBlogPosts } from "../../lib/editorial";
 import { getPosts } from "../../lib/wordpress";
 
-const posts = await getPosts({ per_page: "20" });
+const title = "Blog | EventHex";
+const description = "Insights, practical playbooks, and AI-powered event strategies from the EventHex team.";
+const posts = normalizeBlogPosts(await getPosts({ per_page: "18" }));
 ---
 
-<BaseLayout title="Blog - EventHex">
-  <h1>Blog</h1>
-  {posts.length === 0 && <p>No posts found.</p>}
-  <ul>
-    {posts.map((post) => (
-      <li>
-        <a href={`/blog/${post.slug}`}>
-          <h2 set:html={post.title.rendered} />
-        </a>
-        <time datetime={post.date}>{new Date(post.date).toLocaleDateString()}</time>
-        <div set:html={post.excerpt.rendered} />
-      </li>
-    ))}
-  </ul>
-</BaseLayout>
+<MarketingLayout
+  title={title}
+  description={description}
+  footerCtaTitle="Ready to turn these insights into action?"
+  footerCtaButtonText="Book a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <EditorialIndexPage
+    kind="blog"
+    eyebrow="EventHex Blog"
+    pageTitle="Ideas, playbooks, and product thinking for teams building modern events."
+    pageDescription={description}
+    items={posts}
+  />
+</MarketingLayout>

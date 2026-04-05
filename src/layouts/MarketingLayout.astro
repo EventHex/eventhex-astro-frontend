@@ -2,16 +2,31 @@
 import "../styles/design-tokens.css";
 import "../styles/animations.css";
 import HeaderNew from "../components/home-new/HeaderNew.astro";
-import HeroNew from "../components/home-new/HeroNew.astro";
-import DashboardSection from "../components/home-new/DashboardSection.astro";
-import FeaturesSection from "../components/home-new/FeaturesSection.astro";
-import AISection from "../components/home-new/AISection.astro";
-import TestimonialsSection from "../components/home-new/TestimonialsSection.astro";
-import BlogSection from "../components/home-new/BlogSection.astro";
 import FooterNew from "../components/home-new/FooterNew.astro";
 
-const title = "EventHex - The AI-Powered Event Management Platform";
-const description = "Simplify Events, Amplify Results. The AI-Powered Event Management Platform for Every Event.";
+interface Props {
+  title: string;
+  description: string;
+  footerCtaTitle?: string;
+  footerCtaButtonText?: string;
+  footerCtaHref?: string;
+  showFooterCta?: boolean;
+  canonical?: string;
+  ogImage?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  footerCtaTitle,
+  footerCtaButtonText,
+  footerCtaHref,
+  showFooterCta = true,
+  canonical,
+  ogImage,
+  ogType = "website",
+} = Astro.props;
 ---
 
 <html lang="en">
@@ -24,34 +39,43 @@ const description = "Simplify Events, Amplify Results. The AI-Powered Event Mana
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <title>{title}</title>
+    {canonical && <link rel="canonical" href={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <slot name="head" />
   </head>
   <body>
     <HeaderNew />
     <main>
-      <HeroNew />
-      <DashboardSection />
-      <FeaturesSection />
-      <AISection />
-      <TestimonialsSection />
-      <BlogSection />
+      <slot />
     </main>
-    <FooterNew />
+    <FooterNew
+      ctaTitle={footerCtaTitle}
+      ctaButtonText={footerCtaButtonText}
+      ctaHref={footerCtaHref}
+      showCta={showFooterCta}
+    />
 
-    <!-- Entrance animations triggered on scroll -->
     <script>
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               const el = entry.target as HTMLElement;
-              const anim = el.dataset.animation || 'fadeIn';
-              const delay = parseInt(el.dataset.delay || '0', 10);
+              const anim = el.dataset.animation || "fadeIn";
+              const delay = parseInt(el.dataset.delay || "0", 10);
               setTimeout(() => {
-                el.classList.add('is-visible');
+                el.classList.add("is-visible");
                 el.style.animationName = anim;
               }, delay);
               observer.unobserve(el);
@@ -60,7 +84,8 @@ const description = "Simplify Events, Amplify Results. The AI-Powered Event Mana
         },
         { threshold: 0.15 }
       );
-      document.querySelectorAll('.animate-on-scroll').forEach((el) => observer.observe(el));
+
+      document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe(el));
     </script>
 
     <style is:global>

@@ -5,60 +5,116 @@
 //   a557308: button "Explore More" — hidden on all breakpoints
 //   dfd01e5: heading "Your Countless Events Begin Here" — Manrope 48px/500, 50% width
 //   9ca0129: loop-carousel — template 1267, 15px gap, dots #375DFB
+// Template 1267 card structure:
+//   featured image 250px tall
+//   top meta row: category + date
+//   title: Manrope 22px/30px/500
+//   bottom meta row: authors taxonomy + linked arrow icon
 
-// Fetch blog posts from WP API
 interface WPPost {
   id: number;
   title: { rendered: string };
-  excerpt: { rendered: string };
   link: string;
   date: string;
   _embedded?: {
+    author?: Array<{ name: string }>;
     'wp:featuredmedia'?: Array<{ source_url: string; alt_text: string }>;
+    'wp:term'?: Array<Array<{ name: string; taxonomy?: string }>>;
   };
 }
 
 const WP_URL = import.meta.env.WP_URL || 'https://eventhex.ai';
 let posts: WPPost[] = [];
+
+const formatDate = (date: string) =>
+  new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(date));
+
+const getFirstTerm = (post: WPPost, taxonomy: string) =>
+  post._embedded?.['wp:term']
+    ?.flat()
+    .find((term) => term.taxonomy === taxonomy)
+    ?.name;
+
 try {
   const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts?per_page=6&_embed`);
   if (res.ok) posts = await res.json();
 } catch {}
 ---
 
-<section class="blog-section">
-  <h3 class="blog-title">Your Countless Events Begin Here</h3>
+<section class="blog-section" id="home-blog-carousel-root">
+  <h2 class="blog-title">Your Countless Events Begin Here</h2>
 
-  <div class="blog-carousel">
+  <div class="blog-carousel" data-carousel-track>
     {posts.map((post) => {
       const img = post._embedded?.['wp:featuredmedia']?.[0];
-      const excerpt = post.excerpt.rendered.replace(/<[^>]+>/g, '').slice(0, 120);
+      const category = getFirstTerm(post, 'category') ?? 'Uncategorized';
+      const author = getFirstTerm(post, 'authors') ?? post._embedded?.author?.[0]?.name ?? 'EventHex';
+      const formattedDate = formatDate(post.date);
+      const articleHref = `/blog/${post.slug}/`;
+
       return (
-        <a href={post.link} class="blog-card" target="_blank" rel="noopener">
+        <article class="blog-card" data-carousel-card>
           {img && (
             <div class="blog-card__img">
               <img src={img.source_url} alt={img.alt_text || post.title.rendered} loading="lazy" />
             </div>
           )}
+
           <div class="blog-card__body">
-            <h4 class="blog-card__title" set:html={post.title.rendered} />
-            <p class="blog-card__excerpt">{excerpt}...</p>
+            <div class="blog-card__meta blog-card__meta--top">
+              <span class="blog-card__meta-primary">{category}</span>
+              <span class="blog-card__meta-secondary">{formattedDate}</span>
+            </div>
+
+            <h3 class="blog-card__title">
+              <a href={articleHref} set:html={post.title.rendered} />
+            </h3>
+
+            <div class="blog-card__meta blog-card__meta--bottom">
+              <span class="blog-card__meta-secondary">{author}</span>
+              <a href={articleHref} class="blog-card__arrow" aria-label={`Read ${post.title.rendered}`}>
+                <img
+                  src="https://eventhex.ai/wp-content/uploads/2024/12/Group-1000002609-1.svg"
+                  alt=""
+                  loading="lazy"
+                />
+              </a>
+            </div>
           </div>
-        </a>
+        </article>
       );
     })}
   </div>
+
+  {posts.length > 1 && (
+    <div class="blog-dots" aria-label="Blog carousel pagination">
+      {posts.map((post, index) => (
+        <button
+          type="button"
+          class:list={['blog-dot', index === 0 && 'is-active']}
+          data-carousel-dot
+          data-index={index}
+          aria-label={`Go to blog slide ${index + 1}`}
+        ></button>
+      ))}
+    </div>
+  )}
 </section>
 
 <style>
   .blog-section {
     max-width: 1140px;
     margin: 0 auto;
-    padding: 60px 0;
+    padding: 60px 0 70px;
     background: url('https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.webp') center center / cover no-repeat;
   }
+
   .blog-title {
-    font-family: var(--font-heading);
+    font-family: 'Manrope', var(--font-heading);
     font-size: 48px;
     font-weight: 500;
     line-height: 50px;
@@ -67,6 +123,7 @@ try {
     margin: 0 0 40px;
     max-width: 50%;
   }
+
   .blog-carousel {
     display: flex;
     gap: 15px;
@@ -76,59 +133,236 @@ try {
     scrollbar-width: none;
     padding-bottom: 10px;
   }
-  .blog-carousel::-webkit-scrollbar { display: none; }
+
+  .blog-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
   .blog-card {
     flex: 0 0 calc(33.333% - 10px);
     scroll-snap-align: start;
     background: #fff;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
-    text-decoration: none;
     color: inherit;
     transition: transform 0.3s, box-shadow 0.3s;
-    border: 1px solid #E8ECF2;
+    border: 1px solid #CBCDD1;
+    padding: 20px;
+    min-width: 0;
   }
+
   .blog-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
   }
+
   .blog-card__img {
-    height: 180px;
+    height: 250px;
     overflow: hidden;
+    border-radius: 12px;
   }
+
   .blog-card__img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+
   .blog-card__body {
-    padding: 16px 20px;
+    padding: 15px 0 0;
   }
-  .blog-card__title {
-    font-family: var(--font-heading);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--heading-dark);
-    margin: 0 0 8px;
-    line-height: 1.3;
+
+  .blog-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
   }
-  .blog-card__excerpt {
-    font-family: var(--font-body);
-    font-size: 14px;
+
+  .blog-card__meta-primary {
+    font-family: 'Inter', var(--font-body);
+    font-size: 16px;
     font-weight: 400;
-    color: var(--body-gray);
+    color: #000;
+    min-width: 0;
+  }
+
+  .blog-card__meta-secondary {
+    font-family: 'Inter', var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    color: #525866;
+    min-width: 0;
+  }
+
+  .blog-card__title {
+    min-height: 130px;
+    padding: 20px 0;
     margin: 0;
-    line-height: 1.6;
+  }
+
+  .blog-card__title :global(a),
+  .blog-card__title a {
+    font-family: 'Manrope', var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 30px;
+    color: #000;
+    text-decoration: none;
+  }
+
+  .blog-card__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .blog-card__arrow img {
+    width: 34px;
+    height: auto;
+    display: block;
+  }
+
+  .blog-card:hover .blog-card__arrow {
+    transform: translateX(4px);
+  }
+
+  .blog-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .blog-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 0;
+    background: #D0D5DD;
+    cursor: pointer;
+    transition: width 0.3s ease, background 0.3s ease;
+    padding: 0;
+  }
+
+  .blog-dot.is-active {
+    width: 24px;
+    background: #375DFB;
   }
 
   @media (max-width: 1024px) {
-    .blog-section { padding: 50px 20px; }
-    .blog-title { font-size: 40px; line-height: 1.1em; }
-    .blog-card { flex: 0 0 calc(50% - 8px); }
+    .blog-section {
+      padding: 50px 20px 60px;
+    }
+
+    .blog-title {
+      font-size: 40px;
+      line-height: 1.1em;
+    }
+
+    .blog-card {
+      flex: 0 0 calc(50% - 8px);
+    }
+
+    .blog-card__title {
+      min-height: 100px;
+      padding: 16px 0;
+    }
+
+    .blog-card__title :global(a),
+    .blog-card__title a {
+      font-size: 20px;
+      line-height: 1.1em;
+    }
   }
+
   @media (max-width: 767px) {
-    .blog-section { padding: 40px 16px; }
-    .blog-title { font-size: 30px; line-height: 1.2em; max-width: 100%; letter-spacing: 0; }
-    .blog-card { flex: 0 0 85%; }
+    .blog-section {
+      padding: 40px 16px 50px;
+    }
+
+    .blog-title {
+      font-size: 30px;
+      line-height: 1.2em;
+      max-width: 100%;
+      letter-spacing: 0;
+    }
+
+    .blog-card {
+      flex: 0 0 85%;
+    }
+
+    .blog-card__img {
+      height: 220px;
+    }
+
+    .blog-card__meta {
+      flex-wrap: wrap;
+      row-gap: 6px;
+    }
+
+    .blog-card__meta-primary,
+    .blog-card__meta-secondary {
+      font-size: 14px;
+    }
+
+    .blog-card__title {
+      min-height: auto;
+    }
+
+    .blog-card__title :global(a),
+    .blog-card__title a {
+      font-size: 18px;
+      line-height: 1.35;
+    }
   }
 </style>
+
+<script>
+  const root = document.getElementById('home-blog-carousel-root');
+  const track = root?.querySelector('[data-carousel-track]') as HTMLElement | null;
+  const cards = Array.from(root?.querySelectorAll('[data-carousel-card]') ?? []) as HTMLElement[];
+  const dots = Array.from(root?.querySelectorAll('[data-carousel-dot]') ?? []) as HTMLButtonElement[];
+
+  if (root && track && cards.length && dots.length) {
+    let frame = 0;
+
+    const updateDots = () => {
+      const cardWidth = cards[0]?.getBoundingClientRect().width ?? 1;
+      const styles = window.getComputedStyle(track);
+      const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
+      const index = Math.min(
+        dots.length - 1,
+        Math.max(0, Math.round(track.scrollLeft / (cardWidth + gap)))
+      );
+
+      dots.forEach((dot, dotIndex) => {
+        dot.classList.toggle('is-active', dotIndex === index);
+      });
+    };
+
+    const requestDotUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        updateDots();
+      });
+    };
+
+    dots.forEach((dot, dotIndex) => {
+      dot.addEventListener('click', () => {
+        cards[dotIndex]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'start',
+        });
+      });
+    });
+
+    track.addEventListener('scroll', requestDotUpdate, { passive: true });
+    window.addEventListener('resize', requestDotUpdate);
+    updateDots();
+  }
+</script>

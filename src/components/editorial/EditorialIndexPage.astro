@@ -1,0 +1,225 @@
+---
+import EditorialCard from "./EditorialCard.astro";
+import type { EditorialEntry, EditorialKind } from "../../lib/editorial";
+import { getUniqueCategories } from "../../lib/editorial";
+
+interface Props {
+  kind: EditorialKind;
+  pageTitle: string;
+  pageDescription: string;
+  eyebrow: string;
+  items: EditorialEntry[];
+}
+
+const { kind, pageTitle, pageDescription, eyebrow, items } = Astro.props;
+
+const featuredItem = items[0] ?? null;
+const archiveItems = items.slice(1);
+const topics = getUniqueCategories(items);
+---
+
+<section class="editorial-shell">
+  <div class="editorial-container">
+    <header class="editorial-header">
+      <div class="editorial-header-inner">
+        <p class="editorial-eyebrow">{eyebrow}</p>
+        <h1 class="editorial-title">{pageTitle}</h1>
+        <p class="editorial-lead">{pageDescription}</p>
+        
+        {topics.length > 0 && (
+          <div class="editorial-categories">
+            {topics.map((topic) => (
+              <span class="editorial-category-tag">{topic}</span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    {featuredItem ? (
+      <main class="editorial-main">
+        <section class="editorial-featured">
+          <EditorialCard item={featuredItem} variant="feature" />
+        </section>
+
+        {archiveItems.length > 0 && (
+          <section class="editorial-grid">
+            {archiveItems.map((item) => (
+              <EditorialCard item={item} />
+            ))}
+          </section>
+        )}
+      </main>
+    ) : (
+      <section class="editorial-empty">
+        <h2>No articles published yet.</h2>
+        <p>Stay tuned for updates from our team.</p>
+      </section>
+    )}
+
+    <section class="editorial-cta">
+      <div class="editorial-cta-content">
+        <h2>Turn ideas into smoother event execution.</h2>
+        <p>See how EventHex connects registration, ticketing, attendee experiences, and analytics in one AI-powered workflow.</p>
+        <a class="editorial-cta-btn" href="/book-a-demo/">Schedule a walkthrough</a>
+      </div>
+    </section>
+  </div>
+</section>
+
+<style>
+  .editorial-shell {
+    background-color: #ffffff;
+    padding: 6rem 1.5rem 8rem;
+  }
+
+  .editorial-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  }
+
+  .editorial-header {
+    max-width: 800px;
+  }
+
+  .editorial-eyebrow {
+    display: inline-block;
+    color: var(--brand-blue, #2563eb);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 1rem;
+    background-color: rgba(37, 99, 235, 0.1);
+    border-radius: 99px;
+  }
+
+  .editorial-title {
+    font-family: var(--font-heading);
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1.5rem;
+  }
+
+  .editorial-lead {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: #4b5563;
+    margin: 0 0 2rem;
+    max-width: 680px;
+  }
+
+  .editorial-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .editorial-category-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 99px;
+    background-color: #f3f4f6;
+    color: #374151;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.2s;
+    cursor: default;
+  }
+
+  .editorial-category-tag:hover {
+    background-color: #e5e7eb;
+  }
+
+  .editorial-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6rem;
+  }
+
+  .editorial-featured {
+    padding-bottom: 6rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .editorial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 4rem 2rem;
+  }
+
+  .editorial-empty {
+    text-align: center;
+    padding: 8rem 0;
+    background-color: #f9fafb;
+    border-radius: 24px;
+    border: 1px dashed #d1d5db;
+  }
+
+  .editorial-empty h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #111827;
+  }
+
+  .editorial-empty p {
+    color: #6b7280;
+  }
+
+  .editorial-cta {
+    margin-top: 4rem;
+    padding: 5rem 2rem;
+    background: #111827;
+    border-radius: 24px;
+    text-align: center;
+  }
+
+  .editorial-cta-content {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .editorial-cta h2 {
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.5rem;
+  }
+
+  .editorial-cta p {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #9ca3af;
+    margin-bottom: 2.5rem;
+  }
+
+  .editorial-cta-btn {
+    display: inline-flex;
+    padding: 1rem 2rem;
+    background-color: var(--brand-blue, #2563eb);
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 99px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .editorial-cta-btn:hover {
+    background-color: #1d4ed8;
+  }
+</style>

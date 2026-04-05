@@ -1,11 +1,12 @@
 ---
 // Source: Elementor Container 40f13d5 (depth 0)
-// Dark bg radial gradients (same as dark-section), boxed 1140px, pt:60px
+// Elementor renders this as e-con-boxed: full-width background shell + 1140px inner content
+// Shell: bg #000 + bg-2.webp | Inner: column, pt:60px
 // Children:
 //   b4813e6: 60% width, column, center, gap 16px
 //     f3d20c0: heading — "Harness the power of AI..." Inter 18px/400, white
-//     55f9ca2: animated-headline — "Simply The Best AI-Powered Event Management Software"
-//   bb3f883: stacking_cards — 5 AI feature cards, GSAP ScrollTrigger sticky scroll
+//     55f9ca2: animated-headline — 48px/40px/30px, Manrope 400, highlight #AFA3FF
+//   bb3f883: stacking_cards — sticky top 20px, gap 60px, content width 45%
 //   fde1553: Rifath testimonial section
 
 const aiCards = [
@@ -37,79 +38,76 @@ const aiCards = [
 ];
 ---
 
-<section class="ai-section">
-  <!-- Header area (b4813e6) -->
-  <div class="ai-header">
-    <h3 class="ai-subtitle">Harness the power of AI to revolutionize your events</h3>
-    <h2 class="ai-title">
-      Simply The Best <span class="ai-title-highlight">AI-Powered</span><br/>Event Management Software
-    </h2>
-  </div>
-
-  <!-- Stacking Cards (bb3f883) — GSAP ScrollTrigger sticky cards -->
-  <div class="stacking-cards" id="ai-stacking-cards">
-    {aiCards.map((card, i) => (
-      <div
-        class="stacking-card"
-        data-card-index={i}
-        style={`--card-index: ${i}; top: calc(20px + ${i * 20}px);`}
-      >
-        <div class="card-content">
-          <h3 class="card-title">{card.title}</h3>
-          <p class="card-desc">{card.desc}</p>
-          <a href="/book-a-demo/" class="card-btn">Explore More</a>
-        </div>
-        <div class="card-image">
-          <img src={card.image} alt={card.title} loading="lazy" />
-        </div>
-      </div>
-    ))}
-  </div>
-
-  <!-- Rifath testimonial (fde1553) -->
-  <div class="testimonial-rifath">
-    <p class="rifath-quote rifath-quote--desktop animate-on-scroll" data-animation="fadeInLeft">
-      "Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"
-    </p>
-    <div class="rifath-quote rifath-quote--mobile">
-      <div class="side-border"></div>
-      <p>"Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX design capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"</p>
+<section class="ai-section-shell">
+  <div class="ai-section">
+    <!-- Header area (b4813e6) -->
+    <div class="ai-header">
+      <h3 class="ai-subtitle">Harness the power of AI to revolutionize your events</h3>
+      <h2 class="ai-title">
+        Simply The Best <span class="ai-title-highlight">AI-Powered</span><br/>Event Management Software
+      </h2>
     </div>
 
-    <div class="testimonial-author">
-      <img src="https://eventhex.ai/wp-content/uploads/2025/01/Group-2233.png" alt="SOLID Business Club logo" class="author-logo" loading="lazy" />
-      <img src="https://eventhex.ai/wp-content/uploads/2025/01/Rifath-Rahman.jpeg" alt="Rifath Rahman" class="author-avatar" loading="lazy" />
-      <div class="author-info">
-        <h4 class="author-name">Rifath Rahman</h4>
-        <p class="author-role">President, SOLID Business Club</p>
+    <!-- Stacking Cards (bb3f883) — GSAP ScrollTrigger sticky cards -->
+    <div class="stacking-cards" id="ai-stacking-cards">
+      {aiCards.map((card, i) => (
+        <div
+          class="stacking-card"
+          data-card-index={i}
+          style={`--card-index: ${i}; top: calc(20px + ${i * 20}px);`}
+        >
+          <div class="card-content">
+            <h3 class="card-title">{card.title}</h3>
+            <p class="card-desc">{card.desc}</p>
+            <a href="/book-a-demo/" class="card-btn">Explore More</a>
+          </div>
+          <div class="card-image">
+            <img src={card.image} alt={card.title} loading="lazy" />
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Rifath testimonial (fde1553) -->
+    <div class="testimonial-rifath">
+      <p class="rifath-quote rifath-quote--desktop animate-on-scroll" data-animation="fadeInLeft">
+        "Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"
+      </p>
+      <div class="rifath-quote rifath-quote--mobile">
+        <div class="side-border"></div>
+        <p>"Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX design capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"</p>
+      </div>
+
+      <div class="testimonial-author">
+        <img src="https://eventhex.ai/wp-content/uploads/2025/01/Group-2233.png" alt="SOLID Business Club logo" class="author-logo" loading="lazy" />
+        <img src="https://eventhex.ai/wp-content/uploads/2025/01/Rifath-Rahman.jpeg" alt="Rifath Rahman" class="author-avatar" loading="lazy" />
+        <div class="author-info">
+          <h4 class="author-name">Rifath Rahman</h4>
+          <p class="author-role">President, SOLID Business Club</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <style>
+  .ai-section-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
   .ai-section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     max-width: 1140px;
     margin: 0 auto;
-    padding: 60px 0 0;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 43% 87%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 70% 81%, hsl(53 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 7% 43%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 11%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%);
-    background-size: cover;
+    padding: 50px 0 30px;
   }
 
   /* b4813e6 header — 60% width, gap 16px */
@@ -148,8 +146,7 @@ const aiCards = [
     width: 100%;
     padding: 30px 0 0;
     position: relative;
-    /* padding-bottom set dynamically by card count */
-    padding-bottom: calc(5 * 60px + 500px);
+    padding-bottom: 50px;
   }
   .stacking-card {
     position: sticky;
@@ -258,6 +255,7 @@ const aiCards = [
     .ai-subtitle { font-size: 16px; }
     .ai-title { font-size: 40px; line-height: 1em; }
     .stacking-card { height: 450px; }
+    .card-content { flex-basis: 50%; }
     .card-title { font-size: 30px; }
     .card-desc { font-size: 16px; }
     .card-btn { font-size: 14px; }
@@ -271,11 +269,11 @@ const aiCards = [
     .ai-header { width: 100%; }
     .ai-title { font-size: 30px; }
     .stacking-card { flex-direction: column; height: 500px; }
-    .card-content { flex: 0 0 48%; padding: 20px; }
+    .card-content { flex: 0 0 48%; padding: 20px 20px 0; }
     .card-image { padding: 10px; }
     .card-title { font-size: 26px; }
     .card-desc { font-size: 15px; }
-    .stacking-cards { padding-bottom: calc(5 * 60px + 500px); }
+    .stacking-cards { padding-bottom: 40px; }
     .rifath-quote--desktop { display: none; }
     .rifath-quote--mobile { display: flex; }
     .testimonial-rifath { padding: 20px 20px 0; }

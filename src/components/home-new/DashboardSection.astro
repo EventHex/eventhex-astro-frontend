@@ -2,7 +2,7 @@
 // Source: Elementor Container 40a2c6f (depth 0)
 // Dark section: radial-gradient background, pt:250px pb:60px
 // Children:
-//   cb45902 (margin-top: -460px): dashboard image (9e5b253) — 3D perspective
+//   cb45902 (margin-top: -460px): dashboard image (9e5b253) — Elementor motion_fx scale effect, no tilt
 //   52c97b5: engagement text + trusted-by carousel
 //   c89aa97: Amy testimonial
 // Note: stacking_cards widget 3869d38 is hidden on ALL breakpoints — excluded
@@ -42,6 +42,7 @@ const trustedLogos = [
       width="734"
       height="437"
       class="dashboard-img"
+      data-dashboard-motion
       loading="lazy"
     />
   </div>
@@ -50,18 +51,18 @@ const trustedLogos = [
   <div class="engagement-wrap">
     <div class="engagement-text-container">
       <!-- Desktop: splitting letters effect (a70b33b) — we render as static text with color spans -->
-      <h3 class="engagement-heading engagement-heading--desktop animate-on-scroll" data-animation="fadeInDown">
+      <h2 class="engagement-heading engagement-heading--desktop animate-on-scroll" data-animation="fadeInDown">
         <span class="text-white">EventHex boosts retention through </span>
         <span class="text-purple-light">enhanced attendee engagement </span>
         <span class="text-white">and </span>
         <span class="text-cyan">personalized user experiences</span>
-      </h3>
+      </h2>
       <!-- Mobile: regular heading (d044db7) -->
-      <h3 class="engagement-heading engagement-heading--mobile animate-on-scroll" data-animation="fadeInDown">
+      <h2 class="engagement-heading engagement-heading--mobile animate-on-scroll" data-animation="fadeInDown">
         EventHex boosts retention through
         <span style="color:#AFA3FF;"> enhanced attendee engagement</span>
         and<span style="color:#ABFFFF;">  personalized user experiences</span>
-      </h3>
+      </h2>
     </div>
     <!-- Star image (fdf5052) -->
     <div class="star-img-wrap animate-on-scroll" data-animation="fadeInLeft" data-delay="800" style="--anim-duration:1000ms">
@@ -107,6 +108,40 @@ const trustedLogos = [
   </div>
 </section>
 
+<script>
+  const dashboardImage = document.querySelector('[data-dashboard-motion]') as HTMLElement | null;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+  if (dashboardImage && !prefersReducedMotion.matches) {
+    let frameId = 0;
+
+    const updateDashboardMotion = () => {
+      const rect = dashboardImage.getBoundingClientRect();
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const scaleStart = viewportHeight * 0.4;
+      const scaleEnd = viewportHeight * 0.05;
+      const scaleProgress = clamp((scaleStart - rect.top) / (scaleStart - scaleEnd), 0, 1);
+      const scaleBoost = scaleProgress * 0.1;
+
+      dashboardImage.style.setProperty('--dashboard-scale', `${(1 + scaleBoost).toFixed(3)}`);
+    };
+
+    const requestDashboardMotionUpdate = () => {
+      if (frameId) return;
+      frameId = window.requestAnimationFrame(() => {
+        frameId = 0;
+        updateDashboardMotion();
+      });
+    };
+
+    updateDashboardMotion();
+    window.addEventListener('scroll', requestDashboardMotionUpdate, { passive: true });
+    window.addEventListener('resize', requestDashboardMotionUpdate);
+  }
+</script>
+
 <style>
   /* 40a2c6f — dark bg with radial gradients */
   .dark-section {
@@ -127,7 +162,10 @@ const trustedLogos = [
       radial-gradient(at 46% 11%, hsl(19 0% 0%) 0px, transparent 50%),
       radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
       radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
+      url('https://eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
+    background-position: center center;
+    background-repeat: no-repeat;
     background-size: cover;
   }
 
@@ -135,14 +173,26 @@ const trustedLogos = [
   .dashboard-wrap {
     width: 100%;
     margin-top: -460px;
+    padding: 0;
     display: flex;
     justify-content: center;
   }
   .dashboard-img {
+    --dashboard-scale: 1;
     width: 55%;
     height: auto;
-    transform: perspective(1000px) rotateX(-16deg) scaleX(0.8) skewX(-13deg);
+    aspect-ratio: 734 / 437;
+    display: block;
+    transform: scale(var(--dashboard-scale));
     transform-origin: center center;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dashboard-img {
+      transform: none;
+      will-change: auto;
+    }
   }
 
   /* d3cf198 — engagement text */
@@ -312,7 +362,7 @@ const trustedLogos = [
   /* Tablet */
   @media (max-width: 1024px) {
     .dark-section { padding: 220px 0 50px; }
-    .dashboard-wrap { margin-top: -300px; }
+    .dashboard-wrap { margin-top: -300px; padding: 0 50px; }
     .dashboard-img { width: 80%; }
     .engagement-wrap { padding: 40px 20px 50px; }
     .engagement-text-container { width: 85%; }
@@ -327,7 +377,7 @@ const trustedLogos = [
   /* Mobile */
   @media (max-width: 767px) {
     .dark-section { padding: 100px 0 50px; margin-top: -80px; }
-    .dashboard-wrap { margin-top: -160px; }
+    .dashboard-wrap { margin-top: -160px; padding: 0 20px; }
     .dashboard-img { width: 85%; }
     .engagement-wrap { padding: 60px 15px 50px; }
     .engagement-text-container { width: 100%; }

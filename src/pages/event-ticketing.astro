@@ -1,0 +1,338 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import HeroSection from "../components/event-ticketing/HeroSection.astro";
+import PricingCalculatorSection from "../components/event-ticketing/PricingCalculatorSection.astro";
+import FeatureSplitSection from "../components/event-ticketing/FeatureSplitSection.astro";
+import BulkImportSection from "../components/event-ticketing/BulkImportSection.astro";
+import BenefitsSection from "../components/event-ticketing/BenefitsSection.astro";
+import FaqSection from "../components/event-ticketing/FaqSection.astro";
+import MobileCtaBar from "../components/event-ticketing/MobileCtaBar.astro";
+
+const title = "Event Ticketing - EventHex";
+const description = "Launch branded event ticketing flows, route payments securely, manage waitlists, and move attendees from checkout to check-in without friction.";
+
+const splitSections = [
+  {
+    eyebrow: "Conversion design",
+    metric: "Mobile-first checkout that keeps drop-offs low",
+    title: "Simplified Checkout for Higher Conversions",
+    items: [
+      "Provide attendees with an intuitive and mobile-optimized ticket booking app.",
+      "Offer a frictionless flow from selection to secure payment.",
+      "Automated form optimization reduces abandonment rates at checkout.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Monitor-XDR.svg",
+    imageAlt: "EventHex checkout flow preview on desktop display",
+    imageLeft: true,
+    contentWidth: "48%",
+    mediaWidth: "52%",
+    titleWidth: "50%",
+    listWidth: "90%",
+  },
+  {
+    eyebrow: "Payment control",
+    metric: "0% platform fee option with your own gateway",
+    title: "Secure Payment Processing",
+    items: [
+      "Get instant pay-outs with our secure event ticketing platform.",
+      "Use your own payment gateway for 0% platform fees.",
+      "Use EventHex’s payment gateway at competitive rates.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.svg",
+    imageAlt: "Tablet preview of secure ticket payment processing",
+    imageLeft: false,
+    framed: true,
+    dark: true,
+    backgroundImage: "https://eventhex.ai/wp-content/uploads/2025/03/bg.svg",
+    backgroundColor: "#000312",
+    mobileReverse: true,
+    contentWidth: "50%",
+    mediaWidth: "50%",
+    titleWidth: "70%",
+    listWidth: "75%",
+  },
+  {
+    eyebrow: "On-site entry",
+    metric: "Fast scanning and badge-ready check-in",
+    title: "QR Code Scanning \nand Badge Printing",
+    items: [
+      "Generate QR code-enabled tickets to streamline event check-ins.",
+      "Badge printing ensures easy attendee identification.",
+      "Hassle-free registration experience at the venue.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Realistic-ID-Cards.svg",
+    imageAlt: "Printed badges and QR-enabled event tickets",
+    imageLeft: true,
+    contentWidth: "48%",
+    mediaWidth: "52%",
+    titleWidth: "80%",
+    listWidth: "80%",
+    contentPadding: "0 50px 0 0",
+  },
+  {
+    eyebrow: "Brand experience",
+    metric: "Unlimited ticket styles with campaign-ready pricing",
+    title: "Custom Ticketing \nwith Brand Support",
+    items: [
+      "Generate multiple ticket types effortlessly.",
+      "Offer discounts, flexible coupons, and early-bird specials.",
+      "Customize tickets with your event branding, creating a professional look.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra-1.svg",
+    imageAlt: "Tablet preview of branded ticket customization",
+    imageLeft: false,
+    framed: true,
+    backgroundImage: "https://eventhex.ai/wp-content/uploads/2025/03/Rectangle-1206.png",
+    mobileReverse: true,
+    contentWidth: "50%",
+    mediaWidth: "50%",
+    titleWidth: "70%",
+    listWidth: "80%",
+  },
+  {
+    eyebrow: "Revenue intelligence",
+    metric: "Track ticket performance while the campaign is live",
+    title: "Attendee Retention with Event Analytics",
+    items: [
+      "Leverage real-time data insights with our event management software.",
+      "Track attendee behavior and monitor ticket sales trends",
+      "Discover actionable strategies to boost attendee retention for future events.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Mac-Studio.svg",
+    imageAlt: "Event ticketing analytics dashboard on desktop",
+    imageLeft: true,
+    contentWidth: "48%",
+    mediaWidth: "52%",
+    titleWidth: "50%",
+    contentPadding: "0 50px 0 0",
+  },
+  {
+    eyebrow: "Compliance and control",
+    metric: "Approval-based access with privacy-ready data handling",
+    title: "Secure Data and GDPR Compliance",
+    items: [
+      "Protect sensitive attendee information with enterprise-grade encryption.",
+      "Ensure compliance with GDPR and other privacy standards.",
+      "Tickets purchase can be waitlisted for the event organizer’s approval.",
+    ],
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000003184.svg",
+    imageAlt: "Illustration for secure data and GDPR compliance",
+    imageLeft: true,
+    framed: true,
+    dark: true,
+    backgroundImage: "https://eventhex.ai/wp-content/uploads/2025/03/bg.svg",
+    backgroundColor: "#000312",
+    contentWidth: "50%",
+    mediaWidth: "50%",
+    titleWidth: "70%",
+    listWidth: "80%",
+  },
+];
+
+const bulkCards = [
+  {
+    title: "Bulk CSV Imports",
+    desc: "Import attendees with ease through bulk import functionality.",
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Vector.svg",
+  },
+  {
+    title: "Approval Rules",
+    desc: "Automate waitlist management with approval-based workflows.",
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Vector.svg",
+  },
+  {
+    title: "Branded Output",
+    desc: "Customize tickets with your event branding, creating a professional look.",
+    image: "https://eventhex.ai/wp-content/uploads/2025/04/Vector.svg",
+  },
+];
+
+const benefitRows = [
+  [
+    {
+      title: "Versatile Platform",
+      desc: "Manage events of any size with customizable event ticketing and registration.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870.svg",
+    },
+    {
+      title: "Brand First",
+      desc: "Customize tickets with your logos and branding to give a professional outlook.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-1.svg",
+    },
+    {
+      title: "Affordable Pricing",
+      desc: "Save costs when using your own payment gateway and keep all the profit to yourself.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-2.svg",
+    },
+  ],
+  [
+    {
+      title: "Easy Integrations",
+      desc: "Sync with your event workflow to better manage and update the incoming attendee.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-3.svg",
+    },
+    {
+      title: "Mobile Access",
+      desc: "Our event ticketing app works seamlessly for attendees right on-the-go.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-4.svg",
+    },
+  ],
+];
+
+const faqItems = [
+  {
+    question: "Can I create multiple ticket types for the same event?",
+    answerHtml: "<p>Yes. EventHex lets you create different ticket classes such as early-bird, VIP, group bundles, sponsor passes, or invite-only registrations. You can set different prices, capacities, access rules, and branding for each tier without building separate flows.</p>",
+  },
+  {
+    question: "Can I use my own payment gateway?",
+    answerHtml: "<p>Yes. You can connect your preferred payment gateway and keep full control over payouts, fees, and settlement timing. If you want a faster setup, EventHex can also support you with a competitive default payment flow.</p>",
+  },
+  {
+    question: "Does EventHex support QR check-in and badge printing?",
+    answerHtml: "<p>It does. Each ticket can be paired with a QR-based entry workflow so your team can scan guests on arrival, validate access quickly, and connect the same registration flow to badge printing for a smoother on-site experience.</p>",
+  },
+  {
+    question: "Can I hold registrations for approval or waitlist them?",
+    answerHtml: "<p>Yes. EventHex supports approval-based workflows and waitlists, which is especially useful for curated events, premium access, or limited-capacity ticket classes. Your team can review requests, approve attendees, and keep communication organized from one dashboard.</p>",
+  },
+];
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  footerCtaTitle={"Upgrade Your Event\nTicketing System Today"}
+  footerCtaButtonText="Get a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <div class="ticket-page">
+    <HeroSection
+      eyebrow="Event Ticketing"
+      titleHtml="Sell Smarter, Scan Faster, and Maximise <b>Revenue</b> with <b>Event Ticketing Software</b>"
+      description={description}
+      ctaText="Get a demo"
+      ctaHref="/book-a-demo/"
+      image="https://eventhex.ai/wp-content/uploads/2025/04/eventticketing.png"
+      imageAlt="EventHex event ticketing dashboard"
+    />
+
+    <PricingCalculatorSection ctaHref="/book-a-demo/" />
+
+    <!-- Features intro header -->
+    <div class="ticket-features-hd animate-on-scroll" data-animation="fadeInUp" style="--anim-duration:700ms">
+      <span class="ticket-features-hd__eyebrow">Flow-by-flow</span>
+      <h2 class="ticket-features-hd__title">Everything Built Into One Ticketing Platform</h2>
+      <p class="ticket-features-hd__sub">From checkout to check-in — every step of the ticketing journey, handled.</p>
+    </div>
+
+    {splitSections.map((section, index) => (
+      <FeatureSplitSection {...section} sectionNumber={index + 1} />
+    ))}
+
+    <BulkImportSection
+      title="Bulk Import and Waitlist Management"
+      cards={bulkCards}
+    />
+
+    <BenefitsSection
+      title="Why EventHex is Your Best Event Ticketing Solution"
+      rows={benefitRows}
+    />
+
+    <FaqSection title="FAQ" items={faqItems} />
+    <MobileCtaBar
+      primaryHref="/book-a-demo/"
+      primaryText="Get a demo"
+      secondaryHref="#ticket-pricing"
+      secondaryText="Pricing"
+    />
+  </div>
+</MarketingLayout>
+
+<script>
+  const tiltCards = Array.from(document.querySelectorAll("[data-ticket-tilt-card]")) as HTMLElement[];
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (!prefersReducedMotion.matches) {
+    tiltCards.forEach((card) => {
+      const resetTilt = () => {
+        card.style.setProperty("--tilt-rotate-x", "0deg");
+        card.style.setProperty("--tilt-rotate-y", "0deg");
+      };
+
+      card.addEventListener("mousemove", (event) => {
+        if (window.innerWidth <= 767) return;
+
+        const rect = card.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const rotateY = (x - 0.5) * 8;
+        const rotateX = (0.5 - y) * 8;
+
+        card.style.setProperty("--tilt-rotate-x", `${rotateX.toFixed(2)}deg`);
+        card.style.setProperty("--tilt-rotate-y", `${rotateY.toFixed(2)}deg`);
+      });
+
+      card.addEventListener("mouseleave", resetTilt);
+      card.addEventListener("blur", resetTilt);
+    });
+  }
+</script>
+
+<style>
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  .ticket-page {
+    background:
+      radial-gradient(circle at top left, rgba(55, 93, 251, 0.06), transparent 20%),
+      radial-gradient(circle at 90% 12%, rgba(186, 160, 255, 0.08), transparent 18%),
+      #fff;
+  }
+
+  /* Features section introduction */
+  .ticket-features-hd {
+    max-width: 760px;
+    margin: 60px auto 12px;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  .ticket-features-hd__eyebrow {
+    display: inline-flex;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    border: 1px solid rgba(55, 93, 251, 0.16);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .ticket-features-hd__title {
+    margin-top: 16px;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    line-height: 1.06;
+    font-weight: 700;
+    letter-spacing: -1.4px;
+    color: var(--heading-dark);
+  }
+
+  .ticket-features-hd__sub {
+    margin-top: 14px;
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+  }
+
+  @media (max-width: 767px) {
+    .ticket-features-hd { margin-top: 40px; }
+    .ticket-features-hd__title { font-size: 30px; }
+    .ticket-features-hd__sub { font-size: 16px; }
+  }
+</style>

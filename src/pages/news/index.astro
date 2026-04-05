@@ -1,0 +1,26 @@
+---
+import EditorialIndexPage from "../../components/editorial/EditorialIndexPage.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { normalizeNewsItems } from "../../lib/editorial";
+import { getNews } from "../../lib/wordpress";
+
+const title = "News | EventHex";
+const description = "Official EventHex news, partnerships, launch notes, and company milestones.";
+const newsItems = normalizeNewsItems(await getNews({ per_page: "18" }));
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  footerCtaTitle="Need event technology that moves as fast as your team?"
+  footerCtaButtonText="Book a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <EditorialIndexPage
+    kind="news"
+    eyebrow="EventHex News"
+    pageTitle="Product launches, partnerships, and milestone updates from EventHex."
+    pageDescription={description}
+    items={newsItems}
+  />
+</MarketingLayout>

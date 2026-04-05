@@ -1,31 +1,31 @@
 ---
 import EditorialArticlePage from "../../components/editorial/EditorialArticlePage.astro";
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
-import { normalizeBlogPost, normalizeBlogPosts } from "../../lib/editorial";
-import { getPostBySlug, getPosts } from "../../lib/wordpress";
+import { normalizeNewsItem, normalizeNewsItems } from "../../lib/editorial";
+import { getNews, getNewsBySlug } from "../../lib/wordpress";
 
 const { slug } = Astro.params;
-const post = slug ? await getPostBySlug(slug) : null;
-const article = post ? normalizeBlogPost(post) : null;
+const newsItem = slug ? await getNewsBySlug(slug) : null;
+const article = newsItem ? normalizeNewsItem(newsItem) : null;
 
 if (!article) {
   Astro.response.status = 404;
 }
 
-const recentPosts = article ? await getPosts({ per_page: "4" }) : [];
+const recentNews = article ? await getNews({ per_page: "4" }) : [];
 const relatedItems = article
-  ? normalizeBlogPosts(recentPosts.filter((candidate) => candidate.id !== article.id)).slice(0, 3)
+  ? normalizeNewsItems(recentNews.filter((candidate) => candidate.id !== article.id)).slice(0, 3)
   : [];
-const title = article ? `${article.title} | EventHex Blog` : "Article not found | EventHex";
-const description = article?.description ?? "The requested EventHex blog article could not be found.";
+const title = article ? `${article.title} | EventHex News` : "Article not found | EventHex";
+const description = article?.description ?? "The requested EventHex news article could not be found.";
 const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
-const canonicalUrl = article ? new URL(article.href, siteUrl).toString() : new URL("/blog/", siteUrl).toString();
+const canonicalUrl = article ? new URL(article.href, siteUrl).toString() : new URL("/news/", siteUrl).toString();
 const ogImage = article?.image?.src ?? "";
 
 const jsonLd = article
   ? JSON.stringify({
       "@context": "https://schema.org",
-      "@type": "BlogPosting",
+      "@type": "NewsArticle",
       headline: article.title,
       description: article.description,
       image: article.image?.src,
@@ -53,7 +53,7 @@ const jsonLd = article
   canonical={canonicalUrl}
   ogImage={ogImage}
   ogType="article"
-  footerCtaTitle="Want the same clarity inside your own events?"
+  footerCtaTitle="Want a platform that earns headlines for the right reasons?"
   footerCtaButtonText="Talk to EventHex"
   footerCtaHref="/book-a-demo/"
 >
@@ -63,8 +63,8 @@ const jsonLd = article
   <EditorialArticlePage
     item={article}
     relatedItems={relatedItems}
-    collectionHref="/blog/"
-    collectionLabel="Blog"
+    collectionHref="/news/"
+    collectionLabel="News"
     canonicalUrl={canonicalUrl}
   />
 </MarketingLayout>

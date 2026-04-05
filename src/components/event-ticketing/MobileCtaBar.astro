@@ -1,0 +1,97 @@
+---
+interface Props {
+  primaryHref: string;
+  primaryText: string;
+  secondaryHref: string;
+  secondaryText: string;
+}
+
+const {
+  primaryHref,
+  primaryText,
+  secondaryHref,
+  secondaryText,
+} = Astro.props;
+---
+
+<div class="ticket-mobile-cta" role="complementary" aria-label="Quick actions for event ticketing">
+  <div class="ticket-mobile-cta__text">
+    <span>Ready to launch smarter ticketing?</span>
+    <strong>Pricing, approvals, and check-in in one flow.</strong>
+  </div>
+
+  <div class="ticket-mobile-cta__actions">
+    <a href={secondaryHref} class="ticket-mobile-cta__button ticket-mobile-cta__button--ghost">{secondaryText}</a>
+    <a href={primaryHref} class="ticket-mobile-cta__button">{primaryText}</a>
+  </div>
+</div>
+
+<style>
+  .ticket-mobile-cta {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .ticket-mobile-cta {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      left: 12px;
+      z-index: 120;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(10, 18, 37, 0.94);
+      box-shadow: 0 20px 48px rgba(10, 18, 37, 0.24);
+      backdrop-filter: blur(16px);
+    }
+
+    .ticket-mobile-cta__text span {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .ticket-mobile-cta__text strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #fff;
+    }
+
+    .ticket-mobile-cta__actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .ticket-mobile-cta__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: #375dfb;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .ticket-mobile-cta__button--ghost {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    :global(body) {
+      padding-bottom: calc(106px + env(safe-area-inset-bottom));
+    }
+  }
+</style>
