@@ -1,27 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getPosts } from "../lib/wordpress";
-
-const posts = await getPosts({ per_page: "5" });
+import HeroSection from "../components/home/HeroSection.astro";
+import TrustedBy from "../components/home/TrustedBy.astro";
+import FeaturesSection from "../components/home/FeaturesSection.astro";
+import AIFeatures from "../components/home/AIFeatures.astro";
+import Testimonials from "../components/home/Testimonials.astro";
+import BlogPosts from "../components/home/BlogPosts.astro";
 ---
 
-<BaseLayout title="EventHex">
-  <h1>EventHex</h1>
-  <p>The AI-Powered Event Management Platform</p>
-
-  <section>
-    <h2>Latest Posts</h2>
-    {posts.length === 0 && <p>No posts found.</p>}
-    <ul>
-      {posts.map((post) => (
-        <li>
-          <a href={`/blog/${post.slug}`}>
-            <h3 set:html={post.title.rendered} />
-          </a>
-          <p set:html={post.excerpt.rendered} />
-        </li>
-      ))}
-    </ul>
-    <a href="/blog">View all posts &rarr;</a>
-  </section>
+<BaseLayout title="EventHex - The AI-Powered Event Management Platform">
+  <HeroSection />
+  <TrustedBy />
+  <FeaturesSection />
+  <AIFeatures />
+  <Testimonials />
+  <BlogPosts />
 </BaseLayout>
