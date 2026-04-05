@@ -29,5 +29,39 @@ const { title, description = "EventHex - The AI-Powered Event Management Platfor
       <slot />
     </main>
     <Footer />
+
+    <!-- Entrance animations triggered on scroll -->
+    <script>
+      const animationMap: Record<string, string> = {
+        fadeIn: 'ehFadeIn',
+        fadeInDown: 'ehFadeInDown',
+        fadeInLeft: 'ehFadeInLeft',
+        fadeInRight: 'ehFadeInRight',
+        fadeInUp: 'ehFadeInUp',
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const el = entry.target as HTMLElement;
+              const anim = el.dataset.animation || 'fadeIn';
+              const delay = parseInt(el.dataset.delay || '0', 10);
+              const keyframes = animationMap[anim] || 'ehFadeIn';
+
+              setTimeout(() => {
+                el.style.animationName = keyframes;
+                el.classList.add('eh-animated');
+              }, delay);
+
+              observer.unobserve(el);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+
+      document.querySelectorAll('.eh-animate').forEach((el) => observer.observe(el));
+    </script>
   </body>
 </html>
