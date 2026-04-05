@@ -1,0 +1,191 @@
+---
+// Shared Feature Section variant with simple list items (no bold titles)
+// Used by: Centralized Dashboard, etc.
+
+interface Props {
+  sectionTitle: string;
+  items: string[];
+  image: string;
+  imageAlt: string;
+  imageLeft?: boolean;
+}
+
+const {
+  sectionTitle,
+  items,
+  image,
+  imageAlt,
+  imageLeft = true,
+} = Astro.props;
+---
+
+<section class:list={["fps-feature", imageLeft ? "fps-feature--img-left" : "fps-feature--img-right"]}>
+  <div class="fps-feature__inner">
+    {imageLeft ? (
+      <>
+        <div class="fps-feature__media">
+          <img src={image} alt={imageAlt} width="600" height="450" loading="lazy" />
+        </div>
+        <div class="fps-feature__content">
+          <h2 class="fps-feature__title">{sectionTitle}</h2>
+          <ul class="fps-feature__list">
+            {items.map((item) => (
+              <li class="fps-feature__item">
+                <span class="fps-feature__icon">
+                  <img src="https://eventhex.ai/wp-content/uploads/2025/03/Vector-4.svg" alt="" width="16" height="16" loading="lazy" />
+                </span>
+                <span class="fps-feature__item-text">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </>
+    ) : (
+      <>
+        <div class="fps-feature__content">
+          <h2 class="fps-feature__title">{sectionTitle}</h2>
+          <ul class="fps-feature__list">
+            {items.map((item) => (
+              <li class="fps-feature__item">
+                <span class="fps-feature__icon">
+                  <img src="https://eventhex.ai/wp-content/uploads/2025/03/Vector-4.svg" alt="" width="16" height="16" loading="lazy" />
+                </span>
+                <span class="fps-feature__item-text">{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="fps-feature__media">
+          <img src={image} alt={imageAlt} width="600" height="450" loading="lazy" />
+        </div>
+      </>
+    )}
+  </div>
+</section>
+
+<style>
+  .fps-feature {
+    padding: 80px 0;
+  }
+
+  .fps-feature__inner {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 0;
+  }
+
+  .fps-feature__media {
+    width: 52%;
+    display: flex;
+    align-items: center;
+  }
+
+  .fps-feature--img-right .fps-feature__media {
+    width: 50%;
+  }
+
+  .fps-feature__media img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .fps-feature__content {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .fps-feature--img-right .fps-feature__content {
+    width: 50%;
+  }
+
+  .fps-feature__title {
+    font-family: "Manrope", var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 60px;
+    letter-spacing: -1px;
+    color: #000000;
+    margin: 0;
+  }
+
+  .fps-feature__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .fps-feature__item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .fps-feature__icon {
+    flex-shrink: 0;
+    margin-top: 4px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .fps-feature__icon img {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  .fps-feature__item-text {
+    font-family: "Inter", var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #475467;
+  }
+
+  @media (max-width: 1024px) {
+    .fps-feature {
+      padding: 60px 20px;
+    }
+
+    .fps-feature__title {
+      font-size: 35px;
+      line-height: 1.1;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .fps-feature {
+      padding: 40px 20px;
+    }
+
+    .fps-feature__inner {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .fps-feature--img-right .fps-feature__inner {
+      flex-direction: column-reverse;
+    }
+
+    .fps-feature__media,
+    .fps-feature__content,
+    .fps-feature--img-right .fps-feature__media,
+    .fps-feature--img-right .fps-feature__content {
+      width: 100%;
+    }
+
+    .fps-feature__title {
+      font-size: 30px;
+      line-height: 1.2;
+    }
+  }
+</style>

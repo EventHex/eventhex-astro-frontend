@@ -1,0 +1,331 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+
+const title = "Contact Us - EventHex";
+const description = "Contact EventHex to elevate your events with cutting-edge AI technology. Offices in India, UAE, and Malaysia.";
+
+const offices = [
+  {
+    country: "India",
+    address: "Eventhex Solutions Private Limited, Hilite Business Park, Calicut, Kerala 673014",
+    email: "info@eventhex.ai",
+    phone: "+91 73567 33317",
+    mapQuery: "Hilite+Business+Park+Calicut+Kerala",
+  },
+  {
+    country: "UAE",
+    address: "DAMAC Executive Bay Tower B #1103, Business Bay, Dubai, UAE",
+    email: "mail@webcastle.ae",
+    phone: "+971 4 554 0033",
+    mapQuery: "DAMAC+Executive+Bay+Tower+Business+Bay+Dubai",
+  },
+  {
+    country: "Malaysia",
+    address: "J13, Common Ground Jaya One, The Square, 72A, Jln Profesor Diraja Ungku Aziz, Seksyen 13, 46200 Petaling Jaya, Selangor",
+    email: "admin@ludic.asia",
+    phone: "012-3019954",
+    mapQuery: "Common+Ground+Jaya+One+Petaling+Jaya",
+  },
+];
+---
+
+<MarketingLayout {title} {description}>
+  <!-- Hero + Form Section -->
+  <section class="contact-hero">
+    <div class="contact-hero__inner">
+      <div class="contact-hero__content">
+        <h1 class="contact-hero__title">Contact Us to Elevate Your Events with Cutting-Edge AI Technology</h1>
+        <p class="contact-hero__desc">Did you know that 60% of attendees never return to your events? EventHex's all-in-one Event Management Software is designed to help you boost retention up to 30-40% through enhanced attendee engagement and personalized experiences.</p>
+        <img
+          src="https://eventhex.ai/wp-content/uploads/2025/01/Free_Ticket_Mockup_1-copy-1.png"
+          alt="EventHex ticket mockup"
+          width="500"
+          height="300"
+          loading="eager"
+          class="contact-hero__image"
+        />
+      </div>
+      <div class="contact-hero__form-wrap">
+        <form class="contact-form" action="https://eventhex.ai/contact-en/" method="post" data-contact-form>
+          <div class="contact-form__field">
+            <input type="text" name="name" placeholder="Name" required class="contact-form__input" />
+          </div>
+          <div class="contact-form__field">
+            <input type="email" name="email" placeholder="Email" required class="contact-form__input" />
+          </div>
+          <div class="contact-form__field">
+            <input type="text" name="enterprise" placeholder="Enterprise Name" required class="contact-form__input" />
+          </div>
+          <div class="contact-form__field">
+            <input type="text" name="region" placeholder="Region" class="contact-form__input" />
+          </div>
+          <div class="contact-form__field">
+            <input type="tel" name="phone" placeholder="Phone Number" required class="contact-form__input" />
+          </div>
+          <div class="contact-form__field">
+            <select name="referral" class="contact-form__input contact-form__select">
+              <option value="" disabled selected>How did You Know About us</option>
+              <option value="linkedin">LinkedIn</option>
+              <option value="google">Google Search</option>
+              <option value="referral">Referral</option>
+              <option value="social">Social Media</option>
+              <option value="event">Event</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="contact-form__field">
+            <textarea name="message" placeholder="Message" rows="4" class="contact-form__input contact-form__textarea"></textarea>
+          </div>
+          <div class="contact-form__field contact-form__checkbox">
+            <label>
+              <input type="checkbox" name="consent" required />
+              <span>I agree to the <a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms-of-service/">Terms of Service</a></span>
+            </label>
+          </div>
+          <button type="submit" class="contact-form__submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offices Section -->
+  <section class="contact-offices">
+    <div class="contact-offices__inner">
+      {offices.map((office) => (
+        <div class="contact-office">
+          <div class="contact-office__map">
+            <iframe
+              src={`https://maps.google.com/maps?q=${office.mapQuery}&t=&z=15&ie=UTF8&iwloc=&output=embed`}
+              width="100%"
+              height="200"
+              style="border:0; border-radius: 12px;"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title={`${office.country} office location`}
+            ></iframe>
+          </div>
+          <div class="contact-office__info">
+            <div class="contact-office__country-row">
+              <img src="https://eventhex.ai/wp-content/uploads/2025/06/Location.svg" alt="" width="20" height="20" loading="lazy" />
+              <h3 class="contact-office__country">{office.country}</h3>
+            </div>
+            <p class="contact-office__address">{office.address}</p>
+            <p class="contact-office__contact">{office.email}</p>
+            <p class="contact-office__contact">{office.phone}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  .contact-hero {
+    padding: 40px 20px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .contact-hero__inner {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .contact-hero__content {
+    flex: 1;
+  }
+
+  .contact-hero__title {
+    font-family: "Manrope", var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: #22272F;
+    margin: 0 0 20px;
+  }
+
+  .contact-hero__desc {
+    font-family: "Inter", var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: #475467;
+    margin: 0 0 30px;
+  }
+
+  .contact-hero__image {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+  }
+
+  .contact-hero__form-wrap {
+    flex-shrink: 0;
+    width: 420px;
+    background: rgba(187, 194, 255, 0.16);
+    border-radius: 24px;
+    padding: 40px;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact-form__input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E2E4E9;
+    border-radius: 10px;
+    font-family: "Inter", var(--font-body);
+    font-size: 15px;
+    color: #22272F;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .contact-form__input:focus {
+    border-color: #375DFB;
+  }
+
+  .contact-form__input::placeholder {
+    color: #868C98;
+  }
+
+  .contact-form__select {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .contact-form__textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .contact-form__checkbox {
+    font-family: "Inter", var(--font-body);
+    font-size: 14px;
+    color: #475467;
+  }
+
+  .contact-form__checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .contact-form__checkbox a {
+    color: #375DFB;
+    text-decoration: underline;
+  }
+
+  .contact-form__submit {
+    padding: 12px 24px;
+    background-color: #375DFB;
+    color: #ffffff;
+    font-family: "Inter", var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .contact-form__submit:hover {
+    background-color: #1C46D4;
+  }
+
+  /* Offices */
+  .contact-offices {
+    padding: 0 20px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .contact-offices__inner {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .contact-office {
+    background: rgba(187, 194, 255, 0.16);
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 20px;
+  }
+
+  .contact-office__map {
+    margin-bottom: 16px;
+  }
+
+  .contact-office__country-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .contact-office__country {
+    font-family: "Inter", var(--font-body);
+    font-size: 20px;
+    font-weight: 700;
+    color: #375DFB;
+    margin: 0;
+  }
+
+  .contact-office__address {
+    font-family: "Inter", var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #475467;
+    margin: 0 0 8px;
+  }
+
+  .contact-office__contact {
+    font-family: "Inter", var(--font-body);
+    font-size: 14px;
+    color: #22272F;
+    margin: 0 0 4px;
+  }
+
+  @media (max-width: 1024px) {
+    .contact-hero__inner {
+      flex-direction: column;
+    }
+
+    .contact-hero__form-wrap {
+      width: 100%;
+    }
+
+    .contact-hero__title {
+      font-size: 35px;
+    }
+
+    .contact-offices__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .contact-hero {
+      padding: 20px 20px 40px;
+    }
+
+    .contact-hero__title {
+      font-size: 28px;
+    }
+
+    .contact-hero__form-wrap {
+      padding: 24px;
+    }
+  }
+</style>

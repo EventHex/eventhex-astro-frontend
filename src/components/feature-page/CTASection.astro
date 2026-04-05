@@ -1,0 +1,136 @@
+---
+// Shared CTA Section for feature pages
+// Used by: Event Marketing, Event Registration, Sponsor Management, etc.
+
+interface Props {
+  title?: string;
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = "Know More About\nEventHex in Detail",
+  ctaText = "Get a demo",
+  ctaHref = "/book-a-demo/",
+} = Astro.props;
+
+const titleParts = title.split("\n");
+---
+
+<section class="fp-cta">
+  <div class="fp-cta__card">
+    <div class="fp-cta__content">
+      <h2 class="fp-cta__title">
+        {titleParts.map((part, i) => (
+          <>
+            {part}
+            {i < titleParts.length - 1 && <br />}
+          </>
+        ))}
+      </h2>
+      <a href={ctaHref} class="fp-cta__btn">{ctaText}</a>
+    </div>
+    <div class="fp-cta__decor" aria-hidden="true"></div>
+  </div>
+</section>
+
+<style>
+  .fp-cta {
+    max-width: 1140px;
+    margin: -220px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .fp-cta__card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background:
+      url("https://eventhex.ai/wp-content/uploads/2025/01/Vector-20.png") no-repeat center / cover,
+      url("https://eventhex.ai/wp-content/uploads/2025/01/Mask-group-43.png") no-repeat center / cover,
+      #000000;
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 30px;
+    overflow: hidden;
+    min-height: 400px;
+  }
+
+  .fp-cta__content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 60px;
+    align-items: flex-start;
+  }
+
+  .fp-cta__title {
+    font-family: "Manrope", var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 60px;
+    letter-spacing: -1px;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .fp-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background-color: #375DFB;
+    color: #ffffff;
+    font-family: "Inter", var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+
+  .fp-cta__btn:hover {
+    background-color: #1C46D4;
+  }
+
+  .fp-cta__decor {
+    flex: 1;
+  }
+
+  @media (max-width: 1024px) {
+    .fp-cta__card {
+      min-height: 300px;
+    }
+
+    .fp-cta__title {
+      font-size: 35px;
+      line-height: 1.1;
+    }
+
+    .fp-cta__content {
+      padding: 40px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .fp-cta {
+      margin-top: -150px;
+    }
+
+    .fp-cta__card {
+      min-height: 250px;
+    }
+
+    .fp-cta__title {
+      font-size: 28px;
+      line-height: 1.2;
+    }
+
+    .fp-cta__content {
+      padding: 30px 20px;
+    }
+  }
+</style>

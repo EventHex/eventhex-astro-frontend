@@ -1,0 +1,144 @@
+---
+// Shared FAQ Section for feature pages
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  items: FaqItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="fp-faq">
+  <div class="fp-faq__inner">
+    <div class="fp-faq__header">
+      <h2 class="fp-faq__title">FAQ</h2>
+    </div>
+    <div class="fp-faq__list">
+      {items.map((item, index) => (
+        <details class="fp-faq__item" data-faq-index={index}>
+          <summary class="fp-faq__question">
+            <span>{item.question}</span>
+            <span class="fp-faq__icon" aria-hidden="true">+</span>
+          </summary>
+          <div class="fp-faq__answer" set:html={item.answer} />
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .fp-faq {
+    padding: 80px 20px;
+    background-color: #000312;
+  }
+
+  .fp-faq__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 60px;
+  }
+
+  .fp-faq__header {
+    flex-shrink: 0;
+    width: 200px;
+  }
+
+  .fp-faq__title {
+    font-family: "Manrope", var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #ffffff;
+    margin: 0;
+    position: sticky;
+    top: 100px;
+  }
+
+  .fp-faq__list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .fp-faq__item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .fp-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 0;
+    cursor: pointer;
+    list-style: none;
+    font-family: "Inter", var(--font-body);
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.4;
+  }
+
+  .fp-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .fp-faq__icon {
+    flex-shrink: 0;
+    font-size: 24px;
+    color: #375DFB;
+    transition: transform 0.2s;
+    width: 24px;
+    text-align: center;
+  }
+
+  .fp-faq__item[open] .fp-faq__icon {
+    transform: rotate(45deg);
+  }
+
+  .fp-faq__answer {
+    padding: 0 0 24px;
+    font-family: "Inter", var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  @media (max-width: 1024px) {
+    .fp-faq {
+      padding: 60px 20px;
+    }
+
+    .fp-faq__inner {
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .fp-faq__header {
+      width: 100%;
+    }
+
+    .fp-faq__title {
+      font-size: 35px;
+      position: static;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .fp-faq {
+      padding: 40px 20px;
+    }
+
+    .fp-faq__question {
+      font-size: 16px;
+      padding: 20px 0;
+    }
+  }
+</style>
