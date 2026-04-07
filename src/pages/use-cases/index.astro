@@ -1,0 +1,351 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+
+const title = "Event Management Software for Every Use Case | EventHex";
+const description = "EventHex powers conferences, trade shows, workshops, galas, festivals, and more. Find the right event management solution for your event type.";
+
+const useCases = [
+  { name: "Conferences", color: "#375DFB", tagline: "Multi-track sessions, speaker management, and AI session recaps", slug: "conferences", icon: "🎤" },
+  { name: "Trade Shows", color: "#EF4444", tagline: "Exhibitor portals, floor plans, badge printing, and lead capture", slug: "trade-shows", icon: "🏢" },
+  { name: "Corporate Events", color: "#10B981", tagline: "Brand-consistent events with team collaboration and ROI analytics", slug: "corporate-events", icon: "💼" },
+  { name: "Academic Conferences", color: "#F59E0B", tagline: "Abstract submission, peer review, and certificate generation", slug: "academic-conferences", icon: "🎓" },
+  { name: "Hybrid Events", color: "#8B5CF6", tagline: "Unified in-person + virtual with cross-format networking", slug: "hybrid-events", icon: "🌐" },
+  { name: "Workshops", color: "#0EA5E9", tagline: "QR attendance tracking, certificates, and feedback collection", slug: "workshops", icon: "📋" },
+  { name: "Networking Events", color: "#EC4899", tagline: "AI matchmaking, 1:1 meeting scheduler, and contact exchange", slug: "networking-events", icon: "🤝" },
+  { name: "Fundraising Events", color: "#059669", tagline: "0% fee ticketing, donation collection, and impact reporting", slug: "fundraising-events", icon: "💚" },
+  { name: "Award Ceremonies", color: "#D97706", tagline: "Nominee management, table seating, and same-night photo delivery", slug: "award-ceremonies", icon: "🏆" },
+  { name: "Product Launches", color: "#6366F1", tagline: "Media accreditation, demo analytics, and pipeline attribution", slug: "product-launches", icon: "🚀" },
+  { name: "Festivals", color: "#E11D48", tagline: "Multi-day ticketing, zone management, and AI photo galleries", slug: "festivals", icon: "🎪" },
+  { name: "Government Events", color: "#475467", tagline: "GDPR compliance, Arabic bilingual support, and audit trails", slug: "government-events", icon: "🏛️" },
+];
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "EventHex Use Case Solutions",
+  description: description,
+  numberOfItems: useCases.length,
+  itemListElement: useCases.map((uc, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: `Event Management for ${uc.name}`,
+    url: `https://eventhex.ai/use-cases/${uc.slug}/`,
+  })),
+};
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical="https://eventhex.ai/use-cases/"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="uchub-hero">
+    <div class="uchub-hero__inner">
+      <span class="uchub-hero__badge animate-on-scroll">Use Cases</span>
+      <h1 class="uchub-hero__title animate-on-scroll" data-delay="80">
+        Event Management Software for <strong>Every Event Type</strong>
+      </h1>
+      <p class="uchub-hero__sub animate-on-scroll" data-delay="160">
+        Whether you're running a 50-person workshop or a 10,000-attendee festival, EventHex has the tools built for your event type.
+      </p>
+      <a href="/book-a-demo/" class="uchub-btn uchub-btn--primary animate-on-scroll" data-delay="240">Book a Free Demo</a>
+    </div>
+  </section>
+
+  <!-- USE CASE GRID -->
+  <section class="uchub-grid-section">
+    <div class="uchub-grid-section__inner">
+      <div class="uchub-grid">
+        {useCases.map((uc, i) => (
+          <a href={`/use-cases/${uc.slug}/`} class="uchub-card animate-on-scroll" data-delay={String(i * 50)}>
+            <span class="uchub-card__icon" style={`background: ${uc.color}15; color: ${uc.color};`}>
+              {uc.icon}
+            </span>
+            <h2 class="uchub-card__name">{uc.name}</h2>
+            <p class="uchub-card__tagline">{uc.tagline}</p>
+            <span class="uchub-card__link" style={`color: ${uc.color};`}>Learn more &rarr;</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="uchub-cta">
+    <div class="uchub-cta__inner">
+      <div class="uchub-cta__card animate-on-scroll">
+        <div class="uchub-cta__glow uchub-cta__glow--1"></div>
+        <div class="uchub-cta__glow uchub-cta__glow--2"></div>
+        <h2 class="uchub-cta__title">Don't See Your Event Type?</h2>
+        <p class="uchub-cta__copy">EventHex adapts to any event format — from intimate dinners to massive multi-day festivals. Talk to our team and we'll show you how EventHex fits your needs.</p>
+        <div class="uchub-cta__btns">
+          <a href="/book-a-demo/" class="uchub-btn uchub-btn--white">Book a Free Demo</a>
+          <a href="/contact-en/" class="uchub-btn uchub-btn--ghost">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── Hero ── */
+  .uchub-hero {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 40%, #f8f6ff 100%);
+    padding: 7rem 1.5rem 4.5rem;
+    text-align: center;
+  }
+  .uchub-hero__inner {
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .uchub-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+    background: rgba(55, 93, 251, 0.08);
+    border: 1px solid rgba(55, 93, 251, 0.18);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+  .uchub-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--heading-dark);
+    margin-bottom: 1.25rem;
+  }
+  .uchub-hero__title strong {
+    color: var(--brand-blue);
+    font-weight: 800;
+  }
+  .uchub-hero__sub {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  /* ── Buttons ── */
+  .uchub-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.75rem 1.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .uchub-btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .uchub-btn--primary:hover {
+    background: var(--brand-blue-hover);
+    transform: translateY(-1px);
+  }
+  .uchub-btn--white {
+    background: #fff;
+    color: var(--heading-dark);
+  }
+  .uchub-btn--white:hover {
+    background: #f0f4ff;
+    transform: translateY(-1px);
+  }
+  .uchub-btn--ghost {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .uchub-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ── Grid Section ── */
+  .uchub-grid-section {
+    background: #fff;
+    padding: 5rem 1.5rem;
+  }
+  .uchub-grid-section__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .uchub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .uchub-card {
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .uchub-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.08);
+    border-color: var(--brand-blue);
+  }
+  .uchub-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .uchub-card__name {
+    font-family: var(--font-heading);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin-bottom: 0.4rem;
+  }
+  .uchub-card__tagline {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin-bottom: 1rem;
+    flex: 1;
+  }
+  .uchub-card__link {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  /* ── Bottom CTA ── */
+  .uchub-cta {
+    padding: 0 1.5rem 5rem;
+    background: #fff;
+  }
+  .uchub-cta__inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .uchub-cta__card {
+    position: relative;
+    background: linear-gradient(135deg, #1a1f4e 0%, #0f1225 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .uchub-cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .uchub-cta__glow--1 {
+    width: 300px;
+    height: 300px;
+    background: rgba(55, 93, 251, 0.3);
+    top: -80px;
+    right: -60px;
+  }
+  .uchub-cta__glow--2 {
+    width: 250px;
+    height: 250px;
+    background: rgba(159, 129, 255, 0.2);
+    bottom: -60px;
+    left: -40px;
+  }
+  .uchub-cta__title {
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .uchub-cta__copy {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+  }
+  .uchub-cta__btns {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Animations ── */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .uchub-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .uchub-hero {
+      padding: 5rem 1rem 3rem;
+    }
+    .uchub-grid-section {
+      padding: 3.5rem 1rem;
+    }
+    .uchub-grid {
+      grid-template-columns: 1fr;
+    }
+    .uchub-cta__card {
+      padding: 2.5rem 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = parseInt(el.dataset.delay || "0", 10);
+          setTimeout(() => el.classList.add("is-visible"), delay);
+          obs.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => obs.observe(el));
+</script>

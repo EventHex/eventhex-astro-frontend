@@ -38,6 +38,7 @@ export interface WPEmbedded {
 export interface WPBaseEntry {
   id: number;
   date: string;
+  modified: string;
   slug: string;
   status: string;
   link: string;
@@ -147,4 +148,43 @@ export async function getCategoryBySlug(slug: string): Promise<WPCategory | null
 // Tags
 export async function getTags(params: Record<string, string> = {}): Promise<WPTag[]> {
   return fetchAPI<WPTag[]>("/tags", { per_page: "100", ...params });
+}
+
+// Sitemap helpers — fetch all entries with pagination
+async function fetchAllEntries<T>(endpoint: string, fields: string): Promise<T[]> {
+  const all: T[] = [];
+  let page = 1;
+
+  while (true) {
+    const url = new URL(`${WP_API}${endpoint}`);
+    url.searchParams.set("per_page", "100");
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("_fields", fields);
+
+    const response = await fetch(url.toString());
+    if (!response.ok) break;
+
+    const entries = (await response.json()) as T[];
+    if (entries.length === 0) break;
+
+    all.push(...entries);
+    const totalPages = Number(response.headers.get("X-WP-TotalPages") ?? "1");
+    if (page >= totalPages) break;
+    page++;
+  }
+
+  return all;
+}
+
+export interface WPSitemapEntry {
+  slug: string;
+  modified: string;
+}
+
+export async function getAllPostSlugs(): Promise<WPSitemapEntry[]> {
+  return fetchAllEntries<WPSitemapEntry>("/posts", "slug,modified");
+}
+
+export async function getAllNewsSlugs(): Promise<WPSitemapEntry[]> {
+  return fetchAllEntries<WPSitemapEntry>("/news", "slug,modified");
 }

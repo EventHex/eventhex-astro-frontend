@@ -21,6 +21,8 @@ const description = article?.description ?? "The requested EventHex news article
 const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
 const canonicalUrl = article ? new URL(article.href, siteUrl).toString() : new URL("/news/", siteUrl).toString();
 const ogImage = article?.image?.src ?? "";
+const publishedTime = newsItem?.date ?? "";
+const modifiedTime = newsItem?.modified ?? "";
 
 const jsonLd = article
   ? JSON.stringify({
@@ -30,14 +32,13 @@ const jsonLd = article
       description: article.description,
       image: article.image?.src,
       datePublished: article.date,
+      ...(newsItem?.modified && { dateModified: newsItem.modified }),
       author: {
         "@type": "Person",
         name: article.author,
       },
       publisher: {
-        "@type": "Organization",
-        name: "EventHex",
-        url: "https://eventhex.ai",
+        "@id": "https://eventhex.ai/#organization",
       },
       mainEntityOfPage: {
         "@type": "WebPage",
@@ -53,6 +54,8 @@ const jsonLd = article
   canonical={canonicalUrl}
   ogImage={ogImage}
   ogType="article"
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
   footerCtaTitle="Want a platform that earns headlines for the right reasons?"
   footerCtaButtonText="Talk to EventHex"
   footerCtaHref="/book-a-demo/"

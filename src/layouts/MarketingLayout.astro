@@ -15,7 +15,12 @@ interface Props {
   canonical?: string;
   ogImage?: string;
   ogType?: string;
+  robots?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
 }
+
+const DEFAULT_OG_IMAGE = "https://eventhex.ai/wp-content/uploads/2024/09/eventhex-og-default.png";
 
 const {
   title,
@@ -27,7 +32,39 @@ const {
   canonical,
   ogImage,
   ogType = "website",
+  robots,
+  publishedTime,
+  modifiedTime,
 } = Astro.props;
+
+const resolvedOgImage = ogImage || DEFAULT_OG_IMAGE;
+
+const organizationSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://eventhex.ai/#organization",
+      name: "EventHex",
+      url: "https://eventhex.ai",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://eventhex.ai/wp-content/uploads/2024/09/eventhex-logo.png",
+      },
+      sameAs: [
+        "https://www.linkedin.com/company/eventhex/",
+        "https://twitter.com/eventhexai",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://eventhex.ai/#website",
+      url: "https://eventhex.ai",
+      name: "EventHex",
+      publisher: { "@id": "https://eventhex.ai/#organization" },
+    },
+  ],
+});
 ---
 
 <html lang="en">
@@ -37,6 +74,8 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {robots && <meta name="robots" content={robots} />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -45,14 +84,18 @@ const {
     />
     <title>{title}</title>
     {canonical && <link rel="canonical" href={canonical} />}
-    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta property="og:image" content={resolvedOgImage} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content={ogType} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <meta name="twitter:image" content={resolvedOgImage} />
+    <script type="application/ld+json" set:html={organizationSchema} />
     <slot name="head" />
   </head>
   <body>

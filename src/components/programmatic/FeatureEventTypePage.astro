@@ -1,0 +1,491 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import type { FeatureEventTypeEntry } from "../../lib/programmatic/feature-event-type-data";
+
+interface Props {
+  entry: FeatureEventTypeEntry;
+}
+
+const { entry } = Astro.props;
+const { feature, featureLabel, eventTypeLabel, heroCopy, useCases, faqs, metaTitle, metaDescription } = entry;
+
+const canonical = `https://eventhex.ai/${feature}/${entry.eventType}/`;
+const featureUrl = `/${feature}/`;
+
+/* FAQ JSON‑LD */
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+/* Breadcrumb JSON‑LD */
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://eventhex.ai/" },
+    { "@type": "ListItem", position: 2, name: featureLabel, item: `https://eventhex.ai${featureUrl}` },
+    { "@type": "ListItem", position: 3, name: `${featureLabel} for ${eventTypeLabel}` },
+  ],
+};
+---
+
+<MarketingLayout title={metaTitle} description={metaDescription} canonical={canonical}>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+  </Fragment>
+
+  <!-- ① HERO ─────────────────────────────────────────── -->
+  <section class="fet-hero">
+    <div class="fet-hero__bg"></div>
+    <div class="fet-hero__inner">
+      <span class="fet-hero__badge animate-on-scroll">{featureLabel} for {eventTypeLabel}</span>
+      <h1 class="fet-hero__title animate-on-scroll" data-delay="80">
+        {featureLabel} for <strong>{eventTypeLabel}</strong>
+      </h1>
+      <p class="fet-hero__copy animate-on-scroll" data-delay="160">{heroCopy}</p>
+      <div class="fet-hero__ctas animate-on-scroll" data-delay="240">
+        <a href="/book-a-demo/" class="fet-btn fet-btn--primary">Book a Demo</a>
+        <a href={featureUrl} class="fet-btn fet-btn--ghost">Learn About {featureLabel} →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② USE CASES ────────────────────────────────────── -->
+  <section class="fet-usecases">
+    <div class="fet-usecases__inner">
+      <h2 class="fet-section-heading animate-on-scroll">
+        How {featureLabel} Powers <strong>{eventTypeLabel}</strong>
+      </h2>
+      <div class="fet-usecases__grid">
+        {useCases.map((uc, i) => (
+          <div class="fet-uc-card animate-on-scroll" data-delay={String(i * 80)}>
+            <span class="fet-uc-card__num">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="fet-uc-card__title">{uc.title}</h3>
+            <p class="fet-uc-card__desc">{uc.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ③ FAQ ──────────────────────────────────────────── -->
+  {faqs.length > 0 && (
+    <section class="fet-faq">
+      <div class="fet-faq__inner">
+        <div class="fet-faq__sidebar">
+          <h2 class="fet-section-heading animate-on-scroll">Frequently Asked <strong>Questions</strong></h2>
+          <p class="fet-faq__sub animate-on-scroll" data-delay="80">Everything you need to know about {featureLabel} for {eventTypeLabel}.</p>
+        </div>
+        <div class="fet-faq__list">
+          {faqs.map((faq, i) => (
+            <details class="fet-faq__item animate-on-scroll" data-delay={String(i * 60)}>
+              <summary class="fet-faq__q">{faq.q}</summary>
+              <div class="fet-faq__a">{faq.a}</div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ④ CTA ──────────────────────────────────────────── -->
+  <section class="fet-cta">
+    <div class="fet-cta__inner">
+      <div class="fet-cta__card animate-on-scroll">
+        <div class="fet-cta__glow fet-cta__glow--1"></div>
+        <div class="fet-cta__glow fet-cta__glow--2"></div>
+        <h2 class="fet-cta__title">Ready to Upgrade Your {eventTypeLabel}?</h2>
+        <p class="fet-cta__copy">See how EventHex {featureLabel} transforms {eventTypeLabel} management — with zero platform fees and AI-powered tools.</p>
+        <div class="fet-cta__btns">
+          <a href="/book-a-demo/" class="fet-btn fet-btn--white">Book a Free Demo</a>
+          <a href={featureUrl} class="fet-btn fet-btn--outline">All {featureLabel} Features</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── Design Tokens (local) ─────────────────────────── */
+
+  /* ── HERO ──────────────────────────────────────────── */
+  .fet-hero {
+    position: relative;
+    background: linear-gradient(135deg, #0b0f1a 0%, #111833 50%, #0d1022 100%);
+    padding: 8rem 1.5rem 5rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .fet-hero__bg {
+    position: absolute;
+    inset: 0;
+    background: url("/bg-2.webp") center / cover no-repeat;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .fet-hero__inner {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .fet-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #93a8ff;
+    background: rgba(55, 93, 251, 0.12);
+    border: 1px solid rgba(55, 93, 251, 0.25);
+    padding: 0.4rem 1.1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .fet-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+  .fet-hero__title strong {
+    color: #93a8ff;
+    font-weight: 800;
+  }
+  .fet-hero__copy {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 640px;
+    margin: 0 auto 2.25rem;
+  }
+  .fet-hero__ctas {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── BUTTONS ───────────────────────────────────────── */
+  .fet-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.75rem 1.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .fet-btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .fet-btn--primary:hover {
+    background: #4a6dff;
+    transform: translateY(-1px);
+  }
+  .fet-btn--ghost {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+  .fet-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+  .fet-btn--white {
+    background: #fff;
+    color: var(--heading-dark);
+  }
+  .fet-btn--white:hover {
+    background: #f0f4ff;
+    transform: translateY(-1px);
+  }
+  .fet-btn--outline {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .fet-btn--outline:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  /* ── SECTION HEADING ───────────────────────────────── */
+  .fet-section-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--heading-dark);
+    margin-bottom: 0.75rem;
+  }
+  .fet-section-heading strong {
+    color: var(--brand-blue);
+    font-weight: 800;
+  }
+
+  /* ── USE CASES ─────────────────────────────────────── */
+  .fet-usecases {
+    background: #fff;
+    padding: 5.5rem 1.5rem;
+  }
+  .fet-usecases__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .fet-usecases__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-top: 3rem;
+    text-align: left;
+  }
+  .fet-uc-card {
+    background: var(--surface-light, #f8f9fb);
+    border: 1px solid var(--surface-card-border, #e8ecf1);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .fet-uc-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(55, 93, 251, 0.07);
+    border-color: rgba(55, 93, 251, 0.25);
+  }
+  .fet-uc-card__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(55, 93, 251, 0.08);
+    color: var(--brand-blue);
+    font-family: var(--font-heading);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .fet-uc-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin-bottom: 0.5rem;
+  }
+  .fet-uc-card__desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+  }
+
+  /* ── FAQ ────────────────────────────────────────────── */
+  .fet-faq {
+    background: var(--surface-light, #f8f9fb);
+    padding: 5.5rem 1.5rem;
+  }
+  .fet-faq__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .fet-faq__sub {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+    margin-top: 0.5rem;
+  }
+  .fet-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .fet-faq__item {
+    background: #fff;
+    border: 1px solid var(--surface-card-border, #e8ecf1);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  .fet-faq__item[open] {
+    border-color: rgba(55, 93, 251, 0.25);
+  }
+  .fet-faq__q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.15rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.15s ease;
+  }
+  .fet-faq__q:hover {
+    background: rgba(55, 93, 251, 0.03);
+  }
+  .fet-faq__q::after {
+    content: "▾";
+    color: var(--brand-blue);
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 1rem;
+  }
+  .fet-faq__item[open] .fet-faq__q::after {
+    transform: rotate(180deg);
+  }
+  .fet-faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .fet-faq__a {
+    padding: 0 1.5rem 1.25rem;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+  }
+
+  /* ── CTA ────────────────────────────────────────────── */
+  .fet-cta {
+    background: #fff;
+    padding: 3rem 1.5rem 5rem;
+  }
+  .fet-cta__inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .fet-cta__card {
+    position: relative;
+    background: linear-gradient(135deg, #1a1f4e 0%, #0f1225 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .fet-cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .fet-cta__glow--1 {
+    width: 300px;
+    height: 300px;
+    background: rgba(55, 93, 251, 0.3);
+    top: -80px;
+    right: -60px;
+  }
+  .fet-cta__glow--2 {
+    width: 250px;
+    height: 250px;
+    background: rgba(159, 129, 255, 0.2);
+    bottom: -60px;
+    left: -40px;
+  }
+  .fet-cta__title {
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .fet-cta__copy {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+  }
+  .fet-cta__btns {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── ANIMATIONS ────────────────────────────────────── */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE 1024 ───────────────────────────────── */
+  @media (max-width: 1024px) {
+    .fet-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  /* ── RESPONSIVE 767 ────────────────────────────────── */
+  @media (max-width: 767px) {
+    .fet-hero {
+      padding: 6rem 1rem 3.5rem;
+    }
+    .fet-usecases {
+      padding: 3.5rem 1rem;
+    }
+    .fet-usecases__grid {
+      grid-template-columns: 1fr;
+    }
+    .fet-faq {
+      padding: 3.5rem 1rem;
+    }
+    .fet-cta__card {
+      padding: 2.5rem 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = parseInt(el.dataset.delay || "0", 10);
+          setTimeout(() => el.classList.add("is-visible"), delay);
+          obs.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => obs.observe(el));
+</script>
