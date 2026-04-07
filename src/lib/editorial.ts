@@ -1,4 +1,5 @@
 import type { WPBaseEntry, WPNews, WPPost } from "./wordpress";
+import { rewriteContentUrls } from "./wordpress";
 
 export type EditorialKind = "blog" | "news";
 
@@ -173,7 +174,7 @@ function injectHeadingIds(html: string): { html: string; headings: EditorialHead
 function createEntry(entry: WPBaseEntry, kind: EditorialKind, fallbackCategory: string): EditorialEntry {
   const title = sanitizePlainText(entry.title.rendered);
   const excerptHtml = resolveExcerptHtml(entry);
-  const cleanedContent = cleanRenderedHtml(entry.content.rendered);
+  const cleanedContent = cleanRenderedHtml(rewriteContentUrls(entry.content.rendered));
   const { html: contentHtml, headings } = injectHeadingIds(cleanedContent);
   const description = truncateText(sanitizePlainText(excerptHtml || cleanedContent), 190);
   const wordCount = stripHtml(cleanedContent).split(/\s+/).filter(Boolean).length;

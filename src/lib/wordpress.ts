@@ -1,5 +1,13 @@
-const WP_URL = import.meta.env.WP_URL || "https://eventhex.ai";
+const WP_URL = import.meta.env.WP_URL || "https://cms.eventhex.ai";
 const WP_API = `${WP_URL}/wp-json/wp/v2`;
+
+/**
+ * Rewrite any old eventhex.ai/wp-content/ URLs in WordPress HTML content
+ * to point at the CMS subdomain, so images always resolve correctly.
+ */
+export function rewriteContentUrls(html: string): string {
+  return html.replaceAll("https://eventhex.ai/wp-content/", `${WP_URL}/wp-content/`);
+}
 
 export interface WPRenderedField {
   rendered: string;
