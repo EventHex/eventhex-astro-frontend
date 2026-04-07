@@ -1,0 +1,382 @@
+---
+const faqs = [
+  {
+    q: "How does event gamification increase engagement?",
+    a: "Gamification gives attendees a reason to explore — visit booths, attend sessions, and network — by rewarding those activities with points, badges, and prizes. Our clients see 3x more interactions at gamified events.",
+  },
+  {
+    q: "What types of challenges can I create?",
+    a: "Any trackable activity can be a challenge — visit 5 sponsor booths, attend 3 sessions, network with 10 people, post on social media, answer quiz questions, or scan QR codes at specific locations.",
+  },
+  {
+    q: "Can I run a lucky draw at my event?",
+    a: "Yes. Lucky draws can be weighted by engagement points — so more active attendees have better odds. You can run multiple draws throughout the event with configurable prize pools.",
+  },
+  {
+    q: "How does the leaderboard work?",
+    a: "The leaderboard updates in real-time as attendees complete challenges. It can be displayed on venue screens, in the mobile app, and on the event website. Position-based rewards can auto-trigger at milestones.",
+  },
+  {
+    q: "Can sponsors sponsor challenges?",
+    a: "Absolutely. Sponsors can have branded challenges tied to their booth — driving verified foot traffic. They receive detailed engagement reports showing exactly how many attendees interacted with their brand.",
+  },
+  {
+    q: "Do attendees need an app to participate?",
+    a: "Attendees can participate via the EventHex mobile app or the web-based event page. QR scanning works with any smartphone camera — no special app required.",
+  },
+];
+
+const checklist = [
+  "Custom challenge builder",
+  "Real-time leaderboards",
+  "Sponsor ROI tracking",
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="egfq" data-eg-faq>
+  <div class="egfq__inner">
+    <div class="egfq__support">
+      <span class="egfq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need help with event gamification?</span>
+      <h2 class="egfq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
+      <p class="egfq__desc animate-on-scroll" data-animation="fadeInUp">
+        We help event teams design gamification strategies that drive engagement, prove sponsor ROI, and create memorable event experiences.
+      </p>
+
+      <div class="egfq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="egfq__support-label">Included with every rollout</span>
+        <ul class="egfq__support-list">
+          {checklist.map((item) => (
+            <li class="egfq__support-item">{item}</li>
+          ))}
+        </ul>
+
+        <div class="egfq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Map your gamification strategy before launch and keep your event team aligned on challenges, rewards, and sponsor integrations.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="egfq__cta">Plan my gamification</a>
+      </div>
+    </div>
+
+    <div class="egfq__list">
+      {faqs.map((faq, index) => (
+        <details class="egfq__item animate-on-scroll" data-animation="fadeInUp" data-eg-faq-item open={index === 0}>
+          <summary class="egfq__question">
+            <span>{faq.q}</span>
+            <span class="egfq__icon" aria-hidden="true">
+              <span class="egfq__icon-line egfq__icon-line--horizontal"></span>
+              <span class="egfq__icon-line egfq__icon-line--vertical"></span>
+            </span>
+          </summary>
+          <div class="egfq__answer">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const egFaqItems = Array.from(document.querySelectorAll('[data-eg-faq-item]'));
+
+  egFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) {
+        return;
+      }
+
+      egFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .egfq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .egfq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .egfq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .egfq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .egfq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .egfq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .egfq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .egfq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .egfq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .egfq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .egfq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .egfq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .egfq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .egfq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .egfq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .egfq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .egfq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .egfq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+  }
+
+  .egfq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+  }
+
+  .egfq__question::-webkit-details-marker,
+  .egfq__question::marker {
+    display: none;
+  }
+
+  .egfq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 4px;
+  }
+
+  .egfq__icon-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .egfq__icon-line--vertical {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .egfq__item[open] .egfq__icon-line--vertical {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .egfq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .egfq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  @media (max-width: 1100px) {
+    .egfq { padding: 76px 0; }
+    .egfq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .egfq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .egfq__title { font-size: 40px; }
+    .egfq__desc { font-size: 16px; }
+    .egfq__question { padding: 24px 22px; font-size: 20px; }
+    .egfq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .egfq { padding: 56px 0; }
+    .egfq__inner { padding: 0 16px; gap: 24px; }
+    .egfq__title { font-size: 32px; line-height: 1.08; }
+    .egfq__desc { font-size: 15px; line-height: 1.7; }
+    .egfq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .egfq__support-item { font-size: 15px; }
+    .egfq__support-note strong { font-size: 18px; }
+    .egfq__cta { width: 100%; }
+    .egfq__item { border-radius: 24px; }
+    .egfq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .egfq__answer { padding: 0 18px 20px; }
+    .egfq__answer p { font-size: 15px; line-height: 1.75; }
+  }
+</style>

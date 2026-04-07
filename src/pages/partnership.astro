@@ -1,0 +1,568 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+
+const title = "Partner With Us - EventHex";
+const description = "Partner with EventHex to co-sell, integrate, and deliver stronger event experiences with a WordPress-backed inquiry flow.";
+
+const partnerTracks = [
+  {
+    title: "Agency & Delivery",
+    description: "Launch EventHex for clients with implementation, branding, and rollout support across recurring event programs.",
+  },
+  {
+    title: "Technology & Integrations",
+    description: "Connect payment, CRM, analytics, and venue workflows to strengthen the EventHex event stack.",
+  },
+  {
+    title: "Channel & Strategic",
+    description: "Build co-marketing, referrals, or regional partnerships that open new event markets together.",
+  },
+];
+
+const partnerBenefits = [
+  "Flexible partnership models for agencies, platforms, venues, and event operators.",
+  "Faster implementation with an event stack that already spans ticketing, engagement, and on-site operations.",
+  "Shared growth opportunities across product integrations, referrals, and co-selling motions.",
+];
+
+const wpUrl = import.meta.env.WP_URL || "https://eventhex.ai";
+---
+
+<MarketingLayout
+  {title}
+  {description}
+  canonical="https://eventhex.ai/partnership/"
+  ogImage="https://eventhex.ai/wp-content/uploads/2024/09/Ellipse-2.png"
+  showFooterCta={false}
+>
+  <section class="partner-page">
+    <div class="partner-shell">
+      <div class="partner-story">
+        <span class="partner-pill">Partner Ecosystem</span>
+
+        <div class="partner-copy">
+          <h1 class="partner-title">Partner with EventHex to transform event experiences together</h1>
+          <p class="partner-description">
+            Join EventHex as a technology partner, implementation partner, reseller, or strategic ally. We are
+            building an AI-first event platform for organizers who want fewer disconnected tools and stronger
+            attendee outcomes.
+          </p>
+        </div>
+
+        <ul class="partner-benefits" aria-label="Partnership benefits">
+          {partnerBenefits.map((benefit) => (
+            <li>{benefit}</li>
+          ))}
+        </ul>
+
+        <div class="partner-track-grid">
+          {partnerTracks.map((track) => (
+            <article class="partner-track-card">
+              <h2>{track.title}</h2>
+              <p>{track.description}</p>
+            </article>
+          ))}
+        </div>
+
+        <div class="partner-visual-wrap">
+          <img
+            src="https://eventhex.ai/wp-content/uploads/2024/09/Ellipse-2.png"
+            alt="Abstract EventHex partnership illustration"
+            width="260"
+            height="431"
+            loading="lazy"
+            class="partner-visual"
+          />
+          <div class="partner-note-card">
+            <strong>WordPress-backed routing</strong>
+            <p>
+              This inquiry uses the same WordPress-backed submission pattern already used by the Astro contact flow,
+              keeping partnership requests inside the existing backend process.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="partner-form-panel">
+        <div class="partner-form-panel__intro">
+          <p class="partner-form-panel__eyebrow">Partnership Inquiry</p>
+          <h2>Tell us how you want to work together</h2>
+          <p>
+            Share your company details, partnership model, and the kind of event delivery or integration motion you
+            want to explore.
+          </p>
+        </div>
+
+        <form class="partner-form" id="ehf-partnership-form">
+          <div class="partner-form__field">
+            <input type="text" name="company" placeholder="Company or organization" required class="partner-form__input" />
+          </div>
+          <div class="partner-form__field partner-form__field--split">
+            <input type="text" name="contact_name" placeholder="Primary contact" required class="partner-form__input" />
+            <input type="email" name="email" placeholder="Work email" required class="partner-form__input" />
+          </div>
+          <div class="partner-form__field partner-form__field--split">
+            <input type="tel" name="phone" placeholder="Phone number" required class="partner-form__input" />
+            <input type="text" name="country" placeholder="Country or region" required class="partner-form__input" />
+          </div>
+          <div class="partner-form__field partner-form__field--split">
+            <input type="url" name="website" placeholder="Website" class="partner-form__input" />
+            <select name="partner_type" class="partner-form__input partner-form__select" required>
+              <option value="" disabled selected>Partnership type</option>
+              <option value="Agency or implementation partner">Agency or implementation partner</option>
+              <option value="Technology or integration partner">Technology or integration partner</option>
+              <option value="Reseller or channel partner">Reseller or channel partner</option>
+              <option value="Venue or operator partner">Venue or operator partner</option>
+              <option value="Strategic alliance">Strategic alliance</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="partner-form__field">
+            <textarea
+              name="goals"
+              rows="6"
+              placeholder="What kind of partnership are you exploring, and what outcomes are you looking for?"
+              class="partner-form__input partner-form__textarea"
+            ></textarea>
+          </div>
+          <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <input type="text" name="ehf_hp_field" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="partner-form__checkbox">
+            <label>
+              <input type="checkbox" name="consent" required />
+              <span>
+                I agree to the <a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms-of-service/">Terms of Service</a>.
+              </span>
+            </label>
+          </div>
+          <button type="submit" class="partner-form__submit">Submit inquiry</button>
+          <div id="ehf-partnership-msg" class="partner-form__message" style="display:none"></div>
+        </form>
+      </aside>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  .partner-page {
+    padding: 32px 20px 88px;
+  }
+
+  .partner-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(340px, 430px);
+    gap: 28px;
+    align-items: stretch;
+  }
+
+  .partner-story {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 42px;
+    border-radius: 34px;
+    border: 1px solid rgba(172, 161, 241, 0.32);
+    background:
+      radial-gradient(circle at top left, rgba(55, 93, 251, 0.14), transparent 42%),
+      linear-gradient(180deg, #f7f9ff 0%, #ffffff 100%);
+    overflow: hidden;
+  }
+
+  .partner-pill {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+    color: #375dfb;
+    font-family: "Inter", var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .partner-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .partner-title {
+    margin: 0;
+    font-family: "Manrope", var(--font-heading);
+    font-size: clamp(2.4rem, 4vw, 3.9rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.06em;
+    color: #1f2630;
+    max-width: 11ch;
+  }
+
+  .partner-description {
+    margin: 0;
+    max-width: 62ch;
+    font-family: "Inter", var(--font-body);
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #4b5565;
+  }
+
+  .partner-benefits {
+    display: grid;
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .partner-benefits li {
+    position: relative;
+    padding-left: 24px;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: #303947;
+  }
+
+  .partner-benefits li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.63rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #375dfb 0%, #8aa2ff 100%);
+    box-shadow: 0 0 0 6px rgba(55, 93, 251, 0.08);
+  }
+
+  .partner-track-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .partner-track-card {
+    min-height: 100%;
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(226, 228, 233, 0.94);
+    box-shadow: 0 14px 40px -34px rgba(15, 23, 42, 0.6);
+  }
+
+  .partner-track-card h2 {
+    margin: 0 0 8px;
+    font-family: "Manrope", var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #202836;
+  }
+
+  .partner-track-card p {
+    margin: 0;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: #596273;
+  }
+
+  .partner-visual-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: auto;
+  }
+
+  .partner-visual {
+    width: min(210px, 34vw);
+    height: auto;
+    display: block;
+  }
+
+  .partner-note-card {
+    max-width: 320px;
+    padding: 18px 20px;
+    border-radius: 22px;
+    background: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 24px 80px -46px rgba(15, 23, 42, 0.92);
+  }
+
+  .partner-note-card strong {
+    display: block;
+    margin-bottom: 8px;
+    font-family: "Manrope", var(--font-heading);
+    font-size: 1.02rem;
+    font-weight: 700;
+  }
+
+  .partner-note-card p {
+    margin: 0;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .partner-form-panel {
+    padding: 34px;
+    border-radius: 34px;
+    background: rgba(187, 194, 255, 0.16);
+    border: 1px solid rgba(172, 161, 241, 0.36);
+    box-shadow: 0 24px 80px -58px rgba(55, 93, 251, 0.45);
+  }
+
+  .partner-form-panel__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .partner-form-panel__eyebrow {
+    margin: 0;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .partner-form-panel__intro h2 {
+    margin: 0;
+    font-family: "Manrope", var(--font-heading);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    color: #22272f;
+  }
+
+  .partner-form-panel__intro p {
+    margin: 0;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: #596273;
+  }
+
+  .partner-form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .partner-form__field--split {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .partner-form__input {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #e2e4e9;
+    border-radius: 12px;
+    background: #ffffff;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.95rem;
+    color: #22272f;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+  }
+
+  .partner-form__input:focus {
+    border-color: #375dfb;
+    box-shadow: 0 0 0 4px rgba(55, 93, 251, 0.08);
+  }
+
+  .partner-form__input::placeholder {
+    color: #868c98;
+  }
+
+  .partner-form__select {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .partner-form__textarea {
+    resize: vertical;
+    min-height: 136px;
+  }
+
+  .partner-form__checkbox {
+    font-family: "Inter", var(--font-body);
+    font-size: 0.88rem;
+    color: #4b5565;
+  }
+
+  .partner-form__checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .partner-form__checkbox a {
+    color: #375dfb;
+    text-decoration: underline;
+  }
+
+  .partner-form__submit {
+    padding: 13px 24px;
+    border: none;
+    border-radius: 12px;
+    background: #375dfb;
+    color: #ffffff;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.96rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+  }
+
+  .partner-form__submit:hover {
+    background: #1c46d4;
+  }
+
+  .partner-form__submit:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .partner-form__message {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-family: "Inter", var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  .partner-form__message--success {
+    background: #d1fadf;
+    color: #067647;
+    border: 1px solid #12b76a;
+  }
+
+  .partner-form__message--error {
+    background: #fee4e2;
+    color: #b42318;
+    border: 1px solid #d92d20;
+  }
+
+  @media (max-width: 1024px) {
+    .partner-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .partner-track-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .partner-visual-wrap {
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .partner-page {
+      padding: 20px 16px 56px;
+    }
+
+    .partner-story,
+    .partner-form-panel {
+      padding: 24px;
+      border-radius: 26px;
+    }
+
+    .partner-form__field--split {
+      grid-template-columns: 1fr;
+    }
+
+    .partner-visual-wrap {
+      flex-direction: column;
+    }
+
+    .partner-note-card {
+      max-width: none;
+    }
+  }
+</style>
+
+<script>
+  const WP_URL = 'https://eventhex.ai';
+
+  document.getElementById('ehf-partnership-form')?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const form = event.target as HTMLFormElement;
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const message = document.getElementById('ehf-partnership-msg')!;
+    const formData = new FormData(form);
+
+    const website = String(formData.get('website') || '').trim();
+    const country = String(formData.get('country') || '').trim();
+    const goals = String(formData.get('goals') || '').trim();
+    const partnerType = String(formData.get('partner_type') || '').trim();
+
+    const payload: Record<string, string> = {
+      'name-1': String(formData.get('contact_name') || '').trim(),
+      'email-1': String(formData.get('email') || '').trim(),
+      'name-2': String(formData.get('company') || '').trim(),
+      'text-1': country,
+      'phone-1': String(formData.get('phone') || '').trim(),
+      'select-1': partnerType,
+      'textarea-1': [
+        website ? `Website: ${website}` : '',
+        goals ? `Partnership goals:\n${goals}` : '',
+        'Form source: Partnership page',
+      ].filter(Boolean).join('\n\n'),
+      ehf_hp_field: String(formData.get('ehf_hp_field') || ''),
+    };
+
+    const consent = form.querySelector('[name="consent"]') as HTMLInputElement;
+    if (consent?.checked) {
+      payload['checkbox-1'] = 'I agree to receive email notifications and updates from EventHex. I understand that I can unsubscribe at any time.';
+    }
+
+    button.disabled = true;
+    button.textContent = 'Submitting...';
+    message.style.display = 'none';
+
+    try {
+      const response = await fetch(`${WP_URL}/wp-json/ehf/v1/submit/contact-form`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        message.className = 'partner-form__message partner-form__message--success';
+        message.textContent = result.message;
+        message.style.display = 'block';
+        form.reset();
+      } else {
+        throw new Error(result.message || 'Submission failed.');
+      }
+    } catch (error: any) {
+      message.className = 'partner-form__message partner-form__message--error';
+      message.textContent = error.message || 'Something went wrong. Please try again.';
+      message.style.display = 'block';
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Submit inquiry';
+    }
+  });
+</script>

@@ -1,0 +1,502 @@
+---
+const featureCards = [
+  {
+    title: "Selfie-to-photo matching in seconds",
+    desc: "Attendees take one selfie and InstaSnap returns every matched photo across the event gallery without manual tagging or delayed post-event delivery.",
+    visual: "match",
+  },
+  {
+    title: "Bulk uploads and gallery organization",
+    desc: "Photographers upload thousands of images while event teams organize albums by day, session, VIP access, or custom tags from one dashboard.",
+    visual: "gallery",
+  },
+  {
+    title: "Sponsor frames and branded sharing",
+    desc: "Add in-gallery sponsor banners, branded overlays, and share-ready framing so every download becomes a monetizable event touchpoint.",
+    visual: "sponsor",
+  },
+  {
+    title: "Privacy controls and download rules",
+    desc: "Give organizers GDPR-ready opt-out options, watermark settings, and attendee-specific download permissions without breaking the gallery flow.",
+    visual: "privacy",
+  },
+];
+---
+
+<section class="apgf-shell">
+  <div class="apgf-section">
+    <div class="apgf-header">
+      <span class="apgf-subtitle">Key features that keep event photography operationally tight</span>
+      <h2 class="apgf-title">
+        Everything You Need to <span class="apgf-highlight">Match, Manage, and Monetize</span><br />
+        Event Photos
+      </h2>
+    </div>
+
+    <div class="apgf-cards" id="apgf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="apgf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="apgf-card-content">
+            <h3 class="apgf-card-title">{card.title}</h3>
+            <p class="apgf-card-desc">{card.desc}</p>
+            <a href="/book-a-demo/" class="apgf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`apgf-card-visual apgf-card-visual--${card.visual}`}>
+            {card.visual === "match" && (
+              <Fragment>
+                <div class="apgf-phone">
+                  <div class="apgf-phone__screen">
+                    <div class="apgf-face"></div>
+                    <div class="apgf-scan-box"></div>
+                    <div class="apgf-scan-line"></div>
+                  </div>
+                </div>
+                <div class="apgf-thumbs">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                <div class="apgf-pill">12 photos matched</div>
+              </Fragment>
+            )}
+
+            {card.visual === "gallery" && (
+              <Fragment>
+                <div class="apgf-folder apgf-folder--one">
+                  <strong>Day 1</strong>
+                  <span>Opening + keynotes</span>
+                </div>
+                <div class="apgf-folder apgf-folder--two">
+                  <strong>Day 2</strong>
+                  <span>Breakouts + expo</span>
+                </div>
+                <div class="apgf-progress">
+                  <span>3,200 photos syncing</span>
+                  <i><b></b></i>
+                </div>
+              </Fragment>
+            )}
+
+            {card.visual === "sponsor" && (
+              <Fragment>
+                <div class="apgf-banner">Sponsor spotlight live</div>
+                <div class="apgf-gallery-grid">
+                  <span></span><span></span><span></span><span></span><span></span><span></span>
+                </div>
+                <div class="apgf-frame-card">
+                  <strong>Branded frame</strong>
+                  <span>Auto-applied on share</span>
+                </div>
+              </Fragment>
+            )}
+
+            {card.visual === "privacy" && (
+              <Fragment>
+                <div class="apgf-shield"></div>
+                <div class="apgf-toggles">
+                  <span><b></b> Facial data encrypted</span>
+                  <span><b></b> Opt-out enabled</span>
+                  <span><b></b> Download approval rules</span>
+                </div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .apgf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .apgf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .apgf-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .apgf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .apgf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .apgf-highlight {
+    color: #AFA3FF;
+  }
+
+  .apgf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .apgf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .apgf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .apgf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .apgf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .apgf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .apgf-card-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .apgf-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  .apgf-phone {
+    width: 220px;
+    padding: 10px;
+    border-radius: 30px;
+    background: linear-gradient(180deg, #1a2340 0%, #243873 100%);
+    box-shadow: 0 28px 50px -32px rgba(12, 22, 52, 0.85);
+  }
+
+  .apgf-phone__screen {
+    position: relative;
+    height: 320px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #eef4ff 0%, #dfe8ff 100%);
+    overflow: hidden;
+  }
+
+  .apgf-face {
+    position: absolute;
+    inset: 22% 22% auto;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at center 34%, rgba(55, 93, 251, 0.42) 0 22%, transparent 23%),
+      radial-gradient(circle at center 76%, rgba(55, 93, 251, 0.48) 0 28%, transparent 29%),
+      linear-gradient(180deg, rgba(55, 93, 251, 0.08), rgba(55, 93, 251, 0.2));
+  }
+
+  .apgf-scan-box {
+    position: absolute;
+    inset: 18% 15% 34% 15%;
+    border: 2px solid rgba(56, 189, 248, 0.75);
+    border-radius: 24px;
+  }
+
+  .apgf-scan-line {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+    animation: apgf-scan-line 2.4s ease-in-out infinite;
+  }
+
+  .apgf-thumbs {
+    position: absolute;
+    right: 28px;
+    top: 48px;
+    width: 180px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .apgf-thumbs span,
+  .apgf-gallery-grid span {
+    display: block;
+    aspect-ratio: 0.92;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #d9e4ff, #eff4ff);
+    border: 1px solid rgba(122, 146, 235, 0.28);
+  }
+
+  .apgf-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .apgf-folder {
+    position: absolute;
+    left: 40px;
+    right: 160px;
+    display: grid;
+    gap: 6px;
+    padding: 18px 18px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.52);
+  }
+
+  .apgf-folder strong {
+    color: #183465;
+    font-size: 18px;
+  }
+
+  .apgf-folder span {
+    color: #607390;
+    font-size: 14px;
+  }
+
+  .apgf-folder--one { top: 88px; }
+  .apgf-folder--two { top: 182px; left: 76px; }
+
+  .apgf-progress {
+    position: absolute;
+    right: 36px;
+    bottom: 54px;
+    width: 220px;
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(24, 52, 101, 0.94);
+    color: #f8fbff;
+    box-shadow: 0 22px 40px -28px rgba(17, 28, 56, 0.75);
+  }
+
+  .apgf-progress span {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .apgf-progress i {
+    overflow: hidden;
+    display: block;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .apgf-progress b {
+    display: block;
+    width: 72%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #22c55e, #38bdf8);
+    animation: apgf-load 2.8s ease-in-out infinite alternate;
+  }
+
+  .apgf-banner {
+    position: absolute;
+    left: 34px;
+    top: 48px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(245, 158, 11, 0.08));
+    color: #a16207;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .apgf-gallery-grid {
+    position: absolute;
+    left: 34px;
+    right: 34px;
+    top: 100px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .apgf-frame-card {
+    position: absolute;
+    right: 34px;
+    bottom: 46px;
+    display: grid;
+    gap: 4px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(20, 33, 59, 0.95);
+    color: #f8fbff;
+    box-shadow: 0 20px 40px -26px rgba(17, 28, 56, 0.7);
+  }
+
+  .apgf-frame-card strong { font-size: 15px; }
+  .apgf-frame-card span { color: rgba(248, 251, 255, 0.76); font-size: 13px; }
+
+  .apgf-shield {
+    position: absolute;
+    left: 50%;
+    top: 56px;
+    width: 124px;
+    height: 150px;
+    transform: translateX(-50%);
+    clip-path: polygon(50% 0%, 92% 14%, 92% 52%, 50% 100%, 8% 52%, 8% 14%);
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(55, 93, 251, 0.3));
+    border: 1px solid rgba(34, 197, 94, 0.26);
+  }
+
+  .apgf-toggles {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    bottom: 52px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .apgf-toggles span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1f3a6d;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .apgf-toggles b {
+    width: 22px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #22c55e, #38bdf8);
+    box-shadow: inset -10px 0 0 0 rgba(255, 255, 255, 0.88);
+  }
+
+  @keyframes apgf-load {
+    from { width: 48%; }
+    to { width: 82%; }
+  }
+
+  @keyframes apgf-scan-line {
+    0%, 100% { transform: translateY(-54px); }
+    50% { transform: translateY(54px); }
+  }
+
+  @media (max-width: 1024px) {
+    .apgf-section { padding: 60px 20px 30px; }
+    .apgf-header { width: 80%; }
+    .apgf-subtitle { font-size: 16px; }
+    .apgf-title { font-size: 40px; line-height: 1em; }
+    .apgf-card { height: 450px; }
+    .apgf-card-content { flex-basis: 50%; }
+    .apgf-card-title { font-size: 28px; }
+    .apgf-card-desc { font-size: 16px; }
+    .apgf-phone { width: 180px; }
+    .apgf-phone__screen { height: 280px; }
+    .apgf-thumbs { width: 150px; }
+  }
+
+  @media (max-width: 767px) {
+    .apgf-section { padding: 50px 20px 30px; }
+    .apgf-header { width: 100%; }
+    .apgf-title { font-size: 30px; }
+    .apgf-card { flex-direction: column; height: 520px; }
+    .apgf-card-content { flex: 0 0 50%; padding: 20px 20px 0; }
+    .apgf-card-visual { min-height: 260px; padding: 12px; }
+    .apgf-card-title { font-size: 24px; }
+    .apgf-card-desc { font-size: 15px; }
+    .apgf-cards { padding-bottom: 40px; }
+    .apgf-phone { width: 150px; }
+    .apgf-phone__screen { height: 220px; }
+    .apgf-thumbs { width: 120px; top: 30px; right: 18px; gap: 8px; }
+    .apgf-folder { left: 20px; right: 120px; }
+    .apgf-progress,
+    .apgf-frame-card { right: 18px; }
+    .apgf-gallery-grid { left: 20px; right: 20px; }
+    .apgf-toggles { left: 20px; right: 20px; bottom: 20px; }
+  }
+</style>

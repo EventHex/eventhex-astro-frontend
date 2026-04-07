@@ -1,0 +1,1421 @@
+---
+const tabs = [
+  {
+    label: "Live Polls",
+    hero: {
+      eyebrow: "Poll Engine",
+      title: "Multiple-choice polls, word clouds, and timed questions with live venue display",
+      desc: "Create polls in seconds and display results on venue screens as votes pour in. Bar charts race, word clouds grow — creating energy in the room.",
+      points: ["Multiple-choice and rating polls", "Real-time word clouds", "Live venue screen display"],
+      visual: "polls",
+    },
+    cards: [
+      {
+        eyebrow: "Words",
+        title: "Word Clouds",
+        desc: "Generate real-time word clouds from attendee responses.",
+        visual: "wordcloud",
+      },
+      {
+        eyebrow: "Timer",
+        title: "Timed Polls",
+        desc: "Set countdown timers for urgency and focused engagement.",
+        visual: "timedpoll",
+      },
+      {
+        eyebrow: "Charts",
+        title: "Live Bar Charts",
+        desc: "Results animate in real-time on venue screens as votes come in.",
+        visual: "livechart",
+      },
+      {
+        eyebrow: "Templates",
+        title: "Pre-Built Templates",
+        desc: "Poll templates for icebreakers, feedback, and session topics.",
+        visual: "polltpl",
+      },
+    ],
+  },
+  {
+    label: "Q&A System",
+    hero: {
+      eyebrow: "Q&A Engine",
+      title: "Attendee questions with upvoting, moderation queue, and speaker view",
+      desc: "Attendees submit questions from any device, others upvote the best ones. Moderators filter and approve before they go live.",
+      points: ["Upvoted question ranking", "Moderator approval queue", "Dedicated speaker view"],
+      visual: "qa",
+    },
+    cards: [
+      {
+        eyebrow: "Voting",
+        title: "Upvoting",
+        desc: "Attendees upvote the best questions — popular ones rise to the top.",
+        visual: "upvote",
+      },
+      {
+        eyebrow: "Moderate",
+        title: "Moderation Queue",
+        desc: "Moderators review and approve questions before they go live.",
+        visual: "modqueue",
+      },
+      {
+        eyebrow: "Speaker",
+        title: "Speaker View",
+        desc: "Dedicated speaker view showing approved questions in order.",
+        visual: "speakerview",
+      },
+      {
+        eyebrow: "Anon",
+        title: "Anonymous Mode",
+        desc: "Allow anonymous questions to encourage honest participation.",
+        visual: "anonmode",
+      },
+    ],
+  },
+  {
+    label: "Feedback & Analytics",
+    hero: {
+      eyebrow: "Feedback Engine",
+      title: "Session ratings, NPS surveys, and response analytics with export",
+      desc: "Collect real-time feedback at session end — star ratings, NPS scores, and comments. Export all data and auto-generate speaker reports.",
+      points: ["Session-end feedback forms", "NPS survey support", "Auto speaker reports"],
+      visual: "feedback",
+    },
+    cards: [
+      {
+        eyebrow: "NPS",
+        title: "NPS Surveys",
+        desc: "Run Net Promoter Score surveys during or after the event.",
+        visual: "nps",
+      },
+      {
+        eyebrow: "Charts",
+        title: "Response Analytics",
+        desc: "Detailed charts and insights for every poll and Q&A session.",
+        visual: "analytics",
+      },
+      {
+        eyebrow: "Export",
+        title: "Export Data",
+        desc: "Export all poll results, Q&A logs, and feedback data as CSV or PDF.",
+        visual: "export",
+      },
+      {
+        eyebrow: "Reports",
+        title: "Speaker Reports",
+        desc: "Auto-generated speaker feedback reports with audience ratings.",
+        visual: "speakerreport",
+      },
+    ],
+  },
+];
+---
+
+<section class="lpqb-section" id="lpq-bento">
+  <div class="lpqb-shell">
+    <h2 class="lpqb-title">
+      Live <b>Polls</b>, Moderated <b>Q&A</b> & <b>Feedback</b>
+    </h2>
+    <p class="lpqb-subtitle">
+      Create polls, moderate questions, collect feedback, and display results in real time.
+    </p>
+
+    <nav class="lpqb-nav" aria-label="Live polling and Q&A workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`lpqb-tab${index === 0 ? " lpqb-tab--active" : ""}`}
+          data-lpqb-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`lpqb-panel${tabIndex === 0 ? " lpqb-panel--active" : ""}`}
+        data-lpqb-panel={tabIndex}
+      >
+        <div class="lpqb-grid">
+          <article class="lpqb-card lpqb-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="lpqb-card__content">
+              <span class="lpqb-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="lpqb-card__title">{tab.hero.title}</h3>
+              <p class="lpqb-card__desc">{tab.hero.desc}</p>
+
+              <ul class="lpqb-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`lpqb-art lpqb-art--hero lpqb-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "polls" && (
+                <Fragment>
+                  <div class="lpqb-poll-bars">
+                    <div class="lpqb-poll-option">
+                      <span class="lpqb-poll-label"></span>
+                      <div class="lpqb-poll-track"><span class="lpqb-poll-fill" style="--w:78%"></span></div>
+                      <span class="lpqb-poll-pct">78%</span>
+                    </div>
+                    <div class="lpqb-poll-option">
+                      <span class="lpqb-poll-label"></span>
+                      <div class="lpqb-poll-track"><span class="lpqb-poll-fill" style="--w:55%"></span></div>
+                      <span class="lpqb-poll-pct">55%</span>
+                    </div>
+                    <div class="lpqb-poll-option">
+                      <span class="lpqb-poll-label"></span>
+                      <div class="lpqb-poll-track"><span class="lpqb-poll-fill" style="--w:34%"></span></div>
+                      <span class="lpqb-poll-pct">34%</span>
+                    </div>
+                    <div class="lpqb-poll-option">
+                      <span class="lpqb-poll-label"></span>
+                      <div class="lpqb-poll-track"><span class="lpqb-poll-fill" style="--w:12%"></span></div>
+                      <span class="lpqb-poll-pct">12%</span>
+                    </div>
+                  </div>
+                  <div class="lpqb-vote-counter">
+                    <strong>1,247</strong>
+                    <span>votes</span>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "qa" && (
+                <Fragment>
+                  <div class="lpqb-qa-phone">
+                    <div class="lpqb-qa-notch"></div>
+                    <div class="lpqb-qa-screen">
+                      <div class="lpqb-qa-bubble lpqb-qa-bubble--top">
+                        <span class="lpqb-qa-bubble-text"></span>
+                        <span class="lpqb-qa-upvote">&#9650; 24</span>
+                      </div>
+                      <div class="lpqb-qa-bubble">
+                        <span class="lpqb-qa-bubble-text"></span>
+                        <span class="lpqb-qa-upvote">&#9650; 18</span>
+                      </div>
+                      <div class="lpqb-qa-bubble">
+                        <span class="lpqb-qa-bubble-text"></span>
+                        <span class="lpqb-qa-upvote">&#9650; 9</span>
+                      </div>
+                    </div>
+                    <div class="lpqb-qa-input"></div>
+                  </div>
+                  <div class="lpqb-qa-badge">Live Q&A</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "feedback" && (
+                <Fragment>
+                  <div class="lpqb-fb-card">
+                    <div class="lpqb-fb-stars">
+                      <span class="lpqb-fb-star lpqb-fb-star--filled">&#9733;</span>
+                      <span class="lpqb-fb-star lpqb-fb-star--filled">&#9733;</span>
+                      <span class="lpqb-fb-star lpqb-fb-star--filled">&#9733;</span>
+                      <span class="lpqb-fb-star lpqb-fb-star--filled">&#9733;</span>
+                      <span class="lpqb-fb-star">&#9733;</span>
+                    </div>
+                    <div class="lpqb-fb-comment">
+                      <span></span>
+                      <span></span>
+                    </div>
+                    <div class="lpqb-fb-submit"></div>
+                  </div>
+                  <div class="lpqb-fb-nps">
+                    <div class="lpqb-fb-nps-bar">
+                      <span class="lpqb-fb-nps-zone lpqb-fb-nps-zone--red"></span>
+                      <span class="lpqb-fb-nps-zone lpqb-fb-nps-zone--yellow"></span>
+                      <span class="lpqb-fb-nps-zone lpqb-fb-nps-zone--green"></span>
+                    </div>
+                    <span class="lpqb-fb-nps-label">NPS: 72</span>
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="lpqb-card lpqb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="lpqb-card__content">
+                <span class="lpqb-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="lpqb-card__title">{card.title}</h3>
+                <p class="lpqb-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`lpqb-art lpqb-art--mini lpqb-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "wordcloud" && (
+                  <Fragment>
+                    <div class="lpqb-wc-words">
+                      <span class="lpqb-wc-word" style="--s:1.6;--x:-20%;--y:-10%">Innovation</span>
+                      <span class="lpqb-wc-word" style="--s:1.1;--x:15%;--y:20%">AI</span>
+                      <span class="lpqb-wc-word" style="--s:0.8;--x:-30%;--y:30%">Future</span>
+                      <span class="lpqb-wc-word" style="--s:1.3;--x:25%;--y:-20%">Growth</span>
+                      <span class="lpqb-wc-word" style="--s:0.9;--x:0%;--y:10%">Data</span>
+                    </div>
+                    <div class="lpqb-mini-chip">Word cloud</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "timedpoll" && (
+                  <Fragment>
+                    <div class="lpqb-timer">
+                      <svg viewBox="0 0 60 60" class="lpqb-timer-svg">
+                        <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(55,93,251,0.1)" stroke-width="5"/>
+                        <circle cx="30" cy="30" r="26" fill="none" stroke="#375dfb" stroke-width="5" stroke-dasharray="163" stroke-dashoffset="41" stroke-linecap="round" transform="rotate(-90 30 30)" class="lpqb-timer-arc"/>
+                      </svg>
+                      <span class="lpqb-timer-num">0:15</span>
+                    </div>
+                    <div class="lpqb-timer-opts">
+                      <span class="lpqb-timer-opt"></span>
+                      <span class="lpqb-timer-opt"></span>
+                    </div>
+                    <div class="lpqb-mini-chip">Timed poll</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "livechart" && (
+                  <Fragment>
+                    <div class="lpqb-hbars">
+                      <div class="lpqb-hbar"><span style="--w:85%"></span></div>
+                      <div class="lpqb-hbar"><span style="--w:62%"></span></div>
+                      <div class="lpqb-hbar"><span style="--w:45%"></span></div>
+                      <div class="lpqb-hbar"><span style="--w:28%"></span></div>
+                    </div>
+                    <div class="lpqb-mini-chip">Live results</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "polltpl" && (
+                  <Fragment>
+                    <div class="lpqb-tpl-grid">
+                      <div class="lpqb-tpl-card"><span></span><span></span></div>
+                      <div class="lpqb-tpl-card"><span></span><span></span></div>
+                      <div class="lpqb-tpl-card"><span></span><span></span></div>
+                      <div class="lpqb-tpl-card"><span></span><span></span></div>
+                    </div>
+                    <div class="lpqb-mini-chip">4 templates</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "upvote" && (
+                  <Fragment>
+                    <div class="lpqb-uv-cards">
+                      <div class="lpqb-uv-card">
+                        <span class="lpqb-uv-text"></span>
+                        <span class="lpqb-uv-badge">&#9650; 24</span>
+                      </div>
+                      <div class="lpqb-uv-card">
+                        <span class="lpqb-uv-text"></span>
+                        <span class="lpqb-uv-badge">&#9650; 18</span>
+                      </div>
+                    </div>
+                    <div class="lpqb-mini-chip">Top voted</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "modqueue" && (
+                  <Fragment>
+                    <div class="lpqb-mod-panel">
+                      <div class="lpqb-mod-row">
+                        <span class="lpqb-mod-text"></span>
+                        <span class="lpqb-mod-btn lpqb-mod-btn--approve">&#10003;</span>
+                        <span class="lpqb-mod-btn lpqb-mod-btn--reject">&#10005;</span>
+                      </div>
+                      <div class="lpqb-mod-row">
+                        <span class="lpqb-mod-text"></span>
+                        <span class="lpqb-mod-btn lpqb-mod-btn--approve">&#10003;</span>
+                        <span class="lpqb-mod-btn lpqb-mod-btn--reject">&#10005;</span>
+                      </div>
+                    </div>
+                    <div class="lpqb-mini-chip">Moderation</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "speakerview" && (
+                  <Fragment>
+                    <div class="lpqb-sv-panel">
+                      <div class="lpqb-sv-head"></div>
+                      <div class="lpqb-sv-q lpqb-sv-q--active">
+                        <span class="lpqb-sv-dot"></span>
+                        <span class="lpqb-sv-text"></span>
+                      </div>
+                      <div class="lpqb-sv-q">
+                        <span class="lpqb-sv-dot"></span>
+                        <span class="lpqb-sv-text"></span>
+                      </div>
+                    </div>
+                    <div class="lpqb-mini-chip">Speaker view</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "anonmode" && (
+                  <Fragment>
+                    <div class="lpqb-anon">
+                      <div class="lpqb-anon-avatar">
+                        <span class="lpqb-anon-icon">?</span>
+                      </div>
+                      <div class="lpqb-anon-lock">&#128274;</div>
+                    </div>
+                    <div class="lpqb-mini-chip">Anonymous</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "nps" && (
+                  <Fragment>
+                    <div class="lpqb-nps-scale">
+                      <div class="lpqb-nps-bar">
+                        <span class="lpqb-nps-zone lpqb-nps-zone--red"></span>
+                        <span class="lpqb-nps-zone lpqb-nps-zone--yellow"></span>
+                        <span class="lpqb-nps-zone lpqb-nps-zone--green"></span>
+                      </div>
+                      <div class="lpqb-nps-pointer"></div>
+                      <span class="lpqb-nps-score">72</span>
+                    </div>
+                    <div class="lpqb-mini-chip">NPS score</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "analytics" && (
+                  <Fragment>
+                    <div class="lpqb-an-bars">
+                      <span style="--h:50%"></span>
+                      <span style="--h:75%"></span>
+                      <span style="--h:40%"></span>
+                      <span style="--h:90%"></span>
+                      <span style="--h:60%"></span>
+                    </div>
+                    <div class="lpqb-mini-chip">Analytics</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "export" && (
+                  <Fragment>
+                    <div class="lpqb-exp-dialog">
+                      <div class="lpqb-exp-head"></div>
+                      <div class="lpqb-exp-btns">
+                        <span class="lpqb-exp-btn">CSV</span>
+                        <span class="lpqb-exp-btn">PDF</span>
+                      </div>
+                    </div>
+                    <div class="lpqb-mini-chip">Export</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "speakerreport" && (
+                  <Fragment>
+                    <div class="lpqb-sr-card">
+                      <div class="lpqb-sr-avatar"></div>
+                      <div class="lpqb-sr-info">
+                        <span class="lpqb-sr-name"></span>
+                        <div class="lpqb-sr-stars">
+                          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span class="lpqb-sr-star-dim">&#9733;</span>
+                        </div>
+                        <span class="lpqb-sr-score">4.2 / 5</span>
+                      </div>
+                    </div>
+                    <div class="lpqb-mini-chip">Speaker report</div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".lpqb-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".lpqb-tab"));
+      const panels = Array.from(root.querySelectorAll(".lpqb-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("lpqb-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("lpqb-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .lpqb-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .lpqb-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .lpqb-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .lpqb-title b { font-weight: 700; }
+
+  .lpqb-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .lpqb-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .lpqb-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .lpqb-tab:hover,
+  .lpqb-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .lpqb-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .lpqb-panel { display: none; }
+  .lpqb-panel--active { display: block; }
+
+  .lpqb-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .lpqb-panel--active .lpqb-card {
+    animation: lpqb-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  .lpqb-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .lpqb-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .lpqb-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .lpqb-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .lpqb-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .lpqb-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .lpqb-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .lpqb-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .lpqb-card__content { position: relative; z-index: 1; }
+
+  .lpqb-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .lpqb-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .lpqb-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .lpqb-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .lpqb-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .lpqb-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .lpqb-art { position: relative; z-index: 1; min-height: 146px; }
+  .lpqb-art--hero { min-height: 228px; margin-top: 0.6rem; }
+  .lpqb-art--mini { align-self: end; }
+
+  /* === Hero visual: polls === */
+  .lpqb-poll-bars {
+    position: absolute;
+    inset: 0 0 2.4rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0.8rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .lpqb-poll-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lpqb-poll-label {
+    width: 2rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+    flex-shrink: 0;
+  }
+
+  .lpqb-poll-track {
+    flex: 1;
+    height: 1.2rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.06);
+    overflow: hidden;
+  }
+
+  .lpqb-poll-fill {
+    display: block;
+    height: 100%;
+    width: var(--w, 50%);
+    border-radius: 0.6rem;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    animation: lpqb-bar-race 3s ease-in-out infinite alternate;
+  }
+
+  .lpqb-poll-pct {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #375dfb;
+    min-width: 2rem;
+    text-align: right;
+  }
+
+  .lpqb-vote-counter {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 0.35rem;
+    align-items: baseline;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .lpqb-vote-counter strong { font-size: 1.1rem; color: #183465; }
+  .lpqb-vote-counter span { font-size: 0.72rem; color: #607390; font-weight: 700; }
+
+  /* === Hero visual: qa (phone) === */
+  .lpqb-qa-phone {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 55%;
+    max-width: 180px;
+    border-radius: 1.4rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 2px solid rgba(55, 93, 251, 0.15);
+    padding: 0.6rem;
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+  }
+
+  .lpqb-qa-notch {
+    width: 40%;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+    margin: 0 auto 0.5rem;
+  }
+
+  .lpqb-qa-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .lpqb-qa-bubble {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.8rem;
+    background: rgba(55, 93, 251, 0.04);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    animation: lpqb-float 5s ease-in-out infinite;
+  }
+
+  .lpqb-qa-bubble--top {
+    background: rgba(55, 93, 251, 0.1);
+    border-color: rgba(55, 93, 251, 0.2);
+  }
+
+  .lpqb-qa-bubble:nth-child(2) { animation-delay: -0.8s; }
+  .lpqb-qa-bubble:nth-child(3) { animation-delay: -1.6s; }
+
+  .lpqb-qa-bubble-text {
+    flex: 1;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .lpqb-qa-upvote {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: #375dfb;
+    flex-shrink: 0;
+  }
+
+  .lpqb-qa-input {
+    height: 0.8rem;
+    border-radius: 0.5rem;
+    background: rgba(55, 93, 251, 0.04);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    margin-top: 0.4rem;
+  }
+
+  .lpqb-qa-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-flex;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* === Hero visual: feedback === */
+  .lpqb-fb-card {
+    position: absolute;
+    inset: 0 0 2.8rem 0;
+    padding: 1rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .lpqb-fb-stars {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  .lpqb-fb-star {
+    font-size: 1.3rem;
+    color: rgba(55, 93, 251, 0.15);
+  }
+
+  .lpqb-fb-star--filled {
+    color: #f59e0b;
+  }
+
+  .lpqb-fb-comment {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .lpqb-fb-comment span:first-child {
+    height: 0.4rem;
+    width: 85%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .lpqb-fb-comment span:last-child {
+    height: 0.4rem;
+    width: 60%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.04);
+  }
+
+  .lpqb-fb-submit {
+    width: 40%;
+    height: 1.2rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+  }
+
+  .lpqb-fb-nps {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .lpqb-fb-nps-bar {
+    display: flex;
+    gap: 2px;
+    width: 3rem;
+    height: 0.35rem;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .lpqb-fb-nps-zone { flex: 1; }
+  .lpqb-fb-nps-zone--red { background: #ef4444; }
+  .lpqb-fb-nps-zone--yellow { background: #f59e0b; }
+  .lpqb-fb-nps-zone--green { background: #22c55e; }
+
+  .lpqb-fb-nps-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #22c55e;
+  }
+
+  /* === Mini visuals === */
+  .lpqb-mini-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  /* wordcloud */
+  .lpqb-wc-words {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.4rem;
+  }
+
+  .lpqb-wc-word {
+    font-family: var(--font-heading);
+    font-size: calc(var(--s, 1) * 0.72rem);
+    font-weight: 700;
+    color: #375dfb;
+    opacity: 0.7;
+    transform: translate(var(--x, 0), var(--y, 0));
+    animation: lpqb-float 4s ease-in-out infinite;
+  }
+
+  .lpqb-wc-word:nth-child(2) { color: #22c55e; animation-delay: -0.5s; }
+  .lpqb-wc-word:nth-child(3) { color: #AFA3FF; animation-delay: -1s; }
+  .lpqb-wc-word:nth-child(4) { color: #f59e0b; animation-delay: -1.5s; }
+  .lpqb-wc-word:nth-child(5) { color: #38bdf8; animation-delay: -2s; }
+
+  /* timedpoll */
+  .lpqb-timer {
+    position: absolute;
+    inset: 0.2rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lpqb-timer-svg {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+
+  .lpqb-timer-arc {
+    animation: lpqb-countdown 15s linear infinite;
+  }
+
+  .lpqb-timer-num {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #dc2626;
+  }
+
+  .lpqb-timer-opts {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 0.4rem;
+    right: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .lpqb-timer-opt {
+    height: 0.6rem;
+    border-radius: 0.3rem;
+    background: rgba(55, 93, 251, 0.06);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  /* livechart */
+  .lpqb-hbars {
+    position: absolute;
+    inset: 0.4rem 0.5rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  .lpqb-hbar {
+    height: 0.9rem;
+    border-radius: 0.45rem;
+    background: rgba(55, 93, 251, 0.06);
+    overflow: hidden;
+  }
+
+  .lpqb-hbar span {
+    display: block;
+    height: 100%;
+    width: var(--w, 50%);
+    border-radius: 0.45rem;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+    animation: lpqb-bar-race 3s ease-in-out infinite alternate;
+  }
+
+  .lpqb-hbar:nth-child(2) span { animation-delay: -0.5s; }
+  .lpqb-hbar:nth-child(3) span { animation-delay: -1s; }
+  .lpqb-hbar:nth-child(4) span { animation-delay: -1.5s; }
+
+  /* polltpl */
+  .lpqb-tpl-grid {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .lpqb-tpl-card {
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .lpqb-tpl-card span:first-child {
+    height: 0.35rem;
+    width: 60%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .lpqb-tpl-card span:last-child {
+    height: 0.3rem;
+    width: 80%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  /* upvote */
+  .lpqb-uv-cards {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .lpqb-uv-card {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    animation: lpqb-float 5s ease-in-out infinite;
+  }
+
+  .lpqb-uv-card:nth-child(2) { animation-delay: -1s; }
+
+  .lpqb-uv-text {
+    flex: 1;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .lpqb-uv-badge {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #375dfb;
+    padding: 0.2rem 0.4rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+    flex-shrink: 0;
+  }
+
+  /* modqueue */
+  .lpqb-mod-panel {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .lpqb-mod-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .lpqb-mod-text {
+    flex: 1;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .lpqb-mod-btn {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 0.6rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .lpqb-mod-btn--approve {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+  }
+
+  .lpqb-mod-btn--reject {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+  }
+
+  /* speakerview */
+  .lpqb-sv-panel {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.6rem;
+    border-radius: 1rem;
+    background: #14213b;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .lpqb-sv-head {
+    height: 0.35rem;
+    width: 50%;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .lpqb-sv-q {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .lpqb-sv-q--active {
+    background: rgba(55, 93, 251, 0.2);
+    border-color: rgba(55, 93, 251, 0.3);
+  }
+
+  .lpqb-sv-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+  }
+
+  .lpqb-sv-q--active .lpqb-sv-dot {
+    background: #375dfb;
+  }
+
+  .lpqb-sv-text {
+    flex: 1;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  /* anonmode */
+  .lpqb-anon {
+    position: absolute;
+    inset: 0.4rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .lpqb-anon-avatar {
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.15), rgba(175, 163, 255, 0.2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lpqb-anon-icon {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  .lpqb-anon-lock {
+    font-size: 0.9rem;
+    animation: lpqb-pulse 2s ease-in-out infinite;
+  }
+
+  /* nps */
+  .lpqb-nps-scale {
+    position: absolute;
+    inset: 0.8rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .lpqb-nps-bar {
+    width: 100%;
+    height: 0.5rem;
+    border-radius: 999px;
+    overflow: hidden;
+    display: flex;
+  }
+
+  .lpqb-nps-zone { flex: 1; }
+  .lpqb-nps-zone--red { background: #ef4444; }
+  .lpqb-nps-zone--yellow { background: #f59e0b; }
+  .lpqb-nps-zone--green { background: #22c55e; }
+
+  .lpqb-nps-pointer {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid #22c55e;
+    align-self: flex-end;
+    margin-right: 15%;
+  }
+
+  .lpqb-nps-score {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #22c55e;
+  }
+
+  /* analytics */
+  .lpqb-an-bars {
+    position: absolute;
+    inset: 0.4rem 0.5rem 1.8rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.35rem;
+  }
+
+  .lpqb-an-bars span {
+    flex: 1;
+    height: var(--h, 50%);
+    border-radius: 0.3rem 0.3rem 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+    animation: lpqb-float 4s ease-in-out infinite;
+  }
+
+  .lpqb-an-bars span:nth-child(2) { animation-delay: -0.5s; }
+  .lpqb-an-bars span:nth-child(3) { animation-delay: -1s; }
+  .lpqb-an-bars span:nth-child(4) { animation-delay: -1.5s; }
+  .lpqb-an-bars span:nth-child(5) { animation-delay: -2s; }
+
+  /* export */
+  .lpqb-exp-dialog {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.6rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .lpqb-exp-head {
+    height: 0.4rem;
+    width: 55%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .lpqb-exp-btns {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .lpqb-exp-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(55, 93, 251, 0.08);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  /* speakerreport */
+  .lpqb-sr-card {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .lpqb-sr-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.34), rgba(34, 197, 94, 0.24));
+    flex-shrink: 0;
+  }
+
+  .lpqb-sr-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .lpqb-sr-name {
+    height: 0.35rem;
+    width: 3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .lpqb-sr-stars {
+    display: flex;
+    gap: 1px;
+    font-size: 0.65rem;
+    color: #f59e0b;
+  }
+
+  .lpqb-sr-star-dim {
+    opacity: 0.25;
+  }
+
+  .lpqb-sr-score {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  /* === Animations === */
+  @keyframes lpqb-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes lpqb-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes lpqb-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  @keyframes lpqb-bar-race {
+    0% { transform: scaleX(0.85); }
+    100% { transform: scaleX(1); }
+  }
+
+  @keyframes lpqb-countdown {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 163; }
+  }
+
+  @media (max-width: 960px) {
+    .lpqb-section { padding: 60px 0 48px; }
+    .lpqb-title { font-size: 36px; }
+    .lpqb-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+    .lpqb-card--hero { min-height: 380px; }
+  }
+
+  @media (max-width: 720px) {
+    .lpqb-section { padding-inline: 0; }
+    .lpqb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
+    .lpqb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+    .lpqb-title { font-size: 28px; }
+    .lpqb-subtitle { font-size: 15px; }
+    .lpqb-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
+    }
+    .lpqb-card { min-height: 210px; }
+    .lpqb-card--hero { min-height: 420px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lpqb-panel--active .lpqb-card,
+    .lpqb-poll-fill,
+    .lpqb-qa-bubble,
+    .lpqb-uv-card,
+    .lpqb-wc-word,
+    .lpqb-an-bars span,
+    .lpqb-hbar span,
+    .lpqb-timer-arc,
+    .lpqb-anon-lock { animation: none; }
+  }
+</style>

@@ -1,0 +1,1392 @@
+---
+const tabs = [
+  {
+    label: "Badge Design",
+    hero: {
+      eyebrow: "Visual Editor",
+      title: "Drag-and-drop badge designer with QR codes, dynamic data, and templates",
+      desc: "Pick a template, customize with your brand, add QR codes and dynamic attendee data fields, and preview across badge sizes.",
+      points: ["100+ badge templates", "QR code auto-generation", "Dynamic data field mapping"],
+      visual: "badgeedit",
+    },
+    cards: [
+      {
+        eyebrow: "Templates",
+        title: "Template Gallery",
+        desc: "100+ professional badge templates for every event type and format.",
+        visual: "gallery",
+      },
+      {
+        eyebrow: "QR",
+        title: "QR Code Integration",
+        desc: "Auto-generated QR codes for check-in, contact exchange, and verification.",
+        visual: "qrcode",
+      },
+      {
+        eyebrow: "Data",
+        title: "Dynamic Data Fields",
+        desc: "Auto-fill attendee name, company, role, and custom fields per badge.",
+        visual: "datafields",
+      },
+      {
+        eyebrow: "Sizes",
+        title: "Multiple Badge Sizes",
+        desc: "Standard, compact, and VIP sizes with auto-layout adjustment.",
+        visual: "sizes",
+      },
+    ],
+  },
+  {
+    label: "Certificate Design",
+    hero: {
+      eyebrow: "Certificate Engine",
+      title: "Professional certificate templates with auto-fill and bulk PDF generation",
+      desc: "Design once, generate thousands. Certificates auto-fill with attendee data and are delivered as high-resolution PDFs via email.",
+      points: ["Custom branding", "Auto-fill attendee data", "Bulk PDF generation"],
+      visual: "certedit",
+    },
+    cards: [
+      {
+        eyebrow: "Branding",
+        title: "Custom Branding",
+        desc: "Add your event logo, colors, fonts, and sponsor logos to certificates.",
+        visual: "branding",
+      },
+      {
+        eyebrow: "Auto-fill",
+        title: "Auto-Fill Data",
+        desc: "Merge attendee names, dates, and course details automatically.",
+        visual: "autofill",
+      },
+      {
+        eyebrow: "PDF",
+        title: "PDF Generation",
+        desc: "High-resolution downloadable PDF certificates for every attendee.",
+        visual: "pdfgen",
+      },
+      {
+        eyebrow: "Bulk",
+        title: "Bulk Generation",
+        desc: "Generate thousands of unique certificates in minutes.",
+        visual: "bulkgen",
+      },
+    ],
+  },
+  {
+    label: "Printing & Delivery",
+    hero: {
+      eyebrow: "Print Operations",
+      title: "On-site badge printing with thermal printers, kiosks, and digital delivery",
+      desc: "Attendees arrive, scan QR, and get a printed badge in seconds. Self-service kiosks handle high-volume events.",
+      points: ["Thermal printer support", "Self-service kiosks", "Digital badge delivery"],
+      visual: "printing",
+    },
+    cards: [
+      {
+        eyebrow: "Printers",
+        title: "Thermal Printer Support",
+        desc: "Compatible with 50+ thermal and inkjet badge printers.",
+        visual: "thermal",
+      },
+      {
+        eyebrow: "Mail",
+        title: "Pre-Event Mailing",
+        desc: "Print and mail badges before the event for VIP attendees.",
+        visual: "mailing",
+      },
+      {
+        eyebrow: "Digital",
+        title: "Digital Badges",
+        desc: "Send digital badge images to attendee phones via app or email.",
+        visual: "digital",
+      },
+      {
+        eyebrow: "Kiosk",
+        title: "Self-Service Kiosk",
+        desc: "Attendees scan QR and print their own badge at check-in kiosks.",
+        visual: "kiosk",
+      },
+    ],
+  },
+];
+---
+
+<section class="bcdb-section" id="bcd-bento">
+  <div class="bcdb-shell">
+    <h2 class="bcdb-title">
+      Badge <b>Design</b>, Certificate <b>Templates</b> & <b>Printing</b>
+    </h2>
+    <p class="bcdb-subtitle">
+      Design, print, and deliver event badges and certificates from one integrated tool.
+    </p>
+
+    <nav class="bcdb-nav" aria-label="Badge certificate designer workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`bcdb-tab${index === 0 ? " bcdb-tab--active" : ""}`}
+          data-bcdb-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`bcdb-panel${tabIndex === 0 ? " bcdb-panel--active" : ""}`}
+        data-bcdb-panel={tabIndex}
+      >
+        <div class="bcdb-grid">
+          <article class="bcdb-card bcdb-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="bcdb-card__content">
+              <span class="bcdb-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="bcdb-card__title">{tab.hero.title}</h3>
+              <p class="bcdb-card__desc">{tab.hero.desc}</p>
+
+              <ul class="bcdb-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`bcdb-art bcdb-art--hero bcdb-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "badgeedit" && (
+                <Fragment>
+                  <div class="bcdb-badge-canvas">
+                    <div class="bcdb-badge-canvas__header"></div>
+                    <div class="bcdb-badge-canvas__photo"></div>
+                    <div class="bcdb-badge-canvas__name"></div>
+                    <div class="bcdb-badge-canvas__role"></div>
+                    <div class="bcdb-badge-canvas__qr">
+                      <span></span><span></span><span></span>
+                      <span></span><span></span><span></span>
+                      <span></span><span></span><span></span>
+                    </div>
+                    <div class="bcdb-badge-canvas__handle bcdb-badge-canvas__handle--tl"></div>
+                    <div class="bcdb-badge-canvas__handle bcdb-badge-canvas__handle--tr"></div>
+                    <div class="bcdb-badge-canvas__handle bcdb-badge-canvas__handle--bl"></div>
+                    <div class="bcdb-badge-canvas__handle bcdb-badge-canvas__handle--br"></div>
+                  </div>
+                  <div class="bcdb-ai-chip">Visual Editor</div>
+                  <div class="bcdb-lang-pill">QR Ready</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "certedit" && (
+                <Fragment>
+                  <div class="bcdb-cert-frame">
+                    <div class="bcdb-cert-frame__border">
+                      <div class="bcdb-cert-frame__title"></div>
+                      <div class="bcdb-cert-frame__name"></div>
+                      <div class="bcdb-cert-frame__desc"></div>
+                      <div class="bcdb-cert-frame__seal"></div>
+                      <div class="bcdb-cert-frame__sig"></div>
+                    </div>
+                  </div>
+                  <div class="bcdb-ai-chip">Certificate Ready</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "printing" && (
+                <Fragment>
+                  <div class="bcdb-printer-unit">
+                    <div class="bcdb-printer-unit__body">
+                      <div class="bcdb-printer-unit__slot"></div>
+                      <div class="bcdb-printer-unit__light"></div>
+                    </div>
+                    <div class="bcdb-printer-unit__badge">
+                      <div class="bcdb-printer-unit__badge-inner">
+                        <span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bcdb-ai-chip">Print Ready</div>
+                  <div class="bcdb-lang-pill">5s per badge</div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="bcdb-card bcdb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="bcdb-card__content">
+                <span class="bcdb-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="bcdb-card__title">{card.title}</h3>
+                <p class="bcdb-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`bcdb-art bcdb-art--mini bcdb-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "gallery" && (
+                  <Fragment>
+                    <div class="bcdb-template-grid">
+                      <span></span><span></span><span></span>
+                      <span></span><span></span><span class="bcdb-template-grid--selected"></span>
+                    </div>
+                    <div class="bcdb-mini-chip">100+ templates</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "qrcode" && (
+                  <Fragment>
+                    <div class="bcdb-qr-badge">
+                      <div class="bcdb-qr-badge__card">
+                        <span></span><span></span>
+                      </div>
+                      <div class="bcdb-qr-badge__qr">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="bcdb-qr-badge__scan"></div>
+                    </div>
+                    <div class="bcdb-mini-chip">Auto QR</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "datafields" && (
+                  <Fragment>
+                    <div class="bcdb-data-panel">
+                      <div class="bcdb-data-panel__field"><span>Name</span><span class="bcdb-data-panel__val"></span></div>
+                      <div class="bcdb-data-panel__field"><span>Company</span><span class="bcdb-data-panel__val"></span></div>
+                      <div class="bcdb-data-panel__field"><span>Role</span><span class="bcdb-data-panel__val"></span></div>
+                      <div class="bcdb-data-panel__arrow">&#8594;</div>
+                    </div>
+                    <div class="bcdb-mini-chip">Auto-fill</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "sizes" && (
+                  <Fragment>
+                    <div class="bcdb-size-row">
+                      <div class="bcdb-size-row__badge bcdb-size-row__badge--vip"><span>VIP</span></div>
+                      <div class="bcdb-size-row__badge bcdb-size-row__badge--std"><span>STD</span></div>
+                      <div class="bcdb-size-row__badge bcdb-size-row__badge--compact"><span>CPT</span></div>
+                    </div>
+                    <div class="bcdb-mini-chip">3 sizes</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "branding" && (
+                  <Fragment>
+                    <div class="bcdb-brand-panel">
+                      <div class="bcdb-brand-panel__colors">
+                        <span style="background:#375dfb"></span>
+                        <span style="background:#22c55e"></span>
+                        <span style="background:#f59e0b"></span>
+                        <span style="background:#0f1117"></span>
+                      </div>
+                      <div class="bcdb-brand-panel__logo"></div>
+                    </div>
+                    <div class="bcdb-mini-chip">Brand kit</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "autofill" && (
+                  <Fragment>
+                    <div class="bcdb-autofill-viz">
+                      <div class="bcdb-autofill-viz__source">
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="bcdb-autofill-viz__arrow">&#8594;</div>
+                      <div class="bcdb-autofill-viz__cert">
+                        <span class="bcdb-autofill-viz__cursor"></span>
+                      </div>
+                    </div>
+                    <div class="bcdb-mini-chip">Auto-merge</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "pdfgen" && (
+                  <Fragment>
+                    <div class="bcdb-pdf-icon">
+                      <span>PDF</span>
+                    </div>
+                    <div class="bcdb-pdf-dl">
+                      <span class="bcdb-pdf-dl__btn">&#8595;</span>
+                    </div>
+                    <div class="bcdb-mini-chip">Download</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "bulkgen" && (
+                  <Fragment>
+                    <div class="bcdb-bulk-stack">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <div class="bcdb-bulk-progress">
+                      <div class="bcdb-bulk-progress__bar"></div>
+                    </div>
+                    <div class="bcdb-mini-chip">Bulk ready</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "thermal" && (
+                  <Fragment>
+                    <div class="bcdb-printer-models">
+                      <div class="bcdb-printer-models__item"><span>&#10003;</span></div>
+                      <div class="bcdb-printer-models__item"><span>&#10003;</span></div>
+                      <div class="bcdb-printer-models__item"><span>&#10003;</span></div>
+                    </div>
+                    <div class="bcdb-mini-chip">50+ printers</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "mailing" && (
+                  <Fragment>
+                    <div class="bcdb-envelope">
+                      <div class="bcdb-envelope__flap"></div>
+                      <div class="bcdb-envelope__body">
+                        <div class="bcdb-envelope__badge-inside"></div>
+                      </div>
+                    </div>
+                    <div class="bcdb-mini-chip">VIP mailing</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "digital" && (
+                  <Fragment>
+                    <div class="bcdb-phone">
+                      <div class="bcdb-phone__screen">
+                        <div class="bcdb-phone__badge-img"></div>
+                        <div class="bcdb-phone__wallet-btns">
+                          <span></span><span></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bcdb-mini-chip">Digital badge</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "kiosk" && (
+                  <Fragment>
+                    <div class="bcdb-kiosk">
+                      <div class="bcdb-kiosk__screen">
+                        <div class="bcdb-kiosk__qr-area">
+                          <span class="bcdb-kiosk__corner bcdb-kiosk__corner--tl"></span>
+                          <span class="bcdb-kiosk__corner bcdb-kiosk__corner--tr"></span>
+                          <span class="bcdb-kiosk__corner bcdb-kiosk__corner--bl"></span>
+                          <span class="bcdb-kiosk__corner bcdb-kiosk__corner--br"></span>
+                        </div>
+                      </div>
+                      <div class="bcdb-kiosk__base"></div>
+                    </div>
+                    <div class="bcdb-mini-chip">Self-service</div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".bcdb-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".bcdb-tab"));
+      const panels = Array.from(root.querySelectorAll(".bcdb-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("bcdb-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("bcdb-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .bcdb-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .bcdb-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .bcdb-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .bcdb-title b { font-weight: 700; }
+
+  .bcdb-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .bcdb-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .bcdb-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .bcdb-tab:hover,
+  .bcdb-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .bcdb-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .bcdb-panel { display: none; }
+  .bcdb-panel--active { display: block; }
+
+  .bcdb-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .bcdb-panel--active .bcdb-card {
+    animation: bcdb-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  .bcdb-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .bcdb-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .bcdb-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .bcdb-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .bcdb-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .bcdb-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .bcdb-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .bcdb-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .bcdb-card__content { position: relative; z-index: 1; }
+
+  .bcdb-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bcdb-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .bcdb-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .bcdb-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .bcdb-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .bcdb-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .bcdb-art { position: relative; z-index: 1; min-height: 146px; }
+  .bcdb-art--hero { min-height: 228px; margin-top: 0.6rem; }
+  .bcdb-art--mini { align-self: end; }
+
+  /* === Hero visuals === */
+
+  /* badgeedit: Badge canvas with draggable elements and QR code */
+  .bcdb-badge-canvas {
+    position: absolute;
+    inset: 0 8% auto 0;
+    height: 92%;
+    padding: 1rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.52);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    animation: bcdb-float 5.2s ease-in-out infinite;
+  }
+
+  .bcdb-badge-canvas__header {
+    width: 60%;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .bcdb-badge-canvas__photo {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.3), rgba(34, 197, 94, 0.2));
+    margin-top: 0.3rem;
+  }
+
+  .bcdb-badge-canvas__name {
+    width: 55%;
+    height: 0.4rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+  }
+
+  .bcdb-badge-canvas__role {
+    width: 35%;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .bcdb-badge-canvas__qr {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-top: 0.3rem;
+  }
+
+  .bcdb-badge-canvas__qr span {
+    background: #0f1117;
+    border-radius: 1px;
+  }
+
+  .bcdb-badge-canvas__qr span:nth-child(5) { background: transparent; }
+  .bcdb-badge-canvas__qr span:nth-child(8) { background: transparent; }
+
+  .bcdb-badge-canvas__handle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #375dfb;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(55, 93, 251, 0.3);
+  }
+
+  .bcdb-badge-canvas__handle--tl { top: -4px; left: -4px; }
+  .bcdb-badge-canvas__handle--tr { top: -4px; right: -4px; }
+  .bcdb-badge-canvas__handle--bl { bottom: -4px; left: -4px; }
+  .bcdb-badge-canvas__handle--br { bottom: -4px; right: -4px; }
+
+  /* certedit: Certificate with gold border, seal, signature line */
+  .bcdb-cert-frame {
+    position: absolute;
+    inset: 0 6% auto 0;
+    height: 90%;
+    animation: bcdb-float 5.2s ease-in-out infinite;
+  }
+
+  .bcdb-cert-frame__border {
+    height: 100%;
+    padding: 1.2rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #fffdf5, #fef3c7);
+    border: 3px solid #d4a017;
+    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .bcdb-cert-frame__title {
+    width: 50%;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #d4a017, #f59e0b);
+  }
+
+  .bcdb-cert-frame__name {
+    width: 65%;
+    height: 0.45rem;
+    border-radius: 999px;
+    background: rgba(212, 160, 23, 0.2);
+    margin-top: 0.4rem;
+  }
+
+  .bcdb-cert-frame__desc {
+    width: 80%;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(212, 160, 23, 0.1);
+  }
+
+  .bcdb-cert-frame__seal {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, #f59e0b, #d4a017);
+    margin-top: auto;
+    box-shadow: 0 4px 12px rgba(212, 160, 23, 0.4);
+  }
+
+  .bcdb-cert-frame__sig {
+    width: 40%;
+    height: 2px;
+    background: rgba(15, 17, 23, 0.2);
+    margin-top: 0.3rem;
+  }
+
+  /* printing: Thermal printer emitting badge */
+  .bcdb-printer-unit {
+    position: absolute;
+    inset: 0.5rem 10% auto 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: bcdb-float 5s ease-in-out infinite;
+  }
+
+  .bcdb-printer-unit__body {
+    width: 100%;
+    height: 4.5rem;
+    border-radius: 1.2rem 1.2rem 0 0;
+    background: linear-gradient(180deg, #e5e7eb, #d1d5db);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .bcdb-printer-unit__slot {
+    width: 70%;
+    height: 4px;
+    border-radius: 999px;
+    background: #9ca3af;
+    position: absolute;
+    bottom: -2px;
+  }
+
+  .bcdb-printer-unit__light {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    animation: bcdb-blink 2s infinite;
+  }
+
+  .bcdb-printer-unit__badge {
+    width: 60%;
+    margin-top: 2px;
+    padding: 0.6rem;
+    border-radius: 0 0 0.8rem 0.8rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    border-top: none;
+    animation: bcdb-print-emerge 3s ease-in-out infinite;
+  }
+
+  .bcdb-printer-unit__badge-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .bcdb-printer-unit__badge-inner span {
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-printer-unit__badge-inner span:first-child { width: 80%; }
+  .bcdb-printer-unit__badge-inner span:last-child { width: 50%; }
+
+  .bcdb-ai-chip,
+  .bcdb-lang-pill,
+  .bcdb-mini-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .bcdb-ai-chip {
+    position: absolute;
+    right: 0;
+    bottom: 2.8rem;
+  }
+
+  .bcdb-lang-pill {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  /* === Mini card visuals === */
+  .bcdb-mini-chip {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 0.72rem;
+  }
+
+  /* gallery: 2x3 grid of badge template thumbnails */
+  .bcdb-template-grid {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+  }
+
+  .bcdb-template-grid span {
+    aspect-ratio: 0.7;
+    border-radius: 0.5rem;
+    background: linear-gradient(145deg, rgba(55, 93, 251, 0.12), rgba(34, 197, 94, 0.08));
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-template-grid--selected {
+    border: 2px solid #375dfb !important;
+    box-shadow: 0 0 0 3px rgba(55, 93, 251, 0.15);
+  }
+
+  /* qrcode: Badge with QR code + scan line animation */
+  .bcdb-qr-badge {
+    position: absolute;
+    inset: 0.4rem 0.8rem auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-qr-badge__card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .bcdb-qr-badge__card span {
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .bcdb-qr-badge__card span:first-child { width: 80%; }
+  .bcdb-qr-badge__card span:last-child { width: 55%; }
+
+  .bcdb-qr-badge__qr {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .bcdb-qr-badge__qr span {
+    background: #0f1117;
+    border-radius: 1px;
+  }
+
+  .bcdb-qr-badge__qr span:nth-child(5) { background: transparent; }
+
+  .bcdb-qr-badge__scan {
+    position: absolute;
+    right: 0.8rem;
+    top: 0.8rem;
+    width: 2rem;
+    height: 2px;
+    background: #22c55e;
+    animation: bcdb-scan 2s ease-in-out infinite;
+    box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+  }
+
+  /* datafields: Badge + dynamic fields panel with auto-fill arrows */
+  .bcdb-data-panel {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.6rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-data-panel__field {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .bcdb-data-panel__field > span:first-child {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #45608e;
+    min-width: 3rem;
+  }
+
+  .bcdb-data-panel__val {
+    flex: 1;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-data-panel__arrow {
+    text-align: center;
+    font-size: 1rem;
+    color: #375dfb;
+    animation: bcdb-pulse 1.5s infinite;
+  }
+
+  /* sizes: 3 badge sizes */
+  .bcdb-size-row {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .bcdb-size-row__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .bcdb-size-row__badge span {
+    font-size: 0.55rem;
+    font-weight: 800;
+    color: #45608e;
+    letter-spacing: 0.05em;
+  }
+
+  .bcdb-size-row__badge--vip { width: 3.2rem; height: 4.2rem; border-color: #d4a017; background: linear-gradient(180deg, #fffdf5, #fef3c7); }
+  .bcdb-size-row__badge--std { width: 2.8rem; height: 3.6rem; }
+  .bcdb-size-row__badge--compact { width: 2.2rem; height: 2.8rem; }
+
+  /* branding: Color palette + logo + font picker */
+  .bcdb-brand-panel {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.6rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bcdb-brand-panel__colors {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .bcdb-brand-panel__colors span {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .bcdb-brand-panel__logo {
+    width: 2.5rem;
+    height: 1.2rem;
+    border-radius: 0.4rem;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.2), rgba(55, 93, 251, 0.08));
+  }
+
+  /* autofill: Data source arrow to certificate with typing cursor */
+  .bcdb-autofill-viz {
+    position: absolute;
+    inset: 0.5rem 0.5rem auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .bcdb-autofill-viz__source {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .bcdb-autofill-viz__source span {
+    display: block;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+  }
+
+  .bcdb-autofill-viz__source span:nth-child(1) { width: 2rem; }
+  .bcdb-autofill-viz__source span:nth-child(2) { width: 1.5rem; }
+  .bcdb-autofill-viz__source span:nth-child(3) { width: 1.8rem; }
+
+  .bcdb-autofill-viz__arrow {
+    color: #375dfb;
+    font-size: 0.9rem;
+    animation: bcdb-pulse 1.5s infinite;
+  }
+
+  .bcdb-autofill-viz__cert {
+    flex: 1;
+    height: 2.5rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #fffdf5, #fef3c7);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+    position: relative;
+  }
+
+  .bcdb-autofill-viz__cursor {
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 1rem;
+    background: #375dfb;
+    animation: bcdb-blink 1s infinite;
+  }
+
+  /* pdfgen: PDF doc with download button */
+  .bcdb-pdf-icon {
+    position: absolute;
+    left: 50%;
+    top: 0.6rem;
+    transform: translateX(-50%);
+    width: 3rem;
+    height: 3.8rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #fef2f2, #fee2e2);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.4rem;
+  }
+
+  .bcdb-pdf-icon span {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #dc2626;
+    letter-spacing: 0.06em;
+  }
+
+  .bcdb-pdf-dl {
+    position: absolute;
+    left: 50%;
+    top: 4.8rem;
+    transform: translateX(-50%);
+  }
+
+  .bcdb-pdf-dl__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: #375dfb;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  /* bulkgen: Stacked certificates with progress bar */
+  .bcdb-bulk-stack {
+    position: absolute;
+    left: 50%;
+    top: 0.4rem;
+    transform: translateX(-50%);
+    width: 4rem;
+    height: 3rem;
+    position: relative;
+  }
+
+  .bcdb-bulk-stack span {
+    position: absolute;
+    inset: 0;
+    border-radius: 0.5rem;
+    background: linear-gradient(180deg, #fffdf5, #fef3c7);
+    border: 1px solid rgba(212, 160, 23, 0.2);
+  }
+
+  .bcdb-bulk-stack span:nth-child(1) { transform: rotate(-3deg); }
+  .bcdb-bulk-stack span:nth-child(2) { transform: rotate(1deg) translateY(-3px); }
+  .bcdb-bulk-stack span:nth-child(3) { transform: rotate(-1deg) translateY(-6px); }
+
+  .bcdb-bulk-progress {
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    bottom: 1.6rem;
+    height: 0.4rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .bcdb-bulk-progress__bar {
+    height: 100%;
+    width: 68%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #22c55e);
+    animation: bcdb-progress 3s ease-in-out infinite;
+  }
+
+  /* thermal: 3 printer models with checkmarks */
+  .bcdb-printer-models {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .bcdb-printer-models__item {
+    width: 2.2rem;
+    height: 2.8rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #e5e7eb, #d1d5db);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bcdb-printer-models__item span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #22c55e;
+  }
+
+  /* mailing: Envelope with badge inside */
+  .bcdb-envelope {
+    position: absolute;
+    left: 50%;
+    top: 0.5rem;
+    transform: translateX(-50%);
+    width: 4.5rem;
+    height: 3rem;
+  }
+
+  .bcdb-envelope__body {
+    position: absolute;
+    inset: 0.8rem 0 0;
+    border-radius: 0 0 0.8rem 0.8rem;
+    background: linear-gradient(180deg, #edf3ff, #d9e4ff);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bcdb-envelope__badge-inside {
+    width: 1.6rem;
+    height: 2rem;
+    border-radius: 0.3rem;
+    background: linear-gradient(180deg, #ffffff, #f0f4ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-envelope__flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.4rem;
+    clip-path: polygon(0 0, 50% 100%, 100% 0);
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.4;
+  }
+
+  /* digital: Phone with badge + wallet buttons */
+  .bcdb-phone {
+    position: absolute;
+    left: 50%;
+    top: 0.3rem;
+    transform: translateX(-50%);
+    width: 3.2rem;
+    height: 5.2rem;
+    border-radius: 0.7rem;
+    background: #0f1117;
+    padding: 3px;
+  }
+
+  .bcdb-phone__screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 0.3rem;
+  }
+
+  .bcdb-phone__badge-img {
+    width: 1.8rem;
+    height: 2.2rem;
+    border-radius: 0.3rem;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.15), rgba(55, 93, 251, 0.05));
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .bcdb-phone__wallet-btns {
+    display: flex;
+    gap: 0.2rem;
+  }
+
+  .bcdb-phone__wallet-btns span {
+    width: 0.9rem;
+    height: 0.5rem;
+    border-radius: 0.2rem;
+    background: rgba(55, 93, 251, 0.15);
+  }
+
+  /* kiosk: Kiosk display with QR scanning corners */
+  .bcdb-kiosk {
+    position: absolute;
+    left: 50%;
+    top: 0.3rem;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bcdb-kiosk__screen {
+    width: 4rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    background: #1a2340;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem;
+  }
+
+  .bcdb-kiosk__qr-area {
+    position: relative;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .bcdb-kiosk__corner {
+    position: absolute;
+    width: 0.4rem;
+    height: 0.4rem;
+    border: 2px solid #22c55e;
+  }
+
+  .bcdb-kiosk__corner--tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+  .bcdb-kiosk__corner--tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+  .bcdb-kiosk__corner--bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+  .bcdb-kiosk__corner--br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+  .bcdb-kiosk__base {
+    width: 1.5rem;
+    height: 0.8rem;
+    background: linear-gradient(180deg, #e5e7eb, #d1d5db);
+    border-radius: 0 0 0.3rem 0.3rem;
+  }
+
+  /* === Animations === */
+  @keyframes bcdb-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bcdb-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes bcdb-scan {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(2rem); opacity: 0.6; }
+  }
+
+  @keyframes bcdb-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes bcdb-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes bcdb-print-emerge {
+    0%, 100% { transform: translateY(-80%); opacity: 0.3; }
+    50% { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes bcdb-progress {
+    0% { width: 0; }
+    50% { width: 68%; }
+    100% { width: 100%; }
+  }
+
+  /* === Responsive === */
+  @media (max-width: 960px) {
+    .bcdb-section { padding: 60px 0 48px; }
+    .bcdb-title { font-size: 36px; }
+    .bcdb-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+    .bcdb-card--hero { min-height: 380px; }
+  }
+
+  @media (max-width: 720px) {
+    .bcdb-section { padding-inline: 0; }
+    .bcdb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
+    .bcdb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+    .bcdb-title { font-size: 28px; }
+    .bcdb-subtitle { font-size: 15px; }
+    .bcdb-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
+    }
+    .bcdb-card { min-height: 210px; }
+    .bcdb-card--hero { min-height: 420px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bcdb-panel--active .bcdb-card,
+    .bcdb-badge-canvas,
+    .bcdb-cert-frame,
+    .bcdb-printer-unit,
+    .bcdb-qr-badge__scan,
+    .bcdb-bulk-progress__bar,
+    .bcdb-printer-unit__badge,
+    .bcdb-printer-unit__light { animation: none; }
+  }
+</style>

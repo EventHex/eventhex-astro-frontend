@@ -1,0 +1,743 @@
+---
+const featureCards = [
+  {
+    eyebrow: "scan engine",
+    title: "Check in thousands of attendees in minutes with QR scanning",
+    desc: "Multiple staff scan simultaneously across entrances. Each QR scan takes under 1 second with instant visual confirmation and optional auto-print badge trigger.",
+    items: [
+      "Works on any smartphone, tablet, or scanner",
+      "Under 1 second scan and verification",
+      "Auto-trigger badge printing on scan",
+    ],
+    visual: "scanengine",
+  },
+  {
+    eyebrow: "session tracking",
+    title: "Track attendance per session for speakers and sponsors",
+    desc: "Set up scanning points at session rooms to track exactly who attended which sessions — giving speakers feedback and sponsors ROI data.",
+    items: [
+      "Dedicated session room scanners",
+      "Post-event attendance reports",
+      "Speaker session attendance insights",
+    ],
+    visual: "sessioneng",
+  },
+  {
+    eyebrow: "offline mode",
+    title: "Scan even without internet — zero risk of losing data",
+    desc: "Venue WiFi unreliable? Offline mode caches attendee data locally and continues scanning. Data syncs automatically when connectivity returns.",
+    items: [
+      "Attendee data cached locally pre-event",
+      "Auto-sync when device reconnects",
+      "Every scan stored locally first",
+    ],
+    visual: "offlineeng",
+  },
+  {
+    eyebrow: "operations",
+    title: "Real-time operations dashboard for event-day command",
+    desc: "Monitor check-in rates, queue lengths, staff activity, and attendance metrics from a single live dashboard. React to bottlenecks instantly.",
+    items: [
+      "Live check-in rate and queue monitoring",
+      "Staff activity and gate status tracking",
+      "Exportable real-time attendance lists",
+    ],
+    visual: "opseng",
+  },
+];
+---
+
+<section class="ecif-shell">
+  <div class="ecif-section">
+    <div class="ecif-header">
+      <span class="ecif-subtitle">Everything you need to manage event-day check-in and operations</span>
+      <h2 class="ecif-title">
+        Everything You Need to <span class="ecif-highlight">Scan, Track, and Manage</span><br />
+        Event Day Operations
+      </h2>
+    </div>
+
+    <div class="ecif-cards" id="ecif-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="ecif-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="ecif-card-content">
+            <span class="ecif-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="ecif-card-title">{card.title}</h3>
+            <p class="ecif-card-desc">{card.desc}</p>
+            <ul class="ecif-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="ecif-card-btn">Explore More</a>
+          </div>
+
+          <div class={`ecif-card-visual ecif-card-visual--${card.visual}`}>
+            {card.visual === "scanengine" && (
+              <Fragment>
+                <div class="ecif-phone-frame">
+                  <div class="ecif-phone-screen">
+                    <div class="ecif-phone-qr">
+                      <div class="ecif-phone-qr-grid">
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="ecif-phone-scan-line"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ecif-check-badge">
+                  <span class="ecif-check-icon">&#10003;</span>
+                  <span>Checked In</span>
+                </div>
+                <div class="ecif-visual-pill">Scan engine</div>
+              </Fragment>
+            )}
+
+            {card.visual === "sessioneng" && (
+              <Fragment>
+                <div class="ecif-session-room">
+                  <div class="ecif-session-header"></div>
+                  <div class="ecif-session-rows">
+                    <div class="ecif-session-row">
+                      <span class="ecif-session-dot ecif-session-dot--active"></span>
+                      <span class="ecif-session-name-bar"></span>
+                      <strong>124</strong>
+                    </div>
+                    <div class="ecif-session-row">
+                      <span class="ecif-session-dot ecif-session-dot--active"></span>
+                      <span class="ecif-session-name-bar"></span>
+                      <strong>89</strong>
+                    </div>
+                    <div class="ecif-session-row">
+                      <span class="ecif-session-dot ecif-session-dot--pending"></span>
+                      <span class="ecif-session-name-bar"></span>
+                      <strong>—</strong>
+                    </div>
+                  </div>
+                </div>
+                <div class="ecif-scanner-chip">
+                  <span class="ecif-scanner-live"></span>
+                  Room B scanning
+                </div>
+                <div class="ecif-visual-pill">Session tracking</div>
+              </Fragment>
+            )}
+
+            {card.visual === "offlineeng" && (
+              <Fragment>
+                <div class="ecif-offline-device">
+                  <div class="ecif-offline-screen">
+                    <svg viewBox="0 0 48 48" class="ecif-offline-wifi">
+                      <path d="M24 36a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" fill="#94a3b8"/>
+                      <path d="M16 30c2.2-2.2 5.1-3.3 8-3.3s5.8 1.1 8 3.3" stroke="#94a3b8" stroke-width="3" fill="none" stroke-linecap="round"/>
+                      <path d="M10 24c3.8-3.8 8.8-5.7 14-5.7s10.2 1.9 14 5.7" stroke="#94a3b8" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </svg>
+                    <div class="ecif-offline-cross"></div>
+                  </div>
+                </div>
+                <div class="ecif-cache-pills">
+                  <div class="ecif-cache-pill"><span class="ecif-cache-dot"></span>2,500 cached</div>
+                  <div class="ecif-cache-pill ecif-cache-pill--sync"><span class="ecif-sync-icon">&#8635;</span>Auto-sync</div>
+                </div>
+                <div class="ecif-visual-pill">Offline mode</div>
+              </Fragment>
+            )}
+
+            {card.visual === "opseng" && (
+              <Fragment>
+                <div class="ecif-ops-dash">
+                  <div class="ecif-ops-top">
+                    <div class="ecif-ops-widget">
+                      <span class="ecif-ops-label">Check-in rate</span>
+                      <strong>42/min</strong>
+                    </div>
+                    <div class="ecif-ops-widget">
+                      <span class="ecif-ops-label">Queue</span>
+                      <strong>~3 min</strong>
+                    </div>
+                  </div>
+                  <div class="ecif-ops-chart">
+                    <span style="--h:45%"></span>
+                    <span style="--h:70%"></span>
+                    <span style="--h:55%"></span>
+                    <span style="--h:90%"></span>
+                    <span style="--h:65%"></span>
+                    <span style="--h:80%"></span>
+                  </div>
+                  <div class="ecif-ops-gates">
+                    <div class="ecif-ops-gate"><span class="ecif-ops-gate-dot ecif-ops-gate-dot--ok"></span> Gate A</div>
+                    <div class="ecif-ops-gate"><span class="ecif-ops-gate-dot ecif-ops-gate-dot--ok"></span> Gate B</div>
+                    <div class="ecif-ops-gate"><span class="ecif-ops-gate-dot ecif-ops-gate-dot--warn"></span> Gate C</div>
+                  </div>
+                </div>
+                <div class="ecif-visual-pill">Operations hub</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .ecif-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .ecif-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .ecif-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .ecif-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .ecif-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .ecif-highlight { color: #AFA3FF; }
+
+  .ecif-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .ecif-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .ecif-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .ecif-card-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .ecif-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ecif-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .ecif-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ecif-card-items li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .ecif-card-items li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+  }
+
+  .ecif-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .ecif-card-btn:hover { transform: scale(1.05); }
+
+  .ecif-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  /* Scan engine visual */
+  .ecif-phone-frame {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 200px;
+    border-radius: 20px;
+    border: 3px solid rgba(55, 93, 251, 0.25);
+    background: linear-gradient(180deg, #0f1629, #1a2340);
+    padding: 10px;
+  }
+
+  .ecif-phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    background: rgba(55, 93, 251, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ecif-phone-qr {
+    position: relative;
+    width: 60px;
+    height: 60px;
+  }
+
+  .ecif-phone-qr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ecif-phone-qr-grid span {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 1px;
+  }
+
+  .ecif-phone-qr-grid span:nth-child(5) { background: transparent; }
+
+  .ecif-phone-scan-line {
+    position: absolute;
+    left: -10px;
+    right: -10px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #22c55e, transparent);
+    animation: ecif-scan 2.5s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+  }
+
+  @keyframes ecif-scan {
+    0%, 100% { top: 0; }
+    50% { top: 100%; }
+  }
+
+  .ecif-check-badge {
+    position: absolute;
+    right: 34px;
+    top: 80px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    box-shadow: 0 18px 36px -28px rgba(17, 28, 56, 0.5);
+  }
+
+  .ecif-check-icon {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .ecif-check-badge span:last-child {
+    font-size: 13px;
+    font-weight: 700;
+    color: #16a34a;
+  }
+
+  .ecif-visual-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* Session tracking visual */
+  .ecif-session-room {
+    position: absolute;
+    left: 34px;
+    top: 50px;
+    right: 80px;
+    padding: 18px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+  }
+
+  .ecif-session-header {
+    height: 10px;
+    width: 50%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    margin-bottom: 14px;
+  }
+
+  .ecif-session-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ecif-session-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(55, 93, 251, 0.03);
+  }
+
+  .ecif-session-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ecif-session-dot--active { background: #22c55e; box-shadow: 0 0 6px rgba(34, 197, 94, 0.4); }
+  .ecif-session-dot--pending { background: #94a3b8; }
+
+  .ecif-session-name-bar {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .ecif-session-row strong {
+    font-size: 14px;
+    color: #375dfb;
+  }
+
+  .ecif-scanner-chip {
+    position: absolute;
+    right: 34px;
+    top: 60px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(20, 33, 59, 0.95);
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.6);
+  }
+
+  .ecif-scanner-live {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: ecif-live-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes ecif-live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Offline visual */
+  .ecif-offline-device {
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 180px;
+    border-radius: 18px;
+    border: 3px solid rgba(148, 163, 184, 0.3);
+    background: linear-gradient(180deg, #1e293b, #0f172a);
+    padding: 12px;
+  }
+
+  .ecif-offline-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .ecif-offline-wifi {
+    width: 60px;
+    height: 60px;
+  }
+
+  .ecif-offline-cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px;
+    height: 3px;
+    background: #dc2626;
+    border-radius: 999px;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .ecif-cache-pills {
+    position: absolute;
+    right: 30px;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ecif-cache-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    font-size: 12px;
+    font-weight: 700;
+    color: #183465;
+    box-shadow: 0 14px 28px -18px rgba(17, 28, 56, 0.4);
+  }
+
+  .ecif-cache-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+  }
+
+  .ecif-cache-pill--sync {
+    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+    border-color: rgba(34, 197, 94, 0.2);
+    color: #16a34a;
+  }
+
+  .ecif-sync-icon {
+    font-size: 14px;
+  }
+
+  /* Operations visual */
+  .ecif-ops-dash {
+    position: absolute;
+    inset: 40px 30px 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ecif-ops-top {
+    display: flex;
+    gap: 10px;
+  }
+
+  .ecif-ops-widget {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ecif-ops-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #607390;
+  }
+
+  .ecif-ops-widget strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .ecif-ops-chart {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .ecif-ops-chart span {
+    flex: 1;
+    height: var(--h, 50%);
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+  }
+
+  .ecif-ops-gates {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ecif-ops-gate {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    font-size: 11px;
+    font-weight: 700;
+    color: #183465;
+  }
+
+  .ecif-ops-gate-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .ecif-ops-gate-dot--ok { background: #22c55e; }
+  .ecif-ops-gate-dot--warn { background: #f59e0b; }
+
+  @media (max-width: 1024px) {
+    .ecif-section { padding: 60px 20px 30px; }
+    .ecif-header { width: 80%; }
+    .ecif-subtitle { font-size: 16px; }
+    .ecif-title { font-size: 40px; line-height: 1em; }
+    .ecif-card { height: 450px; }
+    .ecif-card-content { flex-basis: 50%; }
+    .ecif-card-title { font-size: 28px; }
+    .ecif-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .ecif-section { padding: 50px 20px 30px; }
+    .ecif-header { width: 100%; }
+    .ecif-title { font-size: 30px; }
+    .ecif-card { flex-direction: column; height: 620px; }
+    .ecif-card-content { flex: 0 0 55%; padding: 20px 20px 0; }
+    .ecif-card-visual { min-height: 260px; padding: 12px; }
+    .ecif-card-title { font-size: 24px; }
+    .ecif-card-desc { font-size: 15px; }
+    .ecif-cards { padding-bottom: 40px; }
+    .ecif-phone-frame { left: 30px; transform: none; }
+    .ecif-check-badge { right: 18px; }
+    .ecif-session-room { left: 20px; right: 60px; }
+    .ecif-scanner-chip { right: 18px; }
+    .ecif-offline-device { left: 30px; transform: none; }
+    .ecif-cache-pills { right: 16px; }
+    .ecif-ops-dash { inset: 20px 16px 50px; }
+  }
+</style>

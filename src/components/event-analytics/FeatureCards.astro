@@ -1,0 +1,738 @@
+---
+const featureCards = [
+  {
+    eyebrow: "real-time",
+    title: "Live dashboards that update while your event runs",
+    desc: "Registration velocity, check-in rates, session attendance, and revenue — all updating in real time. Spot trends and react to data as the event happens.",
+    items: [
+      "Every metric refreshes automatically",
+      "Directional trend lines for key metrics",
+      "Smart alerts when thresholds are breached",
+    ],
+    visual: "livedash",
+  },
+  {
+    eyebrow: "sponsor roi",
+    title: "Prove sponsorship value with verified data",
+    desc: "Auto-generated sponsor reports with booth traffic, challenge participation, session attendance, and brand impressions — giving sponsors the ROI proof they need.",
+    items: [
+      "QR-verified booth visit tracking",
+      "Revenue impact and lead pipeline data",
+      "White-label branded sponsor reports",
+    ],
+    visual: "sponsorval",
+  },
+  {
+    eyebrow: "ai insights",
+    title: "AI-powered predictions and smart recommendations",
+    desc: "AI analyzes patterns across your events — predicting attendance, identifying engagement drivers, and recommending optimizations for your next event.",
+    items: [
+      "AI attendance and revenue forecasts",
+      "Smart recommendations for improvement",
+      "Hidden pattern detection in behavior data",
+    ],
+    visual: "aiinsight",
+  },
+  {
+    eyebrow: "data export",
+    title: "Export everything for your own analysis tools",
+    desc: "Export any dashboard or report as CSV, PDF, or Excel. Pull data via REST API into Tableau, Power BI, or Google Data Studio.",
+    items: [
+      "CSV, PDF, and Excel export",
+      "REST API for BI tool integration",
+      "Scheduled auto-delivery to stakeholders",
+    ],
+    visual: "dataexport",
+  },
+];
+---
+
+<section class="eaf-shell">
+  <div class="eaf-section">
+    <div class="eaf-header">
+      <span class="eaf-subtitle">Everything you need to measure, analyze, and optimize event performance</span>
+      <h2 class="eaf-title">
+        Everything You Need to <span class="eaf-highlight">Track, Analyze, and Report</span><br />
+        Event Performance
+      </h2>
+    </div>
+
+    <div class="eaf-cards" id="eaf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="eaf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="eaf-card-content">
+            <span class="eaf-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="eaf-card-title">{card.title}</h3>
+            <p class="eaf-card-desc">{card.desc}</p>
+            <ul class="eaf-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="eaf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`eaf-card-visual eaf-card-visual--${card.visual}`}>
+            {card.visual === "livedash" && (
+              <Fragment>
+                <div class="eaf-live-frame">
+                  <div class="eaf-live-header">
+                    <span class="eaf-live-dot"></span>
+                    <span class="eaf-live-dot"></span>
+                    <span class="eaf-live-dot"></span>
+                    <span class="eaf-live-bar-title"></span>
+                  </div>
+                  <div class="eaf-live-body">
+                    <div class="eaf-live-kpis">
+                      <div class="eaf-live-kpi">
+                        <strong>2,847</strong>
+                        <span>registrations</span>
+                      </div>
+                      <div class="eaf-live-kpi">
+                        <strong>92%</strong>
+                        <span>check-in rate</span>
+                      </div>
+                    </div>
+                    <div class="eaf-live-chart">
+                      <svg viewBox="0 0 200 60" preserveAspectRatio="none" class="eaf-live-svg">
+                        <polyline points="0,50 25,42 50,35 75,38 100,22 125,28 150,15 175,18 200,8" fill="none" stroke="#375dfb" stroke-width="2.5" stroke-linecap="round"/>
+                        <polyline points="0,50 25,42 50,35 75,38 100,22 125,28 150,15 175,18 200,8 200,60 0,60" fill="url(#eaf-live-grad)" stroke="none"/>
+                        <defs><linearGradient id="eaf-live-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(55,93,251,0.15)"/><stop offset="100%" stop-color="rgba(55,93,251,0)"/></linearGradient></defs>
+                      </svg>
+                    </div>
+                    <div class="eaf-live-trend">
+                      <span class="eaf-trend-up">&#9650;</span>
+                      <span>+12% vs last hour</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="eaf-visual-pill">&#9679; Live dashboard</div>
+              </Fragment>
+            )}
+
+            {card.visual === "sponsorval" && (
+              <Fragment>
+                <div class="eaf-sponsor-frame">
+                  <div class="eaf-sponsor-header">
+                    <div class="eaf-sponsor-icon"></div>
+                    <div class="eaf-sponsor-name-bar"></div>
+                  </div>
+                  <div class="eaf-sponsor-kpis">
+                    <div class="eaf-sponsor-kpi">
+                      <strong>342</strong>
+                      <span>Booth Visits</span>
+                    </div>
+                    <div class="eaf-sponsor-kpi">
+                      <strong>89%</strong>
+                      <span>Engaged</span>
+                    </div>
+                    <div class="eaf-sponsor-kpi">
+                      <strong>3.2x</strong>
+                      <span>ROI</span>
+                    </div>
+                  </div>
+                  <div class="eaf-sponsor-bars">
+                    <span style="--w:85%"></span>
+                    <span style="--w:62%"></span>
+                    <span style="--w:78%"></span>
+                  </div>
+                  <div class="eaf-verified-badge">&#10003; QR Verified</div>
+                </div>
+                <div class="eaf-visual-pill">Sponsor report</div>
+              </Fragment>
+            )}
+
+            {card.visual === "aiinsight" && (
+              <Fragment>
+                <div class="eaf-ai-panel">
+                  <div class="eaf-ai-brain">
+                    <svg viewBox="0 0 48 48" width="48" height="48" class="eaf-ai-brain-svg">
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(175,163,255,0.4)" stroke-width="2"/>
+                      <circle cx="24" cy="24" r="12" fill="none" stroke="#AFA3FF" stroke-width="2"/>
+                      <circle cx="24" cy="24" r="4" fill="#375dfb"/>
+                      <line x1="24" y1="4" x2="24" y2="12" stroke="rgba(175,163,255,0.3)" stroke-width="1.5"/>
+                      <line x1="24" y1="36" x2="24" y2="44" stroke="rgba(175,163,255,0.3)" stroke-width="1.5"/>
+                      <line x1="4" y1="24" x2="12" y2="24" stroke="rgba(175,163,255,0.3)" stroke-width="1.5"/>
+                      <line x1="36" y1="24" x2="44" y2="24" stroke="rgba(175,163,255,0.3)" stroke-width="1.5"/>
+                    </svg>
+                  </div>
+                  <div class="eaf-ai-cards">
+                    <div class="eaf-ai-card">
+                      <span class="eaf-ai-card-icon">&#9733;</span>
+                      <div class="eaf-ai-card-text">
+                        <strong>Prediction</strong>
+                        <span>+18% attendance expected</span>
+                      </div>
+                    </div>
+                    <div class="eaf-ai-card">
+                      <span class="eaf-ai-card-icon">&#9889;</span>
+                      <div class="eaf-ai-card-text">
+                        <strong>Recommendation</strong>
+                        <span>Schedule keynote at 10am</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="eaf-visual-pill">AI insights</div>
+              </Fragment>
+            )}
+
+            {card.visual === "dataexport" && (
+              <Fragment>
+                <div class="eaf-export-panel">
+                  <div class="eaf-export-formats">
+                    <div class="eaf-format eaf-format--csv">
+                      <span class="eaf-format-icon">&#128196;</span>
+                      <span>CSV</span>
+                    </div>
+                    <div class="eaf-format eaf-format--pdf">
+                      <span class="eaf-format-icon">&#128203;</span>
+                      <span>PDF</span>
+                    </div>
+                    <div class="eaf-format eaf-format--xls">
+                      <span class="eaf-format-icon">&#128202;</span>
+                      <span>Excel</span>
+                    </div>
+                  </div>
+                  <div class="eaf-export-api">
+                    <div class="eaf-api-tag">API</div>
+                    <div class="eaf-api-row">
+                      <span class="eaf-api-method">GET</span>
+                      <span class="eaf-api-url">/api/v1/export</span>
+                    </div>
+                  </div>
+                  <div class="eaf-schedule-row">
+                    <span class="eaf-schedule-icon">&#128337;</span>
+                    <span>Auto-delivery: Weekly</span>
+                  </div>
+                </div>
+                <div class="eaf-visual-pill">Export options</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .eaf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .eaf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .eaf-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .eaf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .eaf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .eaf-highlight { color: #AFA3FF; }
+
+  .eaf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .eaf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .eaf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .eaf-card-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .eaf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .eaf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .eaf-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .eaf-card-items li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .eaf-card-items li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+  }
+
+  .eaf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .eaf-card-btn:hover { transform: scale(1.05); }
+
+  .eaf-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  .eaf-visual-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* === livedash visual === */
+  .eaf-live-frame {
+    position: absolute;
+    left: 34px;
+    top: 50px;
+    right: 80px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+    overflow: hidden;
+  }
+
+  .eaf-live-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 14px;
+    background: rgba(55, 93, 251, 0.04);
+    border-bottom: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eaf-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(55, 93, 251, 0.15);
+  }
+
+  .eaf-live-dot:first-child { background: #22c55e; }
+  .eaf-live-dot:nth-child(2) { background: #f59e0b; }
+  .eaf-live-dot:nth-child(3) { background: #ef4444; }
+
+  .eaf-live-bar-title {
+    margin-left: 10px;
+    height: 8px;
+    width: 35%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .eaf-live-body {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .eaf-live-kpis {
+    display: flex;
+    gap: 16px;
+  }
+
+  .eaf-live-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .eaf-live-kpi strong {
+    font-size: 18px;
+    color: #14213b;
+  }
+
+  .eaf-live-kpi span {
+    font-size: 11px;
+    color: #607390;
+    font-weight: 500;
+  }
+
+  .eaf-live-chart { border-radius: 8px; overflow: hidden; }
+
+  .eaf-live-svg { width: 100%; height: 60px; display: block; }
+
+  .eaf-live-trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #22c55e;
+  }
+
+  .eaf-trend-up { font-size: 10px; }
+
+  /* === sponsorval visual === */
+  .eaf-sponsor-frame {
+    position: absolute;
+    left: 34px;
+    top: 50px;
+    right: 80px;
+    padding: 20px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+  }
+
+  .eaf-sponsor-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .eaf-sponsor-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #375dfb, #AFA3FF);
+  }
+
+  .eaf-sponsor-name-bar {
+    height: 10px;
+    width: 45%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .eaf-sponsor-kpis {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 14px;
+  }
+
+  .eaf-sponsor-kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .eaf-sponsor-kpi strong { color: #183465; font-size: 20px; }
+  .eaf-sponsor-kpi span { color: #607390; font-size: 12px; }
+
+  .eaf-sponsor-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .eaf-sponsor-bars span {
+    display: block;
+    height: 8px;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+  }
+
+  .eaf-verified-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    color: #16a34a;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* === aiinsight visual === */
+  .eaf-ai-panel {
+    position: absolute;
+    inset: 40px 30px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .eaf-ai-brain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: eaf-pulse-glow 3s ease-in-out infinite;
+  }
+
+  .eaf-ai-brain-svg { filter: drop-shadow(0 0 12px rgba(175, 163, 255, 0.3)); }
+
+  .eaf-ai-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .eaf-ai-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 18px 36px -28px rgba(17, 28, 56, 0.4);
+  }
+
+  .eaf-ai-card-icon { font-size: 16px; }
+
+  .eaf-ai-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .eaf-ai-card-text strong {
+    font-size: 13px;
+    color: #14213b;
+  }
+
+  .eaf-ai-card-text span {
+    font-size: 11px;
+    color: #607390;
+  }
+
+  /* === dataexport visual === */
+  .eaf-export-panel {
+    position: absolute;
+    inset: 40px 30px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .eaf-export-formats {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .eaf-format {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 12px 24px -16px rgba(17, 28, 56, 0.3);
+    font-size: 12px;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eaf-format-icon { font-size: 20px; }
+
+  .eaf-export-api {
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: #1a1f2e;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .eaf-api-tag {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: rgba(55, 93, 251, 0.2);
+    color: #38bdf8;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .eaf-api-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .eaf-api-method {
+    font-size: 11px;
+    font-weight: 800;
+    color: #22c55e;
+    font-family: monospace;
+  }
+
+  .eaf-api-url {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-family: monospace;
+  }
+
+  .eaf-schedule-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    font-size: 12px;
+    font-weight: 600;
+    color: #14213b;
+  }
+
+  .eaf-schedule-icon { font-size: 14px; }
+
+  @keyframes eaf-pulse-glow {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.06); opacity: 0.85; }
+  }
+
+  @media (max-width: 1024px) {
+    .eaf-section { padding: 60px 20px 30px; }
+    .eaf-header { width: 80%; }
+    .eaf-subtitle { font-size: 16px; }
+    .eaf-title { font-size: 40px; line-height: 1em; }
+    .eaf-card { height: 450px; }
+    .eaf-card-content { flex-basis: 50%; }
+    .eaf-card-title { font-size: 28px; }
+    .eaf-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .eaf-section { padding: 50px 20px 30px; }
+    .eaf-header { width: 100%; }
+    .eaf-title { font-size: 30px; }
+    .eaf-card { flex-direction: column; height: 620px; }
+    .eaf-card-content { flex: 0 0 55%; padding: 20px 20px 0; }
+    .eaf-card-visual { min-height: 260px; padding: 12px; }
+    .eaf-card-title { font-size: 24px; }
+    .eaf-card-desc { font-size: 15px; }
+    .eaf-cards { padding-bottom: 40px; }
+    .eaf-live-frame { left: 20px; right: 40px; }
+    .eaf-sponsor-frame { left: 20px; right: 40px; }
+    .eaf-ai-panel { inset: 20px 16px 60px; }
+    .eaf-export-panel { inset: 20px 16px 60px; }
+  }
+</style>

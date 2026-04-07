@@ -1,0 +1,1342 @@
+---
+const tabs = [
+  {
+    label: "AI Face Matching",
+    hero: {
+      eyebrow: "Face Matching Engine",
+      title: "Let attendees take one selfie and find every relevant photo in seconds",
+      desc: "Upload event galleries once and let InstaSnap handle clustering, personal matching, and delivery across solo portraits and crowded group shots.",
+      points: ["3-second average match", "Group photo detection", "Privacy controls built in"],
+      visual: "scan",
+    },
+    cards: [
+      {
+        eyebrow: "Recognition layer",
+        title: "AWS Rekognition Powered",
+        desc: "Enterprise-grade face clustering with 95%+ accuracy for real event photo volumes.",
+        visual: "engine",
+      },
+      {
+        eyebrow: "Attendee delivery",
+        title: "Instant Notification",
+        desc: "Trigger web or app alerts when newly matched photos are ready for an attendee.",
+        visual: "notify",
+      },
+      {
+        eyebrow: "Crowd awareness",
+        title: "Group Photo Detection",
+        desc: "Make sure group shots and multi-person moments still land in every attendee gallery.",
+        visual: "group",
+      },
+      {
+        eyebrow: "Consent controls",
+        title: "Privacy-First Approach",
+        desc: "Encrypted facial data, organizer controls, and attendee opt-out settings keep operations compliant.",
+        visual: "shield",
+      },
+    ],
+  },
+  {
+    label: "Photo Management",
+    hero: {
+      eyebrow: "Gallery Operations",
+      title: "Keep photographers, uploads, and album structure organized from one workflow",
+      desc: "InstaSnap gives event teams a single place to bulk ingest, tag, watermark, and structure thousands of files without losing photographer context.",
+      points: ["Bulk ingest from photographers", "Album rules by day or session", "Upload history by source"],
+      visual: "albums",
+    },
+    cards: [
+      {
+        eyebrow: "High-volume ingest",
+        title: "Bulk Upload",
+        desc: "Move thousands of images into the gallery quickly while AI starts indexing in the background.",
+        visual: "upload",
+      },
+      {
+        eyebrow: "Brand safety",
+        title: "Watermarking",
+        desc: "Auto-apply event branding and sponsor overlays before attendees start downloading.",
+        visual: "watermark",
+      },
+      {
+        eyebrow: "Community content",
+        title: "Contributed Photos (UGC)",
+        desc: "Let attendees add their own images so the gallery reflects the full event energy.",
+        visual: "ugc",
+      },
+      {
+        eyebrow: "Ops visibility",
+        title: "Upload History",
+        desc: "Track who uploaded what, when it processed, and how much content is now live.",
+        visual: "history",
+      },
+    ],
+  },
+  {
+    label: "Monetization & Sharing",
+    hero: {
+      eyebrow: "Sponsor Revenue",
+      title: "Turn event photos into a branded distribution and monetization channel",
+      desc: "Blend sponsor placements, branded frames, and premium download rules into the same gallery attendees already want to browse.",
+      points: ["Sponsor banners in-gallery", "Share-ready branded frames", "Control download tiers"],
+      visual: "sponsor",
+    },
+    cards: [
+      {
+        eyebrow: "Distribution",
+        title: "Social Sharing Links",
+        desc: "Make it easy for attendees to post matched photos to LinkedIn, Instagram, and X.",
+        visual: "share",
+      },
+      {
+        eyebrow: "Personal galleries",
+        title: "Person-Specific Pages",
+        desc: "Give every attendee a unique page containing the photos the AI found for them.",
+        visual: "person",
+      },
+      {
+        eyebrow: "Brand expression",
+        title: "Branded Gallery",
+        desc: "Customize gallery colors, framing, and sponsor surfaces to match the event identity.",
+        visual: "brand",
+      },
+      {
+        eyebrow: "Access rules",
+        title: "Download Controls",
+        desc: "Set permissions, watermark rules, and resolution access for every gallery experience.",
+        visual: "download",
+      },
+    ],
+  },
+];
+---
+
+<section class="apgb-section" id="gallery-bento">
+  <div class="apgb-shell">
+    <h2 class="apgb-title">
+      AI Face <b>Matching</b>, Photo Management & <b>Sharing</b>
+    </h2>
+    <p class="apgb-subtitle">
+      Match attendees to their photos, keep uploads structured, and turn the gallery into a branded
+      distribution channel without leaving the EventHex workflow.
+    </p>
+
+    <nav class="apgb-nav" aria-label="AI photo gallery workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`apgb-tab${index === 0 ? " apgb-tab--active" : ""}`}
+          data-apgb-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`apgb-panel${tabIndex === 0 ? " apgb-panel--active" : ""}`}
+        data-apgb-panel={tabIndex}
+      >
+        <div class="apgb-grid">
+          <article class="apgb-card apgb-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="apgb-card__content">
+              <span class="apgb-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="apgb-card__title">{tab.hero.title}</h3>
+              <p class="apgb-card__desc">{tab.hero.desc}</p>
+
+              <ul class="apgb-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`apgb-art apgb-art--hero apgb-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "scan" && (
+                <Fragment>
+                  <div class="apgb-phone">
+                    <div class="apgb-phone__screen">
+                      <div class="apgb-avatar"></div>
+                      <div class="apgb-scan-frame">
+                        <span></span><span></span><span></span><span></span>
+                      </div>
+                      <div class="apgb-match-chip">12 photos matched</div>
+                    </div>
+                  </div>
+                  <div class="apgb-thumb-grid">
+                    <span class="apgb-thumb apgb-thumb--a"></span>
+                    <span class="apgb-thumb apgb-thumb--b"></span>
+                    <span class="apgb-thumb apgb-thumb--c"></span>
+                    <span class="apgb-thumb apgb-thumb--d"></span>
+                  </div>
+                  <div class="apgb-pill apgb-pill--floating">95.3% live accuracy</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "albums" && (
+                <Fragment>
+                  <div class="apgb-folder-stack">
+                    <div class="apgb-folder apgb-folder--one">
+                      <strong>Day 1</strong>
+                      <span>Opening + expo floor</span>
+                    </div>
+                    <div class="apgb-folder apgb-folder--two">
+                      <strong>Day 2</strong>
+                      <span>Tracks + breakout rooms</span>
+                    </div>
+                    <div class="apgb-folder apgb-folder--three">
+                      <strong>VIP moments</strong>
+                      <span>Sponsor lounge set</span>
+                    </div>
+                  </div>
+                  <div class="apgb-upload-progress">
+                    <span>3,200 photos syncing</span>
+                    <div><i></i></div>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "sponsor" && (
+                <Fragment>
+                  <div class="apgb-gallery-shell">
+                    <div class="apgb-banner">Sponsor banner live</div>
+                    <div class="apgb-gallery-grid">
+                      <span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                  </div>
+                  <div class="apgb-pill apgb-pill--warm">12.4K gallery views</div>
+                  <div class="apgb-frame-card">
+                    <strong>Branded frame</strong>
+                    <span>Share-ready for sponsors</span>
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="apgb-card apgb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="apgb-card__content">
+                <span class="apgb-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="apgb-card__title">{card.title}</h3>
+                <p class="apgb-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`apgb-art apgb-art--mini apgb-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "engine" && (
+                  <Fragment>
+                    <div class="apgb-nodes">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="apgb-meter">
+                      <div><i></i></div>
+                      <strong>95%</strong>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "notify" && (
+                  <Fragment>
+                    <div class="apgb-device"></div>
+                    <div class="apgb-notice">
+                      <strong>New match</strong>
+                      <span>View photos</span>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "group" && (
+                  <Fragment>
+                    <div class="apgb-crowd">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="apgb-detect-boxes">
+                      <i></i><i></i><i></i>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "shield" && (
+                  <Fragment>
+                    <div class="apgb-shield-shape"></div>
+                    <div class="apgb-privacy-pills">
+                      <span>GDPR</span>
+                      <span>Opt-out</span>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "upload" && (
+                  <Fragment>
+                    <div class="apgb-cloud"></div>
+                    <div class="apgb-meter apgb-meter--wide">
+                      <div><i></i></div>
+                      <strong>Bulk live</strong>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "watermark" && (
+                  <Fragment>
+                    <div class="apgb-photo-surface"></div>
+                    <div class="apgb-stamp">EventHex</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "ugc" && (
+                  <Fragment>
+                    <div class="apgb-ugc-board"></div>
+                    <div class="apgb-ugc-phones">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "history" && (
+                  <Fragment>
+                    <div class="apgb-history-rows">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <div class="apgb-history-badge">3 uploads today</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "share" && (
+                  <Fragment>
+                    <div class="apgb-share-orbit">
+                      <span></span><span></span><span></span>
+                    </div>
+                    <div class="apgb-link-pill">1-click share</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "person" && (
+                  <Fragment>
+                    <div class="apgb-person-card">
+                      <span class="apgb-person-avatar"></span>
+                      <strong>Amina K.</strong>
+                      <small>24 matched photos</small>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "brand" && (
+                  <Fragment>
+                    <div class="apgb-brand-header"></div>
+                    <div class="apgb-brand-swatches">
+                      <span></span><span></span><span></span><span></span>
+                    </div>
+                  </Fragment>
+                )}
+
+                {card.visual === "download" && (
+                  <Fragment>
+                    <div class="apgb-download-arrow"></div>
+                    <div class="apgb-toggle-rows">
+                      <span></span><span></span>
+                    </div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".apgb-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".apgb-tab"));
+      const panels = Array.from(root.querySelectorAll(".apgb-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("apgb-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("apgb-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .apgb-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .apgb-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .apgb-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .apgb-title b {
+    font-weight: 700;
+  }
+
+  .apgb-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .apgb-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .apgb-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .apgb-tab:hover,
+  .apgb-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .apgb-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .apgb-panel {
+    display: none;
+  }
+
+  .apgb-panel--active {
+    display: block;
+  }
+
+  .apgb-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .apgb-panel--active .apgb-card {
+    animation: apgb-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  .apgb-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .apgb-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .apgb-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .apgb-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .apgb-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .apgb-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .apgb-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .apgb-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .apgb-card__content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .apgb-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .apgb-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .apgb-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .apgb-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .apgb-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .apgb-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .apgb-art {
+    position: relative;
+    z-index: 1;
+    min-height: 146px;
+  }
+
+  .apgb-art--hero {
+    min-height: 228px;
+    margin-top: 0.6rem;
+  }
+
+  .apgb-art--mini {
+    align-self: end;
+  }
+
+  .apgb-phone {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: min(54%, 240px);
+    padding: 0.75rem;
+    border-radius: 2rem;
+    background: linear-gradient(180deg, #1a2340 0%, #243873 100%);
+    box-shadow: 0 28px 50px -32px rgba(12, 22, 52, 0.85);
+  }
+
+  .apgb-phone__screen {
+    position: relative;
+    height: 100%;
+    border-radius: 1.45rem;
+    background: linear-gradient(180deg, #eef4ff 0%, #dfe8ff 100%);
+    overflow: hidden;
+  }
+
+  .apgb-avatar {
+    position: absolute;
+    inset: 22% 24% auto 24%;
+    aspect-ratio: 1;
+    border-radius: 999px;
+    background:
+      radial-gradient(circle at center 34%, rgba(55, 93, 251, 0.42) 0 22%, transparent 23%),
+      radial-gradient(circle at center 76%, rgba(55, 93, 251, 0.48) 0 28%, transparent 29%),
+      linear-gradient(180deg, rgba(55, 93, 251, 0.08), rgba(55, 93, 251, 0.2));
+  }
+
+  .apgb-scan-frame {
+    position: absolute;
+    inset: 18% 17% 35% 17%;
+  }
+
+  .apgb-scan-frame::after {
+    content: "";
+    position: absolute;
+    left: 0.5rem;
+    right: 0.5rem;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+    animation: apgb-scan-line 2.4s ease-in-out infinite;
+  }
+
+  .apgb-scan-frame span {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid #38bdf8;
+  }
+
+  .apgb-scan-frame span:nth-child(1) { top: 0; left: 0; border-right: 0; border-bottom: 0; }
+  .apgb-scan-frame span:nth-child(2) { top: 0; right: 0; border-left: 0; border-bottom: 0; }
+  .apgb-scan-frame span:nth-child(3) { bottom: 0; left: 0; border-right: 0; border-top: 0; }
+  .apgb-scan-frame span:nth-child(4) { right: 0; bottom: 0; border-left: 0; border-top: 0; }
+
+  .apgb-match-chip,
+  .apgb-pill,
+  .apgb-history-badge,
+  .apgb-link-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .apgb-match-chip {
+    position: absolute;
+    left: 50%;
+    bottom: 0.9rem;
+    transform: translateX(-50%);
+  }
+
+  .apgb-thumb-grid {
+    position: absolute;
+    right: 0;
+    top: 0.6rem;
+    width: min(42%, 180px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+
+  .apgb-thumb {
+    display: block;
+    aspect-ratio: 0.9;
+    border-radius: 1rem;
+    background: linear-gradient(145deg, #d9e4ff, #eff4ff);
+    border: 1px solid rgba(122, 146, 235, 0.28);
+    animation: apgb-float 4.5s ease-in-out infinite;
+  }
+
+  .apgb-thumb::after {
+    content: "";
+    display: block;
+    width: 68%;
+    height: 38%;
+    margin: 18% auto 0;
+    border-radius: 999px 999px 55% 55%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.3), rgba(55, 93, 251, 0.08));
+  }
+
+  .apgb-thumb--b { animation-delay: -0.7s; }
+  .apgb-thumb--c { animation-delay: -1.4s; }
+  .apgb-thumb--d { animation-delay: -2.1s; }
+
+  .apgb-pill--floating {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0;
+  }
+
+  .apgb-folder-stack {
+    position: absolute;
+    inset: 0 18% auto 0;
+    height: 90%;
+  }
+
+  .apgb-folder {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.05rem 1rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.52);
+    animation: apgb-float 5.2s ease-in-out infinite;
+  }
+
+  .apgb-folder strong {
+    color: #183465;
+    font-size: 1rem;
+  }
+
+  .apgb-folder span {
+    color: #607390;
+    font-size: 0.85rem;
+  }
+
+  .apgb-folder--one { top: 0.1rem; }
+  .apgb-folder--two { top: 4.8rem; left: 1.3rem; animation-delay: -0.7s; }
+  .apgb-folder--three { top: 9.6rem; left: 2.6rem; animation-delay: -1.3s; }
+
+  .apgb-upload-progress {
+    position: absolute;
+    right: 0;
+    bottom: 0.3rem;
+    width: min(46%, 210px);
+    display: grid;
+    gap: 0.55rem;
+    padding: 1rem;
+    border-radius: 1.2rem;
+    background: rgba(24, 52, 101, 0.94);
+    color: #f8fbff;
+    box-shadow: 0 22px 40px -28px rgba(17, 28, 56, 0.75);
+  }
+
+  .apgb-upload-progress span {
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .apgb-upload-progress div,
+  .apgb-meter div {
+    overflow: hidden;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+  }
+
+  .apgb-upload-progress i,
+  .apgb-meter i {
+    display: block;
+    width: 72%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #22c55e, #38bdf8);
+    animation: apgb-load 2.8s ease-in-out infinite alternate;
+  }
+
+  .apgb-gallery-shell {
+    position: absolute;
+    inset: 0 0 auto 0;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #ebf1ff 100%);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+  }
+
+  .apgb-banner {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.75rem;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), rgba(245, 158, 11, 0.08));
+    color: #a16207;
+    font-weight: 700;
+    font-size: 0.78rem;
+  }
+
+  .apgb-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+  }
+
+  .apgb-gallery-grid span,
+  .apgb-photo-surface,
+  .apgb-ugc-board,
+  .apgb-brand-header {
+    display: block;
+    border-radius: 1rem;
+    background: linear-gradient(145deg, rgba(55, 93, 251, 0.18), rgba(34, 197, 94, 0.12));
+    min-height: 3.4rem;
+  }
+
+  .apgb-gallery-grid span:nth-child(1),
+  .apgb-gallery-grid span:nth-child(4) { min-height: 4.3rem; }
+  .apgb-gallery-grid span:nth-child(2),
+  .apgb-gallery-grid span:nth-child(5) { background: linear-gradient(145deg, rgba(15, 23, 42, 0.08), rgba(55, 93, 251, 0.14)); }
+  .apgb-gallery-grid span:nth-child(3),
+  .apgb-gallery-grid span:nth-child(6) { background: linear-gradient(145deg, rgba(245, 158, 11, 0.18), rgba(55, 93, 251, 0.12)); }
+
+  .apgb-pill--warm {
+    position: absolute;
+    left: 0.6rem;
+    bottom: 0.25rem;
+    background: rgba(255, 247, 237, 0.96);
+    color: #9a3412;
+  }
+
+  .apgb-frame-card {
+    position: absolute;
+    right: 0.1rem;
+    bottom: 0.7rem;
+    display: grid;
+    gap: 0.2rem;
+    padding: 0.9rem 1rem;
+    border-radius: 1.15rem;
+    background: rgba(20, 33, 59, 0.95);
+    color: #f8fbff;
+    box-shadow: 0 20px 40px -26px rgba(17, 28, 56, 0.7);
+  }
+
+  .apgb-frame-card strong { font-size: 0.92rem; }
+  .apgb-frame-card span { color: rgba(248, 251, 255, 0.76); font-size: 0.78rem; }
+
+  .apgb-nodes {
+    position: absolute;
+    inset: 0.4rem 0 auto 0;
+    height: 4.1rem;
+  }
+
+  .apgb-nodes::before,
+  .apgb-nodes::after {
+    content: "";
+    position: absolute;
+    top: 2rem;
+    left: 1.2rem;
+    right: 1.2rem;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.18), rgba(55, 93, 251, 0.48), rgba(55, 93, 251, 0.18));
+  }
+
+  .apgb-nodes span {
+    position: absolute;
+    top: 1.35rem;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 999px;
+    background: #375dfb;
+    box-shadow: 0 0 0 0 rgba(55, 93, 251, 0.16);
+    animation: apgb-pulse 2s ease-in-out infinite;
+  }
+
+  .apgb-nodes span:nth-child(1) { left: 1rem; }
+  .apgb-nodes span:nth-child(2) { left: 3.5rem; animation-delay: -0.3s; }
+  .apgb-nodes span:nth-child(3) { left: 6rem; animation-delay: -0.6s; }
+  .apgb-nodes span:nth-child(4) { right: 3.5rem; animation-delay: -0.9s; }
+  .apgb-nodes span:nth-child(5) { right: 1rem; animation-delay: -1.2s; }
+
+  .apgb-meter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.5rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .apgb-meter strong {
+    color: #1a3d7b;
+    font-size: 0.86rem;
+  }
+
+  .apgb-meter--wide { left: 0.1rem; right: 0.1rem; }
+
+  .apgb-device {
+    position: absolute;
+    left: 1.4rem;
+    top: 0.15rem;
+    width: 4.4rem;
+    height: 7rem;
+    border-radius: 1.4rem;
+    background: linear-gradient(180deg, #eff4ff 0%, #d9e4ff 100%);
+    border: 1px solid rgba(55, 93, 251, 0.2);
+  }
+
+  .apgb-device::after {
+    content: "";
+    position: absolute;
+    inset: 0.55rem 0.5rem 1rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #172341 0%, #22355f 100%);
+  }
+
+  .apgb-notice {
+    position: absolute;
+    right: 0;
+    bottom: 0.75rem;
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.75rem 0.85rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 18px 36px -22px rgba(18, 34, 74, 0.4);
+  }
+
+  .apgb-notice strong { color: #19386c; font-size: 0.82rem; }
+  .apgb-notice span { color: #4f79d5; font-size: 0.76rem; }
+
+  .apgb-crowd {
+    position: absolute;
+    inset: auto 0 0.2rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+
+  .apgb-crowd span {
+    width: 2.2rem;
+    height: 3.6rem;
+    border-radius: 999px 999px 0.8rem 0.8rem;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.42), rgba(55, 93, 251, 0.16));
+  }
+
+  .apgb-detect-boxes i {
+    position: absolute;
+    border: 2px solid #38bdf8;
+    border-radius: 0.45rem;
+    animation: apgb-pulse-border 2.2s ease-in-out infinite;
+  }
+
+  .apgb-detect-boxes i:nth-child(1) { left: 0.9rem; top: 1rem; width: 2.6rem; height: 2.6rem; }
+  .apgb-detect-boxes i:nth-child(2) { left: 4.25rem; top: 0.4rem; width: 2.2rem; height: 2.2rem; animation-delay: -0.6s; }
+  .apgb-detect-boxes i:nth-child(3) { right: 0.8rem; top: 1.25rem; width: 2.4rem; height: 2.4rem; animation-delay: -1.2s; }
+
+  .apgb-shield-shape {
+    position: absolute;
+    left: 50%;
+    top: 0.55rem;
+    width: 4.6rem;
+    height: 5.6rem;
+    transform: translateX(-50%);
+    clip-path: polygon(50% 0%, 92% 14%, 92% 52%, 50% 100%, 8% 52%, 8% 14%);
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(55, 93, 251, 0.3));
+    border: 1px solid rgba(34, 197, 94, 0.26);
+  }
+
+  .apgb-privacy-pills {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.75rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .apgb-privacy-pills span {
+    display: inline-flex;
+    padding: 0.45rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #1f5131;
+    background: rgba(34, 197, 94, 0.12);
+  }
+
+  .apgb-cloud {
+    position: absolute;
+    left: 50%;
+    top: 1rem;
+    width: 4.8rem;
+    height: 2.2rem;
+    transform: translateX(-50%);
+    border-radius: 2rem;
+    background: linear-gradient(180deg, #e7efff 0%, #d6e4ff 100%);
+    box-shadow:
+      -1.6rem 0.7rem 0 -0.4rem rgba(214, 228, 255, 0.9),
+      1.6rem 0.65rem 0 -0.45rem rgba(214, 228, 255, 0.9),
+      0 1.05rem 0 0 rgba(231, 239, 255, 0.96);
+  }
+
+  .apgb-cloud::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 2.25rem;
+    width: 0.9rem;
+    height: 1.2rem;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, #375dfb 0%, #1f8fff 100%);
+    clip-path: polygon(50% 100%, 0 55%, 28% 55%, 28% 0, 72% 0, 72% 55%, 100% 55%);
+  }
+
+  .apgb-photo-surface {
+    min-height: 6.3rem;
+    background: linear-gradient(135deg, rgba(55, 93, 251, 0.2), rgba(20, 33, 59, 0.16));
+  }
+
+  .apgb-stamp {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(-13deg);
+    padding: 0.4rem 0.9rem;
+    border: 1px dashed rgba(255, 255, 255, 0.78);
+    border-radius: 0.7rem;
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .apgb-ugc-board {
+    position: absolute;
+    inset: 1.2rem 1.6rem 1.2rem 1.6rem;
+    min-height: auto;
+    border-radius: 1.1rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+  }
+
+  .apgb-ugc-board::after {
+    content: "+ Add your photo";
+    position: absolute;
+    left: 50%;
+    bottom: 0.8rem;
+    transform: translateX(-50%);
+    color: #2b52b7;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .apgb-ugc-phones span {
+    position: absolute;
+    width: 1.7rem;
+    height: 2.6rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #eff4ff 0%, #d9e4ff 100%);
+    border: 1px solid rgba(55, 93, 251, 0.16);
+    animation: apgb-float 3.8s ease-in-out infinite;
+  }
+
+  .apgb-ugc-phones span:nth-child(1) { left: 0; bottom: 1.1rem; }
+  .apgb-ugc-phones span:nth-child(2) { right: 0; bottom: 0.9rem; animation-delay: -0.8s; }
+  .apgb-ugc-phones span:nth-child(3) { left: calc(50% - 0.85rem); top: 0.1rem; animation-delay: -1.6s; }
+
+  .apgb-history-rows {
+    position: absolute;
+    inset: 0.5rem 0 1.9rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .apgb-history-rows span {
+    display: block;
+    border-radius: 0.9rem;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.08), rgba(55, 93, 251, 0.16));
+    position: relative;
+  }
+
+  .apgb-history-rows span::before {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translateY(-50%);
+  }
+
+  .apgb-history-badge {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  .apgb-share-orbit {
+    position: absolute;
+    inset: 1rem;
+    border-radius: 999px;
+    border: 1px dashed rgba(55, 93, 251, 0.26);
+    animation: apgb-spin 14s linear infinite;
+  }
+
+  .apgb-share-orbit span {
+    position: absolute;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #375dfb, #34d399);
+  }
+
+  .apgb-share-orbit span:nth-child(1) { top: -0.2rem; left: calc(50% - 0.55rem); }
+  .apgb-share-orbit span:nth-child(2) { left: 0.3rem; bottom: 1.2rem; }
+  .apgb-share-orbit span:nth-child(3) { right: 0.3rem; bottom: 1rem; }
+
+  .apgb-link-pill {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+  }
+
+  .apgb-person-card {
+    position: absolute;
+    inset: 0.75rem;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.3rem;
+    border-radius: 1.2rem;
+    background: linear-gradient(180deg, #f8fbff 0%, #edf3ff 100%);
+    border: 1px solid rgba(55, 93, 251, 0.14);
+  }
+
+  .apgb-person-avatar {
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.34), rgba(34, 197, 94, 0.24));
+  }
+
+  .apgb-person-card strong { color: #19386c; font-size: 0.92rem; }
+  .apgb-person-card small { color: #5f6f89; font-size: 0.75rem; }
+
+  .apgb-brand-header {
+    min-height: 3rem;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.22), rgba(34, 197, 94, 0.16));
+  }
+
+  .apgb-brand-swatches {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.5rem;
+    display: flex;
+    gap: 0.55rem;
+    justify-content: center;
+  }
+
+  .apgb-brand-swatches span {
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 0.45rem;
+    background: #375dfb;
+  }
+
+  .apgb-brand-swatches span:nth-child(2) { background: #22c55e; }
+  .apgb-brand-swatches span:nth-child(3) { background: #f59e0b; }
+  .apgb-brand-swatches span:nth-child(4) { background: #14213b; }
+
+  .apgb-download-arrow {
+    position: absolute;
+    left: 50%;
+    top: 1rem;
+    width: 2rem;
+    height: 3rem;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.14), rgba(55, 93, 251, 0.28));
+    clip-path: polygon(40% 0, 60% 0, 60% 52%, 82% 52%, 50% 100%, 18% 52%, 40% 52%);
+  }
+
+  .apgb-toggle-rows {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.55rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .apgb-toggle-rows span {
+    display: block;
+    height: 0.95rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    position: relative;
+  }
+
+  .apgb-toggle-rows span::after {
+    content: "";
+    position: absolute;
+    top: 0.15rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 999px;
+    background: #375dfb;
+  }
+
+  .apgb-toggle-rows span:first-child::after { left: calc(100% - 1rem); }
+  .apgb-toggle-rows span:last-child::after { left: 0.2rem; background: #22c55e; }
+
+  @keyframes apgb-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes apgb-scan-line {
+    0%,
+    100% { transform: translateY(-1.1rem); }
+    50% { transform: translateY(3.25rem); }
+  }
+
+  @keyframes apgb-load {
+    from { transform: translateX(-25%); }
+    to { transform: translateX(5%); }
+  }
+
+  @keyframes apgb-float {
+    0%,
+    100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes apgb-pulse {
+    0%,
+    100% { box-shadow: 0 0 0 0 rgba(55, 93, 251, 0.16); }
+    50% { box-shadow: 0 0 0 10px rgba(55, 93, 251, 0); }
+  }
+
+  @keyframes apgb-pulse-border {
+    0%,
+    100% { opacity: 0.45; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes apgb-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 960px) {
+    .apgb-section {
+      padding: 60px 0 48px;
+    }
+
+    .apgb-title {
+      font-size: 36px;
+    }
+
+    .apgb-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+
+    .apgb-card--hero {
+      min-height: 380px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .apgb-section {
+      padding-inline: 0;
+    }
+
+    .apgb-nav {
+      gap: 4px;
+      flex-direction: column;
+      border-radius: 16px;
+      max-width: 300px;
+    }
+
+    .apgb-tab {
+      width: 100%;
+      justify-content: center;
+      border-radius: 12px;
+    }
+
+    .apgb-title {
+      font-size: 28px;
+    }
+
+    .apgb-subtitle {
+      font-size: 15px;
+    }
+
+    .apgb-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "hero"
+        "mini1"
+        "mini2"
+        "mini3"
+        "mini4";
+    }
+
+    .apgb-card {
+      min-height: 210px;
+    }
+
+    .apgb-card--hero {
+      min-height: 420px;
+    }
+
+    .apgb-phone {
+      width: min(55%, 210px);
+    }
+
+    .apgb-thumb-grid {
+      width: min(40%, 140px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apgb-panel--active .apgb-card,
+    .apgb-thumb,
+    .apgb-folder,
+    .apgb-upload-progress i,
+    .apgb-meter i,
+    .apgb-nodes span,
+    .apgb-detect-boxes i,
+    .apgb-ugc-phones span,
+    .apgb-share-orbit,
+    .apgb-scan-frame::after {
+      animation: none;
+    }
+  }
+</style>

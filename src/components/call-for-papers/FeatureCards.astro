@@ -1,0 +1,646 @@
+---
+const featureCards = [
+  {
+    eyebrow: "peer review",
+    title: "Organise reviewers and never chase them again",
+    desc: "Assign papers to reviewers, track progress, send automated reminders, and aggregate scores — all in the EventHex CFP dashboard. No email threads.",
+    items: [
+      "Reviewer pool management with expertise tags",
+      "Rubric-based scoring with structured feedback",
+      "Automated deadline reminders — zero manual follow-up",
+    ],
+    visual: "reviewmgmt",
+  },
+  {
+    eyebrow: "submission portal",
+    title: "A submission portal authors actually like using",
+    desc: "Authors submit, revise, and track their submissions through a clean self-service portal — no confused emails about formats or status.",
+    items: [
+      "Configurable fields for abstract and keywords",
+      "PDF, DOCX, and LaTeX file uploads accepted",
+      "Real-time status: under review, revisions, accepted",
+    ],
+    visual: "authorportal",
+  },
+  {
+    eyebrow: "decisions",
+    title: "From accepted paper to conference schedule in one click",
+    desc: "Accept a paper and assign it directly to a session slot. Authors are notified, the programme is updated, and proceedings can be exported.",
+    items: [
+      "One-click acceptance with auto notification",
+      "Drag papers into session slots in schedule builder",
+      "Generate formatted proceedings PDF automatically",
+    ],
+    visual: "decisionflow",
+  },
+  {
+    eyebrow: "compliance",
+    title: "Blind review and conflict management built in",
+    desc: "Configure single or double-blind review modes. Reviewers declare conflicts of interest, and the system automatically reassigns conflicted submissions.",
+    items: [
+      "Single and double-blind review modes",
+      "Conflict of interest declaration and reassignment",
+      "Multi-round review with revision tracking",
+    ],
+    visual: "compliance",
+  },
+];
+---
+
+<section class="cfpf-shell">
+  <div class="cfpf-section">
+    <div class="cfpf-header">
+      <span class="cfpf-subtitle">Everything you need to manage the full call-for-papers lifecycle</span>
+      <h2 class="cfpf-title">
+        Everything You Need to <span class="cfpf-highlight">Submit, Review, and Publish</span><br />
+        Conference Papers
+      </h2>
+    </div>
+
+    <div class="cfpf-cards" id="cfpf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="cfpf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="cfpf-card-content">
+            <span class="cfpf-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="cfpf-card-title">{card.title}</h3>
+            <p class="cfpf-card-desc">{card.desc}</p>
+            <ul class="cfpf-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="cfpf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`cfpf-card-visual cfpf-card-visual--${card.visual}`}>
+            {card.visual === "reviewmgmt" && (
+              <Fragment>
+                <div class="cfpf-rev-dash">
+                  <div class="cfpf-rev-top">
+                    <div class="cfpf-rev-widget">
+                      <span class="cfpf-rev-label">Reviews done</span>
+                      <strong>24/30</strong>
+                    </div>
+                    <div class="cfpf-rev-widget">
+                      <span class="cfpf-rev-label">Avg. score</span>
+                      <strong>3.8</strong>
+                    </div>
+                  </div>
+                  <div class="cfpf-rev-progress-list">
+                    <div class="cfpf-rev-progress-row">
+                      <span class="cfpf-rev-avatar"></span>
+                      <div class="cfpf-rev-bar-track"><div class="cfpf-rev-bar-fill" style="width:80%"></div></div>
+                    </div>
+                    <div class="cfpf-rev-progress-row">
+                      <span class="cfpf-rev-avatar cfpf-rev-avatar--alt"></span>
+                      <div class="cfpf-rev-bar-track"><div class="cfpf-rev-bar-fill" style="width:60%"></div></div>
+                    </div>
+                    <div class="cfpf-rev-progress-row">
+                      <span class="cfpf-rev-avatar cfpf-rev-avatar--alt2"></span>
+                      <div class="cfpf-rev-bar-track"><div class="cfpf-rev-bar-fill" style="width:100%"></div></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cfpf-visual-pill">Reviewer dashboard</div>
+              </Fragment>
+            )}
+
+            {card.visual === "authorportal" && (
+              <Fragment>
+                <div class="cfpf-author-form">
+                  <div class="cfpf-author-form-header"></div>
+                  <div class="cfpf-author-field"><span class="cfpf-author-field-label"></span><span class="cfpf-author-field-input"></span></div>
+                  <div class="cfpf-author-field"><span class="cfpf-author-field-label"></span><span class="cfpf-author-field-input cfpf-author-field-input--wide"></span></div>
+                  <div class="cfpf-author-field"><span class="cfpf-author-field-label"></span><span class="cfpf-author-field-textarea"></span></div>
+                </div>
+                <div class="cfpf-status-tracker">
+                  <div class="cfpf-status-step cfpf-status-step--done"><span>&#10003;</span> Submitted</div>
+                  <div class="cfpf-status-step cfpf-status-step--active"><span class="cfpf-status-pulse"></span> Review</div>
+                  <div class="cfpf-status-step"><span></span> Decision</div>
+                </div>
+                <div class="cfpf-visual-pill">Author portal</div>
+              </Fragment>
+            )}
+
+            {card.visual === "decisionflow" && (
+              <Fragment>
+                <div class="cfpf-flow-steps">
+                  <div class="cfpf-flow-step cfpf-flow-step--score">
+                    <strong>4.2</strong>
+                    <span>Score</span>
+                  </div>
+                  <div class="cfpf-flow-arrow">&#8594;</div>
+                  <div class="cfpf-flow-step cfpf-flow-step--accept">
+                    <span class="cfpf-flow-check">&#10003;</span>
+                    <span>Accept</span>
+                  </div>
+                  <div class="cfpf-flow-arrow">&#8594;</div>
+                  <div class="cfpf-flow-step cfpf-flow-step--schedule">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="3" y="4" width="18" height="16" rx="2" stroke="#375dfb" stroke-width="2"/><path d="M3 10h18" stroke="#375dfb" stroke-width="2"/></svg>
+                    <span>Schedule</span>
+                  </div>
+                </div>
+                <div class="cfpf-visual-pill">Decision flow</div>
+              </Fragment>
+            )}
+
+            {card.visual === "compliance" && (
+              <Fragment>
+                <div class="cfpf-comp-display">
+                  <div class="cfpf-comp-shield">
+                    <svg viewBox="0 0 48 56" width="48" height="56">
+                      <path d="M24 2L4 12v16c0 14 20 24 20 24s20-10 20-24V12L24 2z" fill="rgba(55,93,251,0.08)" stroke="#375dfb" stroke-width="2"/>
+                      <path d="M16 28l5 5 11-11" stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div class="cfpf-comp-tags">
+                    <span class="cfpf-comp-tag cfpf-comp-tag--blind">Double-Blind</span>
+                    <span class="cfpf-comp-tag cfpf-comp-tag--conflict">COI Managed</span>
+                  </div>
+                </div>
+                <div class="cfpf-visual-pill">Compliance</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .cfpf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .cfpf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .cfpf-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .cfpf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .cfpf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .cfpf-highlight { color: #AFA3FF; }
+
+  .cfpf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .cfpf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .cfpf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .cfpf-card-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .cfpf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .cfpf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .cfpf-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cfpf-card-items li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .cfpf-card-items li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+  }
+
+  .cfpf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .cfpf-card-btn:hover { transform: scale(1.05); }
+
+  .cfpf-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  .cfpf-visual-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* reviewmgmt visual */
+  .cfpf-rev-dash {
+    position: absolute;
+    inset: 40px 30px 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cfpf-rev-top {
+    display: flex;
+    gap: 10px;
+  }
+
+  .cfpf-rev-widget {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cfpf-rev-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #607390;
+  }
+
+  .cfpf-rev-widget strong {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .cfpf-rev-progress-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .cfpf-rev-progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cfpf-rev-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #375dfb, #38bdf8);
+    flex-shrink: 0;
+  }
+
+  .cfpf-rev-avatar--alt { background: linear-gradient(135deg, #afa3ff, #e0b3ff); }
+  .cfpf-rev-avatar--alt2 { background: linear-gradient(135deg, #22c55e, #38bdf8); }
+
+  .cfpf-rev-bar-track {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .cfpf-rev-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #22c55e);
+  }
+
+  /* authorportal visual */
+  .cfpf-author-form {
+    position: absolute;
+    left: 30px;
+    top: 40px;
+    right: 80px;
+    padding: 16px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+  }
+
+  .cfpf-author-form-header {
+    height: 8px;
+    width: 50%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    margin-bottom: 4px;
+  }
+
+  .cfpf-author-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .cfpf-author-field-label {
+    height: 4px;
+    width: 30%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .cfpf-author-field-input {
+    height: 20px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .cfpf-author-field-input--wide { width: 100%; }
+
+  .cfpf-author-field-textarea {
+    height: 36px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .cfpf-status-tracker {
+    position: absolute;
+    right: 30px;
+    top: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cfpf-status-step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(20, 33, 59, 0.85);
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .cfpf-status-step--done {
+    color: #22c55e;
+  }
+
+  .cfpf-status-step--active {
+    color: #fff;
+    background: rgba(55, 93, 251, 0.9);
+  }
+
+  .cfpf-status-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    animation: cfpf-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes cfpf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* decisionflow visual */
+  .cfpf-flow-steps {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cfpf-flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 14px 28px -18px rgba(17, 28, 56, 0.4);
+  }
+
+  .cfpf-flow-step--score strong {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  .cfpf-flow-step span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #607390;
+  }
+
+  .cfpf-flow-check {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .cfpf-flow-arrow {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+  }
+
+  /* compliance visual */
+  .cfpf-comp-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cfpf-comp-shield {
+    padding: 14px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.4);
+  }
+
+  .cfpf-comp-tags {
+    display: flex;
+    gap: 8px;
+  }
+
+  .cfpf-comp-tag {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .cfpf-comp-tag--blind {
+    background: rgba(55, 93, 251, 0.12);
+    color: #80b0ff;
+    border: 1px solid rgba(55, 93, 251, 0.25);
+  }
+
+  .cfpf-comp-tag--conflict {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+
+  @media (max-width: 1024px) {
+    .cfpf-section { padding: 60px 20px 30px; }
+    .cfpf-header { width: 80%; }
+    .cfpf-subtitle { font-size: 16px; }
+    .cfpf-title { font-size: 40px; line-height: 1em; }
+    .cfpf-card { height: 450px; }
+    .cfpf-card-content { flex-basis: 50%; }
+    .cfpf-card-title { font-size: 28px; }
+    .cfpf-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .cfpf-section { padding: 50px 20px 30px; }
+    .cfpf-header { width: 100%; }
+    .cfpf-title { font-size: 30px; }
+    .cfpf-card { flex-direction: column; height: 620px; }
+    .cfpf-card-content { flex: 0 0 55%; padding: 20px 20px 0; }
+    .cfpf-card-visual { min-height: 260px; padding: 12px; }
+    .cfpf-card-title { font-size: 24px; }
+    .cfpf-card-desc { font-size: 15px; }
+    .cfpf-cards { padding-bottom: 40px; }
+    .cfpf-rev-dash { inset: 20px 16px 50px; }
+    .cfpf-author-form { left: 16px; right: 60px; }
+    .cfpf-status-tracker { right: 16px; }
+    .cfpf-flow-steps { flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .cfpf-flow-step { padding: 12px 14px; }
+  }
+</style>

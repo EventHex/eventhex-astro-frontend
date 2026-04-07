@@ -1,0 +1,382 @@
+---
+const faqs = [
+  {
+    q: "What data is tracked by EventHex analytics?",
+    a: "Everything — registrations, ticket sales, check-ins, attendance per session, engagement metrics (polls, Q&A, gamification), sponsor booth traffic, revenue, and post-event feedback.",
+  },
+  {
+    q: "Can I create custom reports?",
+    a: "Yes. The custom report builder lets you select specific metrics, apply filters (date range, ticket type, attendee segment), and save report templates for recurring use.",
+  },
+  {
+    q: "Can analytics data be exported?",
+    a: "Yes. Export any dashboard or report as CSV, PDF, or Excel. You can also pull data via REST API into your own BI tools like Tableau, Power BI, or Google Data Studio.",
+  },
+  {
+    q: "Are analytics available in real time?",
+    a: "Yes. Dashboards update in real time during events — registration velocity, check-in rates, session attendance, and revenue all refresh automatically every few seconds.",
+  },
+  {
+    q: "Can I compare multiple events?",
+    a: "Yes. The multi-event dashboard lets you compare registration trends, attendance, engagement, and revenue across all your events side by side.",
+  },
+  {
+    q: "How does AI improve analytics?",
+    a: "AI analyzes data patterns across events — predicting attendance, identifying what drives engagement, flagging anomalies, and recommending specific improvements for your next event.",
+  },
+];
+
+const checklist = [
+  "Real-time dashboard setup",
+  "Custom report configuration",
+  "AI insights activation",
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="eafq" data-ea-faq>
+  <div class="eafq__inner">
+    <div class="eafq__support">
+      <span class="eafq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need help with event analytics?</span>
+      <h2 class="eafq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
+      <p class="eafq__desc animate-on-scroll" data-animation="fadeInUp">
+        We help event teams set up dashboards, reports, and AI analytics tailored to their event data and stakeholder needs.
+      </p>
+
+      <div class="eafq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="eafq__support-label">Included with every rollout</span>
+        <ul class="eafq__support-list">
+          {checklist.map((item) => (
+            <li class="eafq__support-item">{item}</li>
+          ))}
+        </ul>
+
+        <div class="eafq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Map your analytics needs before launch and keep your team aligned on dashboards, reports, and sponsor ROI tracking.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="eafq__cta">Plan my analytics setup</a>
+      </div>
+    </div>
+
+    <div class="eafq__list">
+      {faqs.map((faq, index) => (
+        <details class="eafq__item animate-on-scroll" data-animation="fadeInUp" data-ea-faq-item open={index === 0}>
+          <summary class="eafq__question">
+            <span>{faq.q}</span>
+            <span class="eafq__icon" aria-hidden="true">
+              <span class="eafq__icon-line eafq__icon-line--horizontal"></span>
+              <span class="eafq__icon-line eafq__icon-line--vertical"></span>
+            </span>
+          </summary>
+          <div class="eafq__answer">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const eaFaqItems = Array.from(document.querySelectorAll('[data-ea-faq-item]'));
+
+  eaFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) {
+        return;
+      }
+
+      eaFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .eafq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .eafq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .eafq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .eafq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .eafq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .eafq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .eafq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .eafq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .eafq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .eafq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .eafq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .eafq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .eafq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .eafq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .eafq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .eafq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .eafq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .eafq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+  }
+
+  .eafq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+  }
+
+  .eafq__question::-webkit-details-marker,
+  .eafq__question::marker {
+    display: none;
+  }
+
+  .eafq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 4px;
+  }
+
+  .eafq__icon-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .eafq__icon-line--vertical {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .eafq__item[open] .eafq__icon-line--vertical {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .eafq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .eafq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  @media (max-width: 1100px) {
+    .eafq { padding: 76px 0; }
+    .eafq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .eafq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .eafq__title { font-size: 40px; }
+    .eafq__desc { font-size: 16px; }
+    .eafq__question { padding: 24px 22px; font-size: 20px; }
+    .eafq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .eafq { padding: 56px 0; }
+    .eafq__inner { padding: 0 16px; gap: 24px; }
+    .eafq__title { font-size: 32px; line-height: 1.08; }
+    .eafq__desc { font-size: 15px; line-height: 1.7; }
+    .eafq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .eafq__support-item { font-size: 15px; }
+    .eafq__support-note strong { font-size: 18px; }
+    .eafq__cta { width: 100%; }
+    .eafq__item { border-radius: 24px; }
+    .eafq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .eafq__answer { padding: 0 18px 20px; }
+    .eafq__answer p { font-size: 15px; line-height: 1.75; }
+  }
+</style>

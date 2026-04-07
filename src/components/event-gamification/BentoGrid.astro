@@ -1,0 +1,1401 @@
+---
+const tabs = [
+  {
+    label: "Games & Challenges",
+    hero: {
+      eyebrow: "Challenge Engine",
+      title: "Pre-built game templates and custom challenges for every event type",
+      desc: "Design custom challenge lists — visit booths, attend sessions, network — and verify completion with QR codes for accurate tracking.",
+      points: ["Master game templates", "QR-verified activities", "Configurable point values"],
+      visual: "games",
+    },
+    cards: [
+      {
+        eyebrow: "Templates",
+        title: "Game Templates",
+        desc: "Pre-built gamification templates for conferences, expos, and workshops.",
+        visual: "templateg",
+      },
+      {
+        eyebrow: "Custom",
+        title: "Custom Challenges",
+        desc: "Create tasks — visit booths, attend sessions, network, scan QR codes.",
+        visual: "custom",
+      },
+      {
+        eyebrow: "Points",
+        title: "Point Scoring",
+        desc: "Configurable point values for different activities and interactions.",
+        visual: "points",
+      },
+      {
+        eyebrow: "Timed",
+        title: "Flash Challenges",
+        desc: "Create urgency with time-limited activities and flash competitions.",
+        visual: "timed",
+      },
+    ],
+  },
+  {
+    label: "Leaderboards & Rewards",
+    hero: {
+      eyebrow: "Rewards Engine",
+      title: "Real-time leaderboards, milestone rewards, and weighted lucky draws",
+      desc: "Live rankings on screens and in the attendee app — with auto-triggered rewards at milestones and engagement-weighted lucky draws.",
+      points: ["Live leaderboard displays", "Position-based rewards", "Weighted lucky draws"],
+      visual: "leader",
+    },
+    cards: [
+      {
+        eyebrow: "Ranking",
+        title: "Position Rewards",
+        desc: "Auto-assign prizes for top performers at each milestone.",
+        visual: "position",
+      },
+      {
+        eyebrow: "Milestones",
+        title: "Milestone Rewards",
+        desc: "Unlock rewards when attendees reach specific point thresholds.",
+        visual: "milestone",
+      },
+      {
+        eyebrow: "Draws",
+        title: "Lucky Draw System",
+        desc: "Run lucky draws with weighted entries based on engagement points.",
+        visual: "draw",
+      },
+      {
+        eyebrow: "Fame",
+        title: "Wall of Fame",
+        desc: "Showcase top participants with photos and achievement badges.",
+        visual: "fame",
+      },
+    ],
+  },
+  {
+    label: "Analytics & Sponsor ROI",
+    hero: {
+      eyebrow: "Event Intelligence",
+      title: "Participation analytics, engagement heatmaps, and sponsor ROI metrics",
+      desc: "Track challenge completion rates, identify top players, and prove sponsor booth traffic with QR-verified engagement data.",
+      points: ["Participation rate tracking", "Engagement heatmaps", "Sponsor ROI reports"],
+      visual: "roi",
+    },
+    cards: [
+      {
+        eyebrow: "Completion",
+        title: "Challenge Completion",
+        desc: "Monitor completion rates and identify popular activities.",
+        visual: "completion",
+      },
+      {
+        eyebrow: "Players",
+        title: "Top Players",
+        desc: "Identify your most engaged attendees and reward them.",
+        visual: "topplay",
+      },
+      {
+        eyebrow: "Heatmaps",
+        title: "Engagement Heatmaps",
+        desc: "Visualize which booths and sessions drive the most activity.",
+        visual: "heatmapg",
+      },
+      {
+        eyebrow: "Sponsors",
+        title: "Sponsor ROI Metrics",
+        desc: "Show sponsors how gamification drove traffic to their booths.",
+        visual: "sponsorroi",
+      },
+    ],
+  },
+];
+---
+
+<section class="egb-section" id="eg-bento">
+  <div class="egb-shell">
+    <h2 class="egb-title">
+      Games & <b>Challenges</b>, Leaderboards & <b>Rewards</b>
+    </h2>
+    <p class="egb-subtitle">
+      Create challenges, track leaderboards, run lucky draws, and reward engagement from a single gamification dashboard.
+    </p>
+
+    <nav class="egb-nav" aria-label="Event gamification workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`egb-tab${index === 0 ? " egb-tab--active" : ""}`}
+          data-egb-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`egb-panel${tabIndex === 0 ? " egb-panel--active" : ""}`}
+        data-egb-panel={tabIndex}
+      >
+        <div class="egb-grid">
+          <article class="egb-card egb-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="egb-card__content">
+              <span class="egb-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="egb-card__title">{tab.hero.title}</h3>
+              <p class="egb-card__desc">{tab.hero.desc}</p>
+
+              <ul class="egb-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`egb-art egb-art--hero egb-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "games" && (
+                <Fragment>
+                  <div class="egb-challenge-list">
+                    <div class="egb-challenge-item egb-challenge-item--done">
+                      <span class="egb-challenge-check">&#10003;</span>
+                      <div class="egb-challenge-text"><span></span></div>
+                      <span class="egb-challenge-pts">+50</span>
+                    </div>
+                    <div class="egb-challenge-item egb-challenge-item--done">
+                      <span class="egb-challenge-check">&#10003;</span>
+                      <div class="egb-challenge-text"><span></span></div>
+                      <span class="egb-challenge-pts">+30</span>
+                    </div>
+                    <div class="egb-challenge-item">
+                      <span class="egb-challenge-circle"></span>
+                      <div class="egb-challenge-text"><span></span></div>
+                      <span class="egb-challenge-pts">+40</span>
+                    </div>
+                    <div class="egb-challenge-item">
+                      <span class="egb-challenge-circle"></span>
+                      <div class="egb-challenge-text"><span></span></div>
+                      <span class="egb-challenge-pts">+25</span>
+                    </div>
+                  </div>
+                  <div class="egb-qr-badge">
+                    <div class="egb-qr-grid">
+                      <span></span><span></span><span></span><span></span>
+                      <span></span><span></span><span></span><span></span>
+                      <span></span>
+                    </div>
+                    <span class="egb-qr-label">Scan to verify</span>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "leader" && (
+                <Fragment>
+                  <div class="egb-podium">
+                    <div class="egb-podium-bar egb-podium-bar--2nd">
+                      <span class="egb-podium-avatar"></span>
+                      <strong>2nd</strong>
+                      <span class="egb-podium-score">820</span>
+                    </div>
+                    <div class="egb-podium-bar egb-podium-bar--1st">
+                      <span class="egb-podium-crown">&#9733;</span>
+                      <span class="egb-podium-avatar"></span>
+                      <strong>1st</strong>
+                      <span class="egb-podium-score">1,240</span>
+                    </div>
+                    <div class="egb-podium-bar egb-podium-bar--3rd">
+                      <span class="egb-podium-avatar"></span>
+                      <strong>3rd</strong>
+                      <span class="egb-podium-score">690</span>
+                    </div>
+                  </div>
+                  <div class="egb-reward-chip">&#127942; Rewards unlocked</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "roi" && (
+                <Fragment>
+                  <div class="egb-roi-chart">
+                    <div class="egb-roi-bars">
+                      <div class="egb-roi-bar-group">
+                        <span style="--h:55%"></span>
+                        <span class="egb-roi-dollar">$</span>
+                      </div>
+                      <div class="egb-roi-bar-group">
+                        <span style="--h:80%"></span>
+                        <span class="egb-roi-dollar">$</span>
+                      </div>
+                      <div class="egb-roi-bar-group">
+                        <span style="--h:45%"></span>
+                        <span class="egb-roi-dollar">$</span>
+                      </div>
+                      <div class="egb-roi-bar-group">
+                        <span style="--h:92%"></span>
+                        <span class="egb-roi-dollar">$</span>
+                      </div>
+                      <div class="egb-roi-bar-group">
+                        <span style="--h:68%"></span>
+                        <span class="egb-roi-dollar">$</span>
+                      </div>
+                    </div>
+                    <div class="egb-roi-label">Sponsor engagement</div>
+                  </div>
+                  <div class="egb-roi-pill">
+                    <strong>3x</strong>
+                    <span>ROI verified</span>
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="egb-card egb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="egb-card__content">
+                <span class="egb-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="egb-card__title">{card.title}</h3>
+                <p class="egb-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`egb-art egb-art--mini egb-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "templateg" && (
+                  <Fragment>
+                    <div class="egb-template-grid">
+                      <div class="egb-template-card"><span></span><span></span></div>
+                      <div class="egb-template-card"><span></span><span></span></div>
+                      <div class="egb-template-card"><span></span><span></span></div>
+                      <div class="egb-template-card"><span></span><span></span></div>
+                    </div>
+                    <div class="egb-mini-chip">4 templates</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "custom" && (
+                  <Fragment>
+                    <div class="egb-task-card">
+                      <div class="egb-task-head"></div>
+                      <div class="egb-task-checks">
+                        <span class="egb-task-row egb-task-row--done"></span>
+                        <span class="egb-task-row egb-task-row--done"></span>
+                        <span class="egb-task-row"></span>
+                      </div>
+                    </div>
+                    <div class="egb-mini-chip">Custom tasks</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "points" && (
+                  <Fragment>
+                    <div class="egb-score-counter">
+                      <strong class="egb-score-num">850</strong>
+                      <div class="egb-score-plus">+50</div>
+                    </div>
+                    <div class="egb-mini-chip">Points earned</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "timed" && (
+                  <Fragment>
+                    <div class="egb-clock">
+                      <div class="egb-clock-face">
+                        <div class="egb-clock-hand"></div>
+                      </div>
+                      <div class="egb-countdown">05:00</div>
+                    </div>
+                    <div class="egb-mini-chip">Flash active</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "position" && (
+                  <Fragment>
+                    <div class="egb-trophy">
+                      <div class="egb-trophy-cup"></div>
+                      <div class="egb-trophy-num">#1</div>
+                    </div>
+                    <div class="egb-mini-chip">Top prize</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "milestone" && (
+                  <Fragment>
+                    <div class="egb-progress-track">
+                      <div class="egb-progress-fill"></div>
+                      <span class="egb-milestone-dot egb-milestone-dot--1"></span>
+                      <span class="egb-milestone-dot egb-milestone-dot--2"></span>
+                      <span class="egb-milestone-dot egb-milestone-dot--3"></span>
+                    </div>
+                    <div class="egb-mini-chip">75% complete</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "draw" && (
+                  <Fragment>
+                    <div class="egb-wheel">
+                      <div class="egb-wheel-inner">
+                        <span></span><span></span><span></span><span></span>
+                      </div>
+                      <div class="egb-wheel-pointer"></div>
+                    </div>
+                    <div class="egb-mini-chip">Lucky draw</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "fame" && (
+                  <Fragment>
+                    <div class="egb-fame-cards">
+                      <div class="egb-fame-card">
+                        <span class="egb-fame-avatar"></span>
+                        <span class="egb-fame-star">&#9733;</span>
+                      </div>
+                      <div class="egb-fame-card">
+                        <span class="egb-fame-avatar"></span>
+                        <span class="egb-fame-star">&#9733;</span>
+                      </div>
+                      <div class="egb-fame-card">
+                        <span class="egb-fame-avatar"></span>
+                        <span class="egb-fame-star">&#9733;</span>
+                      </div>
+                    </div>
+                    <div class="egb-mini-chip">Wall of Fame</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "completion" && (
+                  <Fragment>
+                    <div class="egb-ring">
+                      <svg viewBox="0 0 80 80" class="egb-ring-svg">
+                        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(55,93,251,0.1)" stroke-width="8"/>
+                        <circle cx="40" cy="40" r="34" fill="none" stroke="#375dfb" stroke-width="8" stroke-dasharray="163" stroke-dashoffset="41" stroke-linecap="round" transform="rotate(-90 40 40)"/>
+                      </svg>
+                      <span class="egb-ring-pct">78%</span>
+                    </div>
+                    <div class="egb-mini-chip">Completion rate</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "topplay" && (
+                  <Fragment>
+                    <div class="egb-player-card">
+                      <span class="egb-player-avatar"></span>
+                      <div class="egb-player-info">
+                        <span class="egb-player-bar"></span>
+                        <strong>1,240 pts</strong>
+                      </div>
+                    </div>
+                    <div class="egb-mini-chip">#1 Player</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "heatmapg" && (
+                  <Fragment>
+                    <div class="egb-heatmap-grid">
+                      <span style="--o:0.2"></span><span style="--o:0.5"></span><span style="--o:0.9"></span>
+                      <span style="--o:0.7"></span><span style="--o:1"></span><span style="--o:0.3"></span>
+                      <span style="--o:0.4"></span><span style="--o:0.8"></span><span style="--o:0.6"></span>
+                    </div>
+                    <div class="egb-mini-chip">Activity map</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "sponsorroi" && (
+                  <Fragment>
+                    <div class="egb-report-card">
+                      <div class="egb-report-head"></div>
+                      <div class="egb-report-metrics">
+                        <div><strong>342</strong><span>Visits</span></div>
+                        <div><strong>89%</strong><span>Engaged</span></div>
+                      </div>
+                    </div>
+                    <div class="egb-mini-chip">Sponsor report</div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".egb-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".egb-tab"));
+      const panels = Array.from(root.querySelectorAll(".egb-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("egb-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("egb-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .egb-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .egb-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .egb-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .egb-title b { font-weight: 700; }
+
+  .egb-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .egb-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .egb-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .egb-tab:hover,
+  .egb-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .egb-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .egb-panel { display: none; }
+  .egb-panel--active { display: block; }
+
+  .egb-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .egb-panel--active .egb-card {
+    animation: egb-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  .egb-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .egb-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .egb-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .egb-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .egb-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .egb-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .egb-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .egb-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .egb-card__content { position: relative; z-index: 1; }
+
+  .egb-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .egb-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .egb-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .egb-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .egb-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .egb-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .egb-art { position: relative; z-index: 1; min-height: 146px; }
+  .egb-art--hero { min-height: 228px; margin-top: 0.6rem; }
+  .egb-art--mini { align-self: end; }
+
+  /* === Hero visual: games === */
+  .egb-challenge-list {
+    position: absolute;
+    inset: 0 10% auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .egb-challenge-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    animation: egb-float 5.2s ease-in-out infinite;
+  }
+
+  .egb-challenge-item:nth-child(2) { animation-delay: -0.6s; }
+  .egb-challenge-item:nth-child(3) { animation-delay: -1.2s; }
+  .egb-challenge-item:nth-child(4) { animation-delay: -1.8s; }
+
+  .egb-challenge-item--done {
+    border-left: 3px solid #22c55e;
+  }
+
+  .egb-challenge-check {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .egb-challenge-circle {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    border: 2px solid rgba(55, 93, 251, 0.25);
+    flex-shrink: 0;
+  }
+
+  .egb-challenge-text {
+    flex: 1;
+  }
+
+  .egb-challenge-text span {
+    display: block;
+    height: 0.4rem;
+    width: 80%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .egb-challenge-pts {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #375dfb;
+    flex-shrink: 0;
+  }
+
+  .egb-qr-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .egb-qr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  .egb-qr-grid span {
+    background: #14213b;
+    border-radius: 1px;
+  }
+
+  .egb-qr-grid span:nth-child(5) { background: transparent; }
+  .egb-qr-grid span:nth-child(8) { background: rgba(55, 93, 251, 0.4); }
+
+  .egb-qr-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #45608e;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* === Hero visual: leader (podium) === */
+  .egb-podium {
+    position: absolute;
+    inset: 0.5rem 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.5rem;
+    height: 85%;
+  }
+
+  .egb-podium-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.3rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 1rem 1rem 0 0;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    border-bottom: none;
+    min-width: 4rem;
+    animation: egb-float 5s ease-in-out infinite;
+  }
+
+  .egb-podium-bar--1st {
+    height: 85%;
+    background: linear-gradient(180deg, #fffbe6, #fef3c7);
+    border-color: rgba(245, 158, 11, 0.2);
+  }
+
+  .egb-podium-bar--2nd {
+    height: 65%;
+    animation-delay: -0.8s;
+  }
+
+  .egb-podium-bar--3rd {
+    height: 50%;
+    animation-delay: -1.6s;
+  }
+
+  .egb-podium-crown {
+    font-size: 1.2rem;
+    color: #f59e0b;
+  }
+
+  .egb-podium-avatar {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.34), rgba(34, 197, 94, 0.24));
+  }
+
+  .egb-podium-bar strong {
+    font-size: 0.72rem;
+    color: #14213b;
+  }
+
+  .egb-podium-score {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  .egb-reward-chip {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* === Hero visual: roi === */
+  .egb-roi-chart {
+    position: absolute;
+    inset: 0 0 2.4rem 0;
+    padding: 1rem;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .egb-roi-bars {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.6rem;
+    padding-top: 0.5rem;
+  }
+
+  .egb-roi-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .egb-roi-bar-group span:first-child {
+    width: 100%;
+    height: var(--h, 50%);
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.75;
+    animation: egb-float 4s ease-in-out infinite;
+  }
+
+  .egb-roi-bar-group:nth-child(2) span:first-child { animation-delay: -0.5s; }
+  .egb-roi-bar-group:nth-child(3) span:first-child { animation-delay: -1s; }
+  .egb-roi-bar-group:nth-child(4) span:first-child { animation-delay: -1.5s; }
+  .egb-roi-bar-group:nth-child(5) span:first-child { animation-delay: -2s; }
+
+  .egb-roi-dollar {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #22c55e;
+  }
+
+  .egb-roi-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #45608e;
+  }
+
+  .egb-roi-pill {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .egb-roi-pill strong { font-size: 1.1rem; color: #183465; }
+  .egb-roi-pill span { font-size: 0.72rem; color: #607390; font-weight: 700; }
+
+  /* === Mini visuals === */
+  .egb-mini-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  /* templateg */
+  .egb-template-grid {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .egb-template-card {
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .egb-template-card span:first-child {
+    height: 0.35rem;
+    width: 60%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .egb-template-card span:last-child {
+    height: 0.3rem;
+    width: 80%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  /* custom */
+  .egb-task-card {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.7rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .egb-task-head {
+    height: 0.4rem;
+    width: 50%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    margin-bottom: 0.5rem;
+  }
+
+  .egb-task-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .egb-task-row {
+    display: flex;
+    align-items: center;
+    height: 1.2rem;
+    padding: 0 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(55, 93, 251, 0.04);
+    position: relative;
+  }
+
+  .egb-task-row::before {
+    content: "";
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 3px;
+    border: 2px solid rgba(55, 93, 251, 0.25);
+    flex-shrink: 0;
+  }
+
+  .egb-task-row--done::before {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .egb-task-row::after {
+    content: "";
+    flex: 1;
+    height: 0.25rem;
+    margin-left: 0.4rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  /* points */
+  .egb-score-counter {
+    position: absolute;
+    inset: 0.6rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .egb-score-num {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #14213b;
+    line-height: 1;
+  }
+
+  .egb-score-plus {
+    display: inline-flex;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.14);
+    color: #16a34a;
+    font-size: 0.8rem;
+    font-weight: 700;
+    animation: egb-pulse 2s ease-in-out infinite;
+  }
+
+  /* timed */
+  .egb-clock {
+    position: absolute;
+    inset: 0.4rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .egb-clock-face {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 3px solid rgba(55, 93, 251, 0.2);
+    position: relative;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+  }
+
+  .egb-clock-hand {
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    width: 2px;
+    height: 40%;
+    background: #375dfb;
+    transform-origin: bottom center;
+    border-radius: 999px;
+    animation: egb-tick 4s linear infinite;
+  }
+
+  .egb-countdown {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #dc2626;
+    letter-spacing: 0.05em;
+  }
+
+  /* position (trophy) */
+  .egb-trophy {
+    position: absolute;
+    inset: 0.5rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .egb-trophy-cup {
+    width: 2.4rem;
+    height: 2rem;
+    border-radius: 0 0 1.2rem 1.2rem;
+    background: linear-gradient(180deg, #f59e0b, #fbbf24);
+    position: relative;
+  }
+
+  .egb-trophy-cup::before {
+    content: "";
+    position: absolute;
+    top: -0.3rem;
+    left: -0.6rem;
+    right: -0.6rem;
+    height: 0.5rem;
+    border-radius: 0.3rem;
+    background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  }
+
+  .egb-trophy-cup::after {
+    content: "";
+    position: absolute;
+    bottom: -0.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1.4rem;
+    height: 0.4rem;
+    border-radius: 0.2rem;
+    background: #d97706;
+  }
+
+  .egb-trophy-num {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 800;
+    color: #f59e0b;
+    margin-top: 0.3rem;
+  }
+
+  /* milestone */
+  .egb-progress-track {
+    position: absolute;
+    inset: 1.2rem 0.8rem auto;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .egb-progress-fill {
+    height: 100%;
+    width: 75%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #22c55e);
+  }
+
+  .egb-milestone-dot {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: #375dfb;
+  }
+
+  .egb-milestone-dot--1 { left: 33%; background: #22c55e; }
+  .egb-milestone-dot--2 { left: 66%; background: #22c55e; }
+  .egb-milestone-dot--3 { left: 90%; background: rgba(55, 93, 251, 0.3); }
+
+  /* draw (wheel) */
+  .egb-wheel {
+    position: absolute;
+    inset: 0.3rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .egb-wheel-inner {
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    background: conic-gradient(
+      #375dfb 0deg 90deg,
+      #22c55e 90deg 180deg,
+      #f59e0b 180deg 270deg,
+      #AFA3FF 270deg 360deg
+    );
+    position: relative;
+    animation: egb-spin 6s linear infinite;
+  }
+
+  .egb-wheel-inner span {
+    position: absolute;
+    width: 2px;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    left: 50%;
+    transform: translateX(-50%);
+    transform-origin: bottom center;
+  }
+
+  .egb-wheel-inner span:nth-child(1) { transform: translateX(-50%) rotate(0deg); }
+  .egb-wheel-inner span:nth-child(2) { transform: translateX(-50%) rotate(90deg); }
+  .egb-wheel-inner span:nth-child(3) { transform: translateX(-50%) rotate(180deg); }
+  .egb-wheel-inner span:nth-child(4) { transform: translateX(-50%) rotate(270deg); }
+
+  .egb-wheel-pointer {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 10px solid #dc2626;
+    margin-top: -2px;
+  }
+
+  /* fame */
+  .egb-fame-cards {
+    position: absolute;
+    inset: 0.4rem 0.4rem auto;
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .egb-fame-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.3rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .egb-fame-avatar {
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.34), rgba(159, 129, 255, 0.3));
+  }
+
+  .egb-fame-star {
+    font-size: 0.7rem;
+    color: #f59e0b;
+  }
+
+  /* completion (ring) */
+  .egb-ring {
+    position: absolute;
+    inset: 0.2rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .egb-ring-svg {
+    width: 3.8rem;
+    height: 3.8rem;
+  }
+
+  .egb-ring-pct {
+    position: absolute;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  /* topplay */
+  .egb-player-card {
+    position: absolute;
+    inset: 0.5rem 0.6rem auto;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .egb-player-avatar {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.34), rgba(34, 197, 94, 0.24));
+    flex-shrink: 0;
+  }
+
+  .egb-player-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .egb-player-bar {
+    height: 0.3rem;
+    width: 3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .egb-player-info strong {
+    font-size: 0.78rem;
+    color: #375dfb;
+  }
+
+  /* heatmapg */
+  .egb-heatmap-grid {
+    position: absolute;
+    inset: 0.5rem 0.5rem auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.35rem;
+  }
+
+  .egb-heatmap-grid span {
+    display: block;
+    aspect-ratio: 1.5;
+    border-radius: 0.5rem;
+    background: #375dfb;
+    opacity: var(--o, 0.5);
+  }
+
+  /* sponsorroi */
+  .egb-report-card {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.7rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .egb-report-head {
+    height: 0.4rem;
+    width: 55%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    margin-bottom: 0.5rem;
+  }
+
+  .egb-report-metrics {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .egb-report-metrics div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .egb-report-metrics strong {
+    font-size: 0.9rem;
+    color: #14213b;
+  }
+
+  .egb-report-metrics span {
+    font-size: 0.65rem;
+    color: #607390;
+    font-weight: 600;
+  }
+
+  /* === Animations === */
+  @keyframes egb-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes egb-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes egb-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+  }
+
+  @keyframes egb-tick {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes egb-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 960px) {
+    .egb-section { padding: 60px 0 48px; }
+    .egb-title { font-size: 36px; }
+    .egb-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+    .egb-card--hero { min-height: 380px; }
+  }
+
+  @media (max-width: 720px) {
+    .egb-section { padding-inline: 0; }
+    .egb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
+    .egb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+    .egb-title { font-size: 28px; }
+    .egb-subtitle { font-size: 15px; }
+    .egb-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
+    }
+    .egb-card { min-height: 210px; }
+    .egb-card--hero { min-height: 420px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .egb-panel--active .egb-card,
+    .egb-challenge-item,
+    .egb-podium-bar,
+    .egb-roi-bar-group span:first-child,
+    .egb-wheel-inner,
+    .egb-clock-hand,
+    .egb-score-plus { animation: none; }
+  }
+</style>

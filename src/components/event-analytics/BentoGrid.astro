@@ -1,0 +1,1386 @@
+---
+const tabs = [
+  {
+    label: "Event Metrics",
+    hero: {
+      eyebrow: "Core Analytics",
+      title: "Registration, attendance, revenue, and engagement tracking in real time",
+      desc: "Track signups, conversion funnels, ticket sales, check-in rates, session attendance, and composite engagement scores — all updating live.",
+      points: ["Registration funnels", "Revenue dashboards", "Engagement scores"],
+      visual: "metrics",
+    },
+    cards: [
+      {
+        eyebrow: "Attendance",
+        title: "Attendance Tracking",
+        desc: "Live check-in tracking with arrival patterns and no-show rates.",
+        visual: "attendance",
+      },
+      {
+        eyebrow: "Revenue",
+        title: "Revenue Dashboard",
+        desc: "Real-time revenue tracking across tickets, add-ons, and sponsorships.",
+        visual: "revenue",
+      },
+      {
+        eyebrow: "Sessions",
+        title: "Session Analytics",
+        desc: "Attendance, ratings, and engagement data per session and speaker.",
+        visual: "sessions",
+      },
+      {
+        eyebrow: "Engagement",
+        title: "Engagement Scores",
+        desc: "Composite engagement scores for every attendee and session.",
+        visual: "engage",
+      },
+    ],
+  },
+  {
+    label: "Platform Analytics",
+    hero: {
+      eyebrow: "Cross-Event Intelligence",
+      title: "Multi-event comparison, cohort analysis, and marketing attribution",
+      desc: "Compare performance across all your events. Track returning attendees, measure marketing channels, and benchmark against industry data.",
+      points: ["Multi-event comparison", "UTM attribution tracking", "Industry benchmarks"],
+      visual: "platform",
+    },
+    cards: [
+      {
+        eyebrow: "Cohorts",
+        title: "Cohort Analysis",
+        desc: "Track returning attendees, first-timers, and VIPs across events.",
+        visual: "cohort",
+      },
+      {
+        eyebrow: "Marketing",
+        title: "UTM Tracking",
+        desc: "Measure which marketing channels drive the most registrations.",
+        visual: "utm",
+      },
+      {
+        eyebrow: "Trends",
+        title: "Trend Analysis",
+        desc: "Spot trends in attendance, revenue, and engagement over time.",
+        visual: "trends",
+      },
+      {
+        eyebrow: "Benchmark",
+        title: "Benchmark Data",
+        desc: "Compare your event metrics against industry benchmarks.",
+        visual: "benchmark",
+      },
+    ],
+  },
+  {
+    label: "Reports & Export",
+    hero: {
+      eyebrow: "Reporting Engine",
+      title: "Scheduled reports, custom builders, and sponsor ROI with data export",
+      desc: "Use 50+ report templates or build custom reports. Schedule automatic delivery, generate sponsor ROI reports, and export via CSV, PDF, or API.",
+      points: ["50+ report templates", "Custom report builder", "API data access"],
+      visual: "reports",
+    },
+    cards: [
+      {
+        eyebrow: "Custom",
+        title: "Custom Report Builder",
+        desc: "Build custom reports with drag-and-drop metrics and filters.",
+        visual: "customreport",
+      },
+      {
+        eyebrow: "Sponsors",
+        title: "Sponsor ROI Reports",
+        desc: "Auto-generated reports showing sponsor engagement and booth traffic.",
+        visual: "sponsorreport",
+      },
+      {
+        eyebrow: "Export",
+        title: "CSV & PDF Export",
+        desc: "Export any report or dashboard as CSV, PDF, or Excel format.",
+        visual: "csvpdf",
+      },
+      {
+        eyebrow: "API",
+        title: "API Access",
+        desc: "Pull analytics data into your own BI tools via REST API.",
+        visual: "apiaccess",
+      },
+    ],
+  },
+];
+---
+
+<section class="eab-section" id="ea-bento">
+  <div class="eab-shell">
+    <h2 class="eab-title">
+      Event <b>Metrics</b>, Platform <b>Analytics</b> & <b>Reports</b>
+    </h2>
+    <p class="eab-subtitle">
+      Track registrations, attendance, engagement, revenue, and sponsor ROI from one analytics dashboard.
+    </p>
+
+    <nav class="eab-nav" aria-label="Event analytics workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`eab-tab${index === 0 ? " eab-tab--active" : ""}`}
+          data-eab-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`eab-panel${tabIndex === 0 ? " eab-panel--active" : ""}`}
+        data-eab-panel={tabIndex}
+      >
+        <div class="eab-grid">
+          <article class="eab-card eab-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="eab-card__content">
+              <span class="eab-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="eab-card__title">{tab.hero.title}</h3>
+              <p class="eab-card__desc">{tab.hero.desc}</p>
+
+              <ul class="eab-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`eab-art eab-art--hero eab-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "metrics" && (
+                <Fragment>
+                  <div class="eab-dashboard">
+                    <div class="eab-dashboard-header">
+                      <span class="eab-dashboard-dot eab-dashboard-dot--green"></span>
+                      <span class="eab-dashboard-dot eab-dashboard-dot--yellow"></span>
+                      <span class="eab-dashboard-dot eab-dashboard-dot--red"></span>
+                      <span class="eab-dashboard-title-bar"></span>
+                    </div>
+                    <div class="eab-dashboard-body">
+                      <div class="eab-dash-kpi">
+                        <div class="eab-kpi-card">
+                          <span class="eab-kpi-val">2,847</span>
+                          <span class="eab-kpi-label">Registrations</span>
+                        </div>
+                        <div class="eab-kpi-card">
+                          <span class="eab-kpi-val">$124K</span>
+                          <span class="eab-kpi-label">Revenue</span>
+                        </div>
+                        <div class="eab-kpi-card">
+                          <span class="eab-kpi-val">87%</span>
+                          <span class="eab-kpi-label">Attendance</span>
+                        </div>
+                      </div>
+                      <div class="eab-dash-charts">
+                        <div class="eab-chart-bar">
+                          <span style="--h:45%"></span>
+                          <span style="--h:70%"></span>
+                          <span style="--h:55%"></span>
+                          <span style="--h:88%"></span>
+                          <span style="--h:65%"></span>
+                        </div>
+                        <div class="eab-chart-line">
+                          <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                            <polyline points="0,35 20,28 40,18 60,22 80,10 100,14 120,5" fill="none" stroke="#375dfb" stroke-width="2"/>
+                            <polyline points="0,35 20,28 40,18 60,22 80,10 100,14 120,5" fill="url(#eab-grad)" stroke="none"/>
+                            <defs><linearGradient id="eab-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(55,93,251,0.2)"/><stop offset="100%" stop-color="rgba(55,93,251,0)"/></linearGradient></defs>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="eab-live-badge">&#9679; Live</div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "platform" && (
+                <Fragment>
+                  <div class="eab-multi-panel">
+                    <div class="eab-panel-card">
+                      <span class="eab-panel-head"></span>
+                      <div class="eab-panel-bars">
+                        <span style="--w:85%"></span>
+                        <span style="--w:60%"></span>
+                        <span style="--w:72%"></span>
+                      </div>
+                    </div>
+                    <div class="eab-panel-card">
+                      <span class="eab-panel-head"></span>
+                      <div class="eab-panel-bars">
+                        <span style="--w:70%"></span>
+                        <span style="--w:90%"></span>
+                        <span style="--w:55%"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="eab-compare-chip">
+                    <strong>3</strong>
+                    <span>events compared</span>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "reports" && (
+                <Fragment>
+                  <div class="eab-report-grid">
+                    <div class="eab-report-tmpl">
+                      <div class="eab-report-tmpl-head"></div>
+                      <div class="eab-report-tmpl-rows">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                    <div class="eab-report-tmpl">
+                      <div class="eab-report-tmpl-head"></div>
+                      <div class="eab-report-tmpl-rows">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                    <div class="eab-report-tmpl">
+                      <div class="eab-report-tmpl-head"></div>
+                      <div class="eab-report-tmpl-rows">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                    <div class="eab-report-tmpl">
+                      <div class="eab-report-tmpl-head"></div>
+                      <div class="eab-report-tmpl-rows">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="eab-report-pill">50+ templates</div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="eab-card eab-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="eab-card__content">
+                <span class="eab-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="eab-card__title">{card.title}</h3>
+                <p class="eab-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`eab-art eab-art--mini eab-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "attendance" && (
+                  <Fragment>
+                    <div class="eab-line-chart">
+                      <svg viewBox="0 0 120 50" preserveAspectRatio="none" class="eab-line-svg">
+                        <polyline points="0,45 15,38 30,30 45,25 55,28 70,15 85,18 100,8 120,12" fill="none" stroke="#375dfb" stroke-width="2.5" stroke-linecap="round"/>
+                        <polyline points="0,45 15,38 30,30 45,25 55,28 70,15 85,18 100,8 120,12 120,50 0,50" fill="url(#eab-att-grad)" stroke="none"/>
+                        <defs><linearGradient id="eab-att-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(55,93,251,0.18)"/><stop offset="100%" stop-color="rgba(55,93,251,0)"/></linearGradient></defs>
+                      </svg>
+                    </div>
+                    <div class="eab-mini-chip">Arrival pattern</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "revenue" && (
+                  <Fragment>
+                    <div class="eab-stacked-bars">
+                      <div class="eab-stacked-col">
+                        <span class="eab-bar-tickets" style="--h:40%"></span>
+                        <span class="eab-bar-addons" style="--h:20%"></span>
+                        <span class="eab-bar-sponsors" style="--h:15%"></span>
+                      </div>
+                      <div class="eab-stacked-col">
+                        <span class="eab-bar-tickets" style="--h:50%"></span>
+                        <span class="eab-bar-addons" style="--h:25%"></span>
+                        <span class="eab-bar-sponsors" style="--h:10%"></span>
+                      </div>
+                      <div class="eab-stacked-col">
+                        <span class="eab-bar-tickets" style="--h:60%"></span>
+                        <span class="eab-bar-addons" style="--h:15%"></span>
+                        <span class="eab-bar-sponsors" style="--h:20%"></span>
+                      </div>
+                      <div class="eab-stacked-col">
+                        <span class="eab-bar-tickets" style="--h:55%"></span>
+                        <span class="eab-bar-addons" style="--h:30%"></span>
+                        <span class="eab-bar-sponsors" style="--h:12%"></span>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">Revenue mix</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "sessions" && (
+                  <Fragment>
+                    <div class="eab-session-cards">
+                      <div class="eab-session-card">
+                        <span class="eab-session-bar"></span>
+                        <div class="eab-session-stars">
+                          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span class="eab-star-dim">&#9733;</span>
+                        </div>
+                      </div>
+                      <div class="eab-session-card">
+                        <span class="eab-session-bar"></span>
+                        <div class="eab-session-stars">
+                          <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span><span>&#9733;</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">Session ratings</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "engage" && (
+                  <Fragment>
+                    <div class="eab-gauge">
+                      <svg viewBox="0 0 80 50" class="eab-gauge-svg">
+                        <path d="M8,45 A32,32 0 0,1 72,45" fill="none" stroke="rgba(55,93,251,0.12)" stroke-width="8" stroke-linecap="round"/>
+                        <path d="M8,45 A32,32 0 0,1 62,18" fill="none" stroke="#375dfb" stroke-width="8" stroke-linecap="round"/>
+                      </svg>
+                      <span class="eab-gauge-val">82</span>
+                    </div>
+                    <div class="eab-mini-chip">Engagement score</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "cohort" && (
+                  <Fragment>
+                    <div class="eab-cohort-circles">
+                      <div class="eab-cohort-circle eab-cohort-circle--returning"></div>
+                      <div class="eab-cohort-circle eab-cohort-circle--new"></div>
+                      <div class="eab-cohort-overlap"></div>
+                    </div>
+                    <div class="eab-mini-chip">Returning vs new</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "utm" && (
+                  <Fragment>
+                    <div class="eab-utm-list">
+                      <div class="eab-utm-row">
+                        <span class="eab-utm-tag">google</span>
+                        <span class="eab-utm-bar" style="--w:80%"></span>
+                      </div>
+                      <div class="eab-utm-row">
+                        <span class="eab-utm-tag">email</span>
+                        <span class="eab-utm-bar" style="--w:60%"></span>
+                      </div>
+                      <div class="eab-utm-row">
+                        <span class="eab-utm-tag">social</span>
+                        <span class="eab-utm-bar" style="--w:45%"></span>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">UTM sources</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "trends" && (
+                  <Fragment>
+                    <div class="eab-trend-chart">
+                      <svg viewBox="0 0 120 50" preserveAspectRatio="none" class="eab-trend-svg">
+                        <polyline points="0,42 20,38 40,30 60,28 80,18 100,12 120,5" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="40" cy="30" r="3" fill="#22c55e"/>
+                        <circle cx="80" cy="18" r="3" fill="#22c55e"/>
+                        <circle cx="120" cy="5" r="3" fill="#22c55e"/>
+                      </svg>
+                    </div>
+                    <div class="eab-mini-chip">Upward trend</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "benchmark" && (
+                  <Fragment>
+                    <div class="eab-benchmark-bars">
+                      <div class="eab-bench-row">
+                        <span class="eab-bench-yours" style="--w:78%"></span>
+                        <span class="eab-bench-industry" style="--w:60%"></span>
+                      </div>
+                      <div class="eab-bench-row">
+                        <span class="eab-bench-yours" style="--w:85%"></span>
+                        <span class="eab-bench-industry" style="--w:70%"></span>
+                      </div>
+                      <div class="eab-bench-row">
+                        <span class="eab-bench-yours" style="--w:65%"></span>
+                        <span class="eab-bench-industry" style="--w:72%"></span>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">You vs industry</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "customreport" && (
+                  <Fragment>
+                    <div class="eab-builder">
+                      <div class="eab-builder-sidebar">
+                        <span class="eab-builder-block"></span>
+                        <span class="eab-builder-block"></span>
+                        <span class="eab-builder-block"></span>
+                      </div>
+                      <div class="eab-builder-canvas">
+                        <span class="eab-builder-drop"></span>
+                        <span class="eab-builder-drop eab-builder-drop--filled"></span>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">Drag & drop</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "sponsorreport" && (
+                  <Fragment>
+                    <div class="eab-sponsor-badge">
+                      <div class="eab-sponsor-logo"></div>
+                      <div class="eab-sponsor-metrics">
+                        <div><strong>342</strong><span>visits</span></div>
+                        <div><strong>89%</strong><span>engaged</span></div>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">Sponsor ROI</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "csvpdf" && (
+                  <Fragment>
+                    <div class="eab-file-icons">
+                      <div class="eab-file-icon eab-file-icon--csv">CSV</div>
+                      <div class="eab-file-icon eab-file-icon--pdf">PDF</div>
+                      <div class="eab-file-icon eab-file-icon--xls">XLS</div>
+                    </div>
+                    <div class="eab-mini-chip">Export formats</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "apiaccess" && (
+                  <Fragment>
+                    <div class="eab-api-block">
+                      <div class="eab-api-endpoint">GET /api/analytics</div>
+                      <div class="eab-api-json">
+                        <span class="eab-api-brace">&#123;</span>
+                        <span class="eab-api-line">"registrations": 2847</span>
+                        <span class="eab-api-line">"revenue": 124000</span>
+                        <span class="eab-api-brace">&#125;</span>
+                      </div>
+                    </div>
+                    <div class="eab-mini-chip">REST API</div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".eab-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".eab-tab"));
+      const panels = Array.from(root.querySelectorAll(".eab-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("eab-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("eab-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .eab-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .eab-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .eab-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .eab-title b { font-weight: 700; }
+
+  .eab-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .eab-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .eab-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .eab-tab:hover,
+  .eab-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .eab-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .eab-panel { display: none; }
+  .eab-panel--active { display: block; }
+
+  .eab-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .eab-panel--active .eab-card {
+    animation: eab-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  @keyframes eab-fade-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eab-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .eab-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .eab-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .eab-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .eab-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .eab-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .eab-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .eab-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .eab-card__content { position: relative; z-index: 1; }
+
+  .eab-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .eab-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .eab-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .eab-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .eab-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .eab-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .eab-art { position: relative; z-index: 1; min-height: 146px; }
+  .eab-art--hero { min-height: 228px; margin-top: 0.6rem; }
+  .eab-art--mini { align-self: end; }
+
+  /* === Hero visual: metrics (Dashboard) === */
+  .eab-dashboard {
+    position: absolute;
+    inset: 0 0 2rem 0;
+    border-radius: 1.3rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    overflow: hidden;
+    animation: eab-float 5.2s ease-in-out infinite;
+  }
+
+  .eab-dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0.6rem 0.8rem;
+    background: rgba(55, 93, 251, 0.04);
+    border-bottom: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eab-dashboard-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+
+  .eab-dashboard-dot--green { background: #22c55e; }
+  .eab-dashboard-dot--yellow { background: #f59e0b; }
+  .eab-dashboard-dot--red { background: #ef4444; }
+
+  .eab-dashboard-title-bar {
+    margin-left: 8px;
+    height: 0.35rem;
+    width: 30%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-dashboard-body {
+    padding: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .eab-dash-kpi {
+    display: flex;
+    gap: 0.4rem;
+  }
+
+  .eab-kpi-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.04);
+    border: 1px solid rgba(55, 93, 251, 0.06);
+  }
+
+  .eab-kpi-val {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eab-kpi-label {
+    font-size: 0.58rem;
+    color: #607390;
+    font-weight: 500;
+  }
+
+  .eab-dash-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .eab-chart-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+    height: 3.5rem;
+    padding: 0.3rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.03);
+  }
+
+  .eab-chart-bar span {
+    flex: 1;
+    height: var(--h, 50%);
+    border-radius: 0.25rem 0.25rem 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.75;
+  }
+
+  .eab-chart-line {
+    padding: 0.3rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.03);
+  }
+
+  .eab-chart-line svg {
+    width: 100%;
+    height: 3rem;
+  }
+
+  .eab-live-badge {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #22c55e;
+    font-size: 0.78rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+    animation: eab-pulse 2s ease-in-out infinite;
+  }
+
+  /* === Hero visual: platform (Multi-panel) === */
+  .eab-multi-panel {
+    position: absolute;
+    inset: 0 0 2.4rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .eab-panel-card {
+    padding: 0.7rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: eab-float 5s ease-in-out infinite;
+  }
+
+  .eab-panel-card:nth-child(2) { animation-delay: -1.2s; }
+
+  .eab-panel-head {
+    height: 0.35rem;
+    width: 55%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .eab-panel-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .eab-panel-bars span {
+    height: 0.4rem;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+  }
+
+  .eab-compare-chip {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  .eab-compare-chip strong { font-size: 1.1rem; color: #183465; }
+  .eab-compare-chip span { font-size: 0.72rem; color: #607390; font-weight: 700; }
+
+  /* === Hero visual: reports (Template grid) === */
+  .eab-report-grid {
+    position: absolute;
+    inset: 0.4rem 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.4rem;
+  }
+
+  .eab-report-tmpl {
+    padding: 0.6rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-report-tmpl-head {
+    height: 0.35rem;
+    width: 60%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    margin-bottom: 0.4rem;
+  }
+
+  .eab-report-tmpl-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .eab-report-tmpl-rows span {
+    height: 0.25rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .eab-report-tmpl-rows span:nth-child(1) { width: 90%; }
+  .eab-report-tmpl-rows span:nth-child(2) { width: 70%; }
+  .eab-report-tmpl-rows span:nth-child(3) { width: 80%; }
+
+  .eab-report-pill {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: inline-flex;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* === Mini visuals === */
+  .eab-mini-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  /* attendance (line chart) */
+  .eab-line-chart {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    padding: 0.5rem;
+  }
+
+  .eab-line-svg { width: 100%; height: 3.2rem; }
+
+  /* revenue (stacked bars) */
+  .eab-stacked-bars {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 5rem;
+    padding: 0.5rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-stacked-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .eab-bar-tickets {
+    height: var(--h, 40%);
+    background: #375dfb;
+    border-radius: 0.25rem 0.25rem 0 0;
+    opacity: 0.8;
+  }
+
+  .eab-bar-addons {
+    height: var(--h, 20%);
+    background: #38bdf8;
+    opacity: 0.7;
+  }
+
+  .eab-bar-sponsors {
+    height: var(--h, 15%);
+    background: #22c55e;
+    border-radius: 0 0 0.25rem 0.25rem;
+    opacity: 0.7;
+  }
+
+  /* sessions (cards with stars) */
+  .eab-session-cards {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .eab-session-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.7rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-session-bar {
+    height: 0.35rem;
+    width: 40%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-session-stars {
+    display: flex;
+    gap: 1px;
+    font-size: 0.7rem;
+    color: #f59e0b;
+  }
+
+  .eab-star-dim { opacity: 0.3; }
+
+  /* engage (gauge) */
+  .eab-gauge {
+    position: absolute;
+    inset: 0.3rem 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .eab-gauge-svg { width: 5rem; height: 3.2rem; }
+
+  .eab-gauge-val {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #14213b;
+    margin-top: -0.4rem;
+  }
+
+  /* cohort (overlapping circles) */
+  .eab-cohort-circles {
+    position: absolute;
+    inset: 0.6rem 0 auto;
+    display: flex;
+    justify-content: center;
+    height: 4rem;
+  }
+
+  .eab-cohort-circle {
+    width: 3.6rem;
+    height: 3.6rem;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+  }
+
+  .eab-cohort-circle--returning {
+    left: calc(50% - 2.4rem);
+    background: rgba(55, 93, 251, 0.25);
+    border: 2px solid rgba(55, 93, 251, 0.4);
+  }
+
+  .eab-cohort-circle--new {
+    left: calc(50% - 1.2rem);
+    background: rgba(34, 197, 94, 0.2);
+    border: 2px solid rgba(34, 197, 94, 0.4);
+  }
+
+  .eab-cohort-overlap {
+    position: absolute;
+    top: 0;
+    left: calc(50% - 1.2rem);
+    width: 1.2rem;
+    height: 3.6rem;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  /* utm (attribution bars) */
+  .eab-utm-list {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .eab-utm-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .eab-utm-tag {
+    flex-shrink: 0;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #375dfb;
+    background: rgba(55, 93, 251, 0.08);
+    padding: 0.2rem 0.45rem;
+    border-radius: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    min-width: 2.5rem;
+    text-align: center;
+  }
+
+  .eab-utm-bar {
+    height: 0.45rem;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    opacity: 0.6;
+  }
+
+  /* trends (upward line) */
+  .eab-trend-chart {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    padding: 0.5rem;
+  }
+
+  .eab-trend-svg { width: 100%; height: 3.2rem; }
+
+  /* benchmark (comparison bars) */
+  .eab-benchmark-bars {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .eab-bench-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .eab-bench-yours {
+    height: 0.4rem;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .eab-bench-industry {
+    height: 0.4rem;
+    width: var(--w, 50%);
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.15);
+  }
+
+  /* customreport (drag-and-drop builder) */
+  .eab-builder {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.4rem;
+    height: 5rem;
+  }
+
+  .eab-builder-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    border-radius: 0.6rem;
+    background: rgba(55, 93, 251, 0.06);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eab-builder-block {
+    height: 0.8rem;
+    border-radius: 0.3rem;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.2), rgba(56, 189, 248, 0.15));
+    border: 1px dashed rgba(55, 93, 251, 0.2);
+  }
+
+  .eab-builder-canvas {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.4rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+  }
+
+  .eab-builder-drop {
+    flex: 1;
+    border-radius: 0.4rem;
+    border: 2px dashed rgba(55, 93, 251, 0.15);
+  }
+
+  .eab-builder-drop--filled {
+    background: rgba(55, 93, 251, 0.06);
+    border-style: solid;
+    border-color: rgba(55, 93, 251, 0.12);
+  }
+
+  /* sponsorreport (badge with metrics) */
+  .eab-sponsor-badge {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    padding: 0.7rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .eab-sponsor-logo {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, #375dfb, #AFA3FF);
+    flex-shrink: 0;
+  }
+
+  .eab-sponsor-metrics {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .eab-sponsor-metrics div {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .eab-sponsor-metrics strong {
+    font-size: 0.9rem;
+    color: #14213b;
+  }
+
+  .eab-sponsor-metrics span {
+    font-size: 0.6rem;
+    color: #607390;
+    font-weight: 500;
+  }
+
+  /* csvpdf (file format icons) */
+  .eab-file-icons {
+    position: absolute;
+    inset: 0.5rem 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .eab-file-icon {
+    width: 2.6rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    border: 1px solid;
+  }
+
+  .eab-file-icon--csv {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border-color: rgba(34, 197, 94, 0.2);
+  }
+
+  .eab-file-icon--pdf {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border-color: rgba(239, 68, 68, 0.2);
+  }
+
+  .eab-file-icon--xls {
+    background: rgba(55, 93, 251, 0.1);
+    color: #375dfb;
+    border-color: rgba(55, 93, 251, 0.2);
+  }
+
+  /* apiaccess (endpoint + JSON) */
+  .eab-api-block {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    border-radius: 0.8rem;
+    background: #1a1f2e;
+    padding: 0.6rem 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .eab-api-endpoint {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #22c55e;
+    font-family: monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .eab-api-json {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .eab-api-brace {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: monospace;
+  }
+
+  .eab-api-line {
+    font-size: 0.6rem;
+    color: #38bdf8;
+    font-family: monospace;
+    padding-left: 0.6rem;
+  }
+
+  /* Animations */
+  @keyframes eab-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes eab-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .eab-section { padding: 64px 0 48px; }
+    .eab-title { font-size: 36px; }
+    .eab-subtitle { font-size: 16px; }
+    .eab-nav { max-width: 480px; }
+    .eab-tab { padding: 9px 14px; font-size: 13px; }
+    .eab-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+    .eab-card--hero { min-height: 360px; }
+  }
+
+  @media (max-width: 767px) {
+    .eab-section { padding: 48px 0 36px; }
+    .eab-shell { padding: 0 16px; }
+    .eab-title { font-size: 28px; line-height: 1.15; }
+    .eab-subtitle { font-size: 15px; }
+    .eab-nav {
+      max-width: 100%;
+      overflow-x: auto;
+      gap: 2px;
+    }
+    .eab-tab { padding: 9px 12px; font-size: 12px; white-space: nowrap; }
+    .eab-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "hero"
+        "mini1"
+        "mini2"
+        "mini3"
+        "mini4";
+    }
+    .eab-card--hero { min-height: 320px; }
+    .eab-card--mini { min-height: 180px; }
+  }
+</style>

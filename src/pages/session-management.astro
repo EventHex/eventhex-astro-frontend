@@ -1,0 +1,2716 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import BentoGrid from "../components/session-management/BentoGrid.astro";
+
+const title = "Session Management Software for Multi-Track Events | EventHex";
+const description = "Plan multi-day agendas with visual timeline scheduling, session access controls, live polls, Q&A, and AI-powered session recaps from one event workflow.";
+
+const stats = [
+  { value: "50,000+", label: "Sessions scheduled" },
+  { value: "500+", label: "Multi-track events run" },
+  { value: "98%", label: "Scheduling accuracy" },
+  { value: "4.9/5", label: "Organizer satisfaction" },
+];
+
+const showcaseTabs = [
+  {
+    label: "Agenda Builder",
+    cards: [
+      {
+        type: "image",
+        size: "wide",
+        eyebrow: "Visual timeline",
+        title: "Plot every day, room, and stage from one agenda view",
+        desc: "Switch between days, drag sessions into new slots, and keep the full program readable even when your event spans parallel tracks and nested sessions.",
+        image: "/feature-images/session-management/timeline-view.jpeg",
+        alt: "EventHex session timeline showing multi-day, multi-stage scheduling",
+        chips: ["Day-by-day planning", "Drag-and-drop edits", "Conflict visibility"],
+      },
+      {
+        type: "list",
+        size: "tall",
+        eyebrow: "Session logic",
+        title: "Handle keynotes, breakouts, workshops, and sub-sessions without workarounds",
+        desc: "Model the agenda the way your event actually runs instead of flattening everything into a spreadsheet grid.",
+        items: [
+          "Create custom session types with color rules for instant recognition.",
+          "Nest sub-sessions under parent tracks for workshops and parallel streams.",
+          "Assign speakers, moderators, and room notes directly on the session.",
+          "Move sessions between stages without rebuilding the rest of the day.",
+        ],
+      },
+      {
+        type: "snapshot",
+        size: "small",
+        eyebrow: "Operator speed",
+        title: "Open the exact session context in one click",
+        desc: "Jump from the agenda into session-level actions without breaking your planning flow.",
+        rows: [
+          { label: "Session detail", value: "speaker, room, timing" },
+          { label: "Live tools", value: "polls, Q&A, feedback" },
+          { label: "Recap state", value: "recording and AI summary" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Access & Capacity",
+    cards: [
+      {
+        type: "capacity",
+        size: "wide",
+        eyebrow: "Registration control",
+        title: "Protect high-value sessions with clear access and seat rules",
+        desc: "Tie session entry to ticket types, enforce capacity limits, and keep waitlists moving without manual coordination.",
+      },
+      {
+        type: "list",
+        size: "tall",
+        eyebrow: "Capacity rules",
+        title: "Keep attendance quality high as registrations climb",
+        desc: "Stay ahead of overbooking, no-shows, and room mismatches before the event day starts.",
+        items: [
+          "Restrict workshops and premium sessions by ticket class or participant segment.",
+          "Set capacity caps per room, per day, or per session type.",
+          "Auto-create waitlists when demand exceeds available seats.",
+          "Trigger reminder sequences for registered attendees close to session start.",
+        ],
+      },
+      {
+        type: "snapshot",
+        size: "small",
+        eyebrow: "Reminder engine",
+        title: "Reduce missed sessions with targeted nudges",
+        desc: "Use session registration data to send reminders that are relevant, timely, and tied to the right audience segment.",
+        rows: [
+          { label: "VIP workshop", value: "reminder sent 2h before" },
+          { label: "Waitlist release", value: "auto-fill open seats" },
+          { label: "Room change", value: "notify affected attendees" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Live Session Layer",
+    cards: [
+      {
+        type: "image",
+        size: "wide",
+        eyebrow: "Session detail panel",
+        title: "Run engagement, feedback, and recap workflows from inside each session",
+        desc: "Moderators and event ops teams can launch polls, review questions, track feedback, and monitor recap status without leaving session context.",
+        image: "/feature-images/session-management/detail-panel.png",
+        alt: "EventHex session detail panel with speaker and engagement controls",
+        chips: ["Live polls", "Q&A spotlight", "AI recap status"],
+      },
+      {
+        type: "list",
+        size: "tall",
+        eyebrow: "Live engagement",
+        title: "Turn every session into a two-way experience",
+        desc: "Engagement tools are built into the same workflow used to manage the agenda, so teams are not stitching together separate tools on event day.",
+        items: [
+          "Launch live polls and watch color-coded analytics update in real time.",
+          "Collect audience questions and project them in spotlight mode for speakers.",
+          "Capture emoji reactions and star ratings while the session is still live.",
+          "Feed recordings into InstaRecap for transcripts, summaries, and translation.",
+        ],
+      },
+      {
+        type: "poll",
+        size: "small",
+        eyebrow: "In-session signals",
+        title: "Read sentiment and turnout while the room is active",
+        desc: "Event teams can spot what is landing, what is full, and which follow-ups matter before the session ends.",
+      },
+    ],
+  },
+];
+
+const deepDiveCards = [
+  {
+    eyebrow: "Agenda control",
+    title: "Visual timeline scheduling that stays usable when agendas get dense",
+    desc: "Build multi-day, multi-room agendas with a view that stays readable for event teams, speakers, and operators. Session edits happen where the schedule already lives, not in disconnected tools.",
+    items: [
+      "See stages side by side to spot clashes before they affect attendees.",
+      "Drag sessions into new slots when speakers change or rooms shift.",
+      "Keep color-coded session types visible for faster agenda review.",
+    ],
+    visual: "timeline",
+  },
+  {
+    eyebrow: "Session structure",
+    title: "Support every format from keynotes to breakout-heavy workshop flows",
+    desc: "Create parent sessions, sub-sessions, and specialized formats so the published agenda matches the real shape of the event instead of flattening it into generic blocks.",
+    items: [
+      "Keynotes, panels, labs, workshops, and sponsor sessions in one model.",
+      "Nested sub-sessions for breakouts and themed track branches.",
+      "Role assignment for speakers, moderators, and session owners.",
+    ],
+    visual: "types",
+  },
+  {
+    eyebrow: "Capacity and access",
+    title: "Use registration data to control who can enter what and when",
+    desc: "EventHex connects ticket rules and session-level attendance so premium access, limited-capacity rooms, and waitlists stay operationally sound.",
+    items: [
+      "Restrict attendance by ticket class, invite list, or participant segment.",
+      "Set hard caps and keep overflow demand on structured waitlists.",
+      "Notify the right attendees when seats open or rooms change.",
+    ],
+    visual: "capacity",
+  },
+  {
+    eyebrow: "Live engagement and recap",
+    title: "Keep interaction, feedback, recording, and AI summary in the same session workflow",
+    desc: "Moderators can run live tools while ops teams monitor response, recording, and recap completion. Nothing needs to be copied into a separate post-event system.",
+    items: [
+      "Live polls and Q&A without leaving the session control panel.",
+      "Emoji reactions and star ratings for immediate session sentiment.",
+      "InstaRecap transcripts, summaries, and translations after the recording ends.",
+    ],
+    visual: "engagement",
+  },
+];
+
+const coordinationCards = [
+  {
+    title: "Multi-stage control",
+    desc: "Run agendas across unlimited rooms and stages while keeping speaker assignments, room notes, and schedule changes synchronized in one place.",
+  },
+  {
+    title: "Access-aware registration",
+    desc: "Connect session eligibility, capacity, waitlists, and reminders so high-demand sessions stay structured even when demand spikes.",
+  },
+  {
+    title: "Agenda publishing and follow-up",
+    desc: "Present agendas in attendee-friendly formats, then carry recordings and AI recaps forward without rebuilding the session record later.",
+  },
+];
+
+const supportChecklist = [
+  "Agenda blueprinting for multi-track programs",
+  "Session access rules, capacity setup, and waitlists",
+  "Live engagement, recording, and recap readiness",
+];
+
+const faqItems = [
+  {
+    q: "What is session management software?",
+    a: "Session management software helps event organizers plan, schedule, and coordinate all sessions, workshops, and keynotes across multiple days and stages from a single dashboard with visual timeline views.",
+  },
+  {
+    q: "Can I manage sessions across multiple stages and days?",
+    a: "Yes. EventHex supports unlimited stages, rooms, and days. Each stage gets its own timeline track so your team can review schedules side by side, resolve clashes early, and keep the agenda coherent as the event grows.",
+  },
+  {
+    q: "What are sub-sessions and breakout rooms?",
+    a: "Sub-sessions are nested sessions created under a parent session. They are useful for workshops that split into groups, panel discussions with parallel tracks, or conferences with themed breakout streams that still belong to one larger program.",
+  },
+  {
+    q: "Can I restrict sessions to specific ticket types?",
+    a: "Yes. You can limit session access to specific ticket types or participant categories, set maximum capacity per session, and maintain waitlists when a room fills up. That makes it practical to manage VIP workshops, sponsor-only sessions, or premium add-ons.",
+  },
+  {
+    q: "How does drag-and-drop scheduling work?",
+    a: "The visual timeline lets your team move sessions between time slots or stages with direct drag-and-drop edits. Changes are reflected in the same planning view so operators can reschedule quickly without rebuilding the rest of the agenda.",
+  },
+  {
+    q: "What live engagement tools are available during sessions?",
+    a: "EventHex includes live polls with real-time analytics, Q&A with spotlight mode for fullscreen projection, emoji reactions, star ratings, and session feedback tools that attendees can use from their phones during the event.",
+  },
+  {
+    q: "Can sessions be recorded and transcribed automatically?",
+    a: "Yes. EventHex's InstaRecap workflow can pair recordings with AI-generated transcripts, summaries, and translations after the session ends, helping organizers turn session content into usable post-event knowledge faster.",
+  },
+  {
+    q: "Can I track which attendees registered for each session?",
+    a: "Yes. EventHex tracks session-level registrations so your team can review attendee counts, manage capacity, send targeted reminders, and analyze which sessions drew the strongest interest across the event.",
+  },
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex Session Management",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: "https://eventhex.ai/session-management/",
+  description,
+  creator: {
+    "@type": "Organization",
+    name: "EventHex",
+    url: "https://eventhex.ai",
+  },
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Free demo available",
+  },
+  featureList: [
+    "Visual timeline scheduling",
+    "Multi-day and multi-stage agenda control",
+    "Sub-sessions and breakout room planning",
+    "Session-level capacity and waitlists",
+    "Ticket-restricted access rules",
+    "Live polls and Q&A spotlight",
+    "Emoji feedback and ratings",
+    "AI-powered transcripts and session recaps",
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical="https://eventhex.ai/session-management/"
+  footerCtaTitle={"See Your Agenda Workflow\nLive Before Launch"}
+  footerCtaButtonText="Get a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <section class="ssm-hero">
+    <div class="ssm-hero__shell">
+      <div class="ssm-hero__grid">
+        <div class="ssm-hero__content">
+          <div class="ssm-hero__badge animate-on-scroll" data-animation="fadeInDown">
+            <span>Session Management</span>
+          </div>
+
+          <h1 class="ssm-hero__title animate-on-scroll" data-animation="fadeInUp">
+            Plan Complex Event Agendas Without
+            <span>Track-Planning Chaos</span>
+          </h1>
+
+          <p class="ssm-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+            Build multi-day schedules, organize sub-sessions, control room capacity,
+            and run live engagement from one operational layer built for event teams.
+          </p>
+
+          <div class="ssm-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
+            <span class="ssm-hero__point">Visual timeline scheduling</span>
+            <span class="ssm-hero__point">Sub-sessions and breakout control</span>
+            <span class="ssm-hero__point">Live polls, Q&amp;A, and AI recap</span>
+          </div>
+
+          <div class="ssm-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+            <a href="/book-a-demo/" class="ssm-hero__btn ssm-hero__btn--primary">Get a Free Demo</a>
+            <a href="#ssm-bento" class="ssm-hero__btn ssm-hero__btn--secondary">Explore Features</a>
+          </div>
+
+          <div class="ssm-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+            <span class="ssm-hero__trust-item">50,000+ sessions scheduled</span>
+            <span class="ssm-hero__trust-item">Built for multi-stage events</span>
+          </div>
+        </div>
+
+        <div class="ssm-hero__visual animate-on-scroll" data-animation="fadeInRight">
+          <div class="ssm-hero__visual-card">
+            <div class="ssm-hero__floating ssm-hero__floating--top">
+              <span class="ssm-hero__floating-label">Agenda Builder</span>
+              <strong>Reschedule tracks without rebuilding the day</strong>
+            </div>
+
+            <img
+              src="/feature-images/session-management/timeline-view.jpeg"
+              alt="EventHex session management timeline view"
+              width="1280"
+              height="710"
+              loading="eager"
+            />
+
+            <div class="ssm-hero__detail-panel">
+              <img
+                src="/feature-images/session-management/detail-panel.png"
+                alt="EventHex session detail panel"
+                width="420"
+                height="530"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="ssm-hero__floating ssm-hero__floating--bottom">
+              <span class="ssm-hero__floating-label">Live Session Ops</span>
+              <strong>Polls, Q&amp;A, feedback, and recap status in one panel</strong>
+            </div>
+
+            <div class="ssm-hero__metric-row">
+              <div class="ssm-hero__metric">
+                <strong>500+</strong>
+                <span>multi-track events</span>
+              </div>
+              <div class="ssm-hero__metric">
+                <strong>98%</strong>
+                <span>scheduling accuracy</span>
+              </div>
+              <div class="ssm-hero__metric">
+                <strong>Live</strong>
+                <span>session-level engagement</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ssm-dark-band">
+    <div class="ssm-dark-band__headline">
+      <h2 class="ssm-dark-band__title animate-on-scroll" data-animation="fadeInDown">
+        <span class="ssm-dark-band__white">Keep agenda planning, session access, and</span>
+        <span class="ssm-dark-band__purple"> live attendee signals</span>
+        <span class="ssm-dark-band__white"> inside one</span>
+        <span class="ssm-dark-band__cyan"> event workflow</span>
+      </h2>
+    </div>
+
+    <div class="ssm-dark-band__stats">
+      {stats.map((stat) => (
+        <div class="ssm-dark-band__stat">
+          <span class="ssm-dark-band__value">{stat.value}</span>
+          <span class="ssm-dark-band__label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <BentoGrid />
+
+  <section class="ssm-stack">
+    <div class="ssm-stack__section">
+      <div class="ssm-stack__header">
+        <span class="ssm-stack__subtitle">Key features that keep session operations under control</span>
+        <h2 class="ssm-stack__title">
+          Everything you need to <span>shape, protect, and activate</span><br />
+          your event agenda
+        </h2>
+      </div>
+
+      <div class="ssm-stack__cards">
+        {deepDiveCards.map((card, index) => (
+          <article class="ssm-stack__card" style={`top: calc(24px + ${index * 22}px);`}>
+            <div class="ssm-stack__content">
+              <span class="ssm-stack__eyebrow">{card.eyebrow}</span>
+              <h3 class="ssm-stack__card-title">{card.title}</h3>
+              <p class="ssm-stack__card-desc">{card.desc}</p>
+
+              <ul class="ssm-stack__list">
+                {card.items.map((item) => <li class="ssm-stack__item">{item}</li>)}
+              </ul>
+
+              <a href="/book-a-demo/" class="ssm-stack__link">See it in a demo</a>
+            </div>
+
+            <div class={`ssm-stack__visual ssm-stack__visual--${card.visual}`}>
+              {card.visual === "timeline" && (
+                <img
+                  src="/feature-images/session-management/timeline-view.jpeg"
+                  alt="EventHex agenda timeline"
+                  width="1180"
+                  height="660"
+                  loading="lazy"
+                />
+              )}
+
+              {card.visual === "types" && (
+                <div class="ssm-visual-types">
+                  <div class="ssm-visual-types__header">
+                    <span>Session types</span>
+                    <strong>4 active patterns</strong>
+                  </div>
+                  <div class="ssm-visual-types__grid">
+                    <div class="ssm-visual-types__tile is-blue">
+                      <span>Keynote</span>
+                      <small>Main-stage address</small>
+                    </div>
+                    <div class="ssm-visual-types__tile is-violet">
+                      <span>Panel</span>
+                      <small>Moderator + guests</small>
+                    </div>
+                    <div class="ssm-visual-types__tile is-green">
+                      <span>Workshop</span>
+                      <small>Capacity-managed</small>
+                    </div>
+                    <div class="ssm-visual-types__tile is-amber">
+                      <span>Breakout</span>
+                      <small>Nested under track</small>
+                    </div>
+                  </div>
+                  <div class="ssm-visual-types__branch">
+                    <span>Innovation Track</span>
+                    <div>
+                      <b>Breakout A</b>
+                      <b>Breakout B</b>
+                      <b>Breakout C</b>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {card.visual === "capacity" && (
+                <div class="ssm-visual-capacity">
+                  <div class="ssm-visual-capacity__top">
+                    <span>Session access</span>
+                    <strong>Rules applied</strong>
+                  </div>
+                  <div class="ssm-visual-capacity__rule is-blue">VIP Ticket only</div>
+                  <div class="ssm-visual-capacity__rule is-soft">Standard pass + waitlist</div>
+                  <div class="ssm-visual-capacity__bars">
+                    <div>
+                      <span>Workshop Lab</span>
+                      <strong>38/40</strong>
+                      <i><b style="width: 95%"></b></i>
+                    </div>
+                    <div>
+                      <span>Breakout Room C</span>
+                      <strong>22/30</strong>
+                      <i><b style="width: 73%"></b></i>
+                    </div>
+                    <div>
+                      <span>Sponsor Roundtable</span>
+                      <strong>12/12</strong>
+                      <i><b style="width: 100%"></b></i>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {card.visual === "engagement" && (
+                <div class="ssm-visual-engagement">
+                  <div class="ssm-visual-engagement__frame">
+                    <img
+                      src="/feature-images/session-management/detail-panel.png"
+                      alt="Session detail controls"
+                      width="420"
+                      height="530"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div class="ssm-visual-engagement__callout">
+                    <span>Live poll</span>
+                    <strong>342 responses in-session</strong>
+                  </div>
+                  <div class="ssm-visual-engagement__callout is-secondary">
+                    <span>InstaRecap</span>
+                    <strong>Summary queued after recording</strong>
+                  </div>
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="ssm-cta">
+    <div class="ssm-cta__card">
+      <div class="ssm-cta__glow ssm-cta__glow--1"></div>
+      <div class="ssm-cta__glow ssm-cta__glow--2"></div>
+
+      <div class="ssm-cta__content">
+        <span class="ssm-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Session Planning Without Loose Ends</span>
+        <h2 class="ssm-cta__title animate-on-scroll" data-animation="fadeInUp">
+          Ready to run your next agenda from one coordinated workflow?
+        </h2>
+        <p class="ssm-cta__desc animate-on-scroll" data-animation="fadeInUp">
+          Bring scheduling, access rules, live engagement, and recap into a single
+          session layer so your ops team stays faster before and during the event.
+        </p>
+
+        <div class="ssm-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span class="ssm-cta__proof-pill">Visual timeline builder</span>
+          <span class="ssm-cta__proof-pill">Capacity-aware registrations</span>
+          <span class="ssm-cta__proof-pill">Live polls and AI recap</span>
+        </div>
+
+        <div class="ssm-cta__buttons">
+          <a href="/book-a-demo/" class="ssm-cta__btn ssm-cta__btn--primary">Book a Free Demo</a>
+          <a href="/contact-en/" class="ssm-cta__btn ssm-cta__btn--secondary">Talk to the team</a>
+        </div>
+
+        <div class="ssm-cta__trust">
+          <span class="ssm-cta__trust-item">Free onboarding support</span>
+          <span class="ssm-cta__trust-item">No credit card required</span>
+          <span class="ssm-cta__trust-item">Built for conferences and summits</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ssm-ops">
+    <div class="ssm-ops__inner">
+      <div class="ssm-ops__header">
+        <span class="ssm-ops__tag animate-on-scroll" data-animation="fadeIn">Operational Support</span>
+        <h2 class="ssm-ops__title animate-on-scroll" data-animation="fadeInUp">
+          Effortless session <b>coordination</b>
+        </h2>
+        <p class="ssm-ops__desc animate-on-scroll" data-animation="fadeInUp">
+          Keep rooms, registrations, reminders, and agenda publishing connected so
+          your event team can scale session operations without creating extra layers
+          of admin work.
+        </p>
+      </div>
+
+      <div class="ssm-ops__cards">
+        {coordinationCards.map((card) => (
+          <article class="ssm-ops__card animate-on-scroll" data-animation="fadeInUp">
+            <div class="ssm-ops__icon">
+              <span></span>
+            </div>
+            <h3 class="ssm-ops__card-title">{card.title}</h3>
+            <p class="ssm-ops__card-desc">{card.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="ssm-faq">
+    <div class="ssm-faq__inner">
+      <div class="ssm-faq__support">
+        <span class="ssm-faq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need a custom session setup?</span>
+        <h2 class="ssm-faq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
+        <p class="ssm-faq__desc animate-on-scroll" data-animation="fadeInUp">
+          We help event teams structure agenda logic, access rules, session-level
+          communication, and live recap workflows around the way their programs actually run.
+        </p>
+
+        <div class="ssm-faq__support-card animate-on-scroll" data-animation="fadeInUp">
+          <span class="ssm-faq__support-label">Included with every rollout</span>
+          <ul class="ssm-faq__support-list">
+            {supportChecklist.map((item) => (
+              <li class="ssm-faq__support-item">{item}</li>
+            ))}
+          </ul>
+
+          <div class="ssm-faq__support-note">
+            <strong>Free onboarding support</strong>
+            <span>Map your agenda workflow before launch and keep your event team aligned on the live operating model.</span>
+          </div>
+
+          <a href="/book-a-demo/" class="ssm-faq__cta">Plan my session flow</a>
+        </div>
+      </div>
+
+      <div class="ssm-faq__list">
+        {faqItems.map((faq, index) => (
+          <details class="ssm-faq__item animate-on-scroll" data-animation="fadeInUp" data-session-faq open={index === 0}>
+            <summary class="ssm-faq__question">
+              <span>{faq.q}</span>
+              <span class="ssm-faq__icon" aria-hidden="true">
+                <span class="ssm-faq__icon-line ssm-faq__icon-line--horizontal"></span>
+                <span class="ssm-faq__icon-line ssm-faq__icon-line--vertical"></span>
+              </span>
+            </summary>
+            <div class="ssm-faq__answer">
+              <p>{faq.a}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+  <script>
+    const setupSessionTabs = () => {
+      const tabs = Array.from(document.querySelectorAll("[data-session-tab]"));
+      const panels = Array.from(document.querySelectorAll("[data-session-panel]"));
+
+      tabs.forEach((tab) => {
+        if (tab.dataset.bound === "true") {
+          return;
+        }
+
+        tab.dataset.bound = "true";
+        tab.addEventListener("click", () => {
+          const activeIndex = tab.getAttribute("data-session-tab");
+
+          tabs.forEach((item) => {
+            const selected = item.getAttribute("data-session-tab") === activeIndex;
+            item.classList.toggle("is-active", selected);
+            item.setAttribute("aria-selected", selected ? "true" : "false");
+          });
+
+          panels.forEach((panel) => {
+            const selected = panel.getAttribute("data-session-panel") === activeIndex;
+            panel.classList.toggle("is-active", selected);
+            panel.setAttribute("aria-hidden", selected ? "false" : "true");
+          });
+        });
+      });
+
+      const faqItems = Array.from(document.querySelectorAll("[data-session-faq]"));
+
+      faqItems.forEach((item) => {
+        if (item.dataset.bound === "true") {
+          return;
+        }
+
+        item.dataset.bound = "true";
+        item.addEventListener("toggle", () => {
+          if (!(item instanceof HTMLDetailsElement) || !item.open) {
+            return;
+          }
+
+          faqItems.forEach((other) => {
+            if (other !== item && other instanceof HTMLDetailsElement) {
+              other.open = false;
+            }
+          });
+        });
+      });
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setupSessionTabs, { once: true });
+    } else {
+      setupSessionTabs();
+    }
+  </script>
+</MarketingLayout>
+
+<style>
+  :global(html) {
+    scroll-behavior: smooth;
+  }
+
+  :global(main) {
+    background-color: #ffffff;
+  }
+
+  .ssm-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 0 0 220px;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(175, 163, 255, 0.18), transparent 24%),
+      radial-gradient(circle at 82% 18%, rgba(124, 180, 255, 0.16), transparent 25%),
+      url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp") center center / cover no-repeat;
+  }
+
+  .ssm-hero__shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 160px 0 0;
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp") center center / cover no-repeat;
+  }
+
+  .ssm-hero__grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .ssm-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .ssm-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+  }
+
+  .ssm-hero__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 60px;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+  }
+
+  .ssm-hero__title span {
+    display: block;
+    color: var(--brand-blue);
+  }
+
+  .ssm-hero__desc {
+    margin: 0;
+    max-width: 590px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+  }
+
+  .ssm-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ssm-hero__point {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e5ebff;
+    box-shadow: 0 8px 24px rgba(34, 39, 47, 0.05);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #475467;
+  }
+
+  .ssm-hero__cta {
+    display: flex;
+    gap: 14px;
+    padding-top: 6px;
+  }
+
+  .ssm-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .ssm-hero__btn--primary {
+    color: #fff;
+    background: var(--brand-blue);
+    box-shadow: 0 10px 24px rgba(55, 93, 251, 0.28);
+  }
+
+  .ssm-hero__btn--primary:hover {
+    transform: translateY(-2px);
+    background: var(--brand-blue-hover);
+    box-shadow: 0 14px 30px rgba(55, 93, 251, 0.34);
+  }
+
+  .ssm-hero__btn--secondary {
+    color: var(--heading-dark);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dce4ff;
+  }
+
+  .ssm-hero__btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: #c5d2ff;
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  .ssm-hero__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ssm-hero__trust-item {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #667085;
+  }
+
+  .ssm-hero__trust-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .ssm-hero__visual {
+    position: relative;
+  }
+
+  .ssm-hero__visual-card {
+    position: relative;
+    padding: 18px 18px 24px;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.84);
+    box-shadow: 0 30px 70px rgba(34, 39, 47, 0.12);
+    backdrop-filter: blur(16px);
+  }
+
+  .ssm-hero__visual-card > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 24px;
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    box-shadow: 0 18px 44px rgba(55, 93, 251, 0.12);
+  }
+
+  .ssm-hero__detail-panel {
+    position: absolute;
+    right: 30px;
+    bottom: 104px;
+    width: clamp(190px, 26vw, 300px);
+    padding: 8px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    box-shadow: 0 24px 50px rgba(15, 17, 23, 0.18);
+  }
+
+  .ssm-hero__detail-panel img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+  }
+
+  .ssm-hero__floating {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 260px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(15, 17, 23, 0.88);
+    box-shadow: 0 14px 36px rgba(15, 17, 23, 0.18);
+    color: #fff;
+  }
+
+  .ssm-hero__floating--top {
+    top: -18px;
+    left: -18px;
+  }
+
+  .ssm-hero__floating--bottom {
+    left: 34px;
+    bottom: -18px;
+  }
+
+  .ssm-hero__floating-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ssm-hero__floating strong {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  .ssm-hero__metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .ssm-hero__metric {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(247, 248, 252, 0.96);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .ssm-hero__metric strong {
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    color: var(--heading-dark);
+  }
+
+  .ssm-hero__metric span {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #667085;
+  }
+
+  .ssm-dark-band {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 110px 0;
+    background-color: #000;
+    background-image:
+      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
+      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
+      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
+      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
+      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
+      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
+      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
+      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
+      url("https://eventhex.ai/wp-content/uploads/2024/12/bg-1.webp");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .ssm-dark-band__headline {
+    width: 100%;
+    padding: 0 20px 60px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ssm-dark-band__title {
+    width: min(900px, 100%);
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 52px;
+    letter-spacing: -1px;
+  }
+
+  .ssm-dark-band__white {
+    color: #fff;
+  }
+
+  .ssm-dark-band__purple {
+    color: var(--accent-purple-light);
+  }
+
+  .ssm-dark-band__cyan {
+    color: var(--accent-cyan);
+  }
+
+  .ssm-dark-band__stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    padding: 0 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .ssm-dark-band__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ssm-dark-band__value {
+    font-family: var(--font-heading);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 48px;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+
+  .ssm-dark-band__label {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ssm-bento {
+    width: 100%;
+    padding: 92px 20px 96px;
+    background: #f7f9fd;
+  }
+
+  .ssm-bento__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ssm-bento__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.07);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4f46c4;
+  }
+
+  .ssm-bento__title {
+    margin: 20px 0 0;
+    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1.2px;
+    color: #0f1117;
+  }
+
+  .ssm-bento__title span {
+    display: block;
+    color: var(--brand-blue);
+  }
+
+  .ssm-bento__desc {
+    width: min(720px, 100%);
+    margin: 18px 0 0;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .ssm-bento__nav {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 36px;
+    padding: 8px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 14px 34px rgba(15, 17, 23, 0.05);
+  }
+
+  .ssm-bento__tab {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    padding: 12px 18px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #667085;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+  }
+
+  .ssm-bento__tab:hover {
+    color: #1f2937;
+  }
+
+  .ssm-bento__tab.is-active {
+    background: #0f1629;
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(15, 22, 41, 0.22);
+  }
+
+  .ssm-bento__panel {
+    display: none;
+    width: 100%;
+    margin-top: 30px;
+  }
+
+  .ssm-bento__panel.is-active {
+    display: block;
+  }
+
+  .ssm-bento__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.22fr) minmax(0, 0.86fr);
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .ssm-bento__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    min-height: 100%;
+    padding: 24px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 16px 34px rgba(15, 17, 23, 0.05);
+  }
+
+  .ssm-bento__card--wide {
+    grid-row: span 2;
+  }
+
+  .ssm-bento__card-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ssm-bento__card-eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .ssm-bento__card-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    color: #0f1117;
+  }
+
+  .ssm-bento__card-desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .ssm-bento__media {
+    overflow: hidden;
+    border-radius: 22px;
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    background: linear-gradient(180deg, #f8fbff 0%, #eef3ff 100%);
+  }
+
+  .ssm-bento__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .ssm-bento__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ssm-bento__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #eef3ff;
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #375dfb;
+  }
+
+  .ssm-bento__chip.is-alert {
+    background: rgba(255, 107, 107, 0.1);
+    color: #d9485f;
+    border-color: rgba(217, 72, 95, 0.16);
+  }
+
+  .ssm-bento__chip.is-quiet {
+    background: rgba(15, 17, 23, 0.05);
+    color: #475467;
+    border-color: rgba(15, 17, 23, 0.08);
+  }
+
+  .ssm-bento__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ssm-bento__list-item {
+    position: relative;
+    padding-left: 24px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #2d3340;
+  }
+
+  .ssm-bento__list-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .ssm-bento__snapshot {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f7f9fd;
+    border: 1px solid rgba(15, 17, 23, 0.06);
+  }
+
+  .ssm-bento__snapshot-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(15, 17, 23, 0.06);
+  }
+
+  .ssm-bento__snapshot-row:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .ssm-bento__snapshot-row span {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #667085;
+  }
+
+  .ssm-bento__snapshot-row strong {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    color: #0f1117;
+  }
+
+  .ssm-bento__capacity-board {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 22px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #0f1629 0%, #17213b 100%);
+    color: #fff;
+  }
+
+  .ssm-bento__capacity-header,
+  .ssm-bento__capacity-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .ssm-bento__capacity-header span,
+  .ssm-bento__capacity-meta span {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ssm-bento__capacity-header strong,
+  .ssm-bento__capacity-meta strong {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #fff;
+  }
+
+  .ssm-bento__capacity-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ssm-bento__capacity-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ssm-bento__capacity-track {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .ssm-bento__capacity-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #7fb4ff 0%, #375dfb 100%);
+  }
+
+  .ssm-bento__capacity-track.is-full span {
+    background: linear-gradient(90deg, #ff8e8e 0%, #ff5b5b 100%);
+  }
+
+  .ssm-bento__capacity-track.is-calm span {
+    background: linear-gradient(90deg, #82e6c1 0%, #10b981 100%);
+  }
+
+  .ssm-bento__capacity-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ssm-bento__poll-board {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #0f1629 0%, #1b2747 100%);
+    color: #fff;
+  }
+
+  .ssm-bento__poll-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ssm-bento__poll-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff5b5b;
+    box-shadow: 0 0 0 8px rgba(255, 91, 91, 0.12);
+  }
+
+  .ssm-bento__poll-question {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  .ssm-bento__poll-option {
+    display: grid;
+    grid-template-columns: minmax(0, 88px) minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .ssm-bento__poll-option span,
+  .ssm-bento__poll-option strong,
+  .ssm-bento__poll-note {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .ssm-bento__poll-option span {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ssm-bento__poll-option strong {
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .ssm-bento__poll-option div {
+    height: 10px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .ssm-bento__poll-option i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #8ebaff 0%, #375dfb 100%);
+  }
+
+  .ssm-bento__poll-note {
+    margin-top: 6px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .ssm-stack {
+    width: 100%;
+    background-color: #000;
+    background-image: url("https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp");
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .ssm-stack__section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 84px 20px 40px;
+  }
+
+  .ssm-stack__header {
+    width: 74%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .ssm-stack__subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+  }
+
+  .ssm-stack__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .ssm-stack__title span {
+    color: var(--accent-purple-light);
+  }
+
+  .ssm-stack__cards {
+    width: 100%;
+    padding: 36px 0 10px;
+    position: relative;
+  }
+
+  .ssm-stack__card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    gap: 28px;
+    min-height: 520px;
+    margin-bottom: 64px;
+    padding: 28px;
+    border-radius: 24px;
+    background: #11162b;
+    border: 1px solid rgba(172, 161, 241, 0.34);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24);
+    overflow: hidden;
+  }
+
+  .ssm-stack__content {
+    flex: 0 0 43%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .ssm-stack__eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(175, 163, 255, 0.9);
+  }
+
+  .ssm-stack__card-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .ssm-stack__card-desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.68;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ssm-stack__list {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .ssm-stack__item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .ssm-stack__item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .ssm-stack__link {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 10px 22px;
+    border-radius: 12px;
+    background: var(--accent-btn-purple);
+    color: #0a0d14;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 22px;
+    transition: transform 0.25s ease;
+  }
+
+  .ssm-stack__link:hover {
+    transform: translateY(-1px);
+  }
+
+  .ssm-stack__visual {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    min-height: 100%;
+  }
+
+  .ssm-stack__visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ssm-visual-types,
+  .ssm-visual-capacity,
+  .ssm-visual-engagement {
+    width: 100%;
+    height: 100%;
+    padding: 28px;
+  }
+
+  .ssm-visual-types {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(45, 60, 105, 0.18) 100%);
+  }
+
+  .ssm-visual-types__header,
+  .ssm-visual-capacity__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .ssm-visual-types__header span,
+  .ssm-visual-capacity__top span {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .ssm-visual-types__header strong,
+  .ssm-visual-capacity__top strong {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #fff;
+  }
+
+  .ssm-visual-types__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .ssm-visual-types__tile {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .ssm-visual-types__tile span {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .ssm-visual-types__tile small {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 18px;
+    color: rgba(255, 255, 255, 0.68);
+  }
+
+  .ssm-visual-types__tile.is-blue {
+    box-shadow: inset 0 0 0 1px rgba(127, 180, 255, 0.28);
+  }
+
+  .ssm-visual-types__tile.is-violet {
+    box-shadow: inset 0 0 0 1px rgba(175, 163, 255, 0.28);
+  }
+
+  .ssm-visual-types__tile.is-green {
+    box-shadow: inset 0 0 0 1px rgba(118, 223, 180, 0.24);
+  }
+
+  .ssm-visual-types__tile.is-amber {
+    box-shadow: inset 0 0 0 1px rgba(255, 205, 124, 0.24);
+  }
+
+  .ssm-visual-types__branch {
+    margin-top: auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .ssm-visual-types__branch > span {
+    display: block;
+    margin-bottom: 12px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .ssm-visual-types__branch > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ssm-visual-types__branch b {
+    display: inline-flex;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: rgba(127, 180, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: #cfe1ff;
+  }
+
+  .ssm-visual-capacity {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(52, 72, 131, 0.2) 100%);
+  }
+
+  .ssm-visual-capacity__rule {
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  .ssm-visual-capacity__rule.is-blue {
+    background: rgba(55, 93, 251, 0.16);
+    color: #dce7ff;
+  }
+
+  .ssm-visual-capacity__rule.is-soft {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .ssm-visual-capacity__bars {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: auto;
+  }
+
+  .ssm-visual-capacity__bars div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 16px;
+    align-items: center;
+  }
+
+  .ssm-visual-capacity__bars span,
+  .ssm-visual-capacity__bars strong {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    color: #fff;
+  }
+
+  .ssm-visual-capacity__bars i {
+    grid-column: 1 / -1;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .ssm-visual-capacity__bars b {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #8ebaff 0%, #375dfb 100%);
+  }
+
+  .ssm-visual-engagement {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(45, 60, 105, 0.18) 100%);
+  }
+
+  .ssm-visual-engagement__frame {
+    width: min(320px, 70%);
+    padding: 10px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 22px 42px rgba(15, 17, 23, 0.22);
+  }
+
+  .ssm-visual-engagement__frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 16px;
+  }
+
+  .ssm-visual-engagement__callout {
+    position: absolute;
+    left: 28px;
+    bottom: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 210px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(15, 17, 23, 0.88);
+    color: #fff;
+  }
+
+  .ssm-visual-engagement__callout.is-secondary {
+    left: auto;
+    right: 28px;
+    top: 28px;
+    bottom: auto;
+  }
+
+  .ssm-visual-engagement__callout span {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.58);
+  }
+
+  .ssm-visual-engagement__callout strong {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+
+  .ssm-cta {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px 84px;
+  }
+
+  .ssm-cta__card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+    border-radius: 24px;
+    background: #0f1629;
+  }
+
+  .ssm-cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .ssm-cta__glow--1 {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    left: -50px;
+    background: rgba(55, 93, 251, 0.2);
+  }
+
+  .ssm-cta__glow--2 {
+    width: 300px;
+    height: 300px;
+    right: -30px;
+    bottom: -80px;
+    background: rgba(159, 129, 255, 0.15);
+  }
+
+  .ssm-cta__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 680px;
+  }
+
+  .ssm-cta__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .ssm-cta__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+
+  .ssm-cta__desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .ssm-cta__proof-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .ssm-cta__proof-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    color: rgba(255, 255, 255, 0.76);
+  }
+
+  .ssm-cta__buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .ssm-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+
+  .ssm-cta__btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(55, 93, 251, 0.35);
+  }
+
+  .ssm-cta__btn--primary:hover {
+    background: var(--brand-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 28px rgba(55, 93, 251, 0.4);
+  }
+
+  .ssm-cta__btn--secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .ssm-cta__btn--secondary:hover {
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateY(-1px);
+  }
+
+  .ssm-cta__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .ssm-cta__trust-item {
+    position: relative;
+    padding-left: 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .ssm-cta__trust-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+  }
+
+  .ssm-ops {
+    width: 100%;
+    margin: 0;
+    padding: 72px 0;
+    background: #000312 url("https://eventhex.ai/wp-content/uploads/2025/03/bg.svg") center / cover no-repeat;
+  }
+
+  .ssm-ops__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .ssm-ops__header {
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .ssm-ops__tag {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    color: var(--accent-purple-light);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ssm-ops__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #fff;
+  }
+
+  .ssm-ops__title b {
+    font-weight: 700;
+  }
+
+  .ssm-ops__desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .ssm-ops__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .ssm-ops__card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px 24px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  }
+
+  .ssm-ops__card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(175, 163, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .ssm-ops__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(55, 93, 251, 0.15);
+  }
+
+  .ssm-ops__icon span {
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
+    border: 2px solid #7fb4ff;
+    box-shadow: inset 0 0 0 4px rgba(127, 180, 255, 0.18);
+  }
+
+  .ssm-ops__card-title {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+  }
+
+  .ssm-ops__card-desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ssm-faq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .ssm-faq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .ssm-faq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .ssm-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .ssm-faq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .ssm-faq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .ssm-faq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .ssm-faq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .ssm-faq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .ssm-faq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .ssm-faq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .ssm-faq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .ssm-faq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .ssm-faq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .ssm-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .ssm-faq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .ssm-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .ssm-faq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+  }
+
+  .ssm-faq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+  }
+
+  .ssm-faq__question::-webkit-details-marker,
+  .ssm-faq__question::marker {
+    display: none;
+  }
+
+  .ssm-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 4px;
+  }
+
+  .ssm-faq__icon-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .ssm-faq__icon-line--vertical {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .ssm-faq__item[open] .ssm-faq__icon-line--vertical {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .ssm-faq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .ssm-faq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  @media (max-width: 1180px) {
+    .ssm-hero__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ssm-hero__visual {
+      max-width: 760px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .ssm-dark-band__stats {
+      gap: 36px;
+      flex-wrap: wrap;
+    }
+
+    .ssm-bento__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ssm-bento__card--wide {
+      grid-row: auto;
+    }
+
+    .ssm-stack__header {
+      width: 100%;
+    }
+
+    .ssm-stack__card {
+      flex-direction: column;
+      min-height: auto;
+    }
+
+    .ssm-stack__content,
+    .ssm-stack__visual {
+      flex: auto;
+    }
+
+    .ssm-ops__cards,
+    .ssm-faq__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .ssm-faq__support {
+      position: static;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .ssm-hero {
+      padding-bottom: 180px;
+    }
+
+    .ssm-hero__title {
+      font-size: 44px;
+      line-height: 1.12;
+    }
+
+    .ssm-hero__detail-panel {
+      right: 22px;
+      bottom: 92px;
+    }
+
+    .ssm-dark-band {
+      padding: 84px 0;
+    }
+
+    .ssm-dark-band__title,
+    .ssm-bento__title,
+    .ssm-stack__title,
+    .ssm-cta__title,
+    .ssm-faq__title {
+      font-size: 38px;
+      line-height: 1.12;
+    }
+
+    .ssm-ops__title {
+      font-size: 36px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ssm-hero {
+      margin-top: -82px;
+      padding-bottom: 110px;
+    }
+
+    .ssm-hero__shell {
+      padding-top: 132px;
+    }
+
+    .ssm-hero__grid {
+      gap: 30px;
+      padding-bottom: 20px;
+    }
+
+    .ssm-hero__title {
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: -0.8px;
+    }
+
+    .ssm-hero__desc,
+    .ssm-bento__desc,
+    .ssm-faq__desc,
+    .ssm-cta__desc,
+    .ssm-ops__desc {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .ssm-hero__cta,
+    .ssm-cta__buttons {
+      width: 100%;
+      flex-direction: column;
+    }
+
+    .ssm-hero__btn,
+    .ssm-cta__btn {
+      width: 100%;
+    }
+
+    .ssm-hero__floating {
+      position: static;
+      max-width: none;
+      margin-top: 16px;
+    }
+
+    .ssm-hero__detail-panel {
+      position: static;
+      width: 100%;
+      margin-top: 16px;
+    }
+
+    .ssm-hero__metric-row {
+      grid-template-columns: 1fr;
+    }
+
+    .ssm-dark-band {
+      padding: 64px 0;
+    }
+
+    .ssm-dark-band__headline {
+      padding-bottom: 30px;
+    }
+
+    .ssm-dark-band__title,
+    .ssm-bento__title,
+    .ssm-stack__title,
+    .ssm-cta__title,
+    .ssm-faq__title,
+    .ssm-ops__title {
+      font-size: 30px;
+      line-height: 1.16;
+    }
+
+    .ssm-dark-band__stats {
+      gap: 24px;
+      justify-content: center;
+    }
+
+    .ssm-dark-band__stat {
+      width: 42%;
+    }
+
+    .ssm-bento {
+      padding: 68px 16px 72px;
+    }
+
+    .ssm-bento__nav {
+      width: 100%;
+      border-radius: 24px;
+    }
+
+    .ssm-bento__tab {
+      width: 100%;
+    }
+
+    .ssm-bento__card,
+    .ssm-stack__card,
+    .ssm-cta__card {
+      padding: 20px;
+      border-radius: 20px;
+    }
+
+    .ssm-bento__card-title,
+    .ssm-stack__card-title {
+      font-size: 24px;
+    }
+
+    .ssm-stack__section {
+      padding-top: 58px;
+    }
+
+    .ssm-stack__card {
+      position: relative;
+      top: auto !important;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .ssm-visual-types,
+    .ssm-visual-capacity,
+    .ssm-visual-engagement {
+      padding: 20px;
+    }
+
+    .ssm-visual-engagement__frame {
+      width: min(100%, 280px);
+    }
+
+    .ssm-visual-engagement__callout,
+    .ssm-visual-engagement__callout.is-secondary {
+      position: static;
+      max-width: none;
+      margin-top: 14px;
+    }
+
+    .ssm-cta {
+      padding: 40px 16px 60px;
+    }
+
+    .ssm-ops {
+      padding: 56px 0;
+    }
+
+    .ssm-faq {
+      padding: 64px 0;
+    }
+
+    .ssm-faq__question {
+      font-size: 18px;
+      padding: 20px 18px;
+    }
+
+    .ssm-faq__answer {
+      padding: 0 18px 18px;
+    }
+  }
+</style>

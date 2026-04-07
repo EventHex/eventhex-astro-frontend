@@ -1,0 +1,341 @@
+---
+// Hero — speaker-management pattern: split layout, single image, floating info cards
+// CSS prefix: em-hero__
+
+interface Props {
+  eyebrow: string;
+  titleHtml: string;
+  description: string;
+  ctaText: string;
+  ctaHref: string;
+  image: string;
+  imageAlt: string;
+}
+
+const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = Astro.props;
+---
+
+<section class="em-hero">
+  <div class="em-hero__shell">
+    <div class="em-hero__grid">
+
+      <div class="em-hero__content">
+        <div class="em-hero__badge animate-on-scroll" data-animation="fadeInDown">
+          <span>{eyebrow}</span>
+        </div>
+
+        <h1 class="em-hero__title animate-on-scroll" data-animation="fadeInUp" set:html={titleHtml}></h1>
+
+        <p class="em-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+          {description}
+        </p>
+
+        <div class="em-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
+          <span class="em-hero__point">Email + WhatsApp</span>
+          <span class="em-hero__point">Smart Audience Targeting</span>
+          <span class="em-hero__point">Real-Time Analytics</span>
+        </div>
+
+        <div class="em-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+          <a href={ctaHref} class="em-hero__btn em-hero__btn--primary">{ctaText}</a>
+          <a href="#em-features" class="em-hero__btn em-hero__btn--secondary">Explore Features</a>
+        </div>
+
+        <div class="em-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+          <span class="em-hero__trust-item">50,000+ campaigns sent</span>
+          <span class="em-hero__trust-item">95% delivery rate</span>
+        </div>
+      </div>
+
+      <div class="em-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="em-hero__visual-card">
+          <div class="em-hero__floating em-hero__floating--top">
+            <span class="em-hero__floating-label">Campaigns</span>
+            <strong>50,000+ messages delivered</strong>
+          </div>
+
+          <img
+            src={image}
+            alt={imageAlt}
+            width="700"
+            height="500"
+            loading="eager"
+          />
+
+          <div class="em-hero__floating em-hero__floating--bottom">
+            <span class="em-hero__floating-label">Delivery</span>
+            <strong>95% success rate across channels</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .em-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 0 0 120px;
+    background:
+      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
+      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
+      url('https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+  }
+
+  .em-hero__shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 160px 0 0;
+    background: url('https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
+  }
+
+  .em-hero__grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .em-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .em-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+  }
+
+  .em-hero__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 60px;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+  }
+
+  .em-hero__title :global(b),
+  .em-hero__title :global(span) {
+    color: var(--brand-blue);
+  }
+
+  .em-hero__desc {
+    margin: 0;
+    max-width: 580px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+  }
+
+  .em-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .em-hero__point {
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e5ebff;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #475467;
+    box-shadow: 0 8px 24px rgba(34, 39, 47, 0.05);
+  }
+
+  .em-hero__cta {
+    display: flex;
+    gap: 14px;
+    padding-top: 6px;
+  }
+
+  .em-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .em-hero__btn--primary {
+    color: #fff;
+    background: var(--brand-blue);
+    box-shadow: 0 10px 24px rgba(55, 93, 251, 0.28);
+  }
+
+  .em-hero__btn--primary:hover {
+    transform: translateY(-2px);
+    background: var(--brand-blue-hover);
+    box-shadow: 0 14px 30px rgba(55, 93, 251, 0.34);
+  }
+
+  .em-hero__btn--secondary {
+    color: var(--heading-dark);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dce4ff;
+  }
+
+  .em-hero__btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: #c5d2ff;
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  .em-hero__trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .em-hero__trust-item {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #667085;
+  }
+
+  .em-hero__trust-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .em-hero__visual {
+    position: relative;
+  }
+
+  .em-hero__visual-card {
+    position: relative;
+    padding: 20px 0 36px;
+  }
+
+  .em-hero__visual-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    filter: drop-shadow(0 26px 48px rgba(34, 39, 47, 0.14));
+  }
+
+  .em-hero__floating {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--heading-dark);
+    border: 1px solid rgba(229, 235, 255, 0.9);
+    box-shadow: 0 18px 36px rgba(34, 39, 47, 0.12);
+    backdrop-filter: blur(12px);
+  }
+
+  .em-hero__floating--top {
+    top: -18px;
+    left: -18px;
+    max-width: 260px;
+  }
+
+  .em-hero__floating--bottom {
+    right: -18px;
+    bottom: 94px;
+    max-width: 280px;
+  }
+
+  .em-hero__floating-label {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #667085;
+  }
+
+  .em-hero__floating strong {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 1120px) {
+    .em-hero { padding: 0 20px 110px; }
+    .em-hero__shell { padding: 136px 0 0; }
+    .em-hero__grid { gap: 28px; padding: 0 0 40px; }
+    .em-hero__desc { max-width: 520px; }
+    .em-hero__title { font-size: 46px; line-height: 1.1em; }
+  }
+
+  @media (max-width: 960px) {
+    .em-hero { padding: 0 20px 96px; }
+    .em-hero__shell { padding: 130px 0 0; }
+    .em-hero__grid { grid-template-columns: 1fr; gap: 34px; padding: 0 0 40px; }
+    .em-hero__content { align-items: center; text-align: center; }
+    .em-hero__desc { max-width: 720px; }
+    .em-hero__trust, .em-hero__points, .em-hero__cta { justify-content: center; }
+    .em-hero__title { font-size: 42px; line-height: 1.1em; }
+    .em-hero__visual-card { padding: 26px 0 0; }
+    .em-hero__floating--top { left: 0; }
+    .em-hero__floating--bottom { right: 0; bottom: 34px; }
+  }
+
+  @media (max-width: 767px) {
+    .em-hero { margin-top: -80px; padding: 0 20px 90px; }
+    .em-hero__shell { padding: 120px 0 0; }
+    .em-hero__grid { padding: 0 0 30px; }
+    .em-hero__title { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
+    .em-hero__desc { font-size: 15px; line-height: 1.7; }
+    .em-hero__badge { font-size: 16px; line-height: 1.1em; }
+    .em-hero__point { font-size: 13px; padding: 8px 12px; }
+    .em-hero__cta { width: 100%; flex-direction: column; }
+    .em-hero__btn { width: 100%; }
+    .em-hero__trust { gap: 10px; justify-content: center; }
+    .em-hero__floating { position: static; margin-bottom: 12px; max-width: none; }
+    .em-hero__visual-card { padding: 18px 0 0; }
+  }
+</style>

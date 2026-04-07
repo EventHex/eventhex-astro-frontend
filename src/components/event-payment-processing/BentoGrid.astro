@@ -1,0 +1,1396 @@
+---
+const tabs = [
+  {
+    label: "Supported Gateways",
+    hero: {
+      eyebrow: "Gateway Engine",
+      title: "Stripe, Razorpay, and Tap Payments with one-click OAuth connection",
+      desc: "Connect your existing gateway account with one OAuth click. Revenue settles directly to your bank on your gateway's normal schedule — EventHex is never in the payment flow.",
+      points: ["One-click OAuth connection", "Direct revenue settlement", "PCI DSS compliant"],
+      visual: "gateways",
+    },
+    cards: [
+      {
+        eyebrow: "India",
+        title: "Razorpay",
+        desc: "Accept UPI, net banking, cards, and wallets in India with 0% EventHex fees.",
+        visual: "razorpay",
+      },
+      {
+        eyebrow: "MENA",
+        title: "Tap Payments",
+        desc: "Accept KNET, mada, Visa, and Mastercard in the GCC and MENA region.",
+        visual: "tap",
+      },
+      {
+        eyebrow: "Offline",
+        title: "Offline Payments",
+        desc: "Record cash, cheque, and bank transfer payments manually in EventHex.",
+        visual: "offline",
+      },
+      {
+        eyebrow: "Free",
+        title: "Complimentary Tickets",
+        desc: "Issue 100% discount codes or mark registrations as complimentary.",
+        visual: "comp",
+      },
+    ],
+  },
+  {
+    label: "Checkout & Pricing",
+    hero: {
+      eyebrow: "Pricing Engine",
+      title: "Multi-tier tickets, promo codes, group purchases, and tax configuration",
+      desc: "Create unlimited ticket types with early-bird windows, group discounts, and promo codes. Configure currency display, tax lines, and automatic tier switching.",
+      points: ["Unlimited ticket tiers", "Promo and discount codes", "Tax and VAT configuration"],
+      visual: "checkout",
+    },
+    cards: [
+      {
+        eyebrow: "Promos",
+        title: "Promo & Discount Codes",
+        desc: "Percentage or fixed-amount coupons with usage limits and expiry dates.",
+        visual: "promo",
+      },
+      {
+        eyebrow: "Groups",
+        title: "Group Purchases",
+        desc: "Buy tickets for multiple people in one checkout with separate registrations.",
+        visual: "group",
+      },
+      {
+        eyebrow: "Currency",
+        title: "Currency Display",
+        desc: "Set your event currency — attendees see prices in your chosen currency.",
+        visual: "currency",
+      },
+      {
+        eyebrow: "Tax",
+        title: "Tax & VAT",
+        desc: "Add configurable tax lines displayed at checkout and on receipts.",
+        visual: "tax",
+      },
+    ],
+  },
+  {
+    label: "Refunds & Reporting",
+    hero: {
+      eyebrow: "Revenue Engine",
+      title: "Automated refunds, revenue dashboards, transaction export, and reconciliation",
+      desc: "Process refunds from the dashboard, track real-time revenue, export transactions for accounting, and reconcile with your gateway.",
+      points: ["Automated refund processing", "Real-time revenue dashboard", "CSV and Excel export"],
+      visual: "reporting",
+    },
+    cards: [
+      {
+        eyebrow: "Export",
+        title: "Transaction Export",
+        desc: "Export all transactions as CSV or Excel with payment date, amount, and fees.",
+        visual: "txexport",
+      },
+      {
+        eyebrow: "Reconcile",
+        title: "Reconciliation View",
+        desc: "Match EventHex transactions against your gateway with side-by-side view.",
+        visual: "reconcile",
+      },
+      {
+        eyebrow: "Multi-Event",
+        title: "Revenue Roll-Up",
+        desc: "Aggregate revenue across all events in the centralized dashboard.",
+        visual: "rollup",
+      },
+      {
+        eyebrow: "Revenue",
+        title: "Revenue Reports",
+        desc: "Gross sales, net revenue, gateway fees, and revenue by ticket type.",
+        visual: "revreport",
+      },
+    ],
+  },
+];
+---
+
+<section class="eppb-section" id="epp-bento">
+  <div class="eppb-shell">
+    <h2 class="eppb-title">
+      Payment <b>Gateways</b>, Checkout &amp; <b>Reporting</b>
+    </h2>
+    <p class="eppb-subtitle">
+      Connect your gateway, configure pricing, and track every transaction in real time.
+    </p>
+
+    <nav class="eppb-nav" aria-label="Event payment processing workflows">
+      {tabs.map((tab, index) => (
+        <button
+          class={`eppb-tab${index === 0 ? " eppb-tab--active" : ""}`}
+          data-eppb-tab={index}
+          aria-selected={index === 0 ? "true" : "false"}
+          type="button"
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+
+    {tabs.map((tab, tabIndex) => (
+      <div
+        class={`eppb-panel${tabIndex === 0 ? " eppb-panel--active" : ""}`}
+        data-eppb-panel={tabIndex}
+      >
+        <div class="eppb-grid">
+          <article class="eppb-card eppb-card--hero" style={`--card-delay:${0.04}s;`}>
+            <div class="eppb-card__content">
+              <span class="eppb-card__eyebrow">{tab.hero.eyebrow}</span>
+              <h3 class="eppb-card__title">{tab.hero.title}</h3>
+              <p class="eppb-card__desc">{tab.hero.desc}</p>
+
+              <ul class="eppb-point-list">
+                {tab.hero.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </div>
+
+            <div class={`eppb-art eppb-art--hero eppb-art--${tab.hero.visual}`} aria-hidden="true">
+              {tab.hero.visual === "gateways" && (
+                <Fragment>
+                  <div class="eppb-gw-stack">
+                    <div class="eppb-gw-card eppb-gw-card--stripe">
+                      <div class="eppb-gw-logo">
+                        <span class="eppb-gw-dot" style="background:#635bff"></span>
+                        <span class="eppb-gw-name">Stripe</span>
+                      </div>
+                      <span class="eppb-gw-status">Connected</span>
+                    </div>
+                    <div class="eppb-gw-card eppb-gw-card--razorpay">
+                      <div class="eppb-gw-logo">
+                        <span class="eppb-gw-dot" style="background:#072654"></span>
+                        <span class="eppb-gw-name">Razorpay</span>
+                      </div>
+                      <span class="eppb-gw-status">Connected</span>
+                    </div>
+                    <div class="eppb-gw-card eppb-gw-card--tap">
+                      <div class="eppb-gw-logo">
+                        <span class="eppb-gw-dot" style="background:#2ac3a2"></span>
+                        <span class="eppb-gw-name">Tap</span>
+                      </div>
+                      <span class="eppb-gw-status">Connected</span>
+                    </div>
+                  </div>
+                  <div class="eppb-gw-line"></div>
+                  <div class="eppb-gw-badge">
+                    <span class="eppb-gw-check">&#10003;</span>
+                    <span>OAuth</span>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "checkout" && (
+                <Fragment>
+                  <div class="eppb-checkout-form">
+                    <div class="eppb-checkout-tier">
+                      <span class="eppb-checkout-tier-name">Early Bird</span>
+                      <strong class="eppb-checkout-tier-price">$49</strong>
+                    </div>
+                    <div class="eppb-checkout-tier eppb-checkout-tier--active">
+                      <span class="eppb-checkout-tier-name">Regular</span>
+                      <strong class="eppb-checkout-tier-price">$99</strong>
+                    </div>
+                    <div class="eppb-checkout-tier">
+                      <span class="eppb-checkout-tier-name">VIP</span>
+                      <strong class="eppb-checkout-tier-price">$199</strong>
+                    </div>
+                    <div class="eppb-checkout-promo">
+                      <span class="eppb-checkout-promo-input"></span>
+                      <span class="eppb-checkout-promo-btn">Apply</span>
+                    </div>
+                    <div class="eppb-checkout-total">
+                      <span>Total</span>
+                      <strong>$99.00</strong>
+                    </div>
+                  </div>
+                </Fragment>
+              )}
+
+              {tab.hero.visual === "reporting" && (
+                <Fragment>
+                  <div class="eppb-rev-dash">
+                    <div class="eppb-rev-topbar">
+                      <div class="eppb-rev-dots"><span></span><span></span><span></span></div>
+                      <span class="eppb-rev-title-bar"></span>
+                    </div>
+                    <div class="eppb-rev-body">
+                      <div class="eppb-rev-widget">
+                        <span class="eppb-rev-widget-label">Revenue</span>
+                        <strong class="eppb-rev-widget-val">$24,850</strong>
+                      </div>
+                      <div class="eppb-rev-widget">
+                        <span class="eppb-rev-widget-label">Refunds</span>
+                        <strong class="eppb-rev-widget-val">$320</strong>
+                      </div>
+                      <div class="eppb-rev-chart">
+                        <span style="--h:35%"></span>
+                        <span style="--h:55%"></span>
+                        <span style="--h:45%"></span>
+                        <span style="--h:80%"></span>
+                        <span style="--h:65%"></span>
+                        <span style="--h:90%"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="eppb-rev-live-dot">
+                    <span class="eppb-live-pulse"></span>
+                    LIVE
+                  </div>
+                </Fragment>
+              )}
+            </div>
+          </article>
+
+          {tab.cards.map((card, cardIndex) => (
+            <article class="eppb-card eppb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
+              <div class="eppb-card__content">
+                <span class="eppb-card__eyebrow">{card.eyebrow}</span>
+                <h3 class="eppb-card__title">{card.title}</h3>
+                <p class="eppb-card__desc">{card.desc}</p>
+              </div>
+
+              <div class={`eppb-art eppb-art--mini eppb-art--${card.visual}`} aria-hidden="true">
+                {card.visual === "razorpay" && (
+                  <Fragment>
+                    <div class="eppb-pay-methods">
+                      <div class="eppb-pay-chip">UPI</div>
+                      <div class="eppb-pay-chip">Cards</div>
+                      <div class="eppb-pay-chip">Wallets</div>
+                    </div>
+                    <div class="eppb-pay-badge" style="background:rgba(7,38,84,0.1);color:#072654">Razorpay</div>
+                    <div class="eppb-mini-chip">India</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "tap" && (
+                  <Fragment>
+                    <div class="eppb-pay-methods">
+                      <div class="eppb-pay-chip">KNET</div>
+                      <div class="eppb-pay-chip">mada</div>
+                      <div class="eppb-pay-chip">Visa</div>
+                    </div>
+                    <div class="eppb-pay-badge" style="background:rgba(42,195,162,0.1);color:#2ac3a2">Tap</div>
+                    <div class="eppb-mini-chip">MENA</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "offline" && (
+                  <Fragment>
+                    <div class="eppb-offline-icon">
+                      <svg viewBox="0 0 48 48" class="eppb-offline-svg" width="48" height="48">
+                        <rect x="8" y="6" width="32" height="36" rx="3" fill="none" stroke="#375dfb" stroke-width="2.5"/>
+                        <path d="M16 16h16M16 22h12M16 28h8" stroke="#375dfb" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+                        <circle cx="36" cy="36" r="8" fill="#22c55e" opacity="0.2"/>
+                        <path d="M32 36l3 3 5-5" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <div class="eppb-mini-chip">Manual entry</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "comp" && (
+                  <Fragment>
+                    <div class="eppb-comp-ticket">
+                      <div class="eppb-comp-ticket-body">
+                        <span class="eppb-comp-ticket-line"></span>
+                        <span class="eppb-comp-ticket-line eppb-comp-ticket-line--short"></span>
+                      </div>
+                      <div class="eppb-comp-discount-badge">100% OFF</div>
+                    </div>
+                    <div class="eppb-mini-chip">Complimentary</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "promo" && (
+                  <Fragment>
+                    <div class="eppb-promo-input">
+                      <span class="eppb-promo-code">EARLY20</span>
+                      <span class="eppb-promo-apply">&#10003;</span>
+                    </div>
+                    <div class="eppb-promo-result">
+                      <span class="eppb-promo-original">$99</span>
+                      <span class="eppb-promo-final">$79.20</span>
+                    </div>
+                    <div class="eppb-mini-chip">-20% applied</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "group" && (
+                  <Fragment>
+                    <div class="eppb-group-stack">
+                      <div class="eppb-group-ticket"></div>
+                      <div class="eppb-group-ticket"></div>
+                      <div class="eppb-group-ticket"></div>
+                    </div>
+                    <div class="eppb-group-badge">x3 Group</div>
+                    <div class="eppb-mini-chip">Group buy</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "currency" && (
+                  <Fragment>
+                    <div class="eppb-currency-selector">
+                      <span class="eppb-currency-sym eppb-currency-sym--active">$</span>
+                      <span class="eppb-currency-sym">&#8377;</span>
+                      <span class="eppb-currency-sym">AED</span>
+                    </div>
+                    <div class="eppb-mini-chip">Multi-currency</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "tax" && (
+                  <Fragment>
+                    <div class="eppb-tax-receipt">
+                      <div class="eppb-tax-row">
+                        <span>Subtotal</span>
+                        <span>$99.00</span>
+                      </div>
+                      <div class="eppb-tax-row eppb-tax-row--tax">
+                        <span>VAT (5%)</span>
+                        <span>$4.95</span>
+                      </div>
+                      <div class="eppb-tax-row eppb-tax-row--total">
+                        <span>Total</span>
+                        <strong>$103.95</strong>
+                      </div>
+                    </div>
+                    <div class="eppb-mini-chip">Tax config</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "txexport" && (
+                  <Fragment>
+                    <div class="eppb-csv-file">
+                      <div class="eppb-csv-header">
+                        <span></span><span></span><span></span>
+                      </div>
+                      <div class="eppb-csv-row"><span></span><span></span><span class="eppb-csv-amount">$99</span></div>
+                      <div class="eppb-csv-row"><span></span><span></span><span class="eppb-csv-amount">$49</span></div>
+                      <div class="eppb-csv-row"><span></span><span></span><span class="eppb-csv-amount">$199</span></div>
+                    </div>
+                    <div class="eppb-mini-chip">CSV export</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "reconcile" && (
+                  <Fragment>
+                    <div class="eppb-reconcile-panels">
+                      <div class="eppb-reconcile-panel">
+                        <span class="eppb-reconcile-label">EventHex</span>
+                        <div class="eppb-reconcile-row"></div>
+                        <div class="eppb-reconcile-row"></div>
+                      </div>
+                      <div class="eppb-reconcile-divider">
+                        <span>&#10003;</span>
+                      </div>
+                      <div class="eppb-reconcile-panel">
+                        <span class="eppb-reconcile-label">Gateway</span>
+                        <div class="eppb-reconcile-row"></div>
+                        <div class="eppb-reconcile-row"></div>
+                      </div>
+                    </div>
+                    <div class="eppb-mini-chip">Matched</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "rollup" && (
+                  <Fragment>
+                    <div class="eppb-rollup-chart">
+                      <div class="eppb-rollup-bar">
+                        <span class="eppb-rollup-seg" style="--h:40%;background:#375dfb"></span>
+                        <span class="eppb-rollup-seg" style="--h:25%;background:#22c55e"></span>
+                        <span class="eppb-rollup-seg" style="--h:15%;background:#f59e0b"></span>
+                      </div>
+                      <div class="eppb-rollup-bar">
+                        <span class="eppb-rollup-seg" style="--h:50%;background:#375dfb"></span>
+                        <span class="eppb-rollup-seg" style="--h:30%;background:#22c55e"></span>
+                      </div>
+                      <div class="eppb-rollup-bar">
+                        <span class="eppb-rollup-seg" style="--h:35%;background:#375dfb"></span>
+                        <span class="eppb-rollup-seg" style="--h:20%;background:#22c55e"></span>
+                        <span class="eppb-rollup-seg" style="--h:25%;background:#f59e0b"></span>
+                      </div>
+                    </div>
+                    <div class="eppb-mini-chip">Multi-event</div>
+                  </Fragment>
+                )}
+
+                {card.visual === "revreport" && (
+                  <Fragment>
+                    <div class="eppb-pie">
+                      <svg viewBox="0 0 64 64" class="eppb-pie-svg">
+                        <circle cx="32" cy="32" r="24" fill="none" stroke="#375dfb" stroke-width="12" stroke-dasharray="75.4 150.8" stroke-dashoffset="0"/>
+                        <circle cx="32" cy="32" r="24" fill="none" stroke="#22c55e" stroke-width="12" stroke-dasharray="37.7 150.8" stroke-dashoffset="-75.4"/>
+                        <circle cx="32" cy="32" r="24" fill="none" stroke="#f59e0b" stroke-width="12" stroke-dasharray="25.1 150.8" stroke-dashoffset="-113.1"/>
+                        <circle cx="32" cy="32" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="12" stroke-dasharray="12.6 150.8" stroke-dashoffset="-138.2"/>
+                      </svg>
+                    </div>
+                    <div class="eppb-mini-chip">Revenue split</div>
+                  </Fragment>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script is:inline>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".eppb-shell").forEach((root) => {
+      const tabs = Array.from(root.querySelectorAll(".eppb-tab"));
+      const panels = Array.from(root.querySelectorAll(".eppb-panel"));
+
+      const activate = (index) => {
+        tabs.forEach((tab, tabIndex) => {
+          const selected = tabIndex === index;
+          tab.classList.toggle("eppb-tab--active", selected);
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+        });
+
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("eppb-panel--active", panelIndex === index);
+        });
+      };
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => activate(index));
+      });
+    });
+  });
+</script>
+
+<style>
+  .eppb-section {
+    padding: 80px 0 60px;
+    background: url('https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+  }
+
+  .eppb-shell {
+    max-width: 1260px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .eppb-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    text-align: center;
+    color: var(--heading-dark);
+    margin: 0 0 12px;
+  }
+
+  .eppb-title b { font-weight: 700; }
+
+  .eppb-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 32px;
+  }
+
+  .eppb-nav {
+    display: flex;
+    justify-content: center;
+    background: #F0F2F5;
+    border-radius: 50px;
+    padding: 4px;
+    margin: 0 auto 32px;
+    max-width: 560px;
+    gap: 4px;
+  }
+
+  .eppb-tab {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475467;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+
+  .eppb-tab:hover,
+  .eppb-tab:focus-visible {
+    color: #16327b;
+    outline: none;
+  }
+
+  .eppb-tab--active {
+    background: var(--brand-blue);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+  }
+
+  .eppb-panel { display: none; }
+  .eppb-panel--active { display: block; }
+
+  .eppb-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr;
+    grid-template-areas:
+      "hero mini1 mini2"
+      "hero mini3 mini4";
+    gap: 1rem;
+  }
+
+  .eppb-panel--active .eppb-card {
+    animation: eppb-fade-up 0.6s ease both;
+    animation-delay: var(--card-delay, 0s);
+  }
+
+  @keyframes eppb-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .eppb-card {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    gap: 1rem;
+    border-radius: 1.75rem;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(166, 186, 255, 0.62);
+    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
+    min-height: 205px;
+  }
+
+  .eppb-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% -45% 35%;
+    height: 70%;
+    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
+    pointer-events: none;
+  }
+
+  .eppb-card--hero {
+    grid-area: hero;
+    align-content: space-between;
+    padding: 1.5rem;
+    min-height: 430px;
+  }
+
+  .eppb-card--mini {
+    padding: 1.2rem;
+    grid-template-rows: auto 1fr;
+  }
+
+  .eppb-card--mini:nth-of-type(2) { grid-area: mini1; }
+  .eppb-card--mini:nth-of-type(3) { grid-area: mini2; }
+  .eppb-card--mini:nth-of-type(4) { grid-area: mini3; }
+  .eppb-card--mini:nth-of-type(5) { grid-area: mini4; }
+
+  .eppb-card__content { position: relative; z-index: 1; }
+
+  .eppb-card__eyebrow {
+    display: inline-flex;
+    padding: 0.38rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(18, 34, 74, 0.06);
+    color: #45608e;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .eppb-card__title {
+    margin: 0.85rem 0 0.55rem;
+    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
+    line-height: 1.18;
+    color: #14213b;
+  }
+
+  .eppb-card__desc {
+    margin: 0;
+    color: #566884;
+    line-height: 1.65;
+    font-size: 0.96rem;
+  }
+
+  .eppb-point-list {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .eppb-point-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: #243a61;
+    font-weight: 600;
+  }
+
+  .eppb-point-list li::before {
+    content: "";
+    flex: 0 0 0.6rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
+  }
+
+  .eppb-art { position: relative; z-index: 1; min-height: 146px; }
+  .eppb-art--hero { min-height: 228px; margin-top: 0.6rem; }
+  .eppb-art--mini { align-self: end; }
+
+  /* === Hero visual: gateways === */
+  .eppb-gw-stack {
+    position: absolute;
+    inset: 0.5rem 5% auto 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .eppb-gw-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 1rem;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    animation: eppb-float 5.2s ease-in-out infinite;
+  }
+
+  .eppb-gw-card:nth-child(2) { animation-delay: 0.3s; }
+  .eppb-gw-card:nth-child(3) { animation-delay: 0.6s; }
+
+  @keyframes eppb-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .eppb-gw-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .eppb-gw-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .eppb-gw-name {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eppb-gw-status {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #16a34a;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.1);
+  }
+
+  .eppb-gw-line {
+    position: absolute;
+    left: 50%;
+    top: 3.5rem;
+    width: 2px;
+    height: 4rem;
+    background: linear-gradient(180deg, rgba(55, 93, 251, 0.3), transparent);
+    transform: translateX(-50%);
+  }
+
+  .eppb-gw-badge {
+    position: absolute;
+    right: 5%;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 1rem;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+  }
+
+  .eppb-gw-check {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .eppb-gw-badge span:last-child {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #16a34a;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* === Hero visual: checkout === */
+  .eppb-checkout-form {
+    position: absolute;
+    inset: 0.5rem 5% auto 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    animation: eppb-float 5.5s ease-in-out infinite;
+  }
+
+  .eppb-checkout-tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-checkout-tier--active {
+    border-color: #375dfb;
+    background: linear-gradient(180deg, #ffffff, #e8edff);
+    box-shadow: 0 4px 12px rgba(55, 93, 251, 0.12);
+  }
+
+  .eppb-checkout-tier-name {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #14213b;
+  }
+
+  .eppb-checkout-tier-price {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    color: #375dfb;
+  }
+
+  .eppb-checkout-promo {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.8rem;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-checkout-promo-input {
+    flex: 1;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+    align-self: center;
+  }
+
+  .eppb-checkout-promo-btn {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #375dfb;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .eppb-checkout-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.9rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #375dfb, #2248e8);
+  }
+
+  .eppb-checkout-total span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .eppb-checkout-total strong {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: #fff;
+  }
+
+  /* === Hero visual: reporting === */
+  .eppb-rev-dash {
+    position: absolute;
+    inset: 0.4rem 5% auto 5%;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    overflow: hidden;
+    animation: eppb-float 5.5s ease-in-out infinite;
+  }
+
+  .eppb-rev-topbar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem;
+    background: rgba(55, 93, 251, 0.05);
+    border-bottom: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-rev-dots {
+    display: flex;
+    gap: 4px;
+  }
+
+  .eppb-rev-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .eppb-rev-dots span:nth-child(1) { background: #ef4444; }
+  .eppb-rev-dots span:nth-child(2) { background: #f59e0b; }
+  .eppb-rev-dots span:nth-child(3) { background: #22c55e; }
+
+  .eppb-rev-title-bar {
+    height: 0.35rem;
+    width: 40%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+  }
+
+  .eppb-rev-body {
+    padding: 0.8rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .eppb-rev-widget {
+    padding: 0.6rem;
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(55, 93, 251, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .eppb-rev-widget-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #607390;
+  }
+
+  .eppb-rev-widget-val {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eppb-rev-chart {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.4rem;
+    height: 3rem;
+    padding: 0.4rem;
+    border-radius: 0.7rem;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(55, 93, 251, 0.06);
+  }
+
+  .eppb-rev-chart span {
+    flex: 1;
+    height: var(--h, 50%);
+    border-radius: 3px 3px 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+  }
+
+  .eppb-rev-live-dot {
+    position: absolute;
+    top: 0.5rem;
+    right: 6%;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(220, 38, 38, 0.1);
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #dc2626;
+    letter-spacing: 0.08em;
+  }
+
+  .eppb-live-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+    animation: eppb-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes eppb-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* === Mini visuals === */
+  .eppb-mini-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #183465;
+    font-size: 0.72rem;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  /* razorpay & tap */
+  .eppb-pay-methods {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .eppb-pay-chip {
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eppb-pay-badge {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* offline */
+  .eppb-offline-icon {
+    position: absolute;
+    inset: 0.3rem 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .eppb-offline-svg {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  /* comp */
+  .eppb-comp-ticket {
+    position: absolute;
+    inset: 0.4rem 10% auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .eppb-comp-ticket-body {
+    width: 4rem;
+    padding: 0.8rem 0.6rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .eppb-comp-ticket-line {
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-comp-ticket-line--short { width: 60%; }
+
+  .eppb-comp-discount-badge {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #16a34a;
+    white-space: nowrap;
+  }
+
+  /* promo */
+  .eppb-promo-input {
+    position: absolute;
+    inset: 0.4rem 0.5rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .eppb-promo-code {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #375dfb;
+    letter-spacing: 0.06em;
+  }
+
+  .eppb-promo-apply {
+    width: 1.2rem;
+    height: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+  }
+
+  .eppb-promo-result {
+    position: absolute;
+    inset: 2.8rem 0.5rem auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.7rem;
+  }
+
+  .eppb-promo-original {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-decoration: line-through;
+  }
+
+  .eppb-promo-final {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #16a34a;
+  }
+
+  /* group */
+  .eppb-group-stack {
+    position: absolute;
+    inset: 0.4rem 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: -0.5rem;
+  }
+
+  .eppb-group-ticket {
+    width: 2.5rem;
+    height: 3rem;
+    border-radius: 0.6rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 4px 12px rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-group-ticket:nth-child(2) { transform: translateY(4px) rotate(3deg); }
+  .eppb-group-ticket:nth-child(3) { transform: translateY(8px) rotate(6deg); }
+
+  .eppb-group-badge {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.3rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.1);
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #375dfb;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* currency */
+  .eppb-currency-selector {
+    position: absolute;
+    inset: 0.5rem 0.5rem auto;
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+
+  .eppb-currency-sym {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.7rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.08);
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: #607390;
+  }
+
+  .eppb-currency-sym--active {
+    border-color: #375dfb;
+    background: linear-gradient(180deg, #ffffff, #e8edff);
+    color: #375dfb;
+    box-shadow: 0 4px 12px rgba(55, 93, 251, 0.12);
+  }
+
+  /* tax */
+  .eppb-tax-receipt {
+    position: absolute;
+    inset: 0.3rem 0.5rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .eppb-tax-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 0.72rem;
+    color: #607390;
+  }
+
+  .eppb-tax-row--tax {
+    background: rgba(55, 93, 251, 0.04);
+    color: #375dfb;
+    font-weight: 600;
+  }
+
+  .eppb-tax-row--total {
+    background: linear-gradient(180deg, #375dfb, #2248e8);
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .eppb-tax-row--total strong {
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+  }
+
+  /* txexport */
+  .eppb-csv-file {
+    position: absolute;
+    inset: 0.3rem 0.5rem auto;
+    border-radius: 0.8rem;
+    background: linear-gradient(180deg, #f8fbff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.1);
+    overflow: hidden;
+  }
+
+  .eppb-csv-header {
+    display: flex;
+    gap: 0.3rem;
+    padding: 0.4rem 0.5rem;
+    background: rgba(55, 93, 251, 0.06);
+    border-bottom: 1px solid rgba(55, 93, 251, 0.08);
+  }
+
+  .eppb-csv-header span {
+    flex: 1;
+    height: 0.3rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.12);
+  }
+
+  .eppb-csv-row {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.5rem;
+    border-bottom: 1px solid rgba(55, 93, 251, 0.04);
+  }
+
+  .eppb-csv-row span {
+    flex: 1;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .eppb-csv-amount {
+    flex: none !important;
+    height: auto !important;
+    background: none !important;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  /* reconcile */
+  .eppb-reconcile-panels {
+    position: absolute;
+    inset: 0.3rem 0.3rem auto;
+    display: flex;
+    gap: 0;
+    align-items: flex-start;
+  }
+
+  .eppb-reconcile-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.4rem;
+  }
+
+  .eppb-reconcile-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #607390;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .eppb-reconcile-row {
+    height: 0.5rem;
+    border-radius: 0.3rem;
+    background: linear-gradient(90deg, rgba(55, 93, 251, 0.08), rgba(55, 93, 251, 0.15));
+  }
+
+  .eppb-reconcile-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    padding-top: 1.2rem;
+  }
+
+  .eppb-reconcile-divider span {
+    width: 1rem;
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #22c55e;
+    color: #fff;
+    font-size: 0.5rem;
+    font-weight: 700;
+  }
+
+  /* rollup */
+  .eppb-rollup-chart {
+    position: absolute;
+    inset: 0.3rem 0.5rem auto;
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    height: 4rem;
+  }
+
+  .eppb-rollup-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    height: 100%;
+  }
+
+  .eppb-rollup-seg {
+    width: 100%;
+    height: var(--h, 30%);
+    border-radius: 3px;
+    opacity: 0.8;
+  }
+
+  /* pie */
+  .eppb-pie {
+    position: absolute;
+    inset: 0.2rem 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+
+  .eppb-pie-svg {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  @media (max-width: 1024px) {
+    .eppb-section { padding: 60px 0 40px; }
+    .eppb-title { font-size: 36px; }
+    .eppb-subtitle { font-size: 16px; }
+    .eppb-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "hero hero"
+        "mini1 mini2"
+        "mini3 mini4";
+    }
+    .eppb-card--hero { min-height: 360px; }
+  }
+
+  @media (max-width: 767px) {
+    .eppb-section { padding: 48px 0 32px; }
+    .eppb-title { font-size: 28px; line-height: 1.15; }
+    .eppb-subtitle { font-size: 15px; }
+    .eppb-nav { max-width: 100%; overflow-x: auto; gap: 2px; }
+    .eppb-tab { font-size: 13px; padding: 9px 14px; white-space: nowrap; }
+    .eppb-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "hero"
+        "mini1"
+        "mini2"
+        "mini3"
+        "mini4";
+    }
+    .eppb-card--hero { min-height: 320px; }
+    .eppb-card--mini { min-height: 180px; }
+  }
+</style>

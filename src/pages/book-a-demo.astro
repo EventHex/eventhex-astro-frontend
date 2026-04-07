@@ -2,269 +2,250 @@
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 
 const title = "Book a Demo - EventHex";
-const description = "Schedule a one-on-one meeting with our product expert to get a live product demo of EventHex AI.";
+const description =
+  "Book a live EventHex walkthrough — registration, ticketing, attendee engagement, and event operations.";
+const canonical = "https://eventhex.ai/book-a-demo/";
+const calendlyUrl = "https://calendly.com/eventhex-info/30min";
 ---
 
-<MarketingLayout {title} {description}>
-  <section class="demo-hero">
-    <div class="demo-hero__inner">
-      <!-- Left Info Panel -->
-      <div class="demo-info">
-        <h1 class="demo-info__title">Schedule A Meeting</h1>
-        <p class="demo-info__desc">Book a one-on-one meeting with our product expert to get a live product demo!</p>
+<MarketingLayout {title} {description} {canonical} showFooterCta={false}>
+  <slot name="head">
+    <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  </slot>
 
-        <div class="demo-info__visual">
-          <img
-            src="https://eventhex.ai/wp-content/uploads/2025/01/iPhone-16-pro-isolated-on-white-background-v11-front-view-copy-1.png"
-            alt="EventHex AI on iPhone"
-            width="250"
-            height="500"
-            loading="eager"
-            class="demo-info__phone"
-          />
-        </div>
+  <!-- Main section: left copy + right Calendly -->
+  <section class="bd-main">
+    <div class="bd-main__inner">
+      <!-- Left column -->
+      <div class="bd-copy animate-on-scroll" data-animation="fadeInUp">
+        <p class="bd-copy__subtitle">Book a Demo</p>
+        <h1 class="bd-copy__title">
+          See EventHex in action — built around your event workflow.
+        </h1>
+        <p class="bd-copy__desc">
+          Pick a time, meet our team, and walk through the modules that matter
+          most to your next event.
+        </p>
 
-        <div class="demo-info__details">
-          <h2 class="demo-info__heading">EventHex AI</h2>
-          <h3 class="demo-info__subheading">30 Minute Meeting</h3>
-          <div class="demo-info__meta">
-            <div class="demo-info__meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
-              <span>20 min</span>
+        <ul class="bd-steps">
+          <li>
+            <span class="bd-steps__num">1</span>
+            <div>
+              <strong>Choose a time</strong>
+              <p>Pick a slot from the calendar that works for your team.</p>
             </div>
-            <div class="demo-info__meta-item">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z"></path>
-              </svg>
-              <span>Web conferencing details provided upon confirmation</span>
+          </li>
+          <li>
+            <span class="bd-steps__num">2</span>
+            <div>
+              <strong>Share your goals</strong>
+              <p>Tell us which event workflow or challenge to focus on.</p>
             </div>
-          </div>
-        </div>
+          </li>
+          <li>
+            <span class="bd-steps__num">3</span>
+            <div>
+              <strong>Get your walkthrough</strong>
+              <p>Join a live demo of the EventHex modules that matter to you.</p>
+            </div>
+          </li>
+        </ul>
+
+        <p class="bd-copy__note">
+          Need a broader enterprise discussion?
+          Email <a href="mailto:info@eventhex.ai">info@eventhex.ai</a>
+        </p>
       </div>
 
-      <!-- Right Form Panel -->
-      <div class="demo-form-wrap">
-        <form class="demo-form" action="https://eventhex.ai/book-a-demo/" method="post" data-demo-form>
-          <div class="demo-form__field">
-            <label for="demo-name" class="demo-form__label">Name <span class="demo-form__req">*</span></label>
-            <input type="text" id="demo-name" name="name" required class="demo-form__input" />
-          </div>
-          <div class="demo-form__field">
-            <label for="demo-email" class="demo-form__label">Email <span class="demo-form__req">*</span></label>
-            <input type="email" id="demo-email" name="email" required class="demo-form__input" />
-          </div>
-          <div class="demo-form__field">
-            <label for="demo-company" class="demo-form__label">Company Name <span class="demo-form__req">*</span></label>
-            <input type="text" id="demo-company" name="company" required class="demo-form__input" />
-          </div>
-          <div class="demo-form__field">
-            <label for="demo-address" class="demo-form__label">Address</label>
-            <input type="text" id="demo-address" name="address" class="demo-form__input" />
-          </div>
-          <div class="demo-form__field">
-            <label for="demo-phone" class="demo-form__label">Phone Number <span class="demo-form__req">*</span></label>
-            <input type="tel" id="demo-phone" name="phone" required class="demo-form__input" />
-          </div>
-          <div class="demo-form__field">
-            <label for="demo-date" class="demo-form__label">Preferred Demo Date <span class="demo-form__req">*</span></label>
-            <input type="date" id="demo-date" name="preferred_date" required class="demo-form__input" />
-          </div>
-          <button type="submit" class="demo-form__submit">Book a Demo</button>
-        </form>
+      <!-- Right column: Calendly embed -->
+      <div class="bd-calendly animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+        <div
+          class="calendly-inline-widget"
+          data-url={`${calendlyUrl}?hide_gdpr_banner=1&background_color=ffffff&text_color=22272f&primary_color=375dfb`}
+          style="min-width:320px;width:100%;height:700px;"
+        ></div>
       </div>
     </div>
   </section>
 </MarketingLayout>
 
 <style>
-  .demo-hero {
-    padding: 40px 20px 80px;
+  /* ── Main section ────────────────────────────── */
+  .bd-main {
+    margin-top: -90px;
+    padding: 160px 20px 80px;
+    background:
+      url("https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp") center top / cover no-repeat,
+      url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp") center center / cover no-repeat;
+  }
+
+  .bd-main__inner {
     max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
   }
 
-  .demo-hero__inner {
-    display: flex;
-    gap: 60px;
-    align-items: flex-start;
-  }
-
-  /* Info Panel */
-  .demo-info {
-    flex: 1;
-  }
-
-  .demo-info__title {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 48px;
-    font-weight: 700;
-    line-height: 1.15;
-    color: #22272F;
-    margin: 0 0 16px;
-    letter-spacing: -1px;
-  }
-
-  .demo-info__desc {
-    font-family: "Inter", var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: #475467;
-    margin: 0 0 32px;
-  }
-
-  .demo-info__visual {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 32px;
-    background: url("https://eventhex.ai/wp-content/uploads/2025/01/Frame-1000003101-1-564x1024.png") no-repeat center center;
-    background-size: contain;
-    padding: 20px;
-    min-height: 400px;
-    align-items: center;
-  }
-
-  .demo-info__phone {
-    width: 200px;
-    height: auto;
-    display: block;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-  }
-
-  .demo-info__heading {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 28px;
-    font-weight: 700;
-    color: #22272F;
-    margin: 0 0 8px;
-  }
-
-  .demo-info__subheading {
-    font-family: "Inter", var(--font-body);
-    font-size: 20px;
-    font-weight: 600;
-    color: #22272F;
-    margin: 0 0 16px;
-  }
-
-  .demo-info__meta {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .demo-info__meta-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: "Inter", var(--font-body);
-    font-size: 15px;
-    color: #475467;
-  }
-
-  .demo-info__meta-item svg {
-    flex-shrink: 0;
-  }
-
-  /* Form Panel */
-  .demo-form-wrap {
-    flex-shrink: 0;
-    width: 440px;
-    background: #F4F5FF;
-    border-radius: 24px;
-    padding: 40px;
-  }
-
-  .demo-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .demo-form__label {
-    display: block;
-    font-family: "Inter", var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #22272F;
-    margin-bottom: 6px;
-  }
-
-  .demo-form__req {
-    color: #E53E3E;
-  }
-
-  .demo-form__input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #E2E4E9;
-    border-radius: 10px;
-    font-family: "Inter", var(--font-body);
-    font-size: 15px;
-    color: #22272F;
-    background: #ffffff;
-    outline: none;
-    transition: border-color 0.2s;
-    box-sizing: border-box;
-  }
-
-  .demo-form__input:focus {
-    border-color: #375DFB;
-  }
-
-  .demo-form__submit {
-    padding: 14px 24px;
-    background-color: #375DFB;
-    color: #ffffff;
-    font-family: "Inter", var(--font-body);
+  /* ── Left copy ───────────────────────────────── */
+  .bd-copy__subtitle {
+    font-family: var(--font-body);
     font-size: 16px;
     font-weight: 600;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    margin: 0 0 12px;
   }
 
-  .demo-form__submit:hover {
-    background-color: #1C46D4;
+  .bd-copy__title {
+    font-family: var(--font-heading);
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+    margin: 0 0 16px;
   }
 
+  .bd-copy__desc {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+    margin: 0 0 40px;
+    max-width: 480px;
+  }
+
+  .bd-copy__note {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--body-light);
+    margin: 36px 0 0;
+  }
+
+  .bd-copy__note a {
+    color: var(--brand-blue);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* ── Steps ───────────────────────────────────── */
+  .bd-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 24px;
+  }
+
+  .bd-steps li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .bd-steps__num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    color: var(--brand-blue);
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .bd-steps strong {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--heading-dark);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .bd-steps p {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  /* ── Right: Calendly embed ───────────────────── */
+  .bd-calendly {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--surface-card-border);
+    box-shadow: 0 24px 56px rgba(34, 39, 47, 0.07);
+  }
+
+  .calendly-inline-widget {
+    border-radius: 20px;
+  }
+
+  /* ── Responsive ──────────────────────────────── */
   @media (max-width: 1024px) {
-    .demo-hero__inner {
-      flex-direction: column;
+    .bd-main__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
     }
 
-    .demo-form-wrap {
-      width: 100%;
-    }
-
-    .demo-info__title {
-      font-size: 35px;
+    .bd-copy__title {
+      font-size: 36px;
     }
   }
 
   @media (max-width: 767px) {
-    .demo-hero {
-      padding: 20px 20px 40px;
+    .bd-main {
+      padding: 120px 16px 56px;
     }
 
-    .demo-info__title {
+    .bd-copy__title {
       font-size: 28px;
+      letter-spacing: 0;
     }
 
-    .demo-info__visual {
-      min-height: 300px;
+    .bd-copy__desc {
+      font-size: 16px;
+      margin-bottom: 28px;
     }
 
-    .demo-info__phone {
-      width: 150px;
+    .bd-steps__num {
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
     }
 
-    .demo-form-wrap {
-      padding: 24px;
+    .bd-steps strong {
+      font-size: 15px;
+    }
+
+    .bd-steps p {
+      font-size: 14px;
+    }
+
+    .bd-calendly {
+      border-radius: 16px;
+    }
+
+    .calendly-inline-widget {
+      height: 650px !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
     }
   }
 </style>

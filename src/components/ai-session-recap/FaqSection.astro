@@ -1,0 +1,390 @@
+---
+const faqs = [
+  {
+    q: "How does InstaRecap generate session summaries?",
+    a: "InstaRecap uses AI speech-to-text transcription combined with NLP to process session audio in real-time. It extracts key takeaways, notable quotes, and topic classifications to create a comprehensive session recap automatically.",
+  },
+  {
+    q: "Does InstaRecap work with virtual events?",
+    a: "Yes. InstaRecap integrates with major virtual platforms and AV systems. Whether your sessions are in-person, virtual, or hybrid, InstaRecap processes the audio and generates recaps seamlessly.",
+  },
+  {
+    q: "How quickly are recaps available after a session?",
+    a: "Recaps are typically available within minutes of a session ending. For live events, real-time transcription means the recap is nearly complete by the time the session wraps up.",
+  },
+  {
+    q: "Can speakers access their own session data?",
+    a: "Yes. Each speaker gets a dedicated dashboard showing their session analytics, audience feedback, ratings, and top questions. They also get pre-formatted social cards to share their session highlights.",
+  },
+  {
+    q: "What languages does InstaRecap support?",
+    a: "InstaRecap supports transcription and recap generation in 25+ languages, making it ideal for international conferences and multi-language events.",
+  },
+  {
+    q: "Are the recap pages SEO optimized?",
+    a: "Yes. Every session recap page is automatically optimized with structured data, meta tags, and clean URLs — driving long-tail search traffic back to your event content.",
+  },
+  {
+    q: "Can I customize the recap page branding?",
+    a: "Absolutely. Recap pages are fully branded with your event logo, colors, and sponsor placements. They match your event's visual identity.",
+  },
+  {
+    q: "Is attendee data shared in the recaps?",
+    a: "No. Recaps focus on session content — summaries, speaker quotes, and engagement metrics. Individual attendee data is never exposed in public recap pages.",
+  },
+];
+
+const checklist = [
+  "AI transcription and recap generation",
+  "Speaker dashboards and social cards",
+  "Post-event content distribution",
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="asrfq">
+  <div class="asrfq__inner">
+    <div class="asrfq__support">
+      <span class="asrfq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need a custom recap setup?</span>
+      <h2 class="asrfq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
+      <p class="asrfq__desc animate-on-scroll" data-animation="fadeInUp">
+        We help event teams shape AI transcription, recap delivery, and speaker analytics around how their live event operations actually run.
+      </p>
+
+      <div class="asrfq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="asrfq__support-label">Included with every rollout</span>
+        <ul class="asrfq__support-list">
+          {checklist.map((item) => (
+            <li class="asrfq__support-item">{item}</li>
+          ))}
+        </ul>
+
+        <div class="asrfq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Map your recap workflow before launch and keep your event team aligned on transcription, delivery, and speaker settings.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="asrfq__cta">Plan my recap flow</a>
+      </div>
+    </div>
+
+    <div class="asrfq__list">
+      {faqs.map((faq, index) => (
+        <details class="asrfq__item animate-on-scroll" data-animation="fadeInUp" data-recap-faq open={index === 0}>
+          <summary class="asrfq__question">
+            <span>{faq.q}</span>
+            <span class="asrfq__icon" aria-hidden="true">
+              <span class="asrfq__icon-line asrfq__icon-line--horizontal"></span>
+              <span class="asrfq__icon-line asrfq__icon-line--vertical"></span>
+            </span>
+          </summary>
+          <div class="asrfq__answer">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const recapFaqItems = Array.from(document.querySelectorAll('[data-recap-faq]'));
+
+  recapFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) {
+        return;
+      }
+
+      recapFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .asrfq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .asrfq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .asrfq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .asrfq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .asrfq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .asrfq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .asrfq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .asrfq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .asrfq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .asrfq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .asrfq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .asrfq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .asrfq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .asrfq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .asrfq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .asrfq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .asrfq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .asrfq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+  }
+
+  .asrfq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+  }
+
+  .asrfq__question::-webkit-details-marker,
+  .asrfq__question::marker {
+    display: none;
+  }
+
+  .asrfq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 4px;
+  }
+
+  .asrfq__icon-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .asrfq__icon-line--vertical {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .asrfq__item[open] .asrfq__icon-line--vertical {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .asrfq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .asrfq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  @media (max-width: 1100px) {
+    .asrfq { padding: 76px 0; }
+    .asrfq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .asrfq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .asrfq__title { font-size: 40px; }
+    .asrfq__desc { font-size: 16px; }
+    .asrfq__question { padding: 24px 22px; font-size: 20px; }
+    .asrfq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .asrfq { padding: 56px 0; }
+    .asrfq__inner { padding: 0 16px; gap: 24px; }
+    .asrfq__title { font-size: 32px; line-height: 1.08; }
+    .asrfq__desc { font-size: 15px; line-height: 1.7; }
+    .asrfq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .asrfq__support-item { font-size: 15px; }
+    .asrfq__support-note strong { font-size: 18px; }
+    .asrfq__cta { width: 100%; }
+    .asrfq__item { border-radius: 24px; }
+    .asrfq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .asrfq__answer { padding: 0 18px 20px; }
+    .asrfq__answer p { font-size: 15px; line-height: 1.75; }
+  }
+</style>

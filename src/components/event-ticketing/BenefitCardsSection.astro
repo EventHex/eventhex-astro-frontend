@@ -1,0 +1,171 @@
+---
+// Benefits Section — centered 3-col glassmorphism cards on dark bg
+// Pattern from speaker-management CoordinationTools
+
+interface BenefitCard {
+  title: string;
+  desc: string;
+  image: string;
+}
+
+interface Props {
+  title: string;
+  rows: BenefitCard[][];
+}
+
+const { title, rows } = Astro.props;
+const cards = rows.flat();
+---
+
+<section class="etbn-section">
+  <div class="etbn-inner">
+    <div class="etbn-header">
+      <span class="etbn-tag animate-on-scroll" data-animation="fadeIn">Why EventHex</span>
+      <h2 class="etbn-title animate-on-scroll" data-animation="fadeInUp">{title}</h2>
+      <p class="etbn-desc animate-on-scroll" data-animation="fadeInUp">
+        Everything you need to sell tickets, manage attendees, and run on-site check-in — in one platform.
+      </p>
+    </div>
+
+    <div class="etbn-grid">
+      {cards.map((card) => (
+        <div class="etbn-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="etbn-card__icon">
+            <img src={card.image} alt="" width="48" height="48" loading="lazy" />
+          </div>
+          <h3 class="etbn-card__title">{card.title}</h3>
+          <p class="etbn-card__desc">{card.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .etbn-section {
+    width: 100%;
+    margin: 0;
+    padding: 80px 0;
+    background: #000312 url('https://eventhex.ai/wp-content/uploads/2025/03/bg.svg') center / cover no-repeat;
+  }
+
+  .etbn-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+
+  .etbn-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    max-width: 680px;
+  }
+
+  .etbn-tag {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    color: #afa3ff;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .etbn-title {
+    font-family: var(--font-heading);
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .etbn-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+  }
+
+  .etbn-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+
+  .etbn-card {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  }
+
+  .etbn-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(175, 163, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .etbn-card__icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(55, 93, 251, 0.12);
+    border-radius: 14px;
+  }
+
+  .etbn-card__icon img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .etbn-card__title {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+    margin: 0;
+  }
+
+  .etbn-card__desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .etbn-section { padding: 64px 0; }
+    .etbn-title { font-size: 36px; }
+    .etbn-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 767px) {
+    .etbn-section { padding: 52px 0; }
+    .etbn-title { font-size: 30px; line-height: 1.15; }
+    .etbn-desc { font-size: 15px; }
+    .etbn-grid { grid-template-columns: 1fr; }
+  }
+</style>

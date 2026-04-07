@@ -1,42 +1,142 @@
 ---
-// Source: Elementor template #312 (Home Header)
-// Container 3536b26: row, boxed 1140px, padding 20px 0, NO bg, NO box-shadow, z-index 1, hide_mobile
-// Logo: 25% (e781837), nav: 45% (d36622d), CTA: 30% (16964fa)
+// Source: Elementor template #312 (Home Header) — redesigned mega menu
 // Mega menu 8a1fb6f: Inter 16px/400, gap 30px, active #375DFB
-// Features dropdown dafc4a4: boxed 1200px, bg #FFF, border 1px #E8ECF4, radius 16px,
-//   shadow 0 12 40 -8 rgba(55,93,251,.1), 3x3 icon-box grid + footer bar
+// Features: categorized 3-column layout for scanability
 
 const navItems = [
   { title: "Home", url: "/" },
   { title: "About", url: "/about-us/" },
-  { title: "Features", url: "#", hasDropdown: true },
+  { title: "Features", url: "#", hasDropdown: true, dropdownId: "mega-dropdown" },
+  { title: "Integrations", url: "/integrations/", hasDropdown: true, dropdownId: "integrations-dropdown" },
+  { title: "Industries", url: "/industries/", hasDropdown: true, dropdownId: "industries-dropdown" },
   { title: "Blog", url: "/blog/" },
-  { title: "News", url: "/news/" },
   { title: "Contact", url: "/contact-en/" },
 ];
 
-const featureItems = [
-  { icon: "users-cog", title: "Speakers Management", desc: "Manage speaker profiles, schedules and bios", url: "/speaker-management/" },
-  { icon: "ticket", title: "Event Ticketing", desc: "Sell tickets and manage secure payments", url: "/event-ticketing/" },
-  { icon: "magic", title: "AI Event Smart-Connect", desc: "AI-powered attendee matchmaking", url: "/enhance-networking-ai-smart-connect/" },
-  { icon: "chart", title: "Event Marketing", desc: "Promote events with targeted campaigns", url: "/event-marketing/" },
-  { icon: "clipboard", title: "Event Registration", desc: "Streamlined sign-ups and check-ins", url: "/event-registration/" },
-  { icon: "handshake", title: "Sponsor Management", desc: "Organize sponsors and track ROI", url: "/sponsor-management/" },
-  { icon: "desktop", title: "Exhibitor Management", desc: "Booth assignments and exhibitor portals", url: "/exhibitor-management/" },
-  { icon: "grid", title: "Centralized Dashboard", desc: "Real-time analytics at a glance", url: "/centralized-dashboard/" },
-  { icon: "file", title: "AI Form Builder", desc: "Drag-and-drop AI-powered forms", url: "/ai-form-builder/" },
+/* ── Feature categories for organized mega menu ── */
+const featureCategories = [
+  {
+    label: "Core Event Management",
+    icon: "calendar",
+    items: [
+      { title: "Event Registration", url: "/event-registration/" },
+      { title: "Event Ticketing", url: "/event-ticketing/" },
+      { title: "Event Check-In", url: "/event-check-in/" },
+      { title: "Payment Processing", url: "/event-payment-processing/" },
+      { title: "Centralized Dashboard", url: "/centralized-dashboard/" },
+    ],
+  },
+  {
+    label: "Speakers & Content",
+    icon: "mic",
+    items: [
+      { title: "Speaker Management", url: "/speaker-management/" },
+      { title: "Session Management", url: "/session-management/" },
+      { title: "Call for Papers", url: "/call-for-papers/" },
+    ],
+  },
+  {
+    label: "AI-Powered",
+    icon: "sparkle",
+    items: [
+      { title: "AI Event Copilot", url: "/ai-event-copilot/" },
+      { title: "AI Smart-Connect", url: "/enhance-networking-ai-smart-connect/" },
+      { title: "AI Photo Gallery", url: "/ai-photo-gallery/" },
+      { title: "AI Session Recap", url: "/ai-session-recap/" },
+      { title: "AI Form Builder", url: "/ai-form-builder/" },
+    ],
+  },
+  {
+    label: "Marketing & Growth",
+    icon: "chart",
+    items: [
+      { title: "Event Marketing", url: "/event-marketing/" },
+      { title: "Event Notifications", url: "/event-notifications/" },
+      { title: "Sponsor Management", url: "/sponsor-management/" },
+      { title: "Exhibitor Management", url: "/exhibitor-management/" },
+    ],
+  },
+  {
+    label: "Engagement",
+    icon: "gamepad",
+    items: [
+      { title: "Live Polling & Q&A", url: "/live-polling-qa/" },
+      { title: "Event Gamification", url: "/event-gamification/" },
+      { title: "Event Mobile App", url: "/event-mobile-app/" },
+    ],
+  },
+  {
+    label: "Design & Analytics",
+    icon: "analytics",
+    items: [
+      { title: "Event Analytics", url: "/event-analytics/" },
+      { title: "Badge & Certificate Designer", url: "/badge-certificate-designer/" },
+      { title: "Event Website Builder", url: "/event-website-builder/" },
+    ],
+  },
+];
+
+const integrationItems = [
+  { icon: "stripe", title: "Stripe", desc: "Global card payments", url: "/integrations/stripe/" },
+  { icon: "razorpay", title: "Razorpay", desc: "UPI & net banking for India", url: "/integrations/razorpay/" },
+  { icon: "tap", title: "Tap Payments", desc: "mada, KNET & Apple Pay", url: "/integrations/tap-payments/" },
+  { icon: "hubspot", title: "HubSpot", desc: "Bidirectional CRM sync", url: "/integrations/hubspot/" },
+  { icon: "whatsapp", title: "WhatsApp", desc: "98% open-rate notifications", url: "/integrations/whatsapp/" },
+  { icon: "email", title: "Email (AWS SES)", desc: "99%+ deliverability", url: "/integrations/email/" },
+  { icon: "push", title: "Push Notifications", desc: "Real-time mobile alerts", url: "/integrations/push-notifications/" },
+  { icon: "webhook", title: "Webhooks & Zapier", desc: "Connect to 5,000+ apps", url: "/integrations/webhooks/" },
+  { icon: "wordpress", title: "WordPress", desc: "Embed in your WP site", url: "/integrations/wordpress/" },
+];
+
+const industryItems = [
+  { icon: "ind-tech", title: "Technology", url: "/industries/technology/" },
+  { icon: "ind-health", title: "Healthcare", url: "/industries/healthcare/" },
+  { icon: "ind-assoc", title: "Associations", url: "/industries/associations/" },
+  { icon: "ind-edu", title: "Education", url: "/industries/education/" },
+  { icon: "ind-finance", title: "Finance", url: "/industries/finance/" },
+  { icon: "ind-realestate", title: "Real Estate", url: "/industries/real-estate/" },
+  { icon: "ind-hospitality", title: "Hospitality", url: "/industries/hospitality/" },
+  { icon: "ind-gov", title: "Government", url: "/industries/government/" },
+  { icon: "ind-media", title: "Media", url: "/industries/media/" },
+  { icon: "ind-mfg", title: "Manufacturing", url: "/industries/manufacturing/" },
+  { icon: "ind-retail", title: "Retail", url: "/industries/retail/" },
+  { icon: "ind-sports", title: "Sports", url: "/industries/sports/" },
+  { icon: "ind-ngo", title: "NGO", url: "/industries/ngo/" },
+  { icon: "ind-culture", title: "Cultural", url: "/industries/cultural/" },
+  { icon: "ind-me", title: "Middle East", url: "/industries/middle-east/" },
 ];
 
 const iconPaths: Record<string, string> = {
-  "users-cog": "M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2m7-10a4 4 0 100-8 4 4 0 000 8zm10 2a3 3 0 100-6 3 3 0 000 6zm1 8v-2a3 3 0 00-2-2.83",
-  "ticket": "M2 9a3 3 0 013-3h14a3 3 0 013 3v0a3 3 0 01-3 3H5a3 3 0 01-3-3zm8-2v4m4-4v4M5 6l1.5-3h11L19 6M5 12l1.5 3h11l1.5-3",
-  "magic": "M12 2l2.09 6.26L20 10.27l-4.74 3.74L16.18 21 12 17.27 7.82 21l.92-6.99L4 10.27l5.91-2.01z",
+  "calendar": "M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v13c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 15H5V10h14v9zm0-11H5V6h14v2zm-9 4h3v3h-3v-3z",
+  "mic": "M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z",
+  "sparkle": "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z",
   "chart": "M3 3v18h18M7 16l4-4 4 4 5-5",
-  "clipboard": "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-4 0a2 2 0 100-4 2 2 0 000 4zm-4 8l2 2 4-4",
-  "handshake": "M2 14l4-4 3 3 5-5 3 3 3-3m-16 6h3m11 0h3M9 18H6m12 0h-3",
-  "desktop": "M3 4h18v12H3zm5 16h8m-4-4v4",
-  "grid": "M3 3h7v7H3zm11 0h7v7h-7zM3 14h7v7H3zm11 0h7v7h-7z",
-  "file": "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-2 0v6h6M8 13h8M8 17h5",
+  "gamepad": "M6 11h4m-2-2v4m6-1h.01M18 13h.01M2 15.27V8.73A2 2 0 013.46 7l.48-.17a2 2 0 011.43.12l1.17.58a2 2 0 001.74 0l1.17-.58A2 2 0 0110.9 7l2.2 0a2 2 0 011.45.63l1.17.58a2 2 0 001.74 0l1.17-.58A2 2 0 0120.06 7l.48.17A2 2 0 0122 8.73v6.54a4 4 0 01-4 4h-1a3 3 0 01-2.12-.88L13.5 17H10.5l-1.38 1.39A3 3 0 017 19.27H6a4 4 0 01-4-4z",
+  "analytics": "M3 3v18h18M7 16l4-4 4 4 5-5m-2-2v4h4",
+  "stripe": "M3 8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm0 3h18M7 15h2",
+  "razorpay": "M3 8a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 4h8m-8 3h5",
+  "tap": "M12 2v4m-7 0h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2zm0 7h14",
+  "hubspot": "M12 2a3 3 0 00-3 3v4.28A4.97 4.97 0 007 12a5 5 0 005 5 5 5 0 005-5 4.97 4.97 0 00-2-3.72V5a3 3 0 00-3-3zm0 13a3 3 0 110-6 3 3 0 010 6z",
+  "whatsapp": "M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm3.4 13.5c-.4.2-2.3 1.1-2.7 1.2-.3.1-.6.2-.9-.2s-1-1.2-1.2-1.5-.5-.2-.8-.1-1.6.6-3-1.8c-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8l.5-.6c.2-.2.2-.3.4-.6.1-.2 0-.4 0-.6s-.9-2.2-1.2-3c-.3-.8-.7-.7-.9-.7h-.8c-.3 0-.7.1-1 .5s-1.4 1.3-1.4 3.3 1.4 3.8 1.6 4.1c.2.2 2.8 4.2 6.8 5.9.9.4 1.7.6 2.3.8.9.3 1.8.3 2.4.2.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.7.2-1.8-.1-.2-.4-.3-.8-.5z",
+  "email": "M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2zm0 2l8 5 8-5",
+  "push": "M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9zm-4.27 13a2 2 0 01-3.46 0M12 2v1",
+  "webhook": "M4.5 12.5l3-3 2 2 5-5 3 3M3 3v18h18M7 21h10",
+  "wordpress": "M12 2a10 10 0 100 20 10 10 0 000-20zm-7.4 10L7 5.7a8 8 0 000 12.6L4.6 12zM12 20a8 8 0 01-2.5-.4L12 12l2.7 7.5A8 8 0 0112 20zm7.4-8l-2.1 6.3a8 8 0 000-12.6l2.1 6.3z",
+  "ind-tech": "M9.5 2A3.5 3.5 0 006 5.5V6H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-1v-.5A3.5 3.5 0 0014.5 2h-5zM10 6V5.5A1.5 1.5 0 0111.5 4h1A1.5 1.5 0 0114 5.5V6h-4zm-2 5h8m-8 3h5",
+  "ind-health": "M12 2L8 6H4v4l-4 4 4 4v4h4l4 4 4-4h4v-4l4-4-4-4V6h-4l-4-4zm0 7a3 3 0 100 6 3 3 0 000-6z",
+  "ind-assoc": "M17 20h5v-2a3 3 0 00-5.36-1.83M17 20H7m10 0v-2c0-.66-.13-1.29-.36-1.83M7 20H2v-2a3 3 0 015.36-1.83M7 20v-2c0-.66.13-1.29.36-1.83m0 0A5.97 5.97 0 0112 14a5.97 5.97 0 014.64 2.17M15 7a3 3 0 11-6 0 3 3 0 016 0z",
+  "ind-edu": "M12 3L2 9l10 6 10-6-10-6zm0 13l-7-4.2V17c0 2.2 3.1 4 7 4s7-1.8 7-4v-5.2L12 16z",
+  "ind-finance": "M3 21h18M3 10h18M5 6l7-3 7 3M5 10v11m14-11v11m-10-11v11m6-11v11",
+  "ind-realestate": "M3 21h18M5 21V11l7-7 7 7v10M9 21v-6h6v6",
+  "ind-hospitality": "M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1",
+  "ind-gov": "M3 21h18M3 10l9-7 9 7M5 10v11m14-11v11M8 14h0m4 0h0m4 0h0",
+  "ind-media": "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14v-4zM3 8h12v8H3V8z",
+  "ind-mfg": "M2 20h20M6 20V10l4-6v6l4-6v6l4-6v16",
+  "ind-retail": "M6 2L3 7v13a2 2 0 002 2h14a2 2 0 002-2V7l-3-5H6zm0 5h12M9 10a3 3 0 006 0",
+  "ind-sports": "M12 12m-10 0a10 10 0 1020 0 10 10 0 10-20 0M4.93 4.93l14.14 14.14M19.07 4.93L4.93 19.07M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z",
+  "ind-ngo": "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5A5.5 5.5 0 017.5 3c1.74 0 3.41.81 4.5 2.09A5.99 5.99 0 0116.5 3 5.5 5.5 0 0122 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z",
+  "ind-culture": "M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.27 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z",
+  "ind-me": "M12 2a10 10 0 100 20 10 10 0 000-20zm0 2c1.1 0 2.1.2 3 .5L12 8 9 4.5A8 8 0 0112 4zm-8 8a8 8 0 012.1-5.4L9 12l-3.1 5.4A8 8 0 014 12zm8 8a8 8 0 01-3-.5L12 16l3 3.5a8 8 0 01-3 .5zm5.9-2.6L15 12l2.9-5.4A8 8 0 0120 12a8 8 0 01-2.1 5.4z",
 };
 ---
 
@@ -55,7 +155,7 @@ const iconPaths: Record<string, string> = {
     <!-- Desktop Nav 45% -->
     <nav class="header-nav" aria-label="Main navigation">
       {navItems.map((item) => (
-        <div class:list={["nav-item", item.hasDropdown && "nav-item--dropdown"]}>
+        <div class:list={["nav-item", item.hasDropdown && "nav-item--dropdown"]} data-dropdown={item.dropdownId}>
           <a
             href={item.url}
             class:list={["nav-link", item.hasDropdown && "has-dropdown"]}
@@ -85,14 +185,51 @@ const iconPaths: Record<string, string> = {
     </button>
   </div>
 
-  <!-- Features Mega Menu Dropdown — Elementor dafc4a4 -->
+  <!-- Features Mega Menu — Categorized layout -->
   <div class="mega-dropdown" id="mega-dropdown" role="menu">
     <div class="mega-inner">
       <div class="mega-header">
         <h6 class="mega-label">PLATFORM FEATURES</h6>
       </div>
+      <div class="mega-categories">
+        {featureCategories.map((cat) => (
+          <div class="mega-category">
+            <div class="mega-category-header">
+              <span class="mega-category-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d={iconPaths[cat.icon]} />
+                </svg>
+              </span>
+              <span class="mega-category-label">{cat.label}</span>
+            </div>
+            <div class="mega-category-items">
+              {cat.items.map((item) => (
+                <a href={item.url} class="mega-item-link">{item.title}</a>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div class="mega-footer">
+        <span class="mega-footer-text">Explore 23+ features built for modern event teams</span>
+        <a href="/book-a-demo/" class="mega-footer-link">
+          See it in action
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integrations Mega Menu Dropdown -->
+  <div class="mega-dropdown" id="integrations-dropdown" role="menu">
+    <div class="mega-inner">
+      <div class="mega-header">
+        <h6 class="mega-label">INTEGRATIONS</h6>
+      </div>
       <div class="mega-grid">
-        {featureItems.map((item) => (
+        {integrationItems.map((item) => (
           <a href={item.url} class="mega-card">
             <span class="mega-icon">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -107,9 +244,41 @@ const iconPaths: Record<string, string> = {
         ))}
       </div>
       <div class="mega-footer">
-        <span class="mega-footer-text">Discover the complete platform</span>
-        <a href="/book-a-demo/" class="mega-footer-link">
-          Request a demo
+        <span class="mega-footer-text">Explore all integrations</span>
+        <a href="/integrations/" class="mega-footer-link">
+          View all
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Industries Mega Menu Dropdown -->
+  <div class="mega-dropdown" id="industries-dropdown" role="menu">
+    <div class="mega-inner">
+      <div class="mega-header">
+        <h6 class="mega-label">INDUSTRIES</h6>
+      </div>
+      <div class="mega-grid mega-grid--5col">
+        {industryItems.map((item) => (
+          <a href={item.url} class="mega-card mega-card--compact">
+            <span class="mega-icon mega-icon--sm">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d={iconPaths[item.icon]} />
+              </svg>
+            </span>
+            <span class="mega-text">
+              <span class="mega-title">{item.title}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+      <div class="mega-footer">
+        <span class="mega-footer-text">Solutions for every industry</span>
+        <a href="/industries/" class="mega-footer-link">
+          View all
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14M12 5l7 7-7 7"/>
           </svg>
@@ -121,14 +290,57 @@ const iconPaths: Record<string, string> = {
   <!-- Mobile Menu -->
   <div id="mobile-menu" class="mobile-menu" hidden>
     <nav class="mobile-nav">
-      {navItems.map((item) => (
-        <>
-          <a href={item.url} class="mobile-link">{item.title}</a>
-          {item.hasDropdown && featureItems.map((child) => (
+      <a href="/" class="mobile-link">Home</a>
+      <a href="/about-us/" class="mobile-link">About</a>
+
+      <!-- Features accordion -->
+      <div class="mobile-accordion">
+        <button class="mobile-link mobile-accordion-btn" type="button">
+          Features
+          <svg class="mobile-accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="mobile-accordion-body" hidden>
+          {featureCategories.map((cat) => (
+            <div class="mobile-category">
+              <span class="mobile-category-label">{cat.label}</span>
+              {cat.items.map((item) => (
+                <a href={item.url} class="mobile-link mobile-link--sub">{item.title}</a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Integrations accordion -->
+      <div class="mobile-accordion">
+        <button class="mobile-link mobile-accordion-btn" type="button">
+          Integrations
+          <svg class="mobile-accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="mobile-accordion-body" hidden>
+          {integrationItems.map((child) => (
             <a href={child.url} class="mobile-link mobile-link--sub">{child.title}</a>
           ))}
-        </>
-      ))}
+          <a href="/integrations/" class="mobile-link mobile-link--sub mobile-link--view-all">View all integrations →</a>
+        </div>
+      </div>
+
+      <!-- Industries accordion -->
+      <div class="mobile-accordion">
+        <button class="mobile-link mobile-accordion-btn" type="button">
+          Industries
+          <svg class="mobile-accordion-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="mobile-accordion-body" hidden>
+          {industryItems.map((child) => (
+            <a href={child.url} class="mobile-link mobile-link--sub">{child.title}</a>
+          ))}
+          <a href="/industries/" class="mobile-link mobile-link--sub mobile-link--view-all">View all industries →</a>
+        </div>
+      </div>
+
+      <a href="/blog/" class="mobile-link">Blog</a>
+      <a href="/contact-en/" class="mobile-link">Contact</a>
       <a href="/book-a-demo/" class="cta-button cta-button--mobile">Get a demo</a>
     </nav>
   </div>
@@ -260,6 +472,58 @@ const iconPaths: Record<string, string> = {
     margin: 0;
   }
 
+  /* ── Categorized feature grid ── */
+  .mega-categories {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding: 16px 20px 8px 20px;
+  }
+  .mega-category {
+    padding: 8px 12px 16px 12px;
+  }
+  .mega-category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 0 8px;
+  }
+  .mega-category-icon {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EEF2FF;
+    border-radius: 8px;
+  }
+  .mega-category-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #1D2939;
+  }
+  .mega-item-link {
+    display: block;
+    padding: 7px 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #475467;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .mega-item-link:hover {
+    background: #F5F8FF;
+    color: #375DFB;
+  }
+
+  /* ── Flat grid for integrations/industries (unchanged) ── */
   .mega-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -332,6 +596,19 @@ const iconPaths: Record<string, string> = {
   }
   .mega-footer-link:hover { opacity: 0.8; }
 
+  /* Industries: 5-col compact grid */
+  .mega-grid--5col {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .mega-card--compact {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+  .mega-icon--sm {
+    width: 32px;
+    height: 32px;
+  }
+
   .mobile-toggle {
     display: none;
     background: none;
@@ -365,6 +642,43 @@ const iconPaths: Record<string, string> = {
     font-size: 14px;
     color: #475467;
   }
+  .mobile-link--view-all {
+    color: #375DFB;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .mobile-accordion-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .mobile-accordion-arrow {
+    transition: transform 0.2s;
+  }
+  .mobile-accordion-btn[aria-expanded="true"] .mobile-accordion-arrow {
+    transform: rotate(180deg);
+  }
+  .mobile-accordion-body {
+    padding-left: 4px;
+  }
+  .mobile-category {
+    margin-bottom: 8px;
+  }
+  .mobile-category-label {
+    display: block;
+    padding: 8px 12px 4px 28px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #98A2B3;
+  }
   .cta-button--mobile {
     margin-top: 12px;
     width: 100%;
@@ -397,22 +711,61 @@ const iconPaths: Record<string, string> = {
     btn?.setAttribute('aria-expanded', String(isHidden));
   });
 
-  const featuresItem = document.querySelector('.nav-item--dropdown');
-  const megaDropdown = document.getElementById('mega-dropdown');
-  if (featuresItem && megaDropdown) {
-    let hideTimeout: ReturnType<typeof setTimeout>;
-    const show = () => { clearTimeout(hideTimeout); megaDropdown.classList.add('is-open'); };
-    const hide = () => { hideTimeout = setTimeout(() => megaDropdown.classList.remove('is-open'), 200); };
-    featuresItem.addEventListener('mouseenter', show);
-    featuresItem.addEventListener('mouseleave', hide);
-    megaDropdown.addEventListener('mouseenter', show);
-    megaDropdown.addEventListener('mouseleave', hide);
-    featuresItem.querySelector('.nav-link')?.addEventListener('click', (e) => {
-      e.preventDefault();
-      megaDropdown.classList.toggle('is-open');
+  // Mobile accordion toggles
+  document.querySelectorAll('.mobile-accordion-btn').forEach((accordionBtn) => {
+    accordionBtn.addEventListener('click', () => {
+      const body = (accordionBtn as HTMLElement).nextElementSibling as HTMLElement | null;
+      if (!body) return;
+      const isOpen = !body.hasAttribute('hidden');
+      if (isOpen) {
+        body.setAttribute('hidden', '');
+        accordionBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        body.removeAttribute('hidden');
+        accordionBtn.setAttribute('aria-expanded', 'true');
+      }
     });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') megaDropdown.classList.remove('is-open');
+  });
+
+  // Handle multiple mega-dropdowns
+  const dropdownItems = document.querySelectorAll('.nav-item--dropdown');
+  const allDropdowns = document.querySelectorAll('.mega-dropdown');
+  const timeouts = new Map<string, ReturnType<typeof setTimeout>>();
+
+  function closeAll(except?: string) {
+    allDropdowns.forEach((dd) => {
+      if (dd.id !== except) dd.classList.remove('is-open');
     });
   }
+
+  dropdownItems.forEach((navItem) => {
+    const link = navItem.querySelector('.nav-link') as HTMLAnchorElement | null;
+    const ddId = (navItem as HTMLElement).dataset.dropdown;
+    if (!ddId) return;
+    const dropdown = document.getElementById(ddId);
+    if (!dropdown) return;
+
+    const show = () => {
+      const t = timeouts.get(ddId);
+      if (t) clearTimeout(t);
+      closeAll(ddId);
+      dropdown.classList.add('is-open');
+    };
+    const hide = () => {
+      timeouts.set(ddId, setTimeout(() => dropdown.classList.remove('is-open'), 200));
+    };
+
+    navItem.addEventListener('mouseenter', show);
+    navItem.addEventListener('mouseleave', hide);
+    dropdown.addEventListener('mouseenter', show);
+    dropdown.addEventListener('mouseleave', hide);
+    link?.addEventListener('click', (e) => {
+      if (link.getAttribute('href') === '#') e.preventDefault();
+      dropdown.classList.toggle('is-open');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAll();
+  });
 </script>

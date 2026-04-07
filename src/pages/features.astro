@@ -1,0 +1,350 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+
+const title = "EventHex Platform Features — 30+ Event Management Tools";
+const description = "From AI-powered networking to multi-channel marketing, EventHex gives you 30+ features to plan, promote, and execute events of any scale.";
+
+interface FeatureItem {
+  name: string;
+  href: string;
+  desc: string;
+}
+
+interface FeatureCategory {
+  title: string;
+  color: string;
+  features: FeatureItem[];
+}
+
+const categories: FeatureCategory[] = [
+  {
+    title: "Event Planning & Operations",
+    color: "#6366F1",
+    features: [
+      { name: "Speaker Management", href: "/speaker-management/", desc: "AI LinkedIn import, speaker profiles, session scheduling, live engagement tools, and InstaRecap transcription." },
+      { name: "Session Management", href: "/session-management/", desc: "Visual timeline scheduling, multi-track agendas, sub-sessions, capacity controls, and live engagement tools." },
+      { name: "Event Ticketing", href: "/event-ticketing/", desc: "Multi-ticket checkouts, 0% platform fees with your own payment gateway, QR-coded tickets, and badge printing." },
+      { name: "Event Registration", href: "/event-registration/", desc: "Registration tracking, attendee type management, waitlist approvals, payment monitoring, and check-in data." },
+      { name: "Centralized Dashboard", href: "/centralized-dashboard/", desc: "Unified view of all events, real-time analytics, unlimited events and attendees, and cross-event reporting." },
+      { name: "Event Check-In", href: "/event-check-in/", desc: "QR code scanning, facial recognition, self-service kiosks, and real-time attendance analytics." },
+      { name: "Call for Papers", href: "/call-for-papers/", desc: "Submission portal, peer review, rubric scoring, acceptance workflows, and proceedings export." },
+      { name: "Event Payment Processing", href: "/event-payment-processing/", desc: "Accept payments via Stripe, Razorpay, or Tap with zero EventHex platform fees." },
+    ],
+  },
+  {
+    title: "AI-Powered Features",
+    color: "#EC4899",
+    features: [
+      { name: "AI Smart-Connect", href: "/enhance-networking-ai-smart-connect/", desc: "AI-powered attendee matchmaking, interest-based networking, meeting scheduling, and conversation starters." },
+      { name: "AI Form Builder", href: "/ai-form-builder/", desc: "Voice-powered form creation, customizable fields, approval workflows, and CAPTCHA protection." },
+      { name: "AI Session Recap", href: "/ai-session-recap/", desc: "Real-time transcription, AI summaries, searchable recap pages, and attendee analytics." },
+      { name: "AI Photo Gallery", href: "/ai-photo-gallery/", desc: "Face-matching photo gallery with real-time tagging and branded sharing." },
+      { name: "AI Event Copilot", href: "/ai-event-copilot/", desc: "Four AI agents: Analyst, Session Builder, Copywriter, and Ticket Agent for automated event operations." },
+    ],
+  },
+  {
+    title: "Marketing & Engagement",
+    color: "#EF4444",
+    features: [
+      { name: "Event Marketing", href: "/event-marketing/", desc: "Email and WhatsApp campaigns, audience segmentation, advocacy posters, and delivery tracking." },
+      { name: "Event Notifications", href: "/event-notifications/", desc: "Multi-channel notifications via email, WhatsApp, push, and SMS with automated triggers." },
+      { name: "Live Polling & Q&A", href: "/live-polling-qa/", desc: "Live audience polls, Q&A moderation, session feedback, and engagement analytics." },
+      { name: "Event Gamification", href: "/event-gamification/", desc: "Points, badges, leaderboards, challenges, and prize distribution for attendee engagement." },
+      { name: "Badge & Certificate Designer", href: "/badge-certificate-designer/", desc: "Visual badge editor, on-site printing, and automated certificate generation." },
+      { name: "Event Website Builder", href: "/event-website-builder/", desc: "Drag-and-drop event website builder with custom domains and responsive templates." },
+      { name: "Event Mobile App", href: "/event-mobile-app/", desc: "White-label mobile app with agenda, networking, notifications, and offline access." },
+    ],
+  },
+  {
+    title: "Sponsors & Exhibitors",
+    color: "#F59E0B",
+    features: [
+      { name: "Sponsor Management", href: "/sponsor-management/", desc: "Tiered sponsor profiles, multi-channel visibility, self-service portals, and ROI analytics." },
+      { name: "Exhibitor Management", href: "/exhibitor-management/", desc: "Exhibitor profiles, booth allocation, booth member management, and dedicated exhibitor portals." },
+      { name: "Partnership", href: "/partnership/", desc: "Partner programme management, co-branded events, and revenue sharing." },
+    ],
+  },
+];
+
+const allFeatures = categories.flatMap((c) => c.features);
+
+const iconForCategory: Record<string, string> = {
+  "Event Planning & Operations": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  "AI-Powered Features": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.5-.8 2.8-2 3.4V11h3a3 3 0 0 1 3 3v1.5a2.5 2.5 0 0 1-5 0V14H9v1.5a2.5 2.5 0 0 1-5 0V14a3 3 0 0 1 3-3h3V9.4A4 4 0 0 1 12 2z"/><circle cx="12" cy="6" r="1"/></svg>`,
+  "Marketing & Engagement": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`,
+  "Sponsors & Exhibitors": `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
+};
+
+const featureIcons: Record<string, string> = {
+  "Speaker Management": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+  "Session Management": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  "Event Ticketing": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2"/><path d="M13 17v2"/><path d="M13 11v2"/></svg>`,
+  "Event Registration": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="m9 14 2 2 4-4"/></svg>`,
+  "Centralized Dashboard": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`,
+  "Event Check-In": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="16" y="3" width="5" height="5" rx="1"/><rect x="3" y="16" width="5" height="5" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>`,
+  "Call for Papers": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  "Event Payment Processing": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+  "AI Smart-Connect": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+  "AI Form Builder": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6"/><path d="M9 13h6"/><path d="M9 17h4"/></svg>`,
+  "AI Session Recap": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>`,
+  "AI Photo Gallery": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`,
+  "AI Event Copilot": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="6" y="14" width="12" height="8" rx="2"/><path d="M12 10v4"/><path d="M12 22v-2"/></svg>`,
+  "Event Marketing": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`,
+  "Event Notifications": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+  "Live Polling & Q&A": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  "Event Gamification": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>`,
+  "Badge & Certificate Designer": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>`,
+  "Event Website Builder": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  "Event Mobile App": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,
+  "Sponsor Management": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+  "Exhibitor Management": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  "Partnership": `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m22 8-5 5"/><path d="m17 8 5 5"/></svg>`,
+};
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical="https://eventhex.ai/features/"
+  footerCtaTitle="See how 30+ features work together"
+  footerCtaButtonText="Book a Free Demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <slot name="head">
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "EventHex Platform Features",
+      "description": description,
+      "numberOfItems": allFeatures.length,
+      "itemListElement": allFeatures.map((f, i) => ({
+        "@type": "ListItem",
+        "position": i + 1,
+        "name": f.name,
+        "url": `https://eventhex.ai${f.href}`,
+        "description": f.desc,
+      })),
+    })} />
+  </slot>
+
+  <!-- Hero -->
+  <section class="fhub-hero">
+    <div class="fhub-hero__container">
+      <span class="fhub-hero__badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+        Platform Features
+      </span>
+      <h1 class="fhub-hero__title">Everything You Need to <span class="fhub-hero__accent">Manage Events</span></h1>
+      <p class="fhub-hero__subtitle">From AI-powered networking to multi-channel marketing, EventHex gives you 30+ features to plan, promote, and execute events of any scale.</p>
+      <a href="/book-a-demo/" class="fhub-hero__cta">Get a Free Demo</a>
+    </div>
+  </section>
+
+  <!-- Feature Categories -->
+  <section class="fhub-categories">
+    <div class="fhub-categories__container">
+      {categories.map((cat) => (
+        <div class="fhub-cat">
+          <div class="fhub-cat__header" style={`border-bottom-color: ${cat.color}`}>
+            <span class="fhub-cat__icon" style={`background: ${cat.color}15; color: ${cat.color}`} set:html={iconForCategory[cat.title]} />
+            <h2 class="fhub-cat__title">{cat.title}</h2>
+          </div>
+          <div class="fhub-cat__grid">
+            {cat.features.map((feat) => (
+              <a href={feat.href} class="fhub-card" data-color={cat.color}>
+                <div class="fhub-card__icon" style={`background: ${cat.color}12; color: ${cat.color}`} set:html={featureIcons[feat.name] || ""} />
+                <div class="fhub-card__body">
+                  <h3 class="fhub-card__title">{feat.name}</h3>
+                  <p class="fhub-card__desc">{feat.desc}</p>
+                  <span class="fhub-card__link" style={`color: ${cat.color}`}>Learn more &rarr;</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── Hero ──────────────────────────────────────────── */
+  .fhub-hero {
+    background: linear-gradient(180deg, #F8FAFF 0%, #FFFFFF 100%);
+    padding: 100px 24px 72px;
+    text-align: center;
+  }
+  .fhub-hero__container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .fhub-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.08);
+    color: #6366F1;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .fhub-hero__title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.15;
+    color: var(--heading-dark, #0F172A);
+    margin-bottom: 20px;
+  }
+  .fhub-hero__accent {
+    color: var(--brand-blue, #4A6CF7);
+  }
+  .fhub-hero__subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    color: #64748B;
+    max-width: 640px;
+    margin: 0 auto 32px;
+  }
+  .fhub-hero__cta {
+    display: inline-block;
+    padding: 14px 32px;
+    border-radius: 10px;
+    background: var(--brand-blue, #4A6CF7);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .fhub-hero__cta:hover {
+    background: #3B5DE7;
+    transform: translateY(-1px);
+  }
+
+  /* ── Categories Section ────────────────────────────── */
+  .fhub-categories {
+    padding: 0 24px 96px;
+    background: #fff;
+  }
+  .fhub-categories__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  /* ── Category Block ────────────────────────────────── */
+  .fhub-cat__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #E5EBFF;
+    margin-bottom: 28px;
+  }
+  .fhub-cat__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+  .fhub-cat__title {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--heading-dark, #0F172A);
+  }
+
+  /* ── Card Grid ─────────────────────────────────────── */
+  .fhub-cat__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── Feature Card ──────────────────────────────────── */
+  .fhub-card {
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid #EEF2F6;
+    border-radius: 16px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.25s, transform 0.2s, border-left-color 0.2s;
+    border-left: 3px solid transparent;
+  }
+  .fhub-card:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.07);
+    transform: translateY(-3px);
+  }
+  .fhub-card[data-color="#6366F1"]:hover { border-left-color: #6366F1; }
+  .fhub-card[data-color="#EC4899"]:hover { border-left-color: #EC4899; }
+  .fhub-card[data-color="#EF4444"]:hover { border-left-color: #EF4444; }
+  .fhub-card[data-color="#F59E0B"]:hover { border-left-color: #F59E0B; }
+
+  .fhub-card__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .fhub-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fhub-card__title {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--heading-dark, #0F172A);
+  }
+  .fhub-card__desc {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.65;
+    color: #64748B;
+  }
+  .fhub-card__link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+    transition: gap 0.2s;
+  }
+
+  /* ── Responsive ────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .fhub-hero__title { font-size: 38px; }
+    .fhub-cat__title { font-size: 24px; }
+    .fhub-cat__grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  }
+  @media (max-width: 767px) {
+    .fhub-hero { padding: 80px 16px 56px; }
+    .fhub-hero__title { font-size: 30px; }
+    .fhub-hero__subtitle { font-size: 16px; }
+    .fhub-categories { padding: 0 16px 64px; }
+    .fhub-categories__container { gap: 48px; }
+    .fhub-cat__title { font-size: 22px; }
+    .fhub-cat__grid { grid-template-columns: 1fr; gap: 14px; }
+    .fhub-card { padding: 18px; gap: 12px; }
+    .fhub-card__icon { width: 40px; height: 40px; min-width: 40px; }
+  }
+</style>

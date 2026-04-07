@@ -1,0 +1,390 @@
+---
+// FAQ Section — Light theme with split layout, SEO JSON-LD structured data
+// Pattern from event-ticketing FaqLightSection
+// CSS prefix: emfaq
+
+const faqItems = [
+  {
+    question: "What is event marketing software?",
+    answerHtml: "<p>Event marketing software helps organizers promote their events through multiple channels — email campaigns, WhatsApp broadcasts, social media advocacy, and audience retargeting. EventHex combines all these tools in one platform, allowing you to create personalized campaigns, manage audience segments, and track delivery analytics without switching between multiple tools.</p>",
+  },
+  {
+    question: "Can I send both email and WhatsApp campaigns?",
+    answerHtml: "<p>Yes! EventHex supports multi-channel campaigns. You can send personalized email campaigns with HTML templates and attachments, or WhatsApp broadcasts using Meta-approved message templates. Both channels share the same audience management system, so you can reach your audience wherever they are.</p>",
+  },
+  {
+    question: "How does the audience targeting work?",
+    answerHtml: "<p>EventHex's audience builder lets you create segments based on ticket type, registration date range, and event history. You can target attendees from your current event, or retarget attendees from previous events. The system automatically calculates unique phone numbers and email addresses, and you can exclude people already registered for your current event.</p>",
+  },
+  {
+    question: "What are advocacy posters and how do they work?",
+    answerHtml: "<p>Advocacy posters are customizable 'I'm Attending' style graphics that attendees can share on social media to promote your event organically. EventHex provides a drag-and-drop poster builder where you add attendee names, photos, and event branding. Each poster generates a unique shareable link with built-in tracking — you can see clicks, unique visitors, and registrations from shared posters.</p>",
+  },
+  {
+    question: "Can I schedule campaigns for later delivery?",
+    answerHtml: "<p>Absolutely. EventHex offers two scheduling modes: 'Send Now' for immediate delivery, and 'Schedule Later' where you set a specific date and time. Scheduled campaigns are processed automatically at the designated time with parallel processing for fast delivery.</p>",
+  },
+  {
+    question: "How does EventHex track campaign performance?",
+    answerHtml: "<p>EventHex provides real-time delivery tracking for every campaign. For emails, monitor delivery rates, open rates, click-through rates, bounce rates, and complaint rates. For WhatsApp, webhook integrations track sent, delivered, read, and failed statuses per recipient. The dashboard shows live progress bars and per-recipient drill-down.</p>",
+  },
+  {
+    question: "Does EventHex handle email bounces automatically?",
+    answerHtml: "<p>Yes. EventHex has a smart suppression system that automatically handles email health. Permanent bounces are auto-suppressed to protect your sender reputation. Transient bounces retry up to 3 times. The system classifies emails as critical, transactional, or marketing to apply appropriate suppression rules.</p>",
+  },
+  {
+    question: "Can I use my own email server or WhatsApp provider?",
+    answerHtml: "<p>Yes. EventHex supports multiple email providers — including Amazon SES, custom SMTP servers, and organization-level email settings. For WhatsApp, you can use EventHex's default provider or configure your own WhatsApp Business account with providers like Dxing or the Official Meta API.</p>",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answerHtml.replace(/<[^>]*>/g, '')
+    }
+  }))
+};
+---
+
+<section class="emfaq" id="em-faq-section">
+  <div class="emfaq__inner">
+    <div class="emfaq__support">
+      <span class="emfaq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need help getting started?</span>
+      <h2 class="emfaq__title animate-on-scroll" data-animation="fadeInUp">Frequently Asked Questions</h2>
+      <p class="emfaq__desc animate-on-scroll" data-animation="fadeInUp">
+        Everything you need to know about event marketing with EventHex — campaigns, audiences, analytics, and more.
+      </p>
+
+      <div class="emfaq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="emfaq__support-label">Getting started</span>
+        <ul class="emfaq__support-list">
+          <li class="emfaq__support-item">Create your first email campaign</li>
+          <li class="emfaq__support-item">Build audience segments from registrations</li>
+          <li class="emfaq__support-item">Set up advocacy posters for sharing</li>
+        </ul>
+
+        <div class="emfaq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Our team helps you set up campaigns and audience targeting before your event launches.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="emfaq__cta">Start marketing your event</a>
+      </div>
+    </div>
+
+    <div class="emfaq__list">
+      {faqItems.map((item, index) => (
+        <details class="emfaq__item animate-on-scroll" data-animation="fadeInUp" data-emfaq-item open={index === 0}>
+          <summary class="emfaq__question">
+            <span>{item.question}</span>
+            <span class="emfaq__icon" aria-hidden="true">
+              <span class="emfaq__icon-line emfaq__icon-line--h"></span>
+              <span class="emfaq__icon-line emfaq__icon-line--v"></span>
+            </span>
+          </summary>
+          <div class="emfaq__answer" set:html={item.answerHtml}></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+
+<script>
+  const emfaqItems = Array.from(document.querySelectorAll('[data-emfaq-item]'));
+
+  emfaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+
+      emfaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .emfaq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .emfaq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .emfaq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .emfaq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .emfaq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .emfaq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .emfaq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .emfaq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .emfaq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .emfaq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .emfaq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .emfaq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .emfaq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .emfaq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .emfaq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .emfaq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .emfaq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .emfaq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .emfaq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+    transition: color 0.2s ease;
+  }
+
+  .emfaq__question::-webkit-details-marker { display: none; }
+  .emfaq__question::marker { display: none; content: ""; }
+
+  .emfaq__question:hover { color: #375dfb; }
+
+  .emfaq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    margin-top: 3px;
+    color: #375dfb;
+  }
+
+  .emfaq__icon-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 999px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .emfaq__icon-line--h { width: 20px; height: 2px; }
+  .emfaq__icon-line--v { width: 2px; height: 20px; }
+
+  .emfaq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .emfaq__answer :global(p) {
+    margin: 0;
+    max-width: 92%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: #5b6477;
+  }
+
+  .emfaq__item[open] {
+    background: #fff;
+    border-color: rgba(55, 93, 251, 0.2);
+    box-shadow: 0 2px 16px rgba(55, 93, 251, 0.06);
+  }
+
+  .emfaq__item[open] .emfaq__icon-line--v {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0.35);
+  }
+
+  @media (max-width: 1100px) {
+    .emfaq { padding: 76px 0; }
+    .emfaq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .emfaq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .emfaq__title { font-size: 40px; }
+    .emfaq__desc { font-size: 16px; }
+    .emfaq__question { padding: 24px 22px; font-size: 20px; }
+    .emfaq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .emfaq { padding: 56px 0; }
+    .emfaq__inner { padding: 0 16px; gap: 24px; }
+    .emfaq__title { font-size: 32px; line-height: 1.08; }
+    .emfaq__desc { font-size: 15px; line-height: 1.7; }
+    .emfaq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .emfaq__support-item { font-size: 15px; }
+    .emfaq__support-note strong { font-size: 18px; }
+    .emfaq__cta { width: 100%; }
+    .emfaq__item { border-radius: 24px; }
+    .emfaq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .emfaq__answer { padding: 0 18px 20px; }
+    .emfaq__answer :global(p) { max-width: 100%; font-size: 15px; line-height: 1.75; }
+  }
+</style>

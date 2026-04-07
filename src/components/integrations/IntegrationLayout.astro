@@ -1,0 +1,1058 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+
+interface StatItem {
+  value: string;
+  label: string;
+}
+
+interface FeatureItem {
+  emoji: string;
+  title: string;
+  description: string;
+}
+
+interface StepItem {
+  title: string;
+  description: string;
+}
+
+interface UseCaseItem {
+  emoji: string;
+  title: string;
+  description: string;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  pageTitle: string;
+  pageDescription: string;
+  canonical?: string;
+  ogImage?: string;
+  badge: string;
+  heroTitleLine1: string;
+  heroTitleLine2: string;
+  heroCopy: string;
+  primaryCta?: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+  stats: StatItem[];
+  featuresHeading: string;
+  featuresSubheading?: string;
+  features: FeatureItem[];
+  howItWorksHeading?: string;
+  steps: StepItem[];
+  useCasesHeading: string;
+  useCases: UseCaseItem[];
+  ctaTitle: string;
+  ctaCopy?: string;
+  ctaPrimaryCta?: { text: string; href: string };
+  ctaSecondaryCta?: { text: string; href: string };
+  faqs: FaqItem[];
+  accentColor?: string;
+  jsonLd?: Record<string, unknown>;
+}
+
+const {
+  pageTitle,
+  pageDescription,
+  canonical,
+  ogImage,
+  badge,
+  heroTitleLine1,
+  heroTitleLine2,
+  heroCopy,
+  primaryCta = { text: "Book a Demo", href: "/book-a-demo/" },
+  secondaryCta = { text: "Start Free", href: "https://app.eventhex.ai/register" },
+  stats,
+  featuresHeading,
+  featuresSubheading,
+  features,
+  howItWorksHeading = "How It Works",
+  steps,
+  useCasesHeading,
+  useCases,
+  ctaTitle,
+  ctaCopy,
+  ctaPrimaryCta = { text: "Book a Demo", href: "/book-a-demo/" },
+  ctaSecondaryCta = { text: "Start Free", href: "https://app.eventhex.ai/register" },
+  faqs,
+  accentColor = "var(--brand-blue)",
+  jsonLd,
+} = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
+};
+---
+
+<MarketingLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonical}
+  ogImage={ogImage}
+  showFooterCta={false}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </Fragment>
+
+  <!-- ① HERO — full viewport, bleeds into header -->
+  <section class="int-hero">
+    <div class="int-hero__inner">
+      <span class="int-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
+      <h1 class="int-hero__title animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+        {heroTitleLine1}<br />
+        <span class="int-hero__highlight">{heroTitleLine2}</span>
+      </h1>
+      <p class="int-hero__copy animate-on-scroll" data-animation="fadeInUp" data-delay="200">{heroCopy}</p>
+      <div class="int-hero__ctas animate-on-scroll" data-animation="fadeInUp" data-delay="300">
+        <a href={primaryCta.href} class="int-btn int-btn--primary">
+          {primaryCta.text}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href={secondaryCta.href} class="int-btn int-btn--outline" target="_blank" rel="noopener">{secondaryCta.text}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ② STATS — dark band with bg-1.webp, colored headline + stat cards -->
+  <section class="int-stats">
+    <div class="int-stats__engagement">
+      <div class="int-stats__engagement-text">
+        <h2 class="int-stats__heading animate-on-scroll" data-animation="fadeInDown">
+          <span class="int-stats--white">Seamless </span>
+          <span class="int-stats--purple">integration </span>
+          <span class="int-stats--white">powered by </span>
+          <span class="int-stats--cyan">EventHex</span>
+        </h2>
+      </div>
+    </div>
+    <div class="int-stats__grid">
+      {stats.map((stat) => (
+        <div class="int-stats__card animate-on-scroll" data-animation="fadeInUp">
+          <span class="int-stats__value">{stat.value}</span>
+          <span class="int-stats__label">{stat.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- ③ FEATURES GRID — white/light section -->
+  <section class="int-features">
+    <div class="int-features__inner">
+      <span class="int-features__tag animate-on-scroll" data-animation="fadeIn">Key Features</span>
+      <h2 class="int-features__heading animate-on-scroll" data-animation="fadeInUp">{featuresHeading}</h2>
+      {featuresSubheading && <p class="int-features__sub animate-on-scroll" data-animation="fadeInUp" data-delay="100">{featuresSubheading}</p>}
+      <div class="int-features__grid">
+        {features.map((f, i) => (
+          <div class="int-features__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 80)}>
+            <span class="int-features__emoji">{f.emoji}</span>
+            <h3 class="int-features__card-title">{f.title}</h3>
+            <p class="int-features__card-desc">{f.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ④ HOW IT WORKS — dark section with bg-2.webp -->
+  <section class="int-how">
+    <div class="int-how__inner">
+      <span class="int-how__eyebrow animate-on-scroll" data-animation="fadeIn">How It Works</span>
+      <h2 class="int-how__heading animate-on-scroll" data-animation="fadeInUp">{howItWorksHeading}</h2>
+      <div class="int-how__steps">
+        {steps.map((step, i) => (
+          <div class="int-how__step animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 120)}>
+            <span class="int-how__num">{String(i + 1).padStart(2, "0")}</span>
+            <h3 class="int-how__step-title">{step.title}</h3>
+            <p class="int-how__step-desc">{step.description}</p>
+            {i < steps.length - 1 && <span class="int-how__arrow">→</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑤ USE CASES — white/light section -->
+  <section class="int-usecases">
+    <div class="int-usecases__inner">
+      <span class="int-usecases__tag animate-on-scroll" data-animation="fadeIn">Use Cases</span>
+      <h2 class="int-usecases__heading animate-on-scroll" data-animation="fadeInUp">{useCasesHeading}</h2>
+      <div class="int-usecases__grid">
+        {useCases.map((uc, i) => (
+          <div class="int-usecases__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 100)}>
+            <span class="int-usecases__emoji">{uc.emoji}</span>
+            <h3 class="int-usecases__card-title">{uc.title}</h3>
+            <p class="int-usecases__card-desc">{uc.description}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑥ CTA — dark card with glows -->
+  <section class="int-cta">
+    <div class="int-cta__card">
+      <div class="int-cta__glow int-cta__glow--1"></div>
+      <div class="int-cta__glow int-cta__glow--2"></div>
+      <div class="int-cta__content">
+        <span class="int-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Get Started Today</span>
+        <h2 class="int-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaTitle}</h2>
+        {ctaCopy && <p class="int-cta__copy animate-on-scroll" data-animation="fadeInUp">{ctaCopy}</p>}
+        <div class="int-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span class="int-cta__proof-pill">AI-powered platform</span>
+          <span class="int-cta__proof-pill">Free onboarding support</span>
+          <span class="int-cta__proof-pill">No credit card required</span>
+        </div>
+        <div class="int-cta__buttons animate-on-scroll" data-animation="fadeInUp">
+          <a href={ctaPrimaryCta.href} class="int-btn int-btn--white">
+            {ctaPrimaryCta.text}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href={ctaSecondaryCta.href} class="int-btn int-btn--ghost" target="_blank" rel="noopener">{ctaSecondaryCta.text}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⑦ FAQ — split layout, sidebar + accordion -->
+  <section class="int-faq">
+    <div class="int-faq__inner">
+      <div class="int-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="int-faq__eyebrow">Need Help?</span>
+        <h2 class="int-faq__sidebar-title">Frequently Asked Questions</h2>
+        <p class="int-faq__sidebar-desc">
+          Everything you need to know about this integration and how it works with EventHex.
+        </p>
+        <div class="int-faq__support-card">
+          <h3 class="int-faq__support-title">Integration Support</h3>
+          <p class="int-faq__support-desc">Our team can help you set up and configure this integration for your specific needs.</p>
+        </div>
+        <a href="/book-a-demo/" class="int-btn int-btn--primary int-btn--sm">Talk to an Expert</a>
+      </div>
+      <div class="int-faq__list">
+        {faqs.map((faq, i) => (
+          <details class="int-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 60)}>
+            <summary class="int-faq__question">
+              {faq.question}
+              <svg class="int-faq__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </summary>
+            <div class="int-faq__answer"><p>{faq.answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style define:vars={{ accentColor }}>
+  /* ══════════════════════════════════════════
+     ① HERO — full viewport, bleeds into header
+     ═══════════════════════════════════════════ */
+  .int-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+    background:
+      url('https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat,
+      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
+      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
+      url('https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+  }
+  .int-hero__inner {
+    position: relative;
+    width: 100%;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 160px 1.5rem 5rem;
+    z-index: 1;
+  }
+  .int-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+    background: none;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+    margin-bottom: 1.5rem;
+  }
+  .int-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 52px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+    margin: 0 0 1.25rem;
+  }
+  .int-hero__highlight {
+    display: block;
+    color: var(--accentColor);
+    font-weight: 600;
+  }
+  .int-hero__copy {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+    color: var(--subheading-gray);
+    max-width: 680px;
+    margin: 0 auto 2rem;
+  }
+  .int-hero__ctas {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ══════════════════════════════════════════
+     BUTTONS — shared
+     ═══════════════════════════════════════════ */
+  .int-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.75rem 1.75rem;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .int-btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .int-btn--primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+  .int-btn--outline {
+    background: transparent;
+    color: var(--heading-dark);
+    border: 1.5px solid var(--surface-card-border, #e8ecf4);
+  }
+  .int-btn--outline:hover {
+    border-color: var(--brand-blue);
+    color: var(--brand-blue);
+  }
+  .int-btn--white {
+    background: #fff;
+    color: var(--heading-dark);
+  }
+  .int-btn--white:hover {
+    background: #f0f4ff;
+    transform: translateY(-2px);
+  }
+  .int-btn--ghost {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .int-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  .int-btn--sm {
+    font-size: 0.875rem;
+    padding: 0.625rem 1.25rem;
+  }
+
+  /* ══════════════════════════════════════════
+     ② STATS — dark band with bg-1.webp
+     ═══════════════════════════════════════════ */
+  .int-stats {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 100px 1.5rem;
+    background-color: #000;
+    background-image:
+      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
+      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
+      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
+      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
+      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
+      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
+      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
+      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
+      url('https://eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .int-stats__engagement {
+    width: 100%;
+    padding: 0 0 60px;
+    display: flex;
+    justify-content: center;
+  }
+  .int-stats__engagement-text {
+    width: 65%;
+    max-width: 800px;
+  }
+  .int-stats__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+  }
+  .int-stats--white { color: #fff; }
+  .int-stats--purple { color: #AFA3FF; }
+  .int-stats--cyan { color: #ABFFFF; }
+  .int-stats__grid {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .int-stats__card {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+  .int-stats__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(55, 93, 251, 0.3);
+  }
+  .int-stats__value {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -1px;
+  }
+  .int-stats__label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* ══════════════════════════════════════════
+     ③ FEATURES GRID — white/light section
+     ═══════════════════════════════════════════ */
+  .int-features {
+    width: 100%;
+    padding: 80px 1.5rem;
+    background: #fff;
+  }
+  .int-features__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .int-features__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+  }
+  .int-features__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    color: var(--heading-dark);
+    text-align: center;
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
+  }
+  .int-features__sub {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--subheading-gray);
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 0;
+    line-height: 1.6;
+  }
+  .int-features__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    width: 100%;
+    margin-top: 48px;
+  }
+  .int-features__card {
+    position: relative;
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem 1.75rem;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .int-features__card:hover {
+    transform: translateY(-6px);
+    border-color: var(--brand-blue);
+    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
+  }
+  .int-features__emoji {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .int-features__card-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.5rem;
+    line-height: 1.35;
+  }
+  .int-features__card-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--subheading-gray);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     ④ HOW IT WORKS — dark section with bg-2.webp
+     ═══════════════════════════════════════════ */
+  .int-how {
+    width: 100%;
+    padding: 80px 1.5rem;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .int-how__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+  }
+  .int-how__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #ABFFFF;
+    margin-bottom: 0;
+  }
+  .int-how__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    margin: -2rem 0 0;
+    line-height: 1.25;
+  }
+  .int-how__steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    width: 100%;
+    position: relative;
+  }
+  .int-how__step {
+    text-align: center;
+    position: relative;
+  }
+  .int-how__num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(55, 93, 251, 0.15);
+    border: 2px solid rgba(55, 93, 251, 0.3);
+    color: var(--brand-blue);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+  .int-how__step-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px;
+  }
+  .int-how__step-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.65;
+    margin: 0;
+  }
+  .int-how__arrow {
+    display: none;
+    position: absolute;
+    top: 26px;
+    right: -22px;
+    font-size: 1.4rem;
+    color: rgba(55, 93, 251, 0.4);
+  }
+  @media (min-width: 1024px) {
+    .int-how__arrow {
+      display: block;
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     ⑤ USE CASES — white/light section
+     ═══════════════════════════════════════════ */
+  .int-usecases {
+    width: 100%;
+    padding: 80px 1.5rem;
+    background: #fff;
+  }
+  .int-usecases__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .int-usecases__tag {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+  }
+  .int-usecases__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    color: var(--heading-dark);
+    text-align: center;
+    margin: 0 0 48px;
+    line-height: 1.25;
+  }
+  .int-usecases__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    width: 100%;
+  }
+  .int-usecases__card {
+    position: relative;
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    border-radius: 16px;
+    padding: 2rem 1.5rem 1.75rem;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .int-usecases__card:hover {
+    transform: translateY(-6px);
+    border-color: var(--brand-blue);
+    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
+  }
+  .int-usecases__emoji {
+    display: block;
+    font-size: 1.8rem;
+    margin-bottom: 0.75rem;
+  }
+  .int-usecases__card-title {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.5rem;
+    line-height: 1.35;
+  }
+  .int-usecases__card-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--subheading-gray);
+    line-height: 1.65;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     ⑥ CTA — dark card with glows
+     ═══════════════════════════════════════════ */
+  .int-cta {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+  }
+  .int-cta__card {
+    position: relative;
+    border-radius: 24px;
+    padding: 80px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    background: #0F1629;
+  }
+  .int-cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .int-cta__glow--1 {
+    width: 350px;
+    height: 350px;
+    background: rgba(55, 93, 251, 0.3);
+    top: -100px;
+    right: -80px;
+  }
+  .int-cta__glow--2 {
+    width: 300px;
+    height: 300px;
+    background: rgba(159, 129, 255, 0.2);
+    bottom: -80px;
+    left: -60px;
+  }
+  .int-cta__content {
+    position: relative;
+    z-index: 1;
+    max-width: 620px;
+  }
+  .int-cta__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+  }
+  .int-cta__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 1rem;
+    line-height: 1.25;
+  }
+  .int-cta__copy {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0 0 1.5rem;
+  }
+  .int-cta__proof-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1.75rem;
+  }
+  .int-cta__proof-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 0.35rem 0.75rem;
+    border-radius: 100px;
+  }
+  .int-cta__buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ══════════════════════════════════════════
+     ⑦ FAQ — split layout sidebar + accordion
+     ═══════════════════════════════════════════ */
+  .int-faq {
+    background: var(--surface-light, #f8f9fc);
+    padding: 5rem 1.5rem;
+  }
+  .int-faq__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .int-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+  .int-faq__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
+  }
+  .int-faq__sidebar-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
+  }
+  .int-faq__sidebar-desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0 0 1.25rem;
+  }
+  .int-faq__support-card {
+    background: #fff;
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .int-faq__support-title {
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.35rem;
+  }
+  .int-faq__support-desc {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+  .int-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .int-faq__item {
+    background: #fff;
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  .int-faq__item[open] {
+    border-color: var(--brand-blue);
+  }
+  .int-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
+    cursor: pointer;
+    list-style: none;
+  }
+  .int-faq__question::-webkit-details-marker {
+    display: none;
+  }
+  .int-faq__chevron {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+    color: var(--subheading-gray);
+  }
+  .int-faq__item[open] .int-faq__chevron {
+    transform: rotate(180deg);
+    color: var(--brand-blue);
+  }
+  .int-faq__answer {
+    padding: 0 1.5rem 1.25rem;
+  }
+  .int-faq__answer p {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
+     ANIMATIONS
+     ═══════════════════════════════════════════ */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .animate-on-scroll[data-animation="fadeInDown"] {
+    transform: translateY(-20px);
+  }
+  .animate-on-scroll[data-animation="fadeInLeft"] {
+    transform: translateX(-20px);
+  }
+  .animate-on-scroll[data-animation="fadeIn"] {
+    transform: none;
+  }
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE — 1024px
+     ═══════════════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .int-stats { padding: 72px 1.5rem; }
+    .int-stats__engagement-text { width: 85%; }
+    .int-stats__grid { gap: 1rem; }
+    .int-stats__card { flex: 0 0 160px; padding: 1.5rem; }
+    .int-stats__value { font-size: 2rem; }
+
+    .int-features__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .int-how__steps {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+    .int-usecases__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .int-faq__inner {
+      grid-template-columns: 1fr;
+    }
+    .int-faq__sidebar {
+      position: static;
+    }
+  }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE — 767px
+     ═══════════════════════════════════════════ */
+  @media (max-width: 767px) {
+    .int-hero { min-height: auto; padding: 0; }
+    .int-hero__inner { padding: 120px 1rem 3rem; }
+    .int-hero__copy { font-size: 16px; }
+    .int-hero__ctas {
+      flex-direction: column;
+      align-items: center;
+    }
+    .int-btn {
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .int-stats { padding: 56px 1rem; }
+    .int-stats__heading { font-size: 1.5rem; line-height: 1.3; }
+    .int-stats__engagement-text { width: 100%; }
+    .int-stats__grid { gap: 0.75rem; }
+    .int-stats__card { flex: 0 0 calc(50% - 0.5rem); padding: 1.25rem; }
+    .int-stats__value { font-size: 1.75rem; }
+
+    .int-features,
+    .int-how,
+    .int-usecases { padding: 56px 1rem; }
+
+    .int-features__grid {
+      grid-template-columns: 1fr;
+    }
+    .int-features__card {
+      padding: 1.5rem 1.25rem;
+    }
+    .int-how__steps {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .int-usecases__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .int-cta__card { padding: 48px 20px; }
+    .int-cta__buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .int-faq { padding: 3.5rem 1rem; }
+    .int-faq__sidebar-title { font-size: 1.375rem; }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+  );
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => observer.observe(el));
+</script>

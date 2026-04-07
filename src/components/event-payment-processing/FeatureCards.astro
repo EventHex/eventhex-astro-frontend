@@ -1,0 +1,690 @@
+---
+const featureCards = [
+  {
+    eyebrow: "bring your gateway",
+    title: "Your gateway, your revenue, instantly",
+    desc: "EventHex is a BYOG platform. Connect your existing Stripe, Razorpay, or Tap account with one OAuth click — revenue settles directly to your bank.",
+    items: [
+      "One-click gateway connection via OAuth",
+      "Direct revenue settlement — never held by EventHex",
+      "PCI DSS compliant — card data handled by gateways only",
+    ],
+    visual: "byog",
+  },
+  {
+    eyebrow: "flexible pricing",
+    title: "Early-bird, VIP, group — any pricing model you need",
+    desc: "Create unlimited ticket tiers, auto-expiring early-bird windows, group discounts, and promo codes. EventHex handles the logic.",
+    items: [
+      "Date-based tier switching automatically",
+      "Promo codes with usage tracking and expiry",
+      "Group discounts at configurable thresholds",
+    ],
+    visual: "pricing",
+  },
+  {
+    eyebrow: "revenue reporting",
+    title: "Track every sale and export for accounting",
+    desc: "Real-time revenue dashboards, transaction-level export, and gateway reconciliation give your finance team everything they need.",
+    items: [
+      "Live revenue dashboard with gross/net/fees",
+      "CSV export with all accounting fields",
+      "Multi-event revenue roll-up view",
+    ],
+    visual: "revtrack",
+  },
+  {
+    eyebrow: "refunds",
+    title: "Process refunds in seconds from the dashboard",
+    desc: "Full or partial refunds processed from EventHex. Refund is sent to gateway, receipt emailed to attendee, and revenue dashboard updates automatically.",
+    items: [
+      "Full and partial refund support",
+      "Automatic gateway API refund call",
+      "Refund confirmation email to attendee",
+    ],
+    visual: "refundcard",
+  },
+];
+---
+
+<section class="eppf-shell">
+  <div class="eppf-section">
+    <div class="eppf-header">
+      <span class="eppf-subtitle">Everything you need to accept payments and track revenue with zero platform fees</span>
+      <h2 class="eppf-title">
+        Everything You Need to <span class="eppf-highlight">Accept, Track, and Report</span><br />
+        Event Payments
+      </h2>
+    </div>
+
+    <div class="eppf-cards" id="eppf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="eppf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="eppf-card-content">
+            <span class="eppf-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="eppf-card-title">{card.title}</h3>
+            <p class="eppf-card-desc">{card.desc}</p>
+            <ul class="eppf-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="eppf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`eppf-card-visual eppf-card-visual--${card.visual}`}>
+            {card.visual === "byog" && (
+              <Fragment>
+                <div class="eppf-byog-cards">
+                  <div class="eppf-byog-gw">
+                    <div class="eppf-byog-gw-icon" style="background:rgba(99,91,255,0.12)">
+                      <span style="color:#635bff">S</span>
+                    </div>
+                    <span class="eppf-byog-gw-name">Stripe</span>
+                  </div>
+                  <div class="eppf-byog-gw">
+                    <div class="eppf-byog-gw-icon" style="background:rgba(7,38,84,0.1)">
+                      <span style="color:#072654">R</span>
+                    </div>
+                    <span class="eppf-byog-gw-name">Razorpay</span>
+                  </div>
+                  <div class="eppf-byog-gw">
+                    <div class="eppf-byog-gw-icon" style="background:rgba(42,195,162,0.12)">
+                      <span style="color:#2ac3a2">T</span>
+                    </div>
+                    <span class="eppf-byog-gw-name">Tap</span>
+                  </div>
+                </div>
+                <div class="eppf-byog-connect">
+                  <span class="eppf-byog-connect-btn">Connect with OAuth</span>
+                </div>
+                <div class="eppf-visual-pill">BYOG platform</div>
+              </Fragment>
+            )}
+
+            {card.visual === "pricing" && (
+              <Fragment>
+                <div class="eppf-pricing-tiers">
+                  <div class="eppf-pricing-tier eppf-pricing-tier--early">
+                    <span class="eppf-pricing-tier-label">Early Bird</span>
+                    <strong>$49</strong>
+                    <div class="eppf-pricing-countdown">
+                      <span class="eppf-pricing-countdown-dot"></span>
+                      <span>Ends in 3d</span>
+                    </div>
+                  </div>
+                  <div class="eppf-pricing-tier eppf-pricing-tier--regular">
+                    <span class="eppf-pricing-tier-label">Regular</span>
+                    <strong>$99</strong>
+                  </div>
+                  <div class="eppf-pricing-tier eppf-pricing-tier--vip">
+                    <span class="eppf-pricing-tier-label">VIP</span>
+                    <strong>$199</strong>
+                  </div>
+                </div>
+                <div class="eppf-visual-pill">Ticket tiers</div>
+              </Fragment>
+            )}
+
+            {card.visual === "revtrack" && (
+              <Fragment>
+                <div class="eppf-revtrack-dash">
+                  <div class="eppf-revtrack-top">
+                    <div class="eppf-revtrack-stat">
+                      <span class="eppf-revtrack-label">Gross</span>
+                      <strong>$24,850</strong>
+                    </div>
+                    <div class="eppf-revtrack-stat">
+                      <span class="eppf-revtrack-label">Net</span>
+                      <strong>$24,130</strong>
+                    </div>
+                    <div class="eppf-revtrack-stat">
+                      <span class="eppf-revtrack-label">Fees</span>
+                      <strong>$720</strong>
+                    </div>
+                  </div>
+                  <div class="eppf-revtrack-chart">
+                    <span style="--h:30%"></span>
+                    <span style="--h:45%"></span>
+                    <span style="--h:60%"></span>
+                    <span style="--h:55%"></span>
+                    <span style="--h:75%"></span>
+                    <span style="--h:90%"></span>
+                    <span style="--h:85%"></span>
+                  </div>
+                </div>
+                <div class="eppf-revtrack-live">
+                  <span class="eppf-revtrack-live-dot"></span>
+                  Live
+                </div>
+                <div class="eppf-visual-pill">Revenue dashboard</div>
+              </Fragment>
+            )}
+
+            {card.visual === "refundcard" && (
+              <Fragment>
+                <div class="eppf-refund-flow">
+                  <div class="eppf-refund-step">
+                    <div class="eppf-refund-step-icon">1</div>
+                    <span>Click Refund</span>
+                  </div>
+                  <div class="eppf-refund-arrow">
+                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6h18M14 1l5 5-5 5" stroke="#afa3ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="eppf-refund-step">
+                    <div class="eppf-refund-step-icon">2</div>
+                    <span>Gateway API</span>
+                  </div>
+                  <div class="eppf-refund-arrow">
+                    <svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6h18M14 1l5 5-5 5" stroke="#afa3ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="eppf-refund-step">
+                    <div class="eppf-refund-step-icon eppf-refund-step-icon--done">&#10003;</div>
+                    <span>Confirmed</span>
+                  </div>
+                </div>
+                <div class="eppf-refund-email">
+                  <span class="eppf-refund-email-icon">&#9993;</span>
+                  <span>Refund email sent</span>
+                </div>
+                <div class="eppf-visual-pill">Instant refunds</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .eppf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .eppf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .eppf-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .eppf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .eppf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .eppf-highlight { color: #AFA3FF; }
+
+  .eppf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .eppf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .eppf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .eppf-card-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .eppf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .eppf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .eppf-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .eppf-card-items li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .eppf-card-items li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+  }
+
+  .eppf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .eppf-card-btn:hover { transform: scale(1.05); }
+
+  .eppf-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  .eppf-visual-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* BYOG visual */
+  .eppf-byog-cards {
+    position: absolute;
+    left: 34px;
+    top: 50px;
+    right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .eppf-byog-gw {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 14px 28px -18px rgba(17, 28, 56, 0.4);
+  }
+
+  .eppf-byog-gw-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eppf-byog-gw-icon span {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 800;
+  }
+
+  .eppf-byog-gw-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eppf-byog-connect {
+    position: absolute;
+    right: 34px;
+    top: 60px;
+  }
+
+  .eppf-byog-connect-btn {
+    display: inline-flex;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #375dfb, #2248e8);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 12px 28px -14px rgba(55, 93, 251, 0.6);
+  }
+
+  /* Pricing visual */
+  .eppf-pricing-tiers {
+    position: absolute;
+    left: 34px;
+    top: 50px;
+    right: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .eppf-pricing-tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 14px 28px -18px rgba(17, 28, 56, 0.4);
+  }
+
+  .eppf-pricing-tier-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #14213b;
+  }
+
+  .eppf-pricing-tier strong {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  .eppf-pricing-tier--early {
+    border-color: #22c55e;
+    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+  }
+
+  .eppf-pricing-tier--early strong { color: #16a34a; }
+
+  .eppf-pricing-countdown {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #dc2626;
+  }
+
+  .eppf-pricing-countdown-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+    animation: eppf-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes eppf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Revenue tracking visual */
+  .eppf-revtrack-dash {
+    position: absolute;
+    inset: 40px 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .eppf-revtrack-top {
+    display: flex;
+    gap: 10px;
+  }
+
+  .eppf-revtrack-stat {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .eppf-revtrack-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #607390;
+  }
+
+  .eppf-revtrack-stat strong {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: #14213b;
+  }
+
+  .eppf-revtrack-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 100px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+  }
+
+  .eppf-revtrack-chart span {
+    flex: 1;
+    height: var(--h, 50%);
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, #375dfb, #38bdf8);
+    opacity: 0.7;
+  }
+
+  .eppf-revtrack-live {
+    position: absolute;
+    right: 34px;
+    top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(220, 38, 38, 0.1);
+    font-size: 11px;
+    font-weight: 800;
+    color: #dc2626;
+  }
+
+  .eppf-revtrack-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #dc2626;
+    animation: eppf-pulse 1.5s ease-in-out infinite;
+  }
+
+  /* Refund flow visual */
+  .eppf-refund-flow {
+    position: absolute;
+    left: 20px;
+    top: 60px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .eppf-refund-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .eppf-refund-step-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.15);
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: #375dfb;
+  }
+
+  .eppf-refund-step-icon--done {
+    background: linear-gradient(180deg, #22c55e, #16a34a);
+    border-color: transparent;
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .eppf-refund-step span {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .eppf-refund-arrow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .eppf-refund-email {
+    position: absolute;
+    right: 34px;
+    bottom: 80px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    box-shadow: 0 14px 28px -18px rgba(17, 28, 56, 0.4);
+  }
+
+  .eppf-refund-email-icon {
+    font-size: 16px;
+  }
+
+  .eppf-refund-email span:last-child {
+    font-size: 12px;
+    font-weight: 700;
+    color: #16a34a;
+  }
+
+  @media (max-width: 1024px) {
+    .eppf-section { padding: 60px 20px 30px; }
+    .eppf-header { width: 80%; }
+    .eppf-subtitle { font-size: 16px; }
+    .eppf-title { font-size: 40px; line-height: 1em; }
+    .eppf-card { height: 450px; }
+    .eppf-card-content { flex-basis: 50%; }
+    .eppf-card-title { font-size: 28px; }
+    .eppf-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .eppf-section { padding: 50px 20px 30px; }
+    .eppf-header { width: 100%; }
+    .eppf-title { font-size: 30px; }
+    .eppf-card { flex-direction: column; height: 620px; }
+    .eppf-card-content { flex: 0 0 55%; padding: 20px 20px 0; }
+    .eppf-card-visual { min-height: 260px; padding: 12px; }
+    .eppf-card-title { font-size: 24px; }
+    .eppf-card-desc { font-size: 15px; }
+    .eppf-cards { padding-bottom: 40px; }
+    .eppf-byog-cards { left: 20px; right: 60px; }
+    .eppf-byog-connect { right: 18px; }
+    .eppf-pricing-tiers { left: 20px; right: 60px; }
+    .eppf-revtrack-dash { inset: 20px 16px auto; }
+    .eppf-refund-flow { left: 10px; right: 10px; gap: 4px; }
+    .eppf-refund-email { right: 16px; bottom: 60px; }
+  }
+</style>

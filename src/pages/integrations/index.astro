@@ -1,0 +1,338 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+
+const title = "EventHex Integrations — Connect to Payments, CRM, Messaging & Automation";
+const description = "EventHex integrates natively with leading payment gateways, CRMs, messaging platforms, and automation tools — so your event data flows where it needs to.";
+
+const integrations = [
+  {
+    category: "Payments",
+    items: [
+      { name: "Stripe", slug: "stripe", color: "#635BFF", tagline: "Accept card payments globally with 135+ currencies and 0% EventHex platform fees.", icon: "💳" },
+      { name: "Razorpay", slug: "razorpay", color: "#072654", tagline: "India's preferred gateway — UPI, cards, net banking & wallets with 0% EventHex fees.", icon: "🏦" },
+      { name: "Tap Payments", slug: "tap-payments", color: "#2ACFCF", tagline: "Accept mada, KNET, BENEFIT & Apple Pay across the GCC in local currencies.", icon: "💰" },
+    ],
+  },
+  {
+    category: "CRM",
+    items: [
+      { name: "HubSpot", slug: "hubspot", color: "#FF7A59", tagline: "Bidirectional CRM sync — attendee data, deals, and follow-up sequences in real time.", icon: "🔗" },
+    ],
+  },
+  {
+    category: "Communication",
+    items: [
+      { name: "WhatsApp", slug: "whatsapp", color: "#25D366", tagline: "Send confirmations, reminders & campaigns via WhatsApp Business API with 98% open rates.", icon: "💬" },
+      { name: "Email / AWS SES", slug: "email", color: "#FF9900", tagline: "Transactional and campaign emails via Amazon SES with 99%+ deliverability.", icon: "✉️" },
+      { name: "Push Notifications", slug: "push-notifications", color: "#FFCA28", tagline: "Real-time alerts to iOS & Android via Firebase Cloud Messaging.", icon: "🔔" },
+    ],
+  },
+  {
+    category: "Automation",
+    items: [
+      { name: "Webhooks & Zapier", slug: "webhooks", color: "#FF4A00", tagline: "Trigger workflows with real-time webhooks or connect to 5,000+ apps via Zapier.", icon: "⚡" },
+      { name: "WordPress", slug: "wordpress", color: "#21759B", tagline: "Embed event listings, ticket checkout & attendee portals into any WordPress page.", icon: "🌐" },
+    ],
+  },
+];
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "EventHex Integrations",
+  description: description,
+  numberOfItems: 9,
+  itemListElement: integrations.flatMap((cat) =>
+    cat.items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      url: `https://eventhex.ai/integrations/${item.slug}/`,
+    }))
+  ),
+};
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical="https://eventhex.ai/integrations/"
+  showFooterCta={false}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+    <meta property="og:url" content="https://eventhex.ai/integrations/" />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="inth-hero">
+    <div class="inth-hero__inner">
+      <span class="inth-hero__badge animate-on-scroll" data-animation="fadeIn">Integrations</span>
+      <h1 class="inth-hero__title animate-on-scroll" data-animation="fadeIn" data-delay="100">
+        Connect EventHex to Your<br />
+        <span class="inth-hero__highlight">Favourite Tools</span>
+      </h1>
+      <p class="inth-hero__copy animate-on-scroll" data-animation="fadeIn" data-delay="200">
+        EventHex integrates natively with leading payment gateways, CRMs, messaging platforms, and automation tools — so your event data flows where it needs to.
+      </p>
+    </div>
+  </section>
+
+  <!-- INTEGRATION GRID -->
+  <section class="inth-grid">
+    <div class="inth-grid__inner">
+      {integrations.map((category) => (
+        <div class="inth-category">
+          <h2 class="inth-category__title animate-on-scroll" data-animation="fadeIn">{category.category}</h2>
+          <div class="inth-category__cards">
+            {category.items.map((item, i) => (
+              <a href={`/integrations/${item.slug}/`} class="inth-card animate-on-scroll" data-animation="fadeIn" data-delay={String(i * 80)}>
+                <div class="inth-card__icon" style={`background: ${item.color}15; border-color: ${item.color}30;`}>
+                  <span class="inth-card__emoji">{item.icon}</span>
+                </div>
+                <h3 class="inth-card__name">{item.name}</h3>
+                <p class="inth-card__tagline">{item.tagline}</p>
+                <span class="inth-card__link">Learn more →</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="inth-cta">
+    <div class="inth-cta__inner animate-on-scroll" data-animation="fadeIn">
+      <h2 class="inth-cta__title">Need a Custom Integration?</h2>
+      <p class="inth-cta__copy">Our team can build custom integrations to connect EventHex with your existing tech stack.</p>
+      <a href="/book-a-demo/" class="inth-btn inth-btn--primary">Book a Demo</a>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .inth-hero {
+    position: relative;
+    padding: 120px 24px 80px;
+    background:
+      url("https://eventhex.ai/wp-content/uploads/2025/03/Bg.svg") center / cover no-repeat,
+      linear-gradient(135deg, #0f1028 0%, #1a1d3a 50%, #0f1028 100%);
+    text-align: center;
+    overflow: hidden;
+  }
+  .inth-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(55, 93, 251, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .inth-hero__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .inth-hero__badge {
+    display: inline-block;
+    padding: 6px 18px;
+    border-radius: 50px;
+    background: rgba(55, 93, 251, 0.15);
+    border: 1px solid rgba(55, 93, 251, 0.3);
+    color: #7b9aff;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    margin-bottom: 24px;
+  }
+  .inth-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0 0 24px;
+  }
+  .inth-hero__highlight {
+    color: var(--brand-blue);
+    font-weight: 800;
+  }
+  .inth-hero__copy {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* ── GRID SECTION ─────────────────────────────────────────── */
+  .inth-grid {
+    padding: 80px 24px 100px;
+    background: linear-gradient(180deg, #0f1028 0%, #141733 50%, #0f1028 100%);
+  }
+  .inth-grid__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .inth-category {
+    margin-bottom: 56px;
+  }
+  .inth-category:last-child {
+    margin-bottom: 0;
+  }
+  .inth-category__title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .inth-category__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* ── CARD ──────────────────────────────────────────────────── */
+  .inth-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-decoration: none;
+    transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+  }
+  .inth-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(55, 93, 251, 0.3);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .inth-card__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    border: 1.5px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  .inth-card__emoji {
+    font-size: 1.5rem;
+  }
+  .inth-card__name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px;
+  }
+  .inth-card__tagline {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.58);
+    line-height: 1.6;
+    margin: 0 0 auto;
+    padding-bottom: 16px;
+  }
+  .inth-card__link {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+    transition: color 0.2s ease;
+  }
+  .inth-card:hover .inth-card__link {
+    color: #7b9aff;
+  }
+
+  /* ── CTA ──────────────────────────────────────────────────── */
+  .inth-cta {
+    padding: 80px 24px 100px;
+    background: linear-gradient(180deg, #0f1028 0%, #1a1d3a 100%);
+    text-align: center;
+  }
+  .inth-cta__inner {
+    max-width: 640px;
+    margin: 0 auto;
+    background: rgba(55, 93, 251, 0.08);
+    border: 1px solid rgba(55, 93, 251, 0.2);
+    border-radius: 24px;
+    padding: 56px 40px;
+  }
+  .inth-cta__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 14px;
+  }
+  .inth-cta__copy {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    margin: 0 0 28px;
+  }
+  .inth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 36px;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .inth-btn--primary {
+    background: var(--brand-blue);
+    color: #fff;
+  }
+  .inth-btn--primary:hover {
+    background: var(--brand-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(55, 93, 251, 0.35);
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .inth-category__cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .inth-hero {
+      padding: 100px 16px 60px;
+    }
+    .inth-hero__copy {
+      font-size: 1rem;
+    }
+    .inth-grid {
+      padding: 56px 16px 72px;
+    }
+    .inth-category__cards {
+      grid-template-columns: 1fr;
+    }
+    .inth-card {
+      padding: 24px 20px;
+    }
+    .inth-cta {
+      padding: 56px 16px 72px;
+    }
+    .inth-cta__inner {
+      padding: 36px 24px;
+    }
+  }
+</style>

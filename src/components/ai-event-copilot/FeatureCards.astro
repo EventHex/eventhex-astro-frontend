@@ -1,0 +1,565 @@
+---
+// AI Event Copilot Feature Cards — sticky stacking cards on dark bg
+const featureCards = [
+  {
+    eyebrow: "analyst agent",
+    title: "Ask your data anything in plain English",
+    desc: "The Analyst Agent turns complex event data into clear answers. Ask in natural language and get instant charts and insights — no SQL or dashboards needed.",
+    items: [
+      "Natural language queries in plain English",
+      "AI picks best chart type and renders instantly",
+      "Forecasts on registration, revenue, and engagement",
+    ],
+    visual: "analystcard",
+  },
+  {
+    eyebrow: "copywriter agent",
+    title: "AI-generated event marketing content in seconds",
+    desc: "From email campaigns to social posts — the Copywriter Agent generates compelling, on-brand content in seconds. Edit or publish directly.",
+    items: [
+      "Multi-step campaign emails with personalization",
+      "Platform-optimized posts for LinkedIn and Twitter",
+      "Generate content in 15+ languages",
+    ],
+    visual: "copycard",
+  },
+  {
+    eyebrow: "session agent",
+    title: "Build optimized agendas from speaker inputs",
+    desc: "The Session Agent generates session schedules from speaker and topic data. It suggests optimal time slots, avoids conflicts, and writes descriptions.",
+    items: [
+      "Generate schedules from speaker inputs",
+      "Conflict detection and time optimization",
+      "Auto-write session descriptions",
+    ],
+    visual: "sessioncard",
+  },
+  {
+    eyebrow: "ticket agent",
+    title: "24/7 attendee support without adding staff",
+    desc: "The Ticket Agent handles inquiries around the clock — registration, payments, ticket issues. Complex queries escalate to your team seamlessly.",
+    items: [
+      "AI chatbot answers in under 2 seconds",
+      "Handles transfers, refunds, access issues",
+      "Seamlessly hands off to human organizers",
+    ],
+    visual: "ticketcard",
+  },
+];
+---
+
+<section class="aecf-shell">
+  <div class="aecf-section">
+    <div class="aecf-header">
+      <span class="aecf-subtitle">Four specialized agents that handle data, content, sessions, and support</span>
+      <h2 class="aecf-title">
+        Everything You Need to <span class="aecf-highlight">Analyze, Create, and Support</span><br/>with AI Agents
+      </h2>
+    </div>
+
+    <div class="aecf-cards" id="aecf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="aecf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="aecf-card-content">
+            <span class="aecf-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="aecf-card-title">{card.title}</h3>
+            <p class="aecf-card-desc">{card.desc}</p>
+            <ul class="aecf-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="aecf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`aecf-card-visual aecf-card-visual--${card.visual}`}>
+            {card.visual === "analystcard" && (
+              <Fragment>
+                <div class="aecf-vis-query">
+                  <div class="aecf-vis-query-bar">
+                    <span class="aecf-vis-query-text"></span>
+                    <span class="aecf-vis-query-cursor"></span>
+                  </div>
+                </div>
+                <div class="aecf-vis-chart">
+                  <div class="aecf-vis-bar aecf-vis-bar--1"></div>
+                  <div class="aecf-vis-bar aecf-vis-bar--2"></div>
+                  <div class="aecf-vis-bar aecf-vis-bar--3"></div>
+                  <div class="aecf-vis-bar aecf-vis-bar--4"></div>
+                  <div class="aecf-vis-bar aecf-vis-bar--5"></div>
+                </div>
+                <div class="aecf-vis-pill">Analyst Agent</div>
+              </Fragment>
+            )}
+
+            {card.visual === "copycard" && (
+              <Fragment>
+                <div class="aecf-vis-editor">
+                  <div class="aecf-vis-editor-header">
+                    <span class="aecf-vis-dot aecf-vis-dot--r"></span>
+                    <span class="aecf-vis-dot aecf-vis-dot--y"></span>
+                    <span class="aecf-vis-dot aecf-vis-dot--g"></span>
+                  </div>
+                  <div class="aecf-vis-editor-lines">
+                    <span class="aecf-vis-line aecf-vis-line--title"></span>
+                    <span class="aecf-vis-line aecf-vis-line--body"></span>
+                    <span class="aecf-vis-line aecf-vis-line--body aecf-vis-line--short"></span>
+                    <span class="aecf-vis-line aecf-vis-line--highlight"></span>
+                  </div>
+                </div>
+                <div class="aecf-vis-pill">Copywriter Agent</div>
+              </Fragment>
+            )}
+
+            {card.visual === "sessioncard" && (
+              <Fragment>
+                <div class="aecf-vis-calendar">
+                  <div class="aecf-vis-cal-header"></div>
+                  <div class="aecf-vis-cal-slots">
+                    <div class="aecf-vis-cal-slot aecf-vis-cal-slot--keynote"></div>
+                    <div class="aecf-vis-cal-slot aecf-vis-cal-slot--panel"></div>
+                    <div class="aecf-vis-cal-slot aecf-vis-cal-slot--workshop"></div>
+                    <div class="aecf-vis-cal-slot aecf-vis-cal-slot--break"></div>
+                  </div>
+                </div>
+                <div class="aecf-vis-pill">Session Agent</div>
+              </Fragment>
+            )}
+
+            {card.visual === "ticketcard" && (
+              <Fragment>
+                <div class="aecf-vis-chat">
+                  <div class="aecf-vis-chat-bot">
+                    <span class="aecf-vis-chat-avatar"></span>
+                    <span class="aecf-vis-chat-bubble aecf-vis-chat-bubble--bot"></span>
+                  </div>
+                  <div class="aecf-vis-chat-user">
+                    <span class="aecf-vis-chat-bubble aecf-vis-chat-bubble--user"></span>
+                  </div>
+                  <div class="aecf-vis-chat-bot">
+                    <span class="aecf-vis-chat-avatar"></span>
+                    <span class="aecf-vis-chat-bubble aecf-vis-chat-bubble--bot aecf-vis-chat-bubble--resolve"></span>
+                  </div>
+                </div>
+                <div class="aecf-vis-pill">Ticket Agent</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .aecf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .aecf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .aecf-header {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .aecf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .aecf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .aecf-highlight {
+    color: #AFA3FF;
+  }
+
+  /* Stacking cards */
+  .aecf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .aecf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg);
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .aecf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .aecf-card-eyebrow {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .aecf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .aecf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .aecf-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aecf-card-items li {
+    position: relative;
+    padding-left: 20px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .aecf-card-items li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .aecf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .aecf-card-btn:hover {
+    transform: scale(1.05);
+  }
+
+  /* Card visual area */
+  .aecf-card-visual {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    position: relative;
+    gap: 16px;
+  }
+
+  .aecf-vis-pill {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.15);
+    border: 1px solid rgba(55, 93, 251, 0.2);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: #7fb4ff;
+    letter-spacing: 0.04em;
+  }
+
+  /* Analyst card visual */
+  .aecf-vis-query {
+    width: 80%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .aecf-vis-query-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .aecf-vis-query-text {
+    display: block;
+    width: 60%;
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .aecf-vis-query-cursor {
+    display: block;
+    width: 2px;
+    height: 14px;
+    background: #375DFB;
+    border-radius: 1px;
+    animation: aecfBlink 1s ease infinite;
+  }
+
+  @keyframes aecfBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .aecf-vis-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 120px;
+    padding: 0 20px;
+  }
+
+  .aecf-vis-bar {
+    width: 28px;
+    border-radius: 6px 6px 0 0;
+    animation: aecfGrow 0.8s ease forwards;
+    transform-origin: bottom;
+  }
+
+  @keyframes aecfGrow {
+    from { transform: scaleY(0); }
+    to { transform: scaleY(1); }
+  }
+
+  .aecf-vis-bar--1 { height: 50px; background: rgba(55, 93, 251, 0.7); animation-delay: 0.1s; }
+  .aecf-vis-bar--2 { height: 80px; background: rgba(55, 93, 251, 0.5); animation-delay: 0.2s; }
+  .aecf-vis-bar--3 { height: 100px; background: rgba(55, 93, 251, 0.8); animation-delay: 0.3s; }
+  .aecf-vis-bar--4 { height: 65px; background: rgba(175, 163, 255, 0.6); animation-delay: 0.4s; }
+  .aecf-vis-bar--5 { height: 110px; background: rgba(16, 185, 129, 0.6); animation-delay: 0.5s; }
+
+  /* Copywriter card visual */
+  .aecf-vis-editor {
+    width: 80%;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .aecf-vis-editor-header {
+    display: flex;
+    gap: 6px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .aecf-vis-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .aecf-vis-dot--r { background: #FF5F57; }
+  .aecf-vis-dot--y { background: #FEBC2E; }
+  .aecf-vis-dot--g { background: #28C840; }
+
+  .aecf-vis-editor-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 14px;
+  }
+
+  .aecf-vis-line {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .aecf-vis-line--title {
+    width: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    height: 8px;
+  }
+
+  .aecf-vis-line--body {
+    width: 90%;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .aecf-vis-line--short {
+    width: 65%;
+  }
+
+  .aecf-vis-line--highlight {
+    width: 70%;
+    background: rgba(55, 93, 251, 0.25);
+    animation: aecfBlink 2s ease infinite;
+  }
+
+  /* Session card visual */
+  .aecf-vis-calendar {
+    width: 80%;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .aecf-vis-cal-header {
+    height: 28px;
+    background: rgba(55, 93, 251, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .aecf-vis-cal-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .aecf-vis-cal-slot {
+    height: 24px;
+    border-radius: 8px;
+  }
+
+  .aecf-vis-cal-slot--keynote { background: rgba(55, 93, 251, 0.2); width: 80%; }
+  .aecf-vis-cal-slot--panel { background: rgba(175, 163, 255, 0.2); width: 60%; }
+  .aecf-vis-cal-slot--workshop { background: rgba(16, 185, 129, 0.2); width: 90%; }
+  .aecf-vis-cal-slot--break { background: rgba(245, 158, 11, 0.15); width: 40%; }
+
+  /* Ticket card visual */
+  .aecf-vis-chat {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .aecf-vis-chat-bot,
+  .aecf-vis-chat-user {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .aecf-vis-chat-user {
+    justify-content: flex-end;
+  }
+
+  .aecf-vis-chat-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(55, 93, 251, 0.2);
+    flex-shrink: 0;
+  }
+
+  .aecf-vis-chat-bubble {
+    display: block;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+
+  .aecf-vis-chat-bubble--bot {
+    background: rgba(55, 93, 251, 0.12);
+    width: 70%;
+    height: 32px;
+  }
+
+  .aecf-vis-chat-bubble--user {
+    background: rgba(255, 255, 255, 0.08);
+    width: 55%;
+    height: 28px;
+  }
+
+  .aecf-vis-chat-bubble--resolve {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+  }
+
+  @media (max-width: 1024px) {
+    .aecf-section { padding: 60px 20px 30px; }
+    .aecf-header { width: 80%; }
+    .aecf-subtitle { font-size: 16px; }
+    .aecf-title { font-size: 40px; line-height: 1em; }
+    .aecf-card { height: 450px; }
+    .aecf-card-content { flex-basis: 50%; }
+    .aecf-card-title { font-size: 28px; }
+    .aecf-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .aecf-section { padding: 50px 20px 30px; }
+    .aecf-header { width: 100%; }
+    .aecf-title { font-size: 30px; }
+    .aecf-card { flex-direction: column; height: 520px; }
+    .aecf-card-content { flex: 0 0 50%; padding: 20px 20px 0; }
+    .aecf-card-visual { padding: 10px; }
+    .aecf-card-title { font-size: 24px; }
+    .aecf-card-desc { font-size: 15px; }
+    .aecf-cards { padding-bottom: 40px; }
+  }
+</style>

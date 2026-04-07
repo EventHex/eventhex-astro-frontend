@@ -1,0 +1,367 @@
+---
+// FAQ Section — Light theme with split layout, SEO JSON-LD structured data
+// Pattern from speaker-management FaqSection (light variant)
+
+interface FaqItem {
+  question: string;
+  answerHtml: string;
+}
+
+interface Props {
+  title: string;
+  items: FaqItem[];
+}
+
+const { title, items } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: item.answerHtml.replace(/<[^>]*>/g, '')
+    }
+  }))
+};
+---
+
+<section class="etfaq" id="ticket-faq-section">
+  <div class="etfaq__inner">
+    <div class="etfaq__support">
+      <span class="etfaq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need a custom setup?</span>
+      <h2 class="etfaq__title animate-on-scroll" data-animation="fadeInUp">{title}</h2>
+      <p class="etfaq__desc animate-on-scroll" data-animation="fadeInUp">
+        We can help you shape branded ticket journeys, approval rules, and faster check-in experiences
+        around how your event team actually works.
+      </p>
+
+      <div class="etfaq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="etfaq__support-label">Common launch checklist</span>
+        <ul class="etfaq__support-list">
+          <li class="etfaq__support-item">Branded ticket classes and discounts</li>
+          <li class="etfaq__support-item">Payment routing and approval rules</li>
+          <li class="etfaq__support-item">QR scan + badge print readiness</li>
+        </ul>
+
+        <div class="etfaq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Design your ticket flow before launch and keep your event team aligned.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="etfaq__cta">Design my ticket flow</a>
+      </div>
+    </div>
+
+    <div class="etfaq__list">
+      {items.map((item, index) => (
+        <details class="etfaq__item animate-on-scroll" data-animation="fadeInUp" data-faq-item open={index === 0}>
+          <summary class="etfaq__question">
+            <span>{item.question}</span>
+            <span class="etfaq__icon" aria-hidden="true">
+              <span class="etfaq__icon-line etfaq__icon-line--h"></span>
+              <span class="etfaq__icon-line etfaq__icon-line--v"></span>
+            </span>
+          </summary>
+          <div class="etfaq__answer" set:html={item.answerHtml}></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<Fragment set:html={`<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`} />
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll('[data-faq-item]'));
+
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+
+      faqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .etfaq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .etfaq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .etfaq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .etfaq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .etfaq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .etfaq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .etfaq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .etfaq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .etfaq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .etfaq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .etfaq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .etfaq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .etfaq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .etfaq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .etfaq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .etfaq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .etfaq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .etfaq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .etfaq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+    transition: color 0.2s ease;
+  }
+
+  .etfaq__question::-webkit-details-marker { display: none; }
+  .etfaq__question::marker { display: none; content: ""; }
+
+  .etfaq__question:hover { color: #375dfb; }
+
+  .etfaq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    margin-top: 3px;
+    color: #375dfb;
+  }
+
+  .etfaq__icon-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 999px;
+    background: currentColor;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .etfaq__icon-line--h { width: 20px; height: 2px; }
+  .etfaq__icon-line--v { width: 2px; height: 20px; }
+
+  .etfaq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .etfaq__answer :global(p) {
+    margin: 0;
+    max-width: 92%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.8;
+    color: #5b6477;
+  }
+
+  .etfaq__item[open] {
+    background: #fff;
+    border-color: rgba(55, 93, 251, 0.2);
+    box-shadow: 0 2px 16px rgba(55, 93, 251, 0.06);
+  }
+
+  .etfaq__item[open] .etfaq__icon-line--v {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0.35);
+  }
+
+  @media (max-width: 1100px) {
+    .etfaq { padding: 76px 0; }
+    .etfaq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .etfaq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .etfaq__title { font-size: 40px; }
+    .etfaq__desc { font-size: 16px; }
+    .etfaq__question { padding: 24px 22px; font-size: 20px; }
+    .etfaq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .etfaq { padding: 56px 0; }
+    .etfaq__inner { padding: 0 16px; gap: 24px; }
+    .etfaq__title { font-size: 32px; line-height: 1.08; }
+    .etfaq__desc { font-size: 15px; line-height: 1.7; }
+    .etfaq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .etfaq__support-item { font-size: 15px; }
+    .etfaq__support-note strong { font-size: 18px; }
+    .etfaq__cta { width: 100%; }
+    .etfaq__item { border-radius: 24px; }
+    .etfaq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .etfaq__answer { padding: 0 18px 20px; }
+    .etfaq__answer :global(p) { max-width: 100%; font-size: 15px; line-height: 1.75; }
+  }
+</style>

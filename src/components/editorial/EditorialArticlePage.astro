@@ -100,7 +100,7 @@ const shareLinks = item
             <ul class="art-toc__list">
               {item.headings.map(h => (
                 <li class:list={["art-toc__item", h.level === 3 && "art-toc__item--sub"]}>
-                  <a href={`#${h.id}`} class="art-toc__link">{h.text}</a>
+                  <a href={`#${h.id}`} class="art-toc__link" data-toc-link>{h.text}</a>
                 </li>
               ))}
             </ul>
@@ -119,12 +119,14 @@ const shareLinks = item
 
   {relatedItems.length > 0 && (
     <section class="art-related">
-      <div class="art-related__header">
-        <h2 class="art-related__title">Continue reading</h2>
-        <a href={collectionHref} class="art-related__all">View all →</a>
-      </div>
-      <div class="art-related__grid">
-        {relatedItems.map(r => <EditorialCard item={r} showDescription={false} />)}
+      <div class="art-related__inner">
+        <div class="art-related__header">
+          <h2 class="art-related__title">Continue reading</h2>
+          <a href={collectionHref} class="art-related__all">View all →</a>
+        </div>
+        <div class="art-related__grid">
+          {relatedItems.map(r => <EditorialCard item={r} showDescription={false} />)}
+        </div>
       </div>
     </section>
   )}
@@ -139,17 +141,54 @@ const shareLinks = item
 </section>
 )}
 
+<script>
+  // TOC scroll-spy: highlight the current heading in the sidebar
+  const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+  if (tocLinks.length > 0) {
+    const headingIds = Array.from(tocLinks).map(link => link.getAttribute('href')!.slice(1));
+    const headings = headingIds
+      .map(id => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const activate = (id: string) => {
+      tocLinks.forEach(link => {
+        const isActive = link.getAttribute('href') === `#${id}`;
+        link.classList.toggle('is-active', isActive);
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            activate(entry.target.id);
+            break;
+          }
+        }
+      },
+      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+    );
+
+    headings.forEach(h => observer.observe(h));
+  }
+</script>
+
 <style>
+  /* ── Hero ── */
   .art-hero {
+    position: relative;
+    margin-top: -90px;
     background:
-      radial-gradient(ellipse at 30% 0%, rgba(55, 93, 251, 0.08) 0%, transparent 60%),
-      var(--surface-light, #f5f8ff);
-    padding: 7rem 1.5rem 4rem;
+      radial-gradient(circle at 18% 30%, rgba(175, 163, 255, 0.14), transparent 28%),
+      radial-gradient(circle at 80% 24%, rgba(171, 255, 255, 0.14), transparent 30%),
+      url('https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
   }
 
   .art-hero__inner {
-    max-width: 820px;
+    max-width: 1000px;
     margin: 0 auto;
+    background: url('https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
+    padding: 180px 24px 80px;
   }
 
   .art-breadcrumb {
@@ -159,7 +198,7 @@ const shareLinks = item
     font-family: var(--font-body);
     font-size: 0.8125rem;
     color: var(--label-gray, #868c98);
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
   }
   .art-breadcrumb a {
     color: inherit;
@@ -199,20 +238,22 @@ const shareLinks = item
     font-size: 0.75rem;
   }
 
+  /* Fix #2: Match site hero typography — 42px/600 Manrope */
   .art-hero__title {
     font-family: var(--font-heading);
-    font-size: clamp(2rem, 4.2vw, 3.2rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.025em;
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 50px;
+    letter-spacing: -0.5px;
     color: var(--heading-dark, #22272f);
     margin-bottom: 1.25rem;
   }
 
   .art-hero__lead {
     font-family: var(--font-body);
-    font-size: 1.175rem;
-    line-height: 1.65;
+    font-size: 18px;
+    line-height: 28px;
+    letter-spacing: -0.48px;
     color: var(--subheading-gray, #475467);
     margin-bottom: 2.5rem;
     max-width: 640px;
@@ -223,7 +264,7 @@ const shareLinks = item
     align-items: center;
     gap: 0.875rem;
     padding-top: 2rem;
-    border-top: 1px solid var(--surface-card-border, #e8ecf2);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
   }
   .art-hero__author-avatar {
     width: 42px;
@@ -253,55 +294,68 @@ const shareLinks = item
     color: var(--label-gray, #868c98);
   }
 
+  /* Fix #4: Cover image — unified width, no awkward translateY */
   .art-cover {
-    max-width: 960px;
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 1.5rem;
-    transform: translateY(-2rem);
+    padding: 0 24px;
+    margin-top: -40px;
   }
   .art-cover img {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 14px;
-    box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.1);
   }
 
+  /* Fix #1 & #4: Unified grid width (1000px) with wider sidebar */
   .art-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px;
-    gap: 4.5rem;
-    max-width: 1060px;
-    margin: 2rem auto 0;
-    padding: 0 1.5rem 5rem;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3.5rem 24px 5rem;
   }
 
+  /* Fix #5: Darken body text for readability */
   .art-prose {
     font-family: var(--font-body);
-    font-size: 1.0625rem;
+    font-size: 17px;
     line-height: 1.85;
-    color: var(--body-gray, #525866);
+    color: #374151;
   }
   .art-prose :global(h2) {
     font-family: var(--font-heading);
-    font-size: 1.75rem;
+    font-size: 28px;
     font-weight: 700;
-    color: var(--heading-dark);
-    margin: 2.75rem 0 1rem;
     line-height: 1.25;
+    color: var(--heading-dark, #22272F);
+    margin: 2.75rem 0 1rem;
     scroll-margin-top: 6rem;
   }
+  /* Fix #10: H3 with left accent border */
   .art-prose :global(h3) {
     font-family: var(--font-heading);
-    font-size: 1.35rem;
+    font-size: 22px;
     font-weight: 600;
-    color: var(--heading-dark);
+    line-height: 1.35;
+    color: var(--heading-dark, #22272F);
     margin: 2.25rem 0 0.75rem;
-    line-height: 1.3;
+    padding-left: 14px;
+    border-left: 3px solid var(--brand-blue, #375DFB);
     scroll-margin-top: 6rem;
   }
   .art-prose :global(p) {
     margin-bottom: 1.35rem;
+  }
+  /* Fix #7: Collapse paragraph spacing inside list items */
+  .art-prose :global(li > p) {
+    margin-bottom: 0;
+  }
+  .art-prose :global(li > p + p) {
+    margin-top: 0.5rem;
   }
   .art-prose :global(a) {
     color: var(--brand-blue);
@@ -317,7 +371,7 @@ const shareLinks = item
   .art-prose :global(figure) {
     max-width: 100%;
     height: auto;
-    border-radius: 10px;
+    border-radius: 12px;
     margin: 2rem 0;
   }
   .art-prose :global(ul),
@@ -410,6 +464,7 @@ const shareLinks = item
     line-height: 1;
   }
 
+  /* ── Sidebar ── */
   .art-aside__sticky {
     position: sticky;
     top: 5.5rem;
@@ -436,20 +491,28 @@ const shareLinks = item
     flex-direction: column;
     gap: 0.125rem;
   }
+  /* Fix #8: TOC scroll-spy active state */
   .art-toc__link {
     display: block;
     padding: 0.375rem 0.75rem;
-    border-radius: 6px;
+    border-left: 2px solid transparent;
+    border-radius: 0 6px 6px 0;
     font-family: var(--font-body);
     font-size: 0.8125rem;
     line-height: 1.45;
     color: var(--body-gray, #525866);
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
   }
   .art-toc__link:hover {
     background: rgba(55, 93, 251, 0.06);
     color: var(--brand-blue);
+  }
+  .art-toc__link:global(.is-active) {
+    border-left-color: var(--brand-blue, #375DFB);
+    color: var(--brand-blue, #375DFB);
+    background: rgba(55, 93, 251, 0.06);
+    font-weight: 600;
   }
   .art-toc__item--sub .art-toc__link {
     padding-left: 1.5rem;
@@ -457,12 +520,15 @@ const shareLinks = item
     color: var(--label-gray, #868c98);
   }
 
+  /* Fix #9: Dark card CTA matching site pattern */
   .art-aside-cta {
     padding: 1.5rem;
     border-radius: 14px;
+    border: 1px solid var(--dark-card-border, rgba(172, 161, 241, 0.51));
     background:
       radial-gradient(circle at top right, rgba(171, 255, 255, 0.18), transparent 60%),
-      var(--brand-blue, #375dfb);
+      radial-gradient(circle at bottom left, rgba(159, 129, 255, 0.15), transparent 50%),
+      var(--dark-card-bg, #333864);
   }
   .art-aside-cta__eyebrow {
     font-family: var(--font-body);
@@ -470,7 +536,7 @@ const shareLinks = item
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: rgba(255,255,255,0.7);
+    color: var(--accent-cyan, #ABFFFF);
     margin-bottom: 0.5rem;
   }
   .art-aside-cta__title {
@@ -485,7 +551,7 @@ const shareLinks = item
     font-family: var(--font-body);
     font-size: 0.8125rem;
     line-height: 1.55;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255,255,255,0.7);
     margin-bottom: 1.25rem;
   }
   .art-aside-cta__btn {
@@ -495,23 +561,28 @@ const shareLinks = item
     width: 100%;
     padding: 0.6rem 1rem;
     border-radius: 8px;
-    background: #fff;
-    color: var(--brand-blue);
+    background: var(--brand-blue, #375DFB);
+    color: #fff;
     font-family: var(--font-body);
     font-size: 0.8125rem;
     font-weight: 700;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, background 0.2s;
   }
   .art-aside-cta__btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    background: var(--brand-blue-hover, #1C46D4);
   }
 
+  /* Fix #9: Related section with subtle bg */
   .art-related {
-    max-width: 1060px;
+    background: var(--surface-light, #F5F8FF);
+    padding: 0 0 4rem;
+  }
+  .art-related__inner {
+    max-width: 1000px;
     margin: 0 auto;
-    padding: 0 1.5rem 6rem;
+    padding: 0 24px;
   }
   .art-related__header {
     display: flex;
@@ -519,13 +590,13 @@ const shareLinks = item
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 2.5rem;
-    padding-top: 3rem;
-    border-top: 1px solid var(--surface-card-border, #e8ecf2);
+    padding-top: 3.5rem;
   }
   .art-related__title {
     font-family: var(--font-heading);
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
     color: var(--heading-dark);
   }
   .art-related__all {
@@ -543,9 +614,10 @@ const shareLinks = item
   .art-related__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 24px;
   }
 
+  /* ── 404 ── */
   .art-404 {
     text-align: center;
     padding: 10rem 1.5rem;
@@ -576,7 +648,15 @@ const shareLinks = item
   }
   .art-404__btn:hover { background: var(--brand-blue-hover, #1c46d4); }
 
+  /* ── Tablet ── */
   @media (max-width: 1024px) {
+    .art-hero__inner {
+      padding: 140px 20px 60px;
+    }
+    .art-hero__title {
+      font-size: 36px;
+      line-height: 44px;
+    }
     .art-grid {
       grid-template-columns: 1fr;
       gap: 3rem;
@@ -589,21 +669,32 @@ const shareLinks = item
     }
   }
 
+  /* ── Mobile ── */
   @media (max-width: 640px) {
-    .art-hero {
-      padding: 5rem 1rem 3rem;
+    .art-hero__inner {
+      padding: 120px 16px 50px;
     }
     .art-hero__title {
-      font-size: 1.85rem;
+      font-size: 28px;
+      line-height: 36px;
+      letter-spacing: 0;
+    }
+    .art-hero__lead {
+      font-size: 16px;
+      line-height: 24px;
     }
     .art-cover {
-      padding: 0 1rem;
+      padding: 0 16px;
+      margin-top: -24px;
     }
     .art-grid {
-      padding: 0 1rem 4rem;
+      padding: 2.5rem 16px 4rem;
     }
     .art-related {
-      padding: 0 1rem 5rem;
+      padding: 0 0 3rem;
+    }
+    .art-related__inner {
+      padding: 0 16px;
     }
     .art-related__grid {
       grid-template-columns: 1fr;

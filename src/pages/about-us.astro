@@ -1,508 +1,286 @@
 ---
+import EditorialCard from "../components/editorial/EditorialCard.astro";
 import MarketingLayout from "../layouts/MarketingLayout.astro";
+import { decodeHtmlEntities, normalizeBlogPosts } from "../lib/editorial";
+import { getPosts } from "../lib/wordpress";
 
 const title = "About Us - EventHex";
 const description = "At EventHex, we're transforming the ways event organizers and recurring events approach event personalisation, attendee retention, and event campaigning.";
+const rawPosts = await getPosts({ per_page: "6" });
+const latestPosts = normalizeBlogPosts(rawPosts)
+  .slice(0, 6)
+  .map((post) => {
+    const sourcePost = rawPosts.find((candidate) => candidate.id === post.id);
+    const authorTerm = sourcePost?._embedded?.["wp:term"]
+      ?.flat()
+      .find((term) => term.taxonomy === "authors");
 
-const founders = [
-  {
-    name: "Amjd Ali EM",
-    image: "https://eventhex.ai/wp-content/uploads/2025/01/Facebook-Image-3-copy-1.png",
-  },
-  {
-    name: "Amjd Ali EM",
-    image: "https://eventhex.ai/wp-content/uploads/2025/01/Facebook-Image-3-copy-1.png",
-  },
-  {
-    name: "Amjd Ali EM",
-    image: "https://eventhex.ai/wp-content/uploads/2025/01/Facebook-Image-3-copy-1.png",
-  },
-  {
-    name: "Amjd Ali EM",
-    image: "https://eventhex.ai/wp-content/uploads/2025/01/Facebook-Image-3-copy-1.png",
-  },
-];
+    return {
+      ...post,
+      author: authorTerm ? decodeHtmlEntities(authorTerm.name) : post.author,
+    };
+  });
 ---
 
 <MarketingLayout {title} {description}>
-  <!-- Hero Section -->
   <section class="about-hero">
-    <div class="about-hero__card">
-      <h1 class="about-hero__title">Built To Keep Them Recurring</h1>
-      <p class="about-hero__desc">At EventHex, we're transforming the ways event organizers and recurring events approach event personalisation, attendee retention, and event campaigning.</p>
+    <div class="about-hero__outer">
+      <div class="about-hero__inner">
+        <h1 class="about-hero__title">Built To Keep Them Recurring</h1>
+        <p class="about-hero__desc">At EventHex, we're transforming the ways event organizers and recurring events approach event personalisation, attendee retention, and event campaigning.</p>
+      </div>
     </div>
   </section>
 
-  <!-- Team Image Banner -->
-  <section class="about-banner">
-    <div class="about-banner__inner">
+  <section class="about-showcase" aria-label="EventHex showcase">
+    <div class="about-showcase__frame">
       <img
-        src="https://eventhex.ai/wp-content/uploads/2025/01/f0c3d099f82975cb5ec38862a91d4c61-1536x742.jpg"
+        src="/about/eventhex-conference-showcase.jpg"
         alt="EventHex team at a conference"
         width="1536"
         height="742"
-        loading="lazy"
+        loading="eager"
+        decoding="async"
       />
     </div>
   </section>
 
-  <!-- Quote Section -->
-  <section class="about-quote">
-    <div class="about-quote__inner">
-      <blockquote class="about-quote__text">
-        "EventHex, our AI-powered all-in-one event management platform, is designed to solve the pain points that come with traditional and fragmented methods of event management, namely non-personalized event experience, low attendee retention rates, and high cost of campaigning. By unifying all event management tools into a single intuitive platform, we hope to empower organizers to create personalising, engaging, and dynamic experiences that make attendees easy to retarget without inflating the cost"
-      </blockquote>
-      <div class="about-quote__author">
-        <img
-          src="https://eventhex.ai/wp-content/uploads/2025/01/Mask-group-6.png"
-          alt="Afeef Hameed"
-          width="60"
-          height="60"
-          loading="lazy"
-          class="about-quote__avatar"
-        />
-        <div class="about-quote__author-info">
-          <strong class="about-quote__author-name">Afeef Hameed</strong>
-          <span class="about-quote__author-role">CEO, EventHex.ai</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <section class="about-editorial" aria-labelledby="about-editorial-title">
+    <div class="about-editorial__inner">
+      <a href="/blog/" class="about-editorial__link">Explore More</a>
+      <h2 id="about-editorial-title" class="about-editorial__title">Your Countless Events Begin Here</h2>
 
-  <!-- Our Story Section -->
-  <section class="about-story">
-    <div class="about-story__inner">
-      <h2 class="about-story__title">Our Story</h2>
-      <div class="about-story__content">
-        <p>As any event organiser would agree, managing multiple moving parts is an overwhelming task when creating successful events. This becomes even more daunting when you are left with multiple events to be handled simultaneously. Planning, marketing, attendee engagement, and post-event analytics are just a few of the many challenges an event organiser faces regularly. Enter EventHex, an all-in-one AI-powered event management software designed to transform the way events are planned, organised, managed, and experienced. EventHex is not just another event technology—it's a game-changer. Harnessing the power of artificial intelligence and integrating it into a centralized dashboard with advanced engagement tools, EventHex is designed to simplify every aspect of event management.</p>
-      </div>
-      <div class="about-story__images">
-        <div class="about-story__image-grid">
-          <img src="https://eventhex.ai/wp-content/uploads/2025/01/Mask-group-7.png" alt="EventHex team collaboration" width="400" height="300" loading="lazy" />
-          <img src="https://eventhex.ai/wp-content/uploads/2025/01/Afeef-Hameed-Activity-1.png" alt="Afeef Hameed at an event" width="400" height="300" loading="lazy" />
-          <img src="https://eventhex.ai/wp-content/uploads/2025/01/image-31.png" alt="EventHex exhibition booth" width="400" height="300" loading="lazy" />
-          <img src="https://eventhex.ai/wp-content/uploads/2025/01/Hamim-Akif-K-1.png" alt="Hamim Akif K" width="400" height="300" loading="lazy" />
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Founders Section -->
-  <section class="about-founders">
-    <div class="about-founders__inner">
-      <h2 class="about-founders__title">Our Founders</h2>
-      <div class="about-founders__grid">
-        {founders.map((founder) => (
-          <div class="about-founders__card">
-            <img src={founder.image} alt={founder.name} width="300" height="300" loading="lazy" />
-            <h3 class="about-founders__name">{founder.name}</h3>
+      <div class="about-editorial__track">
+        {latestPosts.map((post) => (
+          <div class="about-editorial__item">
+            <EditorialCard item={post} showDescription={false} />
           </div>
         ))}
-      </div>
-      <p class="about-founders__diversity">We're dedicated to ensuring equity in the workplace and fostering a diverse, inclusive environment where every voice is heard and everyone belongs.</p>
-    </div>
-  </section>
-
-  <!-- Blog CTA Section -->
-  <section class="about-blog-cta">
-    <div class="about-blog-cta__inner">
-      <a href="/blog/" class="about-blog-cta__btn">Explore More</a>
-      <h2 class="about-blog-cta__title">Your Countless Events Begin Here</h2>
-    </div>
-  </section>
-
-  <!-- Testimonial Section -->
-  <section class="about-testimonial">
-    <div class="about-testimonial__inner">
-      <blockquote class="about-testimonial__text">
-        "Our experience with EventHex has been more than amazing. The efficiency, innovation, and ease with which EventHex operates make it undoubtedly the best event management software"
-      </blockquote>
-      <div class="about-testimonial__author">
-        <img src="https://eventhex.ai/wp-content/uploads/2025/01/Vector-19.png" alt="Quote mark" width="40" height="30" loading="lazy" class="about-testimonial__quote-icon" />
-        <img src="https://eventhex.ai/wp-content/uploads/2025/01/Mask-group-42.png" alt="PBM Farmees" width="60" height="60" loading="lazy" class="about-testimonial__avatar" />
-        <div>
-          <strong>PBM Farmees</strong>
-          <span>General Manager - Corporate Communication at MediaoneTV</span>
-        </div>
       </div>
     </div>
   </section>
 </MarketingLayout>
 
 <style>
-  /* Hero */
   .about-hero {
-    padding: 20px 10px 0;
-    max-width: 1300px;
-    margin: 0 auto;
+    padding: 0 20px 20px;
   }
 
-  .about-hero__card {
-    background:
-      url("https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.png") center / cover no-repeat,
-      url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.png") center / cover no-repeat;
-    border-radius: 49px;
-    padding: 80px 60px;
-    text-align: center;
-    max-width: 900px;
+  .about-hero__outer {
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.png") center / cover no-repeat;
+    max-width: 1140px;
     margin: 0 auto;
+    padding: clamp(88px, 10vw, 128px) clamp(20px, 3vw, 36px) clamp(110px, 14vw, 170px);
+  }
+
+  .about-hero__inner {
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.png") center / cover no-repeat;
+    min-height: clamp(260px, 27vw, 300px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 0 clamp(16px, 3vw, 28px);
   }
 
   .about-hero__title {
+    margin: 0;
+    width: 100%;
     font-family: "Manrope", var(--font-heading);
-    font-size: 56px;
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: #000000;
-    margin: 0 0 24px;
+    font-size: clamp(3rem, 6vw, 4.25rem);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: #22272f;
+    white-space: nowrap;
   }
 
   .about-hero__desc {
-    font-family: "Inter", var(--font-body);
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 28px;
-    color: #475467;
-    margin: 0;
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  /* Team Banner */
-  .about-banner {
-    padding: 60px 20px;
-  }
-
-  .about-banner__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    border-radius: 24px;
-    overflow: hidden;
-  }
-
-  .about-banner__inner img {
+    margin: 20px auto 0;
     width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  /* Quote */
-  .about-quote {
-    padding: 80px 20px;
-    background:
-      url("https://eventhex.ai/wp-content/uploads/2025/01/Frame-1000003101-1.png") center / cover no-repeat;
-  }
-
-  .about-quote__inner {
-    max-width: 900px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .about-quote__text {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.6;
-    color: #000000;
-    margin: 0 0 40px;
-    font-style: normal;
-    border: none;
-    padding: 0;
-  }
-
-  .about-quote__author {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-  }
-
-  .about-quote__avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .about-quote__author-info {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .about-quote__author-name {
+    max-width: 720px;
     font-family: "Inter", var(--font-body);
-    font-size: 16px;
-    font-weight: 700;
-    color: #000000;
-  }
-
-  .about-quote__author-role {
-    font-family: "Inter", var(--font-body);
-    font-size: 14px;
-    color: #475467;
-  }
-
-  /* Our Story */
-  .about-story {
-    padding: 80px 20px;
-    background-color: rgba(203, 211, 255, 0.16);
-  }
-
-  .about-story__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .about-story__title {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    color: #22272F;
-    margin: 0 0 24px;
-  }
-
-  .about-story__content {
-    font-family: "Inter", var(--font-body);
-    font-size: 18px;
-    line-height: 1.7;
-    color: #475467;
-    margin-bottom: 40px;
-    max-width: 800px;
-  }
-
-  .about-story__content p {
-    margin: 0;
-  }
-
-  .about-story__image-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
-
-  .about-story__image-grid img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border-radius: 16px;
-    display: block;
-  }
-
-  /* Founders */
-  .about-founders {
-    padding: 80px 20px;
-    background:
-      url("https://eventhex.ai/wp-content/uploads/2024/12/bg-2.png") center / cover no-repeat,
-      #000000;
-  }
-
-  .about-founders__inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .about-founders__title {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    color: #E2E4E9;
-    margin: 0 0 40px;
-  }
-
-  .about-founders__grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    margin-bottom: 40px;
-  }
-
-  .about-founders__card {
-    background-color: #E1E3FF;
-    border-radius: 20px;
-    overflow: hidden;
-    padding: 0 0 20px;
-  }
-
-  .about-founders__card img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .about-founders__name {
-    font-family: "Inter", var(--font-body);
-    font-size: 18px;
-    font-weight: 600;
-    color: #F6F8FA;
-    margin: 16px 0 0;
-    color: #22272F;
-  }
-
-  .about-founders__diversity {
-    font-family: "Inter", var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.8);
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  /* Blog CTA */
-  .about-blog-cta {
-    padding: 80px 20px;
-    background:
-      url("https://eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.png") center / cover no-repeat;
-  }
-
-  .about-blog-cta__inner {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .about-blog-cta__btn {
-    display: inline-flex;
-    padding: 10px 24px;
-    background-color: #375DFB;
-    color: #ffffff;
-    font-family: "Inter", var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 10px;
-    text-decoration: none;
-    margin-bottom: 24px;
-    transition: background-color 0.2s;
-  }
-
-  .about-blog-cta__btn:hover {
-    background-color: #1C46D4;
-  }
-
-  .about-blog-cta__title {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    color: #000000;
-    margin: 0;
-  }
-
-  /* Testimonial */
-  .about-testimonial {
-    padding: 80px 20px;
-    background:
-      url("https://eventhex.ai/wp-content/uploads/2024/12/Ellipse-207.png") center / cover no-repeat;
-  }
-
-  .about-testimonial__inner {
-    max-width: 800px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .about-testimonial__text {
-    font-family: "Manrope", var(--font-heading);
-    font-size: 28px;
+    font-size: clamp(1.125rem, 2vw, 1.75rem);
     font-weight: 400;
     line-height: 1.5;
-    color: #000000;
-    margin: 0 0 40px;
-    font-style: normal;
-    border: none;
-    padding: 0;
-  }
-
-  .about-testimonial__author {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    text-align: left;
-  }
-
-  .about-testimonial__quote-icon {
-    width: 40px;
-    height: auto;
-  }
-
-  .about-testimonial__avatar {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .about-testimonial__author strong {
-    display: block;
-    font-family: "Inter", var(--font-body);
-    font-size: 16px;
-    color: #000000;
-  }
-
-  .about-testimonial__author span {
-    font-family: "Inter", var(--font-body);
-    font-size: 14px;
     color: #475467;
+    text-wrap: balance;
+  }
+
+  .about-showcase {
+    background: url("https://eventhex.ai/wp-content/uploads/2024/12/bg-1-539x1024.png") center top / cover no-repeat;
+    padding: 0 20px 72px;
+  }
+
+  .about-showcase__frame {
+    width: min(80vw, 960px);
+    height: 500px;
+    margin: -315px auto 0;
+    border-radius: 40px;
+    border: 3px solid rgba(200, 168, 255, 0.5);
+    overflow: hidden;
+    background: #f7f6fb;
+    box-shadow: 0 18px 48px rgba(32, 43, 67, 0.08);
+  }
+
+  .about-showcase__frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .about-editorial {
+    padding: 0 20px 90px;
+  }
+
+  .about-editorial__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  .about-editorial__link {
+    display: inline-flex;
+    align-items: center;
+    font-family: "Inter", var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #302b3f;
+    text-decoration: none;
+    margin-bottom: 12px;
+  }
+
+  .about-editorial__title {
+    margin: 0 0 40px;
+    max-width: 760px;
+    font-family: "Manrope", var(--font-heading);
+    font-size: clamp(2.25rem, 4.5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #000000;
+    text-wrap: balance;
+  }
+
+  .about-editorial__track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+
+  .about-editorial__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about-editorial__item {
+    flex: 0 0 calc((100% - 40px) / 3);
+    min-width: 320px;
+    scroll-snap-align: start;
+  }
+
+  .about-editorial__item :global(.editorial-card) {
+    height: 100%;
   }
 
   @media (max-width: 1024px) {
-    .about-hero__card {
-      padding: 60px 30px;
+    .about-hero {
+      padding-bottom: 18px;
     }
 
-    .about-hero__title {
-      font-size: 40px;
+    .about-hero__outer {
+      padding-bottom: clamp(96px, 14vw, 150px);
     }
 
-    .about-story__image-grid {
-      grid-template-columns: repeat(2, 1fr);
+    .about-showcase {
+      padding-bottom: 56px;
     }
 
-    .about-founders__grid {
-      grid-template-columns: repeat(2, 1fr);
+    .about-showcase__frame {
+      width: min(82vw, 920px);
+      height: 460px;
+      margin-top: -250px;
     }
 
-    .about-story__title,
-    .about-founders__title,
-    .about-blog-cta__title {
-      font-size: 35px;
+    .about-editorial {
+      padding-bottom: 72px;
+    }
+
+    .about-editorial__item {
+      flex-basis: calc((100% - 20px) / 2);
+    }
+
+    .about-editorial__title {
+      margin-bottom: 32px;
     }
   }
 
   @media (max-width: 767px) {
-    .about-hero__card {
-      padding: 40px 20px;
-      border-radius: 30px;
+    .about-hero {
+      padding: 0 16px 16px;
+    }
+
+    .about-hero__outer {
+      padding: 64px 16px 92px;
+    }
+
+    .about-hero__inner {
+      min-height: 0;
     }
 
     .about-hero__title {
-      font-size: 30px;
+      white-space: normal;
+      max-width: 10ch;
     }
 
-    .about-quote__text {
+    .about-hero__desc {
+      margin-top: 16px;
       font-size: 18px;
     }
 
-    .about-story__image-grid {
-      grid-template-columns: 1fr 1fr;
+    .about-showcase {
+      padding: 0 16px 44px;
+      background-size: 160% auto;
     }
 
-    .about-founders__grid {
-      grid-template-columns: 1fr 1fr;
+    .about-showcase__frame {
+      width: 100%;
+      height: auto;
+      margin-top: -84px;
+      border-radius: 24px;
+      border-width: 2px;
     }
 
-    .about-testimonial__text {
-      font-size: 20px;
+    .about-showcase__frame img {
+      height: auto;
+      aspect-ratio: 1536 / 742;
     }
 
-    .about-story__title,
-    .about-founders__title,
-    .about-blog-cta__title {
-      font-size: 28px;
+    .about-editorial {
+      padding: 0 16px 56px;
+    }
+
+    .about-editorial__link {
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .about-editorial__title {
+      margin-bottom: 24px;
+    }
+
+    .about-editorial__track {
+      gap: 16px;
+    }
+
+    .about-editorial__item {
+      flex-basis: 82%;
+      min-width: 82%;
     }
   }
 </style>

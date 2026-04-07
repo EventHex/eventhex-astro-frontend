@@ -1,0 +1,669 @@
+---
+const featureCards = [
+  {
+    eyebrow: "live display",
+    title: "Real-time results on venue screens that create room energy",
+    desc: "Poll results animate live on stage screens as votes come in. Word clouds grow, bar charts race, and Q&A queues update — creating energy in the room.",
+    items: [
+      "Full-screen presentation mode for projectors",
+      "Animated charts race as votes pour in",
+      "Live word clouds shift with responses",
+    ],
+    visual: "display",
+  },
+  {
+    eyebrow: "moderated q&a",
+    title: "Let the best questions rise to the top with upvoting",
+    desc: "Attendees submit questions, others upvote them. Moderators filter and approve. Speakers see a clean, prioritized queue.",
+    items: [
+      "Upvoted question ranking system",
+      "Moderator approval before display",
+      "Clean speaker-facing question queue",
+    ],
+    visual: "modqa",
+  },
+  {
+    eyebrow: "session feedback",
+    title: "Know what worked right after it happens",
+    desc: "Auto-trigger feedback forms at session end. Collect star ratings, NPS scores, and open comments — then auto-generate speaker reports.",
+    items: [
+      "Instant star-rating feedback at session end",
+      "NPS Promoter/Passive/Detractor tracking",
+      "Auto-generated speaker performance reports",
+    ],
+    visual: "feedbackcard",
+  },
+  {
+    eyebrow: "data export",
+    title: "Export every response for post-event analysis",
+    desc: "Export all poll results, Q&A logs, feedback ratings, and NPS scores as CSV, PDF, or via API for your own analytics tools.",
+    items: [
+      "CSV and PDF export for all data",
+      "REST API for custom integrations",
+      "Speaker reports with ratings and comments",
+    ],
+    visual: "exportcard",
+  },
+];
+---
+
+<section class="lpqf-shell">
+  <div class="lpqf-section">
+    <div class="lpqf-header">
+      <span class="lpqf-subtitle">Everything you need to engage audiences and collect real-time feedback</span>
+      <h2 class="lpqf-title">
+        Everything You Need to <span class="lpqf-highlight">Poll, Question, and Measure</span><br />
+        Audience Engagement
+      </h2>
+    </div>
+
+    <div class="lpqf-cards" id="lpqf-stacking-cards">
+      {featureCards.map((card, index) => (
+        <div class="lpqf-card" data-card-index={index} style={`--card-index: ${index}; top: calc(20px + ${index * 20}px);`}>
+          <div class="lpqf-card-content">
+            <span class="lpqf-card-eyebrow">{card.eyebrow}</span>
+            <h3 class="lpqf-card-title">{card.title}</h3>
+            <p class="lpqf-card-desc">{card.desc}</p>
+            <ul class="lpqf-card-items">
+              {card.items.map((item) => <li>{item}</li>)}
+            </ul>
+            <a href="/book-a-demo/" class="lpqf-card-btn">Explore More</a>
+          </div>
+
+          <div class={`lpqf-card-visual lpqf-card-visual--${card.visual}`}>
+            {card.visual === "display" && (
+              <Fragment>
+                <div class="lpqf-stage-screen">
+                  <div class="lpqf-stage-header"></div>
+                  <div class="lpqf-stage-bars">
+                    <div class="lpqf-stage-bar-row">
+                      <span class="lpqf-stage-label"></span>
+                      <span class="lpqf-stage-fill" style="--w:82%"></span>
+                    </div>
+                    <div class="lpqf-stage-bar-row">
+                      <span class="lpqf-stage-label"></span>
+                      <span class="lpqf-stage-fill" style="--w:58%"></span>
+                    </div>
+                    <div class="lpqf-stage-bar-row">
+                      <span class="lpqf-stage-label"></span>
+                      <span class="lpqf-stage-fill" style="--w:35%"></span>
+                    </div>
+                  </div>
+                  <div class="lpqf-stage-wc">
+                    <span style="font-size:0.9rem">Innovation</span>
+                    <span style="font-size:0.65rem">AI</span>
+                    <span style="font-size:0.75rem">Growth</span>
+                  </div>
+                </div>
+                <div class="lpqf-visual-pill">Stage display</div>
+              </Fragment>
+            )}
+
+            {card.visual === "modqa" && (
+              <Fragment>
+                <div class="lpqf-modqa-list">
+                  <div class="lpqf-modqa-card">
+                    <div class="lpqf-modqa-arrow">&#9650;</div>
+                    <div class="lpqf-modqa-text"><span></span></div>
+                    <span class="lpqf-modqa-count">24</span>
+                    <div class="lpqf-modqa-controls">
+                      <span class="lpqf-modqa-approve">&#10003;</span>
+                      <span class="lpqf-modqa-reject">&#10005;</span>
+                    </div>
+                  </div>
+                  <div class="lpqf-modqa-card">
+                    <div class="lpqf-modqa-arrow">&#9650;</div>
+                    <div class="lpqf-modqa-text"><span></span></div>
+                    <span class="lpqf-modqa-count">18</span>
+                    <div class="lpqf-modqa-controls">
+                      <span class="lpqf-modqa-approve">&#10003;</span>
+                      <span class="lpqf-modqa-reject">&#10005;</span>
+                    </div>
+                  </div>
+                  <div class="lpqf-modqa-card">
+                    <div class="lpqf-modqa-arrow">&#9650;</div>
+                    <div class="lpqf-modqa-text"><span></span></div>
+                    <span class="lpqf-modqa-count">9</span>
+                    <div class="lpqf-modqa-controls">
+                      <span class="lpqf-modqa-approve">&#10003;</span>
+                      <span class="lpqf-modqa-reject">&#10005;</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="lpqf-visual-pill">Moderated Q&A</div>
+              </Fragment>
+            )}
+
+            {card.visual === "feedbackcard" && (
+              <Fragment>
+                <div class="lpqf-fbc-form">
+                  <div class="lpqf-fbc-stars">
+                    <span class="lpqf-fbc-star lpqf-fbc-star--filled">&#9733;</span>
+                    <span class="lpqf-fbc-star lpqf-fbc-star--filled">&#9733;</span>
+                    <span class="lpqf-fbc-star lpqf-fbc-star--filled">&#9733;</span>
+                    <span class="lpqf-fbc-star lpqf-fbc-star--filled">&#9733;</span>
+                    <span class="lpqf-fbc-star">&#9733;</span>
+                  </div>
+                  <div class="lpqf-fbc-nps-bar">
+                    <span class="lpqf-fbc-nps-red"></span>
+                    <span class="lpqf-fbc-nps-yellow"></span>
+                    <span class="lpqf-fbc-nps-green"></span>
+                  </div>
+                  <div class="lpqf-fbc-nps-label">NPS: 72</div>
+                  <div class="lpqf-fbc-comment"><span></span><span></span></div>
+                </div>
+                <div class="lpqf-visual-pill">Session feedback</div>
+              </Fragment>
+            )}
+
+            {card.visual === "exportcard" && (
+              <Fragment>
+                <div class="lpqf-exp-panel">
+                  <div class="lpqf-exp-header"></div>
+                  <div class="lpqf-exp-rows">
+                    <span class="lpqf-exp-row"></span>
+                    <span class="lpqf-exp-row"></span>
+                    <span class="lpqf-exp-row"></span>
+                  </div>
+                  <div class="lpqf-exp-buttons">
+                    <span class="lpqf-exp-format">CSV</span>
+                    <span class="lpqf-exp-format">PDF</span>
+                    <span class="lpqf-exp-format">API</span>
+                  </div>
+                </div>
+                <div class="lpqf-visual-pill">Export panel</div>
+              </Fragment>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .lpqf-shell {
+    width: 100%;
+    background-color: #000;
+    background-image: url('https://eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
+    background-position: center left;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .lpqf-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 80px 0 30px;
+  }
+
+  .lpqf-header {
+    width: 72%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .lpqf-subtitle {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    color: #fff;
+    margin: 0;
+  }
+
+  .lpqf-title {
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .lpqf-highlight { color: #AFA3FF; }
+
+  .lpqf-cards {
+    width: 100%;
+    padding: 30px 0 0;
+    position: relative;
+    padding-bottom: 50px;
+  }
+
+  .lpqf-card {
+    position: sticky;
+    display: flex;
+    align-items: stretch;
+    background: var(--dark-card-bg, rgba(18, 15, 40, 0.88));
+    border: 1px solid rgba(172, 161, 241, 0.51);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition: transform 0.3s ease;
+  }
+
+  .lpqf-card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .lpqf-card-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.12);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #afa3ff;
+  }
+
+  .lpqf-card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--accent-purple, #AFA3FF);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .lpqf-card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .lpqf-card-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lpqf-card-items li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .lpqf-card-items li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #22c55e, #38bdf8);
+  }
+
+  .lpqf-card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #0A0D14;
+    background: var(--accent-btn-purple, #D4CAFE);
+    border-radius: 10px;
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s;
+    margin-top: 8px;
+  }
+
+  .lpqf-card-btn:hover { transform: scale(1.05); }
+
+  .lpqf-card-visual {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 52%);
+  }
+
+  .lpqf-visual-pill {
+    position: absolute;
+    right: 32px;
+    bottom: 36px;
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: #183465;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
+  }
+
+  /* Display visual */
+  .lpqf-stage-screen {
+    position: absolute;
+    inset: 40px 30px 80px;
+    padding: 16px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lpqf-stage-header {
+    height: 10px;
+    width: 50%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .lpqf-stage-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .lpqf-stage-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lpqf-stage-label {
+    width: 28px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+    flex-shrink: 0;
+  }
+
+  .lpqf-stage-fill {
+    height: 14px;
+    width: var(--w, 50%);
+    border-radius: 7px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+    opacity: 0.75;
+    animation: lpqf-bar-anim 3s ease-in-out infinite alternate;
+  }
+
+  .lpqf-stage-bar-row:nth-child(2) .lpqf-stage-fill { animation-delay: -0.5s; }
+  .lpqf-stage-bar-row:nth-child(3) .lpqf-stage-fill { animation-delay: -1s; }
+
+  .lpqf-stage-wc {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: #375dfb;
+    opacity: 0.6;
+  }
+
+  /* Moderated Q&A visual */
+  .lpqf-modqa-list {
+    position: absolute;
+    inset: 40px 30px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .lpqf-modqa-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 18px 36px -28px rgba(17, 28, 56, 0.4);
+    animation: lpqf-float 5s ease-in-out infinite;
+  }
+
+  .lpqf-modqa-card:nth-child(2) { animation-delay: -0.8s; }
+  .lpqf-modqa-card:nth-child(3) { animation-delay: -1.6s; }
+
+  .lpqf-modqa-arrow {
+    color: #375dfb;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .lpqf-modqa-text { flex: 1; }
+  .lpqf-modqa-text span {
+    display: block;
+    height: 6px;
+    width: 80%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.08);
+  }
+
+  .lpqf-modqa-count {
+    font-size: 12px;
+    font-weight: 700;
+    color: #375dfb;
+    flex-shrink: 0;
+  }
+
+  .lpqf-modqa-controls {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .lpqf-modqa-approve,
+  .lpqf-modqa-reject {
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .lpqf-modqa-approve {
+    background: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+  }
+
+  .lpqf-modqa-reject {
+    background: rgba(239, 68, 68, 0.12);
+    color: #dc2626;
+  }
+
+  /* Feedback card visual */
+  .lpqf-fbc-form {
+    position: absolute;
+    inset: 40px 30px 80px;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lpqf-fbc-stars {
+    display: flex;
+    gap: 4px;
+  }
+
+  .lpqf-fbc-star {
+    font-size: 24px;
+    color: rgba(55, 93, 251, 0.15);
+  }
+
+  .lpqf-fbc-star--filled {
+    color: #f59e0b;
+  }
+
+  .lpqf-fbc-nps-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 999px;
+    overflow: hidden;
+    gap: 2px;
+  }
+
+  .lpqf-fbc-nps-red { flex: 1; background: #ef4444; }
+  .lpqf-fbc-nps-yellow { flex: 1; background: #f59e0b; }
+  .lpqf-fbc-nps-green { flex: 1; background: #22c55e; }
+
+  .lpqf-fbc-nps-label {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: #22c55e;
+  }
+
+  .lpqf-fbc-comment {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lpqf-fbc-comment span:first-child {
+    height: 6px;
+    width: 85%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .lpqf-fbc-comment span:last-child {
+    height: 6px;
+    width: 60%;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.04);
+  }
+
+  /* Export card visual */
+  .lpqf-exp-panel {
+    position: absolute;
+    inset: 40px 30px 80px;
+    padding: 20px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #ffffff, #edf3ff);
+    border: 1px solid rgba(55, 93, 251, 0.12);
+    box-shadow: 0 20px 40px -28px rgba(17, 28, 56, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lpqf-exp-header {
+    height: 10px;
+    width: 55%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #375dfb, #38bdf8);
+  }
+
+  .lpqf-exp-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+  }
+
+  .lpqf-exp-row {
+    display: block;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(55, 93, 251, 0.06);
+  }
+
+  .lpqf-exp-row:nth-child(1) { width: 100%; }
+  .lpqf-exp-row:nth-child(2) { width: 85%; }
+  .lpqf-exp-row:nth-child(3) { width: 70%; }
+
+  .lpqf-exp-buttons {
+    display: flex;
+    gap: 8px;
+  }
+
+  .lpqf-exp-format {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(55, 93, 251, 0.08);
+    border: 1px solid rgba(55, 93, 251, 0.15);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    color: #375dfb;
+    letter-spacing: 0.04em;
+  }
+
+  @keyframes lpqf-bar-anim {
+    0% { transform: scaleX(0.85); }
+    100% { transform: scaleX(1); }
+  }
+
+  @keyframes lpqf-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @media (max-width: 1024px) {
+    .lpqf-section { padding: 60px 20px 30px; }
+    .lpqf-header { width: 80%; }
+    .lpqf-subtitle { font-size: 16px; }
+    .lpqf-title { font-size: 40px; line-height: 1em; }
+    .lpqf-card { height: 450px; }
+    .lpqf-card-content { flex-basis: 50%; }
+    .lpqf-card-title { font-size: 28px; }
+    .lpqf-card-desc { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .lpqf-section { padding: 50px 20px 30px; }
+    .lpqf-header { width: 100%; }
+    .lpqf-title { font-size: 30px; }
+    .lpqf-card { flex-direction: column; height: 620px; }
+    .lpqf-card-content { flex: 0 0 55%; padding: 20px 20px 0; }
+    .lpqf-card-visual { min-height: 260px; padding: 12px; }
+    .lpqf-card-title { font-size: 24px; }
+    .lpqf-card-desc { font-size: 15px; }
+    .lpqf-cards { padding-bottom: 40px; }
+    .lpqf-stage-screen { inset: 20px 16px 60px; }
+    .lpqf-modqa-list { inset: 20px 16px 60px; }
+    .lpqf-fbc-form { inset: 20px 16px 60px; }
+    .lpqf-exp-panel { inset: 20px 16px 60px; }
+  }
+</style>

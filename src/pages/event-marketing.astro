@@ -1,108 +1,88 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/feature-page/HeroSection.astro";
-import FeatureSection from "../components/feature-page/FeatureSection.astro";
-import CTASection from "../components/feature-page/CTASection.astro";
+import HeroSection from "../components/event-marketing/HeroSection.astro";
+import BentoGridSection from "../components/event-marketing/BentoGridSection.astro";
+import FeatureCardsSection from "../components/event-marketing/FeatureCardsSection.astro";
+import CTASection from "../components/event-marketing/CTASection.astro";
+import BenefitCardsSection from "../components/event-marketing/BenefitCardsSection.astro";
+import FaqLightSection from "../components/event-marketing/FaqLightSection.astro";
 
-const title = "Event Marketing - EventHex";
-const description = "EventHex's Event Marketing module provides organizers with budget-efficient and easy-to-use marketing tools to promote their events online.";
+const title = "Event Marketing Software — Email, WhatsApp & Advocacy Campaigns | EventHex";
+const description = "Promote your events with EventHex's all-in-one event marketing software. Send personalized email & WhatsApp campaigns, build advocacy posters, manage audience segments, and track campaign delivery — all from one platform.";
+const canonical = "https://eventhex.ai/event-marketing/";
 
-const featureSections = [
-  {
-    sectionTitle: "Targeted Social Media Campaigns",
-    imageLeft: true,
-    dark: false,
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-2.svg",
-    imageAlt: "EventHex targeted social media campaign builder interface",
-    items: [
-      {
-        title: "Personalized Campaigns",
-        description: "Create and send personalized email and WhatsApp campaigns to engage with your audience",
-      },
-      {
-        title: "Custom Templates",
-        description: "Select the style of message personalization in the editor using variables such as users and events",
-      },
-      {
-        title: "Campaign Schedule",
-        description: "You can pre-set the time you want your campaign to start running",
-      },
-    ],
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex Event Marketing",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: "EventHex's event marketing software helps organizers promote events with personalized email and WhatsApp campaigns, advocacy posters, smart audience targeting, and real-time delivery analytics.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Free demo available"
   },
-  {
-    sectionTitle: "Re-Campaign with Saved Audience",
-    imageLeft: false,
-    dark: true,
-    backgroundColor: "#000312",
-    backgroundImage: "https://eventhex.ai/wp-content/uploads/2025/03/bg.svg",
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/Marketing-_Campaigns.png",
-    imageAlt: "EventHex re-campaign audience management interface",
-    imageOverflow: true,
-    items: [
-      {
-        title: "Audience List",
-        description: "Organize and manage predefined audience groups for targeted campaigns",
-      },
-      {
-        title: "Audience Filter",
-        description: "Decide if you want to filter the audience list either from the current or previous event",
-      },
-      {
-        title: "Delivery Status",
-        description: "View how many messages are pending and how many are to the selected audience list",
-      },
-    ],
-  },
-  {
-    sectionTitle: "Advocacy Posters to Boost Online Presence",
-    imageLeft: true,
-    dark: false,
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/Group.svg",
-    imageAlt: "EventHex advocacy poster creator for event promotion",
-    extraBottomPadding: true,
-    items: [
-      {
-        title: "Create Posters",
-        description: "Create 'I'm attending' like posters for participants to share and promote your event online",
-      },
-      {
-        title: "Customize Fields",
-        description: "Decide what all details should go on the poster such as name, profile photo, company logo, etc",
-      },
-      {
-        title: "Instant Sharing",
-        description: "Let your audience do the marketing by sharing the advocacy posters on their social media handles",
-      },
-    ],
-  },
-];
+  featureList: [
+    "Email Campaign Builder with HTML Editor",
+    "WhatsApp Broadcast Campaigns",
+    "Smart Audience Segmentation",
+    "Cross-Event Audience Retargeting",
+    "Campaign Scheduling",
+    "Drag & Drop Advocacy Poster Builder",
+    "Real-Time Delivery Analytics",
+    "Per-Recipient Status Tracking",
+    "Email Open Rate & Click-Through Tracking",
+    "Smart Bounce & Complaint Suppression",
+    "Template Variable Personalization",
+    "Multi-Provider Support (SES, SMTP, WhatsApp API)"
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.8",
+    ratingCount: "500",
+    bestRating: "5"
+  }
+};
 ---
 
-<MarketingLayout {title} {description}>
-  <!-- Section 0: Hero -->
+<MarketingLayout
+  {title}
+  {description}
+  {canonical}
+  ogImage="https://eventhex.ai/wp-content/uploads/2025/04/Event-Marketing.png"
+  ogType="website"
+  footerCtaTitle="Explore EventHex's Event Marketing Now!"
+  footerCtaButtonText="Start Marketing Your Event"
+  footerCtaHref="/book-a-demo/"
+>
+  <!-- Section 1: Hero -->
   <HeroSection
     eyebrow="Event Marketing"
-    title="Promote Your Events with Event Marketing Campaigns"
-    description="EventHex's Event Marketing module provides organizers with budget-efficient and easy-to-use marketing tools to promote their events online."
+    titleHtml="Promote Events. <b>Fill Every Seat.</b> Multi-Channel Campaigns."
+    description="Create personalized email and WhatsApp campaigns, build smart audience segments, design advocacy posters, and track every delivery — all from one marketing platform."
+    ctaText="Start Marketing Your Event"
+    ctaHref="/book-a-demo/"
     image="https://eventhex.ai/wp-content/uploads/2025/04/Event-Marketing.png"
     imageAlt="EventHex Event Marketing dashboard preview"
   />
 
-  <!-- Feature Sections -->
-  {featureSections.map((section, i) => (
-    <FeatureSection
-      sectionTitle={section.sectionTitle}
-      items={section.items}
-      image={section.image}
-      imageAlt={section.imageAlt}
-      imageLeft={section.imageLeft}
-      dark={section.dark}
-      backgroundImage={section.backgroundImage}
-      backgroundColor={section.backgroundColor}
-      imageOverflow={section.imageOverflow}
-    />
-  ))}
+  <!-- Section 2: Bento Grid -->
+  <BentoGridSection />
 
-  <!-- CTA Section -->
+  <!-- Section 3: Feature Cards -->
+  <FeatureCardsSection />
+
+  <!-- Section 4: CTA -->
   <CTASection />
+
+  <!-- Section 5: Benefits -->
+  <BenefitCardsSection />
+
+  <!-- Section 6: FAQ -->
+  <FaqLightSection />
+
+  <!-- JSON-LD Software Schema -->
+  <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(softwareSchema)}</script>`} />
 </MarketingLayout>

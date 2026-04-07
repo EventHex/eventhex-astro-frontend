@@ -1,105 +1,132 @@
 ---
-import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/feature-page/HeroSection.astro";
-import FeatureSection from "../components/feature-page/FeatureSection.astro";
-import CTASection from "../components/feature-page/CTASection.astro";
+import FeatureV2Layout from "../components/feature-v2/FeatureV2Layout.astro";
+import { regIllustrations as ill } from "../components/event-registration/illustrations";
 
-const title = "Event Registration - EventHex";
-const description = "EventHex's event registration software helps you analyse the registration trend, manage attendee types, approve registration requests, track ticket purchases, and monitor payment status.";
-
-const featureSections = [
-  {
-    sectionTitle: "View & Manage All Registered Participants",
-    imageLeft: true,
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/Mac-Studio.png",
-    imageAlt: "EventHex attendee registration list management interface",
-    items: [
-      {
-        title: "View",
-        description: "View the total registration list with chosen field info such as name, email, and the time of registration",
-      },
-      {
-        title: "Export",
-        description: "Export the registration list into an excel file and use it elsewhere as needed",
-      },
-      {
-        title: "Search by Category",
-        description: "You can search and organize by pre-set categories such as delegate, exhibitor, and so on",
-      },
-    ],
-  },
-  {
-    sectionTitle: "Track Ticket Purchase and Payment Status",
-    imageLeft: false,
-    dark: true,
-    backgroundColor: "#000312",
-    backgroundImage: "https://eventhex.ai/wp-content/uploads/2025/03/bg.svg",
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1.png",
-    imageAlt: "EventHex ticket purchase tracking and payment status dashboard",
-    imageOverflow: true,
-    items: [
-      {
-        title: "Review & Approve",
-        description: "You can enable waitlist management to require manual approval for the completion of registration",
-      },
-      {
-        title: "Track Purchase",
-        description: "Track ticket purchase with type, order ID, amount, discount availed, and payment status",
-      },
-      {
-        title: "Payment Status",
-        description: "Filter attendee base on the payment status and reach out to request completion of the purchase",
-      },
-    ],
-  },
-  {
-    sectionTitle: "Monitor Attendance and Check-In Instances",
-    imageLeft: true,
-    image: "https://eventhex.ai/wp-content/uploads/2025/04/ZenBook-Duo-14.png",
-    imageAlt: "EventHex attendance monitoring and check-in tracking interface",
-    items: [
-      {
-        title: "Check-In/Pending List",
-        description: "Analyse the check-in and pending data coming from the registration point on the event day.",
-      },
-      {
-        title: "Set-Up Instances",
-        description: "Set up which tickets types can be validated or not at each scanning points such as food",
-      },
-      {
-        title: "Instance Check-In",
-        description: "View where all an attendee scanned, the total check-in rate at an instance, pending list, and so on",
-      },
-    ],
-  },
-];
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex — Event Registration Management",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: "Real-time event registration management with bulk import, custom forms, duplicate detection, and GDPR-ready consent fields.",
+  url: "https://eventhex.ai/event-registration/",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free demo available" },
+  featureList: [
+    "Real-Time Registration Tracking",
+    "Bulk CSV Import",
+    "Duplicate Detection",
+    "Custom Registration Forms",
+    "Conditional Logic",
+    "GDPR Consent Fields",
+    "Payment Status Filtering",
+    "Attendee Export",
+    "Field Mapping Wizard",
+  ],
+};
 ---
 
-<MarketingLayout {title} {description}>
-  <!-- Section 0: Hero -->
-  <HeroSection
-    eyebrow="Event Registration"
-    title="Manage Attendees with Our Event Registration Platform"
-    description="EventHex's event registration software helps you analyse the registration trend, manage attendee types, approve registration requests, track ticket purchases, and monitor payment status."
-    image="https://eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png"
-    imageAlt="EventHex Event Registration dashboard on tablet"
-  />
-
-  <!-- Feature Sections -->
-  {featureSections.map((section) => (
-    <FeatureSection
-      sectionTitle={section.sectionTitle}
-      items={section.items}
-      image={section.image}
-      imageAlt={section.imageAlt}
-      imageLeft={section.imageLeft}
-      dark={section.dark}
-      backgroundImage={section.backgroundImage}
-      backgroundColor={section.backgroundColor}
-      imageOverflow={section.imageOverflow}
-    />
-  ))}
-
-  <!-- CTA Section -->
-  <CTASection />
-</MarketingLayout>
+<FeatureV2Layout
+  pageTitle="Streamlined Event Registration — From Sign-Up to Check-In | EventHex"
+  pageDescription="Manage attendee registrations in real time — track sign-ups, filter by payment status, bulk-import attendees, build custom forms with conditional logic, and export clean data in one click."
+  canonical="https://eventhex.ai/event-registration/"
+  ogImage="https://eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png"
+  badge="Event Registration Management"
+  heroTitleLine1="Streamlined Event Registration"
+  heroTitleLine2="From Sign-Up to Check-In"
+  heroCopy="Manage attendee registrations in real time — track sign-ups, filter by payment status, bulk-import attendees, build custom forms with conditional logic, and export clean data in one click."
+  trustItems={["Real-Time Registration Tracking", "Duplicate Detection", "GDPR-Ready Forms"]}
+  stats={[
+    { value: "1M+", label: "Registrations Processed" },
+    { value: "< 2s", label: "Avg Import Time" },
+    { value: "99.9%", label: "Data Accuracy" },
+    { value: "0%", label: "Platform Fees" },
+  ]}
+  statsHeadline={{
+    white1: "Every attendee.",
+    accent: "Every detail.",
+    white2: "Tracked in",
+    accent2: "real time",
+  }}
+  bentoHeading="Everything You Need for Event Registration"
+  bentoSubtitle="From the moment someone registers to the moment they scan in — EventHex tracks every attendee, every ticket type, and every payment status in one real-time dashboard."
+  bentoTabs={[
+    {
+      tab: "Registration Management",
+      cards: [
+        { title: "Per-Ticket Attendee Lists", desc: "View and filter attendees by ticket type, session, or table assignment", illustration: ill.reg1 },
+        { title: "Real-Time Tracking", desc: "Watch registrations come in live — no page refresh needed", illustration: ill.reg2 },
+        { title: "Payment Status Filtering", desc: "Filter by paid, pending, or complimentary to manage follow-ups", illustration: ill.reg3 },
+        { title: "Check-In Monitoring", desc: "See who has checked in and who is still pending arrival", illustration: ill.reg4 },
+        { title: "Attendee Search & Export", desc: "Find any attendee instantly and export lists to CSV or Excel", illustration: ill.reg5 },
+      ],
+    },
+    {
+      tab: "Import & Data",
+      cards: [
+        { title: "CSV / Excel Import", desc: "Bulk-add attendees by uploading a spreadsheet in seconds", illustration: ill.reg6 },
+        { title: "Duplicate Detection", desc: "Automatic deduplication flags repeated emails before import completes", illustration: ill.reg7 },
+        { title: "Field Mapping Wizard", desc: "Map any column from your spreadsheet to EventHex fields with a visual editor", illustration: ill.reg8 },
+        { title: "Bulk Registration", desc: "Register entire groups, teams, or organizations in a single operation", illustration: ill.reg9 },
+        { title: "Import History", desc: "Full audit log of every import with row-level error reporting", illustration: ill.reg10 },
+      ],
+    },
+    {
+      tab: "Forms & Fields",
+      cards: [
+        { title: "Custom Registration Fields", desc: "Add text, dropdown, checkbox, file upload, or date fields to any registration form", illustration: ill.reg11 },
+        { title: "Conditional Logic", desc: "Show or hide fields based on ticket type, answers, or participant category", illustration: ill.reg12 },
+        { title: "Form Builder", desc: "Drag-and-drop form editor with live preview and mobile-optimized output", illustration: ill.reg13 },
+        { title: "GDPR Consent Fields", desc: "Built-in consent checkboxes, opt-in language, and data retention controls", illustration: ill.reg14 },
+        { title: "Multi-Ticket Registration", desc: "Let one buyer register multiple attendees in a single checkout flow", illustration: ill.reg15 },
+      ],
+    },
+  ]}
+  stackingHeading="Powerful Registration Features"
+  stackingHighlight="in Action"
+  stackingCards={[
+    {
+      title: "Live Attendee Data As Registrations Happen",
+      desc: "Every form submission updates the dashboard immediately — ticket counts, payment totals, and attendee lists refresh in real time so you're never working with stale data.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Mac-Studio.png",
+      alt: "Real-time event registration dashboard with live counters",
+    },
+    {
+      title: "Import Thousands of Attendees in Seconds",
+      desc: "Upload a CSV or Excel file and EventHex handles the rest — mapping columns, detecting duplicates, and creating clean attendee records with zero manual data entry.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/Frame-1.png",
+      alt: "CSV bulk import wizard with column mapping",
+    },
+    {
+      title: "Registration Forms Built Exactly Your Way",
+      desc: "Go beyond name and email — build forms with custom fields, conditional logic, multi-ticket flows, and GDPR consent controls. No developer required.",
+      image: "https://eventhex.ai/wp-content/uploads/2025/04/ZenBook-Duo-14.png",
+      alt: "Custom event registration form builder with conditional logic",
+    },
+  ]}
+  howItWorksHeading="How Event Registration Works"
+  steps={[
+    { title: "Create Your Event & Tickets", desc: "Set up ticket types, capacities, prices, and registration form fields — including custom questions unique to your event." },
+    { title: "Share Your Registration Link", desc: "Publish your event page and share the direct registration URL across email, social, and your website." },
+    { title: "Track Attendees in Real Time", desc: "Watch registrations arrive live. Filter by ticket type, payment status, or check-in status. Export any view instantly." },
+    { title: "Import Offline Registrants", desc: "Bulk-import attendees from spreadsheets, with automatic duplicate detection and field mapping." },
+  ]}
+  ctaTitle="Ready to Simplify Attendee Registration?"
+  ctaCopy="See how EventHex turns messy spreadsheets and manual follow-ups into a clean, automated registration workflow."
+  whyHeading="Why Organizers Choose EventHex Registration"
+  whyCards={[
+    { title: "Real-Time Tracking", desc: "Live registration data with no page refresh needed" },
+    { title: "Bulk Import", desc: "CSV import with duplicate detection and field mapping" },
+    { title: "Form Builder", desc: "Custom fields, conditional logic, and GDPR consent" },
+    { title: "Easy Export", desc: "One-click CSV/Excel export of any attendee list" },
+    { title: "Data Accuracy", desc: "Duplicate detection and validation at every step" },
+  ]}
+  faqs={[
+    { q: "How do I manage event registrations?", a: "EventHex provides a real-time dashboard where you can view all attendees by ticket type, filter by payment status, search for specific attendees, and export lists at any time. All data updates instantly as registrations come in." },
+    { q: "Can I import attendees from a spreadsheet?", a: "Yes. Upload a CSV or Excel file and use the visual field-mapping wizard to match your columns to EventHex fields. Duplicate emails are automatically flagged before import completes." },
+    { q: "How does duplicate detection work?", a: "During bulk import, EventHex checks every email address against your existing attendee list and flags any duplicates before they're added. You can choose to skip, merge, or override duplicate records." },
+    { q: "Can I create custom registration forms?", a: "Yes. The form builder lets you add text fields, dropdowns, checkboxes, file uploads, and date pickers. You can apply conditional logic to show or hide fields based on ticket type or previous answers." },
+    { q: "How do I track check-in status?", a: "The registration dashboard shows a real-time check-in column for every attendee. You can filter to see who has arrived, who is still pending, and who is a no-show — and export the filtered list at any time." },
+    { q: "Is EventHex GDPR compliant?", a: "Yes. Registration forms include built-in GDPR consent checkboxes with customizable opt-in language. EventHex supports data retention policies and provides tools to handle data subject access requests." },
+  ]}
+  jsonLd={jsonLd}
+/>

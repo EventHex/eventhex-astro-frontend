@@ -1,0 +1,382 @@
+---
+const faqs = [
+  {
+    q: "How do attendees participate in live polls?",
+    a: "Attendees participate via any web browser on their phone, tablet, or laptop. They access polls through a URL, QR code, or the event app — no download required. Responses appear on venue screens in under 2 seconds.",
+  },
+  {
+    q: "Can I moderate Q&A questions?",
+    a: "Yes. All questions go through a moderation queue before appearing publicly. Moderators can approve, reject, or star questions. Attendees can also upvote questions, surfacing the most popular ones.",
+  },
+  {
+    q: "Can results be displayed on venue screens?",
+    a: "Yes. The stage display mode is designed for projectors and LED screens. Poll results animate in real-time — bar charts race, word clouds grow — creating energy and engagement in the room.",
+  },
+  {
+    q: "Can I collect feedback per session?",
+    a: "Yes. Feedback forms can auto-trigger at the end of each session. Collect star ratings, NPS scores, and open-text comments. Speaker feedback reports are generated automatically.",
+  },
+  {
+    q: "What poll types are supported?",
+    a: "Multiple-choice, rating scales (1-5/1-10), word clouds, open text, and ranked-choice polls. Pre-built templates are available for common use cases like icebreakers and session feedback.",
+  },
+  {
+    q: "Can Q&A be anonymous?",
+    a: "Yes. You can enable anonymous mode for any Q&A session — encouraging honest questions and feedback. Moderators still see all submissions in the admin panel.",
+  },
+];
+
+const checklist = [
+  "Live polling setup",
+  "Q&A moderation workflow",
+  "Session feedback forms",
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="lpqfq" data-lpq-faq>
+  <div class="lpqfq__inner">
+    <div class="lpqfq__support">
+      <span class="lpqfq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need help with live polling?</span>
+      <h2 class="lpqfq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
+      <p class="lpqfq__desc animate-on-scroll" data-animation="fadeInUp">
+        We help event teams set up live polls, Q&A moderation, and feedback collection for engaging sessions.
+      </p>
+
+      <div class="lpqfq__support-card animate-on-scroll" data-animation="fadeInUp">
+        <span class="lpqfq__support-label">Included with every rollout</span>
+        <ul class="lpqfq__support-list">
+          {checklist.map((item) => (
+            <li class="lpqfq__support-item">{item}</li>
+          ))}
+        </ul>
+
+        <div class="lpqfq__support-note">
+          <strong>Free onboarding support</strong>
+          <span>Map your audience engagement flow before launch and keep your team aligned on polls, Q&A, and feedback collection.</span>
+        </div>
+
+        <a href="/book-a-demo/" class="lpqfq__cta">Plan my engagement flow</a>
+      </div>
+    </div>
+
+    <div class="lpqfq__list">
+      {faqs.map((faq, index) => (
+        <details class="lpqfq__item animate-on-scroll" data-animation="fadeInUp" data-lpq-faq-item open={index === 0}>
+          <summary class="lpqfq__question">
+            <span>{faq.q}</span>
+            <span class="lpqfq__icon" aria-hidden="true">
+              <span class="lpqfq__icon-line lpqfq__icon-line--horizontal"></span>
+              <span class="lpqfq__icon-line lpqfq__icon-line--vertical"></span>
+            </span>
+          </summary>
+          <div class="lpqfq__answer">
+            <p>{faq.a}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const lpqFaqItems = Array.from(document.querySelectorAll('[data-lpq-faq-item]'));
+
+  lpqFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) {
+        return;
+      }
+
+      lpqFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) {
+          other.open = false;
+        }
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .lpqfq {
+    width: 100%;
+    margin: 0;
+    padding: 96px 0;
+    background: #f5f6fa;
+  }
+
+  .lpqfq__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+    align-items: start;
+  }
+
+  .lpqfq__support {
+    position: sticky;
+    top: 108px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .lpqfq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(99, 77, 255, 0.08);
+    border: 1px solid rgba(99, 77, 255, 0.14);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #5a3fd4;
+  }
+
+  .lpqfq__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    color: #0f1117;
+  }
+
+  .lpqfq__desc {
+    margin: 0;
+    max-width: 540px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: #5b6477;
+  }
+
+  .lpqfq__support-card {
+    width: 100%;
+    padding: 24px 22px;
+    border-radius: 28px;
+    background: #fff;
+    border: 1px solid rgba(99, 77, 255, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+  }
+
+  .lpqfq__support-label {
+    display: inline-flex;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #375dfb;
+  }
+
+  .lpqfq__support-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .lpqfq__support-item {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.55;
+    color: #2d3340;
+  }
+
+  .lpqfq__support-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
+  }
+
+  .lpqfq__support-note {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: 22px;
+    background: #f5f6fa;
+    border: 1px solid rgba(15, 17, 23, 0.07);
+  }
+
+  .lpqfq__support-note strong {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #0f1117;
+  }
+
+  .lpqfq__support-note span {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  .lpqfq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    margin-top: 18px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: #375dfb;
+    color: #fff;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+  }
+
+  .lpqfq__cta:hover {
+    background: #2248e8;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+  }
+
+  .lpqfq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .lpqfq__item {
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fff;
+    border: 1px solid rgba(15, 17, 23, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+  }
+
+  .lpqfq__question {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 26px 24px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #0f1117;
+  }
+
+  .lpqfq__question::-webkit-details-marker,
+  .lpqfq__question::marker {
+    display: none;
+  }
+
+  .lpqfq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    margin-top: 4px;
+  }
+
+  .lpqfq__icon-line {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    border-radius: 999px;
+    background: #375dfb;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .lpqfq__icon-line--vertical {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .lpqfq__item[open] .lpqfq__icon-line--vertical {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  }
+
+  .lpqfq__answer {
+    padding: 0 24px 24px;
+  }
+
+  .lpqfq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #5b6477;
+  }
+
+  @media (max-width: 1100px) {
+    .lpqfq { padding: 76px 0; }
+    .lpqfq__inner { grid-template-columns: 1fr; gap: 28px; }
+    .lpqfq__support { position: static; }
+  }
+
+  @media (max-width: 1024px) {
+    .lpqfq__title { font-size: 40px; }
+    .lpqfq__desc { font-size: 16px; }
+    .lpqfq__question { padding: 24px 22px; font-size: 20px; }
+    .lpqfq__answer { padding: 0 22px 22px; }
+  }
+
+  @media (max-width: 767px) {
+    .lpqfq { padding: 56px 0; }
+    .lpqfq__inner { padding: 0 16px; gap: 24px; }
+    .lpqfq__title { font-size: 32px; line-height: 1.08; }
+    .lpqfq__desc { font-size: 15px; line-height: 1.7; }
+    .lpqfq__support-card { padding: 20px 18px; border-radius: 24px; }
+    .lpqfq__support-item { font-size: 15px; }
+    .lpqfq__support-note strong { font-size: 18px; }
+    .lpqfq__cta { width: 100%; }
+    .lpqfq__item { border-radius: 24px; }
+    .lpqfq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
+    .lpqfq__answer { padding: 0 18px 20px; }
+    .lpqfq__answer p { font-size: 15px; line-height: 1.75; }
+  }
+</style>
