@@ -91,9 +91,31 @@ export interface WPTag {
   count: number;
 }
 
+/**
+ * Simple in-memory cache for WordPress API responses.
+ * TTL-based: entries expire after the configured duration.
+ */
+const apiCache = new Map<string, { data: unknown; expires: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+function getCached<T>(key: string): T | undefined {
+  const entry = apiCache.get(key);
+  if (entry && Date.now() < entry.expires) return entry.data as T;
+  if (entry) apiCache.delete(key);
+  return undefined;
+}
+
+function setCache(key: string, data: unknown): void {
+  apiCache.set(key, { data, expires: Date.now() + CACHE_TTL });
+}
+
 async function fetchAPI<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   const url = new URL(`${WP_API}${endpoint}`);
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+
+  const cacheKey = url.toString();
+  const cached = getCached<T>(cacheKey);
+  if (cached) return cached;
 
   const response = await fetch(url.toString());
 
@@ -101,7 +123,9 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, string> = {}
     throw new Error(`WordPress API error: ${response.status} ${response.statusText}`);
   }
 
-  return response.json() as Promise<T>;
+  const data = await response.json() as T;
+  setCache(cacheKey, data);
+  return data;
 }
 
 // Posts
