@@ -7,14 +7,9 @@ const DYNAMIC_PATTERNS = ["/blog/", "/news/", "/wp-content/"];
 /** Sitemap / robots endpoints need short cache for freshness. */
 const SITEMAP_PATTERNS = ["/sitemap-", "/robots.txt"];
 
-/** Known Astro route prefixes — requests starting with these are never blog slugs. */
-const KNOWN_PREFIXES = [
-  "/blog/", "/news/", "/features", "/about-us", "/book-a-demo", "/contact-en",
-  "/partnership", "/industries/", "/integrations/", "/use-cases/",
-  "/event-", "/speaker-", "/session-", "/exhibitor-", "/sponsor-",
-  "/ai-", "/live-polling-qa", "/call-for-papers", "/badge-certificate",
-  "/centralized-dashboard", "/enhance-networking",
-  "/wp-content/", "/sitemap-", "/robots.txt", "/_astro/", "/favicon",
+/** Known Astro route prefixes — skip blog slug lookup for multi-segment paths under these. */
+const SKIP_BLOG_LOOKUP = [
+  "/blog/", "/news/", "/wp-content/", "/sitemap-", "/robots.txt", "/_astro/", "/favicon",
 ];
 
 function redirect301(to: string): Response {
@@ -38,10 +33,10 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
 
   const response = await next();
 
-  // --- Blog slug fallback: root-level /{slug}/ → rewrite to /blog/{slug}/ ---
+  // --- Blog slug fallback: root-level /{slug}/ → redirect to /blog/{slug}/ ---
   // Old WordPress blog posts lived at /{slug}/. Check if a 404 at root level
   // is actually a blog post, and if so redirect to /blog/{slug}/.
-  if (response.status === 404 && !KNOWN_PREFIXES.some((p) => path.startsWith(p))) {
+  if (response.status === 404 && !SKIP_BLOG_LOOKUP.some((p) => path.startsWith(p))) {
     const slug = path.replace(/^\//, "").replace(/\/$/, "");
     if (slug && !slug.includes("/")) {
       try {
