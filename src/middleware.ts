@@ -22,6 +22,11 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
 
   // --- 301 Redirects ---
 
+  // Old WordPress sitemap URLs → new Astro sitemap
+  if (path === "/wp-sitemap.xml" || path === "/sitemap_index.xml") {
+    return redirect301("/sitemap-index.xml");
+  }
+
   // Old WordPress /feature/{slug}/ → /{slug}/
   if (path.startsWith("/feature/")) {
     const featureSlug = path.replace(/^\/feature\//, "").replace(/\/$/, "");

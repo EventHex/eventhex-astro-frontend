@@ -1,0 +1,83 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import { getPageBySlug, rewriteContentUrls } from "../lib/wordpress";
+
+const page = await getPageBySlug("terms-of-service");
+
+if (!page) {
+  Astro.response.status = 404;
+}
+
+const title = page ? `${page.title.rendered} | EventHex` : "Terms of Service | EventHex";
+const description = "EventHex Terms of Service — the terms governing your use of the EventHex platform.";
+const content = page ? rewriteContentUrls(page.content.rendered) : "";
+---
+
+<MarketingLayout title={title} description={description}>
+  <section class="legal-page">
+    <div class="legal-page__inner">
+      <h1 class="legal-page__title">{page ? page.title.rendered : "Terms of Service"}</h1>
+      <div class="legal-page__content" set:html={content} />
+    </div>
+  </section>
+
+  <style>
+    .legal-page {
+      padding: 6rem 1.5rem 4rem;
+    }
+    .legal-page__inner {
+      max-width: 48rem;
+      margin: 0 auto;
+    }
+    .legal-page__title {
+      font-family: var(--font-heading, 'Manrope', sans-serif);
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      color: var(--heading-dark, #1a1a2e);
+    }
+    .legal-page__content {
+      font-family: var(--font-body, 'Inter', sans-serif);
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text-secondary, #4a4a68);
+    }
+    .legal-page__content :global(h2) {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--heading-dark, #1a1a2e);
+    }
+    .legal-page__content :global(h3) {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--heading-dark, #1a1a2e);
+    }
+    .legal-page__content :global(p) {
+      margin-bottom: 1rem;
+    }
+    .legal-page__content :global(ul),
+    .legal-page__content :global(ol) {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+    .legal-page__content :global(li) {
+      margin-bottom: 0.5rem;
+    }
+    .legal-page__content :global(a) {
+      color: var(--primary, #6c5ce7);
+      text-decoration: underline;
+    }
+    .legal-page__content :global(strong) {
+      font-weight: 600;
+      color: var(--heading-dark, #1a1a2e);
+    }
+    @media (max-width: 640px) {
+      .legal-page { padding: 4rem 1rem 3rem; }
+      .legal-page__title { font-size: 1.75rem; }
+    }
+  </style>
+</MarketingLayout>

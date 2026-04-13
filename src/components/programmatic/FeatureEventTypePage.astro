@@ -1,6 +1,6 @@
 ---
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
-import type { FeatureEventTypeEntry } from "../../lib/programmatic/feature-event-type-data";
+import { featureEventTypeData, type FeatureEventTypeEntry } from "../../lib/programmatic/feature-event-type-data";
 
 interface Props {
   entry: FeatureEventTypeEntry;
@@ -11,6 +11,16 @@ const { feature, featureLabel, eventTypeLabel, heroCopy, useCases, faqs, metaTit
 
 const canonical = `https://eventhex.ai/${feature}/${entry.eventType}/`;
 const featureUrl = `/${feature}/`;
+
+/* Related pages: same feature, different event types */
+const sameFeaturePages = featureEventTypeData
+  .filter((e) => e.feature === feature && e.eventType !== entry.eventType)
+  .slice(0, 5);
+
+/* Related pages: same event type, different features */
+const sameEventTypePages = featureEventTypeData
+  .filter((e) => e.eventType === entry.eventType && e.feature !== feature)
+  .slice(0, 5);
 
 /* FAQ JSON‑LD */
 const faqLd = {
@@ -95,7 +105,45 @@ const breadcrumbLd = {
     </section>
   )}
 
-  <!-- ④ CTA ──────────────────────────────────────────── -->
+  <!-- ④ RELATED: Same feature, other event types ───── -->
+  {sameFeaturePages.length > 0 && (
+    <section class="fet-related">
+      <div class="fet-related__inner">
+        <h2 class="fet-section-heading animate-on-scroll">
+          {featureLabel} for <strong>Other Event Types</strong>
+        </h2>
+        <div class="fet-related__grid">
+          {sameFeaturePages.map((p, i) => (
+            <a href={`/${p.feature}/${p.eventType}/`} class="fet-related__card animate-on-scroll" data-delay={String(i * 60)}>
+              <span class="fet-related__label">{p.eventTypeLabel}</span>
+              <p class="fet-related__desc">{p.heroCopy.slice(0, 120)}…</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ⑤ RELATED: Same event type, other features ───── -->
+  {sameEventTypePages.length > 0 && (
+    <section class="fet-related fet-related--alt">
+      <div class="fet-related__inner">
+        <h2 class="fet-section-heading animate-on-scroll">
+          More Tools for <strong>{eventTypeLabel}</strong>
+        </h2>
+        <div class="fet-related__grid">
+          {sameEventTypePages.map((p, i) => (
+            <a href={`/${p.feature}/${p.eventType}/`} class="fet-related__card animate-on-scroll" data-delay={String(i * 60)}>
+              <span class="fet-related__label">{p.featureLabel}</span>
+              <p class="fet-related__desc">{p.heroCopy.slice(0, 120)}…</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ⑥ CTA ──────────────────────────────────────────── -->
   <section class="fet-cta">
     <div class="fet-cta__inner">
       <div class="fet-cta__card animate-on-scroll">
@@ -470,6 +518,58 @@ const breadcrumbLd = {
     .fet-cta__card {
       padding: 2.5rem 1.5rem;
     }
+    .fet-related__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ── Related pages ─────────────────────────────────── */
+  .fet-related {
+    padding: 4rem 1.5rem;
+    background: var(--bg-surface, #f8f9fc);
+  }
+  .fet-related--alt {
+    background: #fff;
+  }
+  .fet-related__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .fet-related__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+  .fet-related__card {
+    display: block;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid #e8ecf4;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .fet-related--alt .fet-related__card {
+    background: var(--bg-surface, #f8f9fc);
+    border-color: #e8ecf4;
+  }
+  .fet-related__card:hover {
+    border-color: #93a8ff;
+    box-shadow: 0 4px 16px rgba(55, 93, 251, 0.08);
+  }
+  .fet-related__label {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark, #1a1a2e);
+    margin-bottom: 0.5rem;
+  }
+  .fet-related__desc {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text-secondary, #4a4a68);
   }
 </style>
 
