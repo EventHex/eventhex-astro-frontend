@@ -976,9 +976,23 @@ const canonical = "https://eventhex.ai/book-a-demo/";
   /* ── Geo-detection: auto-select country code + country ── */
   (async function detectCountry() {
     try {
-      const res = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) });
-      const geo = await res.json();
-      const cc = geo.country_code; // e.g. "IN", "AE", "US"
+      let cc = '';
+
+      // Try Cloudflare trace first (fastest, works on CF-hosted sites)
+      try {
+        const cfRes = await fetch('/cdn-cgi/trace', { signal: AbortSignal.timeout(2000) });
+        const cfText = await cfRes.text();
+        const match = cfText.match(/loc=([A-Z]{2})/);
+        if (match) cc = match[1];
+      } catch { /* fall through */ }
+
+      // Fallback to ipwho.is
+      if (!cc) {
+        const res = await fetch('https://ipwho.is/', { signal: AbortSignal.timeout(3000) });
+        const geo = await res.json();
+        if (geo.success && geo.country_code) cc = geo.country_code;
+      }
+
       if (!cc) return;
 
       // Auto-select country dropdown
