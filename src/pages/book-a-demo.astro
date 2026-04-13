@@ -2,1575 +2,429 @@
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 
 const title = "Book a Demo - EventHex";
-const description = "Book a focused EventHex walkthrough with a calendar-first scheduling experience.";
-const wpUrl = import.meta.env.WP_URL || "https://eventhex.ai";
-const bookingApiBase = `${wpUrl}/wp-json/eventhex-demo/v1`;
-const legacyDemoApi = `${wpUrl}/wp-json/ehf/v1/submit/book-a-demo`;
-
-const fallbackConfig = {
-  meeting_title: "EventHex AI Product Demo",
-  meeting_duration: 30,
-  timezone: "Asia/Kolkata",
-  meeting_location: "Google Meet link shared after confirmation",
-  booking_window_days: 45,
-  working_days: [1, 2, 3, 4, 5],
-  time_slots: ["10:00", "10:30", "11:00", "11:30", "14:00", "14:30", "15:00", "15:30"],
-  success_message: "Your demo request has been received. Check your inbox for the next step.",
-};
+const description =
+  "Book a live EventHex walkthrough — registration, ticketing, attendee engagement, and event operations.";
+const canonical = "https://eventhex.ai/book-a-demo/";
+// const calendlyUrl = "https://calendly.com/eventhex-info/30min";
 ---
 
-<MarketingLayout {title} {description}>
-  <section class="demo-booking">
-    <div class="demo-booking__shell">
-      <aside class="demo-sidebar">
-        <div class="demo-sidebar__badges">
-          <span class="demo-pill"><span data-demo-duration>{fallbackConfig.meeting_duration} min</span> meeting</span>
-          <span class="demo-pill demo-pill--ghost" data-demo-sync-status>Live WordPress availability</span>
-        </div>
+<MarketingLayout {title} {description} {canonical} showFooterCta={false}>
+  {/* Calendly script commented out – using inline form instead
+  <slot name="head">
+    <script is:inline src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  </slot>
+  */}
 
-        <p class="demo-sidebar__kicker">Live Product Session</p>
-        <h1 class="demo-sidebar__title">
-          Book a focused <span class="demo-sidebar__title-accent"><span data-demo-duration>{fallbackConfig.meeting_duration} min</span> walkthrough</span> without the usual back-and-forth.
+  <!-- Main section: left copy + right form -->
+  <section class="bd-main">
+    <div class="bd-main__inner">
+      <!-- Left column -->
+      <div class="bd-copy animate-on-scroll" data-animation="fadeInUp">
+        <p class="bd-copy__subtitle">Book a Demo</p>
+        <h1 class="bd-copy__title">
+          See EventHex in action — built around your event workflow.
         </h1>
-        <p class="demo-sidebar__lead">
-          Choose a live slot controlled from WordPress. Confirmation, admin alerts, reminder email, and follow-up
-          are already wired into the same booking flow.
+        <p class="bd-copy__desc">
+          Fill in the form and our team will reach out to schedule a
+          personalized walkthrough of the modules that matter most to your
+          next event.
         </p>
 
-        <div class="demo-sidebar__journey">
-          <div class="demo-journey-card">
-            <span class="demo-journey-card__index">01</span>
-            <strong>Pick a live slot</strong>
-          </div>
-          <div class="demo-journey-card">
-            <span class="demo-journey-card__index">02</span>
-            <strong>Share your details</strong>
-          </div>
-          <div class="demo-journey-card">
-            <span class="demo-journey-card__index">03</span>
-            <strong>Team gets notified</strong>
-          </div>
-          <div class="demo-journey-card">
-            <span class="demo-journey-card__index">04</span>
-            <strong>Reminder goes out automatically</strong>
-          </div>
-        </div>
-
-        <div class="demo-sidebar__visual">
-          <div class="demo-sidebar__glow"></div>
-          <img
-            src="https://eventhex.ai/wp-content/uploads/2025/01/iPhone-16-pro-isolated-on-white-background-v11-front-view-copy-1.png"
-            alt="EventHex AI on mobile"
-            width="250"
-            height="500"
-            loading="eager"
-            class="demo-sidebar__phone"
-          />
-        </div>
-
-        <div class="demo-sidebar__facts">
-          <div class="demo-fact-card">
-            <span class="demo-fact-card__label">Session</span>
-            <strong class="demo-fact-card__value" data-demo-title>{fallbackConfig.meeting_title}</strong>
-          </div>
-          <div class="demo-fact-card">
-            <span class="demo-fact-card__label">Duration</span>
-            <strong class="demo-fact-card__value" data-demo-duration>{fallbackConfig.meeting_duration} min</strong>
-          </div>
-          <div class="demo-fact-card">
-            <span class="demo-fact-card__label">Location</span>
-            <strong class="demo-fact-card__value" data-demo-location>{fallbackConfig.meeting_location}</strong>
-          </div>
-          <div class="demo-fact-card">
-            <span class="demo-fact-card__label">Timezone</span>
-            <strong class="demo-fact-card__value" data-demo-timezone>{fallbackConfig.timezone}</strong>
-          </div>
-        </div>
-      </aside>
-
-      <div class="demo-scheduler">
-        <header class="demo-scheduler__header">
-          <div>
-            <p class="demo-scheduler__eyebrow">Step-by-Step Booking</p>
-            <h2 class="demo-scheduler__title">Pick a live date, lock a time, then send your details.</h2>
-          </div>
-
-          <div class="demo-progress" aria-label="Booking progress">
-            <span class="demo-progress__step is-active" data-step-badge="date">1 Date</span>
-            <span class="demo-progress__step" data-step-badge="time">2 Time</span>
-            <span class="demo-progress__step" data-step-badge="details">3 Details</span>
-          </div>
-        </header>
-
-        <div class="demo-live-strip">
-          <div class="demo-live-strip__status">
-            <span class="demo-live-strip__dot"></span>
-            <span data-demo-sync-status>Live WordPress availability</span>
-          </div>
-          <p class="demo-live-strip__copy">
-            The booking plugin controls duration, schedule, and slot inventory. Change it in WordPress and this
-            scheduler reflects it here.
-          </p>
-          <div class="demo-live-strip__metrics">
-            <div class="demo-live-metric">
-              <strong data-demo-duration>{fallbackConfig.meeting_duration} min</strong>
-              <span>meeting length</span>
+        <ul class="bd-steps">
+          <li>
+            <span class="bd-steps__num">1</span>
+            <div>
+              <strong>Fill in the form</strong>
+              <p>Tell us about your event and how to reach you.</p>
             </div>
-            <div class="demo-live-metric">
-              <strong data-demo-slot-count>{fallbackConfig.time_slots.length}</strong>
-              <span>configured starts</span>
+          </li>
+          <li>
+            <span class="bd-steps__num">2</span>
+            <div>
+              <strong>We'll get in touch</strong>
+              <p>Our team will contact you to find a convenient time.</p>
             </div>
-            <div class="demo-live-metric">
-              <strong data-demo-window>{fallbackConfig.booking_window_days} days</strong>
-              <span>booking window</span>
+          </li>
+          <li>
+            <span class="bd-steps__num">3</span>
+            <div>
+              <strong>Get your walkthrough</strong>
+              <p>Join a live demo of the EventHex modules that matter to you.</p>
             </div>
+          </li>
+        </ul>
+
+        <p class="bd-copy__note">
+          Need a broader enterprise discussion?
+          Email <a href="mailto:info@eventhex.ai">info@eventhex.ai</a>
+        </p>
+      </div>
+
+      <!-- Right column: Demo request form -->
+      <div class="bd-form-wrap animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+        <form class="bd-form" id="ehf-demo-form">
+          <div class="bd-form__field">
+            <input type="text" name="name-1" placeholder="Full Name" required class="bd-form__input" />
           </div>
-        </div>
-
-        <div class="demo-scheduler__banner" id="demo-booking-banner" hidden></div>
-
-        <div class="demo-scheduler__body">
-          <section class="demo-stage is-active" data-stage="date">
-            <div class="demo-stage__head">
-              <button class="demo-stage__nav" type="button" data-calendar-nav="prev" aria-label="Previous month">&larr;</button>
-              <div>
-                <p class="demo-stage__label">Available Dates</p>
-                <h3 class="demo-stage__title" id="demo-calendar-month">Month</h3>
-              </div>
-              <button class="demo-stage__nav" type="button" data-calendar-nav="next" aria-label="Next month">&rarr;</button>
-            </div>
-
-            <div class="demo-calendar__weekdays" aria-hidden="true">
-              <span>Sun</span>
-              <span>Mon</span>
-              <span>Tue</span>
-              <span>Wed</span>
-              <span>Thu</span>
-              <span>Fri</span>
-              <span>Sat</span>
-            </div>
-
-            <div class="demo-calendar__grid" id="demo-calendar-grid"></div>
-          </section>
-
-          <section class="demo-stage" data-stage="time">
-            <div class="demo-stage__head demo-stage__head--split">
-              <div>
-                <p class="demo-stage__label">Selected Date</p>
-                <h3 class="demo-stage__title" id="demo-selected-date">Choose a date first</h3>
-              </div>
-              <button class="demo-stage__back" type="button" data-back-stage="date">Change date</button>
-            </div>
-
-            <div class="demo-slots" id="demo-slots"></div>
-          </section>
-
-          <section class="demo-stage" data-stage="details">
-            <div class="demo-stage__head demo-stage__head--split">
-              <div>
-                <p class="demo-stage__label">Confirmed Slot</p>
-                <h3 class="demo-stage__title" id="demo-selected-slot">Select a time slot</h3>
-              </div>
-              <button class="demo-stage__back" type="button" data-back-stage="time">Change time</button>
-            </div>
-
-            <div class="demo-summary">
-              <div class="demo-summary__item">
-                <span class="demo-summary__tag">Meeting</span>
-                <span data-demo-title>{fallbackConfig.meeting_title}</span>
-              </div>
-              <div class="demo-summary__item">
-                <span class="demo-summary__tag">Date</span>
-                <span id="demo-summary-date">-</span>
-              </div>
-              <div class="demo-summary__item">
-                <span class="demo-summary__tag">Time</span>
-                <span id="demo-summary-time">-</span>
-              </div>
-              <div class="demo-summary__item">
-                <span class="demo-summary__tag">Duration</span>
-                <span data-demo-duration>{fallbackConfig.meeting_duration} min</span>
-              </div>
-              <div class="demo-summary__item">
-                <span class="demo-summary__tag">Location</span>
-                <span data-demo-location>{fallbackConfig.meeting_location}</span>
-              </div>
-            </div>
-
-            <form class="demo-form" id="eventhex-demo-form">
-              <div class="demo-form__grid">
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Full Name <span class="demo-form__req">*</span></span>
-                  <input class="demo-form__input" name="name" type="text" placeholder="Your name" required />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Work Email <span class="demo-form__req">*</span></span>
-                  <input class="demo-form__input" name="email" type="email" placeholder="you@company.com" required />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Phone <span class="demo-form__req">*</span></span>
-                  <input class="demo-form__input" name="phone" type="tel" placeholder="Phone number" required />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Company <span class="demo-form__req">*</span></span>
-                  <input class="demo-form__input" name="company" type="text" placeholder="Company / Organization" required />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Job Title / Role</span>
-                  <input class="demo-form__input" name="job_title" type="text" placeholder="e.g. Event Manager" />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Country <span class="demo-form__req">*</span></span>
-                  <select class="demo-form__input" name="country" required>
-                    <option value="" disabled selected>Select country</option>
-                    <option value="IN">India</option>
-                    <option value="AE">United Arab Emirates</option>
-                    <option value="SA">Saudi Arabia</option>
-                    <option value="US">United States</option>
-                    <option value="GB">United Kingdom</option>
-                    <option value="SG">Singapore</option>
-                    <option value="QA">Qatar</option>
-                    <option value="BH">Bahrain</option>
-                    <option value="KW">Kuwait</option>
-                    <option value="OM">Oman</option>
-                    <option value="DE">Germany</option>
-                    <option value="FR">France</option>
-                    <option value="NL">Netherlands</option>
-                    <option value="AU">Australia</option>
-                    <option value="CA">Canada</option>
-                    <option value="MY">Malaysia</option>
-                    <option value="ID">Indonesia</option>
-                    <option value="TH">Thailand</option>
-                    <option value="JP">Japan</option>
-                    <option value="KR">South Korea</option>
-                    <option value="ZA">South Africa</option>
-                    <option value="NG">Nigeria</option>
-                    <option value="KE">Kenya</option>
-                    <option value="EG">Egypt</option>
-                    <option value="BR">Brazil</option>
-                    <option value="MX">Mexico</option>
-                    <option value="OTHER">Other</option>
-                  </select>
-                </label>
-              </div>
-
-              <div class="demo-form__grid demo-form__grid--event">
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Expected Event Date</span>
-                  <input class="demo-form__input" name="event_date" type="date" />
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Estimated Attendees</span>
-                  <select class="demo-form__input" name="attendees">
-                    <option value="" disabled selected>Select range</option>
-                    <option value="under-100">Under 100</option>
-                    <option value="100-500">100 – 500</option>
-                    <option value="500-1000">500 – 1,000</option>
-                    <option value="1000-5000">1,000 – 5,000</option>
-                    <option value="5000-10000">5,000 – 10,000</option>
-                    <option value="10000-plus">10,000+</option>
-                  </select>
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Event Type</span>
-                  <select class="demo-form__input" name="event_type">
-                    <option value="" disabled selected>Select type</option>
-                    <option value="conference">Conference</option>
-                    <option value="exhibition">Exhibition / Trade Show</option>
-                    <option value="corporate">Corporate Event</option>
-                    <option value="workshop">Workshop / Training</option>
-                    <option value="networking">Networking Event</option>
-                    <option value="seminar">Seminar / Webinar</option>
-                    <option value="festival">Festival / Concert</option>
-                    <option value="award-gala">Award Ceremony / Gala</option>
-                    <option value="hackathon">Hackathon / Competition</option>
-                    <option value="other">Other</option>
-                  </select>
-                </label>
-
-                <label class="demo-form__field">
-                  <span class="demo-form__label">Module of Interest</span>
-                  <select class="demo-form__input" name="module_interest">
-                    <option value="" disabled selected>What interests you most?</option>
-                    <option value="registration-ticketing">Event Registration & Ticketing</option>
-                    <option value="speaker-session">Speaker & Session Management</option>
-                    <option value="exhibitor-sponsor">Exhibitor & Sponsor Management</option>
-                    <option value="checkin-badges">Event Check-in & Badges</option>
-                    <option value="website-builder">Event Website Builder</option>
-                    <option value="analytics">Event Analytics & Reports</option>
-                    <option value="ai-features">AI Features (Copilot, Smart Connect)</option>
-                    <option value="polling-qa">Live Polling & Q&A</option>
-                    <option value="full-platform">Full Platform Overview</option>
-                  </select>
-                </label>
-              </div>
-
-              <label class="demo-form__field">
-                <span class="demo-form__label">How did you hear about us?</span>
-                <select class="demo-form__input" name="hear_about">
-                  <option value="" disabled selected>Select one</option>
-                  <option value="google">Google / Search Engine</option>
-                  <option value="social-media">Social Media</option>
-                  <option value="advertisement">Advertisement</option>
-                  <option value="event-exhibition">Event / Exhibition</option>
-                  <option value="referral">Referral / Word of Mouth</option>
-                  <option value="other">Other</option>
-                </select>
-              </label>
-
-              <label class="demo-form__field">
-                <span class="demo-form__label">Anything else you'd like us to know?</span>
-                <textarea class="demo-form__input demo-form__input--textarea" name="notes" rows="3" placeholder="Current workflow, team size, or anything we should prepare."></textarea>
-              </label>
-
-              <div class="demo-form__hidden" aria-hidden="true">
-                <input name="hp_field" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-
-              <div class="demo-form__actions">
-                <p class="demo-form__note">Confirmation email, admin notification, reminder email, and follow-up are triggered after booking.</p>
-                <button class="demo-form__submit" id="demo-submit-button" type="submit">Confirm Demo</button>
-              </div>
-
-              <div class="demo-form__message" id="demo-form-message" hidden></div>
-            </form>
-          </section>
-        </div>
+          <div class="bd-form__field">
+            <input type="email" name="email-1" placeholder="Work Email" required class="bd-form__input" />
+          </div>
+          <div class="bd-form__field">
+            <input type="text" name="name-2" placeholder="Company / Organization" required class="bd-form__input" />
+          </div>
+          <div class="bd-form__field">
+            <input type="tel" name="phone-1" placeholder="Phone Number" required class="bd-form__input" />
+          </div>
+          <div class="bd-form__field">
+            <select name="select-1" class="bd-form__input bd-form__select">
+              <option value="" disabled selected>How did you hear about us?</option>
+              <option value="one">Google / Search Engine</option>
+              <option value="two">Social Media</option>
+              <option value="Advertisement">Advertisement</option>
+              <option value="Event-Exhibition">Event / Exhibition</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+          <div class="bd-form__field">
+            <textarea name="textarea-1" placeholder="Tell us about your event or what you'd like to see in the demo" rows="4" class="bd-form__input bd-form__textarea"></textarea>
+          </div>
+          <!-- Honeypot -->
+          <div style="position:absolute;left:-9999px" aria-hidden="true">
+            <input type="text" name="ehf_hp_field" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="bd-form__field bd-form__checkbox">
+            <label>
+              <input type="checkbox" name="checkbox-1" required />
+              <span>I agree to the <a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms-of-service/">Terms of Service</a></span>
+            </label>
+          </div>
+          <button type="submit" class="bd-form__submit">Request a Demo</button>
+          <div id="ehf-demo-msg" class="bd-form__message" style="display:none"></div>
+        </form>
       </div>
     </div>
   </section>
 </MarketingLayout>
 
 <style>
-  .demo-booking {
-    --demo-ink: #16223a;
-    --demo-muted: #607089;
-    --demo-blue: #2256ee;
-    --demo-blue-deep: #1538a8;
-    --demo-line: rgba(34, 86, 238, 0.16);
-    --demo-card: rgba(255, 255, 255, 0.88);
-    --demo-success-bg: #ddfbe6;
-    --demo-success-text: #0d7a3b;
-    --demo-error-bg: #fee2e2;
-    --demo-error-text: #b42318;
-    padding: 32px 20px 88px;
+  /* ── Main section ────────────────────────────── */
+  .bd-main {
+    margin-top: -90px;
+    padding: 160px 20px 80px;
     background:
-      radial-gradient(circle at top left, rgba(34, 86, 238, 0.14), transparent 24%),
-      linear-gradient(180deg, #f7fbff 0%, #edf3ff 100%);
+      url("https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp") center top / cover no-repeat,
+      url("https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp") center center / cover no-repeat;
   }
 
-  .demo-booking__shell {
-    max-width: 1240px;
+  .bd-main__inner {
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
-    gap: 28px;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
     align-items: start;
   }
 
-  .demo-sidebar {
-    position: relative;
-    overflow: hidden;
-    padding: 36px 34px;
-    border-radius: 32px;
-    background: linear-gradient(160deg, rgba(10, 28, 86, 0.97) 0%, rgba(29, 72, 188, 0.96) 58%, rgba(67, 118, 255, 0.92) 100%);
-    color: #f6f9ff;
-    box-shadow: 0 24px 60px rgba(29, 55, 138, 0.18);
-  }
-
-  .demo-sidebar::after {
-    content: "";
-    position: absolute;
-    right: -110px;
-    bottom: -140px;
-    width: 320px;
-    height: 320px;
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 68%);
-  }
-
-  .demo-sidebar__kicker,
-  .demo-scheduler__eyebrow,
-  .demo-stage__label,
-  .demo-fact-card__label,
-  .demo-summary__tag {
-    margin: 0 0 10px;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: 0.16em;
+  /* ── Left copy ───────────────────────────────── */
+  .bd-copy__subtitle {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--brand-blue);
+    margin: 0 0 12px;
   }
 
-  .demo-sidebar__kicker,
-  .demo-fact-card__label {
-    color: rgba(237, 244, 255, 0.76);
+  .bd-copy__title {
+    font-family: var(--font-heading);
+    font-size: 44px;
+    line-height: 1.15;
+    font-weight: 600;
+    letter-spacing: -1px;
+    color: var(--heading-dark);
+    margin: 0 0 16px;
   }
 
-  .demo-sidebar__badges {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 16px;
+  .bd-copy__desc {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+    margin: 0 0 40px;
+    max-width: 480px;
   }
 
-  .demo-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: rgba(255, 214, 102, 0.18);
-    border: 1px solid rgba(255, 214, 102, 0.34);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    color: #fff5d6;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+  .bd-copy__note {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--body-light);
+    margin: 36px 0 0;
   }
 
-  .demo-pill--ghost {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.22);
-    color: rgba(241, 246, 255, 0.92);
+  .bd-copy__note a {
+    color: var(--brand-blue);
+    font-weight: 600;
+    text-decoration: none;
   }
 
-  .demo-sidebar__title {
+  /* ── Steps ───────────────────────────────────── */
+  .bd-steps {
+    list-style: none;
     margin: 0;
-    font-family: "Manrope", var(--font-heading);
-    font-size: clamp(2.3rem, 4vw, 4rem);
-    line-height: 1.03;
-    letter-spacing: -0.06em;
-  }
-
-  .demo-sidebar__title-accent {
-    color: #ffe29b;
-  }
-
-  .demo-sidebar__lead {
-    margin: 18px 0 0;
-    max-width: 36rem;
-    font-size: 1.03rem;
-    line-height: 1.75;
-    color: rgba(244, 248, 255, 0.88);
-  }
-
-  .demo-sidebar__journey {
-    position: relative;
-    z-index: 1;
-    margin-top: 24px;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 24px;
   }
 
-  .demo-journey-card {
-    padding: 16px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 16px 30px rgba(5, 14, 46, 0.12);
+  .bd-steps li {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+    align-items: start;
   }
 
-  .demo-journey-card strong {
-    display: block;
-    color: #fff;
-    line-height: 1.4;
-  }
-
-  .demo-journey-card__index {
-    display: inline-flex;
+  .bd-steps__num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    margin-bottom: 12px;
-    border-radius: 999px;
-    background: rgba(255, 214, 102, 0.2);
-    color: #ffe4a8;
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-  }
-
-  .demo-sidebar__visual {
-    position: relative;
-    z-index: 1;
-    margin-top: 30px;
-    min-height: 260px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 26px;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(16px);
-    overflow: hidden;
-  }
-
-  .demo-sidebar__glow {
-    position: absolute;
-    width: 240px;
-    height: 240px;
-    border-radius: 999px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.34), transparent 68%);
-    filter: blur(8px);
-  }
-
-  .demo-sidebar__phone {
-    position: relative;
-    z-index: 1;
-    width: min(220px, 62%);
-    height: auto;
-    filter: drop-shadow(0 22px 50px rgba(0, 0, 0, 0.28));
-  }
-
-  .demo-sidebar__facts {
-    position: relative;
-    z-index: 1;
-    margin-top: 22px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .demo-fact-card {
-    padding: 18px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(14px);
-  }
-
-  .demo-fact-card__value {
-    display: block;
-    color: #fff;
-    line-height: 1.5;
-  }
-
-  .demo-scheduler {
-    padding: 28px;
-    border-radius: 32px;
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 248, 255, 0.94) 100%),
-      var(--demo-card);
-    border: 1px solid rgba(255, 255, 255, 0.88);
-    box-shadow: 0 28px 70px rgba(34, 55, 120, 0.12);
-    backdrop-filter: blur(18px);
-  }
-
-  .demo-scheduler__header,
-  .demo-stage__head--split,
-  .demo-form__actions {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 18px;
-  }
-
-  .demo-scheduler__header {
-    margin-bottom: 22px;
-  }
-
-  .demo-live-strip {
-    margin-bottom: 20px;
-    padding: 18px;
-    border-radius: 24px;
-    background: linear-gradient(180deg, rgba(34, 86, 238, 0.06) 0%, rgba(255, 255, 255, 0.82) 100%);
-    border: 1px solid rgba(34, 86, 238, 0.1);
-  }
-
-  .demo-live-strip__status {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--demo-blue-deep);
-  }
-
-  .demo-live-strip__dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: #1fa971;
-    box-shadow: 0 0 0 5px rgba(31, 169, 113, 0.12);
-  }
-
-  .demo-live-strip__copy {
-    margin: 12px 0 0;
-    color: var(--demo-muted);
-    line-height: 1.7;
-  }
-
-  .demo-live-strip__metrics {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 16px;
-  }
-
-  .demo-live-metric {
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.82);
-    border: 1px solid rgba(34, 86, 238, 0.08);
-  }
-
-  .demo-live-metric strong {
-    display: block;
-    color: var(--demo-ink);
-    font-family: "Manrope", var(--font-heading);
-    font-size: 1.2rem;
-    letter-spacing: -0.04em;
-  }
-
-  .demo-live-metric span {
-    display: block;
-    margin-top: 6px;
-    color: #66778f;
-    font-size: 0.84rem;
-    line-height: 1.45;
-  }
-
-  [data-demo-sync-status].is-fallback {
-    color: #ffd2aa;
-  }
-
-  .demo-scheduler__eyebrow,
-  .demo-stage__label,
-  .demo-summary__tag {
-    color: #6a7c98;
-  }
-
-  .demo-scheduler__title,
-  .demo-stage__title {
-    margin: 0;
-    color: var(--demo-ink);
-    font-family: "Manrope", var(--font-heading);
-    line-height: 1.12;
-    letter-spacing: -0.04em;
-  }
-
-  .demo-scheduler__title {
-    max-width: 17ch;
-    font-size: clamp(1.65rem, 2.2vw, 2.2rem);
-  }
-
-  .demo-stage__title {
-    font-size: 1.4rem;
-  }
-
-  .demo-progress {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-
-  .demo-progress__step {
-    padding: 10px 14px;
-    border-radius: 999px;
-    background: #eef2fb;
-    color: #72829a;
-    font-size: 0.9rem;
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    color: var(--brand-blue);
+    font-family: var(--font-heading);
+    font-size: 16px;
     font-weight: 700;
   }
 
-  .demo-progress__step.is-active,
-  .demo-progress__step.is-complete {
-    background: linear-gradient(135deg, var(--demo-blue), #4f82ff);
-    color: #fff;
-  }
-
-  .demo-scheduler__banner {
-    margin-bottom: 18px;
-    padding: 13px 16px;
-    border-radius: 16px;
-    background: #fff9db;
-    color: #7a5b00;
-    font-size: 0.96rem;
-    line-height: 1.55;
-  }
-
-  .demo-stage {
-    display: none;
-  }
-
-  .demo-stage.is-active {
-    display: block;
-    animation: demo-stage-enter 220ms ease;
-  }
-
-  @keyframes demo-stage-enter {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .demo-stage__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    margin-bottom: 18px;
-  }
-
-  .demo-stage__nav,
-  .demo-stage__back {
-    border: 1px solid var(--demo-line);
-    background: #fff;
-    color: var(--demo-blue-deep);
-    border-radius: 14px;
-    padding: 10px 14px;
-    font: inherit;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.16s ease, border-color 0.16s ease, background-color 0.16s ease;
-  }
-
-  .demo-stage__nav:hover,
-  .demo-stage__back:hover,
-  .demo-slot:hover,
-  .demo-form__submit:hover {
-    transform: translateY(-1px);
-  }
-
-  .demo-calendar__weekdays,
-  .demo-calendar__grid {
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .demo-calendar__weekdays {
-    margin-bottom: 10px;
-    color: #7b8aa2;
-    font-size: 0.78rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
-
-  .demo-calendar__day,
-  .demo-calendar__empty {
-    aspect-ratio: 1;
-    min-height: 72px;
-  }
-
-  .demo-calendar__empty {
-    border-radius: 18px;
-    background: transparent;
-  }
-
-  .demo-calendar__day {
-    position: relative;
-    border: 1px solid transparent;
-    border-radius: 20px;
-    background: #fff;
-    padding: 12px;
-    color: var(--demo-ink);
-    font: inherit;
-    font-weight: 700;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: 0 10px 24px rgba(36, 89, 245, 0.06);
-  }
-
-  .demo-calendar__day span {
-    display: block;
-    font-size: 1rem;
-  }
-
-  .demo-calendar__day small {
-    display: block;
-    margin-top: 8px;
-    color: #6d7b90;
-    font-size: 0.78rem;
+  .bd-steps strong {
+    font-family: var(--font-heading);
+    font-size: 17px;
     font-weight: 600;
+    color: var(--heading-dark);
+    display: block;
+    margin-bottom: 2px;
   }
 
-  .demo-calendar__day.is-disabled {
-    cursor: not-allowed;
-    background: rgba(255, 255, 255, 0.55);
-    color: #adb8c7;
-    box-shadow: none;
+  .bd-steps p {
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--subheading-gray);
+    margin: 0;
   }
 
-  .demo-calendar__day.is-selected {
-    border-color: rgba(36, 89, 245, 0.28);
-    background: linear-gradient(180deg, rgba(36, 89, 245, 0.1) 0%, rgba(255, 255, 255, 0.92) 100%);
+  /* ── Right: Demo form ─────────────────────────── */
+  .bd-form-wrap {
+    background: rgba(187, 194, 255, 0.16);
+    border-radius: 24px;
+    padding: 40px;
   }
 
-  .demo-calendar__day.is-selected::after {
-    content: "";
-    position: absolute;
-    right: 12px;
-    bottom: 12px;
-    width: 10px;
-    height: 10px;
-    border-radius: 999px;
-    background: var(--demo-blue);
+  .bd-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .demo-slots {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+  .bd-form__input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #E2E4E9;
+    border-radius: 10px;
+    font-family: "Inter", var(--font-body);
+    font-size: 15px;
+    color: #22272F;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
   }
 
-  .demo-slot {
-    display: grid;
-    gap: 10px;
-    padding: 15px 16px;
-    border-radius: 18px;
-    border: 1px solid rgba(36, 89, 245, 0.16);
-    background: #fff;
-    color: var(--demo-ink);
-    font: inherit;
-    font-weight: 700;
+  .bd-form__input:focus {
+    border-color: #375DFB;
+  }
+
+  .bd-form__input::placeholder {
+    color: #868C98;
+  }
+
+  .bd-form__select {
+    appearance: none;
     cursor: pointer;
   }
 
-  .demo-slot span:last-child {
-    color: inherit;
-  }
-
-  .demo-slot__primary {
-    display: block;
-    font-size: 1.02rem;
-  }
-
-  .demo-slot__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    color: #73839d;
-    font-size: 0.82rem;
-    font-weight: 700;
-  }
-
-  .demo-slot__meta span {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 10px;
-    border-radius: 999px;
-    background: #eef3ff;
-  }
-
-  .demo-slot.is-selected {
-    border-color: transparent;
-    background: linear-gradient(135deg, var(--demo-blue), #4f82ff);
-    color: #fff;
-  }
-
-  .demo-slot.is-selected .demo-slot__meta {
-    color: rgba(255, 255, 255, 0.92);
-  }
-
-  .demo-slot.is-selected .demo-slot__meta span {
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  .demo-summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 22px;
-  }
-
-  .demo-summary__item {
-    padding: 15px 16px;
-    border-radius: 18px;
-    background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
-    border: 1px solid rgba(36, 89, 245, 0.08);
-    color: var(--demo-ink);
-    line-height: 1.45;
-  }
-
-  .demo-form {
-    display: grid;
-    gap: 18px;
-  }
-
-  .demo-form__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .demo-form__grid--event {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .demo-form__req {
-    color: #d92d20;
-    font-weight: 400;
-  }
-
-  .demo-form__field {
-    display: grid;
-    gap: 8px;
-  }
-
-  .demo-form__label {
-    color: var(--demo-ink);
-    font-size: 0.92rem;
-    font-weight: 700;
-  }
-
-  .demo-form__input {
-    width: 100%;
-    min-width: 0;
-    padding: 14px 16px;
-    border-radius: 16px;
-    border: 1px solid rgba(36, 89, 245, 0.14);
-    background: #fff;
-    color: var(--demo-ink);
-    font: inherit;
-    box-sizing: border-box;
-    transition: border-color 0.16s ease, box-shadow 0.16s ease;
-  }
-
-  .demo-form__input:focus {
-    outline: none;
-    border-color: rgba(36, 89, 245, 0.45);
-    box-shadow: 0 0 0 4px rgba(36, 89, 245, 0.08);
-  }
-
-  .demo-form__input--textarea {
+  .bd-form__textarea {
     resize: vertical;
     min-height: 100px;
   }
 
-  select.demo-form__input {
-    appearance: none;
+  .bd-form__checkbox {
+    font-family: "Inter", var(--font-body);
+    font-size: 14px;
+    color: #475467;
+  }
+
+  .bd-form__checkbox label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
     cursor: pointer;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23607089' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-    padding-right: 40px;
   }
 
-  select.demo-form__input option[value=""][disabled] {
-    color: #9da3af;
+  .bd-form__checkbox a {
+    color: #375DFB;
+    text-decoration: underline;
   }
 
-  .demo-form__hidden {
-    position: absolute;
-    left: -9999px;
-  }
-
-  .demo-form__note {
-    max-width: 32rem;
-    margin: 0;
-    color: var(--demo-muted);
-    line-height: 1.6;
-  }
-
-  .demo-form__submit {
+  .bd-form__submit {
+    padding: 12px 24px;
+    background-color: #375DFB;
+    color: #ffffff;
+    font-family: "Inter", var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
     border: none;
-    border-radius: 16px;
-    padding: 15px 22px;
-    background: linear-gradient(135deg, var(--demo-blue), #4f82ff);
-    color: #fff;
-    font: inherit;
-    font-weight: 800;
+    border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 16px 26px rgba(36, 89, 245, 0.22);
+    transition: background-color 0.2s;
   }
 
-  .demo-form__submit:disabled {
-    opacity: 0.66;
+  .bd-form__submit:hover {
+    background-color: #1C46D4;
+  }
+
+  .bd-form__submit:disabled {
+    opacity: 0.6;
     cursor: not-allowed;
-    box-shadow: none;
   }
 
-  .demo-form__message,
-  .demo-empty {
-    padding: 14px 16px;
-    border-radius: 16px;
-    line-height: 1.6;
+  .bd-form__message {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: "Inter", var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .bd-form__message--success {
+    background: #d1fadf;
+    color: #12b76a;
+    border: 1px solid #12b76a;
+  }
+  .bd-form__message--error {
+    background: #fee4e2;
+    color: #d92d20;
+    border: 1px solid #d92d20;
   }
 
-  .demo-empty {
-    background: #f7f9fd;
-    color: #6f7c8f;
-  }
-
-  .demo-form__message.is-success {
-    background: var(--demo-success-bg);
-    color: var(--demo-success-text);
-  }
-
-  .demo-form__message.is-error {
-    background: var(--demo-error-bg);
-    color: var(--demo-error-text);
-  }
-
-  @media (max-width: 1120px) {
-    .demo-booking__shell {
-      display: flex;
-      flex-direction: column-reverse;
+  /* ── Responsive ──────────────────────────────── */
+  @media (max-width: 1024px) {
+    .bd-main__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
     }
 
-    .demo-sidebar__visual {
-      min-height: 220px;
+    .bd-copy__title {
+      font-size: 36px;
+    }
+
+    .bd-form-wrap {
+      width: 100%;
     }
   }
 
   @media (max-width: 767px) {
-    .demo-booking {
-      padding: 20px 16px 56px;
+    .bd-main {
+      padding: 120px 16px 56px;
     }
 
-    .demo-sidebar,
-    .demo-scheduler {
-      padding: 22px 18px;
-      border-radius: 24px;
+    .bd-copy__title {
+      font-size: 28px;
+      letter-spacing: 0;
     }
 
-    .demo-sidebar__title {
-      font-size: 2rem;
+    .bd-copy__desc {
+      font-size: 16px;
+      margin-bottom: 28px;
     }
 
-    .demo-summary,
-    .demo-form__grid,
-    .demo-slots,
-    .demo-live-strip__metrics {
-      grid-template-columns: 1fr;
+    .bd-steps__num {
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
     }
 
-    .demo-sidebar__journey,
-    .demo-sidebar__facts {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+    .bd-steps strong {
+      font-size: 15px;
     }
 
-    .demo-sidebar__badges {
-      gap: 8px;
+    .bd-steps p {
+      font-size: 14px;
     }
 
-    .demo-form__grid {
-      grid-template-columns: 1fr;
+    .bd-form-wrap {
+      padding: 24px;
     }
+  }
 
-    .demo-form__grid--event {
-      grid-template-columns: 1fr;
-    }
-
-    .demo-scheduler__header,
-    .demo-stage__head--split,
-    .demo-form__actions {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .demo-progress {
-      justify-content: flex-start;
-    }
-
-    .demo-sidebar__visual {
-      min-height: 200px;
-    }
-
-    .demo-sidebar__phone {
-      width: min(164px, 56%);
-    }
-
-    .demo-calendar__weekdays,
-    .demo-calendar__grid {
-      gap: 6px;
-    }
-
-    .demo-calendar__day,
-    .demo-calendar__empty {
-      aspect-ratio: auto;
-      min-height: 56px;
-    }
-
-    .demo-calendar__day {
-      padding: 8px 6px;
-      border-radius: 14px;
-    }
-
-    .demo-calendar__day span {
-      font-size: 0.9rem;
-    }
-
-    .demo-calendar__day small {
-      margin-top: 6px;
-      font-size: 0.65rem;
-      line-height: 1.15;
-    }
-
-    .demo-stage__nav,
-    .demo-stage__back {
-      width: 100%;
-      justify-content: center;
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation: none !important;
     }
   }
 </style>
 
-<script define:vars={{ bookingApiBase, legacyDemoApi, fallbackConfig }}>
-  const stageOrder = ["date", "time", "details"];
-  const state = {
-    activeStage: "date",
-    activeMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
-    selectedDate: "",
-    selectedTime: "",
-    config: { ...fallbackConfig },
-    availabilityByMonth: new Map(),
-    pluginAvailable: true,
-  };
+<script>
+  const WP_URL = 'https://cms.eventhex.ai';
 
-  const refs = {
-    month: document.getElementById("demo-calendar-month"),
-    grid: document.getElementById("demo-calendar-grid"),
-    slots: document.getElementById("demo-slots"),
-    selectedDate: document.getElementById("demo-selected-date"),
-    selectedSlot: document.getElementById("demo-selected-slot"),
-    summaryDate: document.getElementById("demo-summary-date"),
-    summaryTime: document.getElementById("demo-summary-time"),
-    banner: document.getElementById("demo-booking-banner"),
-    message: document.getElementById("demo-form-message"),
-    submitButton: document.getElementById("demo-submit-button"),
-    form: document.getElementById("eventhex-demo-form"),
-    stages: document.querySelectorAll("[data-stage]"),
-    stepBadges: document.querySelectorAll("[data-step-badge]"),
-    titleTargets: document.querySelectorAll("[data-demo-title]"),
-    durationTargets: document.querySelectorAll("[data-demo-duration]"),
-    locationTargets: document.querySelectorAll("[data-demo-location]"),
-    timezoneTargets: document.querySelectorAll("[data-demo-timezone]"),
-    slotCountTargets: document.querySelectorAll("[data-demo-slot-count]"),
-    windowTargets: document.querySelectorAll("[data-demo-window]"),
-    syncStatusTargets: document.querySelectorAll("[data-demo-sync-status]"),
-    prevMonth: document.querySelector('[data-calendar-nav="prev"]'),
-    nextMonth: document.querySelector('[data-calendar-nav="next"]'),
-  };
+  document.getElementById('ehf-demo-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const msg = document.getElementById('ehf-demo-msg')!;
+    const fd = new FormData(form);
 
-  const monthFormatter = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" });
-
-  function monthKey(date) {
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-  }
-
-  function formatDateLabel(dateString) {
-    return new Intl.DateTimeFormat("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-    }).format(new Date(`${dateString}T12:00:00`));
-  }
-
-  function formatTimeLabel(timeString) {
-    const [hours, minutes] = timeString.split(":").map(Number);
-    const date = new Date();
-    date.setHours(hours || 0, minutes || 0, 0, 0);
-    return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(date);
-  }
-
-  function showBanner(message) {
-    refs.banner.hidden = false;
-    refs.banner.textContent = message;
-  }
-
-  function hideBanner() {
-    refs.banner.hidden = true;
-    refs.banner.textContent = "";
-  }
-
-  function showMessage(message, type) {
-    refs.message.hidden = false;
-    refs.message.className = `demo-form__message is-${type}`;
-    refs.message.textContent = message;
-  }
-
-  function clearMessage() {
-    refs.message.hidden = true;
-    refs.message.className = "demo-form__message";
-    refs.message.textContent = "";
-  }
-
-  function applySyncStatus() {
-    const label = state.pluginAvailable ? "Live WordPress availability" : "Fallback availability mode";
-    refs.syncStatusTargets.forEach((node) => {
-      node.textContent = label;
-      node.classList.toggle("is-fallback", !state.pluginAvailable);
-    });
-  }
-
-  function applyConfig(config) {
-    state.config = { ...state.config, ...config };
-    refs.titleTargets.forEach((node) => {
-      node.textContent = state.config.meeting_title;
-    });
-    refs.durationTargets.forEach((node) => {
-      node.textContent = `${state.config.meeting_duration} min`;
-    });
-    refs.locationTargets.forEach((node) => {
-      node.textContent = state.config.meeting_location;
-    });
-    refs.timezoneTargets.forEach((node) => {
-      node.textContent = state.config.timezone;
-    });
-    refs.slotCountTargets.forEach((node) => {
-      node.textContent = String(Array.isArray(state.config.time_slots) ? state.config.time_slots.length : 0);
-    });
-    refs.windowTargets.forEach((node) => {
-      node.textContent = `${state.config.booking_window_days} days`;
-    });
-  }
-
-  function setStage(stage) {
-    state.activeStage = stage;
-    refs.stages.forEach((node) => {
-      node.classList.toggle("is-active", node.dataset.stage === stage);
-    });
-    refs.stepBadges.forEach((node) => {
-      const stepIndex = stageOrder.indexOf(node.dataset.stepBadge || "");
-      const activeIndex = stageOrder.indexOf(stage);
-      node.classList.toggle("is-active", stepIndex === activeIndex);
-      node.classList.toggle("is-complete", stepIndex < activeIndex);
-    });
-  }
-
-  function buildFallbackAvailability(monthDate) {
-    const availability = {};
-    const start = new Date(monthDate.getFullYear(), monthDate.getMonth(), 1);
-    const end = new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const windowEnd = new Date(today);
-    windowEnd.setDate(windowEnd.getDate() + state.config.booking_window_days);
-
-    for (let cursor = new Date(start); cursor <= end; cursor.setDate(cursor.getDate() + 1)) {
-      const currentDay = new Date(cursor);
-      currentDay.setHours(0, 0, 0, 0);
-
-      if (currentDay < today || currentDay > windowEnd) {
-        continue;
-      }
-
-      if (!state.config.working_days.includes(cursor.getDay())) {
-        continue;
-      }
-
-      const dateString = `${cursor.getFullYear()}-${String(cursor.getMonth() + 1).padStart(2, "0")}-${String(cursor.getDate()).padStart(2, "0")}`;
-      availability[dateString] = state.config.time_slots.map((slot) => ({
-        value: slot,
-        label: formatTimeLabel(slot),
-      }));
+    const data: Record<string, string | boolean> = {};
+    for (const [key, val] of fd.entries()) {
+      data[key] = val as string;
+    }
+    // Consent checkbox
+    const cb = form.querySelector('[name="checkbox-1"]') as HTMLInputElement;
+    if (cb?.checked) {
+      data['checkbox-1'] = 'I agree to receive email notifications and updates from EventHex. I understand that I can unsubscribe at any time.';
     }
 
-    return availability;
-  }
-
-  async function loadMonthAvailability(monthDate) {
-    const key = monthKey(monthDate);
-    if (state.availabilityByMonth.has(key)) {
-      return state.availabilityByMonth.get(key);
-    }
-
-    if (!state.pluginAvailable) {
-      applySyncStatus();
-      const fallback = buildFallbackAvailability(monthDate);
-      state.availabilityByMonth.set(key, fallback);
-      return fallback;
-    }
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    msg.style.display = 'none';
 
     try {
-      const response = await fetch(`${bookingApiBase}/availability?month=${key}`);
-      if (!response.ok) {
-        throw new Error("Booking plugin not available");
-      }
-
-      const payload = await response.json();
-      if (payload.config) {
-        applyConfig(payload.config);
-      }
-
-      const availability = payload.availability || {};
-      state.availabilityByMonth.set(key, availability);
-      state.pluginAvailable = true;
-      applySyncStatus();
-      hideBanner();
-      return availability;
-    } catch (_error) {
-      state.pluginAvailable = false;
-      applySyncStatus();
-      showBanner("The standalone booking plugin is not deployed yet. The calendar UI is live, and submissions are temporarily falling back to the current demo endpoint.");
-      const fallback = buildFallbackAvailability(monthDate);
-      state.availabilityByMonth.set(key, fallback);
-      return fallback;
-    }
-  }
-
-  async function renderCalendar() {
-    const monthStart = new Date(state.activeMonth.getFullYear(), state.activeMonth.getMonth(), 1);
-    const monthEnd = new Date(state.activeMonth.getFullYear(), state.activeMonth.getMonth() + 1, 0);
-    const availability = await loadMonthAvailability(monthStart);
-
-    refs.month.textContent = monthFormatter.format(monthStart);
-    refs.grid.innerHTML = "";
-
-    for (let index = 0; index < monthStart.getDay(); index += 1) {
-      const empty = document.createElement("div");
-      empty.className = "demo-calendar__empty";
-      refs.grid.appendChild(empty);
-    }
-
-    for (let day = 1; day <= monthEnd.getDate(); day += 1) {
-      const dateString = `${monthStart.getFullYear()}-${String(monthStart.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-      const slots = availability[dateString] || [];
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "demo-calendar__day";
-      button.innerHTML = `<span>${day}</span><small>${slots.length ? `${slots.length} open` : "Unavailable"}</small>`;
-
-      if (!slots.length) {
-        button.disabled = true;
-        button.classList.add("is-disabled");
-      }
-
-      if (state.selectedDate === dateString) {
-        button.classList.add("is-selected");
-      }
-
-      button.addEventListener("click", async () => {
-        state.selectedDate = dateString;
-        state.selectedTime = "";
-        refs.selectedDate.textContent = formatDateLabel(dateString);
-        refs.selectedSlot.textContent = "Select a time slot";
-        refs.summaryDate.textContent = formatDateLabel(dateString);
-        refs.summaryTime.textContent = "-";
-        setStage("time");
-        await renderCalendar();
-        await renderSlots();
+      const res = await fetch(`${WP_URL}/wp-json/ehf/v1/submit/contact-form`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
+      const json = await res.json();
 
-      refs.grid.appendChild(button);
-    }
-
-    const currentMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
-    if (refs.prevMonth) {
-      refs.prevMonth.disabled = monthKey(monthStart) === monthKey(currentMonth);
-    }
-
-    if (refs.nextMonth) {
-      const nextMonth = new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1);
-      const nextAvailability = await loadMonthAvailability(nextMonth);
-      refs.nextMonth.disabled = Object.keys(nextAvailability).length === 0;
-    }
-  }
-
-  async function renderSlots() {
-    if (!state.selectedDate) {
-      refs.slots.innerHTML = '<div class="demo-empty">Choose a date to see available time slots.</div>';
-      return;
-    }
-
-    const selectedDate = new Date(`${state.selectedDate}T12:00:00`);
-    const availability = await loadMonthAvailability(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1));
-    const slots = availability[state.selectedDate] || [];
-    refs.selectedDate.textContent = formatDateLabel(state.selectedDate);
-
-    if (!slots.length) {
-      refs.slots.innerHTML = '<div class="demo-empty">That date no longer has any free slots. Pick another date.</div>';
-      return;
-    }
-
-    refs.slots.innerHTML = "";
-    slots.forEach((slot) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "demo-slot";
-      if (state.selectedTime === slot.value) {
-        button.classList.add("is-selected");
+      if (res.ok && json.success) {
+        msg.className = 'bd-form__message bd-form__message--success';
+        msg.textContent = json.message || 'Thank you! Our team will reach out to schedule your demo.';
+        msg.style.display = 'block';
+        form.reset();
+      } else {
+        throw new Error(json.message || 'Submission failed.');
       }
-      button.innerHTML = `
-        <span class="demo-slot__primary">${slot.label}</span>
-        <span class="demo-slot__meta">
-          <span>${state.config.meeting_duration} min</span>
-          <span>${state.config.timezone}</span>
-        </span>
-      `;
-      button.addEventListener("click", () => {
-        state.selectedTime = slot.value;
-        renderSummary();
-        setStage("details");
-        void renderSlots();
-      });
-      refs.slots.appendChild(button);
-    });
-  }
-
-  function renderSummary() {
-    if (!state.selectedDate || !state.selectedTime) {
-      refs.selectedSlot.textContent = "Select a time slot";
-      refs.summaryDate.textContent = state.selectedDate ? formatDateLabel(state.selectedDate) : "-";
-      refs.summaryTime.textContent = "-";
-      return;
-    }
-
-    refs.selectedSlot.textContent = `${formatDateLabel(state.selectedDate)} at ${formatTimeLabel(state.selectedTime)}`;
-    refs.summaryDate.textContent = formatDateLabel(state.selectedDate);
-    refs.summaryTime.textContent = `${formatTimeLabel(state.selectedTime)} (${state.config.timezone})`;
-  }
-
-  async function submitLegacy(payload) {
-    const legacyPayload = {
-      "name-1": payload.name,
-      "email-1": payload.email,
-      "phone-1": payload.phone,
-      "text-1": payload.company,
-      "text-2": payload.job_title,
-      "select-1": payload.country,
-      "date-1": payload.event_date || payload.booking_date,
-      "select-2": payload.attendees,
-      "select-3": payload.event_type,
-      "select-4": payload.module_interest,
-      "select-5": payload.hear_about,
-      "textarea-1": payload.notes,
-      "checkbox-1": "agreed",
-      ehf_hp_field: payload.hp_field,
-    };
-
-    const response = await fetch(legacyDemoApi, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(legacyPayload),
-    });
-    const result = await response.json().catch(() => ({}));
-
-    if (!response.ok || !result.success) {
-      throw new Error(result.message || "The fallback form submission failed.");
-    }
-
-    return result;
-  }
-
-  async function submitBooking(payload) {
-    if (!state.pluginAvailable) {
-      return submitLegacy(payload);
-    }
-
-    const response = await fetch(`${bookingApiBase}/book`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const result = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      if (response.status === 404 || response.status >= 500) {
-        state.pluginAvailable = false;
-        applySyncStatus();
-        showBanner("The standalone booking plugin is not active yet. Submissions are using the current fallback endpoint until it is deployed.");
-        return submitLegacy(payload);
-      }
-      throw new Error(result.message || "Could not confirm the booking.");
-    }
-
-    return result;
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-    clearMessage();
-
-    if (!state.selectedDate || !state.selectedTime) {
-      showMessage("Pick a date and time before submitting the form.", "error");
-      setStage("date");
-      return;
-    }
-
-    const formData = new FormData(refs.form);
-    const payload = {
-      name: String(formData.get("name") || "").trim(),
-      email: String(formData.get("email") || "").trim(),
-      company: String(formData.get("company") || "").trim(),
-      phone: String(formData.get("phone") || "").trim(),
-      job_title: String(formData.get("job_title") || "").trim(),
-      country: String(formData.get("country") || "").trim(),
-      event_date: String(formData.get("event_date") || "").trim(),
-      attendees: String(formData.get("attendees") || "").trim(),
-      event_type: String(formData.get("event_type") || "").trim(),
-      module_interest: String(formData.get("module_interest") || "").trim(),
-      hear_about: String(formData.get("hear_about") || "").trim(),
-      notes: String(formData.get("notes") || "").trim(),
-      hp_field: String(formData.get("hp_field") || ""),
-      booking_date: state.selectedDate,
-      booking_time: state.selectedTime,
-    };
-
-    refs.submitButton.disabled = true;
-    refs.submitButton.textContent = "Confirming...";
-
-    try {
-      const result = await submitBooking(payload);
-      refs.form.reset();
-      state.selectedDate = "";
-      state.selectedTime = "";
-      refs.selectedDate.textContent = "Choose a date first";
-      refs.selectedSlot.textContent = "Select a time slot";
-      refs.summaryDate.textContent = "-";
-      refs.summaryTime.textContent = "-";
-      showMessage(result.message || state.config.success_message, "success");
-      setStage("date");
-      await renderCalendar();
-      await renderSlots();
-    } catch (error) {
-      showMessage(error instanceof Error ? error.message : "Something went wrong while confirming the booking.", "error");
+    } catch (err: any) {
+      msg.className = 'bd-form__message bd-form__message--error';
+      msg.textContent = err.message || 'Something went wrong. Please try again.';
+      msg.style.display = 'block';
     } finally {
-      refs.submitButton.disabled = false;
-      refs.submitButton.textContent = "Confirm Demo";
+      btn.disabled = false;
+      btn.textContent = 'Request a Demo';
     }
-  }
-
-  if (refs.form && refs.grid && refs.slots && refs.month) {
-    refs.prevMonth?.addEventListener("click", async () => {
-      state.activeMonth = new Date(state.activeMonth.getFullYear(), state.activeMonth.getMonth() - 1, 1);
-      await renderCalendar();
-      await renderSlots();
-    });
-
-    refs.nextMonth?.addEventListener("click", async () => {
-      state.activeMonth = new Date(state.activeMonth.getFullYear(), state.activeMonth.getMonth() + 1, 1);
-      await renderCalendar();
-      await renderSlots();
-    });
-
-    document.querySelectorAll("[data-back-stage]").forEach((button) => {
-      button.addEventListener("click", async () => {
-        const stage = button.getAttribute("data-back-stage") || "date";
-        setStage(stage);
-        if (stage === "time") {
-          await renderSlots();
-        }
-      });
-    });
-
-    refs.form.addEventListener("submit", handleSubmit);
-    applyConfig(fallbackConfig);
-    applySyncStatus();
-    renderSummary();
-    void renderCalendar();
-    void renderSlots();
-  }
+  });
 </script>
