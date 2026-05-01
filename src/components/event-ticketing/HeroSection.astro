@@ -1,4 +1,6 @@
 ---
+import LottiePlayer from "../LottiePlayer.astro";
+
 // Hero — speaker-management pattern: split layout, lottie animation, floating info cards
 
 interface Props {
@@ -42,7 +44,7 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
 
       <div class="eth-hero__visual animate-on-scroll" data-animation="fadeInRight">
         <div class="eth-hero__visual-card">
-          <div class="eth-hero__lottie" data-lottie-eth-hero="/animations/event-ticketing-hero.json"></div>
+          <LottiePlayer src="/animations/event-ticketing-hero.json" class="eth-hero__lottie" />
         </div>
       </div>
 
@@ -68,23 +70,6 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
   </div>
 </section>
 
-<script>
-  const ethLottieContainer = document.querySelector('[data-lottie-eth-hero]') as HTMLElement | null;
-  if (ethLottieContainer) {
-    const path = ethLottieContainer.dataset.lottieEthHero;
-    if (path) {
-      import('lottie-web').then((lottie) => {
-        lottie.default.loadAnimation({
-          container: ethLottieContainer,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path,
-        });
-      });
-    }
-  }
-</script>
 
 <style is:global>
   .eth-hero {

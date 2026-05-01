@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import LottiePlayer from "../LottiePlayer.astro";
 
 /* ── TYPE DEFINITIONS ──────────────────────────────────────── */
 interface StatItem { value: string; label: string }
@@ -121,7 +122,7 @@ const layouts = ["a", "b", "c"];
       </div>
       {heroAnimation && (
         <div class="fv2-hero__animation animate-on-scroll" data-animation="fadeIn">
-          <div data-lottie-hero data-lottie-path={heroAnimation}></div>
+          <LottiePlayer src={heroAnimation} />
         </div>
       )}
     </div>
@@ -236,7 +237,7 @@ const layouts = ["a", "b", "c"];
         <div class="fv2-how__left">
           <div class="fv2-how__image animate-on-scroll" data-animation="fadeInUp">
             {howItWorksAnimation ? (
-              <div class="fv2-how__lottie" data-lottie-how={howItWorksAnimation}></div>
+              <LottiePlayer src={howItWorksAnimation} class="fv2-how__lottie" />
             ) : howItWorksImage ? (
               <img src={howItWorksImage} alt={howItWorksHeading} loading="lazy" />
             ) : (
@@ -314,7 +315,7 @@ const layouts = ["a", "b", "c"];
           </div>
         </div>
         <div class="fv2-cta__animation">
-          <div class="fv2-cta__lottie" data-lottie-cta="/animations/cta-animation.json"></div>
+          <LottiePlayer src="/animations/cta-animation.json" class="fv2-cta__lottie" />
         </div>
       </div>
     </div>
@@ -399,7 +400,7 @@ const layouts = ["a", "b", "c"];
     align-items: center;
     justify-content: center;
   }
-  .fv2-hero__animation [data-lottie-hero] {
+  .fv2-hero__animation .lottie-container {
     width: 100%;
     max-width: 640px;
   }
@@ -1216,7 +1217,7 @@ const layouts = ["a", "b", "c"];
     }
     .fv2-hero__inner--split .fv2-hero__ctas { justify-content: center; }
     .fv2-hero__inner--split .fv2-hero__trust { justify-content: center; }
-    .fv2-hero__animation [data-lottie-hero] { max-width: 340px; }
+    .fv2-hero__animation .lottie-container { max-width: 340px; }
     .fv2-hero__copy { font-size: 16px; }
     .fv2-hero__ctas { flex-direction: column; align-items: center; }
     .fv2-btn { width: 100%; max-width: 300px; }
@@ -1279,57 +1280,6 @@ const layouts = ["a", "b", "c"];
 </style>
 
 <script>
-  /* Hero Lottie animation */
-  const lottieContainer = document.querySelector('[data-lottie-hero]') as HTMLElement | null;
-  if (lottieContainer) {
-    const path = lottieContainer.dataset.lottiePath;
-    if (path) {
-      import('lottie-web').then((lottie) => {
-        lottie.default.loadAnimation({
-          container: lottieContainer,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path,
-        });
-      });
-    }
-  }
-
-  /* How It Works Lottie animation */
-  const howLottieContainer = document.querySelector('[data-lottie-how]') as HTMLElement | null;
-  if (howLottieContainer) {
-    const howPath = howLottieContainer.dataset.lottieHow;
-    if (howPath) {
-      import('lottie-web').then((lottie) => {
-        lottie.default.loadAnimation({
-          container: howLottieContainer,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path: howPath,
-        });
-      });
-    }
-  }
-
-  /* CTA Lottie animation */
-  const ctaLottieContainer = document.querySelector('[data-lottie-cta]') as HTMLElement | null;
-  if (ctaLottieContainer) {
-    const ctaPath = ctaLottieContainer.dataset.lottieCta;
-    if (ctaPath) {
-      import('lottie-web').then((lottie) => {
-        lottie.default.loadAnimation({
-          container: ctaLottieContainer,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path: ctaPath,
-        });
-      });
-    }
-  }
-
   /* Bento tab switching */
   const fv2Tabs = Array.from(document.querySelectorAll('[data-fv2-tab]'));
   const fv2Panels = Array.from(document.querySelectorAll('[data-fv2-panel]'));

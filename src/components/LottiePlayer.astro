@@ -1,0 +1,72 @@
+---
+/**
+ * Shared Lottie player with lazy loading (IntersectionObserver) + reduced-motion.
+ * Uses lottie-web SVG renderer for pixel-perfect output matching original designs.
+ *
+ * Usage:
+ *   <LottiePlayer src="/animations/foo.json" class="my-lottie" />
+ */
+interface Props {
+  /** Path to .json Lottie file served from public/ */
+  src: string;
+  /** Extra class(es) forwarded to the container <div> */
+  class?: string;
+  /** Load immediately without waiting for intersection (for above-the-fold) */
+  eager?: boolean;
+  /** Extra data-* attributes forwarded to the container */
+  [key: `data-${string}`]: string;
+}
+
+const { src, class: className, eager, ...rest } = Astro.props;
+---
+
+<div class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></div>
+
+<script>
+  function loadLottie(el: HTMLElement, prefersReducedMotion: boolean) {
+    const src = el.dataset.lottieSrc;
+    if (src && !el.dataset.lottieInit) {
+      el.dataset.lottieInit = "1";
+      import("lottie-web/build/player/lottie_svg").then((lottie) => {
+        lottie.default.loadAnimation({
+          container: el,
+          renderer: "svg",
+          loop: true,
+          autoplay: !prefersReducedMotion,
+          path: src,
+        });
+      });
+    }
+  }
+
+  function initLottie() {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Eager: load immediately (above-the-fold)
+    document
+      .querySelectorAll<HTMLElement>("[data-lottie-src][data-lottie-eager]")
+      .forEach((el) => loadLottie(el, prefersReducedMotion));
+
+    // Lazy: load on intersection
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            loadLottie(entry.target as HTMLElement, prefersReducedMotion);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "200px" },
+    );
+
+    document
+      .querySelectorAll<HTMLElement>("[data-lottie-src]:not([data-lottie-eager])")
+      .forEach((el) => observer.observe(el));
+  }
+
+  initLottie();
+  document.addEventListener("astro:after-swap", initLottie);
+</script>

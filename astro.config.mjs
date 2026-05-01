@@ -13,5 +13,8 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ['lottie-web/build/player/lottie_svg'],
+    },
   },
 });

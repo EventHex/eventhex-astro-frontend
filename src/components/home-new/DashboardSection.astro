@@ -1,4 +1,6 @@
 ---
+import LottiePlayer from "../LottiePlayer.astro";
+
 // Source: Elementor Container 40a2c6f (depth 0)
 // Dark section: radial-gradient background, pt:250px pb:60px
 // Children:
@@ -6,7 +8,6 @@
 //   52c97b5: engagement text + trusted-by carousel
 //   c89aa97: Amy testimonial
 // Note: stacking_cards widget 3869d38 is hidden on ALL breakpoints — excluded
-
 const trustedLogos = [
   { url: "https://cms.eventhex.ai/wp-content/uploads/2026/03/wellbeing.svg", alt: "Wellbeing at Work" },
   { url: "https://cms.eventhex.ai/wp-content/uploads/2026/03/global-Ai-show.svg", alt: "Global AI Show" },
@@ -39,10 +40,11 @@ const trustedLogos = [
     <div
       class="dashboard-img"
       data-dashboard-motion
-      data-lottie-dashboard
       role="img"
       aria-label="Event registration dashboard overview"
-    ></div>
+    >
+      <LottiePlayer src="/animations/dashboard.json" eager />
+    </div>
   </div>
 
   <!-- Engagement text + star (52c97b5 → d3cf198) -->
@@ -103,20 +105,8 @@ const trustedLogos = [
 </section>
 
 <script>
-  import lottie from 'lottie-web';
-
-  const dashboardEl = document.querySelector('[data-lottie-dashboard]') as HTMLElement | null;
+  const dashboardEl = document.querySelector('[data-dashboard-motion]') as HTMLElement | null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  if (dashboardEl) {
-    lottie.loadAnimation({
-      container: dashboardEl,
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      path: '/animations/dashboard.json',
-    });
-  }
 
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
