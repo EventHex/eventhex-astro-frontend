@@ -16,7 +16,7 @@ interface StackingCard {
 
 interface StepItem { title: string; desc: string }
 interface FaqItem { q: string; a: string }
-interface WhyCard { title: string; desc: string }
+interface WhyCard { title: string; desc: string; icon?: string }
 
 interface Props {
   pageTitle: string;
@@ -29,6 +29,7 @@ interface Props {
   heroTitleLine2: string;
   heroCopy: string;
   trustItems: string[];
+  heroAnimation?: string;
   /* stats */
   stats: StatItem[];
   statsHeadline: { white1: string; accent: string; white2: string; accent2: string };
@@ -42,6 +43,8 @@ interface Props {
   stackingCards: StackingCard[];
   /* how it works */
   howItWorksHeading: string;
+  howItWorksImage?: string;
+  howItWorksAnimation?: string;
   steps: StepItem[];
   /* cta */
   ctaTitle: string;
@@ -58,10 +61,11 @@ interface Props {
 const {
   pageTitle, pageDescription, canonical, ogImage,
   badge, heroTitleLine1, heroTitleLine2, heroCopy, trustItems,
+  heroAnimation,
   stats, statsHeadline,
   bentoHeading, bentoSubtitle, bentoTabs,
   stackingHeading, stackingHighlight, stackingCards,
-  howItWorksHeading, steps,
+  howItWorksHeading, howItWorksImage, howItWorksAnimation, steps,
   ctaTitle, ctaCopy,
   whyHeading, whyCards,
   faqs,
@@ -98,29 +102,40 @@ const layouts = ["a", "b", "c"];
   </Fragment>
 
   <!-- ① HERO — full viewport, bleeds into header -->
-  <section class="fv2-hero">
-    <div class="fv2-hero__inner">
-      <span class="fv2-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
-      <h1 class="fv2-hero__title animate-on-scroll" data-animation="fadeInUp">
-        {heroTitleLine1}<br />
-        <span class="fv2-hero__highlight">{heroTitleLine2}</span>
-      </h1>
-      <p class="fv2-hero__copy animate-on-scroll" data-animation="fadeInUp">{heroCopy}</p>
-      <div class="fv2-hero__ctas animate-on-scroll" data-animation="fadeInUp">
-        <a href="/book-a-demo/" class="fv2-btn fv2-btn--primary">
-          Book a Demo
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#fv2-bento" class="fv2-btn fv2-btn--outline">Explore Features</a>
+  <section class={`fv2-hero ${heroAnimation ? 'fv2-hero--split' : ''}`}>
+    <div class={`fv2-hero__inner ${heroAnimation ? 'fv2-hero__inner--split' : ''}`}>
+      <div class="fv2-hero__text">
+        <span class="fv2-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
+        <h1 class="fv2-hero__title animate-on-scroll" data-animation="fadeInUp">
+          {heroTitleLine1}<br />
+          <span class="fv2-hero__highlight">{heroTitleLine2}</span>
+        </h1>
+        <p class="fv2-hero__copy animate-on-scroll" data-animation="fadeInUp">{heroCopy}</p>
+        <div class="fv2-hero__ctas animate-on-scroll" data-animation="fadeInUp">
+          <a href="/book-a-demo/" class="fv2-btn fv2-btn--primary">
+            Book a Demo
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#fv2-bento" class="fv2-btn fv2-btn--outline">Explore Features</a>
+        </div>
       </div>
-      <div class="fv2-hero__trust animate-on-scroll" data-animation="fadeIn">
-        {trustItems.map((t) => (
-          <span class="fv2-hero__trust-item">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            {t}
-          </span>
-        ))}
-      </div>
+      {heroAnimation && (
+        <div class="fv2-hero__animation animate-on-scroll" data-animation="fadeIn">
+          <div data-lottie-hero data-lottie-path={heroAnimation}></div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- trust strip -->
+  <section class="fv2-trust-strip">
+    <div class="fv2-trust-strip__inner">
+      {trustItems.map((t) => (
+        <span class="fv2-trust-strip__item">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {t}
+        </span>
+      ))}
     </div>
   </section>
 
@@ -130,7 +145,8 @@ const layouts = ["a", "b", "c"];
       <div class="fv2-stats__engagement-text">
         <h2 class="fv2-stats__heading animate-on-scroll" data-animation="fadeInDown">
           <span class="fv2-stats--white">{statsHeadline.white1} </span>
-          <span class="fv2-stats--purple">{statsHeadline.accent} </span>
+          <span class="fv2-stats--purple">{statsHeadline.accent}</span>
+          <br />
           <span class="fv2-stats--white">{statsHeadline.white2} </span>
           <span class="fv2-stats--cyan">{statsHeadline.accent2}</span>
         </h2>
@@ -185,7 +201,7 @@ const layouts = ["a", "b", "c"];
       <div class="fv2-stack-header">
         <span class="fv2-stack-subtitle">Feature-by-feature</span>
         <h2 class="fv2-stack-title">
-          {stackingHeading} <span class="fv2-stack-hl">{stackingHighlight}</span>
+          {stackingHeading} <br/><span class="fv2-stack-hl">{stackingHighlight}</span>
         </h2>
       </div>
       <div class="fv2-stack-cards">
@@ -209,20 +225,41 @@ const layouts = ["a", "b", "c"];
     </div>
   </section>
 
-  <!-- ⑤ HOW IT WORKS — dark section -->
+  <!-- ⑤ HOW IT WORKS — white split layout -->
   <section class="fv2-how">
     <div class="fv2-how__inner">
-      <span class="fv2-how__eyebrow animate-on-scroll" data-animation="fadeIn">Step by Step</span>
-      <h2 class="fv2-how__heading animate-on-scroll" data-animation="fadeInUp">{howItWorksHeading}</h2>
-      <div class="fv2-how__steps">
-        {steps.map((step, i) => (
-          <div class="fv2-how__step animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 120)}>
-            <span class="fv2-how__num">{String(i + 1).padStart(2, "0")}</span>
-            <h3 class="fv2-how__step-title">{step.title}</h3>
-            <p class="fv2-how__step-desc">{step.desc}</p>
-            {i < steps.length - 1 && <span class="fv2-how__arrow">→</span>}
+      <div class="fv2-how__header">
+        <span class="fv2-how__eyebrow animate-on-scroll" data-animation="fadeIn">Step by Step</span>
+        <h2 class="fv2-how__heading animate-on-scroll" data-animation="fadeInUp">{howItWorksHeading}</h2>
+      </div>
+      <div class="fv2-how__split">
+        <div class="fv2-how__left">
+          <div class="fv2-how__image animate-on-scroll" data-animation="fadeInUp">
+            {howItWorksAnimation ? (
+              <div class="fv2-how__lottie" data-lottie-how={howItWorksAnimation}></div>
+            ) : howItWorksImage ? (
+              <img src={howItWorksImage} alt={howItWorksHeading} loading="lazy" />
+            ) : (
+              <div class="fv2-how__placeholder">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                  <rect width="120" height="120" rx="24" fill="#F0F2F5"/>
+                  <path d="M40 85V35l45 25-45 25z" fill="#375DFB" opacity="0.3"/>
+                </svg>
+              </div>
+            )}
           </div>
-        ))}
+        </div>
+        <div class="fv2-how__steps">
+          {steps.map((step, i) => (
+            <div class="fv2-how__step animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 100)}>
+              <span class="fv2-how__num">{String(i + 1).padStart(2, "0")}</span>
+              <div class="fv2-how__step-text">
+                <h3 class="fv2-how__step-title">{step.title}</h3>
+                <p class="fv2-how__step-desc">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
@@ -233,9 +270,12 @@ const layouts = ["a", "b", "c"];
       <h2 class="fv2-why__heading animate-on-scroll" data-animation="fadeInUp">{whyHeading}</h2>
       <div class="fv2-why__grid">
         {whyCards.map((card, i) => (
-          <div class="fv2-why__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 80)}>
-            <h3 class="fv2-why__card-title">{card.title}</h3>
-            <p class="fv2-why__card-desc">{card.desc}</p>
+          <div class={`fv2-why__card fv2-why__card--${i} animate-on-scroll`} data-animation="fadeInUp" data-delay={String(i * 80)}>
+            {card.icon && <div class="fv2-why__icon" set:html={card.icon} />}
+            <div class="fv2-why__card-text">
+              <h3 class="fv2-why__card-title">{card.title}</h3>
+              <p class="fv2-why__card-desc">{card.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -247,29 +287,34 @@ const layouts = ["a", "b", "c"];
     <div class="fv2-cta__card">
       <div class="fv2-cta__glow fv2-cta__glow--1"></div>
       <div class="fv2-cta__glow fv2-cta__glow--2"></div>
-      <div class="fv2-cta__content">
-        <span class="fv2-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Get Started Today</span>
-        <h2 class="fv2-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaTitle}</h2>
-        <p class="fv2-cta__copy animate-on-scroll" data-animation="fadeInUp">{ctaCopy}</p>
-        <div class="fv2-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
-          <span class="fv2-cta__proof-pill">AI-powered platform</span>
-          <span class="fv2-cta__proof-pill">Free onboarding support</span>
-          <span class="fv2-cta__proof-pill">No credit card required</span>
+      <div class="fv2-cta__split">
+        <div class="fv2-cta__content">
+          <span class="fv2-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Get Started Today</span>
+          <h2 class="fv2-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaTitle}</h2>
+          <p class="fv2-cta__copy animate-on-scroll" data-animation="fadeInUp">{ctaCopy}</p>
+          <div class="fv2-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
+            <span class="fv2-cta__proof-pill">AI-powered platform</span>
+            <span class="fv2-cta__proof-pill">Free onboarding support</span>
+            <span class="fv2-cta__proof-pill">No credit card required</span>
+          </div>
+          <div class="fv2-cta__buttons animate-on-scroll" data-animation="fadeInUp">
+            <a href="/book-a-demo/" class="fv2-btn fv2-btn--white">
+              Book a Free Demo
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="#fv2-bento" class="fv2-btn fv2-btn--ghost">Explore Features</a>
+          </div>
+          <div class="fv2-cta__trust animate-on-scroll" data-animation="fadeIn">
+            {trustItems.map((t) => (
+              <span class="fv2-cta__trust-item">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
+                {t}
+              </span>
+            ))}
+          </div>
         </div>
-        <div class="fv2-cta__buttons animate-on-scroll" data-animation="fadeInUp">
-          <a href="/book-a-demo/" class="fv2-btn fv2-btn--white">
-            Book a Free Demo
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <a href="#fv2-bento" class="fv2-btn fv2-btn--ghost">Explore Features</a>
-        </div>
-        <div class="fv2-cta__trust animate-on-scroll" data-animation="fadeIn">
-          {trustItems.map((t) => (
-            <span class="fv2-cta__trust-item">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
-              {t}
-            </span>
-          ))}
+        <div class="fv2-cta__animation">
+          <div class="fv2-cta__lottie" data-lottie-cta="/animations/cta-animation.json"></div>
         </div>
       </div>
     </div>
@@ -333,6 +378,31 @@ const layouts = ["a", "b", "c"];
     padding: 160px 1.5rem 5rem;
     z-index: 1;
   }
+  /* Split hero layout */
+  .fv2-hero--split { justify-content: flex-start; }
+  .fv2-hero__inner--split {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    max-width: 1200px;
+    text-align: left;
+    padding: 160px 2rem 5rem;
+  }
+  .fv2-hero__inner--split .fv2-hero__text { flex: 1; min-width: 0; }
+  .fv2-hero__inner--split .fv2-hero__copy { margin-left: 0; margin-right: 0; }
+  .fv2-hero__inner--split .fv2-hero__ctas { justify-content: flex-start; }
+  .fv2-hero__inner--split .fv2-hero__trust { justify-content: flex-start; }
+  .fv2-hero__animation {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fv2-hero__animation [data-lottie-hero] {
+    width: 100%;
+    max-width: 640px;
+  }
   .fv2-hero__badge {
     display: inline-flex;
     font-family: var(--font-body);
@@ -388,6 +458,29 @@ const layouts = ["a", "b", "c"];
     color: var(--subheading-gray);
   }
 
+  /* ── TRUST STRIP ─────────────────────────── */
+  .fv2-trust-strip {
+    background: var(--surface-light);
+    padding: 1.25rem 1.5rem;
+  }
+  .fv2-trust-strip__inner {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .fv2-trust-strip__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--heading-dark);
+  }
+
   /* ── BUTTONS ─────────────────────────────── */
   .fv2-btn {
     display: inline-flex;
@@ -420,6 +513,7 @@ const layouts = ["a", "b", "c"];
   .fv2-stats {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
     padding: 100px 1.5rem;
     background-color: #000;
@@ -455,28 +549,46 @@ const layouts = ["a", "b", "c"];
   .fv2-stats__grid {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
     max-width: 1100px;
     margin: 0 auto;
   }
   .fv2-stats__card {
-    flex: 0 0 200px;
+    flex: 1 1 0;
+    max-width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 2rem;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
+    gap: 10px;
+    padding: 2.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
     text-align: center;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  .fv2-stats__card:hover { transform: translateY(-4px); border-color: rgba(55,93,251,0.3); }
-  .fv2-stats__value { font-family: var(--font-heading); font-size: 2.5rem; font-weight: 700; color: #fff; letter-spacing: -1px; }
-  .fv2-stats__label { font-family: var(--font-body); font-size: 0.875rem; color: rgba(255,255,255,0.6); }
+  .fv2-stats__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(159, 129, 255, 0.35);
+    box-shadow: 0 8px 32px rgba(159, 129, 255, 0.12);
+  }
+  .fv2-stats__value {
+    font-family: var(--font-heading);
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -1.5px;
+    line-height: 1;
+  }
+  .fv2-stats__label {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.02em;
+  }
 
   /* ══════════════════════════════════════════
      ③ BENTO GRID — tabbed, light bg (Bg.svg)
@@ -690,7 +802,9 @@ const layouts = ["a", "b", "c"];
     position: sticky;
     display: flex;
     align-items: stretch;
-    background: rgba(18, 15, 40, 0.8);
+    background: rgba(18, 15, 40, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(172, 161, 241, 0.51);
     border-radius: 20px;
     overflow: hidden;
@@ -747,26 +861,45 @@ const layouts = ["a", "b", "c"];
     overflow: hidden;
   }
   .fv2-stack-card-image img {
-    max-width: 100%;
-    max-height: 100%;
+    max-width: 75%;
+    max-height: 85%;
     object-fit: contain;
+    animation: fv2-stack-float 4.5s ease-in-out infinite;
+  }
+
+  @keyframes fv2-stack-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
   /* ══════════════════════════════════════════
-     ⑤ HOW IT WORKS — dark section
+     ⑤ HOW IT WORKS — white split layout
      ═══════════════════════════════════════════ */
   .fv2-how {
     width: 100%;
     padding: 80px 1.5rem;
-    background: #000 url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp') center / cover no-repeat;
+    background: #fff;
   }
   .fv2-how__inner {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 40px;
+  }
+  .fv2-how__header {
+    text-align: center;
+  }
+  .fv2-how__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 48px;
+    align-items: center;
+  }
+  .fv2-how__left {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
   .fv2-how__eyebrow {
     display: inline-block;
@@ -775,43 +908,83 @@ const layouts = ["a", "b", "c"];
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #ABFFFF;
+    color: var(--brand-blue);
+    margin-bottom: 12px;
   }
   .fv2-how__heading {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 3.5vw, 2.25rem);
     font-weight: 600;
-    color: #fff;
+    color: var(--heading-dark);
     text-align: center;
-    margin: -2rem 0 0;
+    margin: 0;
     line-height: 1.25;
   }
-  .fv2-how__steps {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    width: 100%;
+  .fv2-how__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
-  .fv2-how__step { text-align: center; position: relative; }
+  .fv2-how__image img {
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+  .fv2-how__lottie {
+    width: 100%;
+    max-width: 480px;
+  }
+  .fv2-how__placeholder {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 4 / 3;
+    background: var(--surface-light);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fv2-how__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .fv2-how__step {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px 24px;
+    background: var(--surface-light);
+    border-radius: 16px;
+    border: 1px solid var(--surface-card-border);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .fv2-how__step:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
   .fv2-how__num {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
     border-radius: 50%;
-    background: rgba(55,93,251,0.15);
-    border: 2px solid rgba(55,93,251,0.3);
+    background: rgba(55,93,251,0.1);
+    border: 2px solid rgba(55,93,251,0.25);
     color: var(--brand-blue);
     font-family: var(--font-heading);
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 800;
-    margin-bottom: 20px;
   }
-  .fv2-how__step-title { font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #fff; margin: 0 0 10px; }
-  .fv2-how__step-desc { font-family: var(--font-body); font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.65; margin: 0; }
-  .fv2-how__arrow { display: none; position: absolute; top: 26px; right: -22px; font-size: 1.4rem; color: rgba(55,93,251,0.4); }
-  @media (min-width: 1024px) { .fv2-how__arrow { display: block; } }
+  .fv2-how__step-text {
+    flex: 1;
+  }
+  .fv2-how__step-title { font-family: var(--font-heading); font-size: 1rem; font-weight: 700; color: var(--heading-dark); margin: 0 0 6px; }
+  .fv2-how__step-desc { font-family: var(--font-body); font-size: 0.875rem; color: var(--body-gray); line-height: 1.65; margin: 0; }
 
   /* ══════════════════════════════════════════
      ⑥ WHY CHOOSE — white section
@@ -819,14 +992,39 @@ const layouts = ["a", "b", "c"];
   .fv2-why {
     width: 100%;
     padding: 80px 1.5rem;
-    background: #fff;
+    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+    position: relative;
+  }
+  .fv2-why::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, #fff, transparent);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .fv2-why::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to top, #fff, transparent);
+    z-index: 0;
+    pointer-events: none;
   }
   .fv2-why__inner {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    z-index: 1;
   }
   .fv2-why__heading {
     font-family: var(--font-heading);
@@ -835,69 +1033,101 @@ const layouts = ["a", "b", "c"];
     color: var(--heading-dark);
     text-align: center;
     margin: 0 0 48px;
-    line-height: 1.25;
+    line-height: 1.3;
   }
   .fv2-why__grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1.25rem;
+    gap: 1rem;
     width: 100%;
   }
   .fv2-why__card {
-    background: var(--surface-light);
-    border: 1px solid var(--surface-card-border);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: 16px;
-    padding: 1.75rem 1.25rem;
-    text-align: center;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 1.5rem 1.25rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .fv2-why__card:hover {
-    transform: translateY(-6px);
-    border-color: var(--brand-blue);
-    box-shadow: 0 12px 32px rgba(55,93,251,0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+  .fv2-why__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #E8E0FF 0%, #F0E6FF 100%);
+    border: 1px solid rgba(210, 215, 230, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    flex-shrink: 0;
+    font-size: 1.625rem;
+    line-height: 1;
+  }
+  .fv2-why__card--0 .fv2-why__icon { background: linear-gradient(135deg, #DBEAFE 0%, #E0E7FF 100%); }
+  .fv2-why__card--1 .fv2-why__icon { background: linear-gradient(135deg, #E0E7FF 0%, #EDE9FE 100%); }
+  .fv2-why__card--2 .fv2-why__icon { background: linear-gradient(135deg, #FCE7F3 0%, #EDE9FE 100%); }
+  .fv2-why__card--3 .fv2-why__icon { background: linear-gradient(135deg, #DBEAFE 0%, #CFFAFE 100%); }
+  .fv2-why__card--4 .fv2-why__icon { background: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%); }
+  .fv2-why__icon :global(svg) {
+    width: 24px;
+    height: 24px;
+    color: var(--brand-blue);
   }
   .fv2-why__card-title {
     font-family: var(--font-heading);
-    font-size: 0.9375rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: var(--heading-dark);
     margin: 0 0 0.5rem;
   }
   .fv2-why__card-desc {
     font-family: var(--font-body);
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     color: var(--subheading-gray);
-    line-height: 1.55;
+    line-height: 1.6;
     margin: 0;
   }
 
   /* ══════════════════════════════════════════
      ⑦ CTA — dark card with glows
      ═══════════════════════════════════════════ */
-  .fv2-cta { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; }
+  .fv2-cta { max-width: 1328px; margin: 0 auto; padding: 60px 24px 80px; }
   .fv2-cta__card {
     position: relative;
     border-radius: 24px;
     padding: 80px 40px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: stretch;
     overflow: hidden;
     background: #0F1629;
   }
+  .fv2-cta__split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
   .fv2-cta__glow { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
   .fv2-cta__glow--1 { width: 350px; height: 350px; background: rgba(55,93,251,0.3); top: -100px; right: -80px; }
   .fv2-cta__glow--2 { width: 300px; height: 300px; background: rgba(159,129,255,0.2); bottom: -80px; left: -60px; }
-  .fv2-cta__content { position: relative; z-index: 1; max-width: 620px; }
-  .fv2-cta__eyebrow { display: inline-block; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+  .fv2-cta__content { position: relative; z-index: 1; text-align: left; }
+  .fv2-cta__eyebrow { display: inline-block; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-purple); margin-bottom: 1rem; }
   .fv2-cta__title { font-family: var(--font-heading); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; margin: 0 0 1rem; line-height: 1.25; }
   .fv2-cta__copy { font-family: var(--font-body); font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); margin: 0 0 1.5rem; }
-  .fv2-cta__proof-row { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.75rem; }
+  .fv2-cta__proof-row { display: flex; gap: 0.5rem; justify-content: flex-start; flex-wrap: wrap; margin-bottom: 1.75rem; }
   .fv2-cta__proof-pill { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); padding: 0.35rem 0.75rem; border-radius: 100px; }
-  .fv2-cta__buttons { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; }
-  .fv2-cta__trust { display: flex; gap: 1.25rem; justify-content: center; flex-wrap: wrap; }
+  .fv2-cta__buttons { display: flex; gap: 0.75rem; justify-content: flex-start; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .fv2-cta__trust { display: flex; gap: 1.25rem; justify-content: flex-start; flex-wrap: wrap; }
   .fv2-cta__trust-item { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+  .fv2-cta__animation { display: flex; align-items: center; justify-content: center; }
+  .fv2-cta__lottie { width: 100%; max-width: 420px; }
 
   /* ══════════════════════════════════════════
      ⑧ FAQ — split layout sidebar + accordion
@@ -965,7 +1195,8 @@ const layouts = ["a", "b", "c"];
     .fv2-stack-card-title { font-size: 28px; }
     .fv2-stack-card-desc { font-size: 16px; }
 
-    .fv2-how__steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .fv2-how__split { gap: 32px; }
+    .fv2-how__steps { gap: 20px; }
     .fv2-why__grid { grid-template-columns: repeat(3, 1fr); }
     .fv2-faq__inner { grid-template-columns: 1fr; }
     .fv2-faq__sidebar { position: static; }
@@ -977,6 +1208,15 @@ const layouts = ["a", "b", "c"];
   @media (max-width: 767px) {
     .fv2-hero { min-height: auto; padding: 0; }
     .fv2-hero__inner { padding: 120px 1rem 3rem; }
+    .fv2-hero__inner--split {
+      flex-direction: column;
+      text-align: center;
+      gap: 2rem;
+      padding: 120px 1rem 3rem;
+    }
+    .fv2-hero__inner--split .fv2-hero__ctas { justify-content: center; }
+    .fv2-hero__inner--split .fv2-hero__trust { justify-content: center; }
+    .fv2-hero__animation [data-lottie-hero] { max-width: 340px; }
     .fv2-hero__copy { font-size: 16px; }
     .fv2-hero__ctas { flex-direction: column; align-items: center; }
     .fv2-btn { width: 100%; max-width: 300px; }
@@ -1018,17 +1258,78 @@ const layouts = ["a", "b", "c"];
     .fv2-stack-cards { padding-bottom: 40px; }
 
     .fv2-how, .fv2-why { padding: 56px 1rem; }
-    .fv2-how__steps { grid-template-columns: 1fr; gap: 24px; }
+    .fv2-how__split { grid-template-columns: 1fr; }
+    .fv2-how__left { gap: 24px; }
+    .fv2-how__image { order: 0; }
+    .fv2-how__image img { max-width: 400px; }
+    .fv2-how__lottie { max-width: 320px; }
+    .fv2-how__steps { gap: 16px; }
     .fv2-why__grid { grid-template-columns: 1fr; }
 
     .fv2-cta__card { padding: 48px 20px; }
-    .fv2-cta__buttons { flex-direction: column; align-items: center; }
+    .fv2-cta__split { grid-template-columns: 1fr; text-align: center; }
+    .fv2-cta__content { text-align: center; }
+    .fv2-cta__proof-row { justify-content: center; }
+    .fv2-cta__buttons { flex-direction: column; align-items: center; justify-content: center; }
+    .fv2-cta__trust { justify-content: center; }
+    .fv2-cta__lottie { max-width: 300px; margin: 0 auto; }
     .fv2-faq { padding: 3.5rem 1rem; }
     .fv2-faq__sidebar-title { font-size: 1.375rem; }
   }
 </style>
 
 <script>
+  /* Hero Lottie animation */
+  const lottieContainer = document.querySelector('[data-lottie-hero]') as HTMLElement | null;
+  if (lottieContainer) {
+    const path = lottieContainer.dataset.lottiePath;
+    if (path) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: lottieContainer,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path,
+        });
+      });
+    }
+  }
+
+  /* How It Works Lottie animation */
+  const howLottieContainer = document.querySelector('[data-lottie-how]') as HTMLElement | null;
+  if (howLottieContainer) {
+    const howPath = howLottieContainer.dataset.lottieHow;
+    if (howPath) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: howLottieContainer,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: howPath,
+        });
+      });
+    }
+  }
+
+  /* CTA Lottie animation */
+  const ctaLottieContainer = document.querySelector('[data-lottie-cta]') as HTMLElement | null;
+  if (ctaLottieContainer) {
+    const ctaPath = ctaLottieContainer.dataset.lottieCta;
+    if (ctaPath) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: ctaLottieContainer,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: ctaPath,
+        });
+      });
+    }
+  }
+
   /* Bento tab switching */
   const fv2Tabs = Array.from(document.querySelectorAll('[data-fv2-tab]'));
   const fv2Panels = Array.from(document.querySelectorAll('[data-fv2-panel]'));

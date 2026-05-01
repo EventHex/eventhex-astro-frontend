@@ -7,12 +7,31 @@ const stats = [
 ];
 ---
 
+<div class="epph-hero__points-bar">
+  <div class="epph-hero__points-inner">
+    <span class="epph-hero__point">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      0% EventHex Fees
+    </span>
+    <span class="epph-hero__point">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Bring Your Own Gateway
+    </span>
+    <span class="epph-hero__point">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      135+ Currencies
+    </span>
+  </div>
+</div>
+
 <section class="epps-dark">
   <div class="epps-engagement">
     <div class="epps-engagement-text">
       <h2 class="epps-heading animate-on-scroll" data-animation="fadeInDown">
-        <span class="epps-white">Accept payments with </span>
-        <span class="epps-purple">zero platform fees </span>
+        <span class="epps-white">Accept payments with</span>
+        <br />
+        <span class="epps-purple">zero platform fees</span>
+        <br />
         <span class="epps-white">and </span>
         <span class="epps-cyan">direct settlement</span>
       </h2>
@@ -21,7 +40,7 @@ const stats = [
 
   <div class="epps-stats">
     {stats.map((stat) => (
-      <div class="epps-stat">
+      <div class="epps-stat-card">
         <span class="epps-stat-value">{stat.value}</span>
         <span class="epps-stat-label">{stat.label}</span>
       </div>
@@ -30,6 +49,36 @@ const stats = [
 </section>
 
 <style>
+  .epph-hero__points-bar {
+    background: var(--surface-light);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .epph-hero__points-inner {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .epph-hero__point {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--heading-dark);
+  }
+
+  @media (max-width: 767px) {
+    .epph-hero__point { font-size: 13px; }
+    .epph-hero__points-bar { padding: 1rem 1rem; }
+    .epph-hero__points-inner { gap: 1rem; }
+  }
+
   .epps-dark {
     display: flex;
     flex-direction: column;
@@ -64,9 +113,9 @@ const stats = [
 
   .epps-heading {
     font-family: var(--font-heading);
-    font-size: 48px;
+    font-size: clamp(1.75rem, 4vw, 3rem);
     font-weight: 400;
-    line-height: 52px;
+    line-height: 1.15;
     letter-spacing: -1px;
     color: #fff;
     text-align: center;
@@ -80,36 +129,52 @@ const stats = [
   .epps-stats {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 1.5rem;
     padding: 0 20px;
     max-width: 1100px;
     margin: 0 auto;
     width: 100%;
+    flex-wrap: nowrap;
   }
 
-  .epps-stat {
+  .epps-stat-card {
+    flex: 1 1 0;
+    max-width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    padding: 2.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .epps-stat-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(159,129,255,0.35);
+    box-shadow: 0 8px 32px rgba(159,129,255,0.12);
   }
 
   .epps-stat-value {
     font-family: var(--font-heading);
-    font-size: 40px;
+    font-size: 2.75rem;
     font-weight: 700;
-    line-height: 48px;
-    letter-spacing: -1px;
+    line-height: 1;
+    letter-spacing: -1.5px;
     color: #fff;
   }
 
   .epps-stat-label {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 0.875rem;
     font-weight: 400;
-    line-height: 20px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.55);
   }
 
   @media (max-width: 1024px) {
@@ -117,9 +182,10 @@ const stats = [
     .epps-engagement { padding: 0 20px 40px; }
     .epps-engagement-text { width: 85%; }
     .epps-heading { font-size: 40px; line-height: 1.1em; }
-    .epps-stats { gap: 40px; }
-    .epps-stat-value { font-size: 32px; }
-    .epps-stat-label { font-size: 14px; }
+    .epps-stats { gap: 1rem; }
+    .epps-stat-card { padding: 1.75rem 1.25rem; }
+    .epps-stat-value { font-size: 2.25rem; }
+    .epps-stat-label { font-size: 0.8125rem; }
   }
 
   @media (max-width: 767px) {
@@ -129,11 +195,15 @@ const stats = [
     .epps-heading { font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
     .epps-stats {
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 1rem;
       justify-content: center;
     }
-    .epps-stat { width: 40%; }
-    .epps-stat-value { font-size: 28px; }
-    .epps-stat-label { font-size: 13px; }
+    .epps-stat-card {
+      flex: 1 1 calc(50% - 0.5rem);
+      max-width: none;
+      padding: 1.5rem 1rem;
+    }
+    .epps-stat-value { font-size: 1.75rem; }
+    .epps-stat-label { font-size: 0.8125rem; }
   }
 </style>

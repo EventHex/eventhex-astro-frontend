@@ -1,5 +1,5 @@
 ---
-// Hero — speaker-management pattern: split layout, single image, floating info cards
+// Hero — speaker-management pattern: split layout, lottie animation, floating info cards
 
 interface Props {
   eyebrow: string;
@@ -29,12 +29,6 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
           {description}
         </p>
 
-        <div class="eth-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
-          <span class="eth-hero__point">0% platform fee option</span>
-          <span class="eth-hero__point">QR scan + badge printing</span>
-          <span class="eth-hero__point">Real-time ticket analytics</span>
-        </div>
-
         <div class="eth-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
           <a href={ctaHref} class="eth-hero__btn eth-hero__btn--primary">{ctaText}</a>
           <a href="#ticket-workflows" class="eth-hero__btn eth-hero__btn--secondary">Explore Features</a>
@@ -48,36 +42,56 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
 
       <div class="eth-hero__visual animate-on-scroll" data-animation="fadeInRight">
         <div class="eth-hero__visual-card">
-          <div class="eth-hero__floating eth-hero__floating--top">
-            <span class="eth-hero__floating-label">Revenue</span>
-            <strong>0% fee with your own gateway</strong>
-          </div>
-
-          <img
-            src={image}
-            alt={imageAlt}
-            width="700"
-            height="500"
-            loading="eager"
-          />
-
-          <div class="eth-hero__floating eth-hero__floating--bottom">
-            <span class="eth-hero__floating-label">On-site</span>
-            <strong>QR check-in, badges & live tracking</strong>
-          </div>
+          <div class="eth-hero__lottie" data-lottie-eth-hero="/animations/event-ticketing-hero.json"></div>
         </div>
       </div>
 
     </div>
   </div>
+
 </section>
+
+<section class="eth-trust-strip">
+  <div class="eth-trust-strip__inner">
+    <span class="eth-trust-strip__item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      0% platform fee option
+    </span>
+    <span class="eth-trust-strip__item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      QR scan + badge printing
+    </span>
+    <span class="eth-trust-strip__item">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Real-time ticket analytics
+    </span>
+  </div>
+</section>
+
+<script>
+  const ethLottieContainer = document.querySelector('[data-lottie-eth-hero]') as HTMLElement | null;
+  if (ethLottieContainer) {
+    const path = ethLottieContainer.dataset.lottieEthHero;
+    if (path) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: ethLottieContainer,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path,
+        });
+      });
+    }
+  }
+</script>
 
 <style is:global>
   .eth-hero {
     position: relative;
     overflow: hidden;
     margin-top: -90px;
-    padding: 0 0 120px;
+    padding: 0 0 20px;
     background:
       radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
       radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
@@ -145,27 +159,6 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
     line-height: 28px;
     letter-spacing: -0.48px;
     color: var(--subheading-gray);
-  }
-
-  .eth-hero__points {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .eth-hero__point {
-    display: inline-flex;
-    align-items: center;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e5ebff;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #475467;
-    box-shadow: 0 8px 24px rgba(34, 39, 47, 0.05);
   }
 
   .eth-hero__cta {
@@ -250,56 +243,46 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
     padding: 20px 0 36px;
   }
 
-  .eth-hero__visual-card img {
-    display: block;
+  .eth-hero__lottie {
     width: 100%;
-    height: auto;
-    border-radius: 0;
-    filter: drop-shadow(0 26px 48px rgba(34, 39, 47, 0.14));
+    max-width: 520px;
+    margin: 0 auto;
   }
 
-  .eth-hero__floating {
-    position: absolute;
-    z-index: 2;
+  .eth-hero__lottie svg {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .eth-trust-strip {
+    background: var(--surface-light);
+    padding: 1.25rem 1.5rem;
+  }
+
+  .eth-trust-strip__inner {
+    max-width: 1280px;
+    margin: 0 auto;
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.94);
-    color: var(--heading-dark);
-    border: 1px solid rgba(229, 235, 255, 0.9);
-    box-shadow: 0 18px 36px rgba(34, 39, 47, 0.12);
-    backdrop-filter: blur(12px);
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2.5rem;
   }
 
-  .eth-hero__floating--top {
-    top: -18px;
-    left: -18px;
-    max-width: 240px;
-  }
-
-  .eth-hero__floating--bottom {
-    right: -18px;
-    bottom: 94px;
-    max-width: 260px;
-  }
-
-  .eth-hero__floating-label {
+  .eth-trust-strip__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 0.938rem;
     font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #667085;
+    line-height: 1;
+    color: var(--heading-dark);
+    white-space: nowrap;
   }
 
-  .eth-hero__floating strong {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.45;
+  .eth-trust-strip__item svg {
+    flex-shrink: 0;
   }
 
   @media (max-width: 1120px) {
@@ -342,7 +325,6 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
       max-width: 720px;
     }
     .eth-hero__trust,
-    .eth-hero__points,
     .eth-hero__cta {
       justify-content: center;
     }
@@ -352,13 +334,6 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
     }
     .eth-hero__visual-card {
       padding: 26px 0 0;
-    }
-    .eth-hero__floating--top {
-      left: 0;
-    }
-    .eth-hero__floating--bottom {
-      right: 0;
-      bottom: 34px;
     }
   }
 
@@ -386,10 +361,7 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
       font-size: 16px;
       line-height: 1.1em;
     }
-    .eth-hero__point {
-      font-size: 13px;
-      padding: 8px 12px;
-    }
+
     .eth-hero__cta {
       width: 100%;
       flex-direction: column;
@@ -401,13 +373,9 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
       gap: 10px;
       justify-content: center;
     }
-    .eth-hero__floating {
-      position: static;
-      margin-bottom: 12px;
-      max-width: none;
-    }
     .eth-hero__visual-card {
       padding: 18px 0 0;
     }
+
   }
 </style>

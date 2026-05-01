@@ -34,17 +34,15 @@ const trustedLogos = [
 ---
 
 <section class="dark-section">
-  <!-- Dashboard image overlay (cb45902) -->
+  <!-- Dashboard animation overlay (cb45902) -->
   <div class="dashboard-wrap">
-    <img
-      src="https://cms.eventhex.ai/wp-content/uploads/2025/01/Frame-1000003133.png"
-      alt="Event registration dashboard overview"
-      width="734"
-      height="437"
+    <div
       class="dashboard-img"
       data-dashboard-motion
-      loading="lazy"
-    />
+      data-lottie-dashboard
+      role="img"
+      aria-label="Event registration dashboard overview"
+    ></div>
   </div>
 
   <!-- Engagement text + star (52c97b5 → d3cf198) -->
@@ -55,7 +53,7 @@ const trustedLogos = [
         <span class="text-white">EventHex boosts retention through </span>
         <span class="text-purple-light">enhanced attendee engagement </span>
         <span class="text-white">and </span>
-        <span class="text-cyan">personalized user experiences</span>
+        <span class="text-cyan">personalized user experiences</span><img src="https://cms.eventhex.ai/wp-content/uploads/2024/12/Layer_1.svg" alt="Event-star" loading="lazy" class="star-img-inline" />
       </h2>
       <!-- Mobile: regular heading (d044db7) -->
       <h2 class="engagement-heading engagement-heading--mobile animate-on-scroll" data-animation="fadeInDown">
@@ -63,10 +61,6 @@ const trustedLogos = [
         <span style="color:#AFA3FF;"> enhanced attendee engagement</span>
         and<span style="color:#ABFFFF;">  personalized user experiences</span>
       </h2>
-    </div>
-    <!-- Star image (fdf5052) -->
-    <div class="star-img-wrap animate-on-scroll" data-animation="fadeInLeft" data-delay="800" style="--anim-duration:1000ms">
-      <img src="https://cms.eventhex.ai/wp-content/uploads/2024/12/Layer_1.svg" alt="Event-star" loading="lazy" class="star-img" />
     </div>
   </div>
 
@@ -109,23 +103,35 @@ const trustedLogos = [
 </section>
 
 <script>
-  const dashboardImage = document.querySelector('[data-dashboard-motion]') as HTMLElement | null;
+  import lottie from 'lottie-web';
+
+  const dashboardEl = document.querySelector('[data-lottie-dashboard]') as HTMLElement | null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (dashboardEl) {
+    lottie.loadAnimation({
+      container: dashboardEl,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/animations/dashboard.json',
+    });
+  }
 
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-  if (dashboardImage && !prefersReducedMotion.matches) {
+  if (dashboardEl && !prefersReducedMotion.matches) {
     let frameId = 0;
 
     const updateDashboardMotion = () => {
-      const rect = dashboardImage.getBoundingClientRect();
+      const rect = dashboardEl.getBoundingClientRect();
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
       const scaleStart = viewportHeight * 0.4;
       const scaleEnd = viewportHeight * 0.05;
       const scaleProgress = clamp((scaleStart - rect.top) / (scaleStart - scaleEnd), 0, 1);
       const scaleBoost = scaleProgress * 0.1;
 
-      dashboardImage.style.setProperty('--dashboard-scale', `${(1 + scaleBoost).toFixed(3)}`);
+      dashboardEl.style.setProperty('--dashboard-scale', `${(1 + scaleBoost).toFixed(3)}`);
     };
 
     const requestDashboardMotionUpdate = () => {
@@ -224,12 +230,15 @@ const trustedLogos = [
   .text-purple-light { color: #AFA3FF; }
   .text-cyan { color: #ABFFFF; }
 
-  .star-img-wrap {
-    margin-top: -52px;
-    padding-left: 820px;
-    width: 100%;
+  .star-img-inline {
+    display: inline;
+    vertical-align: baseline;
+    height: 1em;
+    width: auto;
+    margin-left: 4px;
+    position: relative;
+    top: 2px;
   }
-  .star-img { width: auto; height: auto; }
 
   /* 2b63b4d — trusted by */
   .trusted-section {
@@ -367,7 +376,7 @@ const trustedLogos = [
     .engagement-wrap { padding: 40px 20px 50px; }
     .engagement-text-container { width: 85%; }
     .engagement-heading { font-size: 40px; line-height: 1.1em; }
-    .star-img-wrap { padding-left: 400px; margin-top: -8px; }
+    .star-img-inline { height: 0.9em; }
     .trusted-section { padding: 0 0 30px; }
     .trusted-title { padding-bottom: 50px; }
     .testimonial-amy { padding: 40px 20px 10px; }
@@ -383,7 +392,7 @@ const trustedLogos = [
     .engagement-text-container { width: 100%; }
     .engagement-heading--desktop { display: none; }
     .engagement-heading--mobile { display: block; font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
-    .star-img-wrap { display: none; }
+    .star-img-inline { display: none; }
     .trusted-section { padding: 0 10px 30px; }
     .trusted-title { padding-bottom: 40px; }
     .logo-track { gap: 40px; }

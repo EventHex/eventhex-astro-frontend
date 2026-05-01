@@ -26,12 +26,6 @@ const faqs = [
   },
 ];
 
-const checklist = [
-  "Payment gateway setup",
-  "Ticket pricing configuration",
-  "Revenue reporting",
-];
-
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -48,39 +42,25 @@ const faqSchema = {
 
 <section class="eppfq" data-epp-faq>
   <div class="eppfq__inner">
-    <div class="eppfq__support">
-      <span class="eppfq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need help with payment processing?</span>
-      <h2 class="eppfq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
-      <p class="eppfq__desc animate-on-scroll" data-animation="fadeInUp">
-        We help event teams configure payment gateways, ticket pricing, and revenue reporting.
+    <div class="eppfq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="eppfq__eyebrow">Need Help?</span>
+      <h2 class="eppfq__title">Frequently Asked Questions</h2>
+      <p class="eppfq__desc">
+        Everything you need to know about payment processing and how it works with EventHex.
       </p>
-
-      <div class="eppfq__support-card animate-on-scroll" data-animation="fadeInUp">
-        <span class="eppfq__support-label">Included with every rollout</span>
-        <ul class="eppfq__support-list">
-          {checklist.map((item) => (
-            <li class="eppfq__support-item">{item}</li>
-          ))}
-        </ul>
-
-        <div class="eppfq__support-note">
-          <strong>Free onboarding support</strong>
-          <span>Map your payment flow before launch and keep your team aligned on gateways, pricing tiers, and refund policies.</span>
-        </div>
-
-        <a href="/book-a-demo/" class="eppfq__cta">Plan my payment setup</a>
+      <div class="eppfq__support-card">
+        <h3 class="eppfq__support-title">Talk to Our Team</h3>
+        <p class="eppfq__support-desc">Our experts can walk you through a personalized demo and answer any questions about payment setup.</p>
       </div>
+      <a href="/book-a-demo/" class="eppfq__cta">Book a Demo</a>
     </div>
 
     <div class="eppfq__list">
       {faqs.map((faq, index) => (
-        <details class="eppfq__item animate-on-scroll" data-animation="fadeInUp" data-epp-faq-item open={index === 0}>
+        <details class="eppfq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)} data-epp-faq-item>
           <summary class="eppfq__question">
-            <span>{faq.q}</span>
-            <span class="eppfq__icon" aria-hidden="true">
-              <span class="eppfq__icon-line eppfq__icon-line--horizontal"></span>
-              <span class="eppfq__icon-line eppfq__icon-line--vertical"></span>
-            </span>
+            {faq.q}
+            <svg class="eppfq__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </summary>
           <div class="eppfq__answer">
             <p>{faq.a}</p>
@@ -113,196 +93,129 @@ const faqSchema = {
 
 <style is:global>
   .eppfq {
-    width: 100%;
-    margin: 0;
-    padding: 96px 0;
-    background: #f5f6fa;
+    background: var(--surface-light, #f8f9fc);
+    padding: 5rem 1.5rem;
   }
 
   .eppfq__inner {
-    max-width: 1280px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
     display: grid;
-    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
-    gap: 32px;
+    grid-template-columns: 320px 1fr;
+    gap: 3rem;
     align-items: start;
   }
 
-  .eppfq__support {
+  .eppfq__sidebar {
     position: sticky;
-    top: 108px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
+    top: 6rem;
   }
 
   .eppfq__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 16px;
-    border-radius: 999px;
-    background: rgba(99, 77, 255, 0.08);
-    border: 1px solid rgba(99, 77, 255, 0.14);
+    display: inline-block;
     font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    font-weight: 600;
     text-transform: uppercase;
-    color: #5a3fd4;
+    letter-spacing: 0.08em;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
   }
 
   .eppfq__title {
-    margin: 0;
     font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 500;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: #0f1117;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
   }
 
   .eppfq__desc {
-    margin: 0;
-    max-width: 540px;
     font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: #5b6477;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0 0 1.25rem;
   }
 
   .eppfq__support-card {
-    width: 100%;
-    padding: 24px 22px;
-    border-radius: 28px;
     background: #fff;
-    border: 1px solid rgba(99, 77, 255, 0.12);
-    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
-  .eppfq__support-label {
-    display: inline-flex;
-    margin-bottom: 16px;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #375dfb;
-  }
-
-  .eppfq__support-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .eppfq__support-item {
-    position: relative;
-    padding-left: 22px;
-    font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.55;
-    color: #2d3340;
-  }
-
-  .eppfq__support-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
-  }
-
-  .eppfq__support-note {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 22px;
-    background: #f5f6fa;
-    border: 1px solid rgba(15, 17, 23, 0.07);
-  }
-
-  .eppfq__support-note strong {
+  .eppfq__support-title {
     font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.3;
-    color: #0f1117;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.35rem;
   }
 
-  .eppfq__support-note span {
+  .eppfq__support-desc {
     font-family: var(--font-body);
-    font-size: 15px;
-    line-height: 1.7;
-    color: #5b6477;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
   }
 
   .eppfq__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    margin-top: 18px;
-    padding: 0 20px;
-    border-radius: 16px;
-    background: #375dfb;
+    min-height: 40px;
+    padding: 0 1.25rem;
+    border-radius: 10px;
+    background: var(--brand-blue);
     color: #fff;
     text-decoration: none;
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 0.875rem;
     font-weight: 600;
-    line-height: 24px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+    line-height: 1;
+    transition: background 0.2s ease, transform 0.25s ease, box-shadow 0.25s ease;
   }
 
   .eppfq__cta:hover {
-    background: #2248e8;
+    background: var(--brand-blue-hover);
     transform: translateY(-1px);
-    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
+    box-shadow: 0 8px 24px rgba(55, 93, 251, 0.25);
   }
 
   .eppfq__list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0.75rem;
   }
 
   .eppfq__item {
-    overflow: hidden;
-    border-radius: 24px;
     background: #fff;
-    border: 1px solid rgba(15, 17, 23, 0.08);
-    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .eppfq__item[open] {
+    border-color: var(--brand-blue);
   }
 
   .eppfq__question {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 26px 24px;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
     cursor: pointer;
     list-style: none;
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.35;
-    color: #0f1117;
   }
 
   .eppfq__question::-webkit-details-marker,
@@ -310,73 +223,55 @@ const faqSchema = {
     display: none;
   }
 
-  .eppfq__icon {
-    position: relative;
+  .eppfq__chevron {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    margin-top: 4px;
+    transition: transform 0.25s ease;
+    color: var(--subheading-gray);
   }
 
-  .eppfq__icon-line {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 18px;
-    height: 2px;
-    border-radius: 999px;
-    background: #375dfb;
-    transform: translate(-50%, -50%);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-
-  .eppfq__icon-line--vertical {
-    transform: translate(-50%, -50%) rotate(90deg);
-  }
-
-  .eppfq__item[open] .eppfq__icon-line--vertical {
-    opacity: 0;
-    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  .eppfq__item[open] .eppfq__chevron {
+    transform: rotate(180deg);
+    color: var(--brand-blue);
   }
 
   .eppfq__answer {
-    padding: 0 24px 24px;
+    padding: 0 1.5rem 1.25rem;
   }
 
   .eppfq__answer p {
-    margin: 0;
     font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 0.875rem;
     line-height: 1.7;
-    color: #5b6477;
+    color: var(--subheading-gray);
+    margin: 0;
   }
 
   @media (max-width: 1100px) {
-    .eppfq { padding: 76px 0; }
-    .eppfq__inner { grid-template-columns: 1fr; gap: 28px; }
-    .eppfq__support { position: static; }
-  }
-
-  @media (max-width: 1024px) {
-    .eppfq__title { font-size: 40px; }
-    .eppfq__desc { font-size: 16px; }
-    .eppfq__question { padding: 24px 22px; font-size: 20px; }
-    .eppfq__answer { padding: 0 22px 22px; }
+    .eppfq__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .eppfq__sidebar {
+      position: static;
+    }
   }
 
   @media (max-width: 767px) {
-    .eppfq { padding: 56px 0; }
-    .eppfq__inner { padding: 0 16px; gap: 24px; }
-    .eppfq__title { font-size: 32px; line-height: 1.08; }
-    .eppfq__desc { font-size: 15px; line-height: 1.7; }
-    .eppfq__support-card { padding: 20px 18px; border-radius: 24px; }
-    .eppfq__support-item { font-size: 15px; }
-    .eppfq__support-note strong { font-size: 18px; }
-    .eppfq__cta { width: 100%; }
-    .eppfq__item { border-radius: 24px; }
-    .eppfq__question { padding: 20px 18px; font-size: 17px; line-height: 1.45; }
-    .eppfq__answer { padding: 0 18px 20px; }
-    .eppfq__answer p { font-size: 15px; line-height: 1.75; }
+    .eppfq {
+      padding: 3rem 1rem;
+    }
+    .eppfq__title {
+      font-size: 1.5rem;
+    }
+    .eppfq__question {
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+    }
+    .eppfq__answer {
+      padding: 0 1.25rem 1rem;
+    }
+    .eppfq__cta {
+      width: 100%;
+    }
   }
 </style>

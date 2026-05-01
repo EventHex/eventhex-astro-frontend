@@ -5,30 +5,53 @@
   <div class="eppcta__card">
     <div class="eppcta__glow eppcta__glow--1"></div>
     <div class="eppcta__glow eppcta__glow--2"></div>
-    <div class="eppcta__content">
-      <span class="eppcta__eyebrow animate-on-scroll" data-animation="fadeIn">Zero Platform Fees</span>
-      <h2 class="eppcta__title animate-on-scroll" data-animation="fadeInUp">Ready to Stop Paying Platform Fees on Ticket Sales?</h2>
-      <p class="eppcta__desc animate-on-scroll" data-animation="fadeInUp">Connect your own gateway and run your next event with zero EventHex processing fees.</p>
-      <div class="eppcta__proof-row animate-on-scroll" data-animation="fadeInUp">
-        <span class="eppcta__proof-pill">0% platform fees</span>
-        <span class="eppcta__proof-pill">3 gateway options</span>
-        <span class="eppcta__proof-pill">Free onboarding support</span>
+    <div class="eppcta__split">
+      <div class="eppcta__content">
+        <span class="eppcta__eyebrow animate-on-scroll" data-animation="fadeIn">Zero Platform Fees</span>
+        <h2 class="eppcta__title animate-on-scroll" data-animation="fadeInUp">Ready to Stop Paying Platform Fees on Ticket Sales?</h2>
+        <p class="eppcta__desc animate-on-scroll" data-animation="fadeInUp">Connect your own gateway and run your next event with zero EventHex processing fees.</p>
+        <div class="eppcta__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span class="eppcta__proof-pill">0% platform fees</span>
+          <span class="eppcta__proof-pill">3 gateway options</span>
+          <span class="eppcta__proof-pill">Free onboarding support</span>
+        </div>
+        <div class="eppcta__buttons">
+          <a href="/book-a-demo/" class="eppcta__btn eppcta__btn--primary">
+            Book a Free Demo
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="/contact-en/" class="eppcta__btn eppcta__btn--secondary">Contact Sales</a>
+        </div>
+        <div class="eppcta__trust">
+          <span class="eppcta__trust-item">No credit card required</span>
+          <span class="eppcta__trust-item">Free onboarding support</span>
+          <span class="eppcta__trust-item">Cancel anytime</span>
+        </div>
       </div>
-      <div class="eppcta__buttons">
-        <a href="/book-a-demo/" class="eppcta__btn eppcta__btn--primary">
-          Book a Free Demo
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="/contact-en/" class="eppcta__btn eppcta__btn--secondary">Contact Sales</a>
-      </div>
-      <div class="eppcta__trust">
-        <span class="eppcta__trust-item">No credit card required</span>
-        <span class="eppcta__trust-item">Free onboarding support</span>
-        <span class="eppcta__trust-item">Cancel anytime</span>
+      <div class="eppcta__animation">
+        <div class="eppcta__lottie" data-lottie-eppcta="/animations/event-payment-processing-cta.json"></div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const lottieCtaEl = document.querySelector('[data-lottie-eppcta]') as HTMLElement | null;
+  if (lottieCtaEl) {
+    const src = lottieCtaEl.dataset.lottieEppcta;
+    if (src) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: lottieCtaEl,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: src,
+        });
+      });
+    }
+  }
+</script>
 
 <style is:global>
   .eppcta { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; }
@@ -36,11 +59,7 @@
   .eppcta__card {
     position: relative;
     border-radius: 24px;
-    padding: 80px 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    padding: 60px 48px;
     overflow: hidden;
     background: #0F1629;
   }
@@ -68,14 +87,20 @@
     right: -30px;
   }
 
-  .eppcta__content {
+  .eppcta__split {
     position: relative;
     z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .eppcta__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
-    max-width: 600px;
   }
 
   .eppcta__eyebrow {
@@ -97,7 +122,7 @@
 
   .eppcta__title {
     font-family: var(--font-heading);
-    font-size: 48px;
+    font-size: 40px;
     font-weight: 600;
     line-height: 1.15;
     letter-spacing: -1px;
@@ -107,9 +132,9 @@
 
   .eppcta__desc {
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 1.65;
     letter-spacing: -0.3px;
     color: rgba(255, 255, 255, 0.65);
     margin: 0;
@@ -118,7 +143,6 @@
   .eppcta__proof-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 10px;
   }
 
@@ -137,7 +161,7 @@
     color: rgba(255, 255, 255, 0.74);
   }
 
-  .eppcta__buttons { display: flex; gap: 12px; justify-content: center; }
+  .eppcta__buttons { display: flex; gap: 12px; }
 
   .eppcta__btn {
     display: inline-flex;
@@ -204,20 +228,37 @@
     background: rgba(255, 255, 255, 0.45);
   }
 
+  .eppcta__animation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .eppcta__lottie {
+    width: 100%;
+    max-width: 420px;
+  }
+
   @media (max-width: 1024px) {
-    .eppcta__card { padding: 60px 24px; }
-    .eppcta__title { font-size: 36px; }
-    .eppcta__desc { font-size: 16px; }
+    .eppcta__card { padding: 48px 32px; }
+    .eppcta__split { gap: 2rem; }
+    .eppcta__title { font-size: 32px; }
+    .eppcta__desc { font-size: 15px; }
+    .eppcta__lottie { max-width: 340px; }
   }
 
   @media (max-width: 767px) {
     .eppcta { padding: 40px 16px 60px; }
-    .eppcta__card { padding: 48px 20px; border-radius: 20px; }
+    .eppcta__card { padding: 40px 20px; border-radius: 20px; }
+    .eppcta__split { grid-template-columns: 1fr; gap: 2rem; }
+    .eppcta__content { align-items: center; text-align: center; }
     .eppcta__title { font-size: 28px; line-height: 1.2em; }
     .eppcta__desc { font-size: 15px; }
-    .eppcta__proof-row { gap: 8px; }
-    .eppcta__buttons { flex-direction: column; width: 100%; }
+    .eppcta__proof-row { justify-content: center; gap: 8px; }
+    .eppcta__buttons { flex-direction: column; width: 100%; justify-content: center; }
     .eppcta__btn { width: 100%; justify-content: center; }
-    .eppcta__trust { flex-direction: column; gap: 8px; }
+    .eppcta__trust { flex-direction: column; gap: 8px; justify-content: center; }
+    .eppcta__animation { order: -1; }
+    .eppcta__lottie { max-width: 280px; }
   }
 </style>

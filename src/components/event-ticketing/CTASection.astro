@@ -6,39 +6,48 @@
   <div class="et-cta__card">
     <div class="et-cta__glow et-cta__glow--1"></div>
     <div class="et-cta__glow et-cta__glow--2"></div>
-    <div class="et-cta__content">
-      <span class="et-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Launch Your Ticketing Flow</span>
-      <h2 class="et-cta__title animate-on-scroll" data-animation="fadeInUp">Ready to Sell Tickets Without the Friction?</h2>
-      <p class="et-cta__desc animate-on-scroll" data-animation="fadeInUp">Join hundreds of organizers who sell tickets, manage payments, and handle check-ins — all from one platform built for events.</p>
-      <div class="et-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
-        <span class="et-cta__proof-pill">0% platform fee option</span>
-        <span class="et-cta__proof-pill">QR check-in ready</span>
-        <span class="et-cta__proof-pill">Free onboarding support</span>
+    <div class="et-cta__grid">
+      <div class="et-cta__content">
+        <span class="et-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Launch Your Ticketing Flow</span>
+        <h2 class="et-cta__title animate-on-scroll" data-animation="fadeInUp">Ready to Sell Tickets Without the Friction?</h2>
+        <p class="et-cta__desc animate-on-scroll" data-animation="fadeInUp">Join hundreds of organizers who sell tickets, manage payments, and handle check-ins — all from one platform built for events.</p>
+        <div class="et-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span class="et-cta__proof-pill">0% platform fee option</span>
+          <span class="et-cta__proof-pill">QR check-in ready</span>
+          <span class="et-cta__proof-pill">Free onboarding support</span>
+        </div>
+        <div class="et-cta__buttons">
+          <a href="/book-a-demo/" class="et-cta__btn et-cta__btn--primary">
+            Book a Free Demo
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="#ticket-pricing" class="et-cta__btn et-cta__btn--secondary">View Pricing</a>
+        </div>
       </div>
-      <div class="et-cta__buttons">
-        <a href="/book-a-demo/" class="et-cta__btn et-cta__btn--primary">
-          Book a Free Demo
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a href="#ticket-pricing" class="et-cta__btn et-cta__btn--secondary">View Pricing</a>
-      </div>
-      <div class="et-cta__trust">
-        <span class="et-cta__trust-item">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
-          No credit card required
-        </span>
-        <span class="et-cta__trust-item">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
-          Free onboarding support
-        </span>
-        <span class="et-cta__trust-item">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
-          Cancel anytime
-        </span>
+      <div class="et-cta__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="et-cta__lottie" data-lottie-et-cta="/animations/event-ticketing-cta.json"></div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const etCtaLottie = document.querySelector('[data-lottie-et-cta]') as HTMLElement | null;
+  if (etCtaLottie) {
+    const path = etCtaLottie.dataset.lottieEtCta;
+    if (path) {
+      import('lottie-web').then((lottie) => {
+        lottie.default.loadAnimation({
+          container: etCtaLottie,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path,
+        });
+      });
+    }
+  }
+</script>
 
 <style is:global>
   .et-cta { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; }
@@ -46,13 +55,18 @@
   .et-cta__card {
     position: relative;
     border-radius: 24px;
-    padding: 80px 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    padding: 60px 40px;
     overflow: hidden;
     background: #0F1629;
+  }
+
+  .et-cta__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
   }
 
   .et-cta__glow {
@@ -83,9 +97,9 @@
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
-    max-width: 600px;
+    max-width: 560px;
   }
 
   .et-cta__eyebrow {
@@ -126,7 +140,6 @@
   .et-cta__proof-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 10px;
   }
 
@@ -144,7 +157,10 @@
     color: rgba(255, 255, 255, 0.74);
   }
 
-  .et-cta__buttons { display: flex; gap: 12px; justify-content: center; }
+  .et-cta__buttons { display: flex; gap: 12px; }
+
+  .et-cta__visual { display: flex; align-items: center; justify-content: flex-end; }
+  .et-cta__lottie { width: 100%; max-width: 460px; }
 
   .et-cta__btn {
     display: inline-flex;
@@ -199,7 +215,8 @@
   }
 
   @media (max-width: 1024px) {
-    .et-cta__card { padding: 60px 24px; }
+    .et-cta__card { padding: 48px 24px; }
+    .et-cta__grid { gap: 30px; }
     .et-cta__title { font-size: 36px; }
     .et-cta__desc { font-size: 16px; }
   }
@@ -207,11 +224,17 @@
   @media (max-width: 767px) {
     .et-cta { padding: 40px 16px 60px; }
     .et-cta__card { padding: 48px 20px; border-radius: 20px; }
+    .et-cta__grid { grid-template-columns: 1fr; gap: 32px; }
+    .et-cta__content { align-items: center; text-align: center; }
+    .et-cta__proof-row { justify-content: center; }
+    .et-cta__buttons { justify-content: center; }
     .et-cta__title { font-size: 28px; line-height: 1.2; }
     .et-cta__desc { font-size: 15px; }
     .et-cta__proof-row { gap: 8px; }
     .et-cta__buttons { flex-direction: column; width: 100%; }
     .et-cta__btn { width: 100%; justify-content: center; }
-    .et-cta__trust { flex-direction: column; gap: 8px; }
+    .et-cta__trust { flex-direction: column; gap: 8px; align-items: center; }
+    .et-cta__visual { order: -1; }
+    .et-cta__lottie { max-width: 320px; }
   }
 </style>

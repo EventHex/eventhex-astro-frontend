@@ -6,14 +6,9 @@ const heroPoints = [
 ];
 
 const trustItems = [
-  "0% platform fees",
-  "Trusted by 400+ events",
 ];
 
 const metrics = [
-  { value: "0%", label: "platform fees" },
-  { value: "3", label: "gateways" },
-  { value: "135+", label: "currencies" },
 ];
 ---
 
@@ -34,53 +29,35 @@ const metrics = [
           Connect your own Stripe, Razorpay, or Tap Payments account to EventHex and keep 100% of your ticket revenue. No per-ticket charge, no hidden fees — just your gateway's standard processing rate.
         </p>
 
-        <div class="epph-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
-          {heroPoints.map((point) => <span class="epph-hero__point">{point}</span>)}
-        </div>
-
         <div class="epph-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
           <a href="/book-a-demo/" class="epph-hero__btn epph-hero__btn--primary">Book a Demo</a>
           <a href="#epp-bento" class="epph-hero__btn epph-hero__btn--secondary">Explore Features</a>
         </div>
-
-        <div class="epph-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
-          {trustItems.map((item) => <span class="epph-hero__trust-item">{item}</span>)}
-        </div>
       </div>
 
       <div class="epph-hero__visual animate-on-scroll" data-animation="fadeInRight">
-        <div class="epph-hero__visual-card">
-          <div class="epph-hero__floating epph-hero__floating--top">
-            <span class="epph-hero__floating-label">Zero Fees</span>
-            <strong>Keep 100% of ticket revenue</strong>
-          </div>
-
-          <img
-            src="https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png"
-            alt="EventHex event payment processing dashboard"
-            width="700"
-            height="500"
-            loading="eager"
-          />
-
-          <div class="epph-hero__floating epph-hero__floating--bottom">
-            <span class="epph-hero__floating-label">Direct Settlement</span>
-            <strong>Revenue goes straight to your account</strong>
-          </div>
-
-          <div class="epph-hero__metric-row">
-            {metrics.map((metric) => (
-              <div class="epph-hero__metric">
-                <strong>{metric.value}</strong>
-                <span>{metric.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <div class="epph-hero__lottie" data-lottie-epph-hero></div>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  async function initEpphHeroLottie() {
+    const container = document.querySelector('[data-lottie-epph-hero]');
+    if (!container) return;
+
+    const lottie = (await import('lottie-web')).default;
+    lottie.loadAnimation({
+      container: container as HTMLElement,
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: '/animations/event-payment-processing-hero.json',
+    });
+  }
+  initEpphHeroLottie();
+</script>
 
 <style is:global>
   .epph-hero {
@@ -157,27 +134,6 @@ const metrics = [
     color: var(--subheading-gray);
   }
 
-  .epph-hero__points {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .epph-hero__point {
-    display: inline-flex;
-    align-items: center;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e5ebff;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #475467;
-    box-shadow: 0 8px 24px rgba(34, 39, 47, 0.05);
-  }
-
   .epph-hero__cta {
     display: flex;
     gap: 14px;
@@ -225,9 +181,7 @@ const metrics = [
   }
 
   .epph-hero__trust {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: none;
   }
 
   .epph-hero__trust-item {
@@ -253,96 +207,19 @@ const metrics = [
 
   .epph-hero__visual {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .epph-hero__visual-card {
-    position: relative;
-    padding: 20px 0 36px;
-  }
-
-  .epph-hero__visual-card img {
-    display: block;
+  .epph-hero__lottie {
     width: 100%;
-    height: auto;
-    filter: drop-shadow(0 26px 48px rgba(34, 39, 47, 0.14));
+    max-width: 580px;
   }
 
-  .epph-hero__floating {
-    position: absolute;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.94);
-    color: var(--heading-dark);
-    border: 1px solid rgba(229, 235, 255, 0.9);
-    box-shadow: 0 18px 36px rgba(34, 39, 47, 0.12);
-    backdrop-filter: blur(12px);
-  }
-
-  .epph-hero__floating--top {
-    top: -18px;
-    left: -18px;
-    max-width: 260px;
-  }
-
-  .epph-hero__floating--bottom {
-    right: -18px;
-    bottom: 94px;
-    max-width: 280px;
-  }
-
-  .epph-hero__floating-label {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #667085;
-  }
-
-  .epph-hero__floating strong {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.45;
-  }
-
-  .epph-hero__metric-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  .epph-hero__metric {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(247, 248, 252, 0.96);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .epph-hero__metric strong {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.8px;
-    color: var(--heading-dark);
-  }
-
-  .epph-hero__metric span {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 18px;
-    color: #667085;
+  .epph-hero__lottie svg {
+    width: 100% !important;
+    height: auto !important;
   }
 
   @media (max-width: 1120px) {
@@ -360,12 +237,9 @@ const metrics = [
     .epph-hero__content { align-items: center; text-align: center; }
     .epph-hero__desc { max-width: 720px; }
     .epph-hero__trust,
-    .epph-hero__points,
     .epph-hero__cta { justify-content: center; }
     .epph-hero__title { font-size: 42px; line-height: 1.1em; }
-    .epph-hero__visual-card { padding: 26px 0 0; }
-    .epph-hero__floating--top { left: 0; }
-    .epph-hero__floating--bottom { right: 0; bottom: 34px; }
+    .epph-hero__visual { justify-content: center; }
   }
 
   @media (max-width: 767px) {
@@ -375,12 +249,8 @@ const metrics = [
     .epph-hero__title { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
     .epph-hero__desc { font-size: 15px; line-height: 1.7; }
     .epph-hero__badge { font-size: 16px; line-height: 1.1em; }
-    .epph-hero__point { font-size: 13px; padding: 8px 12px; }
     .epph-hero__cta { width: 100%; flex-direction: column; }
     .epph-hero__btn { width: 100%; }
-    .epph-hero__trust { gap: 10px; justify-content: center; }
-    .epph-hero__floating { position: static; margin-bottom: 12px; max-width: none; }
-    .epph-hero__visual-card { padding: 18px 0 0; }
-    .epph-hero__metric-row { grid-template-columns: 1fr; }
+    .epph-hero__lottie { max-width: 400px; }
   }
 </style>
