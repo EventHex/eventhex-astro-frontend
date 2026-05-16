@@ -1,13 +1,14 @@
 ---
 /**
  * Shared Lottie player with lazy loading (IntersectionObserver) + reduced-motion.
- * Uses lottie-web SVG renderer for pixel-perfect output matching original designs.
+ * Uses lottie-web SVG renderer for .json files, @lottiefiles/dotlottie-web for .lottie files.
  *
  * Usage:
  *   <LottiePlayer src="/animations/foo.json" class="my-lottie" />
+ *   <LottiePlayer src="/animations/bar.lottie" class="my-lottie" />
  */
 interface Props {
-  /** Path to .json Lottie file served from public/ */
+  /** Path to .json or .lottie Lottie file served from public/ */
   src: string;
   /** Extra class(es) forwarded to the container <div> */
   class?: string;
@@ -18,9 +19,14 @@ interface Props {
 }
 
 const { src, class: className, eager, ...rest } = Astro.props;
+const isDotLottie = src.endsWith(".lottie");
 ---
 
-<div class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></div>
+{isDotLottie ? (
+  <canvas class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></canvas>
+) : (
+  <div class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></div>
+)}
 
 <script>
   let lottieLib: Promise<typeof import("lottie-web/build/player/lottie_svg")> | null = null;
@@ -29,22 +35,40 @@ const { src, class: className, eager, ...rest } = Astro.props;
     return lottieLib;
   }
 
+  let dotLottieLib: Promise<typeof import("@lottiefiles/dotlottie-web")> | null = null;
+  function getDotLottie() {
+    if (!dotLottieLib) dotLottieLib = import("@lottiefiles/dotlottie-web");
+    return dotLottieLib;
+  }
+
   function loadLottie(el: HTMLElement, prefersReducedMotion: boolean) {
     const src = el.dataset.lottieSrc;
     if (src && !el.dataset.lottieInit) {
       el.dataset.lottieInit = "1";
-      Promise.all([
-        getLottie(),
-        fetch(src).then((r) => r.json()),
-      ]).then(([lottie, animationData]) => {
-        lottie.default.loadAnimation({
-          container: el,
-          renderer: "svg",
-          loop: true,
-          autoplay: !prefersReducedMotion,
-          animationData,
+
+      if (src.endsWith(".lottie") && el instanceof HTMLCanvasElement) {
+        getDotLottie().then(({ DotLottie }) => {
+          new DotLottie({
+            canvas: el,
+            src,
+            loop: true,
+            autoplay: !prefersReducedMotion,
+          });
         });
-      });
+      } else {
+        Promise.all([
+          getLottie(),
+          fetch(src).then((r) => r.json()),
+        ]).then(([lottie, animationData]) => {
+          lottie.default.loadAnimation({
+            container: el,
+            renderer: "svg",
+            loop: true,
+            autoplay: !prefersReducedMotion,
+            animationData,
+          });
+        });
+      }
     }
   }
 
@@ -58,7 +82,10 @@ const { src, class: className, eager, ...rest } = Astro.props;
       "[data-lottie-src][data-lottie-eager]",
     );
     if (eagerEls.length) {
-      getLottie(); // kick off import before iterating
+      const hasJson = Array.from(eagerEls).some((el) => !el.dataset.lottieSrc?.endsWith(".lottie"));
+      const hasDot = Array.from(eagerEls).some((el) => el.dataset.lottieSrc?.endsWith(".lottie"));
+      if (hasJson) getLottie();
+      if (hasDot) getDotLottie();
       eagerEls.forEach((el) => loadLottie(el, prefersReducedMotion));
     }
 
