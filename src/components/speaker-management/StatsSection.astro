@@ -24,7 +24,7 @@ const stats = [
   <!-- Stats grid -->
   <div class="smd-stats">
     {stats.map((stat) => (
-      <div class="smd-stat">
+      <div class="smd-stat animate-on-scroll" data-animation="fadeInUp">
         <span class="smd-stat-value">{stat.value}</span>
         <span class="smd-stat-label">{stat.label}</span>
       </div>
@@ -36,8 +36,9 @@ const stats = [
   .smd-dark {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 100%;
-    padding: 110px 0;
+    padding: 110px 24px;
     background-color: #000;
     background-image:
       radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
@@ -81,32 +82,47 @@ const stats = [
   .smd-stats {
     display: flex;
     justify-content: center;
-    gap: 60px;
-    padding: 0 20px;
+    gap: 1.5rem;
+    flex-wrap: nowrap;
     max-width: 1100px;
     margin: 0 auto;
+    padding: 0 20px;
     width: 100%;
   }
   .smd-stat {
+    flex: 1 1 0;
+    max-width: 260px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
+    padding: 2.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    text-align: center;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .smd-stat:hover {
+    transform: translateY(-6px);
+    border-color: rgba(159, 129, 255, 0.35);
+    box-shadow: 0 8px 32px rgba(159, 129, 255, 0.12);
   }
   .smd-stat-value {
     font-family: var(--font-heading);
-    font-size: 40px;
+    font-size: 2.75rem;
     font-weight: 700;
-    line-height: 48px;
-    letter-spacing: -1px;
+    line-height: 1;
+    letter-spacing: -1.5px;
     color: #fff;
   }
   .smd-stat-label {
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 0.875rem;
     font-weight: 400;
-    line-height: 20px;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 1024px) {
@@ -114,9 +130,9 @@ const stats = [
     .smd-engagement { padding: 0 20px 40px; }
     .smd-engagement-text { width: 85%; }
     .smd-heading { font-size: 40px; line-height: 1.1em; }
-    .smd-stats { gap: 40px; }
-    .smd-stat-value { font-size: 32px; }
-    .smd-stat-label { font-size: 14px; }
+    .smd-stats { gap: 1rem; }
+    .smd-stat-value { font-size: 2.25rem; }
+    .smd-stat-label { font-size: 0.8rem; }
   }
 
   @media (max-width: 767px) {
@@ -126,11 +142,11 @@ const stats = [
     .smd-heading { font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
     .smd-stats {
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 1rem;
       justify-content: center;
     }
-    .smd-stat { width: 40%; }
-    .smd-stat-value { font-size: 28px; }
-    .smd-stat-label { font-size: 13px; }
+    .smd-stat { width: calc(50% - 0.5rem); max-width: none; flex: none; }
+    .smd-stat-value { font-size: 1.75rem; }
+    .smd-stat-label { font-size: 0.75rem; }
   }
 </style>

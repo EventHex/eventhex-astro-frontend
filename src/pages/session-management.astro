@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import BentoGrid from "../components/session-management/BentoGrid.astro";
+import LottiePlayer from "../components/LottiePlayer.astro";
 
 const title = "Session Management Software for Multi-Track Events | EventHex";
 const description = "Plan multi-day agendas with visual timeline scheduling, session access controls, live polls, Q&A, and AI-powered session recaps from one event workflow.";
@@ -132,45 +133,28 @@ const deepDiveCards = [
     eyebrow: "Agenda control",
     title: "Visual timeline scheduling that stays usable when agendas get dense",
     desc: "Build multi-day, multi-room agendas with a view that stays readable for event teams, speakers, and operators. Session edits happen where the schedule already lives, not in disconnected tools.",
-    items: [
-      "See stages side by side to spot clashes before they affect attendees.",
-      "Drag sessions into new slots when speakers change or rooms shift.",
-      "Keep color-coded session types visible for faster agenda review.",
-    ],
     visual: "timeline",
+    image: "/feature-images/session-management/agenda-card-visual.svg",
   },
   {
     eyebrow: "Session structure",
     title: "Support every format from keynotes to breakout-heavy workshop flows",
     desc: "Create parent sessions, sub-sessions, and specialized formats so the published agenda matches the real shape of the event instead of flattening it into generic blocks.",
-    items: [
-      "Keynotes, panels, labs, workshops, and sponsor sessions in one model.",
-      "Nested sub-sessions for breakouts and themed track branches.",
-      "Role assignment for speakers, moderators, and session owners.",
-    ],
     visual: "types",
   },
   {
     eyebrow: "Capacity and access",
     title: "Use registration data to control who can enter what and when",
     desc: "EventHex connects ticket rules and session-level attendance so premium access, limited-capacity rooms, and waitlists stay operationally sound.",
-    items: [
-      "Restrict attendance by ticket class, invite list, or participant segment.",
-      "Set hard caps and keep overflow demand on structured waitlists.",
-      "Notify the right attendees when seats open or rooms change.",
-    ],
     visual: "capacity",
+    image: "/feature-images/session-management/capacity-card-visual.svg",
   },
   {
     eyebrow: "Live engagement and recap",
     title: "Keep interaction, feedback, recording, and AI summary in the same session workflow",
     desc: "Moderators can run live tools while ops teams monitor response, recording, and recap completion. Nothing needs to be copied into a separate post-event system.",
-    items: [
-      "Live polls and Q&A without leaving the session control panel.",
-      "Emoji reactions and star ratings for immediate session sentiment.",
-      "InstaRecap transcripts, summaries, and translations after the recording ends.",
-    ],
     visual: "engagement",
+    image: "/feature-images/session-management/engagement-card-visual.svg",
   },
 ];
 
@@ -319,50 +303,11 @@ const faqSchema = {
         </div>
 
         <div class="ssm-hero__visual animate-on-scroll" data-animation="fadeInRight">
-          <div class="ssm-hero__visual-card">
-            <div class="ssm-hero__floating ssm-hero__floating--top">
-              <span class="ssm-hero__floating-label">Agenda Builder</span>
-              <strong>Reschedule tracks without rebuilding the day</strong>
-            </div>
-
-            <img
-              src="/feature-images/session-management/timeline-view.jpeg"
-              alt="EventHex session management timeline view"
-              width="1280"
-              height="710"
-              loading="eager"
-            />
-
-            <div class="ssm-hero__detail-panel">
-              <img
-                src="/feature-images/session-management/detail-panel.png"
-                alt="EventHex session detail panel"
-                width="420"
-                height="530"
-                loading="lazy"
-              />
-            </div>
-
-            <div class="ssm-hero__floating ssm-hero__floating--bottom">
-              <span class="ssm-hero__floating-label">Live Session Ops</span>
-              <strong>Polls, Q&amp;A, feedback, and recap status in one panel</strong>
-            </div>
-
-            <div class="ssm-hero__metric-row">
-              <div class="ssm-hero__metric">
-                <strong>500+</strong>
-                <span>multi-track events</span>
-              </div>
-              <div class="ssm-hero__metric">
-                <strong>98%</strong>
-                <span>scheduling accuracy</span>
-              </div>
-              <div class="ssm-hero__metric">
-                <strong>Live</strong>
-                <span>session-level engagement</span>
-              </div>
-            </div>
-          </div>
+          <LottiePlayer
+            src="/animations/session-management-hero.json"
+            class="ssm-hero__visual-lottie"
+            eager
+          />
         </div>
       </div>
     </div>
@@ -402,114 +347,24 @@ const faqSchema = {
 
       <div class="ssm-stack__cards">
         {deepDiveCards.map((card, index) => (
-          <article class="ssm-stack__card" style={`top: calc(24px + ${index * 22}px);`}>
+          <article class="ssm-stack__card" style={`top: calc(20px + ${index * 20}px);`}>
             <div class="ssm-stack__content">
               <span class="ssm-stack__eyebrow">{card.eyebrow}</span>
               <h3 class="ssm-stack__card-title">{card.title}</h3>
               <p class="ssm-stack__card-desc">{card.desc}</p>
 
-              <ul class="ssm-stack__list">
-                {card.items.map((item) => <li class="ssm-stack__item">{item}</li>)}
-              </ul>
-
               <a href="/book-a-demo/" class="ssm-stack__link">See it in a demo</a>
             </div>
 
             <div class={`ssm-stack__visual ssm-stack__visual--${card.visual}`}>
-              {card.visual === "timeline" && (
-                <img
-                  src="/feature-images/session-management/timeline-view.jpeg"
-                  alt="EventHex agenda timeline"
-                  width="1180"
-                  height="660"
-                  loading="lazy"
-                />
-              )}
-
-              {card.visual === "types" && (
-                <div class="ssm-visual-types">
-                  <div class="ssm-visual-types__header">
-                    <span>Session types</span>
-                    <strong>4 active patterns</strong>
-                  </div>
-                  <div class="ssm-visual-types__grid">
-                    <div class="ssm-visual-types__tile is-blue">
-                      <span>Keynote</span>
-                      <small>Main-stage address</small>
-                    </div>
-                    <div class="ssm-visual-types__tile is-violet">
-                      <span>Panel</span>
-                      <small>Moderator + guests</small>
-                    </div>
-                    <div class="ssm-visual-types__tile is-green">
-                      <span>Workshop</span>
-                      <small>Capacity-managed</small>
-                    </div>
-                    <div class="ssm-visual-types__tile is-amber">
-                      <span>Breakout</span>
-                      <small>Nested under track</small>
-                    </div>
-                  </div>
-                  <div class="ssm-visual-types__branch">
-                    <span>Innovation Track</span>
-                    <div>
-                      <b>Breakout A</b>
-                      <b>Breakout B</b>
-                      <b>Breakout C</b>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {card.visual === "capacity" && (
-                <div class="ssm-visual-capacity">
-                  <div class="ssm-visual-capacity__top">
-                    <span>Session access</span>
-                    <strong>Rules applied</strong>
-                  </div>
-                  <div class="ssm-visual-capacity__rule is-blue">VIP Ticket only</div>
-                  <div class="ssm-visual-capacity__rule is-soft">Standard pass + waitlist</div>
-                  <div class="ssm-visual-capacity__bars">
-                    <div>
-                      <span>Workshop Lab</span>
-                      <strong>38/40</strong>
-                      <i><b style="width: 95%"></b></i>
-                    </div>
-                    <div>
-                      <span>Breakout Room C</span>
-                      <strong>22/30</strong>
-                      <i><b style="width: 73%"></b></i>
-                    </div>
-                    <div>
-                      <span>Sponsor Roundtable</span>
-                      <strong>12/12</strong>
-                      <i><b style="width: 100%"></b></i>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {card.visual === "engagement" && (
-                <div class="ssm-visual-engagement">
-                  <div class="ssm-visual-engagement__frame">
-                    <img
-                      src="/feature-images/session-management/detail-panel.png"
-                      alt="Session detail controls"
-                      width="420"
-                      height="530"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div class="ssm-visual-engagement__callout">
-                    <span>Live poll</span>
-                    <strong>342 responses in-session</strong>
-                  </div>
-                  <div class="ssm-visual-engagement__callout is-secondary">
-                    <span>InstaRecap</span>
-                    <strong>Summary queued after recording</strong>
-                  </div>
-                </div>
-              )}
+              <img
+                class={`ssm-stack__visual-svg${card.image ? ' ssm-stack__visual-svg--animated' : ''}`}
+                src={card.image || "/feature-images/session-management/stacking-card-visual.svg"}
+                alt={card.title}
+                width="1100"
+                height="700"
+                loading="lazy"
+              />
             </div>
           </article>
         ))}
@@ -522,31 +377,38 @@ const faqSchema = {
       <div class="ssm-cta__glow ssm-cta__glow--1"></div>
       <div class="ssm-cta__glow ssm-cta__glow--2"></div>
 
-      <div class="ssm-cta__content">
-        <span class="ssm-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Session Planning Without Loose Ends</span>
-        <h2 class="ssm-cta__title animate-on-scroll" data-animation="fadeInUp">
-          Ready to run your next agenda from one coordinated workflow?
-        </h2>
-        <p class="ssm-cta__desc animate-on-scroll" data-animation="fadeInUp">
-          Bring scheduling, access rules, live engagement, and recap into a single
-          session layer so your ops team stays faster before and during the event.
-        </p>
+      <div class="ssm-cta__grid">
+        <div class="ssm-cta__content">
+          <span class="ssm-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Session Planning Without Loose Ends</span>
+          <h2 class="ssm-cta__title animate-on-scroll" data-animation="fadeInUp">
+            Ready to run your next agenda from one coordinated workflow?
+          </h2>
+          <p class="ssm-cta__desc animate-on-scroll" data-animation="fadeInUp">
+            Bring scheduling, access rules, live engagement, and recap into a single
+            session layer so your ops team stays faster before and during the event.
+          </p>
 
-        <div class="ssm-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
-          <span class="ssm-cta__proof-pill">Visual timeline builder</span>
-          <span class="ssm-cta__proof-pill">Capacity-aware registrations</span>
-          <span class="ssm-cta__proof-pill">Live polls and AI recap</span>
+          <div class="ssm-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
+            <span class="ssm-cta__proof-pill">Visual timeline builder</span>
+            <span class="ssm-cta__proof-pill">Capacity-aware registrations</span>
+            <span class="ssm-cta__proof-pill">Live polls and AI recap</span>
+          </div>
+
+          <div class="ssm-cta__buttons">
+            <a href="/book-a-demo/" class="ssm-cta__btn ssm-cta__btn--primary">Book a Free Demo</a>
+            <a href="/contact-en/" class="ssm-cta__btn ssm-cta__btn--secondary">Talk to the team</a>
+          </div>
         </div>
 
-        <div class="ssm-cta__buttons">
-          <a href="/book-a-demo/" class="ssm-cta__btn ssm-cta__btn--primary">Book a Free Demo</a>
-          <a href="/contact-en/" class="ssm-cta__btn ssm-cta__btn--secondary">Talk to the team</a>
-        </div>
-
-        <div class="ssm-cta__trust">
-          <span class="ssm-cta__trust-item">Free onboarding support</span>
-          <span class="ssm-cta__trust-item">No credit card required</span>
-          <span class="ssm-cta__trust-item">Built for conferences and summits</span>
+        <div class="ssm-cta__visual animate-on-scroll" data-animation="fadeInRight">
+          <img
+            src="/feature-images/session-management/cta-visual.svg"
+            alt="Session management dashboard showing agenda builder, speaker profiles, and live engagement tools"
+            width="831"
+            height="604"
+            loading="lazy"
+            class="ssm-cta__visual-img"
+          />
         </div>
       </div>
     </div>
@@ -582,40 +444,30 @@ const faqSchema = {
 
   <section class="ssm-faq">
     <div class="ssm-faq__inner">
-      <div class="ssm-faq__support">
-        <span class="ssm-faq__eyebrow animate-on-scroll" data-animation="fadeInDown">Need a custom session setup?</span>
-        <h2 class="ssm-faq__title animate-on-scroll" data-animation="fadeInUp">Frequently asked questions</h2>
-        <p class="ssm-faq__desc animate-on-scroll" data-animation="fadeInUp">
+      <div class="ssm-faq__support animate-on-scroll" data-animation="fadeInLeft">
+        <span class="ssm-faq__eyebrow">Need a custom session setup?</span>
+        <h2 class="ssm-faq__title">Frequently Asked Questions</h2>
+        <p class="ssm-faq__desc">
           We help event teams structure agenda logic, access rules, session-level
           communication, and live recap workflows around the way their programs actually run.
         </p>
 
-        <div class="ssm-faq__support-card animate-on-scroll" data-animation="fadeInUp">
-          <span class="ssm-faq__support-label">Included with every rollout</span>
-          <ul class="ssm-faq__support-list">
-            {supportChecklist.map((item) => (
-              <li class="ssm-faq__support-item">{item}</li>
-            ))}
-          </ul>
-
-          <div class="ssm-faq__support-note">
-            <strong>Free onboarding support</strong>
-            <span>Map your agenda workflow before launch and keep your event team aligned on the live operating model.</span>
-          </div>
-
-          <a href="/book-a-demo/" class="ssm-faq__cta">Plan my session flow</a>
+        <div class="ssm-faq__support-card">
+          <h3 class="ssm-faq__support-title">Talk to Our Team</h3>
+          <p class="ssm-faq__support-desc">Our experts can walk you through a personalized demo and answer any questions about session management.</p>
         </div>
+
+        <a href="/book-a-demo/" class="ssm-faq__cta">Book a Demo</a>
       </div>
 
       <div class="ssm-faq__list">
         {faqItems.map((faq, index) => (
-          <details class="ssm-faq__item animate-on-scroll" data-animation="fadeInUp" data-session-faq open={index === 0}>
+          <details class="ssm-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)} data-session-faq open={index === 0}>
             <summary class="ssm-faq__question">
-              <span>{faq.q}</span>
-              <span class="ssm-faq__icon" aria-hidden="true">
-                <span class="ssm-faq__icon-line ssm-faq__icon-line--horizontal"></span>
-                <span class="ssm-faq__icon-line ssm-faq__icon-line--vertical"></span>
-              </span>
+              {faq.q}
+              <svg class="ssm-faq__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </summary>
             <div class="ssm-faq__answer">
               <p>{faq.a}</p>
@@ -865,118 +717,16 @@ const faqSchema = {
 
   .ssm-hero__visual {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .ssm-hero__visual-card {
-    position: relative;
-    padding: 18px 18px 24px;
-    border-radius: 32px;
-    background: rgba(255, 255, 255, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.84);
-    box-shadow: 0 30px 70px rgba(34, 39, 47, 0.12);
-    backdrop-filter: blur(16px);
-  }
-
-  .ssm-hero__visual-card > img {
+  .ssm-hero__visual-lottie {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: 24px;
-    border: 1px solid rgba(55, 93, 251, 0.08);
-    box-shadow: 0 18px 44px rgba(55, 93, 251, 0.12);
-  }
-
-  .ssm-hero__detail-panel {
-    position: absolute;
-    right: 30px;
-    bottom: 104px;
-    width: clamp(190px, 26vw, 300px);
-    padding: 8px;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.82);
-    box-shadow: 0 24px 50px rgba(15, 17, 23, 0.18);
-  }
-
-  .ssm-hero__detail-panel img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 18px;
-  }
-
-  .ssm-hero__floating {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    max-width: 260px;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(15, 17, 23, 0.88);
-    box-shadow: 0 14px 36px rgba(15, 17, 23, 0.18);
-    color: #fff;
-  }
-
-  .ssm-hero__floating--top {
-    top: -18px;
-    left: -18px;
-  }
-
-  .ssm-hero__floating--bottom {
-    left: 34px;
-    bottom: -18px;
-  }
-
-  .ssm-hero__floating-label {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-  }
-
-  .ssm-hero__floating strong {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 22px;
-  }
-
-  .ssm-hero__metric-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  .ssm-hero__metric {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(247, 248, 252, 0.96);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .ssm-hero__metric strong {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.8px;
-    color: var(--heading-dark);
-  }
-
-  .ssm-hero__metric span {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 18px;
-    color: #667085;
   }
 
   .ssm-dark-band {
@@ -1033,7 +783,7 @@ const faqSchema = {
   .ssm-dark-band__stats {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 24px;
     padding: 0 20px;
     max-width: 1100px;
     margin: 0 auto;
@@ -1044,7 +794,20 @@ const faqSchema = {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    flex: 1;
+    padding: 28px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+
+  .ssm-dark-band__stat:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
   }
 
   .ssm-dark-band__value {
@@ -1560,7 +1323,7 @@ const faqSchema = {
 
   .ssm-stack__cards {
     width: 100%;
-    padding: 36px 0 10px;
+    padding: 30px 0 50px;
     position: relative;
   }
 
@@ -1568,22 +1331,23 @@ const faqSchema = {
     position: sticky;
     display: flex;
     align-items: stretch;
-    gap: 28px;
-    min-height: 520px;
-    margin-bottom: 64px;
-    padding: 28px;
-    border-radius: 24px;
-    background: #11162b;
-    border: 1px solid rgba(172, 161, 241, 0.34);
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.24);
+    height: 500px;
+    margin-bottom: 60px;
+    border-radius: 20px;
+    background: rgba(18, 15, 40, 0.92);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(172, 161, 241, 0.51);
     overflow: hidden;
+    transition: transform 0.3s ease;
   }
 
   .ssm-stack__content {
-    flex: 0 0 43%;
+    flex: 0 0 45%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 40px;
     gap: 16px;
   }
 
@@ -1600,10 +1364,10 @@ const faqSchema = {
   .ssm-stack__card-title {
     margin: 0;
     font-family: var(--font-heading);
-    font-size: 34px;
+    font-size: 32px;
     font-weight: 500;
-    line-height: 1.15;
-    color: #fff;
+    line-height: 1.2;
+    color: #AFA3FF;
   }
 
   .ssm-stack__card-desc {
@@ -1611,8 +1375,8 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 17px;
     font-weight: 400;
-    line-height: 1.68;
-    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.65;
+    color: #fff;
   }
 
   .ssm-stack__list {
@@ -1649,288 +1413,50 @@ const faqSchema = {
     align-items: center;
     align-self: flex-start;
     margin-top: 8px;
-    padding: 10px 22px;
-    border-radius: 12px;
-    background: var(--accent-btn-purple);
+    padding: 10px 24px;
+    border-radius: 10px;
+    background: #D4CAFE;
     color: #0a0d14;
     text-decoration: none;
     font-family: var(--font-body);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 22px;
-    transition: transform 0.25s ease;
+    transition: transform 0.3s, background 0.3s;
   }
 
   .ssm-stack__link:hover {
-    transform: translateY(-1px);
+    transform: scale(1.05);
   }
 
   .ssm-stack__visual {
     flex: 1;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 24px;
-    overflow: hidden;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    min-height: 100%;
-  }
-
-  .ssm-stack__visual img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .ssm-visual-types,
-  .ssm-visual-capacity,
-  .ssm-visual-engagement {
-    width: 100%;
-    height: 100%;
-    padding: 28px;
-  }
-
-  .ssm-visual-types {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(45, 60, 105, 0.18) 100%);
-  }
-
-  .ssm-visual-types__header,
-  .ssm-visual-capacity__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .ssm-visual-types__header span,
-  .ssm-visual-capacity__top span {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.55);
-  }
-
-  .ssm-visual-types__header strong,
-  .ssm-visual-capacity__top strong {
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-    color: #fff;
-  }
-
-  .ssm-visual-types__grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-  }
-
-  .ssm-visual-types__tile {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 16px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .ssm-visual-types__tile span {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.15;
-    color: #fff;
-  }
-
-  .ssm-visual-types__tile small {
-    font-family: var(--font-body);
-    font-size: 13px;
-    line-height: 18px;
-    color: rgba(255, 255, 255, 0.68);
-  }
-
-  .ssm-visual-types__tile.is-blue {
-    box-shadow: inset 0 0 0 1px rgba(127, 180, 255, 0.28);
-  }
-
-  .ssm-visual-types__tile.is-violet {
-    box-shadow: inset 0 0 0 1px rgba(175, 163, 255, 0.28);
-  }
-
-  .ssm-visual-types__tile.is-green {
-    box-shadow: inset 0 0 0 1px rgba(118, 223, 180, 0.24);
-  }
-
-  .ssm-visual-types__tile.is-amber {
-    box-shadow: inset 0 0 0 1px rgba(255, 205, 124, 0.24);
-  }
-
-  .ssm-visual-types__branch {
-    margin-top: auto;
-    padding: 18px;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .ssm-visual-types__branch > span {
-    display: block;
-    margin-bottom: 12px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-  }
-
-  .ssm-visual-types__branch > div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .ssm-visual-types__branch b {
-    display: inline-flex;
-    padding: 10px 12px;
-    border-radius: 999px;
-    background: rgba(127, 180, 255, 0.12);
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 600;
-    color: #cfe1ff;
-  }
-
-  .ssm-visual-capacity {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(52, 72, 131, 0.2) 100%);
-  }
-
-  .ssm-visual-capacity__rule {
-    padding: 12px 14px;
-    border-radius: 14px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
-  }
-
-  .ssm-visual-capacity__rule.is-blue {
-    background: rgba(55, 93, 251, 0.16);
-    color: #dce7ff;
-  }
-
-  .ssm-visual-capacity__rule.is-soft {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.76);
-  }
-
-  .ssm-visual-capacity__bars {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: auto;
-  }
-
-  .ssm-visual-capacity__bars div {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 8px 16px;
-    align-items: center;
-  }
-
-  .ssm-visual-capacity__bars span,
-  .ssm-visual-capacity__bars strong {
-    font-family: var(--font-body);
-    font-size: 14px;
-    line-height: 20px;
-    color: #fff;
-  }
-
-  .ssm-visual-capacity__bars i {
-    grid-column: 1 / -1;
-    height: 10px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
+    padding: 20px;
     overflow: hidden;
   }
 
-  .ssm-visual-capacity__bars b {
-    display: block;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #8ebaff 0%, #375dfb 100%);
+  .ssm-stack__visual-svg {
+    max-width: 75%;
+    max-height: 85%;
+    object-fit: contain;
+    animation: ssm-svg-float 4.5s ease-in-out infinite;
   }
 
-  .ssm-visual-engagement {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(45, 60, 105, 0.18) 100%);
+  .ssm-stack__visual-svg--animated {
+    animation: ssm-svg-float-alt 5s ease-in-out infinite;
   }
 
-  .ssm-visual-engagement__frame {
-    width: min(320px, 70%);
-    padding: 10px;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 22px 42px rgba(15, 17, 23, 0.22);
+  @keyframes ssm-svg-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
-  .ssm-visual-engagement__frame img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 16px;
-  }
-
-  .ssm-visual-engagement__callout {
-    position: absolute;
-    left: 28px;
-    bottom: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    max-width: 210px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(15, 17, 23, 0.88);
-    color: #fff;
-  }
-
-  .ssm-visual-engagement__callout.is-secondary {
-    left: auto;
-    right: 28px;
-    top: 28px;
-    bottom: auto;
-  }
-
-  .ssm-visual-engagement__callout span {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.58);
-  }
-
-  .ssm-visual-engagement__callout strong {
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 20px;
+  @keyframes ssm-svg-float-alt {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-12px) scale(1.01); }
   }
 
   .ssm-cta {
@@ -1942,11 +1468,7 @@ const faqSchema = {
   .ssm-cta__card {
     position: relative;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 80px 40px;
+    padding: 60px 40px;
     border-radius: 24px;
     background: #0f1629;
   }
@@ -1974,14 +1496,22 @@ const faqSchema = {
     background: rgba(159, 129, 255, 0.15);
   }
 
+  .ssm-cta__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
   .ssm-cta__content {
     position: relative;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 20px;
-    max-width: 680px;
   }
 
   .ssm-cta__eyebrow {
@@ -2023,7 +1553,6 @@ const faqSchema = {
   .ssm-cta__proof-row {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 10px;
   }
 
@@ -2045,7 +1574,6 @@ const faqSchema = {
   .ssm-cta__buttons {
     display: flex;
     gap: 12px;
-    justify-content: center;
   }
 
   .ssm-cta__btn {
@@ -2089,7 +1617,6 @@ const faqSchema = {
     display: flex;
     flex-wrap: wrap;
     gap: 18px;
-    justify-content: center;
     margin-top: 8px;
   }
 
@@ -2112,6 +1639,74 @@ const faqSchema = {
     height: 6px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.45);
+  }
+
+  .ssm-cta__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ssm-cta__visual-img {
+    width: 100%;
+    height: auto;
+    animation: ssm-cta-float 6s ease-in-out infinite;
+  }
+
+  @keyframes ssm-cta-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @media (max-width: 960px) {
+    .ssm-cta__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .ssm-cta__content {
+      align-items: center;
+      text-align: center;
+    }
+
+    .ssm-cta__proof-row {
+      justify-content: center;
+    }
+
+    .ssm-cta__buttons {
+      justify-content: center;
+    }
+
+    .ssm-cta__trust {
+      justify-content: center;
+    }
+
+    .ssm-cta__visual-img {
+      max-width: 500px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ssm-cta__card {
+      padding: 40px 24px;
+    }
+
+    .ssm-cta__title {
+      font-size: 32px;
+    }
+
+    .ssm-cta__buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .ssm-cta__btn {
+      width: 100%;
+    }
+
+    .ssm-cta__visual-img {
+      max-width: 100%;
+    }
   }
 
   .ssm-ops {
@@ -2235,248 +1830,185 @@ const faqSchema = {
   }
 
   .ssm-faq {
-    width: 100%;
-    margin: 0;
-    padding: 96px 0;
-    background: #f5f6fa;
+    background: var(--surface-light, #f5f8ff);
+    padding: 5rem 1.5rem;
   }
 
   .ssm-faq__inner {
-    max-width: 1280px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 20px;
     display: grid;
-    grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
-    gap: 32px;
+    grid-template-columns: 320px 1fr;
+    gap: 3rem;
     align-items: start;
   }
 
   .ssm-faq__support {
     position: sticky;
-    top: 108px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
+    top: 6rem;
   }
 
   .ssm-faq__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 16px;
-    border-radius: 999px;
-    background: rgba(99, 77, 255, 0.08);
-    border: 1px solid rgba(99, 77, 255, 0.14);
+    display: inline-block;
     font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    font-weight: 600;
     text-transform: uppercase;
-    color: #5a3fd4;
+    letter-spacing: 0.08em;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
   }
 
   .ssm-faq__title {
-    margin: 0;
     font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 500;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: #0f1117;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
   }
 
   .ssm-faq__desc {
-    margin: 0;
-    max-width: 540px;
     font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: #5b6477;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0 0 1.25rem;
   }
 
   .ssm-faq__support-card {
-    width: 100%;
-    padding: 24px 22px;
-    border-radius: 28px;
     background: #fff;
-    border: 1px solid rgba(99, 77, 255, 0.12);
-    box-shadow: 0 2px 16px rgba(15, 17, 23, 0.06);
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
   }
 
-  .ssm-faq__support-label {
-    display: inline-flex;
-    margin-bottom: 16px;
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 16px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: #375dfb;
-  }
-
-  .ssm-faq__support-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .ssm-faq__support-item {
-    position: relative;
-    padding-left: 22px;
-    font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.55;
-    color: #2d3340;
-  }
-
-  .ssm-faq__support-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: linear-gradient(180deg, #7ec8ff 0%, #4d74ff 100%);
-  }
-
-  .ssm-faq__support-note {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 22px;
-    background: #f5f6fa;
-    border: 1px solid rgba(15, 17, 23, 0.07);
-  }
-
-  .ssm-faq__support-note strong {
+  .ssm-faq__support-title {
     font-family: var(--font-heading);
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 1.3;
-    color: #0f1117;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.35rem;
   }
 
-  .ssm-faq__support-note span {
+  .ssm-faq__support-desc {
     font-family: var(--font-body);
-    font-size: 15px;
-    line-height: 1.7;
-    color: #5b6477;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
   }
 
   .ssm-faq__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 48px;
-    margin-top: 18px;
-    padding: 0 20px;
-    border-radius: 16px;
-    background: #375dfb;
-    color: #fff;
-    text-decoration: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--brand-blue);
+    background: transparent;
+    color: var(--brand-blue);
     font-family: var(--font-body);
-    font-size: 15px;
+    font-size: 0.875rem;
     font-weight: 600;
-    line-height: 24px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
   }
 
   .ssm-faq__cta:hover {
-    background: #2248e8;
+    background: var(--brand-blue);
+    color: #fff;
     transform: translateY(-1px);
-    box-shadow: 0 10px 28px rgba(55, 93, 251, 0.28);
   }
 
   .ssm-faq__list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0.75rem;
   }
 
   .ssm-faq__item {
-    overflow: hidden;
-    border-radius: 24px;
     background: #fff;
-    border: 1px solid rgba(15, 17, 23, 0.08);
-    box-shadow: 0 1px 6px rgba(15, 17, 23, 0.04);
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .ssm-faq__item[open] {
+    border-color: var(--brand-blue);
+    box-shadow: 0 2px 12px rgba(55, 93, 251, 0.08);
   }
 
   .ssm-faq__question {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 26px 24px;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
     cursor: pointer;
     list-style: none;
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-weight: 500;
-    line-height: 1.35;
-    color: #0f1117;
+    transition: color 0.2s ease;
   }
 
   .ssm-faq__question::-webkit-details-marker,
   .ssm-faq__question::marker {
     display: none;
+    content: "";
   }
 
-  .ssm-faq__icon {
-    position: relative;
+  .ssm-faq__question:hover {
+    color: var(--brand-blue);
+  }
+
+  .ssm-faq__chevron {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
-    margin-top: 4px;
+    transition: transform 0.25s ease;
+    color: var(--subheading-gray);
   }
 
-  .ssm-faq__icon-line {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 18px;
-    height: 2px;
-    border-radius: 999px;
-    background: #375dfb;
-    transform: translate(-50%, -50%);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-
-  .ssm-faq__icon-line--vertical {
-    transform: translate(-50%, -50%) rotate(90deg);
-  }
-
-  .ssm-faq__item[open] .ssm-faq__icon-line--vertical {
-    opacity: 0;
-    transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+  .ssm-faq__item[open] .ssm-faq__chevron {
+    transform: rotate(180deg);
+    color: var(--brand-blue);
   }
 
   .ssm-faq__answer {
-    padding: 0 24px 24px;
+    padding: 0 1.5rem 1.25rem;
   }
 
   .ssm-faq__answer p {
     margin: 0;
     font-family: var(--font-body);
-    font-size: 16px;
-    font-weight: 400;
+    font-size: 0.875rem;
     line-height: 1.7;
-    color: #5b6477;
+    color: var(--subheading-gray);
+  }
+
+  @media (max-width: 900px) {
+    .ssm-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .ssm-faq__support {
+      position: static;
+    }
   }
 
   @media (max-width: 1180px) {
     .ssm-hero__grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .ssm-hero__title {
+      font-size: 40px;
+      line-height: 48px;
     }
 
     .ssm-hero__visual {
@@ -2486,7 +2018,7 @@ const faqSchema = {
     }
 
     .ssm-dark-band__stats {
-      gap: 36px;
+      gap: 20px;
       flex-wrap: wrap;
     }
 
@@ -2503,17 +2035,22 @@ const faqSchema = {
     }
 
     .ssm-stack__card {
-      flex-direction: column;
-      min-height: auto;
+      height: 450px;
     }
 
-    .ssm-stack__content,
-    .ssm-stack__visual {
-      flex: auto;
+    .ssm-stack__content {
+      flex-basis: 50%;
     }
 
-    .ssm-ops__cards,
-    .ssm-faq__inner {
+    .ssm-stack__card-title {
+      font-size: 28px;
+    }
+
+    .ssm-stack__card-desc {
+      font-size: 16px;
+    }
+
+    .ssm-ops__cards {
       grid-template-columns: 1fr;
     }
 
@@ -2545,11 +2082,6 @@ const faqSchema = {
     .ssm-bento__title,
     .ssm-stack__title,
     .ssm-cta__title,
-    .ssm-faq__title {
-      font-size: 38px;
-      line-height: 1.12;
-    }
-
     .ssm-ops__title {
       font-size: 36px;
     }
@@ -2566,6 +2098,7 @@ const faqSchema = {
     }
 
     .ssm-hero__grid {
+      grid-template-columns: 1fr;
       gap: 30px;
       padding-bottom: 20px;
     }
@@ -2596,22 +2129,6 @@ const faqSchema = {
       width: 100%;
     }
 
-    .ssm-hero__floating {
-      position: static;
-      max-width: none;
-      margin-top: 16px;
-    }
-
-    .ssm-hero__detail-panel {
-      position: static;
-      width: 100%;
-      margin-top: 16px;
-    }
-
-    .ssm-hero__metric-row {
-      grid-template-columns: 1fr;
-    }
-
     .ssm-dark-band {
       padding: 64px 0;
     }
@@ -2624,19 +2141,18 @@ const faqSchema = {
     .ssm-bento__title,
     .ssm-stack__title,
     .ssm-cta__title,
-    .ssm-faq__title,
-    .ssm-ops__title {
-      font-size: 30px;
-      line-height: 1.16;
+    .ssm-faq__title {
+      font-size: 1.5rem;
     }
 
     .ssm-dark-band__stats {
-      gap: 24px;
+      gap: 16px;
       justify-content: center;
     }
 
     .ssm-dark-band__stat {
       width: 42%;
+      padding: 20px 14px;
     }
 
     .ssm-bento {
@@ -2653,14 +2169,12 @@ const faqSchema = {
     }
 
     .ssm-bento__card,
-    .ssm-stack__card,
     .ssm-cta__card {
       padding: 20px;
       border-radius: 20px;
     }
 
-    .ssm-bento__card-title,
-    .ssm-stack__card-title {
+    .ssm-bento__card-title {
       font-size: 24px;
     }
 
@@ -2669,27 +2183,32 @@ const faqSchema = {
     }
 
     .ssm-stack__card {
+      flex-direction: column;
+      height: auto;
       position: relative;
       top: auto !important;
-      gap: 20px;
       margin-bottom: 28px;
     }
 
-    .ssm-visual-types,
-    .ssm-visual-capacity,
-    .ssm-visual-engagement {
-      padding: 20px;
+    .ssm-stack__content {
+      flex: 0 0 auto;
+      padding: 20px 20px 0;
     }
 
-    .ssm-visual-engagement__frame {
-      width: min(100%, 280px);
+    .ssm-stack__visual {
+      padding: 10px;
     }
 
-    .ssm-visual-engagement__callout,
-    .ssm-visual-engagement__callout.is-secondary {
-      position: static;
-      max-width: none;
-      margin-top: 14px;
+    .ssm-stack__card-title {
+      font-size: 24px;
+    }
+
+    .ssm-stack__card-desc {
+      font-size: 15px;
+    }
+
+    .ssm-stack__cards {
+      padding-bottom: 40px;
     }
 
     .ssm-cta {
@@ -2701,16 +2220,29 @@ const faqSchema = {
     }
 
     .ssm-faq {
-      padding: 64px 0;
+      padding: 3rem 1rem;
+    }
+
+    .ssm-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .ssm-faq__support {
+      position: static;
     }
 
     .ssm-faq__question {
-      font-size: 18px;
-      padding: 20px 18px;
+      font-size: 0.875rem;
+      padding: 1rem 1.25rem;
     }
 
     .ssm-faq__answer {
-      padding: 0 18px 18px;
+      padding: 0 1.25rem 1rem;
+    }
+
+    .ssm-faq__answer p {
+      font-size: 0.8125rem;
     }
   }
 </style>

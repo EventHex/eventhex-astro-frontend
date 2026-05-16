@@ -31,6 +31,7 @@ interface Props {
   heroCopy: string;
   trustItems: string[];
   heroAnimation?: string;
+  heroImage?: string;
   /* stats */
   stats: StatItem[];
   statsHeadline: { white1: string; accent: string; white2: string; accent2: string };
@@ -50,6 +51,7 @@ interface Props {
   /* cta */
   ctaTitle: string;
   ctaCopy: string;
+  ctaImage?: string;
   /* why cards */
   whyHeading: string;
   whyCards: WhyCard[];
@@ -62,12 +64,12 @@ interface Props {
 const {
   pageTitle, pageDescription, canonical, ogImage,
   badge, heroTitleLine1, heroTitleLine2, heroCopy, trustItems,
-  heroAnimation,
+  heroAnimation, heroImage,
   stats, statsHeadline,
   bentoHeading, bentoSubtitle, bentoTabs,
   stackingHeading, stackingHighlight, stackingCards,
   howItWorksHeading, howItWorksImage, howItWorksAnimation, steps,
-  ctaTitle, ctaCopy,
+  ctaTitle, ctaCopy, ctaImage,
   whyHeading, whyCards,
   faqs,
   jsonLd,
@@ -103,8 +105,8 @@ const layouts = ["a", "b", "c"];
   </Fragment>
 
   <!-- ① HERO — full viewport, bleeds into header -->
-  <section class={`fv2-hero ${heroAnimation ? 'fv2-hero--split' : ''}`}>
-    <div class={`fv2-hero__inner ${heroAnimation ? 'fv2-hero__inner--split' : ''}`}>
+  <section class={`fv2-hero ${(heroAnimation || heroImage) ? 'fv2-hero--split' : ''}`}>
+    <div class={`fv2-hero__inner ${(heroAnimation || heroImage) ? 'fv2-hero__inner--split' : ''}`}>
       <div class="fv2-hero__text">
         <span class="fv2-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
         <h1 class="fv2-hero__title animate-on-scroll" data-animation="fadeInUp">
@@ -123,6 +125,11 @@ const layouts = ["a", "b", "c"];
       {heroAnimation && (
         <div class="fv2-hero__animation animate-on-scroll" data-animation="fadeIn">
           <LottiePlayer src={heroAnimation} />
+        </div>
+      )}
+      {heroImage && !heroAnimation && (
+        <div class="fv2-hero__visual animate-on-scroll" data-animation="fadeIn">
+          <img src={heroImage} alt={heroTitleLine1} class="fv2-hero__svg fv2-hero__svg--float" width="560" height="460" loading="eager" />
         </div>
       )}
     </div>
@@ -239,7 +246,7 @@ const layouts = ["a", "b", "c"];
             {howItWorksAnimation ? (
               <LottiePlayer src={howItWorksAnimation} class="fv2-how__lottie" />
             ) : howItWorksImage ? (
-              <img src={howItWorksImage} alt={howItWorksHeading} loading="lazy" />
+              <img src={howItWorksImage} alt={howItWorksHeading} class="fv2-how__svg--float" loading="lazy" />
             ) : (
               <div class="fv2-how__placeholder">
                 <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -305,17 +312,23 @@ const layouts = ["a", "b", "c"];
             </a>
             <a href="#fv2-bento" class="fv2-btn fv2-btn--ghost">Explore Features</a>
           </div>
-          <div class="fv2-cta__trust animate-on-scroll" data-animation="fadeIn">
-            {trustItems.map((t) => (
-              <span class="fv2-cta__trust-item">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
-                {t}
-              </span>
-            ))}
-          </div>
+          {!ctaImage && (
+            <div class="fv2-cta__trust animate-on-scroll" data-animation="fadeIn">
+              {trustItems.map((t) => (
+                <span class="fv2-cta__trust-item">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div class="fv2-cta__animation">
-          <LottiePlayer src="/animations/cta-animation.json" class="fv2-cta__lottie" />
+          {ctaImage ? (
+            <img src={ctaImage} alt={ctaTitle} class="fv2-cta__svg fv2-cta__svg--float" width="560" height="460" loading="lazy" />
+          ) : (
+            <LottiePlayer src="/animations/cta-animation.json" class="fv2-cta__lottie" />
+          )}
         </div>
       </div>
     </div>
@@ -403,6 +416,26 @@ const layouts = ["a", "b", "c"];
   .fv2-hero__animation .lottie-container {
     width: 100%;
     max-width: 640px;
+  }
+  .fv2-hero__visual {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fv2-hero__svg {
+    width: 100%;
+    max-width: 560px;
+    height: auto;
+    object-fit: contain;
+  }
+  .fv2-hero__svg--float {
+    animation: fv2HeroFloat 4s ease-in-out infinite;
+  }
+  @keyframes fv2HeroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
   .fv2-hero__badge {
     display: inline-flex;
@@ -558,9 +591,11 @@ const layouts = ["a", "b", "c"];
   .fv2-stats__card {
     flex: 1 1 0;
     max-width: 260px;
+    min-height: 180px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     padding: 2.25rem 1.5rem;
     background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
@@ -933,6 +968,8 @@ const layouts = ["a", "b", "c"];
     border-radius: 20px;
     object-fit: cover;
   }
+  .fv2-how__svg--float { animation: fv2-how-float 4s ease-in-out infinite; border-radius: 0; }
+  @keyframes fv2-how-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
   .fv2-how__lottie {
     width: 100%;
     max-width: 480px;
@@ -1129,6 +1166,9 @@ const layouts = ["a", "b", "c"];
   .fv2-cta__trust-item { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
   .fv2-cta__animation { display: flex; align-items: center; justify-content: center; }
   .fv2-cta__lottie { width: 100%; max-width: 420px; }
+  .fv2-cta__svg { width: 100%; max-width: 520px; height: auto; }
+  .fv2-cta__svg--float { animation: fv2-cta-float 4s ease-in-out infinite; }
+  @keyframes fv2-cta-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
   /* ══════════════════════════════════════════
      ⑧ FAQ — split layout sidebar + accordion

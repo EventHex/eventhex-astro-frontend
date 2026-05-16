@@ -1,4 +1,6 @@
 ---
+import LottiePlayer from "../LottiePlayer.astro";
+
 const heroPoints = [
   "Abstract Submission Portal",
   "Peer Review Workflows",
@@ -10,11 +12,6 @@ const trustItems = [
   "Trusted by 400+ events",
 ];
 
-const metrics = [
-  { value: "100%", label: "blind review" },
-  { value: "Custom", label: "rubrics" },
-  { value: "Auto", label: "notifications" },
-];
 ---
 
 <section class="cfph-hero">
@@ -49,34 +46,7 @@ const metrics = [
       </div>
 
       <div class="cfph-hero__visual animate-on-scroll" data-animation="fadeInRight">
-        <div class="cfph-hero__visual-card">
-          <div class="cfph-hero__floating cfph-hero__floating--top">
-            <span class="cfph-hero__floating-label">Peer Review</span>
-            <strong>Blind review with custom rubrics</strong>
-          </div>
-
-          <img
-            src="https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png"
-            alt="EventHex call for papers management dashboard"
-            width="700"
-            height="500"
-            loading="eager"
-          />
-
-          <div class="cfph-hero__floating cfph-hero__floating--bottom">
-            <span class="cfph-hero__floating-label">Proceedings</span>
-            <strong>Export formatted PDF in one click</strong>
-          </div>
-
-          <div class="cfph-hero__metric-row">
-            {metrics.map((metric) => (
-              <div class="cfph-hero__metric">
-                <strong>{metric.value}</strong>
-                <span>{metric.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <LottiePlayer src="/animations/call-for-papers-hero.json" class="cfph-hero__lottie" eager />
       </div>
     </div>
   </div>
@@ -255,94 +225,10 @@ const metrics = [
     position: relative;
   }
 
-  .cfph-hero__visual-card {
-    position: relative;
-    padding: 20px 0 36px;
-  }
-
-  .cfph-hero__visual-card img {
-    display: block;
+  .cfph-hero__lottie {
     width: 100%;
-    height: auto;
-    filter: drop-shadow(0 26px 48px rgba(34, 39, 47, 0.14));
-  }
-
-  .cfph-hero__floating {
-    position: absolute;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.94);
-    color: var(--heading-dark);
-    border: 1px solid rgba(229, 235, 255, 0.9);
-    box-shadow: 0 18px 36px rgba(34, 39, 47, 0.12);
-    backdrop-filter: blur(12px);
-  }
-
-  .cfph-hero__floating--top {
-    top: -18px;
-    left: -18px;
-    max-width: 260px;
-  }
-
-  .cfph-hero__floating--bottom {
-    right: -18px;
-    bottom: 94px;
-    max-width: 280px;
-  }
-
-  .cfph-hero__floating-label {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #667085;
-  }
-
-  .cfph-hero__floating strong {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.45;
-  }
-
-  .cfph-hero__metric-row {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  .cfph-hero__metric {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 16px 18px;
-    border-radius: 18px;
-    background: rgba(247, 248, 252, 0.96);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .cfph-hero__metric strong {
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.8px;
-    color: var(--heading-dark);
-  }
-
-  .cfph-hero__metric span {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 18px;
-    color: #667085;
+    max-width: 600px;
+    margin: 0 auto;
   }
 
   @media (max-width: 1120px) {
@@ -363,9 +249,6 @@ const metrics = [
     .cfph-hero__points,
     .cfph-hero__cta { justify-content: center; }
     .cfph-hero__title { font-size: 42px; line-height: 1.1em; }
-    .cfph-hero__visual-card { padding: 26px 0 0; }
-    .cfph-hero__floating--top { left: 0; }
-    .cfph-hero__floating--bottom { right: 0; bottom: 34px; }
   }
 
   @media (max-width: 767px) {
@@ -379,8 +262,5 @@ const metrics = [
     .cfph-hero__cta { width: 100%; flex-direction: column; }
     .cfph-hero__btn { width: 100%; }
     .cfph-hero__trust { gap: 10px; justify-content: center; }
-    .cfph-hero__floating { position: static; margin-bottom: 12px; max-width: none; }
-    .cfph-hero__visual-card { padding: 18px 0 0; }
-    .cfph-hero__metric-row { grid-template-columns: 1fr; }
   }
 </style>

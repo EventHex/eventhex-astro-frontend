@@ -1,0 +1,282 @@
+---
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  faqs: FaqItem[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  supportTitle?: string;
+  supportDesc?: string;
+  ctaText?: string;
+  ctaHref?: string;
+}
+
+const {
+  faqs,
+  eyebrow = "Need Help?",
+  title = "Frequently Asked Questions",
+  description = "Everything you need to know about this feature and how it works with EventHex.",
+  supportTitle = "Talk to Our Team",
+  supportDesc = "Our experts can walk you through a personalized demo and answer any questions.",
+  ctaText = "Book a Demo",
+  ctaHref = "/book-a-demo/",
+} = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.a,
+    },
+  })),
+};
+---
+
+<section class="sh-faq">
+  <div class="sh-faq__inner">
+    <div class="sh-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="sh-faq__eyebrow">{eyebrow}</span>
+      <h2 class="sh-faq__sidebar-title">{title}</h2>
+      <p class="sh-faq__sidebar-desc">{description}</p>
+      <div class="sh-faq__support-card">
+        <h3 class="sh-faq__support-title">{supportTitle}</h3>
+        <p class="sh-faq__support-desc">{supportDesc}</p>
+      </div>
+      <a href={ctaHref} class="sh-faq__cta">{ctaText}</a>
+    </div>
+
+    <div class="sh-faq__list">
+      {faqs.map((faq, i) => (
+        <details class="sh-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 60)} data-sh-faq-item>
+          <summary class="sh-faq__question">
+            {faq.q}
+            <svg class="sh-faq__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="sh-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const shFaqItems = Array.from(document.querySelectorAll('[data-sh-faq-item]'));
+  shFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+      shFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .sh-faq {
+    background: var(--surface-light, #f5f8ff);
+    padding: 5rem 1.5rem;
+  }
+
+  .sh-faq__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .sh-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .sh-faq__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
+  }
+
+  .sh-faq__sidebar-title {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
+  }
+
+  .sh-faq__sidebar-desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0 0 1.25rem;
+  }
+
+  .sh-faq__support-card {
+    background: #fff;
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .sh-faq__support-title {
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.35rem;
+  }
+
+  .sh-faq__support-desc {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  .sh-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem 1.25rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--brand-blue);
+    background: transparent;
+    color: var(--brand-blue);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+
+  .sh-faq__cta:hover {
+    background: var(--brand-blue);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  .sh-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .sh-faq__item {
+    background: #fff;
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .sh-faq__item[open] {
+    border-color: var(--brand-blue);
+    box-shadow: 0 2px 12px rgba(55, 93, 251, 0.08);
+  }
+
+  .sh-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
+    cursor: pointer;
+    list-style: none;
+    transition: color 0.2s ease;
+  }
+
+  .sh-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .sh-faq__question::marker {
+    display: none;
+    content: "";
+  }
+
+  .sh-faq__question:hover {
+    color: var(--brand-blue);
+  }
+
+  .sh-faq__chevron {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+    color: var(--subheading-gray);
+  }
+
+  .sh-faq__item[open] .sh-faq__chevron {
+    transform: rotate(180deg);
+    color: var(--brand-blue);
+  }
+
+  .sh-faq__answer {
+    padding: 0 1.5rem 1.25rem;
+  }
+
+  .sh-faq__answer p {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .sh-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .sh-faq__sidebar {
+      position: static;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sh-faq {
+      padding: 3rem 1rem;
+    }
+
+    .sh-faq__sidebar-title {
+      font-size: 1.5rem;
+    }
+
+    .sh-faq__question {
+      font-size: 0.875rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .sh-faq__answer {
+      padding: 0 1.25rem 1rem;
+    }
+
+    .sh-faq__answer p {
+      font-size: 0.8125rem;
+    }
+  }
+</style>

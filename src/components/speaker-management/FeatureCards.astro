@@ -7,26 +7,38 @@ const featureCards = [
   {
     title: "Speaker Profiles & AI LinkedIn Import",
     desc: "Centralize all speaker details—bio, photo, designation, company, and social links—in one dashboard. Paste a LinkedIn URL and AI auto-extracts speaker information instantly, saving 90% of data entry time.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2026/03/speaker-dashboard-anim.svg",
+    image: "/feature-images/speaker-management/speaker-dashboard-v2.svg",
     alt: "EventHex Speaker Dashboard with AI LinkedIn Import",
+    animated: true,
+    width: 669,
+    height: 705,
   },
   {
     title: "Visual Session Timeline & Scheduling",
     desc: "Schedule sessions across multiple days and stages with our interactive visual timeline. Create sub-sessions, set capacity limits, manage multi-track conferences, and let speakers manage their own schedules with drag-and-drop ease.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2026/03/session-timeline-v2.svg",
+    image: "/feature-images/speaker-management/session-timeline-v2.svg",
     alt: "EventHex Session Timeline View with Multi-Stage Scheduling",
+    animated: true,
+    width: 701,
+    height: 729,
   },
   {
     title: "Real-time Audience Engagement",
     desc: "Turn passive attendees into active participants with live polls, real-time Q&A with spotlight mode, emoji reactions, and star ratings. Collect instant feedback and view color-coded analytics as votes pour in—all accessible from attendees' phones.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2026/03/live-engagement-v2.svg",
+    image: "/feature-images/speaker-management/live-engagement-v2.svg",
     alt: "EventHex Live Engagement Tools with Polls and Q&A",
+    animated: true,
+    width: 606,
+    height: 765,
   },
   {
     title: "InstaRecap: AI Transcription & Summaries",
     desc: "Never lose a session insight again. Upload recordings, link YouTube URLs, or record live—InstaRecap automatically transcribes, generates AI summaries with key takeaways, and translates content for global audiences in multiple languages.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2026/03/instarecap-anim.svg",
+    image: "/feature-images/speaker-management/instarecap-v2.svg",
     alt: "EventHex InstaRecap AI Transcription and Summary Dashboard",
+    animated: true,
+    width: 603,
+    height: 746,
   },
 ];
 ---
@@ -54,8 +66,8 @@ const featureCards = [
             <p class="smf-card-desc">{card.desc}</p>
             <a href="/book-a-demo/" class="smf-card-btn">Explore More</a>
           </div>
-          <div class="smf-card-image">
-            <img src={card.image} alt={card.alt} loading="lazy" />
+          <div class:list={["smf-card-image", card.animated && "smf-card-image--animated"]}>
+            <img src={card.image} alt={card.alt} width={card.width} height={card.height} loading="lazy" decoding="async" />
           </div>
         </div>
       ))}
@@ -179,13 +191,25 @@ const featureCards = [
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 30px;
     overflow: hidden;
   }
   .smf-card-image img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    image-rendering: high-quality;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+
+  /* Subtle float animation for featured card image */
+  .smf-card-image--animated img {
+    animation: smf-float 4s ease-in-out infinite;
+  }
+  @keyframes smf-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
   @media (max-width: 1024px) {
