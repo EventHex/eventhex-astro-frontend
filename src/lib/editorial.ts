@@ -28,6 +28,7 @@ export interface EditorialEntry {
   formattedDate: string;
   author: string;
   category: string;
+  categorySlug: string;
   href: string;
   image: EditorialImage | null;
   readingTime: number;
@@ -118,11 +119,11 @@ function getAuthorName(entry: WPBaseEntry): string {
   return authorName ? decodeHtmlEntities(authorName) : "EventHex Team";
 }
 
-function getPrimaryTerm(entry: WPBaseEntry, taxonomy: string): string | null {
+function getPrimaryTerm(entry: WPBaseEntry, taxonomy: string): { name: string; slug: string } | null {
   const terms = entry._embedded?.["wp:term"]?.flat();
   const matchedTerm = terms?.find((term) => term.taxonomy === taxonomy);
 
-  return matchedTerm ? decodeHtmlEntities(matchedTerm.name) : null;
+  return matchedTerm ? { name: decodeHtmlEntities(matchedTerm.name), slug: matchedTerm.slug } : null;
 }
 
 function getFeaturedImage(entry: WPBaseEntry, title: string): EditorialImage | null {
@@ -183,6 +184,8 @@ function createEntry(entry: WPBaseEntry, kind: EditorialKind, fallbackCategory: 
   const description = truncateText(sanitizePlainText(excerptHtml || cleanedContent), 190);
   const wordCount = stripHtml(cleanedContent).split(/\s+/).filter(Boolean).length;
 
+  const primaryTerm = kind === "blog" ? getPrimaryTerm(entry, "category") : null;
+
   return {
     id: entry.id,
     kind,
@@ -194,7 +197,8 @@ function createEntry(entry: WPBaseEntry, kind: EditorialKind, fallbackCategory: 
     date: entry.date,
     formattedDate: formatDate(entry.date),
     author: getAuthorName(entry),
-    category: kind === "blog" ? getPrimaryTerm(entry, "category") ?? fallbackCategory : fallbackCategory,
+    category: primaryTerm?.name ?? fallbackCategory,
+    categorySlug: primaryTerm?.slug ?? "",
     href: kind === "blog" ? `/blog/${entry.slug}/` : `/news/${entry.slug}/`,
     image: getFeaturedImage(entry, title),
     readingTime: Math.max(1, Math.ceil(wordCount / 220)),
@@ -226,6 +230,24 @@ export function normalizeNewsItems(newsItems: WPNews[]): EditorialEntry[] {
     .sort((left, right) => Date.parse(right.date) - Date.parse(left.date));
 }
 
-export function getUniqueCategories(items: EditorialEntry[]): string[] {
-  return Array.from(new Set(items.map((item) => item.category).filter(Boolean))).slice(0, 6);
+export function getUniqueCategories(items: EditorialEntry[]): { name: string; slug: string }[] {
+  const seen = new Set<string>();
+  const result: { name: string; slug: string }[] = [];
+  for (const item of items) {
+    if (item.category && item.categorySlug && !seen.has(item.categorySlug)) {
+      seen.add(item.categorySlug);
+      result.push({ name: item.category, slug: item.categorySlug });
+    }
+  }
+  return result.slice(0, 6);
+}
+
+export function categorySlug(name: string): string {
+  return name
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }

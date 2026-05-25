@@ -1,0 +1,69 @@
+---
+import EditorialIndexPage from "../../../components/editorial/EditorialIndexPage.astro";
+import MarketingLayout from "../../../layouts/MarketingLayout.astro";
+import { normalizeBlogPosts, decodeHtmlEntities } from "../../../lib/editorial";
+import { getCategories, getPosts } from "../../../lib/wordpress";
+import type { WPCategory } from "../../../lib/wordpress";
+
+const { slug } = Astro.params;
+
+// Find the matching category
+const allCategories = await getCategories();
+const category = allCategories.find((c: WPCategory) => c.slug === slug) ?? null;
+
+if (!category) {
+  Astro.response.status = 404;
+}
+
+// Fetch posts for this category
+const posts = category
+  ? normalizeBlogPosts(await getPosts({ per_page: "100", categories: String(category.id), _embed: "true" }))
+  : [];
+
+const categoryName = category ? decodeHtmlEntities(category.name) : "Category Not Found";
+const categoryDescription = category?.description
+  ? decodeHtmlEntities(category.description)
+  : `Browse all ${categoryName} articles from the EventHex blog.`;
+
+const title = `${categoryName} | EventHex Blog`;
+const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
+const canonicalUrl = new URL(`/blog/category/${slug}/`, siteUrl).toString();
+
+const collectionJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  description: categoryDescription,
+  url: canonicalUrl,
+  isPartOf: { "@type": "WebSite", "@id": `${siteUrl}#website` },
+});
+---
+
+<MarketingLayout
+  title={title}
+  description={categoryDescription}
+  canonical={canonicalUrl}
+  footerCtaTitle="Ready to turn these insights into action?"
+  footerCtaButtonText="Book a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={collectionJsonLd} />
+  </Fragment>
+
+  {category ? (
+    <EditorialIndexPage
+      kind="blog"
+      eyebrow="EventHex Blog"
+      pageTitle={categoryName}
+      pageDescription={categoryDescription}
+      items={posts}
+    />
+  ) : (
+    <section style="text-align:center;padding:160px 20px 100px;">
+      <h1>Category not found</h1>
+      <p>The category you're looking for doesn't exist.</p>
+      <a href="/blog/">Back to Blog</a>
+    </section>
+  )}
+</MarketingLayout>
