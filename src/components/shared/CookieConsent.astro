@@ -1,0 +1,291 @@
+---
+/**
+ * Cookie Consent Banner with Google Consent Mode v2
+ * Compact bottom-right card. Consent defaults are set inline before GTM.
+ * Stores preference in localStorage key "eh_cookie_consent".
+ * Values: "granted" | "denied"
+ */
+---
+
+<div
+  id="cookie-consent-banner"
+  class="cc"
+  role="dialog"
+  aria-label="Cookie consent"
+  style="display:none"
+>
+  <div class="cc__header">
+    <svg class="cc__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="8" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="11" r="1" fill="currentColor"/><circle cx="10" cy="15" r="1" fill="currentColor"/><circle cx="14" cy="7" r="1" fill="currentColor"/></svg>
+    <span class="cc__title">Cookie Consent</span>
+  </div>
+  <p class="cc__text">
+    We use cookies to enhance your experience. <a href="/cookie-policy/" class="cc__link">Learn more</a>.
+  </p>
+  <button id="cookie-accept" class="cc__btn cc__btn--accept" type="button">Accept All</button>
+  <div class="cc__row">
+    <button id="cookie-reject" class="cc__btn cc__btn--secondary" type="button">Reject</button>
+    <button id="cookie-settings" class="cc__btn cc__btn--secondary" type="button">Settings</button>
+  </div>
+
+  <!-- Granular settings panel (hidden by default) -->
+  <div id="cookie-settings-panel" class="cc__panel" style="display:none">
+    <label class="cc__toggle">
+      <span>Analytics</span>
+      <input type="checkbox" id="cc-analytics" checked />
+      <span class="cc__slider"></span>
+    </label>
+    <label class="cc__toggle">
+      <span>Marketing</span>
+      <input type="checkbox" id="cc-marketing" />
+      <span class="cc__slider"></span>
+    </label>
+    <button id="cookie-save" class="cc__btn cc__btn--accept cc__btn--sm" type="button">Save Preferences</button>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'eh_cookie_consent';
+    var banner = document.getElementById('cookie-consent-banner');
+    var panel = document.getElementById('cookie-settings-panel');
+    var saved = null;
+    try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+
+    function updateConsent(analytics, marketing) {
+      var aState = analytics ? 'granted' : 'denied';
+      var mState = marketing ? 'granted' : 'denied';
+      if (typeof gtag === 'function') {
+        gtag('consent', 'update', {
+          'analytics_storage': aState,
+          'ad_storage': mState,
+          'ad_user_data': mState,
+          'ad_personalization': mState
+        });
+      }
+    }
+
+    function saveAndHide(choice) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(choice)); } catch (e) {}
+      updateConsent(choice.analytics, choice.marketing);
+      if (banner) banner.style.display = 'none';
+    }
+
+    // Returning visitor — apply saved choice silently
+    if (saved) {
+      try {
+        var parsed = JSON.parse(saved);
+        updateConsent(parsed.analytics, parsed.marketing);
+      } catch (e) {
+        // Legacy string value
+        updateConsent(saved === 'granted', saved === 'granted');
+      }
+      return;
+    }
+
+    // New visitor — show banner
+    if (banner) banner.style.display = 'flex';
+
+    var acceptBtn = document.getElementById('cookie-accept');
+    var rejectBtn = document.getElementById('cookie-reject');
+    var settingsBtn = document.getElementById('cookie-settings');
+    var saveBtn = document.getElementById('cookie-save');
+
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', function () {
+        saveAndHide({ analytics: true, marketing: true });
+      });
+    }
+    if (rejectBtn) {
+      rejectBtn.addEventListener('click', function () {
+        saveAndHide({ analytics: false, marketing: false });
+      });
+    }
+    if (settingsBtn && panel) {
+      settingsBtn.addEventListener('click', function () {
+        panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+      });
+    }
+    if (saveBtn) {
+      saveBtn.addEventListener('click', function () {
+        var a = document.getElementById('cc-analytics');
+        var m = document.getElementById('cc-marketing');
+        saveAndHide({
+          analytics: a ? a.checked : false,
+          marketing: m ? m.checked : false
+        });
+      });
+    }
+  })();
+</script>
+
+<style>
+  .cc {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 9999;
+    width: 340px;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.06);
+    padding: 1.25rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+    animation: ccSlideUp 0.3s ease-out;
+  }
+
+  @keyframes ccSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .cc__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .cc__icon {
+    color: var(--brand-blue, #375DFB);
+    flex-shrink: 0;
+  }
+
+  .cc__title {
+    font-family: var(--font-heading, 'Manrope', system-ui, sans-serif);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--heading-dark, #22272F);
+  }
+
+  .cc__text {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--body-gray, #525866);
+    margin: 0;
+  }
+
+  .cc__link {
+    color: var(--brand-blue, #375DFB);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .cc__link:hover {
+    text-decoration: underline;
+  }
+
+  .cc__btn {
+    display: block;
+    width: 100%;
+    padding: 0.55rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    transition: background 0.15s, transform 0.1s;
+    text-align: center;
+  }
+
+  .cc__btn:active {
+    transform: scale(0.97);
+  }
+
+  .cc__btn--accept {
+    background: var(--brand-blue, #375DFB);
+    color: #fff;
+  }
+
+  .cc__btn--accept:hover {
+    background: var(--brand-blue-hover, #1C46D4);
+  }
+
+  .cc__btn--secondary {
+    background: #fff;
+    color: var(--heading-dark, #22272F);
+    border: 1px solid var(--surface-card-border, #E8ECF2);
+  }
+
+  .cc__btn--secondary:hover {
+    background: var(--surface-light, #F5F8FF);
+  }
+
+  .cc__btn--sm {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .cc__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  /* Settings panel */
+  .cc__panel {
+    flex-direction: column;
+    gap: 0.625rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--surface-card-border, #E8ECF2);
+  }
+
+  .cc__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8125rem;
+    color: var(--body-gray, #525866);
+    cursor: pointer;
+  }
+
+  .cc__toggle input {
+    position: relative;
+    width: 36px;
+    height: 20px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--surface-tab-bg, #F0F2F5);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+
+  .cc__toggle input::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  .cc__toggle input:checked {
+    background: var(--brand-blue, #375DFB);
+  }
+
+  .cc__toggle input:checked::after {
+    transform: translateX(16px);
+  }
+
+  .cc__slider {
+    display: none;
+  }
+
+  @media (max-width: 400px) {
+    .cc {
+      bottom: 0;
+      right: 0;
+      left: 0;
+      width: 100%;
+      border-radius: 0.75rem 0.75rem 0 0;
+    }
+  }
+</style>
