@@ -16,12 +16,14 @@ const recentPosts = article ? await getPosts({ per_page: "4" }) : [];
 const relatedItems = article
   ? normalizeBlogPosts(recentPosts.filter((candidate) => candidate.id !== article.id)).slice(0, 3)
   : [];
-const title = article ? `${article.title} | EventHex Blog` : "Article not found | EventHex";
-const description = article?.description ?? "The requested EventHex blog article could not be found.";
+const title = article
+  ? (article.seoTitle || `${article.title} | EventHex Blog`)
+  : "Article not found | EventHex";
+const description = article?.seoDescription || article?.description || "The requested EventHex blog article could not be found.";
 const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
 // Canonical uses /blog/{slug}/ — old root-level /{slug}/ URLs 301-redirect here via middleware
 const canonicalUrl = article ? new URL(`/blog/${article.slug}/`, siteUrl).toString() : new URL("/blog/", siteUrl).toString();
-const ogImage = article?.image?.src ?? "";
+const ogImage = article?.seoOgImage || (article?.image?.src ?? "");
 const publishedTime = post?.date ?? "";
 const modifiedTime = post?.modified ?? "";
 
@@ -30,7 +32,7 @@ const jsonLd = article
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: article.title,
-      description: article.description,
+      description: article.seoDescription || article.description,
       image: article.image?.src,
       datePublished: article.date,
       ...(post?.modified && { dateModified: post.modified }),
@@ -45,6 +47,21 @@ const jsonLd = article
         "@type": "WebPage",
         "@id": canonicalUrl,
       },
+    })
+  : null;
+
+const faqJsonLd = article && article.faqs.length > 0
+  ? JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: article.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
     })
   : null;
 ---
@@ -63,6 +80,9 @@ const jsonLd = article
 >
   {jsonLd && (
     <script type="application/ld+json" set:html={jsonLd} slot="head" />
+  )}
+  {faqJsonLd && (
+    <script type="application/ld+json" set:html={faqJsonLd} slot="head" />
   )}
   <EditorialArticlePage
     item={article}

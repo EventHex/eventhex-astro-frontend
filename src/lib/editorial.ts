@@ -1,4 +1,4 @@
-import type { WPBaseEntry, WPNews, WPPost } from "./wordpress";
+import type { WPBaseEntry, WPFaqItem, WPNews, WPPost } from "./wordpress";
 import { rewriteContentUrls } from "./wordpress";
 
 export type EditorialKind = "blog" | "news";
@@ -32,6 +32,10 @@ export interface EditorialEntry {
   image: EditorialImage | null;
   readingTime: number;
   headings: EditorialHeading[];
+  seoTitle: string;
+  seoDescription: string;
+  seoOgImage: string;
+  faqs: WPFaqItem[];
 }
 
 const HTML_ENTITY_MAP: Record<string, string> = {
@@ -195,6 +199,10 @@ function createEntry(entry: WPBaseEntry, kind: EditorialKind, fallbackCategory: 
     image: getFeaturedImage(entry, title),
     readingTime: Math.max(1, Math.ceil(wordCount / 220)),
     headings,
+    seoTitle: entry.seo?.title || "",
+    seoDescription: entry.seo?.description || "",
+    seoOgImage: entry.seo?.ogImage || "",
+    faqs: entry.seo?.faqs ?? [],
   };
 }
 

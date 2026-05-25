@@ -16,11 +16,13 @@ const recentNews = article ? await getNews({ per_page: "4" }) : [];
 const relatedItems = article
   ? normalizeNewsItems(recentNews.filter((candidate) => candidate.id !== article.id)).slice(0, 3)
   : [];
-const title = article ? `${article.title} | EventHex News` : "Article not found | EventHex";
-const description = article?.description ?? "The requested EventHex news article could not be found.";
+const title = article
+  ? (article.seoTitle || `${article.title} | EventHex News`)
+  : "Article not found | EventHex";
+const description = article?.seoDescription || article?.description || "The requested EventHex news article could not be found.";
 const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
 const canonicalUrl = article ? new URL(article.href, siteUrl).toString() : new URL("/news/", siteUrl).toString();
-const ogImage = article?.image?.src ?? "";
+const ogImage = article?.seoOgImage || (article?.image?.src ?? "");
 const publishedTime = newsItem?.date ?? "";
 const modifiedTime = newsItem?.modified ?? "";
 
@@ -29,7 +31,7 @@ const jsonLd = article
       "@context": "https://schema.org",
       "@type": "NewsArticle",
       headline: article.title,
-      description: article.description,
+      description: article.seoDescription || article.description,
       image: article.image?.src,
       datePublished: article.date,
       ...(newsItem?.modified && { dateModified: newsItem.modified }),
@@ -44,6 +46,21 @@ const jsonLd = article
         "@type": "WebPage",
         "@id": canonicalUrl,
       },
+    })
+  : null;
+
+const faqJsonLd = article && article.faqs.length > 0
+  ? JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: article.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
     })
   : null;
 ---
@@ -62,6 +79,9 @@ const jsonLd = article
 >
   {jsonLd && (
     <script type="application/ld+json" set:html={jsonLd} slot="head" />
+  )}
+  {faqJsonLd && (
+    <script type="application/ld+json" set:html={faqJsonLd} slot="head" />
   )}
   <EditorialArticlePage
     item={article}

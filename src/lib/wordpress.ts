@@ -43,6 +43,21 @@ export interface WPEmbedded {
   "wp:term"?: WPTermRecord[][];
 }
 
+export interface WPFaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface WPSeoData {
+  title: string;
+  description: string;
+  focusKeyword: string;
+  canonical: string;
+  ogImage: string;
+  twitterCard: string;
+  faqs: WPFaqItem[];
+}
+
 export interface WPBaseEntry {
   id: number;
   date: string;
@@ -56,6 +71,7 @@ export interface WPBaseEntry {
   author: number;
   featured_media: number;
   _embedded?: WPEmbedded;
+  seo?: WPSeoData;
 }
 
 export interface WPPost extends WPBaseEntry {
