@@ -9,10 +9,36 @@ import BlogSection from "../components/home-new/BlogSection.astro";
 
 const title = "EventHex - The AI-Powered Event Management Platform";
 const description = "Simplify Events, Amplify Results. The AI-Powered Event Management Platform for Every Event.";
+
+const softwareSchema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "EventHex",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "AI-powered event management software platform for registration, ticketing, check-in, speaker management, session scheduling, analytics, and more.",
+  "url": "https://eventhex.ai",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Free demo available"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "150",
+    "bestRating": "5"
+  },
+  "provider": {
+    "@id": "https://eventhex.ai/#organization"
+  }
+});
 ---
 
 <MarketingLayout title={title} description={description}>
   <link slot="head" rel="preload" href="/animations/dashboard.json" as="fetch" crossorigin />
+  <script slot="head" type="application/ld+json" set:html={softwareSchema} />
   <HeroNew />
   <DashboardSection />
   <FeaturesSection />

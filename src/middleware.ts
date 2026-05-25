@@ -27,6 +27,19 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     return redirect301("/sitemap-index.xml");
   }
 
+  // Old blog URL slug change: 2025 edition → 2026 edition (7,400+ impressions in GSC)
+  if (path === "/blog/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/") {
+    return redirect301("/blog/25-best-event-management-software-tools-2026-edition/");
+  }
+
+  // Orphan pages that no longer exist → redirect to relevant content
+  if (path === "/ai-event-tech/") {
+    return redirect301("/ai-event-copilot/");
+  }
+  if (path === "/12-mistakes-first-time-event-organizers-make-and-how-to-avoid-them/") {
+    return redirect301("/blog/");
+  }
+
   // Old WordPress /feature/{slug}/ → /{slug}/
   if (path.startsWith("/feature/")) {
     const featureSlug = path.replace(/^\/feature\//, "").replace(/\/$/, "");

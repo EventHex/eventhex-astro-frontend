@@ -14,6 +14,13 @@ const STATIC_PAGES = [
   { path: "/partnership/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
   { path: "/blog/", changefreq: "daily", priority: "0.8", lastmod: "2026-04-13" },
   { path: "/news/", changefreq: "weekly", priority: "0.7", lastmod: "2026-04-13" },
+  // Blog category pages
+  { path: "/blog/category/product-updates/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
+  { path: "/blog/category/event-planning-strategy/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
+  { path: "/blog/category/event-technology-ai/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
+  { path: "/blog/category/event-marketing/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
+  { path: "/blog/category/attendee-engagement/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
+  { path: "/blog/category/comparisons-reviews/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
   // Legal pages
   { path: "/privacy-policy/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
   { path: "/terms-of-service/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
