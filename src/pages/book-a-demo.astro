@@ -363,6 +363,13 @@ const canonical = "https://eventhex.ai/book-a-demo/";
 
 
 
+          <!-- Hidden Attribution Fields -->
+          <input type="hidden" name="text-2" id="attr-ip" />
+          <input type="hidden" name="select-2" id="attr-ua" />
+          <input type="hidden" name="select-3" id="attr-referrer" />
+          <input type="hidden" name="select-5" id="attr-landing" />
+          <input type="hidden" name="textarea-1" id="attr-notes" />
+
           <!-- Honeypot -->
           <div style="position:absolute;left:-9999px" aria-hidden="true">
             <input type="text" name="ehf_hp_field" tabindex="-1" autocomplete="off" />
@@ -1116,6 +1123,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
   (async function detectCountry() {
     try {
       let cc = '';
+      let ip = '';
 
       // Try Cloudflare trace first (fastest, works on CF-hosted sites)
       try {
@@ -1123,6 +1131,8 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         const cfText = await cfRes.text();
         const match = cfText.match(/loc=([A-Z]{2})/);
         if (match) cc = match[1];
+        const ipMatch = cfText.match(/ip=([^\s]+)/);
+        if (ipMatch) ip = ipMatch[1];
       } catch { /* fall through */ }
 
       // Fallback to ipwho.is
@@ -1130,6 +1140,11 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         const res = await fetch('https://ipwho.is/', { signal: AbortSignal.timeout(3000) });
         const geo = await res.json();
         if (geo.success && geo.country_code) cc = geo.country_code;
+        if (geo.success && geo.ip) ip = geo.ip;
+      }
+
+      if (ip && ipField) {
+        ipField.value = ip;
       }
 
       if (!cc) return;
@@ -1151,6 +1166,43 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       // Silently fail — user can pick manually
     }
   })();
+
+  // Populate hidden attribution fields
+  const ipField = document.getElementById('attr-ip') as HTMLInputElement;
+  const uaField = document.getElementById('attr-ua') as HTMLInputElement;
+  const refField = document.getElementById('attr-referrer') as HTMLInputElement;
+  const landField = document.getElementById('attr-landing') as HTMLInputElement;
+  const notesField = document.getElementById('attr-notes') as HTMLInputElement;
+
+  if (uaField) {
+    uaField.value = navigator.userAgent || 'Unknown';
+  }
+  if (refField) {
+    refField.value = document.referrer || 'Direct / None';
+  }
+  if (landField) {
+    landField.value = window.location.href;
+  }
+  
+  // Capture Microsoft Clarity Session Link
+  if (notesField) {
+    let clarityAttempts = 0;
+    const captureClarity = () => {
+      const clarity = (window as any).clarity;
+      if (clarity && typeof clarity === 'function') {
+        const sid = (window as any).clarity("sessionid");
+        if (sid) {
+          notesField.value = `Clarity Shareable Link: https://clarity.microsoft.com/shared/${sid}`;
+          return;
+        }
+      }
+      clarityAttempts++;
+      if (clarityAttempts < 15) {
+        setTimeout(captureClarity, 1000);
+      }
+    };
+    setTimeout(captureClarity, 1000);
+  }
 
   // Set min date for demo datetime picker to tomorrow at 9:00 AM local
   const datetimeInput = document.getElementById('demo-datetime') as HTMLInputElement;
