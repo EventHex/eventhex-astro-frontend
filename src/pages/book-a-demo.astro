@@ -311,26 +311,25 @@ const canonical = "https://eventhex.ai/book-a-demo/";
               </select>
           </div>
 
-          <div class="bd-form__row">
-            <div class="bd-form__field">
-              <input type="date" id="demo-date" class="bd-form__input" required style="padding-top: 16px; padding-bottom: 4px;" />
-              <span class="bd-form__hint">Preferred Date *</span>
-            </div>
-            <div class="bd-form__field">
-              <select id="demo-time" class="bd-form__input bd-form__select" required style="padding-top: 16px; padding-bottom: 4px;">
-                <option value="" disabled selected>Preferred Time *</option>
-                <option value="09:00 AM">09:00 AM</option>
-                <option value="10:00 AM">10:00 AM</option>
-                <option value="11:00 AM">11:00 AM</option>
-                <option value="12:00 PM">12:00 PM</option>
-                <option value="01:00 PM">01:00 PM</option>
-                <option value="02:00 PM">02:00 PM</option>
-                <option value="03:00 PM">03:00 PM</option>
-                <option value="04:00 PM">04:00 PM</option>
-                <option value="05:00 PM">05:00 PM</option>
-                <option value="06:00 PM">06:00 PM</option>
-              </select>
-            </div>
+          <!-- Flatpickr Assets -->
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+          <script is:inline src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+          <style is:global>
+            .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.prevMonthDay.selected, .flatpickr-day.nextMonthDay.selected {
+              background: #375DFB !important;
+              border-color: #375DFB !important;
+            }
+            .flatpickr-time input:focus, .flatpickr-time select:focus {
+              background: #EFF1FF !important;
+            }
+            .flatpickr-months .flatpickr-month {
+              color: #22272F !important;
+            }
+          </style>
+
+          <div class="bd-form__field">
+            <input type="text" name="date-1" id="demo-datetime" class="bd-form__input" placeholder="Preferred Demo Date & Time *" required readonly style="background: #FFFFFF;" />
+            <span class="bd-form__hint">Preferred Demo Date & Time *</span>
           </div>
 
 
@@ -1394,14 +1393,24 @@ const canonical = "https://eventhex.ai/book-a-demo/";
     updateLabel();
   }
 
-  // Set min date for demo date picker to tomorrow
-  const dateInput = document.getElementById('demo-date') as HTMLInputElement;
-  if (dateInput) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    dateInput.min = `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}`;
-  }
+  // Initialize Flatpickr on #demo-datetime
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  
+  const initFlatpickr = () => {
+    if (typeof (window as any).flatpickr === 'function') {
+      (window as any).flatpickr("#demo-datetime", {
+        enableTime: true,
+        dateFormat: "l, F j, Y \\at h:i K",
+        minDate: tomorrow,
+        minuteIncrement: 30,
+        disableMobile: "true"
+      });
+    } else {
+      setTimeout(initFlatpickr, 100);
+    }
+  };
+  initFlatpickr();
 
   /* ── Form submission ─────────────────────────── */
   document.getElementById('ehf-demo-form')?.addEventListener('submit', async (e) => {
@@ -1421,28 +1430,6 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         data[key].push(val as string);
       } else {
         data[key] = val as string;
-      }
-    }
-
-    // Gather date and time from separate custom inputs
-    const dateVal = (document.getElementById('demo-date') as HTMLInputElement)?.value;
-    const timeVal = (document.getElementById('demo-time') as HTMLSelectElement)?.value;
-    if (dateVal && timeVal) {
-      try {
-        const dt = new Date(dateVal);
-        if (!isNaN(dt.getTime())) {
-          const formattedDate = dt.toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-          });
-          data['date-1'] = `${formattedDate} at ${timeVal}`;
-        } else {
-          data['date-1'] = `${dateVal} at ${timeVal}`;
-        }
-      } catch {
-        data['date-1'] = `${dateVal} at ${timeVal}`;
       }
     }
     const cb = form.querySelector('[name="checkbox-1"]') as HTMLInputElement;
