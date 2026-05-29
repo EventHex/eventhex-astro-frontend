@@ -303,15 +303,9 @@ const canonical = "https://eventhex.ai/book-a-demo/";
               </select>
           </div>
 
-          <div class="bd-form__row">
-            <div class="bd-form__field">
-              <input type="date" name="date-1" class="bd-form__input" id="demo-date" />
-              <span class="bd-form__hint">Preferred Demo Date</span>
-            </div>
-            <div class="bd-form__field">
-              <input type="time" name="time-1" class="bd-form__input" id="demo-time" />
-              <span class="bd-form__hint">Preferred Demo Time</span>
-            </div>
+          <div class="bd-form__field">
+            <input type="datetime-local" name="date-1" class="bd-form__input" id="demo-datetime" required />
+            <span class="bd-form__hint">Preferred Demo Date & Time *</span>
           </div>
 
 
@@ -936,32 +930,50 @@ const canonical = "https://eventhex.ai/book-a-demo/";
   }
   .bd-checkbox-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  @media (min-width: 768px) {
+    .bd-checkbox-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
   .bd-checkbox-card {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+    padding: 10px 8px;
     border: 1px solid #E2E4E9;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     background: #FFFFFF;
     transition: all 0.2s ease;
     font-family: "Inter", var(--font-body);
-    font-size: 14px;
+    font-size: 12.5px;
+    line-height: 1.25;
     color: #475467;
+    user-select: none;
+    box-sizing: border-box;
   }
   .bd-checkbox-card:hover {
     border-color: #375DFB;
     background: #F8F9FA;
   }
   .bd-checkbox-card input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    accent-color: #375DFB;
-    cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+  .bd-checkbox-card:has(input:checked) {
+    background: #EFF1FF;
+    border-color: #375DFB;
+    color: #1C46D4;
+    font-weight: 600;
+    box-shadow: 0 1px 4px rgba(55, 93, 251, 0.1);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1087,12 +1099,15 @@ const canonical = "https://eventhex.ai/book-a-demo/";
     }
   })();
 
-  // Set min date for demo date picker to tomorrow
-  const dateInput = document.getElementById('demo-date') as HTMLInputElement;
-  if (dateInput) {
+  // Set min date for demo datetime picker to tomorrow at 9:00 AM local
+  const datetimeInput = document.getElementById('demo-datetime') as HTMLInputElement;
+  if (datetimeInput) {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    dateInput.min = tomorrow.toISOString().split('T')[0];
+    tomorrow.setHours(9, 0, 0, 0);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const localISO = `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth() + 1)}-${pad(tomorrow.getDate())}T${pad(tomorrow.getHours())}:${pad(tomorrow.getMinutes())}`;
+    datetimeInput.min = localISO.slice(0, 16);
   }
 
   /* ── Form submission ─────────────────────────── */
@@ -1113,6 +1128,27 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         data[key].push(val as string);
       } else {
         data[key] = val as string;
+      }
+    }
+
+    // Format datetime-local to a human-readable string for date-1
+    if (data['date-1']) {
+      try {
+        const dt = new Date(data['date-1']);
+        if (!isNaN(dt.getTime())) {
+          const options: Intl.DateTimeFormatOptions = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true
+          };
+          data['date-1'] = dt.toLocaleString('en-US', options);
+        }
+      } catch {
+        // Fallback to original raw value
       }
     }
     const cb = form.querySelector('[name="checkbox-1"]') as HTMLInputElement;
