@@ -1315,6 +1315,22 @@ const canonical = "https://eventhex.ai/book-a-demo/";
   if (notesField) {
     let clarityAttempts = 0;
     const captureClarity = () => {
+      // 1. Try Clarity's official asynchronous callback API first (most accurate)
+      const clarity = (window as any).clarity;
+      if (clarity && typeof clarity === 'function') {
+        try {
+          clarity("sessionid", (sessionId: string, userId: string) => {
+            if (sessionId && userId) {
+              notesField.value = `Clarity Player Link: https://clarity.microsoft.com/player/wvcezfdsb6/${userId}/${sessionId}`;
+            }
+          });
+          if (notesField.value) return; // Exit if successfully captured
+        } catch {
+          // Silently fail and fallback to cookie parsing
+        }
+      }
+
+      // 2. Fallback to parsing cookies directly (reliable backup)
       const getCookie = (name: string) => {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
