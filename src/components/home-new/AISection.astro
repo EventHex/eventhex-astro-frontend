@@ -7,7 +7,7 @@
 //     f3d20c0: heading — "Harness the power of AI..." Inter 18px/400, white
 //     55f9ca2: animated-headline — 48px/40px/30px, Manrope 400, highlight #AFA3FF
 //   bb3f883: stacking_cards — sticky top 20px, gap 60px, content width 45%
-//   fde1553: Rifath testimonial section
+//   fde1553: testimonial carousel (Amy + Rifath)
 
 const aiCards = [
   {
@@ -34,6 +34,36 @@ const aiCards = [
     title: "AI Smart-Connect Networking",
     desc: "AI-driven networking system that intelligently connects attendees and personalizes networking opportunities through the mobile app",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/smart-connect.png",
+  },
+];
+
+const testimonials = [
+  {
+    quote: "\"We approached EventHex knowing teething problems might arise with a newer platform, but after a successful two-event trial, we're eager to sign a two-year partnership. The standout feature isn't just the tech—it's the amazing support team, with rapid problem-solving, intuitive user experience, and a growth mindset that treats clients as true partners. I happily recommend EventHex.\"",
+    logo: "https://cms.eventhex.ai/wp-content/uploads/2026/03/wellbeing.svg",
+    logoAlt: "Wellbeing at Work UK logo",
+    logoInvert: true,
+    avatar: "https://cms.eventhex.ai/wp-content/uploads/2026/03/Amy.png",
+    name: "Amy Carey",
+    role: "Wellbeing at work UK",
+  },
+  {
+    quote: "\"Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!\"",
+    logo: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Group-2233.png",
+    logoAlt: "SOLID Business Club logo",
+    logoInvert: false,
+    avatar: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Rifath-Rahman.jpeg",
+    name: "Rifath Rahman",
+    role: "President, SOLID Business Club",
+  },
+  {
+    quote: "“EventHex.ai revolutionized the way we managed the Gulf Indian Trade Expo. Its efficiency allowed us to focus on creating a world-class experience for our participants and exhibitors. We highly recommend EventHex.ai to anyone looking for reliable and professional event management solutions!”",
+    logo: "https://cms.eventhex.ai/wp-content/uploads/2025/01/image-503170913.svg",
+    logoAlt: "Business Kerala logo",
+    logoInvert: true,
+    avatar: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Noushad-EP.jpeg",
+    name: "Noushad EP",
+    role: "Founder &amp; Chairman, Business Kerala",
   },
 ];
 ---
@@ -68,22 +98,38 @@ const aiCards = [
       ))}
     </div>
 
-    <!-- Rifath testimonial (fde1553) -->
-    <div class="testimonial-rifath">
-      <p class="rifath-quote rifath-quote--desktop animate-on-scroll" data-animation="fadeInLeft">
-        "Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"
-      </p>
-      <div class="rifath-quote rifath-quote--mobile">
-        <div class="side-border"></div>
-        <p>"Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX design capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!"</p>
+    <!-- Testimonial carousel (Amy + Rifath) -->
+    <div class="testimonial-carousel" data-carousel>
+      <div class="carousel-viewport">
+        <div class="carousel-track" data-track>
+          {testimonials.map((t) => (
+            <div class="carousel-slide">
+              <p class="t-quote t-quote--desktop">{t.quote}</p>
+              <div class="t-quote t-quote--mobile">
+                <div class="side-border"></div>
+                <p>{t.quote}</p>
+              </div>
+              <div class="testimonial-author">
+                <img src={t.logo} alt={t.logoAlt} class:list={["author-logo", { "author-logo--invert": t.logoInvert }]} loading="lazy" />
+                <img src={t.avatar} alt={t.name} class="author-avatar" loading="lazy" />
+                <div class="author-info">
+                  <h4 class="author-name">{t.name}</h4>
+                  <p class="author-role" set:html={t.role}></p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-
-      <div class="testimonial-author">
-        <img src="https://cms.eventhex.ai/wp-content/uploads/2025/01/Group-2233.png" alt="SOLID Business Club logo" class="author-logo" loading="lazy" />
-        <img src="https://cms.eventhex.ai/wp-content/uploads/2025/01/Rifath-Rahman.jpeg" alt="Rifath Rahman" class="author-avatar" loading="lazy" />
-        <div class="author-info">
-          <h4 class="author-name">Rifath Rahman</h4>
-          <p class="author-role">President, SOLID Business Club</p>
+      <div class="carousel-controls">
+        <button class="carousel-toggle" data-toggle aria-label="Pause testimonials" aria-pressed="false">
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+        <div class="carousel-dots" data-dots>
+          {testimonials.map((_, i) => (
+            <button class="carousel-dot" data-dot={i} aria-label={`Show testimonial ${i + 1}`}></button>
+          ))}
         </div>
       </div>
     </div>
@@ -215,12 +261,25 @@ const aiCards = [
     object-fit: contain;
   }
 
-  /* Rifath testimonial */
-  .testimonial-rifath {
+  /* Testimonial carousel */
+  .testimonial-carousel {
     width: 100%;
-    padding: 60px 0 50px;
+    padding: 60px 0 30px;
   }
-  .rifath-quote {
+  .carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    will-change: transform;
+  }
+  .carousel-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+  .t-quote {
     font-family: var(--font-body);
     font-size: 30px;
     font-weight: 300;
@@ -231,10 +290,58 @@ const aiCards = [
     width: 75%;
     margin: 0 auto;
   }
-  .rifath-quote--desktop { display: block; }
-  .rifath-quote--mobile { display: none; flex-direction: row; gap: 16px; width: 100%; padding: 0 20px; }
-  .rifath-quote--mobile p { font-family: var(--font-body); font-size: 18px; font-weight: 300; color: #fff; line-height: 1.5; margin: 0; }
+  .t-quote--desktop { display: block; }
+  .t-quote--mobile { display: none; flex-direction: row; gap: 16px; width: 100%; padding: 0 20px; }
+  .t-quote--mobile p { font-family: var(--font-body); font-size: 18px; font-weight: 300; color: #fff; line-height: 1.5; margin: 0; }
   .side-border { width: 5px; background: #fff; align-self: stretch; border-radius: 3px; flex-shrink: 0; }
+
+  .carousel-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding-top: 36px;
+  }
+  .carousel-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 50%;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .carousel-toggle:hover { border-color: var(--accent-purple, #AFA3FF); }
+  .carousel-toggle svg { width: 16px; height: 16px; fill: currentColor; }
+  .carousel-toggle .icon-play { display: none; }
+  .carousel-toggle.is-paused .icon-pause { display: none; }
+  .carousel-toggle.is-paused .icon-play { display: block; }
+  .carousel-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .carousel-dot {
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    cursor: pointer;
+    transition: background 0.3s, width 0.3s;
+  }
+  .carousel-dot.is-active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--accent-purple, #AFA3FF);
+  }
 
   .testimonial-author {
     display: flex;
@@ -243,6 +350,7 @@ const aiCards = [
     padding-top: 50px;
   }
   .author-logo { height: 40px; width: auto; margin-right: 40px; }
+  .author-logo--invert { filter: brightness(0) invert(1); }
   .author-avatar { width: 50px; height: 50px; border-radius: 15px; object-fit: cover; }
   .author-info { padding-left: 30px; }
   .author-name { font-family: var(--font-body); font-size: 22px; font-weight: 400; letter-spacing: -1px; color: #fff; margin: 0; }
@@ -259,8 +367,8 @@ const aiCards = [
     .card-title { font-size: 30px; }
     .card-desc { font-size: 16px; }
     .card-btn { font-size: 14px; }
-    .testimonial-rifath { padding: 40px 20px 10px; }
-    .rifath-quote { font-size: 28px; width: 85%; }
+    .testimonial-carousel { padding: 40px 20px 20px; }
+    .t-quote { font-size: 28px; width: 85%; }
   }
 
   /* Mobile */
@@ -274,10 +382,55 @@ const aiCards = [
     .card-title { font-size: 26px; }
     .card-desc { font-size: 15px; }
     .stacking-cards { padding-bottom: 40px; }
-    .rifath-quote--desktop { display: none; }
-    .rifath-quote--mobile { display: flex; }
-    .testimonial-rifath { padding: 20px 20px 0; }
+    .t-quote--desktop { display: none; }
+    .t-quote--mobile { display: flex; }
+    .testimonial-carousel { padding: 20px 20px 10px; }
     .testimonial-author { flex-wrap: wrap; gap: 16px; }
     .author-info { padding-left: 0; text-align: center; }
   }
 </style>
+
+<script>
+  const carousel = document.querySelector('[data-carousel]') as HTMLElement | null;
+  if (carousel) {
+    const track = carousel.querySelector('[data-track]') as HTMLElement | null;
+    const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    const toggle = carousel.querySelector('[data-toggle]') as HTMLButtonElement | null;
+    const count = dots.length;
+    let index = 0;
+    let timer = 0;
+    let paused = false; // user-controlled pause (sticky across hover)
+
+    const go = (i: number) => {
+      index = (i + count) % count;
+      if (track) track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === index));
+    };
+
+    const run = () => {
+      stop();
+      if (!paused && count > 1) timer = window.setInterval(() => go(index + 1), 4000);
+    };
+    const stop = () => {
+      if (timer) { window.clearInterval(timer); timer = 0; }
+    };
+
+    const setPaused = (state: boolean) => {
+      paused = state;
+      if (toggle) {
+        toggle.classList.toggle('is-paused', paused);
+        toggle.setAttribute('aria-pressed', String(paused));
+        toggle.setAttribute('aria-label', paused ? 'Play testimonials' : 'Pause testimonials');
+      }
+      run();
+    };
+
+    dots.forEach((dot, di) => dot.addEventListener('click', () => { go(di); run(); }));
+    toggle?.addEventListener('click', () => setPaused(!paused));
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', run);
+
+    go(0);
+    run();
+  }
+</script>
