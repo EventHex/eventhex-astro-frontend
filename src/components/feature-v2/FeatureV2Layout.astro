@@ -661,29 +661,30 @@ const layouts = ["a", "b", "c"];
   .fv2-bento__nav {
     display: flex;
     justify-content: center;
+    gap: 0;
     background: #F0F2F5;
     border-radius: 50px;
     padding: 4px;
-    margin: 0 auto 32px;
-    max-width: 520px;
-    gap: 4px;
+    width: fit-content;
+    margin: 0 auto 40px;
   }
   .fv2-bento__tab {
-    flex: 1;
-    padding: 10px 20px;
+    background: transparent;
     border: none;
     border-radius: 50px;
-    background: transparent;
+    padding: 10px 32px;
     font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #475467;
+    font-size: 15px;
+    font-weight: 500;
+    color: #4D5A6B;
     cursor: pointer;
-    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    transition: all 0.3s cubic-bezier(.4,0,.2,1);
+    white-space: nowrap;
   }
+  .fv2-bento__tab:hover { background: rgba(55,93,251,.08); }
   .fv2-bento__tab--active {
-    background: var(--brand-blue);
-    color: #fff;
+    background: var(--brand-blue) !important;
+    color: #fff !important;
     box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
   .fv2-bento__panel { display: none; }
@@ -718,7 +719,7 @@ const layouts = ["a", "b", "c"];
   @property --fv2-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .fv2-bento__card {
     position: relative;
-    background: #F5F8FF;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
     border: 1px solid #E8ECF2;
     border-radius: 20px;
     overflow: hidden;
@@ -776,8 +777,9 @@ const layouts = ["a", "b", "c"];
     flex: 0 0 42%; display: flex; align-items: flex-end; justify-content: center;
     padding: 8px 8px 0 0; overflow: hidden;
   }
-  .fv2-bento__card-img :global(svg) { width: 100%; height: auto; transition: transform 0.4s cubic-bezier(.4,0,.2,1); }
-  .fv2-bento__card:hover .fv2-bento__card-img :global(svg) { transform: translateY(-6px) scale(1.05); animation: fv2BentoFloat 2.2s ease-in-out infinite; }
+  .fv2-bento__card-img { background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%); }
+  .fv2-bento__card-img :global(svg) { width: 100%; height: auto; filter: drop-shadow(0 8px 16px rgba(31,52,128,.12)); transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease; }
+  .fv2-bento__card:hover .fv2-bento__card-img :global(svg) { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18)); animation: fv2BentoFloat 2.2s ease-in-out infinite; }
   @keyframes fv2BentoFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
 
   .fv2-bento__card-text { display: flex; flex-direction: column; gap: 6px; }
