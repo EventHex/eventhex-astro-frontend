@@ -1,118 +1,57 @@
 ---
+import { ewbbIllustrations as ill } from "./illustrations";
+
 const tabs = [
   {
     label: "Page Builder",
     hero: {
-      eyebrow: "Visual Editor",
       title: "Drag-and-drop page builder with pre-built event sections for every need",
       desc: "Our visual builder gives you agenda, speakers, registration, sponsors, venue sections — ready to customize with your brand and content.",
-      points: ["Intuitive drag & drop", "Pre-built event sections", "Real-time preview"],
       visual: "editor",
     },
     cards: [
-      {
-        eyebrow: "Templates",
-        title: "40+ Event Templates",
-        desc: "Conference, workshop, gala, expo, and hybrid event templates ready to customize.",
-        visual: "templates",
-      },
-      {
-        eyebrow: "Domains",
-        title: "Custom Domains",
-        desc: "Publish on your own domain or use eventhex.com subdomains with SSL.",
-        visual: "domains",
-      },
-      {
-        eyebrow: "Responsive",
-        title: "Mobile-First Design",
-        desc: "Every page looks perfect on desktop, tablet, and mobile automatically.",
-        visual: "responsive",
-      },
-      {
-        eyebrow: "Preview",
-        title: "Live Preview",
-        desc: "See changes in real-time before publishing to your event audience.",
-        visual: "preview",
-      },
+      { title: "40+ Event Templates", desc: "Conference, workshop, gala, expo, and hybrid event templates ready to customize.", visual: "templates" },
+      { title: "Custom Domains", desc: "Publish on your own domain or use eventhex.com subdomains with SSL.", visual: "domains" },
+      { title: "Mobile-First Design", desc: "Every page looks perfect on desktop, tablet, and mobile automatically.", visual: "responsive" },
+      { title: "Live Preview", desc: "See changes in real-time before publishing to your event audience.", visual: "preview" },
     ],
   },
   {
     label: "Event Sections",
     hero: {
-      eyebrow: "Content Blocks",
       title: "Pre-built sections for agenda, speakers, sponsors, and registration",
       desc: "Add rich content sections with a click — multi-track agendas, speaker profiles, tiered sponsors, and embedded ticket purchase.",
-      points: ["Multi-track agendas", "Speaker profile cards", "Inline registration"],
       visual: "sections",
     },
     cards: [
-      {
-        eyebrow: "Agenda",
-        title: "Multi-Track Agenda",
-        desc: "Session timelines with speaker details, room assignments, and track filtering.",
-        visual: "agenda",
-      },
-      {
-        eyebrow: "Speakers",
-        title: "Speaker Profiles",
-        desc: "Rich speaker cards with bios, photos, social links, and session assignments.",
-        visual: "speakers",
-      },
-      {
-        eyebrow: "Sponsors",
-        title: "Sponsor Showcase",
-        desc: "Tiered sponsor sections with logos, descriptions, and promotional CTAs.",
-        visual: "sponsors",
-      },
-      {
-        eyebrow: "Venue",
-        title: "Venue & Maps",
-        desc: "Interactive venue details with Google Maps integration and directions.",
-        visual: "venue",
-      },
+      { title: "Multi-Track Agenda", desc: "Session timelines with speaker details, room assignments, and track filtering.", visual: "agenda" },
+      { title: "Speaker Profiles", desc: "Rich speaker cards with bios, photos, social links, and session assignments.", visual: "speakers" },
+      { title: "Sponsor Showcase", desc: "Tiered sponsor sections with logos, descriptions, and promotional CTAs.", visual: "sponsors" },
+      { title: "Venue & Maps", desc: "Interactive venue details with Google Maps integration and directions.", visual: "venue" },
     ],
   },
   {
     label: "SEO & Analytics",
     hero: {
-      eyebrow: "Search Optimization",
       title: "Auto-optimized for search engines with structured data and analytics",
       desc: "Every page auto-generates meta tags, Open Graph, and structured data — with built-in Google Analytics and UTM tracking.",
-      points: ["Auto meta tags", "GA4 integration", "Core Web Vitals optimized"],
       visual: "seo",
     },
     cards: [
-      {
-        eyebrow: "Tracking",
-        title: "Google Analytics",
-        desc: "Built-in GA4 and Facebook Pixel tracking for registration attribution.",
-        visual: "analytics",
-      },
-      {
-        eyebrow: "Campaigns",
-        title: "UTM Tracking",
-        desc: "Automatic UTM parameter handling to track registration sources.",
-        visual: "utm",
-      },
-      {
-        eyebrow: "Speed",
-        title: "Performance Score",
-        desc: "Optimized for Core Web Vitals — fast loading and smooth experience.",
-        visual: "perf",
-      },
-      {
-        eyebrow: "Social",
-        title: "Social Previews",
-        desc: "Customizable Open Graph images for link sharing on social platforms.",
-        visual: "social",
-      },
+      { title: "Google Analytics", desc: "Built-in GA4 and Facebook Pixel tracking for registration attribution.", visual: "analytics" },
+      { title: "UTM Tracking", desc: "Automatic UTM parameter handling to track registration sources.", visual: "utm" },
+      { title: "Performance Score", desc: "Optimized for Core Web Vitals — fast loading and smooth experience.", visual: "perf" },
+      { title: "Social Previews", desc: "Customizable Open Graph images for link sharing on social platforms.", visual: "social" },
     ],
   },
 ];
+
+const ICON = '<svg class="ewbb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
+const layouts = ["a", "b", "c"];
 ---
 
 <section class="ewbb-section" id="ewb-bento">
-  <div class="ewbb-shell">
+  <div class="ewbb">
     <h2 class="ewbb-title">
       Drag & Drop <b>Website Builder</b>, Event <b>Sections</b> & SEO <b>Tools</b>
     </h2>
@@ -120,239 +59,36 @@ const tabs = [
       Build, customize, and optimize event websites with templates, registration widgets, and built-in SEO tools.
     </p>
 
-    <nav class="ewbb-nav" aria-label="Website builder workflows">
-      {tabs.map((tab, index) => (
-        <button
-          class={`ewbb-tab${index === 0 ? " ewbb-tab--active" : ""}`}
-          data-ewbb-tab={index}
-          aria-selected={index === 0 ? "true" : "false"}
-          type="button"
-        >
-          {tab.label}
-        </button>
+    <nav class="ewbb-nav">
+      {tabs.map((t, i) => (
+        <button class={`ewbb-tab ${i === 0 ? "ewbb-tab--active" : ""}`} data-ewbb-tab={String(i)}>{t.label}</button>
       ))}
     </nav>
 
-    {tabs.map((tab, tabIndex) => (
-      <div
-        class={`ewbb-panel${tabIndex === 0 ? " ewbb-panel--active" : ""}`}
-        data-ewbb-panel={tabIndex}
-      >
-        <div class="ewbb-grid">
-          <article class="ewbb-card ewbb-card--hero" style={`--card-delay:${0.04}s;`}>
-            <div class="ewbb-card__content">
-              <span class="ewbb-card__eyebrow">{tab.hero.eyebrow}</span>
-              <h3 class="ewbb-card__title">{tab.hero.title}</h3>
-              <p class="ewbb-card__desc">{tab.hero.desc}</p>
-
-              <ul class="ewbb-point-list">
-                {tab.hero.points.map((point) => <li>{point}</li>)}
-              </ul>
-            </div>
-
-            <div class={`ewbb-art ewbb-art--hero ewbb-art--${tab.hero.visual}`} aria-hidden="true">
-              {tab.hero.visual === "editor" && (
-                <Fragment>
-                  <div class="ewbb-canvas">
-                    <div class="ewbb-canvas__toolbar">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <div class="ewbb-canvas__sections">
-                      <div class="ewbb-canvas__block ewbb-canvas__block--header"></div>
-                      <div class="ewbb-canvas__block ewbb-canvas__block--body"></div>
-                      <div class="ewbb-canvas__block ewbb-canvas__block--footer"></div>
-                    </div>
-                  </div>
-                  <div class="ewbb-drag-handle">
-                    <span></span><span></span><span></span>
-                  </div>
-                  <div class="ewbb-mini-chip">Drag & Drop</div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "sections" && (
-                <Fragment>
-                  <div class="ewbb-section-stack">
-                    <div class="ewbb-section-block ewbb-section-block--agenda">
-                      <div class="ewbb-section-block__bar"></div>
-                      <div class="ewbb-section-block__rows"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="ewbb-section-block ewbb-section-block--speakers">
-                      <div class="ewbb-section-block__bar"></div>
-                      <div class="ewbb-section-block__avatars"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="ewbb-section-block ewbb-section-block--sponsors">
-                      <div class="ewbb-section-block__bar"></div>
-                      <div class="ewbb-section-block__logos"><span></span><span></span></div>
-                    </div>
-                  </div>
-                  <div class="ewbb-mini-chip">Content Blocks</div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "seo" && (
-                <Fragment>
-                  <div class="ewbb-search-result">
-                    <div class="ewbb-search-result__url"></div>
-                    <div class="ewbb-search-result__title"></div>
-                    <div class="ewbb-search-result__desc"><span></span><span></span></div>
-                    <div class="ewbb-search-result__tags">
-                      <span>meta</span><span>OG</span><span>JSON-LD</span>
-                    </div>
-                  </div>
-                  <div class="ewbb-ga-chip">
-                    <strong>GA4</strong>
-                    <span>connected</span>
-                  </div>
-                </Fragment>
-              )}
-            </div>
-          </article>
-
-          {tab.cards.map((card, cardIndex) => (
-            <article class="ewbb-card ewbb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
-              <div class="ewbb-card__content">
-                <span class="ewbb-card__eyebrow">{card.eyebrow}</span>
-                <h3 class="ewbb-card__title">{card.title}</h3>
-                <p class="ewbb-card__desc">{card.desc}</p>
+    {tabs.map((t, tabIdx) => (
+      <div class={`ewbb-panel ${tabIdx === 0 ? "ewbb-panel--active" : ""}`} data-ewbb-panel={String(tabIdx)}>
+        <div class="ewbb-grid" data-layout={layouts[tabIdx % 3]}>
+          <div class="ewbb-card ewbb-card--tall ewbb-pos-0" style="animation-delay:0s">
+            <div class="ewbb-card__inner">
+              <div class="ewbb-card__text">
+                <Fragment set:html={ICON} />
+                <h3 class="ewbb-card__title">{t.hero.title}</h3>
+                <p class="ewbb-card__desc">{t.hero.desc}</p>
               </div>
-
-              <div class={`ewbb-art ewbb-art--mini ewbb-art--${card.visual}`} aria-hidden="true">
-                {card.visual === "templates" && (
-                  <Fragment>
-                    <div class="ewbb-template-grid">
-                      <span></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="ewbb-mini-chip">40+ templates</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "domains" && (
-                  <Fragment>
-                    <div class="ewbb-address-bar">
-                      <span class="ewbb-address-bar__lock"></span>
-                      <span class="ewbb-address-bar__url"></span>
-                    </div>
-                    <div class="ewbb-mini-chip">SSL included</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "responsive" && (
-                  <Fragment>
-                    <div class="ewbb-devices">
-                      <div class="ewbb-device ewbb-device--desktop"></div>
-                      <div class="ewbb-device ewbb-device--mobile"></div>
-                    </div>
-                    <div class="ewbb-mini-chip">Auto-responsive</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "preview" && (
-                  <Fragment>
-                    <div class="ewbb-split-pane">
-                      <div class="ewbb-split-pane__editor">
-                        <span></span><span></span><span></span>
-                      </div>
-                      <div class="ewbb-split-pane__preview">
-                        <span></span><span></span>
-                      </div>
-                    </div>
-                    <div class="ewbb-mini-chip">Live preview</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "agenda" && (
-                  <Fragment>
-                    <div class="ewbb-track-timeline">
-                      <div class="ewbb-track"><span></span><span></span><span></span></div>
-                      <div class="ewbb-track"><span></span><span></span></div>
-                      <div class="ewbb-track"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="ewbb-mini-chip">3 tracks</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "speakers" && (
-                  <Fragment>
-                    <div class="ewbb-avatar-cards">
-                      <div class="ewbb-avatar-card"><span class="ewbb-avatar-circle"></span><span class="ewbb-avatar-name"></span></div>
-                      <div class="ewbb-avatar-card"><span class="ewbb-avatar-circle"></span><span class="ewbb-avatar-name"></span></div>
-                      <div class="ewbb-avatar-card"><span class="ewbb-avatar-circle"></span><span class="ewbb-avatar-name"></span></div>
-                    </div>
-                    <div class="ewbb-mini-chip">Speaker cards</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "sponsors" && (
-                  <Fragment>
-                    <div class="ewbb-tier-logos">
-                      <div class="ewbb-tier ewbb-tier--gold"><span></span></div>
-                      <div class="ewbb-tier ewbb-tier--silver"><span></span><span></span></div>
-                      <div class="ewbb-tier ewbb-tier--bronze"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="ewbb-mini-chip">Tiered sponsors</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "venue" && (
-                  <Fragment>
-                    <div class="ewbb-map-card">
-                      <div class="ewbb-map-pin"></div>
-                      <div class="ewbb-map-label"><span></span><span></span></div>
-                    </div>
-                    <div class="ewbb-mini-chip">Maps integrated</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "analytics" && (
-                  <Fragment>
-                    <div class="ewbb-bar-chart">
-                      <span style="--h:55%"></span>
-                      <span style="--h:80%"></span>
-                      <span style="--h:40%"></span>
-                      <span style="--h:90%"></span>
-                      <span style="--h:65%"></span>
-                    </div>
-                    <div class="ewbb-mini-chip">GA4 tracking</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "utm" && (
-                  <Fragment>
-                    <div class="ewbb-link-chain">
-                      <div class="ewbb-link-segment"></div>
-                      <div class="ewbb-link-tag">utm_source</div>
-                      <div class="ewbb-link-segment"></div>
-                      <div class="ewbb-link-tag">utm_medium</div>
-                    </div>
-                    <div class="ewbb-mini-chip">Auto UTM</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "perf" && (
-                  <Fragment>
-                    <div class="ewbb-gauge">
-                      <div class="ewbb-gauge__track"></div>
-                      <div class="ewbb-gauge__needle"></div>
-                      <div class="ewbb-gauge__value">98</div>
-                    </div>
-                    <div class="ewbb-mini-chip">Core Web Vitals</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "social" && (
-                  <Fragment>
-                    <div class="ewbb-og-card">
-                      <div class="ewbb-og-card__image"></div>
-                      <div class="ewbb-og-card__text">
-                        <span></span><span></span>
-                      </div>
-                    </div>
-                    <div class="ewbb-mini-chip">OG preview</div>
-                  </Fragment>
-                )}
+              <div class="ewbb-card__img" set:html={ill[t.hero.visual]} />
+            </div>
+          </div>
+          {t.cards.map((c, ci) => (
+            <div class={`ewbb-card ewbb-card--sm ewbb-pos-${ci + 1}`} style={`animation-delay:${((ci + 1) * 0.06).toFixed(2)}s`}>
+              <div class="ewbb-card__inner ewbb-card__inner--row">
+                <div class="ewbb-card__text">
+                  <Fragment set:html={ICON} />
+                  <h3 class="ewbb-card__title">{c.title}</h3>
+                  <p class="ewbb-card__desc">{c.desc}</p>
+                </div>
+                <div class="ewbb-card__img ewbb-card__img--sm" set:html={ill[c.visual]} />
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
@@ -360,29 +96,29 @@ const tabs = [
   </div>
 </section>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".ewbb-shell").forEach((root) => {
-      const tabs = Array.from(root.querySelectorAll(".ewbb-tab"));
-      const panels = Array.from(root.querySelectorAll(".ewbb-panel"));
+<script>
+  const ewbbTabs = Array.from(document.querySelectorAll('[data-ewbb-tab]'));
+  const ewbbPanels = Array.from(document.querySelectorAll('[data-ewbb-panel]'));
+  let ewbbActive = 0;
+  let ewbbInterval: ReturnType<typeof setInterval>;
 
-      const activate = (index) => {
-        tabs.forEach((tab, tabIndex) => {
-          const selected = tabIndex === index;
-          tab.classList.toggle("ewbb-tab--active", selected);
-          tab.setAttribute("aria-selected", selected ? "true" : "false");
-        });
-
-        panels.forEach((panel, panelIndex) => {
-          panel.classList.toggle("ewbb-panel--active", panelIndex === index);
-        });
-      };
-
-      tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activate(index));
-      });
-    });
-  });
+  function setEwbbTab(index: number) {
+    ewbbTabs.forEach((t) => t.classList.remove('ewbb-tab--active'));
+    ewbbPanels.forEach((p) => p.classList.remove('ewbb-panel--active'));
+    ewbbTabs[index]?.classList.add('ewbb-tab--active');
+    ewbbPanels[index]?.classList.add('ewbb-panel--active');
+    ewbbActive = index;
+  }
+  function startEwbb() {
+    ewbbInterval = setInterval(() => setEwbbTab((ewbbActive + 1) % ewbbTabs.length), 5000);
+  }
+  ewbbTabs.forEach((tab, i) => tab.addEventListener('click', () => { setEwbbTab(i); clearInterval(ewbbInterval); startEwbb(); }));
+  startEwbb();
+  const ewbbSection = document.querySelector('.ewbb-section');
+  if (ewbbSection) {
+    ewbbSection.addEventListener('mouseenter', () => clearInterval(ewbbInterval));
+    ewbbSection.addEventListener('mouseleave', () => startEwbb());
+  }
 </script>
 
 <style>
@@ -390,810 +126,144 @@ const tabs = [
     padding: 80px 0 60px;
     background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
   }
-
-  .ewbb-shell {
-    max-width: 1260px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
+  .ewbb { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
   .ewbb-title {
     font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    text-align: center;
-    color: var(--heading-dark);
-    margin: 0 0 12px;
+    font-size: 42px; font-weight: 400; line-height: 1.1; letter-spacing: -1px;
+    text-align: center; color: var(--heading-dark); margin: 0 0 12px;
   }
-
   .ewbb-title b { font-weight: 700; }
-
   .ewbb-subtitle {
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--subheading-gray);
-    text-align: center;
-    max-width: 620px;
-    margin: 0 auto 32px;
+    font-family: var(--font-body); font-size: 18px; line-height: 1.6;
+    color: var(--subheading-gray); text-align: center; max-width: 620px; margin: 0 auto 40px;
   }
 
   .ewbb-nav {
-    display: flex;
-    justify-content: center;
-    background: #F0F2F5;
-    border-radius: 50px;
-    padding: 4px;
-    margin: 0 auto 32px;
-    max-width: 560px;
-    gap: 4px;
+    display: flex; justify-content: center; gap: 0;
+    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
   }
-
   .ewbb-tab {
-    flex: 1;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    background: transparent;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #475467;
-    cursor: pointer;
-    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
+    cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
   }
-
-  .ewbb-tab:hover,
-  .ewbb-tab:focus-visible {
-    color: #16327b;
-    outline: none;
-  }
-
+  .ewbb-tab:hover { background: rgba(55,93,251,.08); }
   .ewbb-tab--active {
-    background: var(--brand-blue);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+    background: var(--brand-blue) !important; color: #fff !important;
+    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
 
   .ewbb-panel { display: none; }
-  .ewbb-panel--active { display: block; }
+  .ewbb-panel--active { display: block; animation: ewbbFadeUp 0.4s ease; }
+  @keyframes ewbbFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .ewbb-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr 1fr;
-    grid-template-areas:
-      "hero mini1 mini2"
-      "hero mini3 mini4";
-    gap: 1rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 14px; height: 460px;
   }
+  .ewbb-pos-0 { grid-column: 1; grid-row: 1 / 3; }
+  .ewbb-pos-1 { grid-column: 2; grid-row: 1; }
+  .ewbb-pos-2 { grid-column: 3; grid-row: 1; }
+  .ewbb-pos-3 { grid-column: 2; grid-row: 2; }
+  .ewbb-pos-4 { grid-column: 3; grid-row: 2; }
+  [data-layout="b"] .ewbb-pos-0 { grid-column: 3; grid-row: 1 / 3; }
+  [data-layout="b"] .ewbb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="b"] .ewbb-pos-2 { grid-column: 2; grid-row: 1; }
+  [data-layout="b"] .ewbb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="b"] .ewbb-pos-4 { grid-column: 2; grid-row: 2; }
+  [data-layout="c"] .ewbb-pos-0 { grid-column: 2; grid-row: 1 / 3; }
+  [data-layout="c"] .ewbb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="c"] .ewbb-pos-2 { grid-column: 3; grid-row: 1; }
+  [data-layout="c"] .ewbb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="c"] .ewbb-pos-4 { grid-column: 3; grid-row: 2; }
 
-  .ewbb-panel--active .ewbb-card {
-    animation: ewbb-fade-up 0.6s ease both;
-    animation-delay: var(--card-delay, 0s);
-  }
-
+  @property --ewbb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .ewbb-card {
     position: relative;
-    overflow: hidden;
-    display: grid;
-    gap: 1rem;
-    border-radius: 1.75rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(166, 186, 255, 0.62);
-    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
-    min-height: 205px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
+    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0; animation: ewbbCardIn 0.5s ease forwards;
   }
-
   .ewbb-card::after {
-    content: "";
-    position: absolute;
-    inset: auto -20% -45% 35%;
-    height: 70%;
-    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
-    pointer-events: none;
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: conic-gradient(from var(--ewbb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
-
-  .ewbb-card--hero {
-    grid-area: hero;
-    align-content: space-between;
-    padding: 1.5rem;
-    min-height: 430px;
+  .ewbb-card:hover {
+    transform: translateY(-3px); box-shadow: 0 8px 32px rgba(55,93,251,0.12); border-color: rgba(55,93,251,0.15);
   }
+  .ewbb-card:hover::after { opacity: 1; animation: ewbbBorder 2.4s linear infinite; }
+  @keyframes ewbbBorder { to { --ewbb-angle: 360deg; } }
+  @keyframes ewbbCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .ewbb-pos-1 { animation-delay: 0.06s; }
+  .ewbb-pos-2 { animation-delay: 0.12s; }
+  .ewbb-pos-3 { animation-delay: 0.18s; }
+  .ewbb-pos-4 { animation-delay: 0.24s; }
 
-  .ewbb-card--mini {
-    padding: 1.2rem;
-    grid-template-rows: auto 1fr;
-  }
-
-  .ewbb-card--mini:nth-of-type(2) { grid-area: mini1; }
-  .ewbb-card--mini:nth-of-type(3) { grid-area: mini2; }
-  .ewbb-card--mini:nth-of-type(4) { grid-area: mini3; }
-  .ewbb-card--mini:nth-of-type(5) { grid-area: mini4; }
-
-  .ewbb-card__content { position: relative; z-index: 1; }
-
-  .ewbb-card__eyebrow {
-    display: inline-flex;
-    padding: 0.38rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(18, 34, 74, 0.06);
-    color: #45608e;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
+  .ewbb-card__inner { display: flex; flex-direction: column; height: 100%; }
+  .ewbb-card__inner--row { flex-direction: row; }
+  .ewbb-card__text { display: flex; flex-direction: column; gap: 6px; }
+  .ewbb-card--tall .ewbb-card__text { padding: 20px 20px 8px; }
+  .ewbb-card--sm .ewbb-card__text { padding: 20px 8px 20px 20px; flex: 1 1 55%; }
+  .ewbb-card__icon { margin-bottom: 8px; flex-shrink: 0; }
   .ewbb-card__title {
-    margin: 0.85rem 0 0.55rem;
-    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-    line-height: 1.18;
-    color: #14213b;
-  }
-
-  .ewbb-card__desc {
-    margin: 0;
-    color: #566884;
-    line-height: 1.65;
-    font-size: 0.96rem;
-  }
-
-  .ewbb-point-list {
-    list-style: none;
-    margin: 1rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .ewbb-point-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: #243a61;
-    font-weight: 600;
-  }
-
-  .ewbb-point-list li::before {
-    content: "";
-    flex: 0 0 0.6rem;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #22c55e, #38bdf8);
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
-  }
-
-  .ewbb-art { position: relative; z-index: 1; min-height: 146px; }
-  .ewbb-art--hero { min-height: 228px; margin-top: 0.6rem; }
-  .ewbb-art--mini { align-self: end; }
-
-  /* === Hero visual: Editor === */
-  .ewbb-canvas {
-    position: absolute;
-    inset: 0 8% auto 0;
-    height: 88%;
-    padding: 0.8rem;
-    border-radius: 1.3rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.52);
-    animation: ewbb-float 5.2s ease-in-out infinite;
-  }
-
-  .ewbb-canvas__toolbar {
-    display: flex;
-    gap: 0.3rem;
-    margin-bottom: 0.6rem;
-  }
-
-  .ewbb-canvas__toolbar span {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-  }
-
-  .ewbb-canvas__toolbar span:nth-child(1) { background: #ef4444; }
-  .ewbb-canvas__toolbar span:nth-child(2) { background: #f59e0b; }
-  .ewbb-canvas__toolbar span:nth-child(3) { background: #22c55e; }
-
-  .ewbb-canvas__sections {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .ewbb-canvas__block {
-    border-radius: 0.6rem;
-    border: 1px dashed rgba(55, 93, 251, 0.18);
-  }
-
-  .ewbb-canvas__block--header {
-    height: 1.8rem;
-    background: linear-gradient(90deg, rgba(55, 93, 251, 0.12), rgba(56, 189, 248, 0.08));
-  }
-
-  .ewbb-canvas__block--body {
-    height: 3.5rem;
-    background: rgba(55, 93, 251, 0.04);
-  }
-
-  .ewbb-canvas__block--footer {
-    height: 1.4rem;
-    background: rgba(55, 93, 251, 0.06);
-  }
-
-  .ewbb-drag-handle {
-    position: absolute;
-    right: 0;
-    top: 30%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.8rem;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 12px 24px -12px rgba(17, 28, 56, 0.35);
-    animation: ewbb-float 4s ease-in-out infinite;
-    animation-delay: -1s;
-  }
-
-  .ewbb-drag-handle span {
-    width: 1.4rem;
-    height: 0.2rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.3);
-  }
-
-  /* === Hero visual: Sections === */
-  .ewbb-section-stack {
-    position: absolute;
-    inset: 0 10% auto 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .ewbb-section-block {
-    padding: 0.7rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    animation: ewbb-float 5s ease-in-out infinite;
-  }
-
-  .ewbb-section-block--speakers { animation-delay: -0.6s; }
-  .ewbb-section-block--sponsors { animation-delay: -1.2s; }
-
-  .ewbb-section-block__bar {
-    height: 0.4rem;
-    width: 35%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-    margin-bottom: 0.4rem;
-  }
-
-  .ewbb-section-block__rows { display: flex; flex-direction: column; gap: 0.25rem; }
-  .ewbb-section-block__rows span { display: block; height: 0.3rem; border-radius: 999px; background: rgba(55, 93, 251, 0.08); }
-  .ewbb-section-block__rows span:nth-child(1) { width: 90%; }
-  .ewbb-section-block__rows span:nth-child(2) { width: 70%; }
-  .ewbb-section-block__rows span:nth-child(3) { width: 55%; }
-
-  .ewbb-section-block__avatars { display: flex; gap: 0.3rem; }
-  .ewbb-section-block__avatars span {
-    width: 1.4rem; height: 1.4rem; border-radius: 50%;
-    background: linear-gradient(180deg, rgba(55, 93, 251, 0.3), rgba(34, 197, 94, 0.2));
-  }
-
-  .ewbb-section-block__logos { display: flex; gap: 0.4rem; }
-  .ewbb-section-block__logos span {
-    width: 2.2rem; height: 1rem; border-radius: 0.4rem;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  /* === Hero visual: SEO === */
-  .ewbb-search-result {
-    position: absolute;
-    inset: 0 0 2.4rem 0;
-    padding: 1rem;
-    border-radius: 1.3rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .ewbb-search-result__url {
-    height: 0.3rem;
-    width: 45%;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.3);
-  }
-
-  .ewbb-search-result__title {
-    height: 0.5rem;
-    width: 70%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  .ewbb-search-result__desc { display: flex; flex-direction: column; gap: 0.25rem; }
-  .ewbb-search-result__desc span { display: block; height: 0.3rem; border-radius: 999px; background: rgba(55, 93, 251, 0.08); }
-  .ewbb-search-result__desc span:first-child { width: 95%; }
-  .ewbb-search-result__desc span:last-child { width: 70%; }
-
-  .ewbb-search-result__tags {
-    display: flex;
-    gap: 0.3rem;
-    margin-top: 0.3rem;
-  }
-
-  .ewbb-search-result__tags span {
-    display: inline-flex;
-    padding: 0.25rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    background: rgba(55, 93, 251, 0.08);
-    color: #375dfb;
-  }
-
-  .ewbb-search-result__tags span:nth-child(2) { background: rgba(34, 197, 94, 0.08); color: #16a34a; }
-  .ewbb-search-result__tags span:nth-child(3) { background: rgba(245, 158, 11, 0.1); color: #a16207; }
-
-  .ewbb-ga-chip {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    display: inline-flex;
-    gap: 0.4rem;
-    align-items: baseline;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #183465;
-  }
-
-  .ewbb-ga-chip strong { font-size: 1rem; color: #375dfb; }
-  .ewbb-ga-chip span { font-size: 0.72rem; color: #607390; }
-
-  .ewbb-mini-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    color: #183465;
-    font-size: 0.72rem;
-    font-weight: 700;
-    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
-    position: absolute;
-    left: 0;
-    bottom: 0;
-  }
-
-  /* === Mini visuals === */
-  .ewbb-template-grid {
-    position: absolute;
-    inset: 0.4rem 0.6rem auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.35rem;
-  }
-
-  .ewbb-template-grid span {
-    aspect-ratio: 1.3;
-    border-radius: 0.6rem;
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-template-grid span:nth-child(1) { background: linear-gradient(145deg, rgba(55, 93, 251, 0.15), rgba(56, 189, 248, 0.1)); }
-  .ewbb-template-grid span:nth-child(2) { background: linear-gradient(145deg, rgba(159, 129, 255, 0.18), rgba(55, 93, 251, 0.1)); }
-  .ewbb-template-grid span:nth-child(3) { background: linear-gradient(145deg, rgba(245, 158, 11, 0.15), rgba(55, 93, 251, 0.08)); }
-  .ewbb-template-grid span:nth-child(4) { background: linear-gradient(145deg, rgba(34, 197, 94, 0.15), rgba(55, 93, 251, 0.08)); }
-
-  .ewbb-address-bar {
-    position: absolute;
-    inset: 0.6rem 0.6rem auto;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.8rem;
-    border-radius: 0.8rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-address-bar__lock {
-    width: 0.8rem;
-    height: 1rem;
-    border-radius: 0.2rem;
-    background: #22c55e;
-    position: relative;
-  }
-
-  .ewbb-address-bar__lock::before {
-    content: "";
-    position: absolute;
-    top: -0.4rem;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0.5rem;
-    height: 0.5rem;
-    border: 2px solid #22c55e;
-    border-radius: 50% 50% 0 0;
-    border-bottom: none;
-  }
-
-  .ewbb-address-bar__url {
-    flex: 1;
-    height: 0.35rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.12);
-  }
-
-  .ewbb-devices {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .ewbb-device {
-    border-radius: 0.5rem;
-    border: 1.5px solid rgba(55, 93, 251, 0.2);
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-  }
-
-  .ewbb-device--desktop { width: 3.5rem; height: 2.5rem; }
-  .ewbb-device--mobile { width: 1.4rem; height: 2.2rem; border-radius: 0.4rem; }
-
-  .ewbb-split-pane {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.3rem;
-  }
-
-  .ewbb-split-pane__editor,
-  .ewbb-split-pane__preview {
-    padding: 0.5rem;
-    border-radius: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .ewbb-split-pane__editor {
-    background: #1a2340;
-  }
-
-  .ewbb-split-pane__editor span {
-    display: block;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(56, 189, 248, 0.3);
-  }
-
-  .ewbb-split-pane__editor span:nth-child(1) { width: 80%; }
-  .ewbb-split-pane__editor span:nth-child(2) { width: 60%; }
-  .ewbb-split-pane__editor span:nth-child(3) { width: 70%; }
-
-  .ewbb-split-pane__preview {
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-split-pane__preview span {
-    display: block;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-split-pane__preview span:first-child { width: 70%; }
-  .ewbb-split-pane__preview span:last-child { width: 50%; }
-
-  .ewbb-track-timeline {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    gap: 0.3rem;
-  }
-
-  .ewbb-track {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .ewbb-track span {
-    display: block;
-    border-radius: 0.4rem;
-    background: linear-gradient(180deg, rgba(55, 93, 251, 0.15), rgba(55, 93, 251, 0.06));
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-track:nth-child(1) span:nth-child(1) { height: 1.4rem; }
-  .ewbb-track:nth-child(1) span:nth-child(2) { height: 0.8rem; }
-  .ewbb-track:nth-child(1) span:nth-child(3) { height: 1rem; }
-  .ewbb-track:nth-child(2) span:nth-child(1) { height: 1.8rem; }
-  .ewbb-track:nth-child(2) span:nth-child(2) { height: 1.2rem; }
-  .ewbb-track:nth-child(3) span:nth-child(1) { height: 0.9rem; }
-  .ewbb-track:nth-child(3) span:nth-child(2) { height: 1.5rem; }
-  .ewbb-track:nth-child(3) span:nth-child(3) { height: 0.7rem; }
-
-  .ewbb-avatar-cards {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    gap: 0.35rem;
-  }
-
-  .ewbb-avatar-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.5rem 0.3rem;
-    border-radius: 0.7rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-avatar-circle {
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 50%;
-    background: linear-gradient(180deg, rgba(55, 93, 251, 0.35), rgba(34, 197, 94, 0.2));
-  }
-
-  .ewbb-avatar-name {
-    width: 70%;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-tier-logos {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .ewbb-tier {
-    display: flex;
-    gap: 0.3rem;
-    justify-content: center;
-  }
-
-  .ewbb-tier span {
-    border-radius: 0.5rem;
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-tier--gold span { width: 3rem; height: 1.4rem; background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.1)); }
-  .ewbb-tier--silver span { width: 2.2rem; height: 1rem; background: linear-gradient(135deg, rgba(148, 163, 184, 0.25), rgba(148, 163, 184, 0.1)); }
-  .ewbb-tier--bronze span { width: 1.6rem; height: 0.8rem; background: linear-gradient(135deg, rgba(180, 83, 9, 0.2), rgba(180, 83, 9, 0.08)); }
-
-  .ewbb-map-card {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-map-pin {
-    width: 1.6rem;
-    height: 2rem;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .ewbb-map-pin::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1.2rem;
-    height: 1.2rem;
-    border-radius: 50%;
-    background: linear-gradient(180deg, #375dfb, #38bdf8);
-  }
-
-  .ewbb-map-pin::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 0.4rem solid transparent;
-    border-right: 0.4rem solid transparent;
-    border-top: 0.6rem solid #375dfb;
-  }
-
-  .ewbb-map-label { display: flex; flex-direction: column; gap: 0.2rem; }
-  .ewbb-map-label span { display: block; height: 0.3rem; border-radius: 999px; background: rgba(55, 93, 251, 0.1); }
-  .ewbb-map-label span:first-child { width: 4rem; }
-  .ewbb-map-label span:last-child { width: 2.5rem; }
-
-  .ewbb-bar-chart {
-    position: absolute;
-    inset: 0.5rem 0.5rem auto;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.35rem;
-    height: 3.5rem;
-  }
-
-  .ewbb-bar-chart span {
-    flex: 1;
-    height: var(--h, 50%);
-    border-radius: 0.4rem 0.4rem 0 0;
-    background: linear-gradient(180deg, #375dfb, #38bdf8);
-    opacity: 0.7;
-  }
-
-  .ewbb-link-chain {
-    position: absolute;
-    inset: 0.6rem 0.5rem auto;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .ewbb-link-segment {
-    width: 1.2rem;
-    height: 0.2rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.2);
-  }
-
-  .ewbb-link-tag {
-    display: inline-flex;
-    padding: 0.3rem 0.5rem;
-    border-radius: 0.4rem;
-    background: rgba(55, 93, 251, 0.1);
-    font-size: 0.6rem;
-    font-weight: 700;
-    font-family: monospace;
-    color: #375dfb;
-  }
-
-  .ewbb-gauge {
-    position: absolute;
-    left: 50%;
-    top: 0.5rem;
-    transform: translateX(-50%);
-    width: 4rem;
-    height: 2.4rem;
-    position: relative;
-  }
-
-  .ewbb-gauge__track {
-    position: absolute;
-    inset: 0;
-    border-radius: 4rem 4rem 0 0;
-    background: conic-gradient(from 0.75turn, #ef4444 0%, #f59e0b 25%, #22c55e 50%, #22c55e 75%);
-    opacity: 0.25;
-  }
-
-  .ewbb-gauge__needle {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 2px;
-    height: 1.6rem;
-    background: #22c55e;
-    transform-origin: bottom center;
-    transform: rotate(40deg);
-    border-radius: 999px;
-  }
-
-  .ewbb-gauge__value {
-    position: absolute;
-    bottom: -0.2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: #22c55e;
-  }
-
-  .ewbb-og-card {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    border-radius: 0.8rem;
-    overflow: hidden;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-og-card__image {
-    height: 2rem;
-    background: linear-gradient(135deg, rgba(55, 93, 251, 0.18), rgba(159, 129, 255, 0.15));
-  }
-
-  .ewbb-og-card__text {
-    padding: 0.4rem 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .ewbb-og-card__text span {
-    display: block;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .ewbb-og-card__text span:first-child { width: 75%; }
-  .ewbb-og-card__text span:last-child { width: 55%; }
-
-  @keyframes ewbb-fade-up {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes ewbb-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  @media (max-width: 960px) {
+    font-family: var(--font-heading); font-size: 22px; font-weight: 700; line-height: 1.3;
+    color: var(--heading-dark); margin: 0 0 6px;
+  }
+  .ewbb-card--sm .ewbb-card__title { font-size: 17px; }
+  .ewbb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
+  .ewbb-card--sm .ewbb-card__desc { font-size: 13px; }
+
+  .ewbb-card__img {
+    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+    background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%);
+  }
+  .ewbb-card--tall .ewbb-card__img { flex: 1; padding: 0 12px; min-height: 0; }
+  .ewbb-card--sm .ewbb-card__img { flex: 0 0 42%; padding: 8px 8px 0 0; }
+  .ewbb-card__img :global(svg) {
+    width: 100%; height: auto; max-width: none;
+    filter: drop-shadow(0 8px 16px rgba(31,52,128,.12));
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease;
+  }
+  .ewbb-card:hover .ewbb-card__img :global(svg) {
+    transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18));
+    animation: ewbbFloat 2.2s ease-in-out infinite;
+  }
+  @keyframes ewbbFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
+
+  @media (max-width: 1024px) {
     .ewbb-section { padding: 60px 0 48px; }
     .ewbb-title { font-size: 36px; }
-    .ewbb-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "hero hero"
-        "mini1 mini2"
-        "mini3 mini4";
-    }
-    .ewbb-card--hero { min-height: 380px; }
+    .ewbb-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
+    .ewbb-pos-0 { grid-column: 1 / -1; grid-row: auto; }
+    .ewbb-pos-1, .ewbb-pos-2, .ewbb-pos-3, .ewbb-pos-4 { grid-column: auto; grid-row: auto; }
+    [data-layout="b"] .ewbb-pos-0, [data-layout="c"] .ewbb-pos-0 { grid-column: 1 / -1; }
+    [data-layout="b"] .ewbb-pos-1, [data-layout="b"] .ewbb-pos-2, [data-layout="b"] .ewbb-pos-3, [data-layout="b"] .ewbb-pos-4,
+    [data-layout="c"] .ewbb-pos-1, [data-layout="c"] .ewbb-pos-2, [data-layout="c"] .ewbb-pos-3, [data-layout="c"] .ewbb-pos-4 { grid-column: auto; grid-row: auto; }
+    .ewbb-card--tall .ewbb-card__inner { flex-direction: row; }
+    .ewbb-card--tall .ewbb-card__text { flex: 1; }
+    .ewbb-card--tall .ewbb-card__img { flex: 0 0 36%; padding: 12px; }
   }
-
-  @media (max-width: 720px) {
-    .ewbb-section { padding-inline: 0; }
-    .ewbb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
-    .ewbb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+  @media (max-width: 767px) {
     .ewbb-title { font-size: 28px; }
     .ewbb-subtitle { font-size: 15px; }
-    .ewbb-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
-    }
-    .ewbb-card { min-height: 210px; }
-    .ewbb-card--hero { min-height: 420px; }
+    .ewbb-nav { flex-direction: column; width: 100%; max-width: 300px; border-radius: 16px; }
+    .ewbb-tab { border-radius: 12px; }
+    .ewbb-grid { grid-template-columns: 1fr; }
+    .ewbb-pos-0, .ewbb-pos-1, .ewbb-pos-2, .ewbb-pos-3, .ewbb-pos-4,
+    [data-layout="b"] .ewbb-pos-0, [data-layout="b"] .ewbb-pos-1, [data-layout="b"] .ewbb-pos-2, [data-layout="b"] .ewbb-pos-3, [data-layout="b"] .ewbb-pos-4,
+    [data-layout="c"] .ewbb-pos-0, [data-layout="c"] .ewbb-pos-1, [data-layout="c"] .ewbb-pos-2, [data-layout="c"] .ewbb-pos-3, [data-layout="c"] .ewbb-pos-4 { grid-column: 1; grid-row: auto; }
+    .ewbb-card--sm .ewbb-card__inner, .ewbb-card--tall .ewbb-card__inner { flex-direction: row; }
+    .ewbb-card--sm .ewbb-card__text, .ewbb-card--tall .ewbb-card__text { padding: 14px 6px 14px 14px; flex: 1 1 60%; }
+    .ewbb-card--sm .ewbb-card__img, .ewbb-card--tall .ewbb-card__img { flex: 0 0 38%; padding: 4px 4px 0 0; align-items: flex-end; justify-content: flex-end; }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .ewbb-panel--active .ewbb-card,
-    .ewbb-canvas,
-    .ewbb-section-block,
-    .ewbb-drag-handle { animation: none; }
+    .ewbb-card { animation: none !important; opacity: 1; transform: none; }
+    .ewbb-card:hover::after { animation: none !important; }
+    .ewbb-card:hover .ewbb-card__img :global(svg) { animation: none !important; transform: none; }
   }
 </style>

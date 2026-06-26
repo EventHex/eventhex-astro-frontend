@@ -187,7 +187,7 @@ const faqSchema = {
                 >
                   <div class={`uc-bento__card-inner ${cardIdx > 0 ? "uc-bento__card-inner--row" : ""}`}>
                     <div class="uc-bento__card-text">
-                      <div class="uc-bento__grid-icon"><div/><div/><div/><div/></div>
+                      <svg class="uc-bento__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>
                       <h3 class="uc-bento__card-title">{card.title}</h3>
                       <p class="uc-bento__card-desc">{card.desc}</p>
                       {card.link && (
@@ -583,29 +583,33 @@ const faqSchema = {
   [data-layout="c"] .uc-bento__pos-3 { grid-column: 1; grid-row: 2; }
   [data-layout="c"] .uc-bento__pos-4 { grid-column: 3; grid-row: 2; }
 
+  @property --uc-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
   .uc-bento__card {
-    background: linear-gradient(180deg, #fff 0%, #f5f8ff 100%);
-    border: 1px solid rgba(55,93,251,0.12);
-    border-radius: 16px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
+    border: 1px solid #E8ECF2;
+    border-radius: 20px;
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(55,93,251,0.06);
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     text-decoration: none;
     color: inherit;
   }
-  .uc-bento__card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(55,93,251,0.12);
-    border-color: rgba(107,138,253,0.3);
+  .uc-bento__card::after { content:""; position:absolute; inset:0; border-radius:inherit; padding:1.5px; background:conic-gradient(from var(--uc-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); mask-composite:exclude; opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  .uc-bento__card:hover { transform:translateY(-3px); box-shadow:0 8px 32px rgba(55,93,251,.12); border-color:rgba(55,93,251,.15); }
+  .uc-bento__card:hover::after { opacity:1; animation:uc-border 2.4s linear infinite; }
+  @keyframes uc-border { to { --uc-angle:360deg; } }
+
+  .uc-bento__icon { margin-bottom: 8px; flex-shrink: 0; }
+
+  .uc-bento__card-img :global(svg) { width: 100%; height: auto; filter: drop-shadow(0 8px 16px rgba(31,52,128,.12)); transition: transform .4s cubic-bezier(.4,0,.2,1), filter .4s ease; }
+  .uc-bento__card:hover .uc-bento__card-img :global(svg) { transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .uc-bento__card:hover::after { animation: none !important; }
+    .uc-bento__card:hover .uc-bento__card-img :global(svg) { transform: none; }
   }
-  .uc-bento__grid-icon {
-    width: 30px; height: 30px;
-    background: rgba(55,93,251,0.15);
-    border-radius: 8px;
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 3px; padding: 7px; flex-shrink: 0;
-  }
-  .uc-bento__grid-icon > div { width: 6px; height: 6px; background: #6B8AFD; border-radius: 2px; opacity: 0.7; }
 
   .uc-bento__card--tall .uc-bento__card-inner { display: flex; flex-direction: column; height: 100%; }
   .uc-bento__card--tall .uc-bento__card-text { padding: 16px 16px 10px; }
@@ -614,7 +618,6 @@ const faqSchema = {
   .uc-bento__card--sm .uc-bento__card-inner { display: flex; height: 100%; }
   .uc-bento__card--sm .uc-bento__card-text { padding: 16px 8px 16px 16px; flex: 1 1 55%; display: flex; flex-direction: column; }
   .uc-bento__card--sm .uc-bento__card-img { flex: 0 0 42%; display: flex; align-items: flex-end; justify-content: center; padding: 4px 6px 0 0; overflow: hidden; }
-  .uc-bento__card-img :global(svg) { width: 100%; height: auto; }
 
   .uc-bento__card-text { display: flex; flex-direction: column; gap: 6px; }
   .uc-bento__card-title {

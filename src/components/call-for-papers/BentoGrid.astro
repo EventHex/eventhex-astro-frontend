@@ -1,58 +1,57 @@
 ---
+import { cfpbIllustrations as ill } from "./illustrations";
+
 const tabs = [
   {
     label: "Submission Portal",
     hero: {
-      eyebrow: "Submission Engine",
       title: "Customizable submission form with author portal, file uploads, and deadline management",
       desc: "Authors submit abstracts with keywords, co-authors, and file uploads through a clean self-service portal with real-time status tracking.",
-      points: ["Custom submission forms", "Author self-service portal", "Deadline management"],
       visual: "submit",
     },
     cards: [
-      { eyebrow: "Authors", title: "Author Portal", desc: "Authors log in to view submission status, reviewer comments, and revision requests.", visual: "authorport" },
-      { eyebrow: "Files", title: "File Upload Support", desc: "Accept PDF, DOCX, or LaTeX submissions with format validation.", visual: "fileup" },
-      { eyebrow: "Deadlines", title: "Submission Deadlines", desc: "Set submission windows, late rules, and auto-close with timezone support.", visual: "deadline" },
-      { eyebrow: "Co-Authors", title: "Multi-Author Support", desc: "List co-authors with ORCID integration and institutional affiliations.", visual: "coauthor" },
+      { title: "Author Portal", desc: "Authors log in to view submission status, reviewer comments, and revision requests.", visual: "authorport" },
+      { title: "File Upload Support", desc: "Accept PDF, DOCX, or LaTeX submissions with format validation.", visual: "fileup" },
+      { title: "Submission Deadlines", desc: "Set submission windows, late rules, and auto-close with timezone support.", visual: "deadline" },
+      { title: "Multi-Author Support", desc: "List co-authors with ORCID integration and institutional affiliations.", visual: "coauthor" },
     ],
   },
   {
     label: "Peer Review",
     hero: {
-      eyebrow: "Review Engine",
       title: "Reviewer assignment with blind review, custom rubrics, and conflict management",
       desc: "Assign reviewers manually or with AI matching. Configure single or double-blind review with custom scoring rubrics and automated reminders.",
-      points: ["AI-assisted reviewer matching", "Custom scoring rubrics", "Automated reminders"],
       visual: "review",
     },
     cards: [
-      { eyebrow: "Blind", title: "Blind & Double-Blind", desc: "Configure single-blind or double-blind review modes.", visual: "blindrev" },
-      { eyebrow: "Rubrics", title: "Custom Review Rubrics", desc: "Define scoring criteria — originality, methodology, clarity — with weighted scales.", visual: "rubric" },
-      { eyebrow: "Conflicts", title: "Conflict of Interest", desc: "Reviewers declare conflicts; system automatically reassigns submissions.", visual: "conflict" },
-      { eyebrow: "Reminders", title: "Review Reminders", desc: "Automated email reminders sent to reviewers approaching their deadline.", visual: "reminder" },
+      { title: "Blind & Double-Blind", desc: "Configure single-blind or double-blind review modes.", visual: "blindrev" },
+      { title: "Custom Review Rubrics", desc: "Define scoring criteria — originality, methodology, clarity — with weighted scales.", visual: "rubric" },
+      { title: "Conflict of Interest", desc: "Reviewers declare conflicts; system automatically reassigns submissions.", visual: "conflict" },
+      { title: "Review Reminders", desc: "Automated email reminders sent to reviewers approaching their deadline.", visual: "reminder" },
     ],
   },
   {
     label: "Decision & Publishing",
     hero: {
-      eyebrow: "Decision Engine",
       title: "Acceptance workflows, automated decision emails, and proceedings export",
       desc: "Programme chairs review scores and make accept/reject/revise decisions. Authors receive automated emails. Accepted papers slot into the conference schedule.",
-      points: ["One-click accept/reject", "Automated decision emails", "Proceedings PDF export"],
       visual: "decision",
     },
     cards: [
-      { eyebrow: "Emails", title: "Automated Decision Emails", desc: "Send acceptance, rejection, and revision emails with reviewer comments attached.", visual: "decemail" },
-      { eyebrow: "Schedule", title: "Session Assignment", desc: "Accepted papers are assigned to sessions directly from the CFP dashboard.", visual: "sessassign" },
-      { eyebrow: "Export", title: "Proceedings Export", desc: "Export accepted abstracts as a formatted proceedings PDF with one click.", visual: "proceedings" },
-      { eyebrow: "Camera-Ready", title: "Camera-Ready Submission", desc: "Authors submit final camera-ready versions via the portal after acceptance.", visual: "cameraready" },
+      { title: "Automated Decision Emails", desc: "Send acceptance, rejection, and revision emails with reviewer comments attached.", visual: "decemail" },
+      { title: "Session Assignment", desc: "Accepted papers are assigned to sessions directly from the CFP dashboard.", visual: "sessassign" },
+      { title: "Proceedings Export", desc: "Export accepted abstracts as a formatted proceedings PDF with one click.", visual: "proceedings" },
+      { title: "Camera-Ready Submission", desc: "Authors submit final camera-ready versions via the portal after acceptance.", visual: "cameraready" },
     ],
   },
 ];
+
+const ICON = '<svg class="cfpb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
+const layouts = ["a", "b", "c"];
 ---
 
 <section class="cfpb-section" id="cfp-bento">
-  <div class="cfpb-shell">
+  <div class="cfpb">
     <h2 class="cfpb-title">
       Submission <b>Portal</b>, Peer <b>Review</b> &amp; <b>Publishing</b>
     </h2>
@@ -61,308 +60,35 @@ const tabs = [
     </p>
 
     <nav class="cfpb-nav" aria-label="Call for papers workflows">
-      {tabs.map((tab, index) => (
-        <button
-          class={`cfpb-tab${index === 0 ? " cfpb-tab--active" : ""}`}
-          data-cfpb-tab={index}
-          aria-selected={index === 0 ? "true" : "false"}
-          type="button"
-        >
-          {tab.label}
-        </button>
+      {tabs.map((t, i) => (
+        <button class={`cfpb-tab ${i === 0 ? "cfpb-tab--active" : ""}`} data-cfpb-tab={String(i)}>{t.label}</button>
       ))}
     </nav>
 
-    {tabs.map((tab, tabIndex) => (
-      <div
-        class={`cfpb-panel${tabIndex === 0 ? " cfpb-panel--active" : ""}`}
-        data-cfpb-panel={tabIndex}
-      >
-        <div class="cfpb-grid">
-          <article class="cfpb-card cfpb-card--hero" style={`--card-delay:${0.04}s;`}>
-            <div class="cfpb-card__content">
-              <span class="cfpb-card__eyebrow">{tab.hero.eyebrow}</span>
-              <h3 class="cfpb-card__title">{tab.hero.title}</h3>
-              <p class="cfpb-card__desc">{tab.hero.desc}</p>
-              <ul class="cfpb-point-list">
-                {tab.hero.points.map((point) => <li>{point}</li>)}
-              </ul>
-            </div>
-
-            <div class={`cfpb-art cfpb-art--hero cfpb-art--${tab.hero.visual}`} aria-hidden="true">
-              {tab.hero.visual === "submit" && (
-                <Fragment>
-                  <div class="cfpb-form-frame">
-                    <div class="cfpb-form-header"></div>
-                    <div class="cfpb-form-field"><span class="cfpb-form-label"></span><span class="cfpb-form-input"></span></div>
-                    <div class="cfpb-form-field"><span class="cfpb-form-label"></span><span class="cfpb-form-input cfpb-form-input--wide"></span></div>
-                    <div class="cfpb-form-field"><span class="cfpb-form-label"></span><span class="cfpb-form-textarea"></span></div>
-                    <div class="cfpb-form-submit"></div>
-                  </div>
-                  <div class="cfpb-submit-badge">
-                    <span class="cfpb-submit-check">&#10003;</span>
-                    <span class="cfpb-submit-text">Submitted</span>
-                  </div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "review" && (
-                <Fragment>
-                  <div class="cfpb-review-grid">
-                    <div class="cfpb-reviewer-card">
-                      <span class="cfpb-reviewer-avatar"></span>
-                      <span class="cfpb-reviewer-bar"></span>
-                      <div class="cfpb-reviewer-stars">
-                        <span></span><span></span><span></span><span></span><span class="cfpb-star--empty"></span>
-                      </div>
-                    </div>
-                    <div class="cfpb-reviewer-card">
-                      <span class="cfpb-reviewer-avatar cfpb-reviewer-avatar--alt"></span>
-                      <span class="cfpb-reviewer-bar"></span>
-                      <div class="cfpb-reviewer-stars">
-                        <span></span><span></span><span></span><span></span><span></span>
-                      </div>
-                    </div>
-                    <div class="cfpb-reviewer-card">
-                      <span class="cfpb-reviewer-avatar cfpb-reviewer-avatar--alt2"></span>
-                      <span class="cfpb-reviewer-bar"></span>
-                      <div class="cfpb-reviewer-stars">
-                        <span></span><span></span><span></span><span class="cfpb-star--empty"></span><span class="cfpb-star--empty"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="cfpb-review-badge">
-                    <span class="cfpb-review-badge-dot"></span>
-                    <span>3 Reviewers Assigned</span>
-                  </div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "decision" && (
-                <Fragment>
-                  <div class="cfpb-decision-panel">
-                    <div class="cfpb-decision-row">
-                      <span class="cfpb-decision-paper-bar"></span>
-                      <span class="cfpb-decision-score">4.2</span>
-                      <span class="cfpb-decision-btn cfpb-decision-btn--accept">Accept</span>
-                    </div>
-                    <div class="cfpb-decision-row">
-                      <span class="cfpb-decision-paper-bar"></span>
-                      <span class="cfpb-decision-score">3.1</span>
-                      <span class="cfpb-decision-btn cfpb-decision-btn--revise">Revise</span>
-                    </div>
-                    <div class="cfpb-decision-row">
-                      <span class="cfpb-decision-paper-bar"></span>
-                      <span class="cfpb-decision-score">2.0</span>
-                      <span class="cfpb-decision-btn cfpb-decision-btn--reject">Reject</span>
-                    </div>
-                  </div>
-                  <div class="cfpb-decision-badge">
-                    <span class="cfpb-decision-badge-icon">&#9993;</span>
-                    <span>Emails Sent</span>
-                  </div>
-                </Fragment>
-              )}
-            </div>
-          </article>
-
-          {tab.cards.map((card, cardIndex) => (
-            <article class="cfpb-card cfpb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
-              <div class="cfpb-card__content">
-                <span class="cfpb-card__eyebrow">{card.eyebrow}</span>
-                <h3 class="cfpb-card__title">{card.title}</h3>
-                <p class="cfpb-card__desc">{card.desc}</p>
+    {tabs.map((t, tabIdx) => (
+      <div class={`cfpb-panel ${tabIdx === 0 ? "cfpb-panel--active" : ""}`} data-cfpb-panel={String(tabIdx)}>
+        <div class="cfpb-grid" data-layout={layouts[tabIdx % 3]}>
+          <div class="cfpb-card cfpb-card--tall cfpb-pos-0" style="animation-delay:0s">
+            <div class="cfpb-card__inner">
+              <div class="cfpb-card__text">
+                <Fragment set:html={ICON} />
+                <h3 class="cfpb-card__title">{t.hero.title}</h3>
+                <p class="cfpb-card__desc">{t.hero.desc}</p>
               </div>
-
-              <div class={`cfpb-art cfpb-art--mini cfpb-art--${card.visual}`} aria-hidden="true">
-                {card.visual === "authorport" && (
-                  <Fragment>
-                    <div class="cfpb-portal-cards">
-                      <div class="cfpb-portal-card">
-                        <span class="cfpb-portal-status cfpb-portal-status--review"></span>
-                        <span class="cfpb-portal-bar"></span>
-                      </div>
-                      <div class="cfpb-portal-card">
-                        <span class="cfpb-portal-status cfpb-portal-status--accepted"></span>
-                        <span class="cfpb-portal-bar"></span>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Author portal</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "fileup" && (
-                  <Fragment>
-                    <div class="cfpb-upload-zone">
-                      <div class="cfpb-upload-icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#375dfb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </div>
-                      <div class="cfpb-file-icons">
-                        <span class="cfpb-file-icon cfpb-file-icon--pdf">PDF</span>
-                        <span class="cfpb-file-icon cfpb-file-icon--doc">DOC</span>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">File upload</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "deadline" && (
-                  <Fragment>
-                    <div class="cfpb-calendar">
-                      <div class="cfpb-calendar-header"></div>
-                      <div class="cfpb-calendar-grid">
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span class="cfpb-calendar-today"></span>
-                        <span></span><span class="cfpb-calendar-deadline"></span>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Deadline set</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "coauthor" && (
-                  <Fragment>
-                    <div class="cfpb-authors-linked">
-                      <div class="cfpb-author-node"><span class="cfpb-author-avatar"></span></div>
-                      <div class="cfpb-author-link-line"></div>
-                      <div class="cfpb-author-node"><span class="cfpb-author-avatar cfpb-author-avatar--alt"></span></div>
-                      <div class="cfpb-author-link-line"></div>
-                      <div class="cfpb-author-node"><span class="cfpb-author-avatar cfpb-author-avatar--alt2"></span></div>
-                    </div>
-                    <div class="cfpb-mini-chip">3 co-authors</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "blindrev" && (
-                  <Fragment>
-                    <div class="cfpb-blind-cards">
-                      <div class="cfpb-blind-card">
-                        <span class="cfpb-blind-avatar"></span>
-                        <span class="cfpb-blind-mask">?</span>
-                      </div>
-                      <div class="cfpb-blind-card">
-                        <span class="cfpb-blind-avatar cfpb-blind-avatar--alt"></span>
-                        <span class="cfpb-blind-mask">?</span>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Anonymous</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "rubric" && (
-                  <Fragment>
-                    <div class="cfpb-rubric-table">
-                      <div class="cfpb-rubric-row">
-                        <span class="cfpb-rubric-label"></span>
-                        <div class="cfpb-rubric-dots"><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--empty"></span></div>
-                      </div>
-                      <div class="cfpb-rubric-row">
-                        <span class="cfpb-rubric-label"></span>
-                        <div class="cfpb-rubric-dots"><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--empty"></span><span class="cfpb-rubric-dot--empty"></span></div>
-                      </div>
-                      <div class="cfpb-rubric-row">
-                        <span class="cfpb-rubric-label"></span>
-                        <div class="cfpb-rubric-dots"><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span><span class="cfpb-rubric-dot--filled"></span></div>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Scored</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "conflict" && (
-                  <Fragment>
-                    <div class="cfpb-conflict-display">
-                      <div class="cfpb-conflict-badge-icon">
-                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none"><path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </div>
-                      <div class="cfpb-conflict-arrow">&#8594;</div>
-                      <div class="cfpb-conflict-reassign">
-                        <span class="cfpb-conflict-new-avatar"></span>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Reassigned</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "reminder" && (
-                  <Fragment>
-                    <div class="cfpb-reminder-display">
-                      <div class="cfpb-reminder-envelope">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#375dfb" stroke-width="2"/><path d="M22 7l-10 7L2 7" stroke="#375dfb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </div>
-                      <div class="cfpb-reminder-clock">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><circle cx="12" cy="12" r="10" stroke="#f59e0b" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/></svg>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Reminder sent</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "decemail" && (
-                  <Fragment>
-                    <div class="cfpb-email-template">
-                      <div class="cfpb-email-header">
-                        <span class="cfpb-email-header-bar"></span>
-                      </div>
-                      <div class="cfpb-email-body">
-                        <span class="cfpb-email-line"></span>
-                        <span class="cfpb-email-line cfpb-email-line--short"></span>
-                      </div>
-                      <div class="cfpb-email-decision-badge cfpb-email-decision-badge--accept">Accepted</div>
-                    </div>
-                    <div class="cfpb-mini-chip">Email sent</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "sessassign" && (
-                  <Fragment>
-                    <div class="cfpb-session-slots">
-                      <div class="cfpb-session-slot">
-                        <span class="cfpb-session-slot-time"></span>
-                        <div class="cfpb-session-paper-card">
-                          <span class="cfpb-session-paper-bar"></span>
-                        </div>
-                      </div>
-                      <div class="cfpb-session-slot cfpb-session-slot--empty">
-                        <span class="cfpb-session-slot-time"></span>
-                        <div class="cfpb-session-slot-placeholder"></div>
-                      </div>
-                    </div>
-                    <div class="cfpb-mini-chip">Assigned</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "proceedings" && (
-                  <Fragment>
-                    <div class="cfpb-pdf-doc">
-                      <div class="cfpb-pdf-corner"></div>
-                      <div class="cfpb-pdf-title-bar"></div>
-                      <div class="cfpb-pdf-line"></div>
-                      <div class="cfpb-pdf-line cfpb-pdf-line--short"></div>
-                      <div class="cfpb-pdf-line"></div>
-                      <div class="cfpb-pdf-line cfpb-pdf-line--med"></div>
-                    </div>
-                    <div class="cfpb-mini-chip">PDF ready</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "cameraready" && (
-                  <Fragment>
-                    <div class="cfpb-camera-ready">
-                      <div class="cfpb-camera-circle">
-                        <svg viewBox="0 0 48 48" class="cfpb-camera-svg">
-                          <circle cx="24" cy="24" r="20" fill="none" stroke="#22c55e" stroke-width="3" opacity="0.2"/>
-                          <circle cx="24" cy="24" r="20" fill="none" stroke="#22c55e" stroke-width="3" stroke-dasharray="126" stroke-dashoffset="0" stroke-linecap="round" class="cfpb-camera-ring"/>
-                          <path d="M16 24l5 5 11-11" stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                      </div>
-                      <span class="cfpb-camera-label">Upload Complete</span>
-                    </div>
-                    <div class="cfpb-mini-chip">Final version</div>
-                  </Fragment>
-                )}
+              <div class="cfpb-card__img" set:html={ill[t.hero.visual]} />
+            </div>
+          </div>
+          {t.cards.map((c, ci) => (
+            <div class={`cfpb-card cfpb-card--sm cfpb-pos-${ci + 1}`} style={`animation-delay:${((ci + 1) * 0.06).toFixed(2)}s`}>
+              <div class="cfpb-card__inner cfpb-card__inner--row">
+                <div class="cfpb-card__text">
+                  <Fragment set:html={ICON} />
+                  <h3 class="cfpb-card__title">{c.title}</h3>
+                  <p class="cfpb-card__desc">{c.desc}</p>
+                </div>
+                <div class="cfpb-card__img cfpb-card__img--sm" set:html={ill[c.visual]} />
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
@@ -370,29 +96,29 @@ const tabs = [
   </div>
 </section>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".cfpb-shell").forEach((root) => {
-      const tabs = Array.from(root.querySelectorAll(".cfpb-tab"));
-      const panels = Array.from(root.querySelectorAll(".cfpb-panel"));
+<script>
+  const cfpbTabs = Array.from(document.querySelectorAll('[data-cfpb-tab]'));
+  const cfpbPanels = Array.from(document.querySelectorAll('[data-cfpb-panel]'));
+  let cfpbActive = 0;
+  let cfpbInterval: ReturnType<typeof setInterval>;
 
-      const activate = (index) => {
-        tabs.forEach((tab, tabIndex) => {
-          const selected = tabIndex === index;
-          tab.classList.toggle("cfpb-tab--active", selected);
-          tab.setAttribute("aria-selected", selected ? "true" : "false");
-        });
-
-        panels.forEach((panel, panelIndex) => {
-          panel.classList.toggle("cfpb-panel--active", panelIndex === index);
-        });
-      };
-
-      tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activate(index));
-      });
-    });
-  });
+  function setCfpbTab(index: number) {
+    cfpbTabs.forEach((t) => t.classList.remove('cfpb-tab--active'));
+    cfpbPanels.forEach((p) => p.classList.remove('cfpb-panel--active'));
+    cfpbTabs[index]?.classList.add('cfpb-tab--active');
+    cfpbPanels[index]?.classList.add('cfpb-panel--active');
+    cfpbActive = index;
+  }
+  function startCfpb() {
+    cfpbInterval = setInterval(() => setCfpbTab((cfpbActive + 1) % cfpbTabs.length), 5000);
+  }
+  cfpbTabs.forEach((tab, i) => tab.addEventListener('click', () => { setCfpbTab(i); clearInterval(cfpbInterval); startCfpb(); }));
+  startCfpb();
+  const cfpbSection = document.querySelector('.cfpb-section');
+  if (cfpbSection) {
+    cfpbSection.addEventListener('mouseenter', () => clearInterval(cfpbInterval));
+    cfpbSection.addEventListener('mouseleave', () => startCfpb());
+  }
 </script>
 
 <style>
@@ -400,951 +126,144 @@ const tabs = [
     padding: 80px 0 60px;
     background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
   }
-
-  .cfpb-shell {
-    max-width: 1260px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
+  .cfpb { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
   .cfpb-title {
     font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    text-align: center;
-    color: var(--heading-dark);
-    margin: 0 0 12px;
+    font-size: 42px; font-weight: 400; line-height: 1.1; letter-spacing: -1px;
+    text-align: center; color: var(--heading-dark); margin: 0 0 12px;
   }
-
   .cfpb-title b { font-weight: 700; }
-
   .cfpb-subtitle {
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--subheading-gray);
-    text-align: center;
-    max-width: 620px;
-    margin: 0 auto 32px;
+    font-family: var(--font-body); font-size: 18px; line-height: 1.6;
+    color: var(--subheading-gray); text-align: center; max-width: 620px; margin: 0 auto 40px;
   }
 
   .cfpb-nav {
-    display: flex;
-    justify-content: center;
-    background: #F0F2F5;
-    border-radius: 50px;
-    padding: 4px;
-    margin: 0 auto 32px;
-    max-width: 560px;
-    gap: 4px;
+    display: flex; justify-content: center; gap: 0;
+    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
   }
-
   .cfpb-tab {
-    flex: 1;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    background: transparent;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #475467;
-    cursor: pointer;
-    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
+    cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
   }
-
-  .cfpb-tab:hover,
-  .cfpb-tab:focus-visible {
-    color: #16327b;
-    outline: none;
-  }
-
+  .cfpb-tab:hover { background: rgba(55,93,251,.08); }
   .cfpb-tab--active {
-    background: var(--brand-blue);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+    background: var(--brand-blue) !important; color: #fff !important;
+    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
 
   .cfpb-panel { display: none; }
-  .cfpb-panel--active { display: block; }
+  .cfpb-panel--active { display: block; animation: cfpbFadeUp 0.4s ease; }
+  @keyframes cfpbFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .cfpb-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr 1fr;
-    grid-template-areas:
-      "hero mini1 mini2"
-      "hero mini3 mini4";
-    gap: 1rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 14px; height: 460px;
   }
+  .cfpb-pos-0 { grid-column: 1; grid-row: 1 / 3; }
+  .cfpb-pos-1 { grid-column: 2; grid-row: 1; }
+  .cfpb-pos-2 { grid-column: 3; grid-row: 1; }
+  .cfpb-pos-3 { grid-column: 2; grid-row: 2; }
+  .cfpb-pos-4 { grid-column: 3; grid-row: 2; }
+  [data-layout="b"] .cfpb-pos-0 { grid-column: 3; grid-row: 1 / 3; }
+  [data-layout="b"] .cfpb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="b"] .cfpb-pos-2 { grid-column: 2; grid-row: 1; }
+  [data-layout="b"] .cfpb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="b"] .cfpb-pos-4 { grid-column: 2; grid-row: 2; }
+  [data-layout="c"] .cfpb-pos-0 { grid-column: 2; grid-row: 1 / 3; }
+  [data-layout="c"] .cfpb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="c"] .cfpb-pos-2 { grid-column: 3; grid-row: 1; }
+  [data-layout="c"] .cfpb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="c"] .cfpb-pos-4 { grid-column: 3; grid-row: 2; }
 
-  .cfpb-panel--active .cfpb-card {
-    animation: cfpb-fade-up 0.6s ease both;
-    animation-delay: var(--card-delay, 0s);
-  }
-
-  @keyframes cfpb-fade-up {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
+  @property --cfpb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .cfpb-card {
     position: relative;
-    overflow: hidden;
-    display: grid;
-    gap: 1rem;
-    border-radius: 1.75rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(166, 186, 255, 0.62);
-    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
-    min-height: 205px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
+    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0; animation: cfpbCardIn 0.5s ease forwards;
   }
-
   .cfpb-card::after {
-    content: "";
-    position: absolute;
-    inset: auto -20% -45% 35%;
-    height: 70%;
-    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
-    pointer-events: none;
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: conic-gradient(from var(--cfpb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
-
-  .cfpb-card--hero {
-    grid-area: hero;
-    align-content: space-between;
-    padding: 1.5rem;
-    min-height: 430px;
+  .cfpb-card:hover {
+    transform: translateY(-3px); box-shadow: 0 8px 32px rgba(55,93,251,0.12); border-color: rgba(55,93,251,0.15);
   }
+  .cfpb-card:hover::after { opacity: 1; animation: cfpbBorder 2.4s linear infinite; }
+  @keyframes cfpbBorder { to { --cfpb-angle: 360deg; } }
+  @keyframes cfpbCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .cfpb-pos-1 { animation-delay: 0.06s; }
+  .cfpb-pos-2 { animation-delay: 0.12s; }
+  .cfpb-pos-3 { animation-delay: 0.18s; }
+  .cfpb-pos-4 { animation-delay: 0.24s; }
 
-  .cfpb-card--mini {
-    padding: 1.2rem;
-    grid-template-rows: auto 1fr;
-  }
-
-  .cfpb-card--mini:nth-of-type(2) { grid-area: mini1; }
-  .cfpb-card--mini:nth-of-type(3) { grid-area: mini2; }
-  .cfpb-card--mini:nth-of-type(4) { grid-area: mini3; }
-  .cfpb-card--mini:nth-of-type(5) { grid-area: mini4; }
-
-  .cfpb-card__content { position: relative; z-index: 1; }
-
-  .cfpb-card__eyebrow {
-    display: inline-flex;
-    padding: 0.38rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(18, 34, 74, 0.06);
-    color: #45608e;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
+  .cfpb-card__inner { display: flex; flex-direction: column; height: 100%; }
+  .cfpb-card__inner--row { flex-direction: row; }
+  .cfpb-card__text { display: flex; flex-direction: column; gap: 6px; }
+  .cfpb-card--tall .cfpb-card__text { padding: 20px 20px 8px; }
+  .cfpb-card--sm .cfpb-card__text { padding: 20px 8px 20px 20px; flex: 1 1 55%; }
+  .cfpb-card__icon { margin-bottom: 8px; flex-shrink: 0; }
   .cfpb-card__title {
-    margin: 0.85rem 0 0.55rem;
-    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-    line-height: 1.18;
-    color: #14213b;
+    font-family: var(--font-heading); font-size: 22px; font-weight: 700; line-height: 1.3;
+    color: var(--heading-dark); margin: 0 0 6px;
   }
+  .cfpb-card--sm .cfpb-card__title { font-size: 17px; }
+  .cfpb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
+  .cfpb-card--sm .cfpb-card__desc { font-size: 13px; }
 
-  .cfpb-card__desc {
-    margin: 0;
-    color: #566884;
-    line-height: 1.65;
-    font-size: 0.96rem;
+  .cfpb-card__img {
+    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+    background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%);
   }
-
-  .cfpb-point-list {
-    list-style: none;
-    margin: 1rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .cfpb-point-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: #243a61;
-    font-weight: 600;
-  }
-
-  .cfpb-point-list li::before {
-    content: "";
-    flex: 0 0 0.6rem;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #22c55e, #38bdf8);
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
-  }
-
-  .cfpb-art { position: relative; z-index: 1; min-height: 146px; }
-  .cfpb-art--hero { min-height: 228px; margin-top: 0.6rem; }
-  .cfpb-art--mini { align-self: end; }
-
-  .cfpb-mini-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    color: #183465;
-    font-size: 0.72rem;
-    font-weight: 700;
-    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
-    position: absolute;
-    left: 0;
-    bottom: 0;
-  }
-
-  /* === Hero visual: submit === */
-  .cfpb-form-frame {
-    position: absolute;
-    inset: 0.5rem 8% auto 8%;
-    padding: 1rem;
-    border-radius: 1.2rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    animation: cfpb-float 5.2s ease-in-out infinite;
-  }
-
-  @keyframes cfpb-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-  }
-
-  .cfpb-form-header {
-    height: 0.5rem;
-    width: 45%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  .cfpb-form-field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .cfpb-form-label {
-    height: 0.3rem;
-    width: 30%;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-form-input {
-    height: 1.4rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-form-input--wide { width: 100%; }
-
-  .cfpb-form-textarea {
-    height: 2.6rem;
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-form-submit {
-    width: 40%;
-    height: 1.5rem;
-    border-radius: 0.5rem;
-    background: linear-gradient(90deg, #375dfb, #5b7cfd);
-    align-self: flex-end;
-  }
-
-  .cfpb-submit-badge {
-    position: absolute;
-    right: 5%;
-    bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0.6rem 1rem;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-    border: 1px solid rgba(34, 197, 94, 0.25);
-  }
-
-  .cfpb-submit-check {
-    width: 1.2rem;
-    height: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #22c55e;
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-  }
-
-  .cfpb-submit-text {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #16a34a;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  /* === Hero visual: review === */
-  .cfpb-review-grid {
-    position: absolute;
-    inset: 0.5rem 5% auto 5%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    animation: cfpb-float 5.5s ease-in-out infinite;
-  }
-
-  .cfpb-reviewer-card {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem 0.8rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-  }
-
-  .cfpb-reviewer-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #375dfb, #38bdf8);
-    flex-shrink: 0;
-  }
-
-  .cfpb-reviewer-avatar--alt { background: linear-gradient(135deg, #afa3ff, #e0b3ff); }
-  .cfpb-reviewer-avatar--alt2 { background: linear-gradient(135deg, #22c55e, #38bdf8); }
-
-  .cfpb-reviewer-bar {
-    flex: 1;
-    height: 0.4rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-reviewer-stars {
-    display: flex;
-    gap: 2px;
-  }
-
-  .cfpb-reviewer-stars span {
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 2px;
-    background: #f59e0b;
-  }
-
-  .cfpb-star--empty { background: rgba(55, 93, 251, 0.08) !important; }
-
-  .cfpb-review-badge {
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0.6rem 1rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-    border: 1px solid rgba(55, 93, 251, 0.18);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #375dfb;
-  }
-
-  .cfpb-review-badge-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #375dfb;
-  }
-
-  /* === Hero visual: decision === */
-  .cfpb-decision-panel {
-    position: absolute;
-    inset: 0.5rem 5% auto 5%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    animation: cfpb-float 5.3s ease-in-out infinite;
-  }
-
-  .cfpb-decision-row {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.7rem 0.8rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-  }
-
-  .cfpb-decision-paper-bar {
-    flex: 1;
-    height: 0.4rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-decision-score {
-    font-family: var(--font-heading);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #14213b;
-    min-width: 2rem;
-    text-align: center;
-  }
-
-  .cfpb-decision-btn {
-    padding: 0.3rem 0.7rem;
-    border-radius: 999px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .cfpb-decision-btn--accept { background: rgba(34, 197, 94, 0.12); color: #16a34a; }
-  .cfpb-decision-btn--revise { background: rgba(245, 158, 11, 0.12); color: #d97706; }
-  .cfpb-decision-btn--reject { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
-
-  .cfpb-decision-badge {
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 0.6rem 1rem;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-    border: 1px solid rgba(34, 197, 94, 0.25);
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #16a34a;
-  }
-
-  .cfpb-decision-badge-icon { font-size: 1rem; }
-
-  /* === Mini visuals === */
-
-  /* authorport */
-  .cfpb-portal-cards {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .cfpb-portal-card {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 0.7rem;
-    border-radius: 0.8rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-portal-status {
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .cfpb-portal-status--review { background: #f59e0b; }
-  .cfpb-portal-status--accepted { background: #22c55e; }
-
-  .cfpb-portal-bar {
-    flex: 1;
-    height: 0.35rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  /* fileup */
-  .cfpb-upload-zone {
-    position: absolute;
-    inset: 0.4rem 0.8rem auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 1rem;
-    border-radius: 1rem;
-    border: 2px dashed rgba(55, 93, 251, 0.2);
-    background: rgba(255, 255, 255, 0.6);
-  }
-
-  .cfpb-upload-icon {
-    width: 2.4rem;
-    height: 2.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .cfpb-file-icons {
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  .cfpb-file-icon {
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.4rem;
-    font-size: 0.6rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-  }
-
-  .cfpb-file-icon--pdf { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
-  .cfpb-file-icon--doc { background: rgba(55, 93, 251, 0.1); color: #375dfb; }
-
-  /* deadline */
-  .cfpb-calendar {
-    position: absolute;
-    inset: 0.4rem 0.6rem auto;
-    padding: 0.7rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-calendar-header {
-    height: 0.35rem;
-    width: 50%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-    margin-bottom: 0.5rem;
-  }
-
-  .cfpb-calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-  }
-
-  .cfpb-calendar-grid span {
-    height: 1rem;
-    border-radius: 4px;
-    background: rgba(55, 93, 251, 0.04);
-  }
-
-  .cfpb-calendar-today {
-    background: rgba(55, 93, 251, 0.15) !important;
-    border: 1px solid rgba(55, 93, 251, 0.3);
-  }
-
-  .cfpb-calendar-deadline {
-    background: rgba(220, 38, 38, 0.12) !important;
-    border: 1px solid rgba(220, 38, 38, 0.3);
-  }
-
-  /* coauthor */
-  .cfpb-authors-linked {
-    position: absolute;
-    inset: 0.8rem 0.5rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-  }
-
-  .cfpb-author-node { position: relative; }
-
-  .cfpb-author-avatar {
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #375dfb, #38bdf8);
-    display: block;
-  }
-
-  .cfpb-author-avatar--alt { background: linear-gradient(135deg, #afa3ff, #e0b3ff); }
-  .cfpb-author-avatar--alt2 { background: linear-gradient(135deg, #22c55e, #38bdf8); }
-
-  .cfpb-author-link-line {
-    width: 1.2rem;
-    height: 2px;
-    background: rgba(55, 93, 251, 0.2);
-  }
-
-  /* blindrev */
-  .cfpb-blind-cards {
-    position: absolute;
-    inset: 0.5rem 0.8rem auto;
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .cfpb-blind-card {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.7rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-    position: relative;
-  }
-
-  .cfpb-blind-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #94a3b8, #cbd5e1);
-  }
-
-  .cfpb-blind-avatar--alt { background: linear-gradient(135deg, #a78bfa, #c4b5fd); }
-
-  .cfpb-blind-mask {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(4px);
-    border-radius: 1rem;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #375dfb;
-  }
-
-  /* rubric */
-  .cfpb-rubric-table {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .cfpb-rubric-row {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.7rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-rubric-label {
-    width: 3rem;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .cfpb-rubric-dots {
-    display: flex;
-    gap: 3px;
-    margin-left: auto;
-  }
-
-  .cfpb-rubric-dot--filled {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background: #375dfb;
-  }
-
-  .cfpb-rubric-dot--empty {
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  /* conflict */
-  .cfpb-conflict-display {
-    position: absolute;
-    inset: 0.6rem 0.8rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.8rem;
-  }
-
-  .cfpb-conflict-badge-icon {
-    width: 2.6rem;
-    height: 2.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: rgba(245, 158, 11, 0.12);
-    border: 1px solid rgba(245, 158, 11, 0.25);
-  }
-
-  .cfpb-conflict-arrow {
-    font-size: 1.4rem;
-    color: #375dfb;
-    font-weight: 700;
-  }
-
-  .cfpb-conflict-reassign {
-    display: flex;
-    align-items: center;
-  }
-
-  .cfpb-conflict-new-avatar {
-    width: 2.2rem;
-    height: 2.2rem;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #22c55e, #38bdf8);
-    border: 2px solid rgba(34, 197, 94, 0.3);
-  }
-
-  /* reminder */
-  .cfpb-reminder-display {
-    position: absolute;
-    inset: 0.6rem 0 auto 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-  }
-
-  .cfpb-reminder-envelope {
-    padding: 0.6rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
+  .cfpb-card--tall .cfpb-card__img { flex: 1; padding: 0 12px; min-height: 0; }
+  .cfpb-card--sm .cfpb-card__img { flex: 0 0 42%; padding: 8px 8px 0 0; }
+  .cfpb-card__img :global(svg) {
+    width: 100%; height: auto; max-width: none;
+    filter: drop-shadow(0 8px 16px rgba(31,52,128,.12));
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease;
   }
-
-  .cfpb-reminder-clock {
-    position: absolute;
-    right: 0.6rem;
-    top: -0.2rem;
-    padding: 0.3rem;
-    border-radius: 50%;
-    background: #fff;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
-  }
-
-  /* decemail */
-  .cfpb-email-template {
-    position: absolute;
-    inset: 0.4rem 0.6rem auto;
-    padding: 0.8rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .cfpb-email-header-bar {
-    height: 0.35rem;
-    width: 55%;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-email-body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .cfpb-email-line {
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.06);
-  }
-
-  .cfpb-email-line--short { width: 60%; }
-
-  .cfpb-email-decision-badge {
-    align-self: flex-start;
-    padding: 0.25rem 0.6rem;
-    border-radius: 999px;
-    font-size: 0.6rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-
-  .cfpb-email-decision-badge--accept { background: rgba(34, 197, 94, 0.12); color: #16a34a; }
-
-  /* sessassign */
-  .cfpb-session-slots {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .cfpb-session-slot {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.6rem;
-    border-radius: 0.8rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-session-slot-time {
-    width: 2rem;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-session-paper-card {
-    flex: 1;
-    padding: 0.4rem;
-    border-radius: 0.5rem;
-    background: rgba(55, 93, 251, 0.06);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .cfpb-session-paper-bar {
-    display: block;
-    height: 0.3rem;
-    width: 70%;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.15);
-  }
-
-  .cfpb-session-slot--empty { opacity: 0.5; }
-
-  .cfpb-session-slot-placeholder {
-    flex: 1;
-    height: 1.2rem;
-    border-radius: 0.5rem;
-    border: 2px dashed rgba(55, 93, 251, 0.15);
-  }
-
-  /* proceedings */
-  .cfpb-pdf-doc {
-    position: absolute;
-    inset: 0.4rem 1rem auto;
-    padding: 1rem;
-    border-radius: 0.6rem;
-    background: linear-gradient(180deg, #ffffff, #f8faff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    box-shadow: 0 10px 24px -16px rgba(18, 34, 74, 0.2);
-  }
-
-  .cfpb-pdf-corner {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 1.2rem;
-    height: 1.2rem;
-    background: linear-gradient(135deg, transparent 50%, rgba(55, 93, 251, 0.1) 50%);
-    border-radius: 0 0.6rem 0 0;
-  }
-
-  .cfpb-pdf-title-bar {
-    height: 0.5rem;
-    width: 60%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-    margin-bottom: 0.3rem;
-  }
-
-  .cfpb-pdf-line {
-    height: 0.2rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.06);
-  }
-
-  .cfpb-pdf-line--short { width: 50%; }
-  .cfpb-pdf-line--med { width: 75%; }
-
-  /* cameraready */
-  .cfpb-camera-ready {
-    position: absolute;
-    inset: 0.5rem 0 auto 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .cfpb-camera-circle {
-    width: 3.5rem;
-    height: 3.5rem;
-  }
-
-  .cfpb-camera-svg { width: 100%; height: 100%; }
-
-  .cfpb-camera-ring {
-    animation: cfpb-ring-draw 1.5s ease-in-out infinite alternate;
-  }
-
-  @keyframes cfpb-ring-draw {
-    from { stroke-dashoffset: 126; }
-    to { stroke-dashoffset: 0; }
-  }
-
-  .cfpb-camera-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #16a34a;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  .cfpb-card:hover .cfpb-card__img :global(svg) {
+    transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18));
+    animation: cfpbFloat 2.2s ease-in-out infinite;
   }
+  @keyframes cfpbFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
 
-  /* === Responsive === */
   @media (max-width: 1024px) {
-    .cfpb-section { padding: 64px 0 50px; }
+    .cfpb-section { padding: 60px 0 48px; }
     .cfpb-title { font-size: 36px; }
-    .cfpb-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "hero hero"
-        "mini1 mini2"
-        "mini3 mini4";
-    }
-    .cfpb-card--hero { min-height: 360px; }
+    .cfpb-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
+    .cfpb-pos-0 { grid-column: 1 / -1; grid-row: auto; }
+    .cfpb-pos-1, .cfpb-pos-2, .cfpb-pos-3, .cfpb-pos-4 { grid-column: auto; grid-row: auto; }
+    [data-layout="b"] .cfpb-pos-0, [data-layout="c"] .cfpb-pos-0 { grid-column: 1 / -1; }
+    [data-layout="b"] .cfpb-pos-1, [data-layout="b"] .cfpb-pos-2, [data-layout="b"] .cfpb-pos-3, [data-layout="b"] .cfpb-pos-4,
+    [data-layout="c"] .cfpb-pos-1, [data-layout="c"] .cfpb-pos-2, [data-layout="c"] .cfpb-pos-3, [data-layout="c"] .cfpb-pos-4 { grid-column: auto; grid-row: auto; }
+    .cfpb-card--tall .cfpb-card__inner { flex-direction: row; }
+    .cfpb-card--tall .cfpb-card__text { flex: 1; }
+    .cfpb-card--tall .cfpb-card__img { flex: 0 0 36%; padding: 12px; }
   }
-
   @media (max-width: 767px) {
-    .cfpb-section { padding: 52px 0 40px; }
-    .cfpb-title { font-size: 28px; line-height: 1.15; }
+    .cfpb-title { font-size: 28px; }
     .cfpb-subtitle { font-size: 15px; }
-    .cfpb-nav { max-width: 100%; overflow-x: auto; }
-    .cfpb-tab { font-size: 13px; padding: 8px 14px; white-space: nowrap; }
-    .cfpb-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas:
-        "hero"
-        "mini1"
-        "mini2"
-        "mini3"
-        "mini4";
-    }
-    .cfpb-card--hero { min-height: 420px; }
-    .cfpb-card--mini { min-height: 180px; }
+    .cfpb-nav { flex-direction: column; width: 100%; max-width: 300px; border-radius: 16px; }
+    .cfpb-tab { border-radius: 12px; }
+    .cfpb-grid { grid-template-columns: 1fr; }
+    .cfpb-pos-0, .cfpb-pos-1, .cfpb-pos-2, .cfpb-pos-3, .cfpb-pos-4,
+    [data-layout="b"] .cfpb-pos-0, [data-layout="b"] .cfpb-pos-1, [data-layout="b"] .cfpb-pos-2, [data-layout="b"] .cfpb-pos-3, [data-layout="b"] .cfpb-pos-4,
+    [data-layout="c"] .cfpb-pos-0, [data-layout="c"] .cfpb-pos-1, [data-layout="c"] .cfpb-pos-2, [data-layout="c"] .cfpb-pos-3, [data-layout="c"] .cfpb-pos-4 { grid-column: 1; grid-row: auto; }
+    .cfpb-card--sm .cfpb-card__inner, .cfpb-card--tall .cfpb-card__inner { flex-direction: row; }
+    .cfpb-card--sm .cfpb-card__text, .cfpb-card--tall .cfpb-card__text { padding: 14px 6px 14px 14px; flex: 1 1 60%; }
+    .cfpb-card--sm .cfpb-card__img, .cfpb-card--tall .cfpb-card__img { flex: 0 0 38%; padding: 4px 4px 0 0; align-items: flex-end; justify-content: flex-end; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cfpb-card { animation: none !important; opacity: 1; transform: none; }
+    .cfpb-card:hover::after { animation: none !important; }
+    .cfpb-card:hover .cfpb-card__img :global(svg) { animation: none !important; transform: none; }
   }
 </style>
