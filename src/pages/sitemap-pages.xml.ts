@@ -12,7 +12,7 @@ import type { APIRoute } from "astro";
  */
 
 // Pages to omit even though they exist as static routes (thank-you, etc.).
-const EXCLUDE = new Set<string>(["/book-a-demo/thank-you/"]);
+const EXCLUDE = new Set<string>(["/book-a-demo/thank-you/", "/pricing/"]);
 
 // Path prefixes never included (proxy / API routes).
 const EXCLUDE_PREFIXES = ["/api/", "/wp-content/"];

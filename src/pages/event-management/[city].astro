@@ -1,0 +1,663 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { locations } from "../../data/locations";
+import type { LocationData } from "../../data/locations";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return locations.map((loc) => ({
+    params: { city: loc.slug },
+    props: { loc },
+  }));
+}
+
+interface Props {
+  loc: LocationData;
+}
+
+const { loc } = Astro.props;
+const { city, country, region, intro, localAngle, payments, arabicRtl, industryNote } = loc;
+
+const pageTitle = `Event Management Software in ${city} | EventHex`;
+const pageDescription = `EventHex powers event management in ${city}, ${country} — online registration, local payment methods, QR check-in, WhatsApp notifications, and AI-driven insights for ${city}'s ${industryNote}.`;
+const canonicalUrl = `https://eventhex.ai/event-management/${loc.slug}/`;
+
+// Service JSON-LD
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: `Event Management Software in ${city}`,
+  provider: {
+    "@type": "Organization",
+    name: "EventHex",
+    url: "https://eventhex.ai",
+  },
+  areaServed: {
+    "@type": "City",
+    name: city,
+    addressCountry: country,
+  },
+  description: pageDescription,
+  url: canonicalUrl,
+  serviceType: "Event Management Software",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "Free demo available",
+  },
+};
+
+// FAQ JSON-LD — per-city questions
+const faqItems: { q: string; a: string }[] = (() => {
+  if (loc.slug === "dubai") return [
+    {
+      q: "Does EventHex support Arabic for events in Dubai?",
+      a: "Yes. EventHex ships full Arabic RTL support across the attendee app, registration forms, and email notifications — essential for events in Dubai that serve both English and Arabic-speaking audiences.",
+    },
+    {
+      q: "Which payment methods does EventHex support for Dubai event ticketing?",
+      a: "EventHex integrates with Tap Payments, which covers Visa, Mastercard, Apple Pay, and UAE local payment methods. Attendees can pay in AED without encountering foreign-currency friction.",
+    },
+    {
+      q: "Can EventHex handle large-scale check-in at Dubai venues like DWTC or ADNEC?",
+      a: "Yes. EventHex's check-in app supports multiple simultaneous scanning devices, offline mode for connectivity-challenged areas, and real-time attendance dashboards — built for the scale of Dubai's major conference venues.",
+    },
+    {
+      q: "Does EventHex support WhatsApp for event communications in the UAE?",
+      a: "Yes. WhatsApp is EventHex's primary attendee notification channel — ticket delivery, event reminders, and last-minute updates are all sent via WhatsApp, which is the dominant messaging platform in the UAE.",
+    },
+  ];
+  if (loc.slug === "abu-dhabi") return [
+    {
+      q: "Can EventHex manage VIP and protocol attendee tiers for Abu Dhabi government events?",
+      a: "Yes. EventHex supports multiple attendee categories with different registration flows, badge designs, and access levels — covering the VIP, media, and general public tiers common in Abu Dhabi's government and cultural events.",
+    },
+    {
+      q: "Is EventHex compliant with UAE VAT for event ticketing in Abu Dhabi?",
+      a: "EventHex supports VAT-inclusive and VAT-exclusive ticket pricing with itemised receipts, making it straightforward to collect the 5% UAE VAT on taxable ticket sales.",
+    },
+    {
+      q: "Does EventHex support Arabic for Abu Dhabi's Arabic-speaking attendees?",
+      a: "Yes. Arabic is a first-class language in EventHex — the attendee app, registration forms, and all automated emails render in correct right-to-left Arabic when an attendee selects Arabic as their language.",
+    },
+    {
+      q: "Which payment gateway does EventHex use for events in Abu Dhabi?",
+      a: "EventHex integrates with Tap Payments, supporting UAE debit and credit cards, Apple Pay, and link-based payments in AED — no friction for Abu Dhabi's local and international attendees.",
+    },
+  ];
+  if (loc.slug === "riyadh") return [
+    {
+      q: "Does EventHex accept mada cards for event ticketing in Saudi Arabia?",
+      a: "Yes. Through the Tap Payments integration, EventHex accepts mada debit cards — the dominant payment method in Saudi Arabia — alongside Visa, Mastercard, and Apple Pay.",
+    },
+    {
+      q: "Is EventHex's registration flow available in Arabic for Riyadh events?",
+      a: "Yes. EventHex renders registration forms, the attendee app, and all communications in full Arabic with correct RTL layout — mandatory for events in Saudi Arabia where Arabic is the primary language.",
+    },
+    {
+      q: "Can EventHex handle the scale of large Riyadh Season or GITEX-style events?",
+      a: "Yes. EventHex's multi-device check-in, bulk attendee import, and real-time session tracking are purpose-built for events with thousands of concurrent attendees — the scale typical of Saudi Arabia's flagship event calendar.",
+    },
+    {
+      q: "How does EventHex help Saudi event organisers meet Vision 2030 reporting requirements?",
+      a: "EventHex provides real-time attendance data, session engagement reports, and post-event analytics that can be exported for stakeholder reporting — giving organisers the data they need to demonstrate event ROI.",
+    },
+  ];
+  if (loc.slug === "doha") return [
+    {
+      q: "Does EventHex support KNET payments for events in Qatar?",
+      a: "Yes. Through the Tap Payments integration, EventHex supports KNET — Qatar's national debit network — alongside Visa, Mastercard, and Apple Pay, ensuring local residents can purchase tickets without friction.",
+    },
+    {
+      q: "Can EventHex handle bilingual English and Arabic events in Doha?",
+      a: "Yes. EventHex supports simultaneous English and Arabic communications, with full RTL Arabic rendering across the registration form, attendee app, and all automated notifications.",
+    },
+    {
+      q: "Does EventHex work for large diplomatic and government events in Qatar?",
+      a: "Yes. EventHex's attendee category system supports VIP, government delegate, media, and general attendee tiers with separate registration flows, badge designs, and access controls.",
+    },
+    {
+      q: "How does EventHex deliver tickets to Doha event attendees?",
+      a: "EventHex delivers QR-code tickets via email and WhatsApp — both channels are well-used in Qatar. Attendees can also access their tickets through the EventHex attendee app.",
+    },
+  ];
+  if (loc.slug === "london") return [
+    {
+      q: "Is EventHex GDPR-compliant for UK event organisers?",
+      a: "Yes. EventHex registration forms include configurable consent fields, data retention controls, and opt-in language designed to satisfy ICO GDPR requirements — without needing custom development per event.",
+    },
+    {
+      q: "Does EventHex integrate with Stripe for GBP payments at London events?",
+      a: "Yes. EventHex's Stripe integration supports GBP pricing, VAT-inclusive ticketing, Visa, Mastercard, and American Express — standard for UK corporate event ticketing.",
+    },
+    {
+      q: "Does EventHex integrate with HubSpot for post-event lead management?",
+      a: "Yes. EventHex syncs attendee registration data to HubSpot in real time, so your London event leads are in your CRM by the time the first session ends — no post-event CSV imports required.",
+    },
+    {
+      q: "Can EventHex handle large multi-track conferences at ExCeL or Olympia London?",
+      a: "Yes. EventHex supports multi-session, multi-track event programmes with session-level registration, capacity limits, and real-time attendance tracking across all concurrent sessions.",
+    },
+  ];
+  if (loc.slug === "singapore") return [
+    {
+      q: "Does EventHex support SGD payments for Singapore events?",
+      a: "Yes. Through the Stripe integration, EventHex processes Singapore Dollar (SGD) payments across Visa, Mastercard, and American Express — the standard card networks at Singapore's professional conferences.",
+    },
+    {
+      q: "How does EventHex handle fast badge printing at Singapore venues like Marina Bay Sands?",
+      a: "EventHex's check-in app supports on-demand badge printing triggered at the point of QR scan — attendees are checked in and badged in under 10 seconds, keeping queues moving at Singapore's high-volume venues.",
+    },
+    {
+      q: "Does EventHex support WhatsApp notifications for Singapore events?",
+      a: "Yes. WhatsApp is available as a notification channel within EventHex — useful for multi-day Singapore conferences where schedule changes or room moves need to reach attendees instantly.",
+    },
+    {
+      q: "Can EventHex manage ASEAN-wide delegate lists for regional Singapore summits?",
+      a: "Yes. EventHex supports bulk attendee import, multi-country registration forms, and group registration flows — common for regional ASEAN events based in Singapore with delegates travelling from across the region.",
+    },
+  ];
+  // Mumbai
+  return [
+    {
+      q: "Does EventHex support UPI payments for Mumbai event ticketing?",
+      a: "Yes. EventHex integrates with Razorpay, which supports UPI (including UPI QR), net banking, domestic debit and credit cards, and EMI — covering the full range of payment preferences in the Indian market.",
+    },
+    {
+      q: "Can EventHex handle large attendee volumes at Mumbai venues like NESCO or NSCI?",
+      a: "Yes. EventHex supports multi-device check-in across multiple entry gates, bulk attendee import, and a real-time dashboard showing live attendance counts — built for Mumbai's large-scale conference and exhibition format.",
+    },
+    {
+      q: "Does EventHex send tickets via WhatsApp for Indian events?",
+      a: "Yes. EventHex delivers QR-code tickets and event updates via WhatsApp — the platform with the highest open rates in the Indian market — ensuring attendees actually receive and can find their tickets on event day.",
+    },
+    {
+      q: "How does EventHex help Mumbai event organisers manage post-event reporting?",
+      a: "EventHex generates session-level attendance reports, registration source analytics, and revenue summaries that can be exported for client or sponsor reporting — standard practice for Mumbai's corporate event market.",
+    },
+  ];
+})();
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqItems.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: a,
+    },
+  })),
+};
+
+// Capabilities list — common + per-city overrides
+const capabilities = [
+  {
+    icon: "📋",
+    title: "Online Event Registration",
+    desc: `Custom registration forms in ${arabicRtl ? "English and Arabic (with full RTL layout)" : "English"}, optimised for ${city}'s attendee base. Capacity limits, discount codes, group registration, and conditional fields — all without a developer.`,
+  },
+  {
+    icon: "🎟️",
+    title: `Ticketing with ${payments.map((p) => p.label).join(" & ")}`,
+    desc: `Sell tickets in local currency with ${payments.map((p) => p.label).join(" and ")} — covering the payment methods ${city} attendees actually use. Instant confirmation, QR-code ticket delivery, and automated VAT receipts.`,
+  },
+  {
+    icon: "✅",
+    title: "Fast QR Check-In",
+    desc: `Multi-device QR scanning across all entry points, with offline mode for areas with patchy connectivity. Real-time attendance numbers feed directly into your operations dashboard — no manual tally needed.`,
+  },
+  {
+    icon: "💬",
+    title: "WhatsApp-First Attendee Notifications",
+    desc: `Ticket delivery, event reminders, and last-minute updates via WhatsApp${arabicRtl ? " in both English and Arabic" : ""} — the channel your ${city} attendees actually open.`,
+  },
+  {
+    icon: "🤖",
+    title: "AI-Powered Event Insights",
+    desc: `EventHex's AI layer surfaces attendance trends, session popularity, and registration drop-off points in plain language — so you can act on data without a dedicated analyst.`,
+  },
+  ...(arabicRtl
+    ? [
+        {
+          icon: "🌐",
+          title: "Arabic RTL Localisation",
+          desc: `Full right-to-left Arabic across the attendee app, registration forms, and email notifications. Not a translation plugin — Arabic is built into the platform so every attendee touchpoint feels native.`,
+        },
+      ]
+    : []),
+];
+
+const whyPoints = [
+  {
+    title: `Built for ${region} Event Scale`,
+    desc: `EventHex is actively used by event organisers across ${region} — the platform is production-tested at the kind of events ${city} regularly hosts, not piloted at small workshops.`,
+  },
+  {
+    title: "Local Payment Methods, No Workarounds",
+    desc: `${payments.map((p) => p.label).join(" and ")} support is native — not a bolt-on. ${city} attendees pay how they prefer, and you collect in local currency.`,
+  },
+  {
+    title: "WhatsApp at the Core",
+    desc: `EventHex uses WhatsApp for the full attendee journey — registration confirmation, ticket delivery, reminders, and day-of updates. In markets like ${country}, WhatsApp open rates dwarf email.`,
+  },
+  {
+    title: "Ops Dashboard Your Team Will Actually Use",
+    desc: `A single real-time dashboard covering registrations, check-in counts, session attendance, and revenue — giving your on-site team one place to look instead of three spreadsheets.`,
+  },
+  {
+    title: "Setup in Days, Not Months",
+    desc: `Most EventHex customers go from sign-up to live event page in under a week. No IT project, no lengthy onboarding — a dedicated setup call and you're running.`,
+  },
+];
+---
+
+<MarketingLayout
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonicalUrl}
+  footerCtaTitle={`Ready to run better events in ${city}?`}
+  footerCtaButtonText="Book a Free Demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <!-- JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} slot="head" />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} slot="head" />
+
+  <!-- Hero -->
+  <section class="location-hero">
+    <div class="container">
+      <div class="location-hero__badge">
+        {region}
+      </div>
+      <h1 class="location-hero__h1">
+        Event Management Software<br />in <span class="location-hero__city">{city}</span>
+      </h1>
+      <p class="location-hero__lead">{intro}</p>
+      <div class="location-hero__actions">
+        <a href="/book-a-demo/" class="btn-primary">Book a Free Demo</a>
+        <a href="/event-check-in/" class="btn-secondary">See Check-In in Action</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Local angle / market context -->
+  <section class="local-angle">
+    <div class="container local-angle__inner">
+      <div class="local-angle__label">Why {city}?</div>
+      <h2 class="local-angle__heading">Running Events in {city}, {country}</h2>
+      <p class="local-angle__body">{localAngle}</p>
+      <div class="local-angle__links">
+        {payments.map((p) => (
+          <a href={p.href} class="pill-link">{p.icon ?? ""} {p.label} Integration →</a>
+        ))}
+        {arabicRtl && (
+          <a href="/localization/" class="pill-link">Arabic RTL Localisation →</a>
+        )}
+        <a href="/event-check-in/" class="pill-link">Event Check-In App →</a>
+        <a href="/event-ticketing/" class="pill-link">Event Ticketing →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Capabilities -->
+  <section class="capabilities">
+    <div class="container">
+      <h2 class="section-heading">Everything You Need for {city} Events</h2>
+      <p class="section-sub">One platform. Every capability your {city} event requires — from first registration to final attendance report.</p>
+      <div class="capabilities__grid">
+        {capabilities.map((cap) => (
+          <div class="cap-card">
+            <div class="cap-card__icon" aria-hidden="true">{cap.icon}</div>
+            <h3 class="cap-card__title">{cap.title}</h3>
+            <p class="cap-card__desc">{cap.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Why EventHex in this city -->
+  <section class="why-section">
+    <div class="container">
+      <h2 class="section-heading">Why {city} Event Organisers Choose EventHex</h2>
+      <div class="why-section__grid">
+        {whyPoints.map((pt, i) => (
+          <div class="why-card">
+            <div class="why-card__num" aria-hidden="true">0{i + 1}</div>
+            <h3 class="why-card__title">{pt.title}</h3>
+            <p class="why-card__desc">{pt.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container faq-section__inner">
+      <h2 class="section-heading">FAQs — Event Management in {city}</h2>
+      <div class="faq-list">
+        {faqItems.map(({ q, a }) => (
+          <details class="faq-item">
+            <summary class="faq-item__q">{q}</summary>
+            <p class="faq-item__a">{a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container cta-section__inner">
+      <h2 class="cta-section__heading">Ready to run better events in {city}?</h2>
+      <p class="cta-section__sub">
+        See how EventHex handles registration, ticketing, check-in, and reporting for {city}'s {industryNote} — live in a 30-minute demo.
+      </p>
+      <a href="/book-a-demo/" class="btn-primary btn-primary--large">Book a Free Demo</a>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── Layout helpers ── */
+  .container {
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* ── Shared typography ── */
+  .section-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 3vw, 2.25rem);
+    font-weight: 700;
+    color: var(--heading-dark);
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-sub {
+    font-size: 1.05rem;
+    color: var(--body-gray);
+    text-align: center;
+    max-width: 680px;
+    margin-inline: auto;
+    margin-bottom: 3rem;
+    line-height: 1.7;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    display: inline-block;
+    background: var(--brand-blue);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.18s ease;
+  }
+  .btn-primary:hover { background: var(--brand-blue-hover); }
+  .btn-primary--large { padding: 1rem 2.25rem; font-size: 1.05rem; }
+
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--brand-blue);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    border: 2px solid var(--brand-blue);
+    text-decoration: none;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .btn-secondary:hover {
+    background: var(--surface-blue-tint);
+  }
+
+  /* ── Hero ── */
+  .location-hero {
+    background: var(--surface-light);
+    padding: 5rem 0 4rem;
+    text-align: center;
+  }
+  .location-hero__badge {
+    display: inline-block;
+    background: var(--surface-blue-tint);
+    color: var(--brand-blue);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 1.25rem;
+  }
+  .location-hero__h1 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    color: var(--heading-dark);
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+  }
+  .location-hero__city {
+    color: var(--brand-blue);
+  }
+  .location-hero__lead {
+    font-size: 1.1rem;
+    color: var(--body-gray);
+    max-width: 720px;
+    margin-inline: auto;
+    margin-bottom: 2.25rem;
+    line-height: 1.75;
+  }
+  .location-hero__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Local angle ── */
+  .local-angle {
+    padding: 4rem 0;
+    background: #fff;
+    border-bottom: 1px solid var(--surface-card-border);
+  }
+  .local-angle__inner {
+    max-width: 800px;
+  }
+  .local-angle__label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    margin-bottom: 0.5rem;
+  }
+  .local-angle__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin-bottom: 1rem;
+  }
+  .local-angle__body {
+    font-size: 1.02rem;
+    color: var(--body-gray);
+    line-height: 1.8;
+    margin-bottom: 1.75rem;
+  }
+  .local-angle__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .pill-link {
+    display: inline-block;
+    background: var(--surface-blue-tint);
+    color: var(--brand-blue);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .pill-link:hover { background: #cdd9fd; }
+
+  /* ── Capabilities ── */
+  .capabilities {
+    padding: 5rem 0;
+    background: var(--surface-light);
+  }
+  .capabilities__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .cap-card {
+    background: #fff;
+    border: 1px solid var(--surface-card-border);
+    border-radius: 12px;
+    padding: 1.75rem;
+    transition: box-shadow 0.18s ease;
+  }
+  .cap-card:hover { box-shadow: 0 6px 24px rgba(55, 93, 251, 0.08); }
+  .cap-card__icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .cap-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin-bottom: 0.5rem;
+  }
+  .cap-card__desc {
+    font-size: 0.92rem;
+    color: var(--body-gray);
+    line-height: 1.7;
+  }
+
+  /* ── Why section ── */
+  .why-section {
+    padding: 5rem 0;
+    background: #fff;
+  }
+  .why-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .why-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .why-card__num {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--surface-blue-tint);
+    line-height: 1;
+    /* Rendered as decorative — readable text behind */
+    -webkit-text-stroke: 2px var(--brand-blue);
+  }
+  .why-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+  }
+  .why-card__desc {
+    font-size: 0.92rem;
+    color: var(--body-gray);
+    line-height: 1.7;
+  }
+
+  /* ── FAQ ── */
+  .faq-section {
+    padding: 5rem 0;
+    background: var(--surface-light);
+  }
+  .faq-section__inner {
+    max-width: 760px;
+  }
+  .faq-list {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .faq-item {
+    background: #fff;
+    border: 1px solid var(--surface-card-border);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+  }
+  .faq-item__q {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--heading-dark);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .faq-item__q::after {
+    content: "+";
+    font-size: 1.25rem;
+    color: var(--brand-blue);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  details[open] .faq-item__q::after { content: "−"; }
+  .faq-item__a {
+    font-size: 0.92rem;
+    color: var(--body-gray);
+    line-height: 1.75;
+    margin-top: 0.9rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--surface-card-border);
+  }
+
+  /* ── Final CTA ── */
+  .cta-section {
+    padding: 5rem 0;
+    background: var(--dark-card-bg);
+    text-align: center;
+  }
+  .cta-section__inner { max-width: 680px; }
+  .cta-section__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .cta-section__sub {
+    font-size: 1.05rem;
+    color: var(--accent-purple-light);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    .capabilities__grid,
+    .why-section__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
