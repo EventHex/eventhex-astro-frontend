@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { emojiIcon } from "../../lib/featureIcons";
 
 interface Props {
   industry: string;
@@ -139,7 +140,7 @@ const faqSchema = {
         {challenges.map((c, i) => (
           <article class="ind-challenges__card animate-on-scroll" data-animation="fadeInUp">
             <div class="ind-challenges__card-num">{String(i + 1).padStart(2, "0")}</div>
-            <span class="ind-challenges__card-icon">{c.icon}</span>
+            <span class="ind-challenges__card-icon" set:html={emojiIcon(c.icon)} />
             <h3 class="ind-challenges__card-title">{c.title}</h3>
             <p class="ind-challenges__card-desc">{c.desc}</p>
           </article>
@@ -161,7 +162,7 @@ const faqSchema = {
         {solutions.map((s) => (
           <a href={s.link} class="ind-solutions__card animate-on-scroll" data-animation="fadeInUp">
             <div class="ind-solutions__card-glow"></div>
-            <span class="ind-solutions__card-icon">{s.icon}</span>
+            <span class="ind-solutions__card-icon" set:html={emojiIcon(s.icon)} />
             <h3 class="ind-solutions__card-title">{s.title}</h3>
             <p class="ind-solutions__card-desc">{s.desc}</p>
             <span class="ind-solutions__card-link">
@@ -518,9 +519,20 @@ const faqSchema = {
     letter-spacing: 0.05em;
   }
   .ind-challenges__card-icon {
-    font-size: 2rem;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(55, 93, 251, 0.08);
+    border-radius: 10px;
     margin-bottom: 1rem;
+    color: var(--brand-blue);
+  }
+  .ind-challenges__card-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--brand-blue);
   }
   .ind-challenges__card-title {
     font-family: var(--font-heading);
@@ -621,10 +633,17 @@ const faqSchema = {
     opacity: 1;
   }
   .ind-solutions__card-icon {
-    font-size: 2rem;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 1rem;
     position: relative;
+    color: var(--brand-blue);
+  }
+  .ind-solutions__card-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--brand-blue);
   }
   .ind-solutions__card-title {
     font-family: var(--font-heading);

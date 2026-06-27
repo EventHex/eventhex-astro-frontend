@@ -1,159 +1,83 @@
 import type { APIRoute } from "astro";
 
 /**
- * All public Astro-owned static pages.
- * Update this list when adding or removing pages.
- * lastmod: ISO date string (YYYY-MM-DD) of last meaningful content change.
+ * Auto-generated sitemap of public Astro-owned static pages.
+ *
+ * Routes are discovered from the filesystem via import.meta.glob, so new
+ * static pages appear automatically — no manual list to maintain.
+ *
+ * Excluded automatically: dynamic routes ([slug]), 404, API/proxy routes.
+ * Dynamic blog/news *content* is covered by sitemap-posts.xml / sitemap-news.xml.
+ * EXCLUDE / SUPPLEMENT below handle the few hand-managed exceptions.
  */
-const STATIC_PAGES = [
-  { path: "/", changefreq: "weekly", priority: "1.0", lastmod: "2026-04-13" },
-  { path: "/about-us/", changefreq: "monthly", priority: "0.7", lastmod: "2026-04-13" },
-  { path: "/features/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/book-a-demo/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/contact-en/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/partnership/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/blog/", changefreq: "daily", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/news/", changefreq: "weekly", priority: "0.7", lastmod: "2026-04-13" },
-  // Blog category pages
-  { path: "/blog/category/product-updates/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  { path: "/blog/category/event-planning-strategy/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  { path: "/blog/category/event-technology-ai/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  { path: "/blog/category/event-marketing/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  { path: "/blog/category/attendee-engagement/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  { path: "/blog/category/comparisons-reviews/", changefreq: "weekly", priority: "0.6", lastmod: "2026-05-25" },
-  // Legal pages
-  { path: "/privacy-policy/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
-  { path: "/terms-of-service/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
-  { path: "/cookie-policy/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
-  { path: "/cancellation-refund-policy/", changefreq: "yearly", priority: "0.4", lastmod: "2026-04-13" },
-  // Feature pages
-  { path: "/event-ticketing/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/event-registration/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/event-marketing/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/speaker-management/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/session-management/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/exhibitor-management/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/sponsor-management/", changefreq: "monthly", priority: "0.9", lastmod: "2026-04-13" },
-  { path: "/event-check-in/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-analytics/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-mobile-app/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-website-builder/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-notifications/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-payment-processing/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/event-gamification/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/call-for-papers/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/badge-certificate-designer/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/centralized-dashboard/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/ai-form-builder/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/ai-event-copilot/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/ai-session-recap/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  { path: "/enhance-networking-ai-smart-connect/", changefreq: "monthly", priority: "0.8", lastmod: "2026-04-13" },
-  // Industries
-  { path: "/industries/", changefreq: "monthly", priority: "0.7", lastmod: "2026-04-13" },
-  { path: "/industries/associations/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/cultural/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/education/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/finance/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/government/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/healthcare/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/hospitality/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/manufacturing/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/media/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/middle-east/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/ngo/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/real-estate/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/retail/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/sports/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/industries/technology/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  // Integrations
-  { path: "/integrations/", changefreq: "monthly", priority: "0.7", lastmod: "2026-04-13" },
-  { path: "/integrations/email/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/hubspot/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/push-notifications/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/razorpay/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/stripe/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/tap-payments/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/webhooks/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/whatsapp/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/integrations/wordpress/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  // Use Cases
-  { path: "/use-cases/", changefreq: "monthly", priority: "0.7" },
-  { path: "/use-cases/academic-conferences/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/award-ceremonies/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/conferences/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/corporate-events/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/festivals/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/fundraising-events/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/government-events/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/hybrid-events/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/networking-events/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/product-launches/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/trade-shows/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  { path: "/use-cases/workshops/", changefreq: "monthly", priority: "0.6", lastmod: "2026-04-13" },
-  // Feature sub-use-case pages
-  { path: "/event-ticketing/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-ticketing/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-registration/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-check-in/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/event-analytics/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/live-polling-qa/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/academic-conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/award-ceremonies/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/conferences/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/corporate-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/fundraising-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/hybrid-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/networking-events/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/product-launches/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/trade-shows/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
-  { path: "/ai-photo-gallery/workshops/", changefreq: "monthly", priority: "0.5", lastmod: "2026-04-13" },
+
+// Pages to omit even though they exist as static routes (thank-you, etc.).
+const EXCLUDE = new Set<string>(["/book-a-demo/thank-you/", "/pricing/"]);
+
+// Path prefixes never included (proxy / API routes).
+const EXCLUDE_PREFIXES = ["/api/", "/wp-content/"];
+
+// Static URLs produced by dynamic route files (category/[slug]) that the
+// glob cannot enumerate. Keep this in sync when categories change.
+const SUPPLEMENT: string[] = [
+  "/blog/category/product-updates/",
+  "/blog/category/event-planning-strategy/",
+  "/blog/category/event-technology-ai/",
+  "/blog/category/event-marketing/",
+  "/blog/category/attendee-engagement/",
+  "/blog/category/comparisons-reviews/",
 ];
+
+const INDEX_HUBS = new Set(["industries", "integrations", "use-cases"]);
+const LEGAL = new Set([
+  "privacy-policy",
+  "terms-of-service",
+  "cookie-policy",
+  "cancellation-refund-policy",
+]);
+
+function metaFor(path: string): { changefreq: string; priority: string } {
+  if (path === "/") return { changefreq: "weekly", priority: "1.0" };
+  const seg = path.split("/").filter(Boolean);
+  const top = seg[0];
+  const depth = seg.length;
+
+  if (depth === 1) {
+    if (LEGAL.has(top)) return { changefreq: "yearly", priority: "0.4" };
+    if (top === "blog") return { changefreq: "daily", priority: "0.8" };
+    if (top === "news") return { changefreq: "weekly", priority: "0.7" };
+    if (INDEX_HUBS.has(top)) return { changefreq: "monthly", priority: "0.7" };
+    if (top === "features") return { changefreq: "monthly", priority: "0.8" };
+    if (["about-us", "contact-en", "partnership", "book-a-demo"].includes(top))
+      return { changefreq: "monthly", priority: "0.7" };
+    // top-level feature page
+    return { changefreq: "monthly", priority: "0.9" };
+  }
+  if (depth === 2) {
+    // collection child (industries/x, use-cases/x) vs feature sub-use-case (event-ticketing/x)
+    if (INDEX_HUBS.has(top)) return { changefreq: "monthly", priority: "0.6" };
+    return { changefreq: "monthly", priority: "0.5" };
+  }
+  return { changefreq: "monthly", priority: "0.5" };
+}
+
+function discoverRoutes(): string[] {
+  const modules = import.meta.glob("./**/*.astro");
+  const routes = Object.keys(modules)
+    .map((k) => k.replace(/^\.\//, "").replace(/\.astro$/, ""))
+    // drop dynamic routes (any segment like [slug] or [...slug])
+    .filter((k) => !k.split("/").some((s) => s.startsWith("[")))
+    .filter((k) => k !== "404")
+    // index -> directory route
+    .map((k) => (k === "index" ? "" : k.replace(/\/index$/, "")))
+    .map((k) => (k === "" ? "/" : `/${k}/`));
+
+  const all = new Set<string>([...routes, ...SUPPLEMENT]);
+  return [...all]
+    .filter((p) => !EXCLUDE.has(p))
+    .filter((p) => !EXCLUDE_PREFIXES.some((pre) => p.startsWith(pre)))
+    .sort();
+}
 
 function escapeXml(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -161,16 +85,20 @@ function escapeXml(value: string): string {
 
 export const GET: APIRoute = ({ site }) => {
   const base = (site?.toString() ?? "https://eventhex.ai").replace(/\/$/, "");
+  const routes = discoverRoutes();
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${STATIC_PAGES.map(
-  (page) => `  <url>
-    <loc>${escapeXml(`${base}${page.path}`)}</loc>${page.lastmod ? `\n    <lastmod>${page.lastmod}</lastmod>` : ""}
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`
-).join("\n")}
+${routes
+  .map((path) => {
+    const { changefreq, priority } = metaFor(path);
+    return `  <url>
+    <loc>${escapeXml(`${base}${path}`)}</loc>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+  })
+  .join("\n")}
 </urlset>
 `;
 

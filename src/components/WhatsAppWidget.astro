@@ -2,30 +2,19 @@
 interface Props {
   phone?: string;
   message?: string;
-  prompt?: string;
   badgeCount?: number;
-  showDelayMs?: number;
 }
 
 const {
   phone = "917356733317",
   message = "Hi",
-  prompt = "How can we help you?",
   badgeCount = 1,
-  showDelayMs = 3000,
 } = Astro.props;
 
 const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 ---
 
-<div class="eh-wa" data-whatsapp-widget data-delay={String(showDelayMs)}>
-  <div class="eh-wa__popup" data-whatsapp-popup hidden>
-    <p>{prompt}</p>
-    <button type="button" class="eh-wa__close" data-whatsapp-close aria-label="Dismiss WhatsApp message">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-
+<div class="eh-wa">
   <a
     href={href}
     target="_blank"
@@ -37,6 +26,8 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
       <span class="eh-wa__badge" aria-hidden="true">{badgeCount}</span>
     )}
 
+    <span class="eh-wa__pulse" aria-hidden="true"></span>
+
     <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true">
       <path
         d="M16 3C9.373 3 4 8.373 4 15c0 2.534.811 5.022 2.342 7.138L4 29l7.138-2.342A11.937 11.937 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm0 22a9.933 9.933 0 0 1-5.15-1.44l-.367-.217-4.23 1.388 1.38-4.124-.24-.378A9.942 9.942 0 1 1 16 25zm5.07-7.61c-.28-.14-1.64-.81-1.9-.91-.25-.09-.43-.14-.62.14-.18.28-.71.91-.88 1.09-.16.18-.32.21-.6.07-.28-.14-1.17-.43-2.24-1.37-.83-.74-1.38-1.65-1.55-1.93-.16-.28-.02-.43.13-.57.13-.13.28-.34.43-.51.14-.18.18-.3.27-.49.09-.17.04-.37-.02-.52-.07-.14-.62-1.5-.85-2.04-.22-.52-.44-.45-.62-.46h-.53c-.18 0-.47.07-.72.34-.25.28-.97.95-.97 2.3s.99 2.67 1.13 2.85c.14.18 1.96 3.02 4.76 4.13.67.29 1.19.46 1.6.59.67.21 1.29.18 1.77.11.54-.08 1.64-.67 1.87-1.32.23-.66.23-1.22.17-1.34-.07-.12-.25-.19-.53-.33z"
@@ -45,64 +36,6 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     </svg>
   </a>
 </div>
-
-<script>
-  const widgetStorageKey = "eventhex-whatsapp-popup-dismissed";
-
-  const getDismissedState = () => {
-    try {
-      return window.sessionStorage.getItem(widgetStorageKey) === "true";
-    } catch {
-      return false;
-    }
-  };
-
-  const setDismissedState = () => {
-    try {
-      window.sessionStorage.setItem(widgetStorageKey, "true");
-    } catch {
-      // Ignore storage failures and keep the widget usable.
-    }
-  };
-
-  const initWhatsAppWidgets = () => {
-    document.querySelectorAll("[data-whatsapp-widget]").forEach((widget) => {
-      if (widget.dataset.bound === "true") {
-        return;
-      }
-
-      widget.dataset.bound = "true";
-
-      const popup = widget.querySelector("[data-whatsapp-popup]");
-      const closeButton = widget.querySelector("[data-whatsapp-close]");
-      const delay = Number(widget.dataset.delay || "3000");
-
-      if (!popup || getDismissedState()) {
-        return;
-      }
-
-      const showTimer = window.setTimeout(() => {
-        if (!getDismissedState()) {
-          popup.hidden = false;
-        }
-      }, delay);
-
-      closeButton?.addEventListener("click", () => {
-        window.clearTimeout(showTimer);
-        popup.hidden = true;
-        setDismissedState();
-      });
-    });
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initWhatsAppWidgets, { once: true });
-  } else {
-    initWhatsAppWidgets();
-  }
-
-  document.addEventListener("astro:page-load", initWhatsAppWidgets);
-</script>
 
 <style>
   .eh-wa {
@@ -117,20 +50,57 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 60px;
-    height: 60px;
+    width: 52px;
+    height: 52px;
     border-radius: 999px;
-    background: #25d366;
+    background: linear-gradient(145deg, #2ee06f 0%, #25d366 55%, #1aa54f 100%);
     color: #ffffff;
-    box-shadow: 0 18px 36px rgba(18, 122, 60, 0.26);
+    box-shadow: 0 18px 36px rgba(18, 122, 60, 0.32);
     transition:
       transform 180ms ease,
       box-shadow 180ms ease;
+    animation: eh-wa-bob 2.6s ease-in-out infinite;
   }
 
   .eh-wa__button:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 24px 44px rgba(18, 122, 60, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 24px 48px rgba(18, 122, 60, 0.38);
+    animation-play-state: paused;
+  }
+
+  /* Expanding ring behind the button to draw attention */
+  .eh-wa__pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #25d366;
+    z-index: -1;
+    animation: eh-wa-pulse 2s ease-out infinite;
+  }
+
+  @keyframes eh-wa-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+
+  @keyframes eh-wa-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
   }
 
   .eh-wa__button:focus-visible {
@@ -140,14 +110,15 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
   .eh-wa__button svg {
     display: block;
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
   }
 
   .eh-wa__badge {
     position: absolute;
-    top: -4px;
-    right: -2px;
+    top: -5px;
+    right: -5px;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -160,85 +131,31 @@ const href = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
     font-size: 12px;
     font-weight: 700;
     line-height: 1;
+    border: 2px solid #ffffff;
     box-shadow: 0 8px 18px rgba(183, 28, 28, 0.28);
-  }
-
-  .eh-wa__popup {
-    position: absolute;
-    right: 0;
-    bottom: calc(100% + 12px);
-    width: min(220px, calc(100vw - 32px));
-    padding: 12px 40px 12px 14px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.98);
-    box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
-    color: #0f172a;
-  }
-
-  .eh-wa__popup::after {
-    content: "";
-    position: absolute;
-    right: 20px;
-    top: calc(100% - 1px);
-    border-width: 8px 7px 0;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.98) transparent transparent;
-  }
-
-  .eh-wa__popup p {
-    margin: 0;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.5;
-  }
-
-  .eh-wa__close {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: 0;
-    padding: 0;
-    border-radius: 999px;
-    background: transparent;
-    color: rgba(15, 23, 42, 0.55);
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-  }
-
-  .eh-wa__close:hover,
-  .eh-wa__close:focus-visible {
-    background: rgba(15, 23, 42, 0.06);
-    color: #0f172a;
   }
 
   @media (max-width: 767px) {
     .eh-wa__button {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
     }
 
     .eh-wa__button svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .eh-wa__popup {
-      width: min(208px, calc(100vw - 28px));
-      padding-right: 36px;
+      width: 24px;
+      height: 24px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .eh-wa__button {
       transition: none;
+      animation: none;
+    }
+
+    .eh-wa__pulse {
+      animation: none;
+      display: none;
     }
   }
 </style>

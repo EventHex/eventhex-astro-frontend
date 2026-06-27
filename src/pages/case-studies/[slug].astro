@@ -1,0 +1,375 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { getCaseStudyBySlug } from "../../lib/wordpress";
+import type { CaseStudy } from "../../lib/wordpress";
+
+const { slug } = Astro.params;
+const cs: CaseStudy | null = slug ? await getCaseStudyBySlug(slug) : null;
+
+if (!cs) {
+  Astro.response.status = 404;
+}
+
+const siteUrl = Astro.site?.toString() ?? "https://eventhex.ai";
+const canonicalUrl = cs ? new URL(`/case-studies/${cs.slug}/`, siteUrl).toString() : new URL("/customers/", siteUrl).toString();
+const title = cs ? `${cs.clientName}: ${cs.resultHeadline} | EventHex` : "Case Study not found | EventHex";
+const description = cs
+  ? (cs.excerpt.replace(/<[^>]+>/g, "").trim() || cs.resultHeadline)
+  : "The requested case study could not be found.";
+const ogImage = cs?.image?.src ?? "";
+
+const jsonLd = cs
+  ? JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: cs.title,
+      description: description,
+      ...(cs.image && { image: cs.image.src }),
+      publisher: {
+        "@id": "https://eventhex.ai/#organization",
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": canonicalUrl,
+      },
+    })
+  : null;
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical={canonicalUrl}
+  ogImage={ogImage}
+  ogType="article"
+  footerCtaTitle="Want results like these for your events?"
+  footerCtaButtonText="Book a demo"
+  footerCtaHref="/book-a-demo/"
+>
+  {jsonLd && (
+    <script type="application/ld+json" set:html={jsonLd} slot="head" />
+  )}
+
+  {cs ? (
+    <article class="cs-detail">
+      <!-- Header -->
+      <header class="cs-header">
+        <div class="container">
+          <a href="/customers/" class="back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Customer Stories
+          </a>
+          <div class="cs-header__meta">
+            <span class="cs-industry-tag">{cs.industry}</span>
+          </div>
+          <h1 class="cs-title">{cs.clientName}</h1>
+          <p class="cs-result-headline">{cs.resultHeadline}</p>
+        </div>
+      </header>
+
+      <!-- Metrics band -->
+      {cs.metrics.length > 0 && (
+        <div class="metrics-band">
+          <div class="container">
+            <div class="metrics-inner">
+              {cs.metrics.map((m) => (
+                <div class="metric-item">
+                  <span class="metric-value">{m.value}</span>
+                  <span class="metric-label">{m.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <!-- Body -->
+      <div class="cs-body">
+        <div class="container cs-body__inner">
+          <!-- Main content -->
+          <div class="cs-content prose" set:html={cs.contentHtml} />
+
+          <!-- Sidebar: quote -->
+          {cs.quote && (
+            <aside class="cs-sidebar">
+              <blockquote class="cs-quote">
+                <p class="cs-quote__text">"{cs.quote}"</p>
+                {cs.quoteAuthor && (
+                  <footer class="cs-quote__author">— {cs.quoteAuthor}</footer>
+                )}
+              </blockquote>
+
+              <!-- CTA -->
+              <div class="cs-sidebar__cta">
+                <p class="sidebar-cta__label">Ready to see results like these?</p>
+                <a href="/book-a-demo/" class="btn-primary">Book a demo</a>
+              </div>
+            </aside>
+          )}
+        </div>
+      </div>
+    </article>
+  ) : (
+    <div class="not-found">
+      <div class="container">
+        <h1>Case study not found</h1>
+        <p><a href="/customers/">← Back to Customer Stories</a></p>
+      </div>
+    </div>
+  )}
+</MarketingLayout>
+
+<style>
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Header */
+  .cs-header {
+    background: var(--surface-light);
+    padding: 3rem 1.5rem 3.5rem;
+    border-bottom: 1px solid var(--surface-card-border);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+
+  .cs-header__meta {
+    margin-bottom: 0.75rem;
+  }
+
+  .cs-industry-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+    background: var(--surface-blue-tint);
+    border-radius: 2rem;
+    padding: 0.25rem 0.75rem;
+  }
+
+  .cs-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    color: var(--heading-dark);
+    line-height: 1.15;
+    margin: 0 0 0.75rem;
+  }
+
+  .cs-result-headline {
+    font-size: 1.125rem;
+    color: var(--subheading-gray);
+    margin: 0;
+    max-width: 50rem;
+    line-height: 1.6;
+  }
+
+  /* Metrics band */
+  .metrics-band {
+    background: var(--brand-blue);
+    padding: 2.5rem 1.5rem;
+  }
+
+  .metrics-inner {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .metric-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0 2.5rem;
+    flex: 1 1 10rem;
+    position: relative;
+  }
+
+  .metric-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 10%;
+    height: 80%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .metric-value {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .metric-label {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  /* Body layout */
+  .cs-body {
+    padding: 4rem 0 5rem;
+  }
+
+  .cs-body__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .cs-body__inner {
+      grid-template-columns: 1fr 20rem;
+    }
+  }
+
+  /* Prose content */
+  .prose {
+    color: var(--body-gray);
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    min-width: 0;
+  }
+
+  .prose :global(h2) {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 2.25rem 0 0.75rem;
+    line-height: 1.3;
+  }
+
+  .prose :global(h3) {
+    font-family: var(--font-heading);
+    font-size: 1.1875rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 1.75rem 0 0.5rem;
+  }
+
+  .prose :global(p) {
+    margin: 0 0 1rem;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 1rem 1.5rem;
+  }
+
+  .prose :global(li) {
+    margin-bottom: 0.35rem;
+  }
+
+  .prose :global(strong) {
+    color: var(--heading-dark);
+    font-weight: 600;
+  }
+
+  /* Sidebar */
+  .cs-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .cs-quote {
+    background: var(--surface-blue-tint);
+    border-left: 4px solid var(--brand-blue);
+    border-radius: 0 0.75rem 0.75rem 0;
+    padding: 1.5rem;
+    margin: 0;
+  }
+
+  .cs-quote__text {
+    font-size: 1rem;
+    color: var(--heading-dark);
+    font-style: italic;
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+
+  .cs-quote__author {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+  }
+
+  .cs-sidebar__cta {
+    background: #fff;
+    border: 1px solid var(--surface-card-border);
+    border-radius: 0.875rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .sidebar-cta__label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--heading-dark);
+    margin: 0;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--brand-blue);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    padding: 0.625rem 1.375rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .btn-primary:hover {
+    background: var(--brand-blue-hover);
+  }
+
+  /* 404 */
+  .not-found {
+    padding: 6rem 1.5rem;
+    text-align: center;
+    color: var(--subheading-gray);
+  }
+
+  .not-found h1 {
+    font-family: var(--font-heading);
+    color: var(--heading-dark);
+    margin-bottom: 1rem;
+  }
+
+  .not-found a {
+    color: var(--brand-blue);
+    font-weight: 600;
+  }
+</style>

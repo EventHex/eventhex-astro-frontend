@@ -11,6 +11,19 @@ function readEnv(key: string): string | undefined {
   return (env as any)?.[key] ?? import.meta.env[key];
 }
 
+// Defer a fire-and-forget promise past the response on Workers. Astro v6 exposes
+// the execution context as locals.cfContext (locals.runtime.ctx was removed and
+// its getter now throws, so we must not touch it). Without a context the promise
+// still runs, just not deferred.
+function defer(promise: Promise<unknown>, locals: any): void {
+  try {
+    const cf = locals?.cfContext;
+    if (cf?.waitUntil) cf.waitUntil(promise);
+  } catch {
+    /* no execution context available */
+  }
+}
+
 // Internal addresses added as guests to every booking (comma-separated env).
 function getGuests(): string[] {
   return (readEnv("CALCOM_GUEST_EMAILS") || "")
@@ -85,15 +98,50 @@ export const POST: APIRoute = async ({ request, locals }) => {
       headers: { "content-type": "application/json", "X-Demo-Secret": notifySecret },
       body: JSON.stringify({ name, email, company, start: b.start || start, meetingUrl, timeZone }),
     }).catch((err) => console.error("brochure email dispatch failed:", err));
-    // Defer on Workers so it doesn't delay the response. Astro v6 exposes the
-    // execution context as locals.cfContext (locals.runtime.ctx was removed and
-    // its getter now throws, so we must not touch it).
-    try {
-      const cf = (locals as any)?.cfContext;
-      if (cf?.waitUntil) cf.waitUntil(send);
-    } catch {
-      /* no execution context available — the fetch still fires, just not deferred */
-    }
+    defer(send, locals);
+  }
+
+  // Fire-and-forget: push the lead into the DataHex ERP CRM. Never block the booking.
+  const erpKey = readEnv("ERP_API_KEY");
+  if (erpKey) {
+    const erpUrl = readEnv("ERP_LEADS_URL") || "https://erp.datahex.co/api/v1/leads";
+    const leadNotes = [
+      `Demo: ${b.start || start} (${timeZone || "UTC"})`,
+      role ? `Role: ${role}` : "",
+      meetingUrl ? `Meet: ${meetingUrl}` : "",
+      notes ? `Notes: ${notes}` : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    const lead = fetch(erpUrl, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${erpKey}`,
+        // Dedupe retries; same booking never creates two leads.
+        ...(b.uid ? { "Idempotency-Key": String(b.uid) } : {}),
+      },
+      body: JSON.stringify({
+        contactName: name,
+        ...(company ? { company } : {}),
+        email,
+        ...(phone ? { phone } : {}),
+        source: readEnv("ERP_LEAD_SOURCE") || "Website",
+        leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
+        owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
+        priority: "medium",
+        notes: leadNotes,
+        tags: ["book-a-demo", "website"],
+      }),
+    })
+      .then(async (r) => {
+        // 409 = duplicate lead already exists — expected, not an error.
+        if (!r.ok && r.status !== 409) {
+          console.error("ERP lead create failed:", r.status, await r.text().catch(() => ""));
+        }
+      })
+      .catch((err) => console.error("ERP lead dispatch failed:", err));
+    defer(lead, locals);
   }
 
   return json({
