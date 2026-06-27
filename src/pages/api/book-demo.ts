@@ -126,12 +126,13 @@ export const POST: APIRoute = async ({ request, locals }) => {
         ...(company ? { company } : {}),
         email,
         ...(phone ? { phone } : {}),
-        source: readEnv("ERP_LEAD_SOURCE") || "Website",
+        source: readEnv("ERP_LEAD_SOURCE") || "Book a Demo",
+        stage: readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
         leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
         owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
         priority: "medium",
         notes: leadNotes,
-        tags: ["book-a-demo", "website"],
+        tags: ["book-a-demo"],
       }),
     })
       .then(async (r) => {
