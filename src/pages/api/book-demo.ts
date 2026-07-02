@@ -112,37 +112,63 @@ export const POST: APIRoute = async ({ request }) => {
     ]
       .filter(Boolean)
       .join(" | ");
+    const authHeaders = { "content-type": "application/json", Authorization: `Bearer ${erpKey}` };
     tasks.push(
-      fetch(erpUrl, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${erpKey}`,
-          // Dedupe retries; same booking never creates two leads.
-          ...(b.uid ? { "Idempotency-Key": String(b.uid) } : {}),
-        },
-        body: JSON.stringify({
-          contactName: name,
-          ...(company ? { company } : {}),
-          email,
-          ...(phone ? { phone } : {}),
-          source: readEnv("ERP_LEAD_SOURCE") || "Book a Demo",
-          stage: readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
-          leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
-          owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
-          priority: "medium",
-          notes: leadNotes,
-          tags: ["book-a-demo"],
-        }),
-        signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
-      })
-        .then(async (r) => {
-          // 409 = duplicate lead already exists — expected, not an error.
-          if (!r.ok && r.status !== 409) {
-            console.error("ERP lead create failed:", r.status, await r.text().catch(() => ""));
+      (async () => {
+        // 1. Create the lead (or resolve the existing one on a 409 duplicate).
+        const res = await fetch(erpUrl, {
+          method: "POST",
+          headers: {
+            ...authHeaders,
+            // Dedupe retries; same booking never creates two leads.
+            ...(b.uid ? { "Idempotency-Key": String(b.uid) } : {}),
+          },
+          body: JSON.stringify({
+            contactName: name,
+            ...(company ? { company } : {}),
+            email,
+            ...(phone ? { phone } : {}),
+            source: readEnv("ERP_LEAD_SOURCE") || "Book a Demo",
+            stage: readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
+            leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
+            owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
+            priority: "medium",
+            notes: leadNotes,
+            tags: ["book-a-demo"],
+          }),
+          signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
+        });
+
+        const payload = (await res.json().catch(() => ({}))) as any;
+        let leadId: string | undefined;
+        if (res.ok) {
+          leadId = payload?.data?.id;
+        } else if (res.status === 409) {
+          // Duplicate — the existing lead's id is in the conflict details.
+          leadId = payload?.error?.details?.id ?? payload?.error?.details?.duplicate?._id;
+        } else {
+          console.error("ERP lead create failed:", res.status, JSON.stringify(payload).slice(0, 200));
+          return;
+        }
+
+        // 2. Log a timeline activity so the touch is visible in the CRM.
+        //    Fail-soft: needs leads:update scope; skipped silently otherwise.
+        if (leadId) {
+          const activityBody =
+            "Automated: booking confirmed — pre-demo brochure & confirmation email sent." +
+            (meetingUrl ? ` Google Meet: ${meetingUrl}.` : "") +
+            ` Demo: ${b.start || start}.`;
+          const act = await fetch(`${erpUrl}/${leadId}/activities`, {
+            method: "POST",
+            headers: authHeaders,
+            body: JSON.stringify({ type: "email", body: activityBody }),
+            signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
+          });
+          if (!act.ok) {
+            console.error("ERP activity log failed:", act.status, await act.text().catch(() => ""));
           }
-        })
-        .catch((err) => console.error("ERP lead dispatch failed:", err)),
+        }
+      })().catch((err) => console.error("ERP lead dispatch failed:", err)),
     );
   }
 
