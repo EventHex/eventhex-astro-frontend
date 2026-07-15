@@ -130,6 +130,9 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, string> = {}
   const url = new URL(`${WP_API}${endpoint}`);
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
 
+  // 5-minute rotating cache buster to prevent Cloudflare edge-caching old responses indefinitely
+  url.searchParams.set("_cb", String(Math.floor(Date.now() / 300000)));
+
   const cacheKey = url.toString();
   const cached = getCached<T>(cacheKey);
   if (cached) return cached;
