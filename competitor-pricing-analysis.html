@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All-in-One Event-Tech — Competitor Pricing Analysis</title>
+<style>
+  :root {
+    --bg: #f7f8fa;
+    --surface: #ffffff;
+    --surface-2: #f1f3f6;
+    --border: #e2e6ec;
+    --text: #1a1f2b;
+    --text-dim: #5a6473;
+    --brand: #6d3bf5;
+    --brand-soft: #efe9fe;
+    --green: #17915a;
+    --green-soft: #e2f5eb;
+    --amber: #b9770a;
+    --amber-soft: #fbf0da;
+    --red: #c0392b;
+    --red-soft: #fbe6e3;
+    --shadow: 0 1px 3px rgba(20,24,40,.06), 0 8px 24px rgba(20,24,40,.05);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0e1015;
+      --surface: #171a21;
+      --surface-2: #1e222b;
+      --border: #2a2f3a;
+      --text: #e8ebf1;
+      --text-dim: #9aa4b4;
+      --brand: #a586ff;
+      --brand-soft: #241a3d;
+      --green: #46c98a;
+      --green-soft: #12291f;
+      --amber: #e0a944;
+      --amber-soft: #2c2312;
+      --red: #f0796b;
+      --red-soft: #2c1613;
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f7f8fa; --surface: #fff; --surface-2: #f1f3f6; --border: #e2e6ec;
+    --text: #1a1f2b; --text-dim: #5a6473; --brand: #6d3bf5; --brand-soft: #efe9fe;
+    --green: #17915a; --green-soft: #e2f5eb; --amber: #b9770a; --amber-soft: #fbf0da;
+    --red: #c0392b; --red-soft: #fbe6e3;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1015; --surface: #171a21; --surface-2: #1e222b; --border: #2a2f3a;
+    --text: #e8ebf1; --text-dim: #9aa4b4; --brand: #a586ff; --brand-soft: #241a3d;
+    --green: #46c98a; --green-soft: #12291f; --amber: #e0a944; --amber-soft: #2c2312;
+    --red: #f0796b; --red-soft: #2c1613;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 32px 20px 80px; }
+  header.hero {
+    background: linear-gradient(135deg, var(--brand) 0%, #4a1fb8 100%);
+    color: #fff; border-radius: var(--radius); padding: 36px 32px; margin-bottom: 28px;
+    box-shadow: var(--shadow);
+  }
+  header.hero h1 { margin: 0 0 8px; font-size: clamp(1.5rem, 3.5vw, 2.1rem); line-height: 1.2; letter-spacing: -.02em; }
+  header.hero p { margin: 4px 0; opacity: .92; font-size: .95rem; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 14px; font-size: .82rem; opacity: .9; }
+  h2 {
+    font-size: 1.35rem; letter-spacing: -.01em; margin: 40px 0 14px;
+    padding-bottom: 8px; border-bottom: 2px solid var(--border);
+  }
+  h2 .num { color: var(--brand); font-weight: 700; margin-right: 8px; }
+  h3 { font-size: 1.05rem; margin: 24px 0 8px; }
+  p { margin: 10px 0; }
+  a { color: var(--brand); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px 22px; margin: 16px 0; box-shadow: var(--shadow);
+  }
+  .callout {
+    background: var(--brand-soft); border-left: 4px solid var(--brand);
+    border-radius: 8px; padding: 14px 18px; margin: 16px 0; font-size: .93rem;
+  }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px; font-size: .78rem; font-weight: 600;
+    padding: 3px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .b-green { background: var(--green-soft); color: var(--green); }
+  .b-amber { background: var(--amber-soft); color: var(--amber); }
+  .b-red { background: var(--red-soft); color: var(--red); }
+  .table-scroll { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+  table { border-collapse: collapse; width: 100%; font-size: .88rem; background: var(--surface); min-width: 560px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--surface-2); font-weight: 700; font-size: .8rem; text-transform: uppercase; letter-spacing: .03em; color: var(--text-dim); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--surface-2); }
+  td strong { color: var(--text); }
+  .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 640px) { .model-grid { grid-template-columns: 1fr; } }
+  .model-grid .card { margin: 0; }
+  .model-grid h3 { margin-top: 0; }
+  ul { margin: 10px 0; padding-left: 22px; }
+  li { margin: 5px 0; }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; background: var(--surface-2); padding: 1px 6px; border-radius: 5px; }
+  .price { font-weight: 700; color: var(--brand); }
+  .rec-tier { border-left: 4px solid var(--brand); }
+  .src { font-size: .8rem; color: var(--text-dim); font-style: italic; margin-top: 6px; }
+  footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid var(--border); font-size: .82rem; color: var(--text-dim); }
+  .toggle {
+    position: fixed; top: 16px; right: 16px; z-index: 10;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    border-radius: 999px; padding: 7px 14px; font-size: .8rem; cursor: pointer; box-shadow: var(--shadow);
+  }
+</style>
+</head>
+<body>
+<button class="toggle" onclick="(function(){var r=document.documentElement;var d=r.getAttribute('data-theme')|| (matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.setAttribute('data-theme', d==='dark'?'light':'dark');})()">◐ Theme</button>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>All-in-One Event-Tech — Competitor Pricing Analysis</h1>
+    <p>Competitive pricing research to inform EventHex's Plans &amp; Pricing decision.</p>
+    <div class="hero-meta">
+      <span>📅 Compiled 2026-07-15</span>
+      <span>🔍 Multi-source deep research · 112 agents</span>
+      <span>✔️ 25 claims verified · 22 confirmed · 3 refuted</span>
+    </div>
+  </header>
+
+  <div class="callout">
+    <strong>How to read confidence.</strong> Figures marked
+    <span class="badge b-green">✅ Verified</span> passed independent 3-vote adversarial checks against the vendor's own page plus aggregators (G2, Capterra, SaaSworthy, GetApp). Figures marked
+    <span class="badge b-amber">⚠️ Indicative</span> come from search snippets that did <em>not</em> survive full verification — directional only. Nearly every vendor page blocks direct fetch (HTTP&nbsp;403), so even verified numbers rest on cached snapshots + aggregators. <strong>All prices are a 2026 snapshot and drift over time.</strong>
+  </div>
+
+  <h2><span class="num">1.</span>The market splits into two pricing models</h2>
+  <div class="model-grid">
+    <div class="card">
+      <h3>A · Subscription / SaaS</h3>
+      <p>Flat fee per month / year / event, sometimes + attendee add-ons.</p>
+      <p class="src">Zoho Backstage, Eventify, Swapcard, Accelevents, Whova, Brella, Cvent, Bizzabo, RingCentral/Hopin</p>
+    </div>
+    <div class="card">
+      <h3>B · Transaction fee (pay-per-ticket)</h3>
+      <p>% + fixed fee per <strong>paid</strong> ticket. <strong>Free events are free.</strong></p>
+      <p class="src">Townscript, Explara, KonfHub (India/GCC) — and globally, Eventbrite</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>🎯 The single most important finding for EventHex:</strong> onsite <strong>badge printing + check-in hardware</strong> is almost always gated behind a <strong>quote-only enterprise tier</strong> (Swapcard, Whova, Brella, Cvent). Eventify is the rare exception that publishes it. That is EventHex's clearest positioning gap — <em>a transparently-priced, mid-market, all-in-one plan that includes onsite badging/check-in.</em>
+  </div>
+
+  <h2><span class="num">2.</span>Truly all-in-one vs point solutions</h2>
+  <p>"All-in-one" = registration + ticketing + badges/check-in + engagement/networking + analytics in one platform.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Truly all-in-one</th><th>Engagement/networking-led</th><th>Ticketing-led</th></tr></thead>
+      <tbody>
+        <tr><td>Cvent, Bizzabo, RainFocus (enterprise)</td><td>Swapcard (networking-first)</td><td>Eventbrite (ticketing-first)</td></tr>
+        <tr><td>Zoho Backstage, Eventify, Accelevents, Whova</td><td>Brella (matchmaking)</td><td>Townscript, Explara, KonfHub (regional)</td></tr>
+        <tr><td></td><td>Hubilo, Airmeet (virtual-led)</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="num">3.</span>Detailed competitor breakdown</h2>
+
+  <div class="card">
+    <h3>Zoho Backstage <span class="badge b-green">✅ Verified</span></h3>
+    <p>Two billing models on the same tiers, plus a Free plan.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tier</th><th>Subscription (annual)</th><th>Pay-per-event</th><th>Attendee limit</th></tr></thead>
+        <tbody>
+          <tr><td>Free</td><td>$0</td><td>—</td><td>100</td></tr>
+          <tr><td>Essentials</td><td class="price">~$99/mo</td><td>$299/event</td><td>200</td></tr>
+          <tr><td>Premium</td><td class="price">~$208/mo</td><td>$599/event</td><td>1,000</td></tr>
+          <tr><td>Ultimate</td><td class="price">~$416/mo</td><td>$1,499/event</td><td>5,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>Attendee add-on: <strong>$0.50 / attendee</strong> beyond the limit. Subscription tiers organize unlimited events.</li>
+    </ul>
+    <p class="src">Source: zoho.com/backstage/pricing.html + Zoho help KB, G2, Capterra, fgrade, SaaSworthy.</p>
+  </div>
+
+  <div class="card">
+    <h3>Eventify <span class="badge b-green">✅ Verified</span> <span class="badge b-amber">cadence ⚠️</span></h3>
+    <p>Per-event / per-venue pricing, free trial, <strong>no free plan</strong>.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Tier</th><th>Price</th><th>Attendees</th><th>Key adds</th></tr></thead>
+        <tbody>
+          <tr><td>Business Pro</td><td class="price">$249/event/venue</td><td>~250</td><td>Microsite, ticketing, <strong>badge designer, onsite badge printing, check-in</strong></td></tr>
+          <tr><td>Enterprise Pro (white-label)</td><td class="price">$599/event/venue</td><td>~400</td><td>Event/web app, 1-1 meetings, agenda, gamification, analytics</td></tr>
+          <tr><td>Enterprise (top)</td><td class="price">up to $1,199.99</td><td>~1,500</td><td>AI copilot/analytics, custom development</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li><strong>Notable:</strong> publishes onsite badge printing + check-in at the entry ($249) tier — unusual in the market.</li>
+      <li>Ambiguity: some sources say "per year," most say per-event/per-venue; $249 tier seen temporarily promoted free.</li>
+    </ul>
+    <p class="src">Source: eventify.io/pricing + G2, Capterra, SaaSworthy.</p>
+  </div>
+
+  <div class="card">
+    <h3>Accelevents <span class="badge b-green">✅ Verified</span> <span class="badge b-amber">tier $ = gap</span></h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Plan group</th><th>Ticketing/platform fee</th><th>Subscription</th></tr></thead>
+        <tbody>
+          <tr><td>Free &amp; Starter</td><td><strong>$1.50 + 3.5% per paid ticket</strong> (free tickets exempt), via organizer's Stripe/Square</td><td>low/none</td></tr>
+          <tr><td>Professional, Business, Enterprise, White Label</td><td><strong>$0 platform fee</strong> — only card processing (2.9% + $0.30)</td><td>flat (custom-quoted; exact $ not captured)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>White Label adds branding removal, custom URL/email domain, branded mobile app.</p>
+    <p class="src">Source: support.accelevents.com articles 6285214 / 6323728 + checkthat.ai 2026.</p>
+  </div>
+
+  <div class="card">
+    <h3>Swapcard <span class="badge b-green">✅ Verified</span></h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Product</th><th>Price</th><th>Includes</th></tr></thead>
+        <tbody>
+          <tr><td>Event Engagement Platform</td><td class="price">from $610 / year</td><td>Full mobile/web app, AI networking, virtual events, hosted-buyer tools, exhibitor lead mgmt (free tier ~250 attendees)</td></tr>
+          <tr><td>Registration &amp; Management (end-to-end)</td><td class="price">Quote-only</td><td><strong>Onsite badging</strong>, exhibitor management, advanced reporting</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="src">Source: swapcard.com/pricing + Capterra, G2, GetApp, SoftwareFinder.</p>
+  </div>
+
+  <div class="card">
+    <h3>Whova <span class="badge b-green">✅ Verified</span></h3>
+    <ul>
+      <li><strong>No public tier table.</strong> Sold as a <strong>quote-only per-event fee</strong> (not per-seat).</li>
+      <li>Paid-ticket fee: <strong>3.0% + $0.99 per paid ticket</strong>; unlimited free tickets carry no fee.</li>
+      <li>Separate Stripe processing (2.9%/3.4% + $0.30). Add-ons e.g. unlimited document uploads +$2,000.</li>
+    </ul>
+    <p class="src">Source: whova.com/pricing + LineUpr, GetApp, Capterra.</p>
+  </div>
+
+  <div class="card">
+    <h3>Brella <span class="badge b-green">✅ Verified</span></h3>
+    <ul>
+      <li><strong>Quote-only, no free plan, no public starting price.</strong> Two named plans:</li>
+      <li><strong>Professional</strong> — single event, priced by attendee count + consulting.</li>
+      <li><strong>Portfolio</strong> — multiple events, priced by per-event attendees + consulting + number of events, with volume/pre-pay discounts.</li>
+    </ul>
+    <p class="src">Source: brella.io/pricing + help.brella.io, SaaSworthy, SpotSaaS, Capterra.</p>
+  </div>
+
+  <div class="card">
+    <h3>Enterprise quote-only <span class="badge b-amber">⚠️ Indicative — not verified this pass</span></h3>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Vendor</th><th>Model</th><th>Indicative range</th></tr></thead>
+        <tbody>
+          <tr><td>Cvent</td><td>Quote-only (headcount/usage/contract)</td><td>~$15.5K/yr (SMB) → ~$107K/yr (enterprise); $50K–$200K+/yr</td></tr>
+          <tr><td>RainFocus</td><td>Quote-only enterprise</td><td>Not disclosed</td></tr>
+          <tr><td>Bizzabo</td><td>Quote-only enterprise</td><td>Not disclosed</td></tr>
+          <tr><td>RingCentral Events (ex-Hopin)</td><td>Public base + quote-only tiers</td><td>Base ~$99/organizer/mo, unlimited events</td></tr>
+          <tr><td>Hubilo / Airmeet</td><td>Quote-only, virtual-led</td><td>Not disclosed</td></tr>
+          <tr><td>Splash</td><td>Tiered incl. free; enterprise quote</td><td>Not disclosed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Regional India / GCC — transaction fee</h3>
+    <p><strong>Townscript <span class="badge b-green">✅ Verified</span></strong> — no subscription, no setup; free events free.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Region</th><th>Townscript fee</th><th>Gateway</th><th>Other</th></tr></thead>
+        <tbody>
+          <tr><td>India</td><td>2.99% (1.99% + ₹10)</td><td>+ 1.99%</td><td>+ 2% attendee platform fee</td></tr>
+          <tr><td>International</td><td>1.99% + $2/ticket</td><td>2.9% domestic / 3.9% intl</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><strong>Explara / ExplaraX</strong> <span class="badge b-green">✅ free tier</span> <span class="badge b-red">✗ paid tiers refuted</span> — Free Starter: 1 event/mo, ~100 registrations, 1 WhatsApp community (~200 members), 5 digital products. Paid-tier &amp; white-label figures failed verification.</p>
+    <p><strong>KonfHub</strong> <span class="badge b-green">✅ transaction fee</span> <span class="badge b-red">✗ one-time plans refuted</span> — free for free events; standard <strong>~1.75%/paid ticket</strong>; Lite Plan 2% + GST (2.36%, India/UPI, ≤300 regs then ₹10/ticket). 18% GST applies.</p>
+    <p class="src">Sources: townscript.com/i/pricing · go.explara.com · konfhub.com/pricing.</p>
+  </div>
+
+  <div class="card">
+    <h3>Eventbrite <span class="badge b-green">✅ Verified (US pricing)</span></h3>
+    <ul>
+      <li><strong>Publish unlimited free events at no cost.</strong> Old Flex plan discontinued; paid Pro plans ($15–$100/mo) only add email-marketing — not required to sell.</li>
+      <li>Paid tickets only: Service Fee <strong>3.7% + $1.79/ticket</strong> + Processing <strong>2.9%/order</strong>, all plans (US). Fee caps removed. Passable to attendees.</li>
+      <li>UK/EU/India rates differ but were not captured this pass.</li>
+    </ul>
+    <p class="src">Source: eventbrite.com/organizer/pricing + SimpleTix, CheckoutPage, AnyRoad.</p>
+  </div>
+
+  <h2><span class="num">4.</span>Master comparison table</h2>
+  <div class="legend">
+    <span class="badge b-green">✅ Verified</span>
+    <span class="badge b-amber">⚠️ Indicative</span>
+    <span class="badge b-red">✗ Refuted / uncertain</span>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Vendor</th><th>Model</th><th>Entry price</th><th>Onsite badging/check-in</th><th>Public?</th><th>Region</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Zoho Backstage</strong></td><td>Sub or per-event</td><td>$99/mo · $299/event</td><td>Higher tiers</td><td>✅ Public</td><td>USD</td></tr>
+        <tr><td><strong>Eventify</strong></td><td>Per-event/venue</td><td>$249/event</td><td>✅ <strong>At entry</strong></td><td>✅ Public</td><td>USD</td></tr>
+        <tr><td><strong>Accelevents</strong></td><td>Fee + flat sub</td><td>$1.50+3.5%/tkt → $0-fee sub</td><td>Enterprise/WL</td><td>Partial</td><td>USD</td></tr>
+        <tr><td><strong>Swapcard</strong></td><td>Subscription</td><td>$610/yr</td><td>Quote-only tier</td><td>Partial</td><td>Volume</td></tr>
+        <tr><td><strong>Whova</strong></td><td>Quote + ticket fee</td><td>Quote; 3.0%+$0.99/tkt</td><td>Enterprise (quote)</td><td>❌</td><td>USD</td></tr>
+        <tr><td><strong>Brella</strong></td><td>Quote-only</td><td>Quote (attendee-based)</td><td>Enterprise (quote)</td><td>❌</td><td>—</td></tr>
+        <tr><td><strong>Cvent</strong> ⚠️</td><td>Quote-only</td><td>~$15.5K/yr+</td><td>✅ (enterprise)</td><td>❌</td><td>Global</td></tr>
+        <tr><td><strong>RingCentral/Hopin</strong> ⚠️</td><td>Sub + quote</td><td>~$99/organizer/mo</td><td>Higher tiers</td><td>Partial</td><td>—</td></tr>
+        <tr><td><strong>Townscript</strong></td><td>Transaction fee</td><td>Free; 2.99%+₹10 (IN)</td><td>Add-on</td><td>✅ Public</td><td><strong>IN vs Intl</strong></td></tr>
+        <tr><td><strong>Explara</strong></td><td>Freemium + fee</td><td>Free tier; paid unclear</td><td>—</td><td>Partial</td><td>India</td></tr>
+        <tr><td><strong>KonfHub</strong></td><td>Transaction fee</td><td>Free; ~1.75%/tkt</td><td>Basic check-in</td><td>✅ Public</td><td>India/UPI</td></tr>
+        <tr><td><strong>Eventbrite</strong></td><td>Transaction fee</td><td>Free publish; 3.7%+$1.79/tkt</td><td>❌</td><td>✅ Public</td><td><strong>US; UK/EU/IN differ</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2><span class="num">5.</span>Recommended pricing structure for EventHex</h2>
+  <p>EventHex is an all-in-one platform with strong India/GCC presence competing against Western SaaS incumbents. The positioning gap: <strong>transparent, mid-market pricing that bundles onsite badging/check-in</strong> — which competitors hide behind quote-only enterprise tiers — <strong>while offering the transaction-fee flexibility the India/GCC market expects.</strong></p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Tier</th><th>Target</th><th>Suggested price</th><th>Includes</th></tr></thead>
+      <tbody>
+        <tr class="rec-tier"><td><strong>Free</strong></td><td>Trial / small free events</td><td class="price">$0</td><td>1 event, ~100 registrations, registration + basic ticketing, mobile app, basic analytics. Free events always free.</td></tr>
+        <tr class="rec-tier"><td><strong>Starter</strong></td><td>Small paid / SMB</td><td class="price">$99–149/event</td><td><em>or</em> ~2% + fixed per paid ticket. ~250 attendees, microsite, ticketing, check-in app, badge designer, coupons.</td></tr>
+        <tr class="rec-tier"><td><strong>Professional</strong></td><td>Mid-market conferences</td><td class="price">$299–399/event or ~$249/mo</td><td>~1,000 attendees, <strong>onsite badge printing + hardware check-in</strong>, networking/1-1 meetings, agenda, gamification, exhibitor/lead capture, full analytics.</td></tr>
+        <tr class="rec-tier"><td><strong>Business / White-Label</strong></td><td>Agencies, franchises</td><td class="price">$799–1,199/event</td><td>1,500+ attendees, white-label + custom domain, branded app, AI copilot, API, priority support, multi-event portfolio.</td></tr>
+        <tr class="rec-tier"><td><strong>Enterprise</strong></td><td>5,000+ / GCC govt &amp; corporate</td><td class="price">Quote</td><td>Unlimited scale, SLAs, dedicated onsite hardware, custom development, SSO.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Why this positioning wins</h3>
+    <ul>
+      <li><strong>Onsite badging at Professional, not enterprise</strong> — undercuts Swapcard/Whova/Brella/Cvent (all quote-only); matches only Eventify, which starts higher and per-venue.</li>
+      <li><strong>Both per-event and transaction-fee billing</strong> — India/GCC organizers (used to "free events free, pay per ticket") aren't forced into a Western subscription. ~2% + fixed undercuts Eventbrite (3.7%+$1.79) and Townscript (2.99%+₹10).</li>
+      <li><strong>Entry between the two worlds</strong> — above the India fee floor, well below Western SaaS: Professional ~$299/event vs Zoho $599 / Eventify $599.</li>
+      <li><strong>Region-specific pricing</strong> (India/GCC in INR/AED, West in USD) — every incumbent is USD-flat; localized + free-events-free is a concrete regional edge.</li>
+      <li><strong>Transparent published pricing</strong> as a brand differentiator — most enterprise rivals (Cvent, Bizzabo, RainFocus, Whova, Brella) are quote-only, which mid-market buyers dislike.</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">6.</span>Known gaps &amp; open questions</h2>
+  <div class="card">
+    <ul>
+      <li><strong>No verified pricing</strong> for Cvent, Bizzabo, RingCentral/Hopin, Hubilo, Airmeet, Splash, RainFocus, Dreamcast — enterprise players are known quote-only but figures are indicative only. A targeted follow-up or direct sales-quote requests are needed.</li>
+      <li><strong>Geographic variance</strong> (US vs UK/EU vs India/GCC) firmly captured only for Townscript (IN vs Intl) and Eventbrite (US). Whether Zoho/Eventify/Swapcard/Accelevents localize for India/GCC is unconfirmed.</li>
+      <li><strong>Refuted claims (do not use):</strong> Explara paid-tier scaling, Explara white-label $0.99/registration + 4% gateway, KonfHub one-time $499/$1499 plans.</li>
+      <li>Exact per-tier subscription $ for Accelevents' Professional/Business/Enterprise were not captured.</li>
+      <li>Every vendor page returned HTTP 403 to direct fetch; verification relied on search-index snapshots + aggregators. <strong>Confirm any number before publishing externally.</strong></li>
+    </ul>
+  </div>
+
+  <h2><span class="num">7.</span>Primary sources</h2>
+  <div class="card">
+    <ul>
+      <li>Zoho Backstage — <a href="https://www.zoho.com/backstage/pricing.html">zoho.com/backstage/pricing.html</a></li>
+      <li>Eventify — <a href="https://eventify.io/pricing">eventify.io/pricing</a></li>
+      <li>Swapcard — <a href="https://www.swapcard.com/pricing">swapcard.com/pricing</a></li>
+      <li>Whova — <a href="https://whova.com/pricing/">whova.com/pricing</a></li>
+      <li>Brella — <a href="https://www.brella.io/pricing">brella.io/pricing</a> · <a href="https://help.brella.io/what-is-the-pricing-for-brella">help.brella.io</a></li>
+      <li>Accelevents — <a href="https://support.accelevents.com/en/articles/6285214">support.accelevents.com/…/6285214</a></li>
+      <li>Townscript — <a href="https://www.townscript.com/i/pricing">townscript.com/i/pricing</a></li>
+      <li>Explara — <a href="https://go.explara.com/">go.explara.com</a> · <a href="https://explarax.com/pricing">explarax.com/pricing</a></li>
+      <li>KonfHub — <a href="https://konfhub.com/pricing">konfhub.com/pricing</a></li>
+      <li>Eventbrite — <a href="https://www.eventbrite.com/organizer/pricing/">eventbrite.com/organizer/pricing</a></li>
+      <li>Cvent (indicative) — <a href="https://www.spendhound.com/marketplace/cvent-pricing">spendhound.com/marketplace/cvent-pricing</a></li>
+      <li>RingCentral/Hopin (indicative) — <a href="https://www.ringcentral.com/pricing/events.html">ringcentral.com/pricing/events.html</a></li>
+    </ul>
+    <p class="src">Aggregator corroboration: G2, Capterra, SaaSworthy, GetApp, SoftwareFinder, SpotSaaS.</p>
+  </div>
+
+  <footer>
+    Compiled for EventHex (eventhex.ai) · 2026-07-15 · Method: multi-source deep research with 3-vote adversarial verification. All figures are a 2026 snapshot — confirm before external use.
+  </footer>
+
+</div>
+</body>
+</html>
