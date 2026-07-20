@@ -11,6 +11,13 @@ function readEnv(key: string): string | undefined {
   return (env as any)?.[key] ?? import.meta.env[key];
 }
 
+// Post-booking side effects (brochure email + CRM lead) must be AWAITED before
+// the handler returns. On Cloudflare Workers an un-awaited fetch is cancelled
+// when the response is sent (ctx.waitUntil isn't reliably exposed here), which
+// silently dropped leads. Each fetch is bounded by a timeout so a slow/hung
+// downstream can never hang or fail the booking.
+const DISPATCH_TIMEOUT_MS = 8000;
+
 // Internal addresses added as guests to every booking (comma-separated env).
 function getGuests(): string[] {
   return (readEnv("CALCOM_GUEST_EMAILS") || "")
@@ -19,7 +26,7 @@ function getGuests(): string[] {
     .filter(Boolean);
 }
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   const apiKey = readEnv("CALCOM_API_KEY");
   if (!apiKey) return json({ error: "Scheduler not configured" }, 500);
 
@@ -75,26 +82,98 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const b = data?.data || {};
   const meetingUrl = b.meetingUrl || b.location || null;
 
-  // Fire-and-forget: send the branded pre-demo brochure email via the SaaS API
-  // (SES). Never block or fail the booking on email errors.
+  // Post-booking side effects — AWAITED (see DISPATCH_TIMEOUT_MS note). Failures
+  // are caught per-task so they can never break the confirmed booking.
+  const tasks: Promise<unknown>[] = [];
+
+  // Branded pre-demo brochure email via the SaaS API (SES).
   const notifyUrl = readEnv("DEMO_NOTIFY_URL");
   const notifySecret = readEnv("DEMO_NOTIFY_SECRET");
   if (notifyUrl && notifySecret) {
-    const send = fetch(notifyUrl, {
-      method: "POST",
-      headers: { "content-type": "application/json", "X-Demo-Secret": notifySecret },
-      body: JSON.stringify({ name, email, company, start: b.start || start, meetingUrl, timeZone }),
-    }).catch((err) => console.error("brochure email dispatch failed:", err));
-    // Defer on Workers so it doesn't delay the response. Astro v6 exposes the
-    // execution context as locals.cfContext (locals.runtime.ctx was removed and
-    // its getter now throws, so we must not touch it).
-    try {
-      const cf = (locals as any)?.cfContext;
-      if (cf?.waitUntil) cf.waitUntil(send);
-    } catch {
-      /* no execution context available — the fetch still fires, just not deferred */
-    }
+    tasks.push(
+      fetch(notifyUrl, {
+        method: "POST",
+        headers: { "content-type": "application/json", "X-Demo-Secret": notifySecret },
+        body: JSON.stringify({ name, email, company, start: b.start || start, meetingUrl, timeZone }),
+        signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
+      }).catch((err) => console.error("brochure email dispatch failed:", err)),
+    );
   }
+
+  // Push the lead into the DataHex ERP CRM.
+  const erpKey = readEnv("ERP_API_KEY");
+  if (erpKey) {
+    const erpUrl = readEnv("ERP_LEADS_URL") || "https://erp.datahex.co/api/v1/leads";
+    const leadNotes = [
+      `Demo: ${b.start || start} (${timeZone || "UTC"})`,
+      role ? `Role: ${role}` : "",
+      meetingUrl ? `Meet: ${meetingUrl}` : "",
+      notes ? `Notes: ${notes}` : "",
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    const authHeaders = { "content-type": "application/json", Authorization: `Bearer ${erpKey}` };
+    tasks.push(
+      (async () => {
+        // 1. Create the lead (or resolve the existing one on a 409 duplicate).
+        const res = await fetch(erpUrl, {
+          method: "POST",
+          headers: {
+            ...authHeaders,
+            // Dedupe retries; same booking never creates two leads.
+            ...(b.uid ? { "Idempotency-Key": String(b.uid) } : {}),
+          },
+          body: JSON.stringify({
+            contactName: name,
+            ...(company ? { company } : {}),
+            email,
+            ...(phone ? { phone } : {}),
+            source: readEnv("ERP_LEAD_SOURCE") || "Book a Demo",
+            stage: readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
+            leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
+            owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
+            priority: "medium",
+            notes: leadNotes,
+            tags: ["book-a-demo"],
+          }),
+          signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
+        });
+
+        const payload = (await res.json().catch(() => ({}))) as any;
+        let leadId: string | undefined;
+        if (res.ok) {
+          leadId = payload?.data?.id;
+        } else if (res.status === 409) {
+          // Duplicate — the existing lead's id is in the conflict details.
+          leadId = payload?.error?.details?.id ?? payload?.error?.details?.duplicate?._id;
+        } else {
+          console.error("ERP lead create failed:", res.status, JSON.stringify(payload).slice(0, 200));
+          return;
+        }
+
+        // 2. Log a timeline activity so the touch is visible in the CRM.
+        //    Fail-soft: needs leads:update scope; skipped silently otherwise.
+        if (leadId) {
+          const activityBody =
+            "Automated: booking confirmed — pre-demo brochure & confirmation email sent." +
+            (meetingUrl ? ` Google Meet: ${meetingUrl}.` : "") +
+            ` Demo: ${b.start || start}.`;
+          const act = await fetch(`${erpUrl}/${leadId}/activities`, {
+            method: "POST",
+            headers: authHeaders,
+            body: JSON.stringify({ type: "email", body: activityBody }),
+            signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
+          });
+          if (!act.ok) {
+            console.error("ERP activity log failed:", act.status, await act.text().catch(() => ""));
+          }
+        }
+      })().catch((err) => console.error("ERP lead dispatch failed:", err)),
+    );
+  }
+
+  // Keep the worker alive until both complete (or time out) so neither is dropped.
+  if (tasks.length) await Promise.allSettled(tasks);
 
   return json({
     ok: true,

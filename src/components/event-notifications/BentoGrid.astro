@@ -1,58 +1,57 @@
 ---
+import { enbIllustrations as ill } from "./illustrations";
+
 const tabs = [
   {
     label: "Email Notifications",
     hero: {
-      eyebrow: "Email Engine",
       title: "Transactional emails, reminder sequences, and marketing broadcasts with templates",
       desc: "Instant registration confirmations, pre-event reminders, and marketing broadcasts with drag-and-drop templates and GDPR-compliant unsubscribe.",
-      points: ["Transactional and marketing emails", "Automated reminder sequences", "GDPR-compliant unsubscribe"],
       visual: "email",
     },
     cards: [
-      { eyebrow: "Reminders", title: "Pre-Event Reminders", desc: "Automated sequences: 7 days, 3 days, 1 day before, and day-of reminders.", visual: "reminders" },
-      { eyebrow: "Broadcast", title: "Marketing Broadcasts", desc: "Speaker announcements, schedule updates, and sponsor messages to segments.", visual: "broadcast" },
-      { eyebrow: "Templates", title: "Custom Email Templates", desc: "Drag-and-drop template builder with dynamic fields and responsive layouts.", visual: "emailtpl" },
-      { eyebrow: "Compliance", title: "Unsubscribe Management", desc: "CAN-SPAM and GDPR compliant unsubscribe with auto list suppression.", visual: "unsub" },
+      { title: "Pre-Event Reminders", desc: "Automated sequences: 7 days, 3 days, 1 day before, and day-of reminders.", visual: "reminders" },
+      { title: "Marketing Broadcasts", desc: "Speaker announcements, schedule updates, and sponsor messages to segments.", visual: "broadcast" },
+      { title: "Custom Email Templates", desc: "Drag-and-drop template builder with dynamic fields and responsive layouts.", visual: "emailtpl" },
+      { title: "Unsubscribe Management", desc: "CAN-SPAM and GDPR compliant unsubscribe with auto list suppression.", visual: "unsub" },
     ],
   },
   {
     label: "WhatsApp & Push",
     hero: {
-      eyebrow: "WhatsApp Engine",
       title: "WhatsApp confirmations, broadcasts, push notifications, and bot responses",
       desc: "Send ticket QR codes via WhatsApp on registration — 98% open rate. Push notifications for session alerts and in-app announcements.",
-      points: ["98% WhatsApp open rate", "Push notifications via app", "WhatsApp bot responses"],
       visual: "whatsapp",
     },
     cards: [
-      { eyebrow: "Campaigns", title: "WhatsApp Broadcasts", desc: "Send announcements to opted-in segments via WhatsApp Business API.", visual: "wabroadcast" },
-      { eyebrow: "Push", title: "Push Notifications", desc: "Session start alerts and networking suggestions via the attendee app.", visual: "push" },
-      { eyebrow: "In-App", title: "In-App Notifications", desc: "Real-time notification bell for schedule changes and session reminders.", visual: "inapp" },
-      { eyebrow: "Bot", title: "WhatsApp Bot", desc: "Automated bot answers common queries — venue, status, ticket delivery.", visual: "wabot" },
+      { title: "WhatsApp Broadcasts", desc: "Send announcements to opted-in segments via WhatsApp Business API.", visual: "wabroadcast" },
+      { title: "Push Notifications", desc: "Session start alerts and networking suggestions via the attendee app.", visual: "push" },
+      { title: "In-App Notifications", desc: "Real-time notification bell for schedule changes and session reminders.", visual: "inapp" },
+      { title: "WhatsApp Bot", desc: "Automated bot answers common queries — venue, status, ticket delivery.", visual: "wabot" },
     ],
   },
   {
     label: "SMS & Delivery",
     hero: {
-      eyebrow: "Delivery Engine",
       title: "SMS via Twilio, queue-based delivery, tracking, and A/B testing",
       desc: "SMS for last-minute updates and emergency notifications. Queue-based delivery, per-recipient tracking, and A/B testing for optimization.",
-      points: ["SMS via Twilio integration", "Per-recipient delivery tracking", "A/B testing support"],
       visual: "sms",
     },
     cards: [
-      { eyebrow: "Queue", title: "Queue-Based Delivery", desc: "High-volume sends queued and delivered reliably — no messages lost.", visual: "queue" },
-      { eyebrow: "Tracking", title: "Delivery Tracking", desc: "Sent, delivered, bounced, and opened status per recipient per channel.", visual: "tracking" },
-      { eyebrow: "Testing", title: "A/B Testing", desc: "Test subject lines and message variants before sending to full audience.", visual: "abtest" },
-      { eyebrow: "Suppression", title: "Suppression Lists", desc: "Hard bounces and unsubscribes automatically suppressed across all sends.", visual: "suppress" },
+      { title: "Queue-Based Delivery", desc: "High-volume sends queued and delivered reliably — no messages lost.", visual: "queue" },
+      { title: "Delivery Tracking", desc: "Sent, delivered, bounced, and opened status per recipient per channel.", visual: "tracking" },
+      { title: "A/B Testing", desc: "Test subject lines and message variants before sending to full audience.", visual: "abtest" },
+      { title: "Suppression Lists", desc: "Hard bounces and unsubscribes automatically suppressed across all sends.", visual: "suppress" },
     ],
   },
 ];
+
+const ICON = '<svg class="enb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
+const layouts = ["a", "b", "c"];
 ---
 
 <section class="enb-section" id="en-bento">
-  <div class="enb-shell">
+  <div class="enb">
     <h2 class="enb-title">
       Email <b>Notifications</b>, WhatsApp &amp; <b>Push</b>
     </h2>
@@ -60,274 +59,36 @@ const tabs = [
       Send transactional and marketing messages across all channels from one communication hub.
     </p>
 
-    <nav class="enb-nav" aria-label="Event notification workflows">
-      {tabs.map((tab, index) => (
-        <button
-          class={`enb-tab${index === 0 ? " enb-tab--active" : ""}`}
-          data-enb-tab={index}
-          aria-selected={index === 0 ? "true" : "false"}
-          type="button"
-        >
-          {tab.label}
-        </button>
+    <nav class="enb-nav">
+      {tabs.map((t, i) => (
+        <button class={`enb-tab ${i === 0 ? "enb-tab--active" : ""}`} data-enb-tab={String(i)}>{t.label}</button>
       ))}
     </nav>
 
-    {tabs.map((tab, tabIndex) => (
-      <div
-        class={`enb-panel${tabIndex === 0 ? " enb-panel--active" : ""}`}
-        data-enb-panel={tabIndex}
-      >
-        <div class="enb-grid">
-          <article class="enb-card enb-card--hero" style={`--card-delay:${0.04}s;`}>
-            <div class="enb-card__content">
-              <span class="enb-card__eyebrow">{tab.hero.eyebrow}</span>
-              <h3 class="enb-card__title">{tab.hero.title}</h3>
-              <p class="enb-card__desc">{tab.hero.desc}</p>
-              <ul class="enb-point-list">
-                {tab.hero.points.map((point) => <li>{point}</li>)}
-              </ul>
-            </div>
-
-            <div class={`enb-art enb-art--hero enb-art--${tab.hero.visual}`} aria-hidden="true">
-              {tab.hero.visual === "email" && (
-                <Fragment>
-                  <div class="enb-envelope">
-                    <div class="enb-envelope-body">
-                      <div class="enb-envelope-flap"></div>
-                      <div class="enb-envelope-content">
-                        <span class="enb-envelope-line"></span>
-                        <span class="enb-envelope-line enb-envelope-line--short"></span>
-                      </div>
-                    </div>
-                    <div class="enb-notif-badge">3</div>
-                  </div>
-                  <div class="enb-email-stack">
-                    <div class="enb-email-item"><span class="enb-email-dot enb-email-dot--green"></span><span class="enb-email-subject"></span></div>
-                    <div class="enb-email-item"><span class="enb-email-dot enb-email-dot--blue"></span><span class="enb-email-subject"></span></div>
-                  </div>
-                </Fragment>
-              )}
-              {tab.hero.visual === "whatsapp" && (
-                <Fragment>
-                  <div class="enb-wa-phone">
-                    <div class="enb-wa-header">
-                      <span class="enb-wa-avatar"></span>
-                      <span class="enb-wa-name"></span>
-                    </div>
-                    <div class="enb-wa-messages">
-                      <div class="enb-wa-msg enb-wa-msg--received">
-                        <span class="enb-wa-msg-text"></span>
-                        <div class="enb-wa-qr">
-                          <span></span><span></span><span></span><span></span>
-                        </div>
-                      </div>
-                      <div class="enb-wa-msg enb-wa-msg--sent">
-                        <span class="enb-wa-msg-text enb-wa-msg-text--short"></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="enb-wa-rate-badge">
-                    <strong>98%</strong>
-                    <span>open rate</span>
-                  </div>
-                </Fragment>
-              )}
-              {tab.hero.visual === "sms" && (
-                <Fragment>
-                  <div class="enb-sms-bubbles">
-                    <div class="enb-sms-bubble enb-sms-bubble--out">
-                      <span class="enb-sms-line"></span>
-                      <span class="enb-sms-line enb-sms-line--short"></span>
-                    </div>
-                    <div class="enb-sms-bubble enb-sms-bubble--in">
-                      <span class="enb-sms-line"></span>
-                    </div>
-                    <div class="enb-sms-bubble enb-sms-bubble--out">
-                      <span class="enb-sms-line enb-sms-line--med"></span>
-                    </div>
-                  </div>
-                  <div class="enb-sms-provider">
-                    <span class="enb-sms-provider-icon">T</span>
-                    <span>Twilio</span>
-                  </div>
-                </Fragment>
-              )}
-            </div>
-          </article>
-
-          {tab.cards.map((card, cardIndex) => (
-            <article class="enb-card enb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
-              <div class="enb-card__content">
-                <span class="enb-card__eyebrow">{card.eyebrow}</span>
-                <h3 class="enb-card__title">{card.title}</h3>
-                <p class="enb-card__desc">{card.desc}</p>
+    {tabs.map((t, tabIdx) => (
+      <div class={`enb-panel ${tabIdx === 0 ? "enb-panel--active" : ""}`} data-enb-panel={String(tabIdx)}>
+        <div class="enb-grid" data-layout={layouts[tabIdx % 3]}>
+          <div class="enb-card enb-card--tall enb-pos-0" style="animation-delay:0s">
+            <div class="enb-card__inner">
+              <div class="enb-card__text">
+                <Fragment set:html={ICON} />
+                <h3 class="enb-card__title">{t.hero.title}</h3>
+                <p class="enb-card__desc">{t.hero.desc}</p>
               </div>
-
-              <div class={`enb-art enb-art--mini enb-art--${card.visual}`} aria-hidden="true">
-                {card.visual === "reminders" && (
-                  <Fragment>
-                    <div class="enb-reminder-stack">
-                      <div class="enb-reminder-card"><span class="enb-reminder-day">7d</span><span class="enb-reminder-bar"></span></div>
-                      <div class="enb-reminder-card"><span class="enb-reminder-day">3d</span><span class="enb-reminder-bar"></span></div>
-                      <div class="enb-reminder-card enb-reminder-card--active"><span class="enb-reminder-day">1d</span><span class="enb-reminder-bar"></span></div>
-                    </div>
-                    <div class="enb-mini-chip">Reminders</div>
-                  </Fragment>
-                )}
-                {card.visual === "broadcast" && (
-                  <Fragment>
-                    <div class="enb-megaphone">
-                      <div class="enb-megaphone-body">
-                        <div class="enb-megaphone-cone"></div>
-                        <div class="enb-megaphone-handle"></div>
-                      </div>
-                      <div class="enb-audience-dots">
-                        <span></span><span></span><span></span><span></span><span></span>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">Broadcast</div>
-                  </Fragment>
-                )}
-                {card.visual === "emailtpl" && (
-                  <Fragment>
-                    <div class="enb-tpl-canvas">
-                      <div class="enb-tpl-header"></div>
-                      <div class="enb-tpl-body">
-                        <div class="enb-tpl-block enb-tpl-block--img"></div>
-                        <div class="enb-tpl-block enb-tpl-block--text">
-                          <span></span><span></span>
-                        </div>
-                      </div>
-                      <div class="enb-tpl-btn"></div>
-                    </div>
-                    <div class="enb-mini-chip">Templates</div>
-                  </Fragment>
-                )}
-                {card.visual === "unsub" && (
-                  <Fragment>
-                    <div class="enb-unsub-link">
-                      <span class="enb-unsub-text">Unsubscribe</span>
-                      <div class="enb-unsub-indicator">
-                        <span class="enb-unsub-x">&times;</span>
-                        <span class="enb-unsub-label">Suppressed</span>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">Compliance</div>
-                  </Fragment>
-                )}
-                {card.visual === "wabroadcast" && (
-                  <Fragment>
-                    <div class="enb-wa-list">
-                      <div class="enb-wa-list-row"><span class="enb-wa-list-icon">&#9679;</span><span class="enb-wa-list-name"></span><span class="enb-wa-list-count">1.2k</span></div>
-                      <div class="enb-wa-list-row"><span class="enb-wa-list-icon" style="color:#22c55e">&#9679;</span><span class="enb-wa-list-name"></span><span class="enb-wa-list-count">840</span></div>
-                      <div class="enb-wa-list-row"><span class="enb-wa-list-icon" style="color:#AFA3FF">&#9679;</span><span class="enb-wa-list-name"></span><span class="enb-wa-list-count">520</span></div>
-                    </div>
-                    <div class="enb-mini-chip">Segments</div>
-                  </Fragment>
-                )}
-                {card.visual === "push" && (
-                  <Fragment>
-                    <div class="enb-push-phone">
-                      <div class="enb-push-screen">
-                        <div class="enb-push-banner">
-                          <span class="enb-push-app-icon"></span>
-                          <div class="enb-push-banner-text">
-                            <span class="enb-push-banner-title"></span>
-                            <span class="enb-push-banner-desc"></span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">Push</div>
-                  </Fragment>
-                )}
-                {card.visual === "inapp" && (
-                  <Fragment>
-                    <div class="enb-bell-wrap">
-                      <svg viewBox="0 0 48 48" class="enb-bell-svg">
-                        <path d="M24 4c-5.5 0-10 4.5-10 10v8l-4 4v2h28v-2l-4-4v-8c0-5.5-4.5-10-10-10z" fill="rgba(55,93,251,0.12)" stroke="#375dfb" stroke-width="2"/>
-                        <path d="M20 38c0 2.2 1.8 4 4 4s4-1.8 4-4" stroke="#375dfb" stroke-width="2" fill="none"/>
-                      </svg>
-                      <span class="enb-bell-dot"></span>
-                    </div>
-                    <div class="enb-mini-chip">In-App</div>
-                  </Fragment>
-                )}
-                {card.visual === "wabot" && (
-                  <Fragment>
-                    <div class="enb-bot-chat">
-                      <div class="enb-bot-avatar">
-                        <svg viewBox="0 0 24 24" class="enb-bot-icon"><circle cx="12" cy="8" r="4" fill="rgba(55,93,251,0.3)"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8" fill="rgba(55,93,251,0.15)"/></svg>
-                      </div>
-                      <div class="enb-bot-msgs">
-                        <div class="enb-bot-msg"><span></span></div>
-                        <div class="enb-bot-msg enb-bot-msg--reply"><span></span></div>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">Bot</div>
-                  </Fragment>
-                )}
-                {card.visual === "queue" && (
-                  <Fragment>
-                    <div class="enb-queue-pipeline">
-                      <div class="enb-queue-item enb-queue-item--1"></div>
-                      <div class="enb-queue-item enb-queue-item--2"></div>
-                      <div class="enb-queue-item enb-queue-item--3"></div>
-                      <div class="enb-queue-arrow">&rarr;</div>
-                      <div class="enb-queue-item enb-queue-item--sent">&#10003;</div>
-                    </div>
-                    <div class="enb-mini-chip">Queue</div>
-                  </Fragment>
-                )}
-                {card.visual === "tracking" && (
-                  <Fragment>
-                    <div class="enb-tracking-timeline">
-                      <div class="enb-tracking-step enb-tracking-step--done"><span class="enb-tracking-dot"></span><span class="enb-tracking-label">Sent</span></div>
-                      <div class="enb-tracking-line enb-tracking-line--done"></div>
-                      <div class="enb-tracking-step enb-tracking-step--done"><span class="enb-tracking-dot"></span><span class="enb-tracking-label">Delivered</span></div>
-                      <div class="enb-tracking-line"></div>
-                      <div class="enb-tracking-step"><span class="enb-tracking-dot"></span><span class="enb-tracking-label">Opened</span></div>
-                    </div>
-                    <div class="enb-mini-chip">Tracking</div>
-                  </Fragment>
-                )}
-                {card.visual === "abtest" && (
-                  <Fragment>
-                    <div class="enb-ab-compare">
-                      <div class="enb-ab-variant">
-                        <span class="enb-ab-letter">A</span>
-                        <div class="enb-ab-bar"><div class="enb-ab-fill" style="width:65%"></div></div>
-                        <span class="enb-ab-pct">65%</span>
-                      </div>
-                      <div class="enb-ab-variant">
-                        <span class="enb-ab-letter enb-ab-letter--b">B</span>
-                        <div class="enb-ab-bar"><div class="enb-ab-fill enb-ab-fill--b" style="width:42%"></div></div>
-                        <span class="enb-ab-pct">42%</span>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">A/B Test</div>
-                  </Fragment>
-                )}
-                {card.visual === "suppress" && (
-                  <Fragment>
-                    <div class="enb-suppress-indicator">
-                      <div class="enb-suppress-icon">
-                        <svg viewBox="0 0 24 24" class="enb-suppress-svg">
-                          <circle cx="12" cy="12" r="10" fill="rgba(220,38,38,0.08)" stroke="#dc2626" stroke-width="2"/>
-                          <path d="M8 8l8 8M16 8l-8 8" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                      </div>
-                      <div class="enb-suppress-labels">
-                        <span class="enb-suppress-tag enb-suppress-tag--bounce">Bounced</span>
-                        <span class="enb-suppress-tag enb-suppress-tag--unsub">Unsubscribed</span>
-                      </div>
-                    </div>
-                    <div class="enb-mini-chip">Suppressed</div>
-                  </Fragment>
-                )}
+              <div class="enb-card__img" set:html={ill[t.hero.visual]} />
+            </div>
+          </div>
+          {t.cards.map((c, ci) => (
+            <div class={`enb-card enb-card--sm enb-pos-${ci + 1}`} style={`animation-delay:${((ci + 1) * 0.06).toFixed(2)}s`}>
+              <div class="enb-card__inner enb-card__inner--row">
+                <div class="enb-card__text">
+                  <Fragment set:html={ICON} />
+                  <h3 class="enb-card__title">{c.title}</h3>
+                  <p class="enb-card__desc">{c.desc}</p>
+                </div>
+                <div class="enb-card__img enb-card__img--sm" set:html={ill[c.visual]} />
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
@@ -335,28 +96,29 @@ const tabs = [
   </div>
 </section>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".enb-shell").forEach((root) => {
-      const tabs = Array.from(root.querySelectorAll(".enb-tab"));
-      const panels = Array.from(root.querySelectorAll(".enb-panel"));
+<script>
+  const enbTabs = Array.from(document.querySelectorAll('[data-enb-tab]'));
+  const enbPanels = Array.from(document.querySelectorAll('[data-enb-panel]'));
+  let enbActive = 0;
+  let enbInterval: ReturnType<typeof setInterval>;
 
-      const activate = (index) => {
-        tabs.forEach((tab, tabIndex) => {
-          const selected = tabIndex === index;
-          tab.classList.toggle("enb-tab--active", selected);
-          tab.setAttribute("aria-selected", selected ? "true" : "false");
-        });
-        panels.forEach((panel, panelIndex) => {
-          panel.classList.toggle("enb-panel--active", panelIndex === index);
-        });
-      };
-
-      tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activate(index));
-      });
-    });
-  });
+  function setEnbTab(index: number) {
+    enbTabs.forEach((t) => t.classList.remove('enb-tab--active'));
+    enbPanels.forEach((p) => p.classList.remove('enb-panel--active'));
+    enbTabs[index]?.classList.add('enb-tab--active');
+    enbPanels[index]?.classList.add('enb-panel--active');
+    enbActive = index;
+  }
+  function startEnb() {
+    enbInterval = setInterval(() => setEnbTab((enbActive + 1) % enbTabs.length), 5000);
+  }
+  enbTabs.forEach((tab, i) => tab.addEventListener('click', () => { setEnbTab(i); clearInterval(enbInterval); startEnb(); }));
+  startEnb();
+  const enbSection = document.querySelector('.enb-section');
+  if (enbSection) {
+    enbSection.addEventListener('mouseenter', () => clearInterval(enbInterval));
+    enbSection.addEventListener('mouseleave', () => startEnb());
+  }
 </script>
 
 <style>
@@ -364,1059 +126,144 @@ const tabs = [
     padding: 80px 0 60px;
     background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
   }
-
-  .enb-shell {
-    max-width: 1260px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
+  .enb { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
   .enb-title {
     font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    text-align: center;
-    color: var(--heading-dark);
-    margin: 0 0 12px;
+    font-size: 42px; font-weight: 400; line-height: 1.1; letter-spacing: -1px;
+    text-align: center; color: var(--heading-dark); margin: 0 0 12px;
   }
-
   .enb-title b { font-weight: 700; }
-
   .enb-subtitle {
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--subheading-gray);
-    text-align: center;
-    max-width: 620px;
-    margin: 0 auto 32px;
+    font-family: var(--font-body); font-size: 18px; line-height: 1.6;
+    color: var(--subheading-gray); text-align: center; max-width: 620px; margin: 0 auto 40px;
   }
 
   .enb-nav {
-    display: flex;
-    justify-content: center;
-    background: #F0F2F5;
-    border-radius: 50px;
-    padding: 4px;
-    margin: 0 auto 32px;
-    max-width: 560px;
-    gap: 4px;
+    display: flex; justify-content: center; gap: 0;
+    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
   }
-
   .enb-tab {
-    flex: 1;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    background: transparent;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #475467;
-    cursor: pointer;
-    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
+    cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
   }
-
-  .enb-tab:hover,
-  .enb-tab:focus-visible {
-    color: #16327b;
-    outline: none;
-  }
-
+  .enb-tab:hover { background: rgba(55,93,251,.08); }
   .enb-tab--active {
-    background: var(--brand-blue);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+    background: var(--brand-blue) !important; color: #fff !important;
+    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
 
   .enb-panel { display: none; }
-  .enb-panel--active { display: block; }
+  .enb-panel--active { display: block; animation: enbFadeUp 0.4s ease; }
+  @keyframes enbFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .enb-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr 1fr;
-    grid-template-areas:
-      "hero mini1 mini2"
-      "hero mini3 mini4";
-    gap: 1rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 14px; height: 460px;
   }
+  .enb-pos-0 { grid-column: 1; grid-row: 1 / 3; }
+  .enb-pos-1 { grid-column: 2; grid-row: 1; }
+  .enb-pos-2 { grid-column: 3; grid-row: 1; }
+  .enb-pos-3 { grid-column: 2; grid-row: 2; }
+  .enb-pos-4 { grid-column: 3; grid-row: 2; }
+  [data-layout="b"] .enb-pos-0 { grid-column: 3; grid-row: 1 / 3; }
+  [data-layout="b"] .enb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="b"] .enb-pos-2 { grid-column: 2; grid-row: 1; }
+  [data-layout="b"] .enb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="b"] .enb-pos-4 { grid-column: 2; grid-row: 2; }
+  [data-layout="c"] .enb-pos-0 { grid-column: 2; grid-row: 1 / 3; }
+  [data-layout="c"] .enb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="c"] .enb-pos-2 { grid-column: 3; grid-row: 1; }
+  [data-layout="c"] .enb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="c"] .enb-pos-4 { grid-column: 3; grid-row: 2; }
 
-  .enb-panel--active .enb-card {
-    animation: enb-fade-up 0.6s ease both;
-    animation-delay: var(--card-delay, 0s);
-  }
-
+  @property --enb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .enb-card {
     position: relative;
-    overflow: hidden;
-    display: grid;
-    gap: 1rem;
-    border-radius: 1.75rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(166, 186, 255, 0.62);
-    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
-    min-height: 205px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
+    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0; animation: enbCardIn 0.5s ease forwards;
   }
-
   .enb-card::after {
-    content: "";
-    position: absolute;
-    inset: auto -20% -45% 35%;
-    height: 70%;
-    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
-    pointer-events: none;
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: conic-gradient(from var(--enb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
-
-  .enb-card--hero {
-    grid-area: hero;
-    align-content: space-between;
-    padding: 1.5rem;
-    min-height: 430px;
+  .enb-card:hover {
+    transform: translateY(-3px); box-shadow: 0 8px 32px rgba(55,93,251,0.12); border-color: rgba(55,93,251,0.15);
   }
+  .enb-card:hover::after { opacity: 1; animation: enbBorder 2.4s linear infinite; }
+  @keyframes enbBorder { to { --enb-angle: 360deg; } }
+  @keyframes enbCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .enb-pos-1 { animation-delay: 0.06s; }
+  .enb-pos-2 { animation-delay: 0.12s; }
+  .enb-pos-3 { animation-delay: 0.18s; }
+  .enb-pos-4 { animation-delay: 0.24s; }
 
-  .enb-card--mini {
-    padding: 1.2rem;
-    grid-template-rows: auto 1fr;
-  }
-
-  .enb-card--mini:nth-of-type(2) { grid-area: mini1; }
-  .enb-card--mini:nth-of-type(3) { grid-area: mini2; }
-  .enb-card--mini:nth-of-type(4) { grid-area: mini3; }
-  .enb-card--mini:nth-of-type(5) { grid-area: mini4; }
-
-  .enb-card__content { position: relative; z-index: 1; }
-
-  .enb-card__eyebrow {
-    display: inline-flex;
-    padding: 0.38rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(18, 34, 74, 0.06);
-    color: #45608e;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
+  .enb-card__inner { display: flex; flex-direction: column; height: 100%; }
+  .enb-card__inner--row { flex-direction: row; }
+  .enb-card__text { display: flex; flex-direction: column; gap: 6px; }
+  .enb-card--tall .enb-card__text { padding: 20px 20px 8px; }
+  .enb-card--sm .enb-card__text { padding: 20px 8px 20px 20px; flex: 1 1 55%; }
+  .enb-card__icon { margin-bottom: 8px; flex-shrink: 0; }
   .enb-card__title {
-    margin: 0.85rem 0 0.55rem;
-    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-    line-height: 1.18;
-    color: #14213b;
-  }
-
-  .enb-card__desc {
-    margin: 0;
-    color: #566884;
-    line-height: 1.65;
-    font-size: 0.96rem;
-  }
-
-  .enb-point-list {
-    list-style: none;
-    margin: 1rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .enb-point-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: #243a61;
-    font-weight: 600;
-  }
-
-  .enb-point-list li::before {
-    content: "";
-    flex: 0 0 0.6rem;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #22c55e, #38bdf8);
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
-  }
-
-  .enb-art { position: relative; z-index: 1; min-height: 146px; }
-  .enb-art--hero { min-height: 228px; margin-top: 0.6rem; }
-  .enb-art--mini { align-self: end; }
-
-  /* === Hero visual: email === */
-  .enb-envelope {
-    position: absolute;
-    inset: 0.5rem 10% auto 10%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    animation: enb-float 5s ease-in-out infinite;
-  }
-
-  .enb-envelope-body {
-    position: relative;
-    width: 6rem;
-    height: 4rem;
-    border-radius: 0.8rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 2px solid rgba(55, 93, 251, 0.18);
-    overflow: hidden;
-  }
-
-  .enb-envelope-flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 50%;
-    background: linear-gradient(135deg, transparent 48%, rgba(55, 93, 251, 0.08) 50%, rgba(55, 93, 251, 0.04));
-    border-bottom: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .enb-envelope-content {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 0.6rem;
-    right: 0.6rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .enb-envelope-line {
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .enb-envelope-line--short { width: 60%; }
-
-  .enb-notif-badge {
-    position: absolute;
-    top: -0.4rem;
-    right: -0.4rem;
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 50%;
-    background: #dc2626;
-    color: #fff;
-    font-size: 0.7rem;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
-  }
-
-  .enb-email-stack {
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    right: 5%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .enb-email-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 0.6rem;
-    border-radius: 0.6rem;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-    box-shadow: 0 4px 12px -6px rgba(18, 34, 74, 0.2);
-  }
-
-  .enb-email-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .enb-email-dot--green { background: #22c55e; }
-  .enb-email-dot--blue { background: #375dfb; }
-
-  .enb-email-subject {
-    height: 0.3rem;
-    flex: 1;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  /* === Hero visual: whatsapp === */
-  .enb-wa-phone {
-    position: absolute;
-    inset: 0.3rem 8% auto 8%;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #075e54, #128c7e);
-    overflow: hidden;
-    animation: enb-float 5.2s ease-in-out infinite;
-  }
-
-  .enb-wa-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.7rem;
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  .enb-wa-avatar {
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .enb-wa-name {
-    height: 0.35rem;
-    width: 40%;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.4);
-  }
-
-  .enb-wa-messages {
-    padding: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .enb-wa-msg {
-    max-width: 80%;
-    padding: 0.45rem 0.6rem;
-    border-radius: 0.6rem;
-  }
-
-  .enb-wa-msg--received {
-    background: #dcf8c6;
-    border-radius: 0.6rem 0.6rem 0.6rem 0;
-    align-self: flex-start;
-  }
-
-  .enb-wa-msg--sent {
-    background: #fff;
-    border-radius: 0.6rem 0.6rem 0 0.6rem;
-    align-self: flex-end;
-  }
-
-  .enb-wa-msg-text {
-    display: block;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.12);
-  }
-
-  .enb-wa-msg-text--short { width: 60%; }
-
-  .enb-wa-qr {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2px;
-    width: 1.6rem;
-    height: 1.6rem;
-    margin-top: 0.3rem;
-  }
-
-  .enb-wa-qr span {
-    background: #14213b;
-    border-radius: 1px;
-  }
-
-  .enb-wa-rate-badge {
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 12px 28px -16px rgba(18, 34, 74, 0.4);
-  }
-
-  .enb-wa-rate-badge strong {
-    font-family: var(--font-heading);
-    font-size: 1rem;
-    font-weight: 700;
-    color: #22c55e;
-  }
-
-  .enb-wa-rate-badge span {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: #607390;
-  }
-
-  /* === Hero visual: sms === */
-  .enb-sms-bubbles {
-    position: absolute;
-    inset: 0.5rem 8% auto 8%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    animation: enb-float 5.5s ease-in-out infinite;
-  }
-
-  .enb-sms-bubble {
-    padding: 0.6rem 0.8rem;
-    border-radius: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    max-width: 75%;
-  }
-
-  .enb-sms-bubble--out {
-    background: linear-gradient(135deg, #375dfb, #5b7bfc);
-    align-self: flex-end;
-    border-radius: 1rem 1rem 0 1rem;
-  }
-
-  .enb-sms-bubble--in {
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    align-self: flex-start;
-    border-radius: 1rem 1rem 1rem 0;
-  }
-
-  .enb-sms-line {
-    display: block;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.35);
-  }
-
-  .enb-sms-bubble--in .enb-sms-line { background: rgba(55, 93, 251, 0.12); }
-  .enb-sms-line--short { width: 55%; }
-  .enb-sms-line--med { width: 70%; }
-
-  .enb-sms-provider {
-    position: absolute;
-    bottom: 0;
-    right: 5%;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 8px 20px -12px rgba(18, 34, 74, 0.35);
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #183465;
-  }
-
-  .enb-sms-provider-icon {
-    width: 1.2rem;
-    height: 1.2rem;
-    border-radius: 0.3rem;
-    background: #dc2626;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.65rem;
-    font-weight: 800;
-  }
-
-  /* === Mini visuals === */
-  .enb-mini-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    color: #183465;
-    font-size: 0.72rem;
-    font-weight: 700;
-    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
-    position: absolute;
-    left: 0;
-    bottom: 0;
-  }
-
-  /* reminders */
-  .enb-reminder-stack {
-    position: absolute;
-    inset: 0.3rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .enb-reminder-card {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.45rem 0.6rem;
-    border-radius: 0.7rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .enb-reminder-card--active {
-    border-color: rgba(55, 93, 251, 0.3);
-    background: linear-gradient(180deg, #edf3ff, #dce4ff);
-  }
-
-  .enb-reminder-day {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: #375dfb;
-    min-width: 1.5rem;
-  }
-
-  .enb-reminder-bar {
-    flex: 1;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  /* broadcast */
-  .enb-megaphone {
-    position: absolute;
-    inset: 0.3rem 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.6rem;
-  }
-
-  .enb-megaphone-body {
-    display: flex;
-    align-items: center;
-    gap: 0;
-  }
-
-  .enb-megaphone-cone {
-    width: 2.5rem;
-    height: 1.8rem;
-    background: linear-gradient(135deg, #375dfb, #5b7bfc);
-    border-radius: 0.3rem 1rem 1rem 0.3rem;
-    clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 80%);
-  }
-
-  .enb-megaphone-handle {
-    width: 0.6rem;
-    height: 1rem;
-    background: #14213b;
-    border-radius: 0 0.3rem 0.3rem 0;
-  }
-
-  .enb-audience-dots {
-    display: flex;
-    gap: 0.3rem;
-  }
-
-  .enb-audience-dots span {
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
-    background: rgba(55, 93, 251, 0.2);
-    animation: enb-pulse 2s ease-in-out infinite;
-  }
-
-  .enb-audience-dots span:nth-child(2) { animation-delay: 0.2s; background: rgba(34, 197, 94, 0.3); }
-  .enb-audience-dots span:nth-child(3) { animation-delay: 0.4s; }
-  .enb-audience-dots span:nth-child(4) { animation-delay: 0.6s; background: rgba(175, 163, 255, 0.4); }
-  .enb-audience-dots span:nth-child(5) { animation-delay: 0.8s; }
-
-  /* emailtpl */
-  .enb-tpl-canvas {
-    position: absolute;
-    inset: 0.3rem 0.4rem auto;
-    border-radius: 0.8rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    overflow: hidden;
-  }
-
-  .enb-tpl-header {
-    height: 0.7rem;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  .enb-tpl-body {
-    display: flex;
-    gap: 0.4rem;
-    padding: 0.4rem;
-  }
-
-  .enb-tpl-block--img {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 0.3rem;
-    background: rgba(55, 93, 251, 0.08);
-    flex-shrink: 0;
-  }
-
-  .enb-tpl-block--text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    justify-content: center;
-  }
-
-  .enb-tpl-block--text span {
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .enb-tpl-block--text span:last-child { width: 65%; }
-
-  .enb-tpl-btn {
-    margin: 0.3rem 0.4rem 0.4rem;
-    height: 0.6rem;
-    width: 40%;
-    border-radius: 0.3rem;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  /* unsub */
-  .enb-unsub-link {
-    position: absolute;
-    inset: 0.3rem 0.5rem auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .enb-unsub-text {
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #375dfb;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .enb-unsub-indicator {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    padding: 0.4rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(220, 38, 38, 0.08);
-    border: 1px solid rgba(220, 38, 38, 0.15);
-  }
-
-  .enb-unsub-x {
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #dc2626;
-  }
-
-  .enb-unsub-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    color: #dc2626;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  /* wabroadcast */
-  .enb-wa-list {
-    position: absolute;
-    inset: 0.3rem 0.4rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .enb-wa-list-row {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.6rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .enb-wa-list-icon { font-size: 0.5rem; color: #375dfb; }
-
-  .enb-wa-list-name {
-    flex: 1;
-    height: 0.3rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .enb-wa-list-count {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #375dfb;
-  }
-
-  /* push */
-  .enb-push-phone {
-    position: absolute;
-    inset: 0.3rem 15% auto;
-    border-radius: 0.8rem;
-    border: 2px solid rgba(55, 93, 251, 0.15);
-    background: linear-gradient(180deg, #0f1629, #1a2340);
-    padding: 0.4rem;
-  }
-
-  .enb-push-screen {
-    border-radius: 0.5rem;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.5rem;
-  }
-
-  .enb-push-banner {
-    display: flex;
-    gap: 0.4rem;
-    padding: 0.4rem;
-    border-radius: 0.6rem;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .enb-push-app-icon {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 0.25rem;
-    background: linear-gradient(135deg, #375dfb, #22c55e);
-    flex-shrink: 0;
-  }
-
-  .enb-push-banner-text {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    justify-content: center;
-  }
-
-  .enb-push-banner-title {
-    height: 0.25rem;
-    width: 70%;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .enb-push-banner-desc {
-    height: 0.2rem;
-    width: 90%;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  /* inapp */
-  .enb-bell-wrap {
-    position: absolute;
-    inset: 0.2rem 0 auto;
-    display: flex;
-    justify-content: center;
-  }
-
-  .enb-bell-svg { width: 3.5rem; height: 3.5rem; }
-
-  .enb-bell-dot {
-    position: absolute;
-    top: 0.1rem;
-    right: 35%;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 50%;
-    background: #dc2626;
-    box-shadow: 0 0 6px rgba(220, 38, 38, 0.5);
-    animation: enb-pulse 1.5s ease-in-out infinite;
-  }
-
-  /* wabot */
-  .enb-bot-chat {
-    position: absolute;
-    inset: 0.3rem 0.4rem auto;
-    display: flex;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-
-  .enb-bot-avatar {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 50%;
-    background: linear-gradient(180deg, rgba(55, 93, 251, 0.15), rgba(175, 163, 255, 0.2));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .enb-bot-icon { width: 1.2rem; height: 1.2rem; }
-
-  .enb-bot-msgs {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .enb-bot-msg {
-    padding: 0.4rem 0.6rem;
-    border-radius: 0.6rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.08);
-  }
-
-  .enb-bot-msg span {
-    display: block;
-    height: 0.25rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .enb-bot-msg--reply {
-    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
-    border-color: rgba(34, 197, 94, 0.15);
-  }
-
-  .enb-bot-msg--reply span { background: rgba(34, 197, 94, 0.15); }
-
-  /* queue */
-  .enb-queue-pipeline {
-    position: absolute;
-    inset: 0.8rem 0.4rem auto;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    justify-content: center;
-  }
-
-  .enb-queue-item {
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 0.4rem;
-    background: linear-gradient(180deg, #edf3ff, #dce4ff);
-    border: 1px solid rgba(55, 93, 251, 0.15);
-  }
-
-  .enb-queue-item--1 { animation: enb-queue-flow 2s ease-in-out infinite; }
-  .enb-queue-item--2 { animation: enb-queue-flow 2s ease-in-out 0.3s infinite; }
-  .enb-queue-item--3 { animation: enb-queue-flow 2s ease-in-out 0.6s infinite; }
-
-  .enb-queue-arrow {
-    font-size: 1rem;
-    color: #375dfb;
-    font-weight: 700;
-  }
-
-  .enb-queue-item--sent {
-    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
-    border-color: rgba(34, 197, 94, 0.2);
-    color: #22c55e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 700;
-  }
-
-  @keyframes enb-queue-flow {
-    0%, 100% { transform: translateX(0); opacity: 1; }
-    50% { transform: translateX(4px); opacity: 0.6; }
-  }
-
-  /* tracking */
-  .enb-tracking-timeline {
-    position: absolute;
-    inset: 0.8rem 0.3rem auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-  }
-
-  .enb-tracking-step {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .enb-tracking-dot {
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
-    background: rgba(55, 93, 251, 0.15);
-    border: 2px solid rgba(55, 93, 251, 0.2);
-  }
-
-  .enb-tracking-step--done .enb-tracking-dot {
-    background: #22c55e;
-    border-color: #22c55e;
-    box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
-  }
-
-  .enb-tracking-label {
-    font-size: 0.55rem;
-    font-weight: 700;
-    color: #607390;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .enb-tracking-line {
-    width: 1.5rem;
-    height: 2px;
-    background: rgba(55, 93, 251, 0.1);
-    margin-bottom: 1.2rem;
-  }
-
-  .enb-tracking-line--done { background: #22c55e; }
-
-  /* abtest */
-  .enb-ab-compare {
-    position: absolute;
-    inset: 0.3rem 0.4rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-
-  .enb-ab-variant {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-
-  .enb-ab-letter {
-    width: 1.4rem;
-    height: 1.4rem;
-    border-radius: 0.4rem;
-    background: linear-gradient(135deg, #375dfb, #5b7bfc);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 800;
-    flex-shrink: 0;
-  }
-
-  .enb-ab-letter--b { background: linear-gradient(135deg, #AFA3FF, #d4cafe); color: #14213b; }
-
-  .enb-ab-bar {
-    flex: 1;
-    height: 0.5rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-    overflow: hidden;
-  }
-
-  .enb-ab-fill {
-    height: 100%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  .enb-ab-fill--b { background: linear-gradient(90deg, #AFA3FF, #d4cafe); }
-
-  .enb-ab-pct {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #375dfb;
-    min-width: 2rem;
-    text-align: right;
-  }
-
-  /* suppress */
-  .enb-suppress-indicator {
-    position: absolute;
-    inset: 0.3rem 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .enb-suppress-svg { width: 2.5rem; height: 2.5rem; }
-
-  .enb-suppress-labels {
-    display: flex;
-    gap: 0.3rem;
-  }
-
-  .enb-suppress-tag {
-    padding: 0.25rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.6rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  .enb-suppress-tag--bounce {
-    background: rgba(220, 38, 38, 0.08);
-    color: #dc2626;
-  }
-
-  .enb-suppress-tag--unsub {
-    background: rgba(245, 158, 11, 0.08);
-    color: #d97706;
-  }
-
-  /* === Animations === */
-  @keyframes enb-fade-up {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes enb-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  @keyframes enb-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
-  }
-
-  @media (max-width: 960px) {
+    font-family: var(--font-heading); font-size: 22px; font-weight: 700; line-height: 1.3;
+    color: var(--heading-dark); margin: 0 0 6px;
+  }
+  .enb-card--sm .enb-card__title { font-size: 17px; }
+  .enb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
+  .enb-card--sm .enb-card__desc { font-size: 13px; }
+
+  .enb-card__img {
+    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+    background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%);
+  }
+  .enb-card--tall .enb-card__img { flex: 1; padding: 0 12px; min-height: 0; }
+  .enb-card--sm .enb-card__img { flex: 0 0 42%; padding: 8px 8px 0 0; }
+  .enb-card__img :global(svg) {
+    width: 100%; height: auto; max-width: none;
+    filter: drop-shadow(0 8px 16px rgba(31,52,128,.12));
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease;
+  }
+  .enb-card:hover .enb-card__img :global(svg) {
+    transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18));
+    animation: enbFloat 2.2s ease-in-out infinite;
+  }
+  @keyframes enbFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
+
+  @media (max-width: 1024px) {
     .enb-section { padding: 60px 0 48px; }
     .enb-title { font-size: 36px; }
-    .enb-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "hero hero"
-        "mini1 mini2"
-        "mini3 mini4";
-    }
-    .enb-card--hero { min-height: 380px; }
+    .enb-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
+    .enb-pos-0 { grid-column: 1 / -1; grid-row: auto; }
+    .enb-pos-1, .enb-pos-2, .enb-pos-3, .enb-pos-4 { grid-column: auto; grid-row: auto; }
+    [data-layout="b"] .enb-pos-0, [data-layout="c"] .enb-pos-0 { grid-column: 1 / -1; }
+    [data-layout="b"] .enb-pos-1, [data-layout="b"] .enb-pos-2, [data-layout="b"] .enb-pos-3, [data-layout="b"] .enb-pos-4,
+    [data-layout="c"] .enb-pos-1, [data-layout="c"] .enb-pos-2, [data-layout="c"] .enb-pos-3, [data-layout="c"] .enb-pos-4 { grid-column: auto; grid-row: auto; }
+    .enb-card--tall .enb-card__inner { flex-direction: row; }
+    .enb-card--tall .enb-card__text { flex: 1; }
+    .enb-card--tall .enb-card__img { flex: 0 0 36%; padding: 12px; }
   }
-
-  @media (max-width: 720px) {
-    .enb-section { padding-inline: 0; }
-    .enb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
-    .enb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+  @media (max-width: 767px) {
     .enb-title { font-size: 28px; }
     .enb-subtitle { font-size: 15px; }
-    .enb-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
-    }
-    .enb-card { min-height: 210px; }
-    .enb-card--hero { min-height: 420px; }
+    .enb-nav { flex-direction: column; width: 100%; max-width: 300px; border-radius: 16px; }
+    .enb-tab { border-radius: 12px; }
+    .enb-grid { grid-template-columns: 1fr; }
+    .enb-pos-0, .enb-pos-1, .enb-pos-2, .enb-pos-3, .enb-pos-4,
+    [data-layout="b"] .enb-pos-0, [data-layout="b"] .enb-pos-1, [data-layout="b"] .enb-pos-2, [data-layout="b"] .enb-pos-3, [data-layout="b"] .enb-pos-4,
+    [data-layout="c"] .enb-pos-0, [data-layout="c"] .enb-pos-1, [data-layout="c"] .enb-pos-2, [data-layout="c"] .enb-pos-3, [data-layout="c"] .enb-pos-4 { grid-column: 1; grid-row: auto; }
+    .enb-card--sm .enb-card__inner, .enb-card--tall .enb-card__inner { flex-direction: row; }
+    .enb-card--sm .enb-card__text, .enb-card--tall .enb-card__text { padding: 14px 6px 14px 14px; flex: 1 1 60%; }
+    .enb-card--sm .enb-card__img, .enb-card--tall .enb-card__img { flex: 0 0 38%; padding: 4px 4px 0 0; align-items: flex-end; justify-content: flex-end; }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .enb-panel--active .enb-card,
-    .enb-envelope,
-    .enb-wa-phone,
-    .enb-sms-bubbles,
-    .enb-bell-dot,
-    .enb-queue-item { animation: none; }
+    .enb-card { animation: none !important; opacity: 1; transform: none; }
+    .enb-card:hover::after { animation: none !important; }
+    .enb-card:hover .enb-card__img :global(svg) { animation: none !important; transform: none; }
   }
 </style>

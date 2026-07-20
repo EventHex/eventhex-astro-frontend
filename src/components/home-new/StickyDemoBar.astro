@@ -211,11 +211,13 @@ const {
     background: rgba(34, 39, 47, 0.12);
   }
 
-  /* Phones: anchor left and reserve room for the WhatsApp FAB (bottom-right). */
+  /* Phones: anchor left, stay content-sized, and never reach the WhatsApp FAB. */
   @media (max-width: 640px) {
     .eh-demobar {
       left: 14px;
-      right: 84px;
+      right: auto;
+      /* Cap so the pill + close button can't overlap the bottom-right FAB. */
+      max-width: calc(100vw - 96px);
       transform: translateY(16px);
     }
 
@@ -224,9 +226,21 @@ const {
     }
 
     .eh-demobar__pill {
-      flex: 1;
+      min-width: 0;
       padding: 4px 13px 4px 4px;
       gap: 9px;
+    }
+
+    /* Let the text column shrink and the subtitle truncate instead of forcing width. */
+    .eh-demobar__text {
+      min-width: 0;
+    }
+
+    .eh-demobar__title,
+    .eh-demobar__subtitle {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .eh-demobar__avatar {

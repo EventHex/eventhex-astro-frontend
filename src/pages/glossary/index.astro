@@ -1,0 +1,410 @@
+---
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { glossaryEntries } from "../../data/glossary";
+
+const title = "Event Management Glossary — Terms & Definitions | EventHex";
+const description =
+  "Plain-English definitions of 54 event management terms — from QR code check-in to hybrid events, AI networking, and GDPR compliance. Written for event organisers.";
+
+// Sort alphabetically by term
+const sorted = [...glossaryEntries].sort((a, b) =>
+  a.term.localeCompare(b.term)
+);
+
+// Group by first letter
+const groups: Record<string, typeof sorted> = {};
+for (const entry of sorted) {
+  const letter = entry.term[0].toUpperCase();
+  if (!groups[letter]) groups[letter] = [];
+  groups[letter].push(entry);
+}
+const letters = Object.keys(groups).sort();
+
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Event Management Glossary",
+  description,
+  numberOfItems: glossaryEntries.length,
+  itemListElement: sorted.map((entry, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: entry.term,
+    url: `https://eventhex.ai/glossary/${entry.slug}/`,
+  })),
+};
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical="https://eventhex.ai/glossary/"
+  footerCtaTitle="See EventHex in action"
+  footerCtaButtonText="Book a Free Demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+  </Fragment>
+
+  <!-- HERO -->
+  <section class="glos-hero">
+    <div class="glos-hero__inner">
+      <span class="glos-hero__badge animate-on-scroll">Glossary</span>
+      <h1 class="glos-hero__title animate-on-scroll" data-delay="80">
+        Event Management <strong>Glossary</strong>
+      </h1>
+      <p class="glos-hero__sub animate-on-scroll" data-delay="160">
+        Plain-English definitions of {glossaryEntries.length} essential event management terms — written for organisers, not technologists.
+      </p>
+    </div>
+  </section>
+
+  <!-- ALPHABET NAV -->
+  <nav class="glos-alpha" aria-label="Jump to letter">
+    <div class="glos-alpha__inner">
+      {letters.map((letter) => (
+        <a href={`#letter-${letter}`} class="glos-alpha__link">{letter}</a>
+      ))}
+    </div>
+  </nav>
+
+  <!-- TERMS GRID -->
+  <section class="glos-body">
+    <div class="glos-body__inner">
+      {letters.map((letter) => (
+        <div class="glos-group" id={`letter-${letter}`}>
+          <h2 class="glos-group__letter">{letter}</h2>
+          <div class="glos-grid">
+            {groups[letter].map((entry, i) => (
+              <a
+                href={`/glossary/${entry.slug}/`}
+                class="glos-card animate-on-scroll"
+                data-delay={String((i % 4) * 60)}
+              >
+                <span class="glos-card__term">{entry.term}</span>
+                <p class="glos-card__excerpt">
+                  {entry.short.slice(0, 110).trimEnd()}&hellip;
+                </p>
+                <span class="glos-card__arrow">Read definition &rarr;</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- BOTTOM CTA -->
+  <section class="glos-cta">
+    <div class="glos-cta__inner">
+      <div class="glos-cta__card animate-on-scroll">
+        <div class="glos-cta__glow glos-cta__glow--1"></div>
+        <div class="glos-cta__glow glos-cta__glow--2"></div>
+        <h2 class="glos-cta__title">Ready to put these concepts into practice?</h2>
+        <p class="glos-cta__copy">
+          EventHex brings every term in this glossary to life — from QR check-in and AI networking to sponsor ROI reports and WhatsApp campaigns.
+        </p>
+        <div class="glos-cta__btns">
+          <a href="/book-a-demo/" class="glos-btn glos-btn--white">Book a Free Demo</a>
+          <a href="/features/" class="glos-btn glos-btn--ghost">Explore Features</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</MarketingLayout>
+
+<style>
+  /* ── Hero ── */
+  .glos-hero {
+    background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 40%, #f8f6ff 100%);
+    padding: 7rem 1.5rem 4.5rem;
+    text-align: center;
+  }
+  .glos-hero__inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .glos-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+    background: rgba(55, 93, 251, 0.08);
+    border: 1px solid rgba(55, 93, 251, 0.18);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+  }
+  .glos-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 700;
+    line-height: 1.18;
+    color: var(--heading-dark);
+    margin-bottom: 1.25rem;
+  }
+  .glos-hero__title strong {
+    color: var(--brand-blue);
+    font-weight: 800;
+  }
+  .glos-hero__sub {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* ── Alphabet Nav ── */
+  .glos-alpha {
+    background: #fff;
+    border-bottom: 1px solid var(--surface-card-border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .glos-alpha__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  .glos-alpha__link {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    text-decoration: none;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .glos-alpha__link:hover {
+    background: rgba(55, 93, 251, 0.1);
+    color: var(--brand-blue);
+  }
+
+  /* ── Body ── */
+  .glos-body {
+    background: #fff;
+    padding: 4rem 1.5rem 5rem;
+  }
+  .glos-body__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── Letter group ── */
+  .glos-group {
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 64px;
+  }
+  .glos-group__letter {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--brand-blue);
+    border-bottom: 2px solid rgba(55, 93, 251, 0.15);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── Cards ── */
+  .glos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .glos-card {
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  }
+  .glos-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(55, 93, 251, 0.08);
+    border-color: var(--brand-blue);
+  }
+  .glos-card__term {
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    line-height: 1.3;
+  }
+  .glos-card__excerpt {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    flex: 1;
+  }
+  .glos-card__arrow {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--brand-blue);
+  }
+
+  /* ── Bottom CTA ── */
+  .glos-cta {
+    padding: 0 1.5rem 5rem;
+    background: #fff;
+  }
+  .glos-cta__inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .glos-cta__card {
+    position: relative;
+    background: linear-gradient(135deg, #1a1f4e 0%, #0f1225 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    text-align: center;
+    overflow: hidden;
+  }
+  .glos-cta__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .glos-cta__glow--1 {
+    width: 300px;
+    height: 300px;
+    background: rgba(55, 93, 251, 0.3);
+    top: -80px;
+    right: -60px;
+  }
+  .glos-cta__glow--2 {
+    width: 250px;
+    height: 250px;
+    background: rgba(159, 129, 255, 0.2);
+    bottom: -60px;
+    left: -40px;
+  }
+  .glos-cta__title {
+    position: relative;
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .glos-cta__copy {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+  }
+  .glos-cta__btns {
+    position: relative;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* ── Buttons ── */
+  .glos-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    border-radius: 10px;
+    padding: 0.75rem 1.75rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .glos-btn--white {
+    background: #fff;
+    color: var(--heading-dark);
+  }
+  .glos-btn--white:hover {
+    background: #f0f4ff;
+    transform: translateY(-1px);
+  }
+  .glos-btn--ghost {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .glos-btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* ── Animations ── */
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .glos-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 767px) {
+    .glos-hero {
+      padding: 5rem 1rem 3rem;
+    }
+    .glos-body {
+      padding: 3rem 1rem 4rem;
+    }
+    .glos-grid {
+      grid-template-columns: 1fr;
+    }
+    .glos-cta__card {
+      padding: 2.5rem 1.5rem;
+    }
+    .glos-alpha {
+      position: static;
+    }
+  }
+</style>
+
+<script>
+  const obs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = parseInt(el.dataset.delay || "0", 10);
+          setTimeout(() => el.classList.add("is-visible"), delay);
+          obs.unobserve(el);
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll(".animate-on-scroll").forEach((el) => obs.observe(el));
+</script>

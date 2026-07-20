@@ -4,6 +4,7 @@ import "../styles/animations.css";
 import HeaderNew from "../components/home-new/HeaderNew.astro";
 import FooterNew from "../components/home-new/FooterNew.astro";
 import WhatsAppWidget from "../components/WhatsAppWidget.astro";
+import StickyDemoBar from "../components/home-new/StickyDemoBar.astro";
 import CookieConsent from "../components/shared/CookieConsent.astro";
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
   footerCtaButtonText?: string;
   footerCtaHref?: string;
   showFooterCta?: boolean;
+  showDemoBar?: boolean;
   canonical?: string;
   ogImage?: string;
   ogType?: string;
@@ -30,6 +32,7 @@ const {
   footerCtaButtonText,
   footerCtaHref,
   showFooterCta = true,
+  showDemoBar = true,
   canonical,
   ogImage,
   ogType = "website",
@@ -101,10 +104,19 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
     <link rel="preconnect" href="https://cms.eventhex.ai" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Async font load (non-render-blocking) with noscript fallback -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap"
+      />
+    </noscript>
     <title>{title}</title>
     <link rel="canonical" href={resolvedCanonical} />
     <meta property="og:image" content={resolvedOgImage} />
@@ -158,6 +170,7 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
       showCta={showFooterCta}
     />
     <WhatsAppWidget />
+    {showDemoBar && <StickyDemoBar />}
 
     <script>
       const observer = new IntersectionObserver(

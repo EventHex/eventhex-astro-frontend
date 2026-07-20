@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import { emojiIcon } from "../../lib/featureIcons";
 
 interface StatItem {
   value: string;
@@ -160,7 +161,7 @@ const faqSchema = {
       <div class="int-features__grid">
         {features.map((f, i) => (
           <div class="int-features__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 80)}>
-            <span class="int-features__emoji">{f.emoji}</span>
+            <span class="int-features__icon" set:html={emojiIcon(f.emoji)} />
             <h3 class="int-features__card-title">{f.title}</h3>
             <p class="int-features__card-desc">{f.description}</p>
           </div>
@@ -195,7 +196,7 @@ const faqSchema = {
       <div class="int-usecases__grid">
         {useCases.map((uc, i) => (
           <div class="int-usecases__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 100)}>
-            <span class="int-usecases__emoji">{uc.emoji}</span>
+            <span class="int-usecases__icon" set:html={emojiIcon(uc.emoji)} />
             <h3 class="int-usecases__card-title">{uc.title}</h3>
             <p class="int-usecases__card-desc">{uc.description}</p>
           </div>
@@ -539,10 +540,21 @@ const faqSchema = {
     border-color: var(--brand-blue);
     box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
   }
-  .int-features__emoji {
-    display: block;
-    font-size: 2rem;
+  .int-features__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(55, 93, 251, 0.08);
+    border-radius: 10px;
     margin-bottom: 1rem;
+    color: var(--brand-blue);
+  }
+  .int-features__icon svg {
+    width: 30px;
+    height: 30px;
+    color: var(--brand-blue);
   }
   .int-features__card-title {
     font-family: var(--font-heading);
@@ -707,10 +719,17 @@ const faqSchema = {
     border-color: var(--brand-blue);
     box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
   }
-  .int-usecases__emoji {
-    display: block;
-    font-size: 1.8rem;
+  .int-usecases__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 0.75rem;
+    color: var(--brand-blue);
+  }
+  .int-usecases__icon svg {
+    width: 24px;
+    height: 24px;
+    color: var(--brand-blue);
   }
   .int-usecases__card-title {
     font-family: var(--font-heading);
