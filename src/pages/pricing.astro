@@ -1,7 +1,19 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
+import { fetchPlans, formatPrice, formatDerivedAnnual, signupUrl, type SaasPlan } from "../lib/saasPricing";
 
-// TODO: placeholder prices — owner to set real + geo-based pricing before going live
+// Live pricing gate: PRICING_LIVE=true flips the page to live geo-resolved
+// prices for everyone; ?preview=1 shows them to internal reviewers first.
+const preview = Astro.url.searchParams.get("preview") === "1";
+const pricingLive = import.meta.env.PRICING_LIVE === "true" || preview;
+
+// Visitor country: ?country=XX test override → Cloudflare runtime geo → header
+const cfCountry = (Astro.locals as { runtime?: { cf?: { country?: string } } })?.runtime?.cf?.country;
+const country = (Astro.url.searchParams.get("country") || cfCountry || Astro.request.headers.get("cf-ipcountry") || "US").toUpperCase();
+
+const plans: SaasPlan[] | null = pricingLive ? await fetchPlans(country) : null;
+
+// Static tier skeleton (feature copy) — prices/CTAs come from the SaaS API when live
 const tiers = [
   {
     name: "Free",
@@ -114,10 +126,52 @@ const matrixRows: {
   { capability: "Support",                 free: "Community", starter: "Email",    pro: "Priority",   premium: "Dedicated",  enterprise: "SLA-backed" },
 ];
 
+// Match a SaaS plan to each static tier by title, falling back to planType
+const TIER_MATCH: Record<string, { titles: string[]; planType?: string }> = {
+  Free: { titles: ["free", "free trial"], planType: "free" },
+  Starter: { titles: ["starter"], planType: "standard" },
+  Pro: { titles: ["pro", "professional"], planType: "business" },
+  Premium: { titles: ["premium"] },
+  Enterprise: { titles: ["enterprise"], planType: "custom" },
+};
+
+const findPlan = (tierName: string): SaasPlan | undefined => {
+  if (!plans) return undefined;
+  const match = TIER_MATCH[tierName];
+  if (!match) return undefined;
+  return (
+    plans.find((p) => match.titles.includes((p.title || "").toLowerCase())) ||
+    (match.planType ? plans.find((p) => p.planType === match.planType) : undefined)
+  );
+};
+
+// Tier view models: live prices + signup deep-links when available,
+// otherwise the static placeholder ("$—" + Book a Demo) — page never breaks.
+const viewTiers = tiers.map((tier) => {
+  const fallback = { ...tier, live: false, priceAnnual: null as string | null, hrefMonthly: tier.ctaHref, hrefAnnual: tier.ctaHref };
+  if (!pricingLive || tier.name === "Enterprise") return fallback;
+  const plan = findPlan(tier.name);
+  const monthlyText = plan ? formatPrice(plan.pricing?.monthly ?? null) : null;
+  if (!plan || !monthlyText) return fallback;
+  const annualText = formatPrice(plan.pricing?.annual ?? null) || formatDerivedAnnual(plan);
+  const isFree = plan.planType === "free" || monthlyText === "Free";
+  return {
+    ...tier,
+    live: true,
+    priceMonthly: monthlyText,
+    priceAnnual: annualText,
+    ctaLabel: isFree ? "Start Free Trial" : "Get Started",
+    hrefMonthly: signupUrl(plan._id, "monthly", isFree),
+    hrefAnnual: signupUrl(plan._id, "annual", isFree),
+  };
+});
+
 const faqs = [
   {
     q: "How does billing work?",
-    a: "Plans are billed monthly or annually. Annual billing offers a discount — exact rates will be published when pricing goes live. You can cancel anytime from your account settings.",
+    a: pricingLive
+      ? "Plans are billed monthly or annually. Annual billing includes a discount, applied automatically at checkout. You can cancel anytime from your account settings."
+      : "Plans are billed monthly or annually. Annual billing offers a discount — exact rates will be published when pricing goes live. You can cancel anytime from your account settings.",
   },
   {
     q: "Can I upgrade or downgrade my plan?",
@@ -133,11 +187,15 @@ const faqs = [
   },
   {
     q: "Do you support multiple currencies and geo-based pricing?",
-    a: "Yes — EventHex plans to support pricing in local currencies for key markets. Geo-based pricing is being finalized and will be reflected at checkout based on your billing country.",
+    a: pricingLive
+      ? "Yes — prices are shown in your local currency for key markets, based on your location. The price you see here is the price you'll pay at checkout."
+      : "Yes — EventHex plans to support pricing in local currencies for key markets. Geo-based pricing is being finalized and will be reflected at checkout based on your billing country.",
   },
   {
     q: "Is there a free trial on paid plans?",
-    a: "Trial details are being confirmed. Book a demo to explore the platform with guidance from our team.",
+    a: pricingLive
+      ? "Yes — paid plans include a free trial (no charge until the trial ends). You can also book a demo to explore the platform with our team."
+      : "Trial details are being confirmed. Book a demo to explore the platform with guidance from our team.",
   },
 ];
 ---
@@ -151,10 +209,17 @@ const faqs = [
   footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
 >
-  <!-- Draft banner -->
-  <div style="background:#FFF8E1;border-bottom:1px solid #FFE082;padding:10px 20px;text-align:center;font-size:0.85rem;color:#795548;font-family:var(--font-body);">
-    <strong>Draft page — pricing is being finalized.</strong> Plans and prices shown are placeholders and subject to change.
-  </div>
+  <!-- Draft banner (hidden once pricing is live) -->
+  {!pricingLive && (
+    <div style="background:#FFF8E1;border-bottom:1px solid #FFE082;padding:10px 20px;text-align:center;font-size:0.85rem;color:#795548;font-family:var(--font-body);">
+      <strong>Draft page — pricing is being finalized.</strong> Plans and prices shown are placeholders and subject to change.
+    </div>
+  )}
+  {preview && (
+    <div style="background:#E3F2FD;border-bottom:1px solid #90CAF9;padding:10px 20px;text-align:center;font-size:0.85rem;color:#1565C0;font-family:var(--font-body);">
+      <strong>Internal preview</strong> — live prices for country: {country}. Add ?country=XX to test other regions.
+    </div>
+  )}
 
   <!-- Hero -->
   <section style="background:var(--surface-light);padding:80px 20px 60px;text-align:center;">
@@ -167,17 +232,26 @@ const faqs = [
         One platform for every event type — conferences, workshops, hybrid, virtual.
         No hidden fees. No per-attendee surprises.
       </p>
-      <p style="font-size:0.9rem;color:var(--body-light);background:white;display:inline-block;padding:8px 20px;border-radius:8px;border:1px solid var(--surface-card-border);">
-        Prices shown are placeholders — final monthly &amp; annual rates will be published soon.
-        Annual plans will include a discount.
-      </p>
+      {!pricingLive && (
+        <p style="font-size:0.9rem;color:var(--body-light);background:white;display:inline-block;padding:8px 20px;border-radius:8px;border:1px solid var(--surface-card-border);">
+          Prices shown are placeholders — final monthly &amp; annual rates will be published soon.
+          Annual plans will include a discount.
+        </p>
+      )}
+      {pricingLive && (
+        <div data-billing-toggle style="display:inline-flex;align-items:center;background:white;border:1px solid var(--surface-card-border);border-radius:999px;padding:4px;gap:2px;">
+          <button type="button" data-cycle="monthly" style="border:none;cursor:pointer;padding:8px 20px;border-radius:999px;font-size:0.875rem;font-weight:600;font-family:var(--font-body);background:var(--brand-blue);color:white;">Monthly</button>
+          <button type="button" data-cycle="annual" style="border:none;cursor:pointer;padding:8px 20px;border-radius:999px;font-size:0.875rem;font-weight:600;font-family:var(--font-body);background:transparent;color:var(--subheading-gray);">Annual</button>
+          <span style="margin:0 10px 0 4px;font-size:0.75rem;font-weight:700;color:#2e7d32;font-family:var(--font-body);">Save with annual</span>
+        </div>
+      )}
     </div>
   </section>
 
   <!-- Tier cards -->
   <section style="padding:60px 20px 80px;background:white;">
     <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:24px;align-items:start;">
-      {tiers.map((tier) => (
+      {viewTiers.map((tier) => (
         <div style={`
           background:${tier.popular ? "var(--brand-blue)" : "white"};
           color:${tier.popular ? "white" : "var(--heading-dark)"};
@@ -199,11 +273,19 @@ const faqs = [
             {tier.tagline}
           </p>
           <div style="margin-bottom:24px;">
-            <span style={`font-family:var(--font-heading);font-size:2.4rem;font-weight:800;color:${tier.popular ? "white" : "var(--heading-dark)"};`}>
+            <span
+              data-tier-price
+              data-price-monthly={tier.live ? tier.priceMonthly : undefined}
+              data-price-annual={tier.live && tier.priceAnnual ? tier.priceAnnual : undefined}
+              style={`font-family:var(--font-heading);font-size:2.4rem;font-weight:800;color:${tier.popular ? "white" : "var(--heading-dark)"};`}
+            >
               {tier.priceMonthly}
             </span>
-            {tier.priceMonthly !== "Custom" && (
-              <span style={`font-size:0.85rem;margin-left:4px;color:${tier.popular ? "rgba(255,255,255,0.7)" : "var(--body-light)"};`}>/mo</span>
+            {tier.priceMonthly !== "Custom" && tier.priceMonthly !== "Free" && (
+              <span
+                data-tier-suffix={tier.live && tier.priceAnnual ? "true" : undefined}
+                style={`font-size:0.85rem;margin-left:4px;color:${tier.popular ? "rgba(255,255,255,0.7)" : "var(--body-light)"};`}
+              >/mo</span>
             )}
           </div>
           <ul style="list-style:none;padding:0;margin:0 0 28px;display:flex;flex-direction:column;gap:10px;">
@@ -217,7 +299,11 @@ const faqs = [
               </li>
             ))}
           </ul>
-          <a href={tier.ctaHref} style={`
+          <a
+            href={tier.live ? tier.hrefMonthly : tier.ctaHref}
+            data-href-monthly={tier.live ? tier.hrefMonthly : undefined}
+            data-href-annual={tier.live ? tier.hrefAnnual : undefined}
+            style={`
             display:block;
             text-align:center;
             padding:12px;
@@ -355,4 +441,38 @@ const faqs = [
       </a>
     </div>
   </section>
+
+  {pricingLive && (
+    <script is:inline>
+      // Monthly/Annual toggle — swaps prices, /mo↔/yr suffix, and signup links
+      (function () {
+        var toggle = document.querySelector("[data-billing-toggle]");
+        if (!toggle) return;
+        var buttons = toggle.querySelectorAll("button[data-cycle]");
+        function setCycle(cycle) {
+          buttons.forEach(function (btn) {
+            var active = btn.dataset.cycle === cycle;
+            btn.style.background = active ? "var(--brand-blue)" : "transparent";
+            btn.style.color = active ? "white" : "var(--subheading-gray)";
+          });
+          document.querySelectorAll("[data-tier-price]").forEach(function (el) {
+            var next = cycle === "annual" ? el.dataset.priceAnnual : el.dataset.priceMonthly;
+            if (next) el.textContent = next;
+          });
+          document.querySelectorAll("[data-tier-suffix]").forEach(function (el) {
+            el.textContent = cycle === "annual" ? "/yr" : "/mo";
+          });
+          document.querySelectorAll("a[data-href-monthly]").forEach(function (a) {
+            var next = cycle === "annual" ? a.dataset.hrefAnnual : a.dataset.hrefMonthly;
+            if (next) a.setAttribute("href", next);
+          });
+        }
+        buttons.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            setCycle(btn.dataset.cycle);
+          });
+        });
+      })();
+    </script>
+  )}
 </MarketingLayout>
