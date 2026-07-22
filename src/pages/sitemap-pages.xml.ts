@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { glossaryEntries } from "../data/glossary";
 
 /**
  * Auto-generated sitemap of public Astro-owned static pages.
@@ -20,6 +21,10 @@ const EXCLUDE_PREFIXES = ["/api/", "/wp-content/"];
 // Static URLs produced by dynamic route files (category/[slug]) that the
 // glob cannot enumerate. Keep this in sync when categories change.
 const SUPPLEMENT: string[] = [
+  ...glossaryEntries.map((e) => `/glossary/${e.slug}/`),
+  // WP case_study CPT slugs — keep in sync when case studies are published.
+  "/case-studies/healthcare-leaders-forum/",
+  "/case-studies/techsummit-mena/",
   "/blog/category/product-updates/",
   "/blog/category/event-planning-strategy/",
   "/blog/category/event-technology-ai/",
