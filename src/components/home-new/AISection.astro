@@ -7,75 +7,76 @@
 //     f3d20c0: heading — "Harness the power of AI..." Inter 18px/400, white
 //     55f9ca2: animated-headline — 48px/40px/30px, Manrope 400, highlight #AFA3FF
 //   bb3f883: stacking_cards — sticky top 20px, gap 60px, content width 45%
-//   fde1553: testimonial carousel (Amy + Rifath)
+// Testimonial carousel (fde1553) split out into AITestimonials.astro
+
+const BOX_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8l9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>`;
 
 const aiCards = [
   {
-    title: "AI Website Builder",
-    desc: "Easily design, create, and customize stunning event websites with EventHex's innovative website builder–no technical expertise required!",
+    tag: "Website Builder",
+    title: "AI Website & Form Builder",
+    desc: "Describe your event and get a full website, registration form, and SEO metadata — voice-powered form filling included.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/AI-website.png",
+    visualImage: "/feature-images/ai/ai-website-builder.png",
+    stats: [{ n: "No-Code", l: "Live in minutes" }, { n: "100%", l: "Mobile responsive" }],
+    highlight: "No dev team? No problem — drag, drop, publish your event site in minutes.",
   },
   {
-    title: "AI Voice Form",
-    desc: "Use EventHex's advanced AI-powered voice recording for the interactive creation and filling of forms–auto-translation supported!",
+    tag: "Voice Forms",
+    title: "AI Session Recap — InstaRecap",
+    desc: "Live transcription with translation, AI summaries, and searchable recap pages delivered to every attendee's inbox.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/AI-voice-form.png",
+    visualImage: "/feature-images/ai/ai-voice-form.png",
+    stats: [{ n: "30+", l: "Languages" }, { n: "Instant", l: "Auto-translation" }],
+    highlight: "Speak naturally — EventHex transcribes, translates, and fills the form for you.",
   },
   {
-    title: "InstaSnap AI",
-    desc: "EventHex's photo-distributing system that helps attendees find, edit, and share their photos by just uploading a selfie",
+    tag: "Photo AI",
+    title: "AI Photo Gallery — InstaSnap",
+    desc: "Attendees upload a selfie and instantly receive every photo they appear in — watermarked, sponsor-branded, and ready to share. Partner spotlights with click & impression tracking built in.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png",
+    visualImage: "/feature-images/ai/instasnap-ai.png",
+    stats: [{ n: "Selfie", l: "Match search" }, { n: "Auto", l: "Edit & share" }],
+    highlight: "Attendees upload a selfie — InstaSnap finds every photo they're in, instantly.",
   },
   {
-    title: "AI Bot",
-    desc: "Customizable AI bot designed to help attendees navigate through the event details and interactively respond to their queries",
+    tag: "AI Assistant",
+    title: "EventHex Copilot",
+    desc: "One assistant inside your dashboard. Ask \"How many tickets sold today?\", \"Add a networking break at 4pm\", \"Write the invite email\" — and it just does it.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/AI-bot.png",
+    visualImage: "/feature-images/ai/ai-bot.png",
+    stats: [{ n: "24/7", l: "Always on" }, { n: "Instant", l: "Query resolution" }],
+    highlight: "A tireless concierge that answers every attendee question, day or night.",
   },
   {
-    title: "AI Smart-Connect Networking",
-    desc: "AI-driven networking system that intelligently connects attendees and personalizes networking opportunities through the mobile app",
+    tag: "Networking",
+    title: "AI Smart-Connect",
+    desc: "Interest-based matchmaking that connects the right attendees and personalizes networking through the mobile app.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/smart-connect.png",
+    visualImage: "/feature-images/ai/ai-smart-networking.png",
+    stats: [{ n: "AI-Matched", l: "Introductions" }, { n: "In-App", l: "Live networking" }],
+    highlight: "EventHex pairs attendees by shared interests — real connections, not random ones.",
   },
 ];
 
-const testimonials = [
-  {
-    quote: "\"We approached EventHex knowing teething problems might arise with a newer platform, but after a successful two-event trial, we're eager to sign a two-year partnership. The standout feature isn't just the tech—it's the amazing support team, with rapid problem-solving, intuitive user experience, and a growth mindset that treats clients as true partners. I happily recommend EventHex.\"",
-    logo: "https://cms.eventhex.ai/wp-content/uploads/2026/03/wellbeing.svg",
-    logoAlt: "Wellbeing at Work UK logo",
-    logoInvert: true,
-    avatar: "https://cms.eventhex.ai/wp-content/uploads/2026/03/Amy.png",
-    name: "Amy Carey",
-    role: "Wellbeing at work UK",
-  },
-  {
-    quote: "\"Eventhex.ai is a game changer in the event tech space. We had first-hand experience using their platform for the Youth Business Conclave. Personally, I was impressed by their UI/UX capabilities. We highly recommend this team to anyone looking for an innovative event tech solution!\"",
-    logo: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Group-2233.png",
-    logoAlt: "SOLID Business Club logo",
-    logoInvert: false,
-    avatar: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Rifath-Rahman.jpeg",
-    name: "Rifath Rahman",
-    role: "President, SOLID Business Club",
-  },
-  {
-    quote: "“EventHex.ai revolutionized the way we managed the Gulf Indian Trade Expo. Its efficiency allowed us to focus on creating a world-class experience for our participants and exhibitors. We highly recommend EventHex.ai to anyone looking for reliable and professional event management solutions!”",
-    logo: "https://cms.eventhex.ai/wp-content/uploads/2025/01/image-503170913.svg",
-    logoAlt: "Business Kerala logo",
-    logoInvert: true,
-    avatar: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Noushad-EP.jpeg",
-    name: "Noushad EP",
-    role: "Founder &amp; Chairman, Business Kerala",
-  },
-];
 ---
 
 <section class="ai-section-shell">
   <div class="ai-section">
-    <!-- Header area (b4813e6) -->
+    <!-- Header area (b4813e6) — sticky bar once scrolled to top, cards pile up beneath it -->
     <div class="ai-header">
-      <h3 class="ai-subtitle">Harness the power of AI to revolutionize your events</h3>
-      <h2 class="ai-title">
-        Simply The Best <span class="ai-title-highlight">AI-Powered</span><br/>Event Management Software
-      </h2>
+      <div class="ai-header-inner">
+        <div class="ai-eyebrow">
+          <span class="ai-eyebrow__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>
+          </span>
+          <span class="ai-eyebrow__label">AI Features</span>
+        </div>
+        <h2 class="ai-title">
+          <span class="ai-title-line">Simply The Best <span class="ai-title-highlight">AI-Powered</span></span>
+          <span class="ai-title-line">Event Management Software</span>
+        </h2>
+      </div>
     </div>
 
     <!-- Stacking Cards (bb3f883) — GSAP ScrollTrigger sticky cards -->
@@ -84,81 +85,146 @@ const testimonials = [
         <div
           class="stacking-card"
           data-card-index={i}
-          style={`--card-index: ${i}; top: calc(20px + ${i * 20}px);`}
+          style={`--card-index: ${i};`}
         >
           <div class="card-content">
+            <span class="card-tag"><span class="card-tag__dot" set:html={BOX_ICON} />{card.tag}</span>
             <h3 class="card-title">{card.title}</h3>
             <p class="card-desc">{card.desc}</p>
             <a href="/book-a-demo/" class="card-btn">Explore More</a>
-          </div>
-          <div class="card-image">
-            <img src={card.image} alt={card.title} loading="lazy" />
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <!-- Testimonial carousel (Amy + Rifath) -->
-    <div class="testimonial-carousel" data-carousel>
-      <div class="carousel-viewport">
-        <div class="carousel-track" data-track>
-          {testimonials.map((t) => (
-            <div class="carousel-slide">
-              <p class="t-quote t-quote--desktop">{t.quote}</p>
-              <div class="t-quote t-quote--mobile">
-                <div class="side-border"></div>
-                <p>{t.quote}</p>
-              </div>
-              <div class="testimonial-author">
-                <img src={t.logo} alt={t.logoAlt} class:list={["author-logo", { "author-logo--invert": t.logoInvert }]} loading="lazy" />
-                <img src={t.avatar} alt={t.name} class="author-avatar" loading="lazy" />
-                <div class="author-info">
-                  <h4 class="author-name">{t.name}</h4>
-                  <p class="author-role" set:html={t.role}></p>
+            <div class="card-stats">
+              {card.stats.map((s) => (
+                <div class="card-stat">
+                  <span class="card-stat__num">{s.n}</span>
+                  <span class="card-stat__label">{s.l}</span>
                 </div>
+              ))}
+            </div>
+          </div>
+          {card.visualImage ? (
+            <div class="card-visual card-visual--image">
+              <img src={card.visualImage} alt={card.title} loading="lazy" />
+            </div>
+          ) : (
+            <div class="card-visual">
+              <div class="visual-skeleton">
+                {Array.from({ length: 6 }).map(() => (
+                  <div class="skeleton-block"><span></span><span></span><span></span></div>
+                ))}
+              </div>
+              <div class="visual-highlight">
+                <span class="visual-highlight__icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 13.8 9 21 12 13.8 15 12 22 10.2 15 3 12 10.2 9 12 2Z"/></svg>
+                </span>
+                <p>{card.highlight}</p>
               </div>
             </div>
-          ))}
+          )}
         </div>
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-toggle" data-toggle aria-label="Pause testimonials" aria-pressed="false">
-          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-        <div class="carousel-dots" data-dots>
-          {testimonials.map((_, i) => (
-            <button class="carousel-dot" data-dot={i} aria-label={`Show testimonial ${i + 1}`}></button>
-          ))}
-        </div>
-      </div>
+      ))}
+      <!-- Real sibling (not padding — sticky elements need an actual box here to get
+           "room" to stick) so the last card settles briefly before releasing. -->
+      <div class="stack-hold-spacer" aria-hidden="true"></div>
     </div>
   </div>
 </section>
+
+<script>
+(function () {
+  var header = document.querySelector('.ai-header');
+  var cards = document.querySelectorAll('.stacking-card');
+  var lastCard = cards[cards.length - 1];
+  if (!header || !lastCard) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var released = false;
+
+  function release() {
+    var beforeTop = header.getBoundingClientRect().top;
+    header.style.position = 'static';
+    var naturalTop = header.getBoundingClientRect().top;
+    header.style.position = '';
+    header.style.top = (beforeTop - naturalTop) + 'px';
+    header.classList.add('ai-header--released');
+    released = true;
+  }
+
+  function restore() {
+    header.classList.remove('ai-header--released');
+    header.style.top = '';
+    released = false;
+  }
+
+  var ticking = false;
+  function update() {
+    var offset = parseFloat(getComputedStyle(lastCard).top) || 0;
+    var cardTop = lastCard.getBoundingClientRect().top;
+    var shouldRelease = cardTop < offset - 0.5;
+    if (shouldRelease && !released) release();
+    else if (!shouldRelease && released) restore();
+    ticking = false;
+  }
+  function onScroll() {
+    if (!ticking) { window.requestAnimationFrame(update); ticking = true; }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+</script>
 
 <style>
   .ai-section-shell {
     width: 100%;
     background-color: #000;
-    background-image: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
-    background-position: center left;
+    background-image:
+      /* Fade in from the SolutionsGrid section's bg color above so the seam stays hidden */
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28) 0%, transparent 55%);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100% 100%, 120% 120%;
+    animation: aiMeshMove 30s linear infinite;
+  }
+  @keyframes aiMeshMove {
+    0% { background-position: 0 0, 0% 0%; }
+    50% { background-position: 0 0, 8% 10%; }
+    100% { background-position: 0 0, 0% 0%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ai-section-shell { animation: none; }
   }
 
   .ai-section {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
     max-width: 1140px;
     margin: 0 auto;
-    padding: 50px 0 30px;
+    padding: 4px 0 30px;
   }
 
-  /* b4813e6 header — 60% width, gap 16px */
+  /* b4813e6 header. Sticks below the site's own sticky navbar (69px) once scrolled
+     there, so the stacking cards below pile up underneath it. Once the last card
+     finishes its brief settle (see .stack-hold-spacer), a small script swaps this to
+     position:relative at the exact matching pixel so it scrolls away together with
+     the last card instead of staying pinned through leftover dead scroll space. */
   .ai-header {
-    width: 60%;
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+  }
+  .ai-header.ai-header--released {
+    position: relative;
+  }
+  .ai-header-inner {
+    width: 82%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -166,40 +232,76 @@ const testimonials = [
     gap: 16px;
     text-align: center;
   }
-  .ai-subtitle {
+  .ai-eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
+  }
+  .ai-eyebrow__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+  .ai-eyebrow__icon svg { width: 100%; height: 100%; }
+  .ai-eyebrow__label {
     font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.48px;
+    font-size: 15px;
+    font-weight: 500;
     color: #fff;
-    margin: 0;
   }
   .ai-title {
     font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
+    font-size: 46px;
+    font-weight: 500;
     color: #fff;
     margin: 0;
     line-height: 1.15;
+  }
+  .ai-title-line {
+    display: block;
+    white-space: nowrap;
   }
   .ai-title-highlight {
     color: #AFA3FF;
   }
 
-  /* Stacking cards — GSAP ScrollTrigger sticky scroll */
+  /* Stacking cards — sticky scroll pile.
+     --stack-top-base clears the site navbar (69px) + this section's own sticky
+     header, so cards stack right below both instead of climbing over them. */
   .stacking-cards {
+    --stack-top-base: 300px;
     width: 100%;
-    padding: 30px 0 0;
+    padding: 80px 0 0;
     position: relative;
     padding-bottom: 50px;
   }
+  /* A real element (not padding — padding gives sticky children no "room" to hold)
+     so the last card gets a brief, deliberate settle before it releases. */
+  .stack-hold-spacer {
+    height: 190px;
+  }
   .stacking-card {
     position: sticky;
+    top: calc(var(--stack-top-base) + var(--card-index) * 20px);
+    z-index: var(--card-index);
     display: flex;
     align-items: stretch;
-    background: var(--dark-card-bg);
-    border: 1px solid rgba(172, 161, 241, 0.51);
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18) 0%, transparent 40%),
+      #0a0a0f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     overflow: hidden;
     height: 500px;
@@ -210,22 +312,46 @@ const testimonials = [
     flex: 0 0 45%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     padding: 40px;
-    gap: 16px;
+    gap: 14px;
+  }
+  .card-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.75);
+    letter-spacing: 0.02em;
+  }
+  .card-tag__dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    color: rgba(255, 255, 255, 0.75);
+    flex-shrink: 0;
+  }
+  .card-tag__dot svg {
+    width: 100%;
+    height: 100%;
   }
   .card-title {
     font-family: var(--font-heading);
     font-size: 35px;
     font-weight: 500;
-    color: var(--accent-purple);
+    color: #E7E4FA;
     margin: 0;
   }
   .card-desc {
     font-family: var(--font-body);
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 400;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.55);
     margin: 0;
     line-height: 1.6;
   }
@@ -235,202 +361,169 @@ const testimonials = [
     align-self: flex-start;
     font-family: var(--font-body);
     font-size: 15px;
-    font-weight: 500;
-    color: #0A0D14;
-    background: var(--accent-btn-purple);
-    border-radius: 10px;
-    padding: 10px 24px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    padding: 12px 26px;
     text-decoration: none;
     transition: transform 0.3s, background 0.3s;
-    margin-top: 8px;
+    margin-top: 4px;
   }
   .card-btn:hover {
     transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.1);
   }
-  .card-image {
-    flex: 1;
+  .card-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: auto;
+    padding-top: 18px;
+  }
+  .card-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .card-stat__num {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 600;
+    color: #E7E4FA;
+  }
+  .card-stat__label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .card-visual--image {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    overflow: hidden;
   }
-  .card-image img {
+  .card-visual--image img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
   }
 
-  /* Testimonial carousel */
-  .testimonial-carousel {
-    width: 100%;
-    padding: 60px 0 30px;
-  }
-  .carousel-viewport {
-    width: 100%;
+  .card-visual {
+    position: relative;
+    flex: 1;
+    margin: 16px 16px 16px 0;
+    border-radius: 16px;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.06);
     overflow: hidden;
+    padding: 24px;
   }
-  .carousel-track {
+  /* Glassmorphism for the image-visual box, overriding the solid-black base above */
+  .card-visual--image {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .visual-skeleton {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    height: 100%;
+  }
+  .skeleton-block {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 12px 10px;
     display: flex;
-    transition: transform 0.5s ease;
-    will-change: transform;
+    flex-direction: column;
+    gap: 6px;
   }
-  .carousel-slide {
-    flex: 0 0 100%;
-    min-width: 0;
+  .skeleton-block span {
+    display: block;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.09);
   }
-  .t-quote {
+  .skeleton-block span:first-child { width: 60%; }
+  .skeleton-block span:nth-child(2) { width: 90%; }
+  .skeleton-block span:last-child { width: 75%; }
+
+  .visual-highlight {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 78%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #0a0a10;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: 0 0 60px rgba(255, 255, 255, 0.1), 0 0 40px rgba(120, 140, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.6);
+  }
+  .visual-highlight__icon {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+  }
+  .visual-highlight__icon svg { width: 16px; height: 16px; }
+  .visual-highlight p {
+    margin: 0;
     font-family: var(--font-body);
-    font-size: 30px;
-    font-weight: 300;
-    line-height: 37px;
-    letter-spacing: -1px;
-    color: #fff;
-    text-align: center;
-    width: 75%;
-    margin: 0 auto;
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
   }
-  .t-quote--desktop { display: block; }
-  .t-quote--mobile { display: none; flex-direction: row; gap: 16px; width: 100%; padding: 0 20px; }
-  .t-quote--mobile p { font-family: var(--font-body); font-size: 18px; font-weight: 300; color: #fff; line-height: 1.5; margin: 0; }
-  .side-border { width: 5px; background: #fff; align-self: stretch; border-radius: 3px; flex-shrink: 0; }
-
-  .carousel-controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    padding-top: 36px;
-  }
-  .carousel-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.35);
-    border-radius: 50%;
-    background: transparent;
-    color: #fff;
-    cursor: pointer;
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .carousel-toggle:hover { border-color: var(--accent-purple, #AFA3FF); }
-  .carousel-toggle svg { width: 16px; height: 16px; fill: currentColor; }
-  .carousel-toggle .icon-play { display: none; }
-  .carousel-toggle.is-paused .icon-pause { display: none; }
-  .carousel-toggle.is-paused .icon-play { display: block; }
-  .carousel-dots {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-  }
-  .carousel-dot {
-    width: 8px;
-    height: 8px;
-    padding: 0;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.35);
-    cursor: pointer;
-    transition: background 0.3s, width 0.3s;
-  }
-  .carousel-dot.is-active {
-    width: 24px;
-    border-radius: 4px;
-    background: var(--accent-purple, #AFA3FF);
-  }
-
-  .testimonial-author {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 50px;
-  }
-  .author-logo { height: 40px; width: auto; margin-right: 40px; }
-  .author-logo--invert { filter: brightness(0) invert(1); }
-  .author-avatar { width: 50px; height: 50px; border-radius: 15px; object-fit: cover; }
-  .author-info { padding-left: 30px; }
-  .author-name { font-family: var(--font-body); font-size: 22px; font-weight: 400; letter-spacing: -1px; color: #fff; margin: 0; }
-  .author-role { font-family: var(--font-body); font-size: 16px; font-weight: 400; line-height: 21px; letter-spacing: -1px; color: #fff; margin: 0; }
 
   /* Tablet */
   @media (max-width: 1024px) {
-    .ai-section { padding: 60px 20px 30px; }
-    .ai-header { width: 70%; }
-    .ai-subtitle { font-size: 16px; }
-    .ai-title { font-size: 40px; line-height: 1em; }
+    .ai-section { padding: 20px 20px 30px; }
+    .ai-header-inner { width: 94%; }
+    .ai-title { font-size: 34px; line-height: 1em; }
+    .stacking-cards { --stack-top-base: 270px; }
     .stacking-card { height: 450px; }
     .card-content { flex-basis: 50%; }
     .card-title { font-size: 30px; }
     .card-desc { font-size: 16px; }
     .card-btn { font-size: 14px; }
-    .testimonial-carousel { padding: 40px 20px 20px; }
-    .t-quote { font-size: 28px; width: 85%; }
+    .card-stats { gap: 28px; }
+    .visual-highlight { width: 85%; }
   }
 
   /* Mobile */
   @media (max-width: 767px) {
-    .ai-section { padding: 50px 20px 30px; }
-    .ai-header { width: 100%; }
+    .ai-section { padding: 16px 20px 30px; }
+    .ai-header-inner { width: 100%; }
     .ai-title { font-size: 30px; }
-    .stacking-card { flex-direction: column; height: 500px; }
-    .card-content { flex: 0 0 48%; padding: 20px 20px 0; }
-    .card-image { padding: 10px; }
+    .ai-title-line { white-space: normal; }
+    .stacking-cards { --stack-top-base: 280px; }
+    .stacking-card { flex-direction: column; height: 560px; }
+    .card-content { flex: 0 0 52%; padding: 20px 20px 0; gap: 10px; }
+    .card-visual { margin: 12px; padding: 16px; }
     .card-title { font-size: 26px; }
     .card-desc { font-size: 15px; }
+    .card-stats { gap: 24px; margin-top: 12px; }
+    .card-stat__num { font-size: 22px; }
+    .visual-highlight { width: 90%; padding: 14px 16px; }
+    .visual-highlight p { font-size: 13px; }
     .stacking-cards { padding-bottom: 40px; }
-    .t-quote--desktop { display: none; }
-    .t-quote--mobile { display: flex; }
-    .testimonial-carousel { padding: 20px 20px 10px; }
-    .testimonial-author { flex-wrap: wrap; gap: 16px; }
-    .author-info { padding-left: 0; text-align: center; }
   }
 </style>
-
-<script>
-  const carousel = document.querySelector('[data-carousel]') as HTMLElement | null;
-  if (carousel) {
-    const track = carousel.querySelector('[data-track]') as HTMLElement | null;
-    const dots = Array.from(carousel.querySelectorAll<HTMLButtonElement>('[data-dot]'));
-    const toggle = carousel.querySelector('[data-toggle]') as HTMLButtonElement | null;
-    const count = dots.length;
-    let index = 0;
-    let timer = 0;
-    let paused = false; // user-controlled pause (sticky across hover)
-
-    const go = (i: number) => {
-      index = (i + count) % count;
-      if (track) track.style.transform = `translateX(-${index * 100}%)`;
-      dots.forEach((d, di) => d.classList.toggle('is-active', di === index));
-    };
-
-    const run = () => {
-      stop();
-      if (!paused && count > 1) timer = window.setInterval(() => go(index + 1), 4000);
-    };
-    const stop = () => {
-      if (timer) { window.clearInterval(timer); timer = 0; }
-    };
-
-    const setPaused = (state: boolean) => {
-      paused = state;
-      if (toggle) {
-        toggle.classList.toggle('is-paused', paused);
-        toggle.setAttribute('aria-pressed', String(paused));
-        toggle.setAttribute('aria-label', paused ? 'Play testimonials' : 'Pause testimonials');
-      }
-      run();
-    };
-
-    dots.forEach((dot, di) => dot.addEventListener('click', () => { go(di); run(); }));
-    toggle?.addEventListener('click', () => setPaused(!paused));
-    carousel.addEventListener('mouseenter', stop);
-    carousel.addEventListener('mouseleave', run);
-
-    go(0);
-    run();
-  }
-</script>

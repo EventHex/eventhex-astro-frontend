@@ -369,10 +369,16 @@ const industryItems = [
      HEADER BASE
   ═══════════════════════════════════════════════ */
   .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 100;
     background: #fff;
     border-bottom: 1px solid #F1F3F9;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .site-header--transparent {
+    background: transparent;
+    border-bottom-color: transparent;
   }
 
   .header-inner {
@@ -404,7 +410,7 @@ const industryItems = [
   }
   .nav-item { position: relative; }
   .nav-link {
-    font-family: 'Inter', var(--font-body);
+    font-family: var(--font-body);
     font-size: 15px;
     font-weight: 500;
     color: #1D2939;
@@ -431,7 +437,7 @@ const industryItems = [
   /* CTA */
   .header-cta { flex-shrink: 0; }
   .cta-button {
-    font-family: 'Inter', var(--font-body);
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: 600;
     color: #fff;
@@ -595,7 +601,7 @@ const industryItems = [
     cursor: pointer;
     width: 100%;
     text-align: left;
-    font-family: 'Inter', var(--font-body);
+    font-family: var(--font-body);
     transition: background 0.12s;
   }
   .feat-tab:hover { background: #F5F8FF; }
@@ -780,6 +786,18 @@ const industryItems = [
 </style>
 
 <script>
+  // Transparent header over hero section only; solid once scrolled past it
+  const siteHeader = document.getElementById('site-header');
+  const heroOuter = document.querySelector('.hero-outer');
+  if (siteHeader && heroOuter) {
+    const SCROLL_THRESHOLD = 10;
+    const syncHeaderBg = () => {
+      siteHeader.classList.toggle('site-header--transparent', window.scrollY < SCROLL_THRESHOLD);
+    };
+    syncHeaderBg();
+    window.addEventListener('scroll', syncHeaderBg, { passive: true });
+  }
+
   const btn = document.getElementById('mobile-menu-btn');
   const menu = document.getElementById('mobile-menu');
   btn?.addEventListener('click', () => {

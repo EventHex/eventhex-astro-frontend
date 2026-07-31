@@ -1,0 +1,62 @@
+---
+interface FeatureItem { title: string; desc: string; icon: string }
+interface Props { items: FeatureItem[] }
+
+const { items } = Astro.props;
+---
+
+<section class="erg-grid-section">
+  <div class="erg-grid">
+    {items.map((item, i) => (
+      <div class="erg-grid__item animate-on-scroll" data-animation="fadeInUp" data-delay={String((i % 3) * 60)}>
+        <div class="erg-grid__icon" set:html={item.icon} />
+        <h3 class="erg-grid__item-title">{item.title}</h3>
+        <p class="erg-grid__item-desc">{item.desc}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style is:global>
+  .erg-grid-section { max-width: 1140px; margin: 0 auto; padding: 8px 24px 0; }
+  .erg-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 3rem;
+  }
+  .erg-grid__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-card-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-blue);
+    margin-bottom: 1.1rem;
+  }
+  .erg-grid__icon svg { width: 22px; height: 22px; }
+  .erg-grid__item-title {
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.4rem;
+  }
+  .erg-grid__item-desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
+    max-width: 300px;
+  }
+
+  @media (max-width: 860px) {
+    .erg-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .erg-grid { grid-template-columns: 1fr; row-gap: 2rem; }
+  }
+</style>

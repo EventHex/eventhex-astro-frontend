@@ -13,11 +13,13 @@ interface StackingCard {
   desc: string;
   image: string;
   alt: string;
+  eyebrow?: string;
 }
 
 interface StepItem { title: string; desc: string }
 interface FaqItem { q: string; a: string }
 interface WhyCard { title: string; desc: string; icon?: string }
+interface EcosystemItem { title: string; desc: string; href: string; icon: string; color: string }
 
 interface Props {
   pageTitle: string;
@@ -32,6 +34,7 @@ interface Props {
   trustItems: string[];
   heroAnimation?: string;
   heroImage?: string;
+  heroVariant?: "default" | "showcase";
   /* stats */
   stats: StatItem[];
   statsHeadline: { white1: string; accent: string; white2: string; accent2: string };
@@ -55,6 +58,11 @@ interface Props {
   /* why cards */
   whyHeading: string;
   whyCards: WhyCard[];
+  /* ecosystem grid (optional) */
+  ecosystemEyebrow?: string;
+  ecosystemHeading?: string;
+  ecosystemSubtitle?: string;
+  ecosystemItems?: EcosystemItem[];
   /* faq */
   faqs: FaqItem[];
   /* seo */
@@ -64,13 +72,14 @@ interface Props {
 const {
   pageTitle, pageDescription, canonical, ogImage,
   badge, heroTitleLine1, heroTitleLine2, heroCopy, trustItems,
-  heroAnimation, heroImage,
+  heroAnimation, heroImage, heroVariant = "default",
   stats, statsHeadline,
   bentoHeading, bentoSubtitle, bentoTabs,
   stackingHeading, stackingHighlight, stackingCards,
   howItWorksHeading, howItWorksImage, howItWorksAnimation, steps,
   ctaTitle, ctaCopy, ctaImage,
   whyHeading, whyCards,
+  ecosystemEyebrow, ecosystemHeading, ecosystemSubtitle, ecosystemItems,
   faqs,
   jsonLd,
 } = Astro.props;
@@ -105,8 +114,8 @@ const layouts = ["a", "b", "c"];
   </Fragment>
 
   <!-- ① HERO — full viewport, bleeds into header -->
-  <section class={`fv2-hero ${(heroAnimation || heroImage) ? 'fv2-hero--split' : ''}`}>
-    <div class={`fv2-hero__inner ${(heroAnimation || heroImage) ? 'fv2-hero__inner--split' : ''}`}>
+  <section class={`fv2-hero ${(heroAnimation || heroImage) ? 'fv2-hero--split' : ''} ${heroVariant === 'showcase' ? 'fv2-hero--showcase' : ''}`}>
+    <div class={`fv2-hero__inner ${(heroAnimation || heroImage) ? 'fv2-hero__inner--split' : ''} ${heroVariant === 'showcase' ? 'fv2-hero__inner--showcase' : ''}`}>
       <div class="fv2-hero__text">
         <span class="fv2-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
         <h1 class="fv2-hero__title animate-on-scroll" data-animation="fadeInUp">
@@ -124,7 +133,7 @@ const layouts = ["a", "b", "c"];
       </div>
       {heroAnimation && (
         <div class="fv2-hero__animation animate-on-scroll" data-animation="fadeIn">
-          <LottiePlayer src={heroAnimation} />
+          <LottiePlayer src={heroAnimation} eager />
         </div>
       )}
       {heroImage && !heroAnimation && (
@@ -220,6 +229,7 @@ const layouts = ["a", "b", "c"];
             style={`--card-index: ${i}; top: calc(20px + ${i * 20}px);`}
           >
             <div class="fv2-stack-card-content">
+              {card.eyebrow && <span class="fv2-stack-card-eyebrow">{card.eyebrow}</span>}
               <h3 class="fv2-stack-card-title">{card.title}</h3>
               <p class="fv2-stack-card-desc">{card.desc}</p>
               <a href="/book-a-demo/" class="fv2-stack-card-btn">Explore More</a>
@@ -289,6 +299,30 @@ const layouts = ["a", "b", "c"];
       </div>
     </div>
   </section>
+
+  <!-- ⑥.5 ECOSYSTEM — cross-link grid (optional) -->
+  {ecosystemItems && ecosystemItems.length > 0 && (
+    <section class="fv2-eco">
+      <div class="fv2-eco__inner">
+        <div class="fv2-eco__header">
+          {ecosystemEyebrow && <span class="fv2-eco__eyebrow animate-on-scroll" data-animation="fadeIn">{ecosystemEyebrow}</span>}
+          <h2 class="fv2-eco__heading animate-on-scroll" data-animation="fadeInUp">{ecosystemHeading}</h2>
+          {ecosystemSubtitle && <p class="fv2-eco__subtitle animate-on-scroll" data-animation="fadeInUp">{ecosystemSubtitle}</p>}
+        </div>
+        <div class="fv2-eco__grid">
+          {ecosystemItems.map((item, i) => (
+            <a href={item.href} class="fv2-eco__card animate-on-scroll" data-animation="fadeInUp" data-delay={String((i % 4) * 60)}>
+              <div class="fv2-eco__icon" style={`background:${item.color}`} set:html={item.icon} />
+              <div class="fv2-eco__card-text">
+                <h3 class="fv2-eco__card-title">{item.title}</h3>
+                <p class="fv2-eco__card-desc">{item.desc}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 
   <!-- ⑦ CTA — dark card with glows -->
   <section class="fv2-cta">
@@ -432,6 +466,104 @@ const layouts = ["a", "b", "c"];
   }
   .fv2-hero__svg--float {
     animation: fv2HeroFloat 4s ease-in-out infinite;
+  }
+  .fv2-hero--showcase {
+    min-height: auto;
+    align-items: flex-start;
+    justify-content: center;
+    text-align: left;
+    background: #fff;
+  }
+  .fv2-hero__inner--showcase {
+    display: grid;
+    grid-template-columns: minmax(210px, 0.34fr) minmax(0, 1fr);
+    gap: 2rem 4rem;
+    width: min(100%, 1780px);
+    max-width: none;
+    padding: 180px clamp(24px, 4.3vw, 84px) 64px;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__text {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-column: 1 / -1;
+    align-items: start;
+    gap: 0 4rem;
+    width: 100%;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__badge {
+    grid-column: 1;
+    width: fit-content;
+    margin: 0;
+    padding: 13px 24px;
+    border: 1px solid #d8dce8;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+    color: #111827;
+    font-size: clamp(15px, 1.1vw, 20px);
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__title {
+    grid-column: 2;
+    max-width: 1080px;
+    margin: 0;
+    color: #05060a;
+    font-size: clamp(54px, 7vw, 124px);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: 0;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__highlight {
+    color: inherit;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__copy {
+    grid-column: 2;
+    max-width: 720px;
+    margin: 32px 0 0;
+    color: #3f4654;
+    font-size: clamp(18px, 1.35vw, 24px);
+    line-height: 1.45;
+    letter-spacing: 0;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__ctas {
+    grid-column: 2;
+    justify-content: flex-start;
+    gap: 1.1rem;
+    margin: 28px 0 0;
+  }
+  .fv2-hero__inner--showcase .fv2-btn {
+    min-height: 56px;
+    border-radius: 8px;
+    padding: 0.92rem 1.7rem;
+    font-size: 18px;
+    letter-spacing: 0;
+  }
+  .fv2-hero__inner--showcase .fv2-btn--outline {
+    border-color: transparent;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .fv2-hero__inner--showcase .fv2-hero__animation,
+  .fv2-hero__inner--showcase .fv2-hero__visual {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 76px;
+    padding: clamp(22px, 3.2vw, 54px);
+    border: 1px solid #e4e8f0;
+    border-radius: 12px;
+    background:
+      linear-gradient(90deg, rgba(55, 93, 251, 0.08), rgba(19, 201, 187, 0.08)),
+      #f7f9fc;
+    box-shadow: 0 22px 70px rgba(15, 23, 42, 0.08);
+  }
+  .fv2-hero__inner--showcase .fv2-hero__animation .lottie-container,
+  .fv2-hero__inner--showcase .fv2-hero__svg {
+    max-width: 1280px;
+    min-height: 420px;
+    margin: 0 auto;
   }
   @keyframes fv2HeroFloat {
     0%, 100% { transform: translateY(0); }
@@ -877,6 +1009,16 @@ const layouts = ["a", "b", "c"];
     padding: 40px;
     gap: 16px;
   }
+  .fv2-stack-card-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #ABFFFF;
+    margin-bottom: 4px;
+  }
   .fv2-stack-card-title {
     font-family: var(--font-heading);
     font-size: 32px;
@@ -1159,6 +1301,84 @@ const layouts = ["a", "b", "c"];
   }
 
   /* ══════════════════════════════════════════
+     ⑥.5 ECOSYSTEM — cross-link grid
+     ═══════════════════════════════════════════ */
+  .fv2-eco { width: 100%; padding: 20px 1.5rem 80px; background: #fff; }
+  .fv2-eco__inner { max-width: 1200px; margin: 0 auto; }
+  .fv2-eco__header { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .fv2-eco__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+  }
+  .fv2-eco__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    font-weight: 600;
+    color: var(--heading-dark);
+    margin: 0 0 0.75rem;
+    line-height: 1.25;
+  }
+  .fv2-eco__subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+  .fv2-eco__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+  .fv2-eco__card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1.25rem;
+    background: var(--surface-light);
+    border: 1px solid var(--surface-card-border, #e8ecf4);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+  .fv2-eco__card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+    border-color: rgba(55, 93, 251, 0.25);
+  }
+  .fv2-eco__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .fv2-eco__icon :global(svg) { width: 20px; height: 20px; }
+  .fv2-eco__card-title {
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.2rem;
+  }
+  .fv2-eco__card-desc {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════════
      ⑦ CTA — dark card with glows
      ═══════════════════════════════════════════ */
   .fv2-cta { max-width: 1328px; margin: 0 auto; padding: 60px 24px 80px; }
@@ -1260,6 +1480,7 @@ const layouts = ["a", "b", "c"];
     .fv2-how__split { gap: 32px; }
     .fv2-how__steps { gap: 20px; }
     .fv2-why__grid { grid-template-columns: repeat(3, 1fr); }
+    .fv2-eco__grid { grid-template-columns: repeat(2, 1fr); }
     .fv2-faq__inner { grid-template-columns: 1fr; }
     .fv2-faq__sidebar { position: static; }
   }
@@ -1282,6 +1503,57 @@ const layouts = ["a", "b", "c"];
     .fv2-hero__copy { font-size: 16px; }
     .fv2-hero__ctas { flex-direction: column; align-items: center; }
     .fv2-btn { width: 100%; max-width: 300px; }
+    .fv2-hero__inner--showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+      padding: 118px 1rem 44px;
+      text-align: left;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__text {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+      text-align: left;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__badge {
+      align-self: flex-start;
+      padding: 10px 16px;
+      white-space: normal;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__title {
+      font-size: clamp(42px, 13vw, 60px);
+      line-height: 1;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__copy {
+      max-width: 100%;
+      margin-top: 0;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__ctas {
+      align-items: stretch;
+      width: 100%;
+      margin-top: 8px;
+    }
+    .fv2-hero__inner--showcase .fv2-btn {
+      width: 100%;
+      max-width: none;
+      min-height: 52px;
+      font-size: 16px;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__animation,
+    .fv2-hero__inner--showcase .fv2-hero__visual {
+      margin-top: 1rem;
+      padding: 14px;
+      border-radius: 10px;
+    }
+    .fv2-hero__inner--showcase .fv2-hero__animation .lottie-container,
+    .fv2-hero__inner--showcase .fv2-hero__svg {
+      min-height: 230px;
+      max-width: 100%;
+    }
 
     .fv2-stats { padding: 56px 1rem; }
     .fv2-stats__heading { font-size: 1.5rem; line-height: 1.3; }
@@ -1327,6 +1599,8 @@ const layouts = ["a", "b", "c"];
     .fv2-how__lottie { max-width: 320px; }
     .fv2-how__steps { gap: 16px; }
     .fv2-why__grid { grid-template-columns: 1fr; }
+    .fv2-eco { padding: 0 1rem 56px; }
+    .fv2-eco__grid { grid-template-columns: 1fr; }
 
     .fv2-cta__card { padding: 48px 20px; }
     .fv2-cta__split { grid-template-columns: 1fr; text-align: center; }

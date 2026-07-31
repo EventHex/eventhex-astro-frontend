@@ -1,0 +1,112 @@
+---
+interface Props {
+  title: string;
+  desc: string;
+  ctaText: string;
+  ctaHref: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const { title, desc, ctaText, ctaHref, image, imageAlt } = Astro.props;
+---
+
+<section class="erg-cta">
+  <div class="erg-cta__card">
+    <div class="erg-cta__top">
+      <div class="erg-cta__content">
+        <div class="erg-cta__brand animate-on-scroll" data-animation="fadeIn">
+          <img src="https://cms.eventhex.ai/wp-content/uploads/2024/09/eventhex-logo.png" alt="EventHex" />
+        </div>
+        <h2 class="erg-cta__title animate-on-scroll" data-animation="fadeInUp">{title}</h2>
+        <p class="erg-cta__desc animate-on-scroll" data-animation="fadeInUp">{desc}</p>
+      </div>
+      <a href={ctaHref} class="erg-cta__btn animate-on-scroll" data-animation="fadeInUp">
+        {ctaText}
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    {image && (
+      <div class="erg-cta__visual animate-on-scroll" data-animation="fadeInUp">
+        <img src={image} alt={imageAlt || title} loading="lazy" />
+      </div>
+    )}
+  </div>
+</section>
+
+<style is:global>
+  .erg-cta { max-width: 1140px; margin: 0 auto; padding: 24px 24px 64px; }
+  .erg-cta__card {
+    position: relative;
+    border-radius: 24px;
+    padding: 48px 44px 0;
+    overflow: hidden;
+    background: linear-gradient(115deg, #05060c 0%, #05060c 22%, #1a1450 42%, #375DFB 68%, #4fd6e0 100%);
+  }
+  .erg-cta__top {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding-bottom: 40px;
+  }
+  .erg-cta__content { max-width: 640px; }
+  .erg-cta__brand { margin-bottom: 20px; }
+  .erg-cta__brand img { height: 26px; width: auto; filter: brightness(0) invert(1); }
+  .erg-cta__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.75rem;
+    line-height: 1.2;
+  }
+  .erg-cta__desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+  }
+  .erg-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 28px;
+    border-radius: 999px;
+    text-decoration: none;
+    background: #fff;
+    color: var(--heading-dark);
+    white-space: nowrap;
+    transition: transform 0.3s;
+  }
+  .erg-cta__btn:hover { transform: translateY(-2px); }
+  .erg-cta__visual {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    padding-top: 8px;
+  }
+  .erg-cta__visual img {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    display: block;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  @media (max-width: 767px) {
+    .erg-cta { padding: 16px 16px 48px; }
+    .erg-cta__card { padding: 36px 24px 0; border-radius: 20px; }
+    .erg-cta__top { flex-direction: column; align-items: flex-start; }
+    .erg-cta__btn { width: 100%; justify-content: center; }
+  }
+</style>

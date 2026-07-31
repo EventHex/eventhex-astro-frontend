@@ -1,0 +1,84 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  desc: string;
+  image: string;
+  alt: string;
+  reverse?: boolean;
+}
+
+const { eyebrow, title, desc, image, alt, reverse = false } = Astro.props;
+---
+
+<div class="erg-spot-row">
+  {reverse && (
+    <div class="erg-spot-cell erg-spot-cell--image">
+      <div class="erg-spot__visual animate-on-scroll" data-animation="fadeIn">
+        <img src={image} alt={alt} loading="lazy" width="512" />
+      </div>
+    </div>
+  )}
+
+  <div class="erg-spot-cell erg-spot-cell--text">
+    <div class="erg-spot__text animate-on-scroll" data-animation="fadeInUp">
+      <span class="erg-spot__eyebrow">{eyebrow}</span>
+      <h3 class="erg-spot__title">{title}</h3>
+      <p class="erg-spot__desc">{desc}</p>
+    </div>
+  </div>
+
+  {!reverse && (
+    <div class="erg-spot-cell erg-spot-cell--image">
+      <div class="erg-spot__visual animate-on-scroll" data-animation="fadeIn">
+        <img src={image} alt={alt} loading="lazy" width="512" />
+      </div>
+    </div>
+  )}
+</div>
+
+<style is:global>
+  .erg-spot-row {
+    display: contents;
+  }
+  .erg-spot-cell {
+    padding: 56px 48px;
+    border-right: 1px solid var(--surface-card-border);
+    border-bottom: 1px solid var(--surface-card-border);
+    display: flex;
+    align-items: center;
+    min-height: 380px;
+  }
+  .erg-spot__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-blue);
+    margin-bottom: 0.9rem;
+  }
+  .erg-spot__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 700;
+    color: var(--heading-dark);
+    line-height: 1.2;
+    margin: 0 0 0.9rem;
+    letter-spacing: -0.5px;
+  }
+  .erg-spot__desc {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+  .erg-spot__visual { width: 100%; display: flex; align-items: center; justify-content: center; }
+  .erg-spot__visual img { width: 100%; max-width: 320px; height: auto; }
+
+  @media (max-width: 860px) {
+    .erg-spot-cell { padding: 32px 24px; min-height: 0; border-right: none; }
+  }
+</style>

@@ -1,0 +1,67 @@
+---
+interface EcosystemItem { title: string; desc: string; href: string; icon: string; color: string }
+interface Props { items: EcosystemItem[] }
+
+const { items } = Astro.props;
+---
+
+<section class="erg-eco">
+  <div class="erg-eco__grid">
+    {items.map((item, i) => (
+      <a href={item.href} class="erg-eco__card animate-on-scroll" data-animation="fadeInUp" data-delay={String((i % 4) * 50)}>
+        <div class="erg-eco__icon" style={`background:${item.color}`} set:html={item.icon} />
+        <div class="erg-eco__card-text">
+          <h3 class="erg-eco__card-title">{item.title}</h3>
+          <p class="erg-eco__card-desc">{item.desc}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style is:global>
+  .erg-eco { max-width: 1140px; margin: 0 auto; padding: 8px 24px 0; }
+  .erg-eco__grid { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 2rem; row-gap: 2rem; }
+  .erg-eco__card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    text-decoration: none;
+    padding: 0.25rem;
+    border-radius: 10px;
+    transition: transform 0.2s ease;
+  }
+  .erg-eco__card:hover { transform: translateX(2px); }
+  .erg-eco__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .erg-eco__icon svg { width: 20px; height: 20px; }
+  .erg-eco__card-title {
+    font-family: var(--font-heading);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 0.15rem;
+  }
+  .erg-eco__card-desc {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .erg-eco__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .erg-eco__grid { grid-template-columns: 1fr; }
+  }
+</style>

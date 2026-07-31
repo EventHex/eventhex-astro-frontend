@@ -1,0 +1,51 @@
+---
+interface Props {
+  eyebrow?: string;
+  titleHtml: string;
+  subtitle?: string;
+}
+
+const { eyebrow, titleHtml, subtitle } = Astro.props;
+---
+
+<div class="erg-heading">
+  {eyebrow && <span class="erg-heading__eyebrow animate-on-scroll" data-animation="fadeIn">{eyebrow}</span>}
+  <h2 class="erg-heading__title animate-on-scroll" data-animation="fadeInUp" set:html={titleHtml}></h2>
+  {subtitle && <p class="erg-heading__subtitle animate-on-scroll" data-animation="fadeInUp">{subtitle}</p>}
+</div>
+
+<style is:global>
+  .erg-heading {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
+    text-align: center;
+  }
+  .erg-heading__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+  }
+  .erg-heading__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: var(--heading-dark);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin: 0 0 0.75rem;
+  }
+  .erg-heading__title .dim { color: #9aa1ae; }
+  .erg-heading__subtitle {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+</style>

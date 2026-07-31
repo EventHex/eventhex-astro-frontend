@@ -1,0 +1,504 @@
+---
+const rawItems = [
+  { name: "Stripe", icon: "stripe" },
+  { name: "Razorpay", icon: "razorpay" },
+  { name: "Tap Payments", icon: "tap-payments" },
+  { name: "WhatsApp", icon: "whatsapp" },
+  { name: "HubSpot", icon: "hubspot" },
+  { name: "Zoom", icon: "zoom" },
+  { name: "Microsoft Teams", icon: "microsoftteams" },
+  { name: "Google Meet", icon: "googlemeet" },
+  { name: "Zapier", icon: "zapier" },
+  { name: "Webhooks", icon: "webhooks" },
+  { name: "WordPress", icon: "wordpress" },
+  { name: "Firebase", icon: "firebase" },
+];
+
+const RX = 50; // % horizontal spread from center (true semicircle: matches 2:1 arc box)
+const RY = 100; // % vertical rise toward apex (true semicircle: matches 2:1 arc box)
+const DURATION = 24; // seconds per full orbit
+
+const N = rawItems.length;
+const items = rawItems.map((item, i) => {
+  const tLine = N > 1 ? i / (N - 1) : 0.5; // 0..1 across the static arc, for the rest position
+  const restAngle = 180 - tLine * 180; // deg; matches the static arc position
+
+  const tCircle = i / N; // 0..1 spread evenly around the FULL loop (not just the visible half)
+  const delay = -(tCircle * DURATION); // negative delay: each icon starts at a different phase
+
+  return { ...item, restAngle: restAngle.toFixed(2), delay: delay.toFixed(2) };
+});
+
+const industryTags = [
+  { name: "Conferences", href: "/industries" },
+  { name: "Trade Shows", href: "/industries" },
+  { name: "Associations", href: "/industries/associations" },
+  { name: "Middle East events", href: "/industries/middle-east" },
+  { name: "Education", href: "/industries/education" },
+  { name: "Festivals", href: "/industries" },
+  { name: "Government", href: "/industries/government" },
+  { name: "Healthcare", href: "/industries/healthcare" },
+  { name: "Award Ceremonies", href: "/industries" },
+];
+
+const tagRows = [industryTags.slice(0, 4), industryTags.slice(4)];
+
+const mobileTagRows = [
+  industryTags.slice(0, 3),
+  industryTags.slice(3, 6),
+  industryTags.slice(6, 9),
+];
+---
+
+<section class="eco-strip">
+  <div class="eco-strip__inner">
+    <div class="eco-strip__arc" style={`--clip-top:${Math.max(0, 100 - RY)}%; --clip-height:${Math.min(100, RY)}%; --clip-width:${2 * RX}%;`}>
+      <div class="eco-strip__blob-clip" aria-hidden="true">
+        <div class="eco-strip__blob"></div>
+      </div>
+      <div class="eco-strip__nodes">
+        {items.map((item) => (
+          <span
+            class="eco-strip__node"
+            style={`--rest-angle:${item.restAngle}deg; --delay:${item.delay}s;`}
+            title={item.name}
+          >
+            <img src={`/icons/integrations/${item.icon}.svg`} alt={item.name} class="eco-strip__node-icon" loading="lazy" width="32" height="32" />
+          </span>
+        ))}
+      </div>
+
+      <div class="eco-strip__fade" aria-hidden="true"></div>
+
+      <div class="eco-strip__content">
+        <span class="eco-strip__badge">⚡ 17 Native Integrations</span>
+        <h2 class="eco-strip__title">Fits Your Stack. Fits Your Industry.</h2>
+        <p class="eco-strip__subtitle">15 industries, zero migration pain.</p>
+      </div>
+
+      <div class="eco-strip__marquee" aria-hidden="true">
+        <div class="eco-strip__marquee-track">
+          {[...items, ...items].map((item) => (
+            <span class="eco-strip__marquee-icon" title={item.name}>
+              <img src={`/icons/integrations/${item.icon}.svg`} alt="" loading="lazy" width="32" height="32" />
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="eco-strip__tags eco-strip__tags--desktop">
+      {tagRows.map((row, ri) => (
+        <div class:list={["eco-strip__tags-row", ri > 0 && "eco-strip__tags-row--next"]}>
+          {row.map((tag) => (
+            <a href={tag.href} class="eco-strip__tag">{tag.name}</a>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <div class="eco-strip__tags eco-strip__tags--mobile">
+      {mobileTagRows.map((row, ri) => (
+        <div class:list={["eco-strip__tags-row", ri > 0 && "eco-strip__tags-row--next"]}>
+          {row.map((tag) => (
+            <a href={tag.href} class="eco-strip__tag">{tag.name}</a>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <a href="/integrations" class="eco-strip__cta">
+      View All Integrations
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.5 8H12.5M12.5 8L8.5 4M12.5 8L8.5 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </a>
+  </div>
+</section>
+
+<style>
+  @property --angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 180deg;
+  }
+
+  .eco-strip {
+    position: relative;
+    background:
+      linear-gradient(to bottom, transparent calc(100% - 320px), rgba(255, 255, 255, 0.35) calc(100% - 210px), rgba(255, 255, 255, 0.75) calc(100% - 110px), #fff 100%),
+      radial-gradient(circle 420px at 6% 100%, rgba(175, 163, 255, 0.30) 0%, transparent 100%),
+      radial-gradient(circle 320px at 96% 100%, rgba(255, 182, 213, 0.28) 0%, transparent 100%),
+      #ffffff;
+    padding: 64px 24px 96px;
+    overflow: hidden;
+  }
+
+  .eco-strip__blob-clip {
+    position: absolute;
+    top: var(--clip-top);
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--clip-width);
+    height: var(--clip-height);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .eco-strip__blob {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 200%;
+    border-radius: 50%;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), inset 0 0 40px rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    background: linear-gradient(
+      to bottom,
+      rgba(250, 204, 21, 0.16) 0%,
+      rgba(253, 224, 71, 0.08) 25%,
+      rgba(255, 255, 255, 0) 50%
+    );
+  }
+
+  .eco-strip__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .eco-strip__arc {
+    position: relative;
+    width: min(1100px, 80%);
+    aspect-ratio: 2 / 1;
+    margin: 0 auto;
+    z-index: 0;
+  }
+
+  .eco-strip__nodes {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .eco-strip__fade {
+    position: absolute;
+    left: 50%;
+    bottom: -100px;
+    width: 100vw;
+    transform: translateX(-50%);
+    height: calc(65% + 100px);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, #fff 55%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .eco-strip__content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(760px, 92%);
+    z-index: 3;
+    text-align: center;
+  }
+
+  .eco-strip__node {
+    position: absolute;
+    --angle: var(--rest-angle);
+    left: calc(50% + (50% * cos(var(--angle))));
+    top: calc(100% - (100% * sin(var(--angle))));
+    transform: translate(-50%, -50%);
+    animation: eco-orbit 24s linear infinite, eco-orbit-fade 24s linear infinite;
+    animation-delay: var(--delay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(72px, 8vw, 112px);
+    height: clamp(72px, 8vw, 112px);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(20, 30, 60, 0.1);
+    border: 1px solid var(--surface-card-border);
+  }
+
+  @keyframes eco-orbit {
+    from { --angle: 180deg; }
+    to { --angle: -180deg; }
+  }
+
+  @keyframes eco-orbit-fade {
+    0% { opacity: 0; }
+    1% { opacity: 1; }
+    49% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .eco-strip__node {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  .eco-strip__node-icon {
+    width: 44%;
+    height: 44%;
+    object-fit: contain;
+  }
+
+  .eco-strip__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid var(--surface-card-border);
+    box-shadow: 0 4px 14px rgba(20, 30, 60, 0.06);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--heading-dark);
+    margin-bottom: 20px;
+  }
+
+  .eco-strip__title {
+    font-family: var(--font-heading);
+    font-size: clamp(30px, calc(4.5vw - 0.3px), 46px);
+    font-weight: 500;
+    color: var(--heading-dark);
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    white-space: nowrap;
+  }
+
+  .eco-strip__subtitle {
+    font-family: var(--font-body);
+    font-size: 19px;
+    color: var(--subheading-gray);
+    margin: 0 0 32px;
+  }
+
+  @media (max-width: 1024px) and (min-width: 681px) {
+    .eco-strip__title {
+      font-size: clamp(22px, 3.4vw, 30px);
+      white-space: normal;
+    }
+  }
+
+  .eco-strip__tags {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    font-family: var(--font-body);
+    font-size: 15px;
+    margin: clamp(-148px, calc(-17.13vw + 98.7px), -18px) auto 28px;
+    background: transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: none;
+    border-right: none;
+    border-image: linear-gradient(to right, rgba(148, 163, 184, 0) 0%, rgba(148, 163, 184, 0.35) 20%, rgba(148, 163, 184, 0.35) 80%, rgba(148, 163, 184, 0) 100%) 1;
+  }
+
+  .eco-strip__tags--mobile {
+    display: none;
+  }
+
+  .eco-strip__tags-row {
+    display: flex;
+  }
+
+  .eco-strip__tags-row--next .eco-strip__tag {
+    border-top: 1px solid rgba(148, 163, 184, 0.35);
+  }
+
+  .eco-strip__tag {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-left: 1px solid rgba(148, 163, 184, 0.35);
+    padding: 10px 20px;
+    color: #1a1a1a;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .eco-strip__tag::before,
+  .eco-strip__tag::after {
+    content: "";
+    position: absolute;
+    left: -8px;
+    width: 16px;
+    height: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='8' viewBox='0 0 28 14'%3E%3Cpath d='M0,0 A14,14 0 0,1 14,14 A14,14 0 0,1 28,0 Z' fill='%23dadfe6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+
+  .eco-strip__tag::before {
+    top: -1px;
+  }
+
+  .eco-strip__tag::after {
+    bottom: -1px;
+    transform: scaleY(-1);
+  }
+
+  .eco-strip__tag:first-child {
+    border-left: none;
+  }
+
+  .eco-strip__tag:first-child::before,
+  .eco-strip__tag:first-child::after {
+    display: none;
+  }
+
+  .eco-strip__tag:hover {
+    background: #1a1a1a;
+    color: #fff;
+  }
+
+  .eco-strip__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    background: var(--heading-dark);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    padding: 14px 26px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    isolation: isolate;
+    transform: translateZ(0);
+  }
+
+  .eco-strip__cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(20, 30, 60, 0.18);
+  }
+
+  .eco-strip__marquee {
+    display: none;
+  }
+
+  @media (max-width: 680px) {
+    .eco-strip { padding: 48px 20px 64px; }
+    .eco-strip__blob-clip { display: none; }
+    .eco-strip__fade { display: none; }
+    .eco-strip__arc {
+      height: auto;
+      aspect-ratio: auto;
+    }
+    .eco-strip__nodes {
+      display: none;
+    }
+    .eco-strip__content {
+      position: static;
+      top: auto;
+      left: auto;
+      transform: none;
+      width: auto;
+    }
+    .eco-strip__title { font-size: 28px; white-space: normal; }
+    .eco-strip__subtitle { font-size: 16px; margin-bottom: 24px; }
+    .eco-strip__marquee {
+      display: block;
+      width: 100vw;
+      margin: 0 calc(50% - 50vw) 28px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    }
+    .eco-strip__marquee-track {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 16px;
+      width: max-content;
+      animation: eco-marquee-scroll 20s linear infinite;
+    }
+    .eco-strip__marquee-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid var(--surface-card-border);
+    }
+    .eco-strip__marquee-icon img {
+      width: 44%;
+      height: 44%;
+      object-fit: contain;
+    }
+    @keyframes eco-marquee-scroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .eco-strip__marquee-track { animation: none; }
+    }
+    .eco-strip__tags {
+      width: 100%;
+      max-width: 100%;
+      gap: 10px;
+      font-size: 14px;
+      margin-top: -8px;
+      background: none;
+      border-top: none;
+      border-bottom: none;
+      border-image: none;
+    }
+    .eco-strip__tags--desktop {
+      display: none;
+    }
+    .eco-strip__tags--mobile {
+      display: flex;
+    }
+    .eco-strip__tags-row {
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .eco-strip__tags-row--next .eco-strip__tag {
+      border-top: none;
+    }
+    .eco-strip__tag {
+      border-left: none;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 999px;
+      padding: 6px 14px;
+      background: #fff;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    .eco-strip__tag::before,
+    .eco-strip__tag::after {
+      display: none;
+    }
+    .eco-strip__tag:hover {
+      border-color: #1a1a1a;
+    }
+  }
+</style>

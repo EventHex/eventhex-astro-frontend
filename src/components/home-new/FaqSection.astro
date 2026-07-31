@@ -1,0 +1,258 @@
+---
+interface FaqItem { q: string; a: string }
+interface Props { faqs?: FaqItem[] }
+
+const defaultFaqs: FaqItem[] = [
+  { q: "How do I get started with EventHex?", a: "Sign up, create your first event in minutes, and use our guided setup to configure registration, ticketing, and branding. No credit card required to try it out." },
+  { q: "Can I manage multiple events from one account?", a: "Yes. EventHex lets you run and monitor unlimited events from a single centralized dashboard, with role-based access for your whole team." },
+  { q: "Is my event data secure?", a: "All data is encrypted in transit and at rest, with granular permissions and audit logs so you always know who accessed what." },
+  { q: "Can I cancel or change my plan anytime?", a: "Yes, you can upgrade, downgrade, or cancel your plan at any time from your account settings — no long-term lock-in." },
+  { q: "What kind of support do you offer?", a: "Every plan includes email and chat support, with priority support and a dedicated success manager on higher tiers." },
+];
+
+const { faqs = defaultFaqs } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<section class="hnf-faq" id="home-faq-root">
+  <div class="hnf-faq__inner">
+    <div class="hnf-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="hnf-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Quick Answers
+      </span>
+      <h2 class="hnf-faq__title">Got Questions?<br />We've Got Answers.</h2>
+      <p class="hnf-faq__desc">Find quick solutions to the most asked topics.</p>
+      <a href="/contact-en/" class="hnf-faq__cta">
+        Visit Help Center
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="hnf-faq__list">
+      {faqs.map((faq, i) => (
+        <details class="hnf-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 60)} data-hnf-faq-item open={i === 0}>
+          <summary class="hnf-faq__question">
+            <span>{i + 1}. {faq.q}</span>
+            <span class="hnf-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="hnf-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const hnfFaqItems = Array.from(document.querySelectorAll('[data-hnf-faq-item]'));
+  hnfFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+      hnfFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .hnf-faq {
+    width: 100%;
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .hnf-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .hnf-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .hnf-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #E4E7EC;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 20px;
+  }
+
+  .hnf-faq__title {
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: #000;
+    margin: 0 0 20px;
+  }
+
+  .hnf-faq__desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--body-light);
+    margin: 0 0 28px;
+  }
+
+  .hnf-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171A21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .hnf-faq__cta:hover {
+    background: #000;
+    transform: translateY(-1px);
+  }
+
+  .hnf-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .hnf-faq__item {
+    border: 1px solid #E4E7EC;
+    border-radius: 20px;
+    padding: 4px 28px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .hnf-faq__item[open] {
+    background: #E4E7EC;
+    border-color: #E4E7EC;
+  }
+
+  .hnf-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .hnf-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .hnf-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+  }
+
+  .hnf-faq__icon::before,
+  .hnf-faq__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+
+  .hnf-faq__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  .hnf-faq__icon::after {
+    width: 2px;
+    height: 14px;
+    transition: opacity 0.2s ease;
+  }
+
+  .hnf-faq__item[open] .hnf-faq__icon::after {
+    opacity: 0;
+  }
+
+  .hnf-faq__answer {
+    padding: 0 0 24px;
+    max-width: 640px;
+  }
+
+  .hnf-faq__answer p {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #000;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .hnf-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .hnf-faq__sidebar {
+      position: static;
+    }
+
+    .hnf-faq__title {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hnf-faq {
+      padding: 56px 16px;
+    }
+
+    .hnf-faq__title {
+      font-size: 28px;
+    }
+
+    .hnf-faq__item {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+
+    .hnf-faq__question {
+      font-size: 0.9375rem;
+      padding: 18px 0;
+    }
+  }
+</style>

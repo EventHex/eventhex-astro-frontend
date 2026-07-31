@@ -1,0 +1,208 @@
+---
+const ICONS = {
+  timer: `<svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .199.079.39.22.53l3.5 3.5a.75.75 0 101.06-1.06l-3.28-3.28V6z"/></svg>`,
+  dollar: `<svg width="27" height="24" viewBox="0 0 489.25 426.18" fill="currentColor"><path d="M430.16.2c12.29,2.26,22.06,9.46,26.34,21.61l20.72,58.92c5.62,15.99-10.24,15.08-23.16,25.29l-338.87-.31L421.33,0l8.83.2Z"/><path d="M.28,396.72L0,332.23c-.03-6.49,2.69-12.32,10.23-12.26,24.03.2,43.24-18.68,43.47-42.19s-19.13-43.26-43.47-43.04C2.64,234.81,0,228.99.02,222.47l.19-63.89c.05-17,13.98-29.89,31.09-30.2l319.86.04v297.59s-320.94,0-320.94,0c-15.95-.12-29.86-12.75-29.93-29.29ZM193.27,234.59c6.47,0,9.16-6.91,8.79-11.54s-3.66-9.48-9.39-9.47l-66.65.02c-5.86,0-9.07,5.78-9.07,10.39s3.09,10.66,8.97,10.66l67.34-.06ZM266.74,287.98c6.86,0,10.02-5.96,9.86-11.08-.14-4.64-3.47-10.15-9.44-10.15l-139.92-.03c-6.68,0-10.48,5.38-10.28,11.09.19,5.27,3.93,10.2,10.29,10.2l139.48-.03ZM267.9,341.08c6.45,0,8.99-7.07,8.67-11.25-.34-4.43-3.3-9.84-9.01-9.84H126.01c-6.03,0-9.03,5.99-9.03,10.71,0,4.57,3.13,10.43,9.13,10.42l141.79-.05Z"/><path d="M478.79,319.91c4.84.14,10.32,3.53,10.33,8.37l.13,69.8c-1.65,16.24-14.71,27.98-31.01,28l-85.81.09V128.39s85.74.03,85.74.03c16.14,0,28.81,11.6,31.05,27.21l-.18,70.69c-.01,4.92-6.57,8.35-10.63,8.48-23.29.74-41.19,19.54-41.42,42.07s17.69,42.35,41.8,43.04Z"/></svg>`,
+  noDownload: `<svg width="24" height="24" viewBox="0 0 511.02 511.02" fill="currentColor"><path d="M510.64,239.7l.38,30.79-.84,4.53c-9.44,125.57-109.67,225.4-235.18,235.17l-3.52.83-31.3-.44C99.16,501.7-7.45,381.11.41,241.36,8.36,99.81,129.59-7.57,270.35.42c129.3,7.34,232.13,110.82,240.3,239.28ZM268.96,345.14l85.99-85.9c8.33-8.32,6.55-22.01-1.17-29.43-7.91-7.61-20.25-8.06-28.76-.6l-48.14,47.96-.18-189.24c-.01-11.99-11.11-20.37-21.61-20.11-11.15.28-20.8,9.12-20.8,21.11l-.1,188.29-47.69-47.46c-8.54-8.14-21.29-7.9-29.48-.09-7.59,7.24-9.64,20.89-1.46,29.08l86.27,86.27c6.67,6.67,19.89,7.34,27.12.12ZM339.81,420.07c12.83,0,21.21-11.19,20.74-22.25-.48-11.05-9.35-20.28-21.32-20.28l-168.35.05c-12.28,0-20.88,11-20.39,22.07s9.28,20.45,21.29,20.45l168.04-.05Z"/></svg>`,
+  sparkle: `<svg width="20" height="24" viewBox="0 0 372.62 448" fill="currentColor"><path d="M302.06,448h-2.69s-6.43-18.58-6.43-18.58c-6.88-19.27-21.24-34.67-40.25-42.4-8-3.25-15.11-4.98-23.53-9.54,7.65-3.61,13.08-5.48,19.79-7.83,21.12-7.41,37.24-23.99,44.49-45.11,2.25-6.55,3.55-11.98,7.9-18.6l8.83,22.77c6.96,17.96,21.06,32.42,39.05,39.39l23.39,9.05c-6.08,4.25-11.01,5.41-17.11,7.43-20.06,6.64-37.44,20.71-44.87,40.74l-8.57,22.69Z"/><path d="M142.72,360.73c-.44,1.23-2.47,3.27-3.47,3s-2.67-1.44-3.58-2.29l-13.23-36.73c-14.64-39.5-45.67-69.94-85.3-84.15l-33.91-12.16c-1.21-.43-3.09-2.21-3.22-3.34-.17-1.49,1.66-3.57,3.23-4.13l34.59-12.48c39.39-14.21,70.03-44.64,84.62-83.85l13.23-36.73c.88-.89,2.56-2.09,3.57-2.29s2.98,1.65,3.35,2.69l12.1,33.76c14.2,39.63,44.32,70.86,83.78,85.73l37.42,13.49,2.27,3.04c.64.85-1.32,3.42-2.39,3.8l-32.94,11.83c-41.24,14.81-73.4,46.19-88.15,87.39l-11.98,33.44Z"/><path d="M310.31,120.27l-7.44,20.15c-.21.57-1.48,2.11-2.01,1.81s-1.67-1.44-1.87-2l-6.96-18.97c-7.25-19.76-23.39-34.58-43.03-41.58-6.74-2.4-12.23-4.24-19.8-7.82,8.83-4.95,16.6-6.49,24.95-10.15,17.08-7.48,30.32-21.06,37.41-38.28,3.27-7.95,4.78-15.26,9.62-23.45l9.46,24.03c7.82,19.86,24.78,34.09,44.88,40.73,6.08,2.01,11.02,3.2,17.1,7.41l-23.38,9.06c-17.75,6.88-32.18,20.75-38.93,39.04Z"/></svg>`,
+};
+
+const items = [
+  {
+    icon: "timer",
+    statLine1: "Live in Under",
+    statLine2: "3 Minutes",
+    desc: "Event, website, tickets, registration. Launched in one sitting. No agency, no implementation project.",
+  },
+  {
+    icon: "dollar",
+    statLine1: "Keep 100% of Ticket",
+    statLine2: "Revenue",
+    desc: "Your own Stripe, Razorpay, or Tap account. 0% platform fees. Every rupee, dirham, and dollar stays yours.",
+  },
+  {
+    icon: "noDownload",
+    statLine1: "Attendees Download",
+    statLine2: "Nothing",
+    desc: "Web app in the browser, concierge in WhatsApp. The event comes to them, not the other way around.",
+  },
+  {
+    icon: "sparkle",
+    statLine1: "One Copilot Runs",
+    statLine2: "It All",
+    desc: 'Ask in plain language: "How are VIP sales?" "Add a lunch break at 1." "Write the invite email." Done.',
+  },
+];
+---
+
+<section class="why-switch">
+  <div class="why-switch__inner">
+    <div class="why-switch__header">
+      <h2 class="why-switch__title">Why event teams switch to <span class="why-switch__title-break">EventHex</span></h2>
+    </div>
+    <div class="why-switch__grid">
+      <div class="why-switch__notch why-switch__notch--1" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+        </svg>
+      </div>
+      <div class="why-switch__notch why-switch__notch--2" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+        </svg>
+      </div>
+      <div class="why-switch__notch why-switch__notch--3" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+        </svg>
+      </div>
+      {items.map((item, i) => (
+        <div class:list={["why-switch__col", i === 0 && "why-switch__col--first", i % 2 === 0 && "why-switch__col--row-start", i >= 2 && "why-switch__col--row2"]}>
+          {i === 2 && (
+            <span class="why-switch__cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" />
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" />
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" />
+              </svg>
+            </span>
+          )}
+          <span class="why-switch__icon" set:html={ICONS[item.icon]} />
+          <h3 class="why-switch__stat">{item.statLine1} <span class="why-switch__stat-break">{item.statLine2}</span></h3>
+          <p class="why-switch__desc">{item.desc}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-switch {
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255, 255, 255, 0.94) 0%, rgba(255, 255, 255, 0.65) 38%, rgba(255, 255, 255, 0.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255, 255, 255, 0.85) 130px, rgba(255, 255, 255, 0.5) 260px, rgba(255, 255, 255, 0.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255, 255, 255, 0.7) 70px, rgba(255, 255, 255, 0.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175, 163, 255, 0.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255, 182, 213, 0.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130, 170, 255, 0.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255, 224, 150, 0.20) 0%, transparent 100%),
+      #ffffff;
+    padding: 0 24px;
+  }
+  .why-switch__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 88px 0 96px;
+    position: relative;
+  }
+  .why-switch__header {
+    margin-bottom: 64px;
+    text-align: center;
+  }
+  .why-switch__title {
+    font-family: var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    background: linear-gradient(180deg, var(--heading-dark) 0%, #8A8F98 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0;
+  }
+  .why-switch__title-break {
+    display: block;
+  }
+  .why-switch__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--surface-card-border);
+  }
+  .why-switch__col {
+    position: relative;
+    border-left: 1px solid var(--surface-card-border);
+    padding: 28px;
+  }
+  .why-switch__cross {
+    display: none;
+  }
+  .why-switch__col--first {
+    border-left: none;
+  }
+  .why-switch__notch {
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 0;
+    z-index: 2;
+  }
+  .why-switch__notch--1 { left: 25%; }
+  .why-switch__notch--2 { left: 50%; }
+  .why-switch__notch--3 { left: 75%; }
+  .why-switch__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--brand-blue);
+    margin-bottom: 28px;
+  }
+  .why-switch__stat {
+    font-family: var(--font-heading);
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--heading-dark);
+    line-height: 1.25;
+    max-width: 230px;
+    margin: 0 0 28px;
+  }
+  .why-switch__stat-break {
+    display: block;
+  }
+  .why-switch__desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--body-gray);
+    line-height: 1.4;
+    margin: 14px 0 0;
+  }
+
+  @media (max-width: 1024px) {
+    .why-switch__grid { grid-template-columns: repeat(2, 1fr); }
+    .why-switch__notch--1,
+    .why-switch__notch--3 { display: none; }
+    .why-switch__col--row-start { border-left: none; }
+    .why-switch__col--row2 { border-top: 1px solid var(--surface-card-border); }
+    .why-switch__cross {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      transform: translate(50%, -50%);
+      pointer-events: none;
+      line-height: 0;
+      z-index: 2;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .why-switch__title { font-size: 32px; }
+  }
+
+  @media (max-width: 640px) {
+    .why-switch { padding: 0 20px; }
+    .why-switch__inner { padding: 44px 0 52px; }
+    .why-switch__title { font-size: 28px; }
+    .why-switch__grid { grid-template-columns: 1fr; }
+    .why-switch__col { border-left: none !important; border-top: 1px solid var(--surface-card-border); }
+    .why-switch__col--first { border-top: none; }
+    .why-switch__cross { display: none; }
+    .why-switch__notch--2 { display: none; }
+  }
+</style>

@@ -27,9 +27,9 @@ const WP_URL = import.meta.env.WP_URL || 'https://cms.eventhex.ai';
 let posts: WPPost[] = [];
 
 const formatDate = (date: string) =>
-  new Intl.DateTimeFormat('en-US', {
-    month: 'long',
+  new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',
+    month: 'long',
     year: 'numeric',
   }).format(new Date(date));
 
@@ -47,63 +47,59 @@ try {
 
 <section class="blog-section" id="home-blog-carousel-root">
  <div class="blog-section__inner">
-  <h2 class="blog-title">Your Countless Events Begin Here</h2>
+  <div class="blog-header">
+    <h2 class="blog-title">Your Countless Events Begin Here</h2>
+    <div class="blog-nav">
+      <button type="button" class="blog-nav__btn" data-dir="prev" aria-label="Previous posts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="blog-nav__btn" data-dir="next" aria-label="Next posts">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
 
-  <div class="blog-carousel" data-carousel-track>
-    {posts.map((post) => {
+  <div class="blog-grid" data-blog-track>
+    {posts.map((post, index) => {
       const img = post._embedded?.['wp:featuredmedia']?.[0];
+      const imageOverride = index === 0
+        ? '/blog-images/badge-printing-system.webp'
+        : index === 1
+        ? '/blog-images/accessible-events.png'
+        : index === 2
+        ? '/blog-images/registration-forms-friction.jpg'
+        : null;
       const category = getFirstTerm(post, 'category') ?? 'Uncategorized';
-      const author = getFirstTerm(post, 'authors') ?? post._embedded?.author?.[0]?.name ?? 'EventHex';
       const formattedDate = formatDate(post.date);
       const articleHref = `/blog/${post.slug}/`;
 
       return (
-        <article class="blog-card" data-carousel-card>
-          {img && (
-            <div class="blog-card__img">
-              <img src={img.source_url} alt={img.alt_text || post.title.rendered} loading="lazy" />
-            </div>
-          )}
+        <article class="blog-card">
+          <a href={articleHref} class="blog-card__img">
+            {(imageOverride || img) && (
+              <img
+                src={imageOverride || img!.source_url}
+                alt={img?.alt_text || post.title.rendered}
+                loading="lazy"
+              />
+            )}
+          </a>
 
-          <div class="blog-card__body">
-            <div class="blog-card__meta blog-card__meta--top">
-              <span class="blog-card__meta-primary">{category}</span>
-              <span class="blog-card__meta-secondary">{formattedDate}</span>
-            </div>
-
-            <h3 class="blog-card__title">
-              <a href={articleHref} set:html={post.title.rendered} />
-            </h3>
-
-            <div class="blog-card__meta blog-card__meta--bottom">
-              <span class="blog-card__meta-secondary">{author}</span>
-              <a href={articleHref} class="blog-card__arrow" aria-label={`Read ${post.title.rendered}`}>
-                <img
-                  src="https://cms.eventhex.ai/wp-content/uploads/2024/12/Group-1000002609-1.svg"
-                  alt=""
-                  loading="lazy"
-                />
-              </a>
-            </div>
+          <div class="blog-card__meta">
+            <span class="blog-card__category">{category}</span>
+            <span class="blog-card__meta-right">
+              <span class="blog-card__dot"></span>
+              <span class="blog-card__date">{formattedDate}</span>
+            </span>
           </div>
+
+          <h3 class="blog-card__title">
+            <a href={articleHref} set:html={post.title.rendered} />
+          </h3>
         </article>
       );
     })}
   </div>
-
-  {posts.length > 1 && (
-    <div class="blog-dots" aria-label="Blog carousel pagination">
-      {posts.map((post, index) => (
-        <button
-          type="button"
-          class:list={['blog-dot', index === 0 && 'is-active']}
-          data-carousel-dot
-          data-index={index}
-          aria-label={`Go to blog slide ${index + 1}`}
-        ></button>
-      ))}
-    </div>
-  )}
  </div>
 </section>
 
@@ -111,26 +107,15 @@ try {
   .blog-section {
     width: 100%;
     padding: 60px 0 70px;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
     position: relative;
-  }
-  .blog-section::before,
-  .blog-section::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 120px;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .blog-section::before {
-    top: 0;
-    background: linear-gradient(to bottom, #fff, transparent);
-  }
-  .blog-section::after {
-    bottom: 0;
-    background: linear-gradient(to top, #fff, transparent);
+    background:
+      radial-gradient(ellipse 55% 50% at 50% 50%, rgba(255, 255, 255, 0.9) 0%, transparent 70%),
+      linear-gradient(to bottom, #fff 0px, transparent 110px, transparent calc(100% - 110px), #fff 100%),
+      radial-gradient(circle 380px at 3% 25%, rgba(175, 163, 255, 0.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 22%, rgba(255, 182, 213, 0.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 78%, rgba(130, 170, 255, 0.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 80%, rgba(255, 224, 150, 0.20) 0%, transparent 100%),
+      #ffffff;
   }
   .blog-section__inner {
     max-width: 1140px;
@@ -139,147 +124,144 @@ try {
     z-index: 2;
   }
 
+  .blog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 0 40px;
+  }
+
   .blog-title {
-    font-family: 'Manrope', var(--font-heading);
-    font-size: 48px;
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 44px;
     font-weight: 500;
-    line-height: 50px;
+    line-height: 1.15;
     letter-spacing: -1px;
     color: #000;
-    margin: 0 0 40px;
+    margin: 0;
     max-width: 50%;
   }
 
-  .blog-carousel {
+  .blog-nav {
     display: flex;
-    gap: 15px;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .blog-nav__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #E4E7EC;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #000;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .blog-nav__btn:hover {
+    background: #f5f6f8;
+    border-color: #d0d5dd;
+  }
+
+  .blog-grid {
+    display: flex;
+    gap: 32px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding-bottom: 10px;
+    padding-bottom: 4px;
   }
 
-  .blog-carousel::-webkit-scrollbar {
+  .blog-grid::-webkit-scrollbar {
     display: none;
   }
 
   .blog-card {
-    flex: 0 0 calc(33.333% - 10px);
-    scroll-snap-align: start;
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-radius: 20px;
-    overflow: hidden;
     color: inherit;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-    border: 1.5px solid rgba(200, 200, 220, 0.45);
-    padding: 20px;
     min-width: 0;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), inset 0 0 0 0.5px rgba(255, 255, 255, 0.5);
-  }
-
-  .blog-card:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.55);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    flex: 0 0 calc((100% - 64px) / 3);
+    scroll-snap-align: start;
   }
 
   .blog-card__img {
-    height: 250px;
+    display: block;
+    aspect-ratio: 4 / 3;
     overflow: hidden;
-    border-radius: 12px;
+    border-radius: 0;
   }
 
   .blog-card__img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.4s ease;
   }
 
-  .blog-card__body {
-    padding: 15px 0 0;
+  .blog-card:hover .blog-card__img img {
+    transform: scale(1.04);
   }
 
   .blog-card__meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
+    margin: 20px 0 12px;
   }
 
-  .blog-card__meta-primary {
-    font-family: 'Inter', var(--font-body);
-    font-size: 16px;
+  .blog-card__category {
+    font-family: var(--font-body);
+    font-size: 14px;
     font-weight: 400;
-    color: #000;
-    min-width: 0;
+    letter-spacing: 0.06em;
+    text-transform: capitalize;
+    color: #667085;
   }
 
-  .blog-card__meta-secondary {
-    font-family: 'Inter', var(--font-body);
-    font-size: 16px;
+  .blog-card__meta-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .blog-card__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: #375DFB;
+    flex-shrink: 0;
+  }
+
+  .blog-card__date {
+    font-family: var(--font-body);
+    font-size: 14px;
     font-weight: 400;
-    color: #525866;
-    min-width: 0;
+    color: #667085;
   }
 
   .blog-card__title {
-    min-height: 130px;
-    padding: 20px 0;
     margin: 0;
   }
 
   .blog-card__title :global(a),
   .blog-card__title a {
-    font-family: 'Manrope', var(--font-heading);
-    font-size: 22px;
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 18px;
     font-weight: 500;
-    line-height: 30px;
+    line-height: 1.3;
     color: #000;
     text-decoration: none;
-  }
-
-  .blog-card__arrow {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
-  }
-
-  .blog-card__arrow img {
-    width: 34px;
-    height: auto;
-    display: block;
-  }
-
-  .blog-card:hover .blog-card__arrow {
-    transform: translateX(4px);
-  }
-
-  .blog-dots {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 20px;
-  }
-
-  .blog-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    border: 0;
-    background: #D0D5DD;
-    cursor: pointer;
-    transition: width 0.3s ease, background 0.3s ease;
-    padding: 0;
-  }
-
-  .blog-dot.is-active {
-    width: 24px;
-    background: #375DFB;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
   }
 
   @media (max-width: 1024px) {
@@ -291,23 +273,21 @@ try {
     }
 
     .blog-title {
-      font-size: 40px;
-      line-height: 1.1em;
+      font-size: 32px;
+      line-height: 1.2em;
+    }
+
+    .blog-grid {
+      gap: 24px;
     }
 
     .blog-card {
-      flex: 0 0 calc(50% - 8px);
-    }
-
-    .blog-card__title {
-      min-height: 100px;
-      padding: 16px 0;
+      flex: 0 0 calc((100% - 24px) / 2);
     }
 
     .blog-card__title :global(a),
     .blog-card__title a {
-      font-size: 20px;
-      line-height: 1.1em;
+      font-size: 17px;
     }
   }
 
@@ -319,38 +299,28 @@ try {
       max-width: 100%;
     }
 
+    .blog-header {
+      flex-wrap: wrap;
+    }
+
     .blog-title {
-      font-size: 30px;
+      font-size: 28px;
       line-height: 1.2em;
       max-width: 100%;
       letter-spacing: 0;
+    }
+
+    .blog-grid {
+      gap: 20px;
     }
 
     .blog-card {
       flex: 0 0 85%;
     }
 
-    .blog-card__img {
-      height: 220px;
-    }
-
-    .blog-card__meta {
-      flex-wrap: wrap;
-      row-gap: 6px;
-    }
-
-    .blog-card__meta-primary,
-    .blog-card__meta-secondary {
-      font-size: 14px;
-    }
-
-    .blog-card__title {
-      min-height: auto;
-    }
-
     .blog-card__title :global(a),
     .blog-card__title a {
-      font-size: 18px;
+      font-size: 16px;
       line-height: 1.35;
     }
   }
@@ -358,47 +328,20 @@ try {
 
 <script>
   const root = document.getElementById('home-blog-carousel-root');
-  const track = root?.querySelector('[data-carousel-track]') as HTMLElement | null;
-  const cards = Array.from(root?.querySelectorAll('[data-carousel-card]') ?? []) as HTMLElement[];
-  const dots = Array.from(root?.querySelectorAll('[data-carousel-dot]') ?? []) as HTMLButtonElement[];
+  const track = root?.querySelector('[data-blog-track]') as HTMLElement | null;
+  const prevBtn = root?.querySelector('.blog-nav__btn[data-dir="prev"]') as HTMLButtonElement | null;
+  const nextBtn = root?.querySelector('.blog-nav__btn[data-dir="next"]') as HTMLButtonElement | null;
 
-  if (root && track && cards.length && dots.length) {
-    let frame = 0;
-
-    const updateDots = () => {
-      const cardWidth = cards[0]?.getBoundingClientRect().width ?? 1;
+  if (track && prevBtn && nextBtn) {
+    const scrollByCard = (dir: number) => {
+      const card = track.querySelector('.blog-card') as HTMLElement | null;
+      const cardWidth = card?.getBoundingClientRect().width ?? track.clientWidth / 3;
       const styles = window.getComputedStyle(track);
       const gap = Number.parseFloat(styles.columnGap || styles.gap || '0');
-      const index = Math.min(
-        dots.length - 1,
-        Math.max(0, Math.round(track.scrollLeft / (cardWidth + gap)))
-      );
-
-      dots.forEach((dot, dotIndex) => {
-        dot.classList.toggle('is-active', dotIndex === index);
-      });
+      track.scrollBy({ left: dir * (cardWidth + gap), behavior: 'smooth' });
     };
 
-    const requestDotUpdate = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(() => {
-        frame = 0;
-        updateDots();
-      });
-    };
-
-    dots.forEach((dot, dotIndex) => {
-      dot.addEventListener('click', () => {
-        cards[dotIndex]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest',
-          inline: 'start',
-        });
-      });
-    });
-
-    track.addEventListener('scroll', requestDotUpdate, { passive: true });
-    window.addEventListener('resize', requestDotUpdate);
-    updateDots();
+    prevBtn.addEventListener('click', () => scrollByCard(-1));
+    nextBtn.addEventListener('click', () => scrollByCard(1));
   }
 </script>

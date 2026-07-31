@@ -1,6 +1,15 @@
 ---
-import FeatureV2Layout from "../components/feature-v2/FeatureV2Layout.astro";
-import { regIllustrations as ill } from "../components/event-registration/illustrations";
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import HeroSection from "../components/event-registration/HeroSection.astro";
+import SectionHeading from "../components/event-registration/SectionHeading.astro";
+import FeatureSpotlightSection from "../components/event-registration/FeatureSpotlightSection.astro";
+import MidCtaSection from "../components/event-registration/MidCtaSection.astro";
+import FeatureGridSection from "../components/event-registration/FeatureGridSection.astro";
+import EcosystemGridSection from "../components/event-registration/EcosystemGridSection.astro";
+import FaqPlainSection from "../components/event-registration/FaqPlainSection.astro";
+
+const title = "Streamlined Event Registration — From Sign-Up to Check-In | EventHex";
+const description = "Manage event registrations in real time — track sign-ups, filter by payment status, bulk-import attendees, build custom forms, and export data in one click.";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -23,112 +32,134 @@ const jsonLd = {
     "Field Mapping Wizard",
   ],
 };
+
+const faqs = [
+  { q: "How do I manage event registrations?", a: "EventHex provides a real-time dashboard where you can view all attendees by ticket type, filter by payment status, search for specific attendees, and export lists at any time. All data updates instantly as registrations come in." },
+  { q: "Can I import attendees from a spreadsheet?", a: "Yes. Upload a CSV or Excel file and use the visual field-mapping wizard to match your columns to EventHex fields. Duplicate emails are automatically flagged before import completes." },
+  { q: "How does duplicate detection work?", a: "During bulk import, EventHex checks every email address against your existing attendee list and flags any duplicates before they're added. You can choose to skip, merge, or override duplicate records." },
+  { q: "Can I create custom registration forms?", a: "Yes. The form builder lets you add text fields, dropdowns, checkboxes, file uploads, and date pickers. You can apply conditional logic to show or hide fields based on ticket type or previous answers." },
+  { q: "How do I track check-in status?", a: "The registration dashboard shows a real-time check-in column for every attendee. You can filter to see who has arrived, who is still pending, and who is a no-show — and export the filtered list at any time." },
+  { q: "Is EventHex GDPR compliant?", a: "Yes. Registration forms include built-in GDPR consent checkboxes with customizable opt-in language. EventHex supports data retention policies and provides tools to handle data subject access requests." },
+];
 ---
 
-<FeatureV2Layout
-  pageTitle="Streamlined Event Registration — From Sign-Up to Check-In | EventHex"
-  pageDescription="Manage event registrations in real time — track sign-ups, filter by payment status, bulk-import attendees, build custom forms, and export data in one click."
+<MarketingLayout
+  title={title}
+  description={description}
   canonical="https://eventhex.ai/event-registration/"
   ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png"
-  heroAnimation="/animations/event-registration-hero.json"
-  badge="Event Registration Management"
-  heroTitleLine1="Streamlined Event Registration"
-  heroTitleLine2="From Sign-Up to Check-In"
-  heroCopy="Manage attendee registrations in real time — track sign-ups, filter by payment status, bulk-import attendees, build custom forms with conditional logic, and export clean data in one click."
-  trustItems={["Real-Time Registration Tracking", "Duplicate Detection", "GDPR-Ready Forms"]}
-  stats={[
-    { value: "100K+", label: "Registrations Processed" },
-    { value: "2 sec", label: "Average Import Time" },
-    { value: "99.9%", label: "Data Accuracy" },
-    { value: "0%", label: "Platform Fees" },
-  ]}
-  statsHeadline={{
-    white1: "Every attendee.",
-    accent: "Every detail.",
-    white2: "Tracked in",
-    accent2: "real time",
-  }}
-  bentoHeading="Everything You Need for Event Registration"
-  bentoSubtitle="From the moment someone registers to the moment they scan in — EventHex tracks every attendee, every ticket type, and every payment status in one real-time dashboard."
-  bentoTabs={[
-    {
-      tab: "Registration Management",
-      cards: [
-        { title: "Per-Ticket Attendee Lists", desc: "View and filter attendees by ticket type, session, or table assignment", illustration: ill.reg1 },
-        { title: "Real-Time Tracking", desc: "Watch registrations come in live — no page refresh needed", illustration: ill.reg2 },
-        { title: "Payment Status Filtering", desc: "Filter by paid, pending, or complimentary to manage follow-ups", illustration: ill.reg3 },
-        { title: "Check-In Monitoring", desc: "See who has checked in and who is still pending arrival", illustration: ill.reg4 },
-        { title: "Attendee Search & Export", desc: "Find any attendee instantly and export lists to CSV or Excel", illustration: ill.reg5 },
-      ],
-    },
-    {
-      tab: "Import & Data",
-      cards: [
-        { title: "CSV / Excel Import", desc: "Bulk-add attendees by uploading a spreadsheet in seconds", illustration: ill.reg6 },
-        { title: "Duplicate Detection", desc: "Automatic deduplication flags repeated emails before import completes", illustration: ill.reg7 },
-        { title: "Field Mapping Wizard", desc: "Map any column from your spreadsheet to EventHex fields with a visual editor", illustration: ill.reg8 },
-        { title: "Bulk Registration", desc: "Register entire groups, teams, or organizations in a single operation", illustration: ill.reg9 },
-        { title: "Import History", desc: "Full audit log of every import with row-level error reporting", illustration: ill.reg10 },
-      ],
-    },
-    {
-      tab: "Forms & Fields",
-      cards: [
-        { title: "Custom Registration Fields", desc: "Add text, dropdown, checkbox, file upload, or date fields to any registration form", illustration: ill.reg11 },
-        { title: "Conditional Logic", desc: "Show or hide fields based on ticket type, answers, or participant category", illustration: ill.reg12 },
-        { title: "Form Builder", desc: "Drag-and-drop form editor with live preview and mobile-optimized output", illustration: ill.reg13 },
-        { title: "GDPR Consent Fields", desc: "Built-in consent checkboxes, opt-in language, and data retention controls", illustration: ill.reg14 },
-        { title: "Multi-Ticket Registration", desc: "Let one buyer register multiple attendees in a single checkout flow", illustration: ill.reg15 },
-      ],
-    },
-  ]}
-  stackingHeading="Powerful Registration Features"
-  stackingHighlight="in Action"
-  stackingCards={[
-    {
-      title: "Live Attendee Data As Registrations Happen",
-      desc: "Every form submission updates the dashboard immediately — ticket counts, payment totals, and attendee lists refresh in real time so you're never working with stale data.",
-      image: "/feature-images/event-registration-dashboard.png",
-      alt: "Real-time event registration dashboard with live counters",
-    },
-    {
-      title: "Import Thousands of Attendees in Seconds",
-      desc: "Upload a CSV or Excel file and EventHex handles the rest — mapping columns, detecting duplicates, and creating clean attendee records with zero manual data entry.",
-      image: "/feature-images/event-registration-import.png",
-      alt: "CSV bulk import wizard with column mapping",
-    },
-    {
-      title: "Registration Forms Built Exactly Your Way",
-      desc: "Go beyond name and email — build forms with custom fields, conditional logic, multi-ticket flows, and GDPR consent controls. No developer required.",
-      image: "/feature-images/event-registration-form.png",
-      alt: "Custom event registration form builder with conditional logic",
-    },
-  ]}
-  howItWorksHeading="How Event Registration Works"
-  howItWorksAnimation="/animations/how-it-works.json"
-  steps={[
-    { title: "Create Your Event & Tickets", desc: "Set up ticket types, capacities, prices, and registration form fields — including custom questions unique to your event." },
-    { title: "Share Your Registration Link", desc: "Publish your event page and share the direct registration URL across email, social, and your website." },
-    { title: "Track Attendees in Real Time", desc: "Watch registrations arrive live. Filter by ticket type, payment status, or check-in status. Export any view instantly." },
-    { title: "Import Offline Registrants", desc: "Bulk-import attendees from spreadsheets, with automatic duplicate detection and field mapping." },
-  ]}
-  ctaTitle="Ready to Simplify Attendee Registration?"
-  ctaCopy="See how EventHex turns messy spreadsheets and manual follow-ups into a clean, automated registration workflow."
-  whyHeading="Why Organizers Choose EventHex Registration"
-  whyCards={[
-    { title: "Real-Time Tracking", desc: "Live registration data with no page refresh needed", icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
-    { title: "Bulk Import", desc: "CSV import with duplicate detection and field mapping", icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' },
-    { title: "Form Builder", desc: "Custom fields, conditional logic, and GDPR consent", icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>' },
-    { title: "Easy Export", desc: "One-click CSV/Excel export of any attendee list", icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' },
-    { title: "Data Accuracy", desc: "Duplicate detection and validation at every step", icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>' },
-  ]}
-  faqs={[
-    { q: "How do I manage event registrations?", a: "EventHex provides a real-time dashboard where you can view all attendees by ticket type, filter by payment status, search for specific attendees, and export lists at any time. All data updates instantly as registrations come in." },
-    { q: "Can I import attendees from a spreadsheet?", a: "Yes. Upload a CSV or Excel file and use the visual field-mapping wizard to match your columns to EventHex fields. Duplicate emails are automatically flagged before import completes." },
-    { q: "How does duplicate detection work?", a: "During bulk import, EventHex checks every email address against your existing attendee list and flags any duplicates before they're added. You can choose to skip, merge, or override duplicate records." },
-    { q: "Can I create custom registration forms?", a: "Yes. The form builder lets you add text fields, dropdowns, checkboxes, file uploads, and date pickers. You can apply conditional logic to show or hide fields based on ticket type or previous answers." },
-    { q: "How do I track check-in status?", a: "The registration dashboard shows a real-time check-in column for every attendee. You can filter to see who has arrived, who is still pending, and who is a no-show — and export the filtered list at any time." },
-    { q: "Is EventHex GDPR compliant?", a: "Yes. Registration forms include built-in GDPR consent checkboxes with customizable opt-in language. EventHex supports data retention policies and provides tools to handle data subject access requests." },
-  ]}
-  jsonLd={jsonLd}
-/>
+  footerCtaTitle={"Ready to Simplify\nAttendee Registration?"}
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </Fragment>
+
+  <HeroSection
+    eyebrow="Event Registration Management"
+    titleHtml="Registration that keeps events live"
+    description="Sign-ups, payments, imports, and check-in status — all connected to one live dashboard. No spreadsheets, no stale data, no manual reconciliation."
+    ctaText="Book a Demo"
+    ctaHref="/book-a-demo/"
+    ctaNote="No credit card. Free onboarding."
+    trustItems={["Real-Time Registration Tracking", "Duplicate Detection", "GDPR-Ready Forms"]}
+  />
+
+  <div id="erg-spotlight">
+    <SectionHeading
+      titleHtml="Registration built for how your team <span class='dim'>actually runs events</span>"
+      subtitle="From the moment someone registers to the moment they scan in — every attendee, ticket type, and payment status stays connected in one place."
+    />
+
+    <div class="erg-spot-grid">
+      <FeatureSpotlightSection
+        eyebrow="Live By Default"
+        title="Every registration updates the dashboard instantly"
+        desc="Every form submission updates the dashboard immediately — ticket counts, payment totals, and attendee lists refresh in real time so you're never working with stale data."
+        image="/feature-images/event-registration-dashboard.png"
+        alt="Real-time event registration dashboard with live counters"
+      />
+      <FeatureSpotlightSection
+        eyebrow="Zero Manual Entry"
+        title="Import thousands of attendees in seconds"
+        desc="Upload a CSV or Excel file and EventHex handles the rest — mapping columns, detecting duplicates, and creating clean attendee records with zero manual data entry."
+        image="/feature-images/event-registration-import.png"
+        alt="CSV bulk import wizard with column mapping"
+        reverse
+      />
+      <FeatureSpotlightSection
+        eyebrow="Built Your Way"
+        title="Registration forms built exactly your way"
+        desc="Go beyond name and email — build forms with custom fields, conditional logic, multi-ticket flows, and GDPR consent controls. No developer required."
+        image="/feature-images/event-registration-form.png"
+        alt="Custom event registration form builder with conditional logic"
+      />
+    </div>
+  </div>
+
+  <MidCtaSection
+    title="Your registration desk should work as hard as your team does"
+    desc="Free onboarding support. No credit card required."
+    ctaText="Get Started. It's Free"
+    ctaHref="/book-a-demo/"
+    image="/feature-images/event-registration-dashboard.png"
+    imageAlt="EventHex registration dashboard"
+  />
+
+  <SectionHeading
+    eyebrow="Core Capabilities"
+    titleHtml="Every registration feature,<br />built in <span class='dim'>from day one</span>"
+  />
+  <FeatureGridSection
+    items={[
+      { title: "Real-Time Tracking", desc: "Watch registrations, payments, and check-ins update live — no page refresh needed.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+      { title: "Bulk CSV Import", desc: "Upload a spreadsheet and register entire groups, teams, or waitlists in seconds.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' },
+      { title: "Duplicate Detection", desc: "Every email is checked against your attendee list before an import completes.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>' },
+      { title: "Custom Form Fields", desc: "Add text, dropdown, checkbox, file upload, or date fields to any registration form.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' },
+      { title: "Conditional Logic", desc: "Show or hide fields based on ticket type, previous answers, or participant category.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>' },
+      { title: "GDPR Consent Fields", desc: "Built-in consent checkboxes, opt-in language, and data retention controls.", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' },
+    ]}
+  />
+
+  <SectionHeading
+    eyebrow="Part of the EventHex Platform"
+    titleHtml="Registration is <span class='dim'>just the</span><br />starting point"
+    subtitle="Every attendee registered here flows straight into ticketing, check-in, payments, and every other tool you run your event with. No re-import, no double entry."
+  />
+  <EcosystemGridSection
+    items={[
+      { title: "Ticketing", desc: "Sell and manage every ticket type", href: "/event-ticketing/", color: "#F97316", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/><path d="M13 5v2m0 10v2m0-14v2m0 2v2m0 2v2"/></svg>' },
+      { title: "Check-In", desc: "Scan badges and track arrivals live", href: "/event-check-in/", color: "#16A34A", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>' },
+      { title: "Payments", desc: "Accept, track, and reconcile revenue", href: "/event-payment-processing/", color: "#2563EB", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>' },
+      { title: "AI Form Builder", desc: "Build smarter registration forms fast", href: "/ai-form-builder/", color: "#7C3AED", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>' },
+      { title: "Sessions", desc: "Schedule tracks and manage agendas", href: "/session-management/", color: "#0EA5E9", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
+      { title: "Speakers", desc: "Manage profiles, bios, and lineups", href: "/speaker-management/", color: "#F59E0B", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/></svg>' },
+      { title: "Dashboard", desc: "See every metric in one live view", href: "/centralized-dashboard/", color: "#EC4899", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>' },
+      { title: "Notifications", desc: "Automated emails and reminders", href: "/event-notifications/", color: "#14B8A6", icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>' },
+    ]}
+  />
+
+  <FaqPlainSection faqs={faqs} />
+</MarketingLayout>
+
+<style is:global>
+  #erg-spotlight { background: #fff; padding-top: 56px; padding-bottom: 8px; }
+  .erg-spot-grid {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--surface-card-border);
+    border-left: 1px solid var(--surface-card-border);
+  }
+  @media (max-width: 860px) {
+    .erg-spot-grid { grid-template-columns: 1fr; border-left: none; }
+  }
+
+  /* Aurora gradient footer CTA, matching the mid-page treatment */
+  .footer-cta-banner {
+    background:
+      linear-gradient(115deg, #05060c 0%, #05060c 22%, #1a1450 42%, #375DFB 68%, #4fd6e0 100%) !important;
+  }
+</style>

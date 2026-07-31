@@ -50,18 +50,36 @@ const trustedLogos = [
   <div class="engagement-wrap">
     <div class="engagement-text-container">
       <!-- Desktop: splitting letters effect (a70b33b) — we render as static text with color spans -->
-      <h2 class="engagement-heading engagement-heading--desktop animate-on-scroll" data-animation="fadeInDown">
-        <span class="text-white">EventHex boosts retention through </span>
-        <span class="text-purple-light">enhanced attendee engagement </span>
-        <span class="text-white">and </span>
-        <span class="text-cyan">personalized user experiences</span><img src="https://cms.eventhex.ai/wp-content/uploads/2024/12/Layer_1.svg" alt="Event-star" loading="lazy" class="star-img-inline" />
+      <h2 class="engagement-heading engagement-heading--desktop type-heading">
+        <span class="text-gradient-blue">Everything your event needs </span>
+        <span class="text-purple-light">before, during, and after</span>
+        <span class="text-white"> in </span>
+        <span class="text-cyan">one dashboard</span>
       </h2>
       <!-- Mobile: regular heading (d044db7) -->
-      <h2 class="engagement-heading engagement-heading--mobile animate-on-scroll" data-animation="fadeInDown">
-        EventHex boosts retention through
-        <span style="color:#AFA3FF;"> enhanced attendee engagement</span>
-        and<span style="color:#ABFFFF;">  personalized user experiences</span>
+      <h2 class="engagement-heading engagement-heading--mobile type-heading">
+        <span class="text-gradient-blue">Everything your event needs</span>
+        <span style="color:#AFA3FF;"> before, during, and after</span>
+         in <span style="color:#AFA3FF;">one dashboard</span>
       </h2>
+    </div>
+    <div class="engagement-stats">
+      <div class="stat-item">
+        <span class="stat-value">500+</span>
+        <span class="stat-label">Events Powered</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">1M+</span>
+        <span class="stat-label">Attendees Checked In</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">4M+</span>
+        <span class="stat-label">Photos Delivered by AI</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">15+</span>
+        <span class="stat-label">Countries</span>
+      </div>
     </div>
   </div>
 
@@ -87,55 +105,173 @@ const trustedLogos = [
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
   if (dashboardEl && !prefersReducedMotion.matches) {
-    let frameId = 0;
+    let targetTilt = 26;
+    let currentTilt = 26;
+    let loopId = 0;
 
-    const updateDashboardMotion = () => {
+    const computeTargetTilt = () => {
       const rect = dashboardEl.getBoundingClientRect();
       const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-      const scaleStart = viewportHeight * 0.4;
-      const scaleEnd = viewportHeight * 0.05;
-      const scaleProgress = clamp((scaleStart - rect.top) / (scaleStart - scaleEnd), 0, 1);
-      const scaleBoost = scaleProgress * 0.1;
 
-      dashboardEl.style.setProperty('--dashboard-scale', `${(1 + scaleBoost).toFixed(3)}`);
+      // Mailmodo-style 3D tilt-to-flat: rotateX 26deg -> 0 as the mockup scrolls up
+      const tiltStart = viewportHeight * 0.9;
+      const tiltEnd = viewportHeight * 0.28;
+      const tiltProgress = clamp((tiltStart - rect.top) / (tiltStart - tiltEnd), 0, 1);
+      targetTilt = 26 * (1 - tiltProgress);
     };
 
-    const requestDashboardMotionUpdate = () => {
-      if (frameId) return;
-      frameId = window.requestAnimationFrame(() => {
-        frameId = 0;
-        updateDashboardMotion();
+    // Continuous rAF loop lerps toward the scroll-derived target instead of
+    // snapping the transform straight to it, so fast/bursty scroll doesn't flip the tilt.
+    const animate = () => {
+      currentTilt += (targetTilt - currentTilt) * 0.12;
+      if (Math.abs(targetTilt - currentTilt) < 0.01) currentTilt = targetTilt;
+      dashboardEl.style.setProperty('--dashboard-tilt', `${currentTilt.toFixed(2)}deg`);
+      loopId = window.requestAnimationFrame(animate);
+    };
+
+    computeTargetTilt();
+    currentTilt = targetTilt;
+    loopId = window.requestAnimationFrame(animate);
+    window.addEventListener('scroll', computeTargetTilt, { passive: true });
+    window.addEventListener('resize', computeTargetTilt);
+  }
+
+  // Type-on-scroll reveal for the engagement heading
+  const typeHeadings = document.querySelectorAll<HTMLElement>('.type-heading');
+
+  const wrapChars = (root: HTMLElement) => {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const textNodes: Text[] = [];
+    let node: Node | null;
+    while ((node = walker.nextNode())) textNodes.push(node as Text);
+    textNodes.forEach((textNode) => {
+      const frag = document.createDocumentFragment();
+      const words = (textNode.textContent || '').split(' ');
+      words.forEach((word, wi) => {
+        if (wi > 0) frag.appendChild(document.createTextNode(' '));
+        const wordSpan = document.createElement('span');
+        wordSpan.className = 'type-word';
+        word.split('').forEach((ch) => {
+          const span = document.createElement('span');
+          span.className = 'type-char';
+          span.textContent = ch;
+          wordSpan.appendChild(span);
+        });
+        frag.appendChild(wordSpan);
       });
-    };
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+  };
 
-    updateDashboardMotion();
-    window.addEventListener('scroll', requestDashboardMotionUpdate, { passive: true });
-    window.addEventListener('resize', requestDashboardMotionUpdate);
+  typeHeadings.forEach(wrapChars);
+
+  if (!prefersReducedMotion.matches) {
+    const iconTimeouts = new WeakMap<HTMLElement, number>();
+
+    const typeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const chars = entry.target.querySelectorAll<HTMLElement>('.type-char');
+          const icon = entry.target.querySelector<HTMLElement>('.icon-pop');
+          const pendingIconTimeout = icon ? iconTimeouts.get(icon) : undefined;
+
+          if (entry.isIntersecting) {
+            chars.forEach((c, i) => {
+              c.style.transitionDelay = `${i * 28}ms`;
+            });
+            requestAnimationFrame(() => {
+              chars.forEach((c) => c.classList.add('is-revealed'));
+            });
+
+            // Icon pops in only after the last character has finished typing
+            if (icon) {
+              if (pendingIconTimeout) window.clearTimeout(pendingIconTimeout);
+              const lastCharDelay = (chars.length - 1) * 28;
+              const timeoutId = window.setTimeout(() => icon.classList.add('is-revealed'), lastCharDelay + 280);
+              iconTimeouts.set(icon, timeoutId);
+            }
+          } else {
+            // Reset so scrolling back down replays the type-in from the start
+            chars.forEach((c) => {
+              c.style.transitionDelay = '0ms';
+              c.classList.remove('is-revealed');
+            });
+            if (icon) {
+              if (pendingIconTimeout) window.clearTimeout(pendingIconTimeout);
+              icon.classList.remove('is-revealed');
+            }
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    typeHeadings.forEach((h) => typeObserver.observe(h));
+  } else {
+    typeHeadings.forEach((h) => {
+      h.querySelectorAll('.type-char').forEach((c) => c.classList.add('is-revealed'));
+      h.querySelectorAll('.icon-pop').forEach((c) => c.classList.add('is-revealed'));
+    });
+  }
+
+  // Count-up animation for the stats row below the dashboard mockup
+  const statValues = document.querySelectorAll<HTMLElement>('.stat-value');
+  statValues.forEach((el) => {
+    const match = el.textContent?.trim().match(/^(\d+)(.*)$/);
+    if (!match) return;
+    el.dataset.countTarget = match[1];
+    el.dataset.countSuffix = match[2];
+    el.textContent = `0${match[2]}`;
+  });
+
+  if (!prefersReducedMotion.matches && statValues.length) {
+    const countObserver = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          const target = Number(el.dataset.countTarget || 0);
+          const suffix = el.dataset.countSuffix || '';
+          const duration = 1400;
+          const start = performance.now();
+          const step = (now: number) => {
+            const progress = clamp((now - start) / duration, 0, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = `${Math.round(target * eased)}${suffix}`;
+            if (progress < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          obs.unobserve(el);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    statValues.forEach((el) => countObserver.observe(el));
+  } else {
+    statValues.forEach((el) => {
+      const target = el.dataset.countTarget;
+      const suffix = el.dataset.countSuffix || '';
+      if (target) el.textContent = `${target}${suffix}`;
+    });
   }
 </script>
 
 <style>
   /* 40a2c6f — dark bg with radial gradients */
   .dark-section {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 250px 0 60px 0;
-    background-color: #000;
+    padding: 250px 0 30px 0;
+    background-color: #0d0a2c;
     background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 43% 87%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 70% 81%, hsl(53 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 7% 43%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 11%, hsl(19 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
+      /* Fade the bottom into pure black so it melts into the section below instead of a hard seam */
+      linear-gradient(180deg, transparent 0%, transparent 70%, #000 100%),
+      /* Flowbit hero look: blue glow bottom-left + purple accent on dark navy */
+      radial-gradient(at 0% 100%, hsl(220 100% 48% / 0.55) 0px, transparent 46%),
+      radial-gradient(at 15% 85%, hsl(220 100% 50% / 0.30) 0px, transparent 42%),
+      radial-gradient(at 88% 12%, hsl(265 90% 58% / 0.30) 0px, transparent 45%),
+      radial-gradient(at 55% 45%, hsl(250 70% 25% / 0.30) 0px, transparent 55%);
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -143,25 +279,30 @@ const trustedLogos = [
 
   /* cb45902 — dashboard offset */
   .dashboard-wrap {
+    position: relative;
+    z-index: 5;
     width: 100%;
     margin-top: -460px;
     padding: 0;
     display: flex;
     justify-content: center;
+    perspective: 500px;
+    perspective-origin: center 35%;
   }
   .dashboard-img {
-    --dashboard-scale: 1;
-    width: 55%;
+    --dashboard-tilt: 26deg;
+    width: 70%;
     height: auto;
     aspect-ratio: 734 / 437;
     display: block;
-    transform: scale(var(--dashboard-scale));
-    transform-origin: center center;
+    transform: rotateX(var(--dashboard-tilt));
+    transform-origin: center 25%;
     will-change: transform;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .dashboard-img {
+      --dashboard-tilt: 0deg;
       transform: none;
       will-change: auto;
     }
@@ -170,7 +311,7 @@ const trustedLogos = [
   /* d3cf198 — engagement text */
   .engagement-wrap {
     width: 100%;
-    padding: 80px 0 50px;
+    padding: 130px 0 96px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -182,8 +323,8 @@ const trustedLogos = [
   }
   .engagement-heading {
     font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
+    font-size: 46px;
+    font-weight: 500;
     line-height: 52px;
     letter-spacing: -1px;
     color: #fff;
@@ -192,26 +333,55 @@ const trustedLogos = [
   }
   .engagement-heading--desktop { display: block; }
   .engagement-heading--mobile { display: none; }
-  .text-white { color: #fff; }
+  .text-white { color: #AFA3FF; }
   .text-purple-light { color: #AFA3FF; }
-  .text-cyan { color: #ABFFFF; }
+  .text-cyan { color: #AFA3FF; }
+  .text-gradient-blue {
+    color: #fff;
+  }
 
-  .star-img-inline {
-    display: inline;
-    vertical-align: baseline;
-    height: 1em;
-    width: auto;
-    margin-left: 4px;
-    position: relative;
-    top: 2px;
+  .icon-pop {
+    opacity: 0;
+    transform: scale(0.4) rotate(-20deg);
+    transition: opacity 0.35s ease-out, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .icon-pop.is-revealed {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+
+  /* Stats row under engagement heading */
+  .engagement-stats {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 80px;
+    margin-top: 56px;
+  }
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+  }
+  .stat-label {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.6);
   }
 
   /* 2b63b4d — trusted by */
   .trusted-section {
     max-width: 1300px;
     margin: 0 auto;
-    padding: 0 0 60px;
-    border-bottom: 1px solid #474747;
+    padding: 0;
     width: 100%;
   }
   .trusted-title {
@@ -257,27 +427,66 @@ const trustedLogos = [
     .dark-section { padding: 220px 0 50px; }
     .dashboard-wrap { margin-top: -300px; padding: 0 50px; }
     .dashboard-img { width: 80%; }
-    .engagement-wrap { padding: 40px 20px 50px; }
+    .engagement-wrap { padding: 70px 20px 96px; }
     .engagement-text-container { width: 85%; }
-    .engagement-heading { font-size: 40px; line-height: 1.1em; }
-    .star-img-inline { height: 0.9em; }
-    .trusted-section { padding: 0 0 30px; }
+    .engagement-heading { font-size: 34px; line-height: 1.1em; }
+    .engagement-stats { gap: 50px; margin-top: 40px; }
+    .stat-value { font-size: 32px; }
+    .stat-label { font-size: 13px; }
+    .trusted-section { padding: 0; }
     .trusted-title { padding-bottom: 50px; }
   }
 
   /* Mobile */
   @media (max-width: 767px) {
-    .dark-section { padding: 100px 0 50px; margin-top: -80px; }
-    .dashboard-wrap { margin-top: -160px; padding: 0 20px; }
+    /* Single smooth vignette sized for narrow viewports — the desktop blob set (four small,
+       widely-spaced radials) reads as patchy/broken at 375px, so mobile gets its own blend. */
+    .dark-section {
+      padding: 100px 0 50px;
+      margin-top: -80px;
+      position: relative;
+      background-image:
+        linear-gradient(180deg, transparent 0%, transparent 70%, #000 100%),
+        radial-gradient(ellipse 480px 420px at 50% 0%, hsl(220 100% 48% / 0.5) 0%, transparent 68%),
+        radial-gradient(ellipse 380px 320px at 12% 55%, hsl(265 90% 58% / 0.28) 0%, transparent 65%);
+    }
+    /* Centers the mockup ON the hero/dark-section seam (half above in the hero, half
+       below in the dark section) instead of hanging entirely into the dark section.
+       -100px cancels the section's own padding-top to reach the seam; the extra -25.3vw
+       pulls it up by half the image's own height (width 85vw * aspect 437/734 / 2). */
+    .dashboard-wrap { margin-top: calc(-100px - 15vw); padding: 0 20px; }
     .dashboard-img { width: 85%; }
-    .engagement-wrap { padding: 60px 15px 50px; }
+    .engagement-wrap { padding: 90px 15px 96px; }
     .engagement-text-container { width: 100%; }
     .engagement-heading--desktop { display: none; }
-    .engagement-heading--mobile { display: block; font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
-    .star-img-inline { display: none; }
-    .trusted-section { padding: 0 10px 30px; }
+    .engagement-heading--mobile { display: block; font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
+    .engagement-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 20px; margin-top: 32px; justify-items: center; }
+    .stat-value { font-size: 26px; }
+    .stat-label { font-size: 12px; }
+    .trusted-section { padding: 0 10px; }
     .trusted-title { padding-bottom: 40px; }
     .logo-track { gap: 40px; }
     .logo-slide img { height: 30px; }
   }
+
+  /* Match Solutions section's reduced top padding at this breakpoint */
+  @media (max-width: 520px) {
+    .engagement-wrap { padding-bottom: 64px; }
+  }
+</style>
+
+<style is:global>
+  /* Type-on-scroll reveal — .type-char spans are created via document.createElement at
+     runtime, so they never receive Astro's scoped data-astro-cid attribute; these rules
+     must stay unscoped or they silently never match. */
+  .type-word {
+    display: inline-block;
+  }
+  .type-char {
+    opacity: 0;
+    display: inline-block;
+    transform: translateY(0.15em);
+    transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+  }
+  .type-char.is-revealed { opacity: 1; transform: translateY(0); }
 </style>

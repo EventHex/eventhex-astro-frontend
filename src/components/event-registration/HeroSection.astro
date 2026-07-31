@@ -1,0 +1,245 @@
+---
+import LottiePlayer from "../LottiePlayer.astro";
+
+interface Props {
+  eyebrow: string;
+  titleHtml: string;
+  description: string;
+  ctaText: string;
+  ctaHref: string;
+  ctaNote: string;
+  trustItems: string[];
+}
+
+const { eyebrow, titleHtml, description, ctaText, ctaHref, ctaNote, trustItems } = Astro.props;
+---
+
+<section class="erg-hero">
+  <div class="erg-hero__grid">
+    <div class="erg-hero__content">
+      <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">{eyebrow}</span>
+
+      <h1 class="erg-hero__title animate-on-scroll" data-animation="fadeInUp" set:html={titleHtml}></h1>
+
+      <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+        {description}
+      </p>
+
+      <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+        <a href={ctaHref} class="erg-hero__btn">
+          {ctaText}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <span class="erg-hero__cta-note">{ctaNote}</span>
+      </div>
+
+      <div class="erg-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+        {trustItems.map((t) => <span class="erg-hero__trust-item">{t}</span>)}
+      </div>
+    </div>
+
+    <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
+      <div class="erg-hero__visual-card">
+        <div class="erg-hero__visual-inner">
+          <LottiePlayer src="/animations/event-registration-hero.json" class="erg-hero__lottie" eager />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="erg-trust-strip">
+  <div class="erg-trust-strip__inner">
+    <span class="erg-trust-strip__label">Trusted By Event Teams</span>
+    <span class="erg-trust-strip__stat"><b>100K+</b> Registrations Processed</span>
+    <span class="erg-trust-strip__stat"><b>2 sec</b> Average Import Time</span>
+    <span class="erg-trust-strip__stat"><b>99.9%</b> Data Accuracy</span>
+    <span class="erg-trust-strip__stat"><b>0%</b> Platform Fees</span>
+  </div>
+</section>
+
+<style is:global>
+  .erg-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background:
+      radial-gradient(ellipse 700px 500px at -5% -10%, rgba(55, 93, 251, 0.14) 0%, rgba(55, 93, 251, 0.06) 40%, rgba(55, 93, 251, 0) 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, rgba(255, 116, 184, 0.24) 0%, rgba(255, 116, 184, 0.10) 45%, rgba(255, 116, 184, 0) 78%),
+      #ffffff;
+  }
+  .erg-hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.45) 70%, rgba(255, 255, 255, 0.75) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .erg-hero__grid {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
+    gap: 48px;
+    align-items: center;
+  }
+  .erg-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .erg-hero__badge {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    color: var(--brand-blue);
+  }
+  .erg-hero__title {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-heading);
+    font-size: 60px;
+    font-weight: 700;
+    line-height: 66px;
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .erg-hero__desc {
+    margin: 0;
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.25px;
+    color: var(--subheading-gray);
+  }
+  .erg-hero__cta-row { display: flex; align-items: center; gap: 16px; padding-top: 8px; flex-wrap: wrap; }
+  .erg-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: -0.36px;
+    line-height: 24px;
+    background: var(--heading-dark);
+    color: #fff;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .erg-hero__btn:hover { transform: translateY(-2px); background: #000; }
+  .erg-hero__cta-note {
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--subheading-gray);
+    max-width: 156px;
+  }
+  .erg-hero__trust { display: flex; flex-wrap: wrap; gap: 18px; padding-top: 4px; }
+  .erg-hero__trust-item {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--heading-dark);
+  }
+  .erg-hero__trust-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+  .erg-hero__visual {
+    position: relative;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+  }
+  .erg-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border-radius: 22px 0 0 22px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    border-right: none;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+      rgba(255, 255, 255, 0.34);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .erg-hero__visual-inner {
+    position: relative;
+    border-radius: 16px 0 0 16px;
+    overflow: hidden;
+    padding: 32px;
+    background: linear-gradient(135deg, #d9ecfa 0%, #eef6fc 45%, #ffffff 100%);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+  .erg-hero__lottie { width: 100%; max-width: 640px; margin: 0 auto; }
+  .erg-hero__lottie svg { width: 100% !important; height: auto !important; }
+
+  .erg-trust-strip { border-top: 1px solid var(--surface-card-border); padding: 1.5rem 1.5rem; }
+  .erg-trust-strip__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2.25rem;
+  }
+  .erg-trust-strip__label {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--label-gray);
+  }
+  .erg-trust-strip__stat {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: var(--subheading-gray);
+    white-space: nowrap;
+  }
+  .erg-trust-strip__stat b { color: var(--heading-dark); font-weight: 700; }
+
+  @media (max-width: 1120px) {
+    .erg-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 32px; }
+    .erg-hero__title { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }
+  }
+  @media (max-width: 960px) {
+    .erg-hero { padding: 130px 20px 48px; }
+    .erg-hero::after { display: none; }
+    .erg-hero__grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
+    .erg-hero__content { align-items: center; }
+    .erg-hero__desc { max-width: 520px; }
+    .erg-hero__cta-row, .erg-hero__trust { justify-content: center; }
+    .erg-hero__visual { margin-right: 0; }
+    .erg-hero__visual-card { border-radius: 22px; border-right: 1px solid rgba(255, 255, 255, 0.62); }
+    .erg-hero__visual-inner { border-radius: 16px; }
+  }
+  @media (max-width: 767px) {
+    .erg-hero { margin-top: -80px; padding: 112px 16px 40px; }
+    .erg-hero__title { font-size: 34px; line-height: 40px; letter-spacing: -0.8px; }
+    .erg-hero__cta-row { width: 100%; flex-direction: column; align-items: stretch; }
+    .erg-hero__btn { width: 100%; justify-content: center; }
+    .erg-hero__cta-note { max-width: 100%; text-align: center; }
+    .erg-trust-strip__inner { justify-content: center; text-align: center; }
+  }
+</style>

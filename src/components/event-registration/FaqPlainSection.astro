@@ -1,0 +1,104 @@
+---
+interface FaqItem { q: string; a: string }
+interface Props { faqs: FaqItem[] }
+
+const { faqs } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<section class="erg-faq">
+  <div class="erg-faq__inner">
+    <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeIn">FAQs</span>
+    <h2 class="erg-faq__heading animate-on-scroll" data-animation="fadeInUp">Frequently asked questions about event registration</h2>
+
+    <div class="erg-faq__list">
+      {faqs.map((faq, i) => (
+        <details class="erg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(i * 50)} data-erg-faq-item>
+          <summary class="erg-faq__question">
+            <strong>{faq.q}</strong>
+            <svg class="erg-faq__chevron" width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="erg-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const ergFaqItems = Array.from(document.querySelectorAll('[data-erg-faq-item]'));
+  ergFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+      ergFaqItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .erg-faq { padding: 5rem 1.5rem; background: #fff; }
+  .erg-faq__inner { max-width: 760px; margin: 0 auto; text-align: center; }
+  .erg-faq__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--brand-blue);
+    margin-bottom: 0.75rem;
+  }
+  .erg-faq__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 3.6vw, 2.25rem);
+    font-weight: 700;
+    color: var(--heading-dark);
+    margin: 0 0 2.5rem;
+    line-height: 1.25;
+  }
+  .erg-faq__list { text-align: left; border-top: 1px solid var(--surface-card-border); }
+  .erg-faq__item { border-bottom: 1px solid var(--surface-card-border); }
+  .erg-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    font-weight: 400;
+    color: var(--heading-dark);
+    cursor: pointer;
+    list-style: none;
+  }
+  .erg-faq__question strong { font-weight: 500; }
+  .erg-faq__question::-webkit-details-marker { display: none; }
+  .erg-faq__chevron { flex-shrink: 0; transition: transform 0.25s ease; color: var(--subheading-gray); }
+  .erg-faq__item[open] .erg-faq__chevron { transform: rotate(180deg); }
+  .erg-faq__answer { padding: 0 0 1.5rem; max-width: 640px; }
+  .erg-faq__answer p {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--subheading-gray);
+    margin: 0;
+  }
+
+  @media (max-width: 767px) {
+    .erg-faq { padding: 3.5rem 1.25rem; }
+    .erg-faq__question { font-size: 0.9375rem; padding: 1.15rem 0; }
+  }
+</style>

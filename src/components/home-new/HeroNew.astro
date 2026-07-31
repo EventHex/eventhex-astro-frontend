@@ -12,6 +12,24 @@
 ---
 
 <section class="hero-outer">
+  <div class="hero-fx" aria-hidden="true">
+    <span class="beam-line" style="--x: 14%; --duration: 7s; --delay: 0s;"></span>
+    <span class="beam-line" style="--x: 29%; --duration: 9s; --delay: 2.5s;"></span>
+    <span class="beam-line" style="--x: 43%; --duration: 8.2s; --delay: 1.2s;"></span>
+    <span class="beam-line" style="--x: 57%; --duration: 7.6s; --delay: 3.4s;"></span>
+    <span class="beam-line" style="--x: 71%; --duration: 9.5s; --delay: 3s;"></span>
+    <span class="beam-line" style="--x: 86%; --duration: 6.8s; --delay: 1.8s;"></span>
+    <span class="particle" style="--x: 12%; --y: 22%; --size: 3px; --duration: 8s; --delay: 0s;"></span>
+    <span class="particle" style="--x: 28%; --y: 68%; --size: 2px; --duration: 10s; --delay: 1.2s;"></span>
+    <span class="particle" style="--x: 45%; --y: 30%; --size: 4px; --duration: 9s; --delay: 2.4s;"></span>
+    <span class="particle" style="--x: 60%; --y: 78%; --size: 2px; --duration: 7.5s; --delay: 0.6s;"></span>
+    <span class="particle" style="--x: 68%; --y: 18%; --size: 3px; --duration: 11s; --delay: 3.6s;"></span>
+    <span class="particle" style="--x: 80%; --y: 55%; --size: 2px; --duration: 8.5s; --delay: 1.8s;"></span>
+    <span class="particle" style="--x: 90%; --y: 30%; --size: 3px; --duration: 9.5s; --delay: 2.8s;"></span>
+    <span class="particle" style="--x: 35%; --y: 85%; --size: 2px; --duration: 10.5s; --delay: 4.2s;"></span>
+    <span class="particle" style="--x: 52%; --y: 55%; --size: 3px; --duration: 7.8s; --delay: 1.5s;"></span>
+  </div>
+  <div class="hero-fx-fade" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-center">
       <div class="hero-content">
@@ -19,21 +37,30 @@
           <!-- Subtitle: ac17d09 -->
           <p
             class="hero-subtitle animate-on-scroll"
-            data-animation="fadeIn"
-            data-delay="300"
-            style="--anim-duration: 1000ms"
+            data-animation="fadeInUp"
+            data-delay="100"
+            style="--anim-duration: 700ms"
           >
             Simplify Events | Amplify Results
           </p>
           <!-- H1: 67a1a19 -->
-          <h1 class="hero-title">
-            The AI-Powered Event Management Platform
-            for Every Event
-          </h1>
+          <h1
+            class="hero-title animate-on-scroll"
+            data-animation="fadeInUp"
+            data-delay="250"
+            style="--anim-duration: 800ms"
+          >Launch Your Entire Event
+<span class="hero-title-gradient">in Minutes, </span><span class="hero-title-black">Not Hours</span></h1>
         </div>
         <!-- Button container: 906c86b -->
-        <div class="hero-cta">
+        <div
+          class="hero-cta animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay="450"
+          style="--anim-duration: 700ms"
+        >
           <a href="/book-a-demo/" class="hero-button">Request a demo</a>
+          <a href="#" class="hero-button hero-button-outline">See EventHex in Action</a>
         </div>
       </div>
     </div>
@@ -44,18 +71,97 @@
   /* c6735b9 — outer section */
   .hero-outer {
     position: relative;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 900px 520px at 4% 52%, rgba(55, 93, 251, 0.18) 0%, rgba(55, 93, 251, 0.10) 34%, rgba(55, 93, 251, 0) 72%),
+      radial-gradient(ellipse 760px 460px at 94% 18%, rgba(255, 116, 184, 0.22) 0%, rgba(255, 116, 184, 0.10) 40%, rgba(255, 116, 184, 0) 78%),
+      radial-gradient(ellipse 900px 560px at 88% 92%, rgba(130, 170, 255, 0.20) 0%, rgba(130, 170, 255, 0.10) 36%, rgba(130, 170, 255, 0) 76%),
+      linear-gradient(135deg, rgba(245, 248, 255, 0.96) 0%, rgba(255, 255, 255, 0.82) 44%, rgba(250, 242, 255, 0.94) 100%),
+      #ffffff;
     margin-top: -90px;
     padding: 0 0 220px 0;
   }
 
   /* 2e95e2d — inner with Frame bg */
   .hero-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
     padding: 160px 0 0 0;
+  }
+
+  /* Fades the rising beams/particles out before they hit the sticky navbar, instead of a hard clip */
+  .hero-fx-fade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 140px;
+    background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* decorative beams — thin vertical guide lines with a glowing streak rising bottom-to-top */
+  .hero-fx {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .beam-line {
+    position: absolute;
+    left: var(--x);
+    bottom: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to top, transparent 0%, rgba(190, 195, 230, 0.16) 12%, rgba(190, 195, 230, 0.24) 45%, rgba(190, 195, 230, 0.08) 75%, transparent 100%);
+  }
+  .beam-line::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -140px;
+    width: 2px;
+    height: 140px;
+    transform: translateX(-50%);
+    background: linear-gradient(to top, transparent, rgba(120, 170, 255, 0.7) 50%, transparent 100%);
+    animation: beam-rise var(--duration) linear infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes beam-rise {
+    0% { bottom: -140px; opacity: 0; }
+    30% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { bottom: 100%; opacity: 0; }
+  }
+
+  /* soft floating white dot particles */
+  .particle {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+    animation: particle-drift var(--duration) ease-in-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes particle-drift {
+    0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+    50% { transform: translate(10px, -14px); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .particle { animation: none; }
+    .beam-line::after { animation: none; opacity: 0; }
   }
 
   /* 8228008 — centering wrapper */
@@ -69,6 +175,8 @@
 
   /* e547529 — content box, boxed 670px, gap 32px */
   .hero-content {
+    position: relative;
+    z-index: 1;
     max-width: 670px;
     width: 100%;
     display: flex;
@@ -79,13 +187,29 @@
     margin: 0;
   }
 
+  /* white mesh-gradient glow behind text — soft blurred blobs, no box edge, blends into outer bg */
+  .hero-content::before {
+    content: "";
+    position: absolute;
+    inset: -160px -200px;
+    z-index: -1;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0) 55%),
+      radial-gradient(circle at 68% 22%, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0) 52%),
+      radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 60%),
+      radial-gradient(circle at 22% 76%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 50%),
+      radial-gradient(circle at 78% 72%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 50%);
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
   /* 02bf690 — text group, gap 16px */
   .hero-text {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 0;
     width: 100%;
   }
 
@@ -106,20 +230,33 @@
     font-family: var(--font-heading);
     font-size: 52px;
     line-height: 60px;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: -1px;
     color: var(--heading-dark);
     text-align: center;
     max-width: 748px;
-    margin: 0;
+    margin: 18px 0 0 0;
     align-self: center;
     white-space: pre-line;
+  }
+
+  .hero-title-gradient {
+    background: linear-gradient(90deg, #2563eb, #60a5fa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-title-black {
+    color: #000;
   }
 
   /* 906c86b — cta container */
   .hero-cta {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 16px;
     width: 100%;
   }
 
@@ -129,20 +266,31 @@
     align-items: center;
     justify-content: center;
     font-family: var(--font-body);
-    font-size: 15px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
     font-weight: 600;
     letter-spacing: -0.48px;
     color: #fff;
     background: var(--brand-blue);
     border-radius: 10px;
-    padding: 12px 32px;
+    padding: 9px 22px;
     text-decoration: none;
     transition: transform 0.3s, background 0.3s;
     align-self: center;
   }
   .hero-button:hover {
     background: var(--brand-blue-hover);
+    transform: scale(1.05);
+  }
+
+  /* outline variant — stroke only, no fill */
+  .hero-button-outline {
+    background: transparent;
+    color: #6b7280;
+    border: 1px solid #6b7280;
+  }
+  .hero-button-outline:hover {
+    background: rgba(107, 114, 128, 0.06);
     transform: scale(1.05);
   }
 
@@ -161,6 +309,24 @@
     .hero-inner { padding: 120px 0 0 0; }
     .hero-subtitle { font-size: 16px; line-height: 1.1em; width: 70%; }
     .hero-title { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
-    .hero-button { font-size: 14px; padding: 8px 10px; }
+    .hero-cta { flex-direction: row; justify-content: center; gap: 10px; }
+    .hero-button { font-size: 13px; padding: 8px 14px; flex: 0 1 auto; }
+
+    /* Stop the text-glow blur from bleeding past the buttons and washing over the
+       dashboard image below — was extending 60px past hero-content's bottom edge. */
+    .hero-content::before {
+      inset: -160px -80px 0px -80px;
+    }
+
+    /* Push the bottom-right glow blob down past hero-outer's edge so it merges into
+       dark-section's overlap instead of washing over the white area above the image. */
+    .hero-outer {
+      background:
+        radial-gradient(ellipse 900px 520px at 4% 52%, rgba(55, 93, 251, 0.18) 0%, rgba(55, 93, 251, 0.10) 34%, rgba(55, 93, 251, 0) 72%),
+        radial-gradient(ellipse 760px 460px at 94% 18%, rgba(255, 116, 184, 0.22) 0%, rgba(255, 116, 184, 0.10) 40%, rgba(255, 116, 184, 0) 78%),
+        radial-gradient(ellipse 900px 560px at 88% 140%, rgba(130, 170, 255, 0.20) 0%, rgba(130, 170, 255, 0.10) 36%, rgba(130, 170, 255, 0) 76%),
+        linear-gradient(135deg, rgba(245, 248, 255, 0.96) 0%, rgba(255, 255, 255, 0.82) 44%, rgba(250, 242, 255, 0.94) 100%),
+        #ffffff;
+    }
   }
 </style>
