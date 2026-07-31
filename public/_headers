@@ -1,0 +1,33 @@
+# Cloudflare Workers static-asset headers.
+# Astro copies public/ into dist/, which is the `assets.directory` in wrangler.jsonc.
+# Without these, every asset is served `max-age=0, must-revalidate`, so repeat
+# visitors re-validate all ~80 requests on each page view.
+
+# Astro build output is content-hashed (index.Cazf8x5V.css) — the filename changes
+# whenever the bytes change, so these are safe to cache permanently.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts are versioned by filename and effectively never change in place.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Media is not content-hashed, so keep a long TTL but allow background refresh
+# rather than pinning it as immutable.
+/feature-images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/blog-images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/animations/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/icons/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/brand/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
