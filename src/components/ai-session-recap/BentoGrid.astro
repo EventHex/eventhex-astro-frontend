@@ -1,118 +1,57 @@
 ---
+import { asrbIllustrations as ill } from "./illustrations";
+
 const tabs = [
   {
     label: "AI Summaries",
     hero: {
-      eyebrow: "Recap Engine",
       title: "Auto-generate session summaries, key takeaways, and speaker quotes in real-time",
       desc: "InstaRecap processes live audio, extracts core insights, and assembles structured recaps without manual note-taking or post-event editing.",
-      points: ["Instant AI summaries", "Speaker quote extraction", "Multi-language output"],
       visual: "summary",
     },
     cards: [
-      {
-        eyebrow: "Core output",
-        title: "Auto Session Summaries",
-        desc: "Full session recaps generated from audio transcription with structured highlights and topic breakdowns.",
-        visual: "doc",
-      },
-      {
-        eyebrow: "Insight extraction",
-        title: "Key Takeaways",
-        desc: "AI identifies the most actionable points from each session and surfaces them in a scannable list.",
-        visual: "takeaway",
-      },
-      {
-        eyebrow: "Attribution",
-        title: "Speaker Quotes",
-        desc: "Notable quotes are automatically tagged to the correct speaker with timestamp references.",
-        visual: "quote",
-      },
-      {
-        eyebrow: "Classification",
-        title: "Topic Classification",
-        desc: "Sessions are auto-tagged by topic, track, and theme for searchable post-event content libraries.",
-        visual: "tag",
-      },
+      { title: "Auto Session Summaries", desc: "Full session recaps generated from audio transcription with structured highlights and topic breakdowns.", visual: "doc" },
+      { title: "Key Takeaways", desc: "AI identifies the most actionable points from each session and surfaces them in a scannable list.", visual: "takeaway" },
+      { title: "Speaker Quotes", desc: "Notable quotes are automatically tagged to the correct speaker with timestamp references.", visual: "quote" },
+      { title: "Topic Classification", desc: "Sessions are auto-tagged by topic, track, and theme for searchable post-event content libraries.", visual: "tag" },
     ],
   },
   {
     label: "Engagement Analytics",
     hero: {
-      eyebrow: "Audience Intelligence",
       title: "Track session engagement from ratings and attendance to Q&A highlights",
       desc: "Give organizers and speakers a complete picture of how each session performed with real-time engagement data and post-session analytics.",
-      points: ["Live attendance tracking", "Q&A highlight extraction", "Engagement heatmaps"],
       visual: "analytics",
     },
     cards: [
-      {
-        eyebrow: "Feedback loop",
-        title: "Session Ratings",
-        desc: "Collect and display attendee ratings per session for immediate speaker and organizer feedback.",
-        visual: "rating",
-      },
-      {
-        eyebrow: "Capacity insight",
-        title: "Attendance Tracking",
-        desc: "Real-time and post-event attendance numbers per session, room, and track.",
-        visual: "attend",
-      },
-      {
-        eyebrow: "Audience voice",
-        title: "Q&A Highlights",
-        desc: "Top questions from each session surfaced automatically in the recap alongside speaker responses.",
-        visual: "qa",
-      },
-      {
-        eyebrow: "Interaction data",
-        title: "Engagement Heatmap",
-        desc: "Visual timeline showing when audience engagement peaked during each session.",
-        visual: "heatmap",
-      },
+      { title: "Session Ratings", desc: "Collect and display attendee ratings per session for immediate speaker and organizer feedback.", visual: "rating" },
+      { title: "Attendance Tracking", desc: "Real-time and post-event attendance numbers per session, room, and track.", visual: "attend" },
+      { title: "Q&A Highlights", desc: "Top questions from each session surfaced automatically in the recap alongside speaker responses.", visual: "qa" },
+      { title: "Engagement Heatmap", desc: "Visual timeline showing when audience engagement peaked during each session.", visual: "heatmap" },
     ],
   },
   {
     label: "Distribution",
     hero: {
-      eyebrow: "Content Delivery",
       title: "Distribute session recaps through email, web pages, social, and API",
       desc: "Every recap becomes a multi-channel content asset — delivered as email digests, shareable web pages, social snippets, and downloadable PDFs.",
-      points: ["Auto email digests", "Shareable recap pages", "API access for integrations"],
       visual: "distribute",
     },
     cards: [
-      {
-        eyebrow: "Auto delivery",
-        title: "Email Digest",
-        desc: "Attendees receive personalized recap emails with summaries and links to full session pages.",
-        visual: "email",
-      },
-      {
-        eyebrow: "Social reach",
-        title: "Social Snippets",
-        desc: "Pre-formatted session highlight cards optimized for LinkedIn, X, and Instagram sharing.",
-        visual: "social",
-      },
-      {
-        eyebrow: "Offline access",
-        title: "PDF Reports",
-        desc: "Export branded session recap PDFs for sponsors, speakers, and internal stakeholders.",
-        visual: "pdf",
-      },
-      {
-        eyebrow: "Developer access",
-        title: "API Access",
-        desc: "Programmatic access to recap data, transcripts, and analytics for custom integrations.",
-        visual: "api",
-      },
+      { title: "Email Digest", desc: "Attendees receive personalized recap emails with summaries and links to full session pages.", visual: "email" },
+      { title: "Social Snippets", desc: "Pre-formatted session highlight cards optimized for LinkedIn, X, and Instagram sharing.", visual: "social" },
+      { title: "PDF Reports", desc: "Export branded session recap PDFs for sponsors, speakers, and internal stakeholders.", visual: "pdf" },
+      { title: "API Access", desc: "Programmatic access to recap data, transcripts, and analytics for custom integrations.", visual: "api" },
     ],
   },
 ];
+
+const ICON = '<svg class="asrb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
+const layouts = ["a", "b", "c"];
 ---
 
 <section class="asrb-section" id="asr-bento">
-  <div class="asrb-shell">
+  <div class="asrb">
     <h2 class="asrb-title">
       AI <b>Transcription</b>, Session Analytics & <b>Distribution</b>
     </h2>
@@ -121,224 +60,36 @@ const tabs = [
       email, web, and social without leaving the EventHex workflow.
     </p>
 
-    <nav class="asrb-nav" aria-label="AI session recap workflows">
-      {tabs.map((tab, index) => (
-        <button
-          class={`asrb-tab${index === 0 ? " asrb-tab--active" : ""}`}
-          data-asrb-tab={index}
-          aria-selected={index === 0 ? "true" : "false"}
-          type="button"
-        >
-          {tab.label}
-        </button>
+    <nav class="asrb-nav">
+      {tabs.map((t, i) => (
+        <button class={`asrb-tab ${i === 0 ? "asrb-tab--active" : ""}`} data-asrb-tab={String(i)}>{t.label}</button>
       ))}
     </nav>
 
-    {tabs.map((tab, tabIndex) => (
-      <div
-        class={`asrb-panel${tabIndex === 0 ? " asrb-panel--active" : ""}`}
-        data-asrb-panel={tabIndex}
-      >
-        <div class="asrb-grid">
-          <article class="asrb-card asrb-card--hero" style={`--card-delay:${0.04}s;`}>
-            <div class="asrb-card__content">
-              <span class="asrb-card__eyebrow">{tab.hero.eyebrow}</span>
-              <h3 class="asrb-card__title">{tab.hero.title}</h3>
-              <p class="asrb-card__desc">{tab.hero.desc}</p>
-
-              <ul class="asrb-point-list">
-                {tab.hero.points.map((point) => <li>{point}</li>)}
-              </ul>
-            </div>
-
-            <div class={`asrb-art asrb-art--hero asrb-art--${tab.hero.visual}`} aria-hidden="true">
-              {tab.hero.visual === "summary" && (
-                <Fragment>
-                  <div class="asrb-doc-stack">
-                    <div class="asrb-doc asrb-doc--one">
-                      <div class="asrb-doc__bar"></div>
-                      <div class="asrb-doc__lines">
-                        <span></span><span></span><span></span><span></span>
-                      </div>
-                    </div>
-                    <div class="asrb-doc asrb-doc--two">
-                      <div class="asrb-doc__bar"></div>
-                      <div class="asrb-doc__lines">
-                        <span></span><span></span><span></span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="asrb-ai-chip">AI Summary Ready</div>
-                  <div class="asrb-lang-pill">25+ languages</div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "analytics" && (
-                <Fragment>
-                  <div class="asrb-chart-frame">
-                    <div class="asrb-chart-bars">
-                      <span style="--h:60%"></span>
-                      <span style="--h:85%"></span>
-                      <span style="--h:45%"></span>
-                      <span style="--h:92%"></span>
-                      <span style="--h:70%"></span>
-                      <span style="--h:55%"></span>
-                    </div>
-                    <div class="asrb-chart-label">Session engagement</div>
-                  </div>
-                  <div class="asrb-rating-chip">
-                    <strong>4.8</strong>
-                    <span>avg rating</span>
-                  </div>
-                </Fragment>
-              )}
-
-              {tab.hero.visual === "distribute" && (
-                <Fragment>
-                  <div class="asrb-channel-grid">
-                    <div class="asrb-channel asrb-channel--email">
-                      <span>Email</span>
-                      <strong>Auto-sent</strong>
-                    </div>
-                    <div class="asrb-channel asrb-channel--web">
-                      <span>Web Page</span>
-                      <strong>SEO-ready</strong>
-                    </div>
-                    <div class="asrb-channel asrb-channel--social">
-                      <span>Social</span>
-                      <strong>Share cards</strong>
-                    </div>
-                  </div>
-                  <div class="asrb-api-pill">API connected</div>
-                </Fragment>
-              )}
-            </div>
-          </article>
-
-          {tab.cards.map((card, cardIndex) => (
-            <article class="asrb-card asrb-card--mini" style={`--card-delay:${(cardIndex + 1) * 0.08}s;`}>
-              <div class="asrb-card__content">
-                <span class="asrb-card__eyebrow">{card.eyebrow}</span>
-                <h3 class="asrb-card__title">{card.title}</h3>
-                <p class="asrb-card__desc">{card.desc}</p>
+    {tabs.map((t, tabIdx) => (
+      <div class={`asrb-panel ${tabIdx === 0 ? "asrb-panel--active" : ""}`} data-asrb-panel={String(tabIdx)}>
+        <div class="asrb-grid" data-layout={layouts[tabIdx % 3]}>
+          <div class="asrb-card asrb-card--tall asrb-pos-0" style="animation-delay:0s">
+            <div class="asrb-card__inner">
+              <div class="asrb-card__text">
+                <Fragment set:html={ICON} />
+                <h3 class="asrb-card__title">{t.hero.title}</h3>
+                <p class="asrb-card__desc">{t.hero.desc}</p>
               </div>
-
-              <div class={`asrb-art asrb-art--mini asrb-art--${card.visual}`} aria-hidden="true">
-                {card.visual === "doc" && (
-                  <Fragment>
-                    <div class="asrb-mini-doc">
-                      <div class="asrb-mini-doc__head"></div>
-                      <div class="asrb-mini-doc__rows"><span></span><span></span><span></span></div>
-                    </div>
-                    <div class="asrb-mini-chip">Summary</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "takeaway" && (
-                  <Fragment>
-                    <div class="asrb-checklist">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <div class="asrb-mini-chip">3 key points</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "quote" && (
-                  <Fragment>
-                    <div class="asrb-quote-block">
-                      <div class="asrb-quote-mark">"</div>
-                      <div class="asrb-quote-lines"><span></span><span></span></div>
-                    </div>
-                    <div class="asrb-mini-chip">Speaker attributed</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "tag" && (
-                  <Fragment>
-                    <div class="asrb-tag-cloud">
-                      <span>AI</span><span>Keynote</span><span>Strategy</span>
-                    </div>
-                    <div class="asrb-mini-chip">Auto-tagged</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "rating" && (
-                  <Fragment>
-                    <div class="asrb-stars">
-                      <span></span><span></span><span></span><span></span><span class="asrb-stars--half"></span>
-                    </div>
-                    <div class="asrb-mini-chip">4.8 / 5</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "attend" && (
-                  <Fragment>
-                    <div class="asrb-people-row">
-                      <span></span><span></span><span></span><span></span>
-                    </div>
-                    <div class="asrb-mini-chip">342 attended</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "qa" && (
-                  <Fragment>
-                    <div class="asrb-qa-bubbles">
-                      <div class="asrb-qa-q"></div>
-                      <div class="asrb-qa-a"></div>
-                    </div>
-                    <div class="asrb-mini-chip">Top questions</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "heatmap" && (
-                  <Fragment>
-                    <div class="asrb-heatmap-grid">
-                      <span style="--o:0.3"></span><span style="--o:0.5"></span><span style="--o:0.9"></span>
-                      <span style="--o:1"></span><span style="--o:0.7"></span><span style="--o:0.4"></span>
-                    </div>
-                    <div class="asrb-mini-chip">Peak at 12:15</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "email" && (
-                  <Fragment>
-                    <div class="asrb-envelope">
-                      <div class="asrb-envelope__flap"></div>
-                      <div class="asrb-envelope__body"></div>
-                    </div>
-                    <div class="asrb-mini-chip">Auto-delivered</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "social" && (
-                  <Fragment>
-                    <div class="asrb-social-cards">
-                      <span></span><span></span><span></span>
-                    </div>
-                    <div class="asrb-mini-chip">Share-ready</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "pdf" && (
-                  <Fragment>
-                    <div class="asrb-pdf-icon">
-                      <span>PDF</span>
-                    </div>
-                    <div class="asrb-mini-chip">Branded export</div>
-                  </Fragment>
-                )}
-
-                {card.visual === "api" && (
-                  <Fragment>
-                    <div class="asrb-api-block">
-                      <span class="asrb-api-curl">GET /recaps</span>
-                      <div class="asrb-api-response"><span></span><span></span></div>
-                    </div>
-                    <div class="asrb-mini-chip">REST API</div>
-                  </Fragment>
-                )}
+              <div class="asrb-card__img" set:html={ill[t.hero.visual]} />
+            </div>
+          </div>
+          {t.cards.map((c, ci) => (
+            <div class={`asrb-card asrb-card--sm asrb-pos-${ci + 1}`} style={`animation-delay:${((ci + 1) * 0.06).toFixed(2)}s`}>
+              <div class="asrb-card__inner asrb-card__inner--row">
+                <div class="asrb-card__text">
+                  <Fragment set:html={ICON} />
+                  <h3 class="asrb-card__title">{c.title}</h3>
+                  <p class="asrb-card__desc">{c.desc}</p>
+                </div>
+                <div class="asrb-card__img asrb-card__img--sm" set:html={ill[c.visual]} />
               </div>
-            </article>
+            </div>
           ))}
         </div>
       </div>
@@ -346,29 +97,29 @@ const tabs = [
   </div>
 </section>
 
-<script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".asrb-shell").forEach((root) => {
-      const tabs = Array.from(root.querySelectorAll(".asrb-tab"));
-      const panels = Array.from(root.querySelectorAll(".asrb-panel"));
+<script>
+  const asrbTabs = Array.from(document.querySelectorAll('[data-asrb-tab]'));
+  const asrbPanels = Array.from(document.querySelectorAll('[data-asrb-panel]'));
+  let asrbActive = 0;
+  let asrbInterval: ReturnType<typeof setInterval>;
 
-      const activate = (index) => {
-        tabs.forEach((tab, tabIndex) => {
-          const selected = tabIndex === index;
-          tab.classList.toggle("asrb-tab--active", selected);
-          tab.setAttribute("aria-selected", selected ? "true" : "false");
-        });
-
-        panels.forEach((panel, panelIndex) => {
-          panel.classList.toggle("asrb-panel--active", panelIndex === index);
-        });
-      };
-
-      tabs.forEach((tab, index) => {
-        tab.addEventListener("click", () => activate(index));
-      });
-    });
-  });
+  function setAsrbTab(index: number) {
+    asrbTabs.forEach((t) => t.classList.remove('asrb-tab--active'));
+    asrbPanels.forEach((p) => p.classList.remove('asrb-panel--active'));
+    asrbTabs[index]?.classList.add('asrb-tab--active');
+    asrbPanels[index]?.classList.add('asrb-panel--active');
+    asrbActive = index;
+  }
+  function startAsrb() {
+    asrbInterval = setInterval(() => setAsrbTab((asrbActive + 1) % asrbTabs.length), 5000);
+  }
+  asrbTabs.forEach((tab, i) => tab.addEventListener('click', () => { setAsrbTab(i); clearInterval(asrbInterval); startAsrb(); }));
+  startAsrb();
+  const asrbSection = document.querySelector('.asrb-section');
+  if (asrbSection) {
+    asrbSection.addEventListener('mouseenter', () => clearInterval(asrbInterval));
+    asrbSection.addEventListener('mouseleave', () => startAsrb());
+  }
 </script>
 
 <style>
@@ -376,666 +127,144 @@ const tabs = [
     padding: 80px 0 60px;
     background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
   }
-
-  .asrb-shell {
-    max-width: 1260px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
+  .asrb { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
   .asrb-title {
     font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -1px;
-    text-align: center;
-    color: var(--heading-dark);
-    margin: 0 0 12px;
+    font-size: 42px; font-weight: 400; line-height: 1.1; letter-spacing: -1px;
+    text-align: center; color: var(--heading-dark); margin: 0 0 12px;
   }
-
   .asrb-title b { font-weight: 700; }
-
   .asrb-subtitle {
-    font-family: var(--font-body);
-    font-size: 18px;
-    line-height: 1.6;
-    color: var(--subheading-gray);
-    text-align: center;
-    max-width: 620px;
-    margin: 0 auto 32px;
+    font-family: var(--font-body); font-size: 18px; line-height: 1.6;
+    color: var(--subheading-gray); text-align: center; max-width: 620px; margin: 0 auto 40px;
   }
 
   .asrb-nav {
-    display: flex;
-    justify-content: center;
-    background: #F0F2F5;
-    border-radius: 50px;
-    padding: 4px;
-    margin: 0 auto 32px;
-    max-width: 560px;
-    gap: 4px;
+    display: flex; justify-content: center; gap: 0;
+    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
   }
-
   .asrb-tab {
-    flex: 1;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    background: transparent;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
-    color: #475467;
-    cursor: pointer;
-    transition: background 0.25s, color 0.25s, box-shadow 0.25s;
+    background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
+    cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
   }
-
-  .asrb-tab:hover,
-  .asrb-tab:focus-visible {
-    color: #16327b;
-    outline: none;
-  }
-
+  .asrb-tab:hover { background: rgba(55,93,251,.08); }
   .asrb-tab--active {
-    background: var(--brand-blue);
-    color: #ffffff;
-    box-shadow: 0 2px 8px rgba(55, 93, 251, 0.3);
+    background: var(--brand-blue) !important; color: #fff !important;
+    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
 
   .asrb-panel { display: none; }
-  .asrb-panel--active { display: block; }
+  .asrb-panel--active { display: block; animation: asrbFadeUp 0.4s ease; }
+  @keyframes asrbFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   .asrb-grid {
-    display: grid;
-    grid-template-columns: 1.35fr 1fr 1fr;
-    grid-template-areas:
-      "hero mini1 mini2"
-      "hero mini3 mini4";
-    gap: 1rem;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: 14px; height: 460px;
   }
+  .asrb-pos-0 { grid-column: 1; grid-row: 1 / 3; }
+  .asrb-pos-1 { grid-column: 2; grid-row: 1; }
+  .asrb-pos-2 { grid-column: 3; grid-row: 1; }
+  .asrb-pos-3 { grid-column: 2; grid-row: 2; }
+  .asrb-pos-4 { grid-column: 3; grid-row: 2; }
+  [data-layout="b"] .asrb-pos-0 { grid-column: 3; grid-row: 1 / 3; }
+  [data-layout="b"] .asrb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="b"] .asrb-pos-2 { grid-column: 2; grid-row: 1; }
+  [data-layout="b"] .asrb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="b"] .asrb-pos-4 { grid-column: 2; grid-row: 2; }
+  [data-layout="c"] .asrb-pos-0 { grid-column: 2; grid-row: 1 / 3; }
+  [data-layout="c"] .asrb-pos-1 { grid-column: 1; grid-row: 1; }
+  [data-layout="c"] .asrb-pos-2 { grid-column: 3; grid-row: 1; }
+  [data-layout="c"] .asrb-pos-3 { grid-column: 1; grid-row: 2; }
+  [data-layout="c"] .asrb-pos-4 { grid-column: 3; grid-row: 2; }
 
-  .asrb-panel--active .asrb-card {
-    animation: asrb-fade-up 0.6s ease both;
-    animation-delay: var(--card-delay, 0s);
-  }
-
+  @property --asrb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .asrb-card {
     position: relative;
-    overflow: hidden;
-    display: grid;
-    gap: 1rem;
-    border-radius: 1.75rem;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(166, 186, 255, 0.62);
-    box-shadow: 0 30px 70px -48px rgba(27, 55, 142, 0.45);
-    min-height: 205px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
+    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0; animation: asrbCardIn 0.5s ease forwards;
   }
-
   .asrb-card::after {
-    content: "";
-    position: absolute;
-    inset: auto -20% -45% 35%;
-    height: 70%;
-    background: radial-gradient(circle, rgba(55, 93, 251, 0.14), transparent 70%);
-    pointer-events: none;
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: conic-gradient(from var(--asrb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
-
-  .asrb-card--hero {
-    grid-area: hero;
-    align-content: space-between;
-    padding: 1.5rem;
-    min-height: 430px;
+  .asrb-card:hover {
+    transform: translateY(-3px); box-shadow: 0 8px 32px rgba(55,93,251,0.12); border-color: rgba(55,93,251,0.15);
   }
+  .asrb-card:hover::after { opacity: 1; animation: asrbBorder 2.4s linear infinite; }
+  @keyframes asrbBorder { to { --asrb-angle: 360deg; } }
+  @keyframes asrbCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  .asrb-pos-1 { animation-delay: 0.06s; }
+  .asrb-pos-2 { animation-delay: 0.12s; }
+  .asrb-pos-3 { animation-delay: 0.18s; }
+  .asrb-pos-4 { animation-delay: 0.24s; }
 
-  .asrb-card--mini {
-    padding: 1.2rem;
-    grid-template-rows: auto 1fr;
-  }
-
-  .asrb-card--mini:nth-of-type(2) { grid-area: mini1; }
-  .asrb-card--mini:nth-of-type(3) { grid-area: mini2; }
-  .asrb-card--mini:nth-of-type(4) { grid-area: mini3; }
-  .asrb-card--mini:nth-of-type(5) { grid-area: mini4; }
-
-  .asrb-card__content { position: relative; z-index: 1; }
-
-  .asrb-card__eyebrow {
-    display: inline-flex;
-    padding: 0.38rem 0.7rem;
-    border-radius: 999px;
-    background: rgba(18, 34, 74, 0.06);
-    color: #45608e;
-    font-size: 0.74rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
+  .asrb-card__inner { display: flex; flex-direction: column; height: 100%; }
+  .asrb-card__inner--row { flex-direction: row; }
+  .asrb-card__text { display: flex; flex-direction: column; gap: 6px; }
+  .asrb-card--tall .asrb-card__text { padding: 20px 20px 8px; }
+  .asrb-card--sm .asrb-card__text { padding: 20px 8px 20px 20px; flex: 1 1 55%; }
+  .asrb-card__icon { margin-bottom: 8px; flex-shrink: 0; }
   .asrb-card__title {
-    margin: 0.85rem 0 0.55rem;
-    font-size: clamp(1.1rem, 1.4vw, 1.5rem);
-    line-height: 1.18;
-    color: #14213b;
+    font-family: var(--font-heading); font-size: 22px; font-weight: 700; line-height: 1.3;
+    color: var(--heading-dark); margin: 0 0 6px;
   }
+  .asrb-card--sm .asrb-card__title { font-size: 17px; }
+  .asrb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
+  .asrb-card--sm .asrb-card__desc { font-size: 13px; }
 
-  .asrb-card__desc {
-    margin: 0;
-    color: #566884;
-    line-height: 1.65;
-    font-size: 0.96rem;
+  .asrb-card__img {
+    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
+    background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%);
   }
-
-  .asrb-point-list {
-    list-style: none;
-    margin: 1rem 0 0;
-    padding: 0;
-    display: grid;
-    gap: 0.7rem;
+  .asrb-card--tall .asrb-card__img { flex: 1; padding: 0 12px; min-height: 0; }
+  .asrb-card--sm .asrb-card__img { flex: 0 0 42%; padding: 8px 8px 0 0; }
+  .asrb-card__img :global(svg) {
+    width: 100%; height: auto; max-width: none;
+    filter: drop-shadow(0 8px 16px rgba(31,52,128,.12));
+    transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease;
   }
-
-  .asrb-point-list li {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    color: #243a61;
-    font-weight: 600;
+  .asrb-card:hover .asrb-card__img :global(svg) {
+    transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18));
+    animation: asrbFloat 2.2s ease-in-out infinite;
   }
+  @keyframes asrbFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
 
-  .asrb-point-list li::before {
-    content: "";
-    flex: 0 0 0.6rem;
-    width: 0.6rem;
-    height: 0.6rem;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #22c55e, #38bdf8);
-    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.14);
-  }
-
-  .asrb-art { position: relative; z-index: 1; min-height: 146px; }
-  .asrb-art--hero { min-height: 228px; margin-top: 0.6rem; }
-  .asrb-art--mini { align-self: end; }
-
-  /* === Hero visuals === */
-  .asrb-doc-stack {
-    position: absolute;
-    inset: 0 12% auto 0;
-    height: 90%;
-  }
-
-  .asrb-doc {
-    position: absolute;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    padding: 1rem;
-    border-radius: 1.3rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    box-shadow: 0 22px 46px -36px rgba(17, 28, 56, 0.52);
-    animation: asrb-float 5.2s ease-in-out infinite;
-  }
-
-  .asrb-doc--one { top: 0; }
-  .asrb-doc--two { top: 5.5rem; left: 1.2rem; animation-delay: -0.7s; }
-
-  .asrb-doc__bar {
-    height: 0.5rem;
-    width: 40%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-  }
-
-  .asrb-doc__lines {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
-  .asrb-doc__lines span {
-    display: block;
-    height: 0.4rem;
-    border-radius: 999px;
-    background: rgba(55, 93, 251, 0.08);
-  }
-
-  .asrb-doc__lines span:nth-child(odd) { width: 90%; }
-  .asrb-doc__lines span:nth-child(even) { width: 70%; }
-
-  .asrb-ai-chip,
-  .asrb-lang-pill,
-  .asrb-rating-chip,
-  .asrb-api-pill,
-  .asrb-mini-chip {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.55rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.92);
-    color: #183465;
-    font-size: 0.78rem;
-    font-weight: 700;
-    box-shadow: 0 18px 36px -24px rgba(18, 34, 74, 0.45);
-  }
-
-  .asrb-ai-chip {
-    position: absolute;
-    right: 0;
-    bottom: 2.8rem;
-  }
-
-  .asrb-lang-pill {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-
-  /* Analytics hero */
-  .asrb-chart-frame {
-    position: absolute;
-    inset: 0 0 2.4rem 0;
-    padding: 1rem;
-    border-radius: 1.3rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .asrb-chart-bars {
-    flex: 1;
-    display: flex;
-    align-items: flex-end;
-    gap: 0.5rem;
-    padding-top: 0.5rem;
-  }
-
-  .asrb-chart-bars span {
-    flex: 1;
-    height: var(--h, 50%);
-    border-radius: 0.5rem 0.5rem 0 0;
-    background: linear-gradient(180deg, #375dfb, #38bdf8);
-    opacity: 0.75;
-    animation: asrb-float 4s ease-in-out infinite;
-  }
-
-  .asrb-chart-bars span:nth-child(2) { animation-delay: -0.5s; }
-  .asrb-chart-bars span:nth-child(3) { animation-delay: -1s; }
-  .asrb-chart-bars span:nth-child(4) { animation-delay: -1.5s; }
-  .asrb-chart-bars span:nth-child(5) { animation-delay: -2s; }
-  .asrb-chart-bars span:nth-child(6) { animation-delay: -2.5s; }
-
-  .asrb-chart-label {
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: #45608e;
-  }
-
-  .asrb-rating-chip {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    gap: 0.4rem;
-    align-items: baseline;
-  }
-
-  .asrb-rating-chip strong { font-size: 1.1rem; color: #183465; }
-  .asrb-rating-chip span { font-size: 0.72rem; color: #607390; }
-
-  /* Distribution hero */
-  .asrb-channel-grid {
-    position: absolute;
-    inset: 0 0 2.4rem 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.6rem;
-  }
-
-  .asrb-channel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    padding: 1rem 0.5rem;
-    border-radius: 1.2rem;
-    background: linear-gradient(180deg, #ffffff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.12);
-    animation: asrb-float 5s ease-in-out infinite;
-  }
-
-  .asrb-channel--web { animation-delay: -0.8s; }
-  .asrb-channel--social { animation-delay: -1.6s; }
-
-  .asrb-channel span { font-size: 0.72rem; color: #607390; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-  .asrb-channel strong { font-size: 0.88rem; color: #183465; }
-
-  .asrb-api-pill {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    background: rgba(34, 197, 94, 0.14);
-    color: #1f5131;
-  }
-
-  /* === Mini card visuals === */
-  .asrb-mini-doc {
-    position: absolute;
-    inset: 0.4rem 0.8rem auto;
-    padding: 0.8rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .asrb-mini-doc__head {
-    height: 0.4rem;
-    width: 45%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #375dfb, #38bdf8);
-    margin-bottom: 0.5rem;
-  }
-
-  .asrb-mini-doc__rows { display: flex; flex-direction: column; gap: 0.3rem; }
-  .asrb-mini-doc__rows span { display: block; height: 0.3rem; border-radius: 999px; background: rgba(55, 93, 251, 0.08); }
-  .asrb-mini-doc__rows span:nth-child(1) { width: 90%; }
-  .asrb-mini-doc__rows span:nth-child(2) { width: 75%; }
-  .asrb-mini-doc__rows span:nth-child(3) { width: 60%; }
-
-  .asrb-mini-chip {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    font-size: 0.72rem;
-  }
-
-  .asrb-checklist {
-    position: absolute;
-    inset: 0.4rem 0.8rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-
-  .asrb-checklist span {
-    display: flex;
-    align-items: center;
-    height: 1.6rem;
-    padding: 0 0.6rem;
-    border-radius: 0.7rem;
-    background: rgba(34, 197, 94, 0.08);
-    position: relative;
-  }
-
-  .asrb-checklist span::before {
-    content: "";
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background: #22c55e;
-  }
-
-  .asrb-checklist span::after {
-    content: "";
-    flex: 1;
-    height: 0.3rem;
-    margin-left: 0.5rem;
-    border-radius: 999px;
-    background: rgba(34, 197, 94, 0.12);
-  }
-
-  .asrb-quote-block {
-    position: absolute;
-    inset: 0.4rem 0.8rem auto;
-    padding: 0.8rem;
-    border-radius: 1rem;
-    background: linear-gradient(180deg, #f8fbff, #edf3ff);
-    border: 1px solid rgba(55, 93, 251, 0.1);
-    border-left: 3px solid #375dfb;
-  }
-
-  .asrb-quote-mark {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    line-height: 1;
-    color: #375dfb;
-    opacity: 0.4;
-  }
-
-  .asrb-quote-lines { display: flex; flex-direction: column; gap: 0.3rem; }
-  .asrb-quote-lines span { display: block; height: 0.3rem; border-radius: 999px; background: rgba(55, 93, 251, 0.08); }
-  .asrb-quote-lines span:first-child { width: 85%; }
-  .asrb-quote-lines span:last-child { width: 60%; }
-
-  .asrb-tag-cloud {
-    position: absolute;
-    inset: 0.5rem 0.5rem auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
-  .asrb-tag-cloud span {
-    display: inline-flex;
-    padding: 0.35rem 0.6rem;
-    border-radius: 999px;
-    font-size: 0.72rem;
-    font-weight: 700;
-    background: rgba(55, 93, 251, 0.08);
-    color: #375dfb;
-  }
-
-  .asrb-tag-cloud span:nth-child(2) { background: rgba(34, 197, 94, 0.08); color: #16a34a; }
-  .asrb-tag-cloud span:nth-child(3) { background: rgba(245, 158, 11, 0.1); color: #a16207; }
-
-  .asrb-stars {
-    position: absolute;
-    inset: 0.6rem 0 auto;
-    display: flex;
-    gap: 0.3rem;
-    justify-content: center;
-  }
-
-  .asrb-stars span {
-    width: 1.2rem;
-    height: 1.2rem;
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    background: #f59e0b;
-  }
-
-  .asrb-stars--half {
-    background: linear-gradient(90deg, #f59e0b 50%, rgba(245, 158, 11, 0.2) 50%) !important;
-  }
-
-  .asrb-people-row {
-    position: absolute;
-    inset: 0.8rem 0 auto;
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-
-  .asrb-people-row span {
-    width: 1.8rem;
-    height: 2.6rem;
-    border-radius: 999px 999px 0.5rem 0.5rem;
-    background: linear-gradient(180deg, rgba(55, 93, 251, 0.35), rgba(55, 93, 251, 0.12));
-  }
-
-  .asrb-people-row span:nth-child(2) { height: 3rem; }
-  .asrb-people-row span:nth-child(3) { height: 2.2rem; }
-
-  .asrb-qa-bubbles {
-    position: absolute;
-    inset: 0.5rem 0.8rem auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .asrb-qa-q,
-  .asrb-qa-a {
-    height: 1.6rem;
-    border-radius: 1rem;
-    background: rgba(55, 93, 251, 0.1);
-  }
-
-  .asrb-qa-q { width: 78%; border-bottom-left-radius: 0.3rem; }
-  .asrb-qa-a { width: 65%; align-self: flex-end; background: rgba(34, 197, 94, 0.1); border-bottom-right-radius: 0.3rem; }
-
-  .asrb-heatmap-grid {
-    position: absolute;
-    inset: 0.5rem 0.5rem auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0.35rem;
-  }
-
-  .asrb-heatmap-grid span {
-    display: block;
-    aspect-ratio: 1.5;
-    border-radius: 0.5rem;
-    background: #375dfb;
-    opacity: var(--o, 0.5);
-  }
-
-  .asrb-envelope {
-    position: absolute;
-    left: 50%;
-    top: 0.5rem;
-    transform: translateX(-50%);
-    width: 4rem;
-    height: 2.8rem;
-  }
-
-  .asrb-envelope__body {
-    position: absolute;
-    inset: 0.8rem 0 0;
-    border-radius: 0 0 0.8rem 0.8rem;
-    background: linear-gradient(180deg, #edf3ff, #d9e4ff);
-    border: 1px solid rgba(55, 93, 251, 0.14);
-  }
-
-  .asrb-envelope__flap {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1.4rem;
-    clip-path: polygon(0 0, 50% 100%, 100% 0);
-    background: linear-gradient(180deg, #375dfb, #38bdf8);
-    opacity: 0.4;
-  }
-
-  .asrb-social-cards {
-    position: absolute;
-    inset: 0.5rem 0.5rem auto;
-    display: flex;
-    gap: 0.4rem;
-  }
-
-  .asrb-social-cards span {
-    flex: 1;
-    aspect-ratio: 0.85;
-    border-radius: 0.7rem;
-    background: linear-gradient(145deg, rgba(55, 93, 251, 0.18), rgba(34, 197, 94, 0.12));
-    border: 1px solid rgba(55, 93, 251, 0.1);
-  }
-
-  .asrb-social-cards span:nth-child(2) { background: linear-gradient(145deg, rgba(159, 129, 255, 0.2), rgba(55, 93, 251, 0.12)); }
-  .asrb-social-cards span:nth-child(3) { background: linear-gradient(145deg, rgba(245, 158, 11, 0.18), rgba(55, 93, 251, 0.1)); }
-
-  .asrb-pdf-icon {
-    position: absolute;
-    left: 50%;
-    top: 0.6rem;
-    transform: translateX(-50%);
-    width: 3rem;
-    height: 3.8rem;
-    border-radius: 0.6rem;
-    background: linear-gradient(180deg, #fef2f2, #fee2e2);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 0.4rem;
-  }
-
-  .asrb-pdf-icon span {
-    font-size: 0.65rem;
-    font-weight: 800;
-    color: #dc2626;
-    letter-spacing: 0.06em;
-  }
-
-  .asrb-api-block {
-    position: absolute;
-    inset: 0.4rem 0.5rem auto;
-    padding: 0.6rem 0.7rem;
-    border-radius: 0.8rem;
-    background: #1a2340;
-  }
-
-  .asrb-api-curl {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    font-family: monospace;
-    color: #38bdf8;
-    margin-bottom: 0.3rem;
-  }
-
-  .asrb-api-response { display: flex; flex-direction: column; gap: 0.2rem; }
-  .asrb-api-response span { display: block; height: 0.25rem; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
-  .asrb-api-response span:first-child { width: 80%; }
-  .asrb-api-response span:last-child { width: 55%; }
-
-  @keyframes asrb-fade-up {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes asrb-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-
-  @media (max-width: 960px) {
+  @media (max-width: 1024px) {
     .asrb-section { padding: 60px 0 48px; }
     .asrb-title { font-size: 36px; }
-    .asrb-grid {
-      grid-template-columns: 1fr 1fr;
-      grid-template-areas:
-        "hero hero"
-        "mini1 mini2"
-        "mini3 mini4";
-    }
-    .asrb-card--hero { min-height: 380px; }
+    .asrb-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
+    .asrb-pos-0 { grid-column: 1 / -1; grid-row: auto; }
+    .asrb-pos-1, .asrb-pos-2, .asrb-pos-3, .asrb-pos-4 { grid-column: auto; grid-row: auto; }
+    [data-layout="b"] .asrb-pos-0, [data-layout="c"] .asrb-pos-0 { grid-column: 1 / -1; }
+    [data-layout="b"] .asrb-pos-1, [data-layout="b"] .asrb-pos-2, [data-layout="b"] .asrb-pos-3, [data-layout="b"] .asrb-pos-4,
+    [data-layout="c"] .asrb-pos-1, [data-layout="c"] .asrb-pos-2, [data-layout="c"] .asrb-pos-3, [data-layout="c"] .asrb-pos-4 { grid-column: auto; grid-row: auto; }
+    .asrb-card--tall .asrb-card__inner { flex-direction: row; }
+    .asrb-card--tall .asrb-card__text { flex: 1; }
+    .asrb-card--tall .asrb-card__img { flex: 0 0 36%; padding: 12px; }
   }
-
-  @media (max-width: 720px) {
-    .asrb-section { padding-inline: 0; }
-    .asrb-nav { gap: 4px; flex-direction: column; border-radius: 16px; max-width: 300px; }
-    .asrb-tab { width: 100%; justify-content: center; border-radius: 12px; }
+  @media (max-width: 767px) {
     .asrb-title { font-size: 28px; }
     .asrb-subtitle { font-size: 15px; }
-    .asrb-grid {
-      grid-template-columns: 1fr;
-      grid-template-areas: "hero" "mini1" "mini2" "mini3" "mini4";
-    }
-    .asrb-card { min-height: 210px; }
-    .asrb-card--hero { min-height: 420px; }
+    .asrb-nav { flex-direction: column; width: 100%; max-width: 300px; border-radius: 16px; }
+    .asrb-tab { border-radius: 12px; }
+    .asrb-grid { grid-template-columns: 1fr; }
+    .asrb-pos-0, .asrb-pos-1, .asrb-pos-2, .asrb-pos-3, .asrb-pos-4,
+    [data-layout="b"] .asrb-pos-0, [data-layout="b"] .asrb-pos-1, [data-layout="b"] .asrb-pos-2, [data-layout="b"] .asrb-pos-3, [data-layout="b"] .asrb-pos-4,
+    [data-layout="c"] .asrb-pos-0, [data-layout="c"] .asrb-pos-1, [data-layout="c"] .asrb-pos-2, [data-layout="c"] .asrb-pos-3, [data-layout="c"] .asrb-pos-4 { grid-column: 1; grid-row: auto; }
+    .asrb-card--sm .asrb-card__inner, .asrb-card--tall .asrb-card__inner { flex-direction: row; }
+    .asrb-card--sm .asrb-card__text, .asrb-card--tall .asrb-card__text { padding: 14px 6px 14px 14px; flex: 1 1 60%; }
+    .asrb-card--sm .asrb-card__img, .asrb-card--tall .asrb-card__img { flex: 0 0 38%; padding: 4px 4px 0 0; align-items: flex-end; justify-content: flex-end; }
   }
-
   @media (prefers-reduced-motion: reduce) {
-    .asrb-panel--active .asrb-card,
-    .asrb-doc,
-    .asrb-chart-bars span,
-    .asrb-channel { animation: none; }
+    .asrb-card { animation: none !important; opacity: 1; transform: none; }
+    .asrb-card:hover::after { animation: none !important; }
+    .asrb-card:hover .asrb-card__img :global(svg) { animation: none !important; transform: none; }
   }
 </style>

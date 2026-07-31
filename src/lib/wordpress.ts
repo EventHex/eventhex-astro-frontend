@@ -130,6 +130,9 @@ async function fetchAPI<T>(endpoint: string, params: Record<string, string> = {}
   const url = new URL(`${WP_API}${endpoint}`);
   Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
 
+  // 5-minute rotating cache buster to prevent Cloudflare edge-caching old responses indefinitely
+  url.searchParams.set("_cb", String(Math.floor(Date.now() / 300000)));
+
   const cacheKey = url.toString();
   const cached = getCached<T>(cacheKey);
   if (cached) return cached;
@@ -228,6 +231,81 @@ async function fetchAllEntries<T>(endpoint: string, fields: string): Promise<T[]
 export interface WPSitemapEntry {
   slug: string;
   modified: string;
+}
+
+// Case Studies
+
+export interface WPCaseStudyMeta {
+  cs_client_name: string;
+  cs_industry: string;
+  cs_result_headline: string;
+  cs_quote: string;
+  cs_quote_author: string;
+  cs_metrics: string; // JSON string: [{label:string,value:string}]
+  cs_logo_url: string;
+}
+
+export interface WPCaseStudy extends WPBaseEntry {
+  meta: WPCaseStudyMeta;
+}
+
+export interface CaseStudyMetric {
+  label: string;
+  value: string;
+}
+
+export interface CaseStudy {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt: string;
+  contentHtml: string;
+  image: { src: string; alt: string } | null;
+  clientName: string;
+  industry: string;
+  resultHeadline: string;
+  quote: string;
+  quoteAuthor: string;
+  metrics: CaseStudyMetric[];
+  logoUrl: string;
+}
+
+function normalizeCaseStudy(raw: WPCaseStudy): CaseStudy {
+  const media = raw._embedded?.["wp:featuredmedia"]?.[0];
+  const image = media ? { src: media.source_url, alt: media.alt_text || raw.title.rendered } : null;
+
+  let metrics: CaseStudyMetric[] = [];
+  try {
+    metrics = JSON.parse(raw.meta.cs_metrics || "[]");
+  } catch {
+    metrics = [];
+  }
+
+  return {
+    id: raw.id,
+    slug: raw.slug,
+    title: raw.title.rendered,
+    excerpt: raw.excerpt?.rendered ?? "",
+    contentHtml: rewriteContentUrls(raw.content.rendered),
+    image,
+    clientName: raw.meta.cs_client_name || "",
+    industry: raw.meta.cs_industry || "",
+    resultHeadline: raw.meta.cs_result_headline || "",
+    quote: raw.meta.cs_quote || "",
+    quoteAuthor: raw.meta.cs_quote_author || "",
+    metrics,
+    logoUrl: raw.meta.cs_logo_url || "",
+  };
+}
+
+export async function getCaseStudies(params: Record<string, string> = {}): Promise<CaseStudy[]> {
+  const raw = await fetchAPI<WPCaseStudy[]>("/case-studies", { per_page: "100", _embed: "true", ...params });
+  return raw.map(normalizeCaseStudy);
+}
+
+export async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
+  const raw = await fetchAPI<WPCaseStudy[]>("/case-studies", { slug, _embed: "true" });
+  return raw[0] ? normalizeCaseStudy(raw[0]) : null;
 }
 
 export async function getAllPostSlugs(): Promise<WPSitemapEntry[]> {

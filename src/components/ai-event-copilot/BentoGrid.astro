@@ -699,10 +699,13 @@
   .aecb-grid[data-layout="c"] .aecb-pos-3 { grid-column: 2; grid-row: 2; }
   .aecb-grid[data-layout="c"] .aecb-pos-4 { grid-column: 3; grid-row: 1/3; }
 
+  @property --aecb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+
   .aecb-card {
     background: #f5f8ff;
     border: 1px solid #e8ecf2;
     border-radius: 20px;
+    position: relative;
     overflow: hidden;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -710,11 +713,17 @@
     animation: aecbCardIn 0.5s ease forwards;
   }
 
+  .aecb-card::before { content:""; position:absolute; inset:0; border-radius:inherit; padding:1.5px; background:conic-gradient(from var(--aecb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); mask-composite:exclude; opacity:0; transition:opacity .3s ease; pointer-events:none; z-index:2; }
+  .aecb-card:hover::before { opacity:1; animation:aecb-border 2.4s linear infinite; }
+  @keyframes aecb-border { to { --aecb-angle:360deg; } }
+
   .aecb-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 32px rgba(55, 93, 251, 0.08);
     border-color: rgba(55, 93, 251, 0.15);
   }
+
+  @media (prefers-reduced-motion: reduce) { .aecb-card:hover::before { animation: none !important; } }
 
   @keyframes aecbCardIn {
     from { opacity: 0; transform: translateY(14px); }
