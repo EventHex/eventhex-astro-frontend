@@ -42,25 +42,27 @@ const trustedLogos = [
       role="img"
       aria-label="Event registration dashboard overview"
     >
-      <LottiePlayer src="/animations/dashboard.json" eager />
+      <img
+        class="dashboard-poster"
+        src="/images/dashboard-poster.webp"
+        srcset="/images/dashboard-poster-640.webp 640w, /images/dashboard-poster-960.webp 960w, /images/dashboard-poster.webp 1280w"
+        sizes="(max-width: 767px) 85vw, 70vw"
+        alt=""
+        width="1280"
+        height="762"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <LottiePlayer src="/animations/dashboard.json" renderer="canvas" defer />
     </div>
   </div>
 
   <!-- Engagement text + star (52c97b5 → d3cf198) -->
   <div class="engagement-wrap">
     <div class="engagement-text-container">
-      <!-- Desktop: splitting letters effect (a70b33b) — we render as static text with color spans -->
-      <h2 class="engagement-heading engagement-heading--desktop type-heading">
-        <span class="text-gradient-blue">Everything your event needs </span>
-        <span class="text-purple-light">before, during, and after</span>
-        <span class="text-white"> in </span>
-        <span class="text-cyan">one dashboard</span>
-      </h2>
-      <!-- Mobile: regular heading (d044db7) -->
-      <h2 class="engagement-heading engagement-heading--mobile type-heading">
+      <h2 class="engagement-heading type-heading">
         <span class="text-gradient-blue">Everything your event needs</span>
-        <span style="color:#AFA3FF;"> before, during, and after</span>
-         in <span style="color:#AFA3FF;">one dashboard</span>
+        <span class="text-purple-light"> before, during, and after in one dashboard</span>
       </h2>
     </div>
     <div class="engagement-stats">
@@ -298,6 +300,28 @@ const trustedLogos = [
     transform: rotateX(var(--dashboard-tilt));
     transform-origin: center 25%;
     will-change: transform;
+    position: relative;
+    overflow: hidden;
+    border-radius: clamp(8px, 1.2vw, 18px);
+    background: #f4f6fb;
+  }
+  .dashboard-poster,
+  .dashboard-img :global(.lottie-container) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .dashboard-poster {
+    object-fit: cover;
+  }
+  .dashboard-img :global(.lottie-container) {
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 180ms ease;
+  }
+  .dashboard-img :global(.lottie-container.is-lottie-ready) {
+    opacity: 1;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -331,8 +355,6 @@ const trustedLogos = [
     text-align: center;
     margin: 0;
   }
-  .engagement-heading--desktop { display: block; }
-  .engagement-heading--mobile { display: none; }
   .text-white { color: #AFA3FF; }
   .text-purple-light { color: #AFA3FF; }
   .text-cyan { color: #AFA3FF; }
@@ -458,8 +480,7 @@ const trustedLogos = [
     .dashboard-img { width: 85%; }
     .engagement-wrap { padding: 90px 15px 96px; }
     .engagement-text-container { width: 100%; }
-    .engagement-heading--desktop { display: none; }
-    .engagement-heading--mobile { display: block; font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
+    .engagement-heading { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
     .engagement-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px 20px; margin-top: 32px; justify-items: center; }
     .stat-value { font-size: 26px; }
     .stat-label { font-size: 12px; }

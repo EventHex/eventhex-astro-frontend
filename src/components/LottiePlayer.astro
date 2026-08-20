@@ -14,18 +14,22 @@ interface Props {
   class?: string;
   /** Load immediately without waiting for intersection (for above-the-fold) */
   eager?: boolean;
+  /** Render JSON animations to canvas instead of generating a large SVG DOM */
+  renderer?: "svg" | "canvas";
+  /** Wait for visibility plus user interaction before loading the animation */
+  defer?: boolean;
   /** Extra data-* attributes forwarded to the container */
   [key: `data-${string}`]: string;
 }
 
-const { src, class: className, eager, ...rest } = Astro.props;
+const { src, class: className, eager, renderer = "svg", defer, ...rest } = Astro.props;
 const isDotLottie = src.endsWith(".lottie");
 ---
 
 {isDotLottie ? (
-  <canvas class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></canvas>
+  <canvas class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...(defer ? {"data-lottie-defer": ""} : {})} {...rest}></canvas>
 ) : (
-  <div class:list={["lottie-container", className]} data-lottie-src={src} {...(eager ? {"data-lottie-eager": ""} : {})} {...rest}></div>
+  <div class:list={["lottie-container", className]} data-lottie-src={src} data-lottie-renderer={renderer} {...(eager ? {"data-lottie-eager": ""} : {})} {...(defer ? {"data-lottie-defer": ""} : {})} {...rest}></div>
 )}
 
 <script>
@@ -33,6 +37,12 @@ const isDotLottie = src.endsWith(".lottie");
   function getLottie() {
     if (!lottieLib) lottieLib = import("lottie-web/build/player/lottie_svg");
     return lottieLib;
+  }
+
+  let canvasLottieLib: Promise<typeof import("lottie-web")> | null = null;
+  function getCanvasLottie() {
+    if (!canvasLottieLib) canvasLottieLib = import("lottie-web");
+    return canvasLottieLib;
   }
 
   let dotLottieLib: Promise<typeof import("@lottiefiles/dotlottie-web")> | null = null;
@@ -56,17 +66,19 @@ const isDotLottie = src.endsWith(".lottie");
           });
         });
       } else {
+        const renderer = el.dataset.lottieRenderer === "canvas" ? "canvas" : "svg";
         Promise.all([
-          getLottie(),
+          renderer === "canvas" ? getCanvasLottie() : getLottie(),
           fetch(src).then((r) => r.json()),
         ]).then(([lottie, animationData]) => {
-          lottie.default.loadAnimation({
+          const animation = lottie.default.loadAnimation({
             container: el,
-            renderer: "svg",
+            renderer,
             loop: true,
             autoplay: !prefersReducedMotion,
             animationData,
           });
+          animation.addEventListener("DOMLoaded", () => el.classList.add("is-lottie-ready"));
         });
       }
     }
@@ -76,6 +88,32 @@ const isDotLottie = src.endsWith(".lottie");
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
+
+    document
+      .querySelectorAll<HTMLElement>("[data-lottie-src][data-lottie-defer]:not([data-lottie-observed])")
+      .forEach((el) => {
+        el.dataset.lottieObserved = "1";
+        if (prefersReducedMotion) return;
+
+        const observer = new IntersectionObserver((entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          observer.disconnect();
+
+          let started = false;
+          const events = ["pointerdown", "keydown", "touchstart", "scroll"];
+          const start = () => {
+            if (started) return;
+            started = true;
+            events.forEach((event) => window.removeEventListener(event, start));
+            window.clearTimeout(fallbackTimer);
+            loadLottie(el, false);
+          };
+          events.forEach((event) => window.addEventListener(event, start, { passive: true, once: true }));
+          const fallbackTimer = window.setTimeout(start, 10000);
+        }, { rootMargin: "0px" });
+
+        observer.observe(el);
+      });
 
     // Eager: start lottie import immediately + load in parallel
     const eagerEls = document.querySelectorAll<HTMLElement>(
@@ -103,7 +141,7 @@ const isDotLottie = src.endsWith(".lottie");
     );
 
     document
-      .querySelectorAll<HTMLElement>("[data-lottie-src]:not([data-lottie-eager])")
+      .querySelectorAll<HTMLElement>("[data-lottie-src]:not([data-lottie-eager]):not([data-lottie-defer])")
       .forEach((el) => observer.observe(el));
   }
 

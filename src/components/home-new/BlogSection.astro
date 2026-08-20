@@ -1,4 +1,6 @@
 ---
+import { decodeHtmlEntities } from "../../lib/editorial";
+
 // Source: Elementor Container ddefb0d (depth 0)
 // Background: Untitled-design-11.webp, boxed 1140px, padding 60px 0
 // Children:
@@ -69,13 +71,13 @@ try {
         : index === 2
         ? '/blog-images/registration-forms-friction.webp'
         : null;
-      const category = getFirstTerm(post, 'category') ?? 'Uncategorized';
+      const category = decodeHtmlEntities(getFirstTerm(post, 'category') ?? 'Uncategorized');
       const formattedDate = formatDate(post.date);
       const articleHref = `/blog/${post.slug}/`;
 
       return (
         <article class="blog-card">
-          <a href={articleHref} class="blog-card__img">
+          <a href={articleHref} class="blog-card__img" aria-label={decodeHtmlEntities(post.title.rendered)}>
             {(imageOverride || img) && (
               <img
                 src={imageOverride || img!.source_url}

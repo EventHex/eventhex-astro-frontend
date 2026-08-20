@@ -6,7 +6,6 @@ Allow: /
 Disallow: /wp-content/
 Disallow: /wp-json/
 Disallow: /wp-admin/
-Disallow: /_astro/
 
 # AI Crawlers
 User-agent: GPTBot

@@ -18,6 +18,9 @@ const aiCards = [
     desc: "Describe your event and get a full website, registration form, and SEO metadata — voice-powered form filling included.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/AI-website.png",
     visualImage: "/feature-images/ai/ai-website-builder.webp",
+    visualSrcSet: "/feature-images/ai/ai-website-builder-320.webp 320w, /feature-images/ai/ai-website-builder-480.webp 480w, /feature-images/ai/ai-website-builder.webp 640w",
+    visualWidth: 640,
+    visualHeight: 421,
     stats: [{ n: "No-Code", l: "Live in minutes" }, { n: "100%", l: "Mobile responsive" }],
     highlight: "No dev team? No problem — drag, drop, publish your event site in minutes.",
     href: "/ai-form-builder/",
@@ -28,18 +31,24 @@ const aiCards = [
     desc: "Live transcription with translation, AI summaries, and searchable recap pages delivered to every attendee's inbox.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/AI-voice-form.png",
     visualImage: "/feature-images/ai/ai-voice-form.webp",
+    visualSrcSet: "/feature-images/ai/ai-voice-form-320.webp 320w, /feature-images/ai/ai-voice-form-480.webp 480w, /feature-images/ai/ai-voice-form.webp 640w",
+    visualWidth: 640,
+    visualHeight: 531,
     stats: [{ n: "30+", l: "Languages" }, { n: "Instant", l: "Auto-translation" }],
     highlight: "Speak naturally — EventHex transcribes, translates, and fills the form for you.",
     href: "/ai-session-recap/",
   },
   {
     tag: "Photo AI",
-    title: "AI Photo Gallery — InstaSnap",
+    title: "AI Photo Gallery",
     desc: "Attendees upload a selfie and instantly receive every photo they appear in — watermarked, sponsor-branded, and ready to share. Partner spotlights with click & impression tracking built in.",
     image: "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png",
     visualImage: "/feature-images/ai/instasnap-ai.webp",
+    visualSrcSet: "/feature-images/ai/instasnap-ai-320.webp 320w, /feature-images/ai/instasnap-ai-480.webp 480w, /feature-images/ai/instasnap-ai.webp 640w",
+    visualWidth: 640,
+    visualHeight: 522,
     stats: [{ n: "Selfie", l: "Match search" }, { n: "Auto", l: "Edit & share" }],
-    highlight: "Attendees upload a selfie — InstaSnap finds every photo they're in, instantly.",
+    highlight: "Attendees upload a selfie — AI Photo Gallery finds every photo they're in, instantly.",
     href: "/ai-photo-gallery/",
   },
   {
@@ -108,7 +117,16 @@ const aiCards = [
           </div>
           {card.visualImage ? (
             <div class="card-visual card-visual--image">
-              <img src={card.visualImage} alt={card.title} loading="lazy" />
+              <img
+                src={card.visualImage}
+                srcset={card.visualSrcSet}
+                sizes={card.visualSrcSet ? "(max-width: 767px) 55vw, 45vw" : undefined}
+                width={card.visualWidth}
+                height={card.visualHeight}
+                alt={card.title}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           ) : (
             <div class="card-visual">
@@ -286,6 +304,7 @@ const aiCards = [
      header, so cards stack right below both instead of climbing over them. */
   .stacking-cards {
     --stack-top-base: 300px;
+    --stack-step: 20px;
     width: 100%;
     padding: 80px 0 0;
     position: relative;
@@ -298,7 +317,7 @@ const aiCards = [
   }
   .stacking-card {
     position: sticky;
-    top: calc(var(--stack-top-base) + var(--card-index) * 20px);
+    top: calc(var(--stack-top-base) + var(--card-index) * var(--stack-step));
     z-index: var(--card-index);
     display: flex;
     align-items: stretch;
@@ -496,6 +515,50 @@ const aiCards = [
     font-size: 14px;
     line-height: 1.5;
     color: rgba(255, 255, 255, 0.85);
+  }
+
+  @media (min-width: 1025px) and (max-height: 850px) {
+    .ai-header {
+      padding: 12px 0;
+    }
+    .ai-header-inner {
+      gap: 10px;
+    }
+    .ai-title {
+      font-size: 36px;
+    }
+    .stacking-cards {
+      --stack-top-base: 220px;
+      --stack-step: 12px;
+      padding-top: 40px;
+    }
+    .stacking-card {
+      height: clamp(400px, calc(100svh - 284px), 500px);
+      margin-bottom: 36px;
+    }
+    .card-content {
+      padding: 28px;
+      gap: 10px;
+    }
+    .card-title {
+      font-size: 30px;
+    }
+    .card-desc {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .card-btn {
+      padding: 10px 22px;
+    }
+    .card-stats {
+      padding-top: 8px;
+    }
+    .card-visual {
+      padding: 16px;
+    }
+    .stack-hold-spacer {
+      height: 120px;
+    }
   }
 
   /* Tablet */

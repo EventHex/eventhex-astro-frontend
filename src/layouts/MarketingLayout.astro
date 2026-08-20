@@ -94,7 +94,7 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=eventhex-blue-mark" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
@@ -134,26 +134,36 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
     {breadcrumbSchema && <script type="application/ld+json" set:html={breadcrumbSchema} />}
     <slot name="head" />
 
-    <!-- Google Consent Mode v2 defaults (MUST come before GTM) -->
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('consent', 'default', {
+    <!-- Google Consent Mode v2 defaults. GTM itself is loaded only after consent. -->
+    <script>
+      const eventHexWindow = window as typeof window & {
+        dataLayer?: unknown[];
+        gtag?: (...args: unknown[]) => void;
+        loadEventHexAnalytics?: () => void;
+        __eventHexAnalyticsLoaded?: boolean;
+      };
+
+      eventHexWindow.dataLayer = eventHexWindow.dataLayer || [];
+      eventHexWindow.gtag = (...args: unknown[]) => eventHexWindow.dataLayer?.push(args);
+      eventHexWindow.gtag('consent', 'default', {
         'analytics_storage': 'denied',
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied',
         'wait_for_update': 500
       });
-    </script>
 
-    <!-- Google Tag Manager -->
-    <script is:inline>
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-MLNN6CLD');
+      // Load Google Tag Manager only after analytics or marketing consent.
+      eventHexWindow.loadEventHexAnalytics = () => {
+        if (eventHexWindow.__eventHexAnalyticsLoaded) return;
+        eventHexWindow.__eventHexAnalyticsLoaded = true;
+        eventHexWindow.dataLayer?.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+        const firstScript = document.getElementsByTagName('script')[0];
+        const gtm = document.createElement('script');
+        gtm.async = true;
+        gtm.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MLNN6CLD';
+        firstScript.parentNode?.insertBefore(gtm, firstScript);
+      };
     </script>
   </head>
   <body>
