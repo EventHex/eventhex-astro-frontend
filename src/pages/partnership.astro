@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import FormSuccessDialog from "../components/shared/FormSuccessDialog.astro";
+import PhoneNumberField from "../components/shared/PhoneNumberField.astro";
 
 const title = "Partner With Us - EventHex";
 const description = "Partner with EventHex to co-sell, integrate, and deliver stronger event experiences together.";
@@ -87,10 +88,7 @@ const partnerBenefits = [
               <span>Work email *</span>
               <input type="email" name="email" autocomplete="email" required class="partner-form__input" />
             </label>
-            <label class="partner-form__field">
-              <span>Phone number *</span>
-              <input type="tel" name="phone" autocomplete="tel" required class="partner-form__input" />
-            </label>
+            <PhoneNumberField codeName="phone_country_code" phoneName="phone" required />
             <label class="partner-form__field">
               <span>Country *</span>
               <input type="text" name="country" autocomplete="country-name" required class="partner-form__input" />
@@ -529,6 +527,8 @@ const partnerBenefits = [
 
     const website = String(formData.get('website') || '').trim();
     const country = String(formData.get('country') || '').trim();
+    const phoneCode = String(formData.get('phone_country_code') || '').trim();
+    const phoneNumber = String(formData.get('phone') || '').trim();
     const goals = String(formData.get('goals') || '').trim();
     const partnerType = String(formData.get('partner_type') || '').trim();
 
@@ -536,7 +536,7 @@ const partnerBenefits = [
       'text-1': String(formData.get('company') || '').trim(),
       'name-1': String(formData.get('contact_name') || '').trim(),
       'email-1': String(formData.get('email') || '').trim(),
-      'phone-1': String(formData.get('phone') || '').trim(),
+      'phone-1': `${phoneCode} ${phoneNumber}`.trim(),
       'text-2': country,
       'url-1': website,
       'select-1': partnerType,

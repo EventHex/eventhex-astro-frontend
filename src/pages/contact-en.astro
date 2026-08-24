@@ -1,6 +1,7 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import FormSuccessDialog from "../components/shared/FormSuccessDialog.astro";
+import PhoneNumberField from "../components/shared/PhoneNumberField.astro";
 
 const title = "Contact Us - EventHex";
 const description = "Contact EventHex to elevate your events with cutting-edge AI technology. Offices in India, UAE, and Malaysia.";
@@ -70,10 +71,7 @@ const offices = [
               <span>Country</span>
               <input type="text" name="text-1" autocomplete="country-name" class="contact-form__input" />
             </label>
-            <label class="contact-form__field">
-              <span>Phone number *</span>
-              <input type="tel" name="phone-1" autocomplete="tel" required class="contact-form__input" />
-            </label>
+            <PhoneNumberField codeName="phone-country-code" phoneName="phone-1" required />
             <label class="contact-form__field">
               <span>How did you hear about us?</span>
               <select name="select-1" class="contact-form__input contact-form__select">
@@ -496,6 +494,10 @@ const offices = [
     for (const [key, val] of fd.entries()) {
       data[key] = val as string;
     }
+    const phoneCode = String(fd.get('phone-country-code') || '').trim();
+    const phoneNumber = String(fd.get('phone-1') || '').trim();
+    data['phone-1'] = `${phoneCode} ${phoneNumber}`.trim();
+    delete data['phone-country-code'];
     // Consent checkbox
     const cb = form.querySelector('[name="checkbox-1"]') as HTMLInputElement;
     if (cb?.checked) {
