@@ -1,14 +1,23 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
+import { requiresDemoApproval } from "../../lib/demo-booking-policy";
 
 export const prerender = false;
 
-const EVENT_TYPE_ID = 6130402; // Cal.com "30 min meeting"
+const DEFAULT_EVENT_TYPE_ID = 6130402; // Cal.com "30 min meeting"
+const DEFAULT_APPROVAL_EVENT_TYPE_ID = 6789162; // Cal.com approval-required demo
 
 // Astro v6 + Cloudflare: runtime secrets come from `cloudflare:workers` env.
 // (locals.runtime.env was removed.) Fall back to import.meta.env for local/non-worker.
 function readEnv(key: string): string | undefined {
   return (env as any)?.[key] ?? import.meta.env[key];
+}
+
+function readEventTypeId(key: string, fallback?: number): number | undefined {
+  const value = readEnv(key);
+  if (!value) return fallback;
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : undefined;
 }
 
 // Post-booking side effects (brochure email + CRM lead) must be AWAITED before
@@ -46,6 +55,19 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "Missing required fields" }, 400);
   }
 
+  let requiresConfirmation: boolean;
+  try {
+    requiresConfirmation = requiresDemoApproval(start);
+  } catch {
+    return json({ error: "Invalid start time" }, 400);
+  }
+  const eventTypeId = requiresConfirmation
+    ? readEventTypeId("CALCOM_DEMO_APPROVAL_EVENT_TYPE_ID", DEFAULT_APPROVAL_EVENT_TYPE_ID)
+    : readEventTypeId("CALCOM_DEMO_EVENT_TYPE_ID", DEFAULT_EVENT_TYPE_ID);
+  if (!eventTypeId) {
+    return json({ error: "That time is not available. Please choose another time." }, 503);
+  }
+
   const bookingFieldsResponses: Record<string, string> = { company };
   if (role) bookingFieldsResponses.role = role;
   if (notes) bookingFieldsResponses.notes = notes;
@@ -56,12 +78,12 @@ export const POST: APIRoute = async ({ request }) => {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,
-      "cal-api-version": "2024-08-13",
+      "cal-api-version": "2026-02-25",
       "content-type": "application/json",
     },
     body: JSON.stringify({
       start,
-      eventTypeId: EVENT_TYPE_ID,
+      eventTypeId,
       attendee: { name, email, timeZone, language: "en", ...(phone ? { phoneNumber: phone } : {}) },
       ...(guests.length ? { guests } : {}),
       bookingFieldsResponses,
@@ -80,7 +102,12 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const b = data?.data || {};
-  const meetingUrl = b.meetingUrl || b.location || null;
+  const rawStatus = String(b.status || "").toLowerCase();
+  const status = rawStatus === "pending" ? "pending" : rawStatus === "accepted" ? "accepted" : requiresConfirmation ? "pending" : "accepted";
+  if ((requiresConfirmation && status !== "pending") || (!requiresConfirmation && status !== "accepted")) {
+    console.error("Cal.com demo confirmation policy mismatch", { eventTypeId, requiresConfirmation, status });
+  }
+  const meetingUrl = status === "accepted" ? b.meetingUrl || b.location || null : null;
 
   // Post-booking side effects — AWAITED (see DISPATCH_TIMEOUT_MS note). Failures
   // are caught per-task so they can never break the confirmed booking.
@@ -89,7 +116,7 @@ export const POST: APIRoute = async ({ request }) => {
   // Branded pre-demo brochure email via the SaaS API (SES).
   const notifyUrl = readEnv("DEMO_NOTIFY_URL");
   const notifySecret = readEnv("DEMO_NOTIFY_SECRET");
-  if (notifyUrl && notifySecret) {
+  if (status === "accepted" && notifyUrl && notifySecret) {
     tasks.push(
       fetch(notifyUrl, {
         method: "POST",
@@ -105,7 +132,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (erpKey) {
     const erpUrl = readEnv("ERP_LEADS_URL") || "https://erp.datahex.co/api/v1/leads";
     const leadNotes = [
-      `Demo: ${b.start || start} (${timeZone || "UTC"})`,
+      `${status === "pending" ? "Demo request" : "Demo"}: ${b.start || start} (${timeZone || "UTC"})`,
       role ? `Role: ${role}` : "",
       meetingUrl ? `Meet: ${meetingUrl}` : "",
       notes ? `Notes: ${notes}` : "",
@@ -129,12 +156,15 @@ export const POST: APIRoute = async ({ request }) => {
             email,
             ...(phone ? { phone } : {}),
             source: readEnv("ERP_LEAD_SOURCE") || "Book a Demo",
-            stage: readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
+            stage:
+              status === "pending"
+                ? readEnv("ERP_PENDING_LEAD_STAGE") || "Demo Request Pending"
+                : readEnv("ERP_LEAD_STAGE") || "Demo Scheduled",
             leadType: readEnv("ERP_LEAD_TYPE") || "New Business",
             owner: readEnv("ERP_LEAD_OWNER") || "hamimbdm@eventhex.ai",
             priority: "medium",
             notes: leadNotes,
-            tags: ["book-a-demo"],
+            tags: ["book-a-demo", status === "pending" ? "demo-request-pending" : "demo-scheduled"],
           }),
           signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
         });
@@ -154,10 +184,12 @@ export const POST: APIRoute = async ({ request }) => {
         // 2. Log a timeline activity so the touch is visible in the CRM.
         //    Fail-soft: needs leads:update scope; skipped silently otherwise.
         if (leadId) {
-          const activityBody =
-            "Automated: booking confirmed — pre-demo brochure & confirmation email sent." +
-            (meetingUrl ? ` Google Meet: ${meetingUrl}.` : "") +
-            ` Demo: ${b.start || start}.`;
+          const activityBody = status === "pending"
+            ? `Automated: demo time requested; dashboard approval pending. Requested time: ${b.start || start}.`
+            :
+                "Automated: booking confirmed — pre-demo brochure & confirmation email sent." +
+                (meetingUrl ? ` Google Meet: ${meetingUrl}.` : "") +
+                ` Demo: ${b.start || start}.`;
           const act = await fetch(`${erpUrl}/${leadId}/activities`, {
             method: "POST",
             headers: authHeaders,
@@ -180,6 +212,8 @@ export const POST: APIRoute = async ({ request }) => {
     uid: b.uid,
     start: b.start,
     meetingUrl,
+    status,
+    requiresConfirmation,
   });
 };
 

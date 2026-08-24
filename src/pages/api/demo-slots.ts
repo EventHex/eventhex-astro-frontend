@@ -1,14 +1,15 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
+import { DEMO_HOST_TIME_ZONE, requiresDemoApproval } from "../../lib/demo-booking-policy";
 
 export const prerender = false;
 
-const EVENT_TYPE_ID = 6130402; // Cal.com "30 min meeting"
+const DEFAULT_EVENT_TYPE_ID = 6130402; // Cal.com "30 min meeting"
+const DEFAULT_APPROVAL_EVENT_TYPE_ID = 6789162; // Cal.com approval-required demo
 const WINDOW_DAYS = 7;
 // Fetch upstream in the host's timezone (availability is defined there). The
 // returned slot instants are absolute, so the browser regroups them into each
 // visitor's local timezone — which means ONE cached entry serves everyone.
-const UPSTREAM_TZ = "Asia/Calcutta";
 const STALE_MS = 60_000; // serve cached instantly, refresh in background after this
 
 // Astro v6 + Cloudflare: runtime secrets come from `cloudflare:workers` env.
@@ -16,9 +17,25 @@ function readEnv(key: string): string | undefined {
   return (env as any)?.[key] ?? import.meta.env[key];
 }
 
+function readEventTypeId(key: string, fallback?: number): number | undefined {
+  const value = readEnv(key);
+  if (!value) return fallback;
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : undefined;
+}
+
 export const GET: APIRoute = async ({ url, locals }) => {
   const apiKey = readEnv("CALCOM_API_KEY");
   if (!apiKey) return json({ error: "Scheduler not configured" }, 500);
+  const instantEventTypeId = readEventTypeId("CALCOM_DEMO_EVENT_TYPE_ID", DEFAULT_EVENT_TYPE_ID)!;
+  const approvalEventTypeId = readEventTypeId(
+    "CALCOM_DEMO_APPROVAL_EVENT_TYPE_ID",
+    DEFAULT_APPROVAL_EVENT_TYPE_ID,
+  );
+  const eventTypes = [
+    { id: instantEventTypeId, requiresConfirmation: false },
+    ...(approvalEventTypeId ? [{ id: approvalEventTypeId, requiresConfirmation: true }] : []),
+  ];
 
   // Bucket the requested window to a calendar date so the cache key is stable
   // (the client sends start=now for week 0, which would otherwise never cache).
@@ -31,28 +48,42 @@ export const GET: APIRoute = async ({ url, locals }) => {
   const end = new Date(bucketMidnight.getTime() + WINDOW_DAYS * 24 * 3600 * 1000);
 
   const cacheKey = new Request(
-    `https://slots.cache/${EVENT_TYPE_ID}/${bucket}`,
+    `https://slots.cache/${instantEventTypeId}-${approvalEventTypeId || "off"}/${bucket}`,
     { method: "GET" },
   );
   const cache: Cache | undefined = (globalThis as any).caches?.default;
 
   const buildFresh = async (): Promise<Response> => {
-    const api = new URL("https://api.cal.com/v2/slots");
-    api.searchParams.set("eventTypeId", String(EVENT_TYPE_ID));
-    api.searchParams.set("start", upstreamStart.toISOString());
-    api.searchParams.set("end", end.toISOString());
-    api.searchParams.set("timeZone", UPSTREAM_TZ);
+    const results = await Promise.all(
+      eventTypes.map(async (eventType) => {
+        const api = new URL("https://api.cal.com/v2/slots");
+        api.searchParams.set("eventTypeId", String(eventType.id));
+        api.searchParams.set("start", upstreamStart.toISOString());
+        api.searchParams.set("end", end.toISOString());
+        api.searchParams.set("timeZone", DEMO_HOST_TIME_ZONE);
 
-    const res = await fetch(api, {
-      headers: { Authorization: `Bearer ${apiKey}`, "cal-api-version": "2024-09-04" },
+        const res = await fetch(api, {
+          headers: { Authorization: `Bearer ${apiKey}`, "cal-api-version": "2024-09-04" },
+        });
+        if (!res.ok) throw new Error(`Cal.com slots ${res.status} for event type ${eventType.id}`);
+
+        const body = (await res.json()) as { data?: Record<string, { start: string }[]> };
+        return Object.values(body.data || {})
+          .flat()
+          .map((slot) => ({
+            start: slot.start,
+            requiresConfirmation: eventType.requiresConfirmation,
+          }))
+          .filter((slot) => requiresDemoApproval(slot.start) === slot.requiresConfirmation);
+      }),
+    ).catch((error) => {
+      console.error("Cal.com slots failed:", error);
+      return null;
     });
-    if (!res.ok) {
-      return json({ error: "Cal.com slots failed", status: res.status }, 502);
-    }
-    const body = (await res.json()) as { data?: Record<string, { start: string }[]> };
-    const slots = Object.values(body.data || {})
+    if (!results) return json({ error: "Cal.com slots failed" }, 502);
+
+    const slots = results
       .flat()
-      .map((s) => ({ start: s.start }))
       .sort((a, b) => (a.start < b.start ? -1 : 1));
 
     const payload = { rangeStart: bucketMidnight.toISOString(), rangeEnd: end.toISOString(), slots };

@@ -113,6 +113,9 @@ const canonical = "https://eventhex.ai/book-a-demo/";
               Choose another time
             </button>
             <p class="ehx-confirm__when" id="ehx-confirm-when"></p>
+            <p class="ehx-confirm__note" id="ehx-confirm-note" hidden>
+              This time requires confirmation from our team before it is booked.
+            </p>
 
             <form class="ehx-form" id="ehx-form" novalidate>
               <div class="ehx-form__grid">
@@ -764,6 +767,16 @@ const canonical = "https://eventhex.ai/book-a-demo/";
     color: #b42318;
   }
 
+  .ehx-confirm__note {
+    margin: -8px 0 20px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fff7e6;
+    color: #8a4b08;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
   @media (max-width: 480px) {
     .ehx-days {
       grid-template-columns: repeat(7, minmax(40px, 1fr));
@@ -789,12 +802,14 @@ const canonical = "https://eventhex.ai/book-a-demo/";
     const confirmEl = document.getElementById("ehx-confirm")!;
     const backBtn = document.getElementById("ehx-back")!;
     const whenEl = document.getElementById("ehx-confirm-when")!;
+    const confirmNoteEl = document.getElementById("ehx-confirm-note")!;
     const slotsHead = document.getElementById("ehx-slots-head")!;
     const formEl = document.getElementById("ehx-form") as HTMLFormElement;
     const formMsgEl = document.getElementById("ehx-form-msg")!;
     const submitBtn = document.getElementById("ehx-submit") as HTMLButtonElement;
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
     let selectedStart: string | null = null;
+    let selectedRequiresConfirmation = false;
 
     function track(event: string, data: Record<string, unknown> = {}) {
       // GTM / GA4
@@ -835,16 +850,18 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       );
     }
 
-    function book(slot: { start: string }) {
+    function book(slot: { start: string; requiresConfirmation?: boolean }) {
       selectedStart = slot.start;
+      selectedRequiresConfirmation = !!slot.requiresConfirmation;
       whenEl.innerHTML = slotLabel(slot.start);
+      confirmNoteEl.hidden = !selectedRequiresConfirmation;
       // reset confirm UI
       formEl.reset();
       formMsgEl.textContent = "";
       formMsgEl.classList.remove("is-err");
       submitBtn.disabled = false;
       submitBtn.classList.remove("is-loading");
-      submitBtn.textContent = "Confirm booking";
+      submitBtn.textContent = selectedRequiresConfirmation ? "Request this time" : "Confirm booking";
       // swap picker -> our confirm form
       pickEl.style.display = "none";
       weekEl.style.display = "none";
@@ -880,7 +897,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       }
       submitBtn.disabled = true;
       submitBtn.classList.add("is-loading");
-      submitBtn.textContent = "Confirming your slot…";
+      submitBtn.textContent = selectedRequiresConfirmation ? "Sending your request…" : "Confirming your slot…";
       formMsgEl.textContent = "";
       // Clarity segmentation tags (no-op if Clarity absent)
       const cl = (window as any).clarity;
@@ -888,7 +905,10 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         cl("set", "demo_company", company);
         if (role) cl("set", "demo_role", role);
       }
-      track("demo_booking_submitted", { slot_start: selectedStart });
+      track("demo_booking_submitted", {
+        slot_start: selectedStart,
+        confirmation_mode: selectedRequiresConfirmation ? "requested" : "instant",
+      });
       try {
         const r = await fetch("/api/book-demo", {
           method: "POST",
@@ -899,12 +919,15 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         if (!r.ok || !data.ok) throw new Error(data.error || "Booking failed");
         // Conversion event fires on the thank-you page.
         const when = data.start || selectedStart;
-        window.location.href = "/book-a-demo/thank-you/?at=" + encodeURIComponent(when);
+        const status = data.status === "pending" ? "pending" : "accepted";
+        window.location.href =
+          "/book-a-demo/thank-you/?at=" + encodeURIComponent(when) +
+          "&status=" + encodeURIComponent(status);
         return;
       } catch (err: any) {
         submitBtn.disabled = false;
         submitBtn.classList.remove("is-loading");
-        submitBtn.textContent = "Confirm booking";
+        submitBtn.textContent = selectedRequiresConfirmation ? "Request this time" : "Confirm booking";
         formMsgEl.textContent = err?.message || "Something went wrong. Please try again.";
         formMsgEl.classList.add("is-err");
       }
@@ -976,7 +999,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       }
 
       byDate = {};
-      (data.slots || []).forEach((s: { start: string }) => {
+      (data.slots || []).forEach((s: { start: string; requiresConfirmation?: boolean }) => {
         const k = localKey(new Date(s.start));
         (byDate[k] = byDate[k] || []).push(s);
       });
