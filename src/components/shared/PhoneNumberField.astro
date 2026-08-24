@@ -1,37 +1,40 @@
 ---
+import { phoneCountries } from "../../lib/phone-country-codes";
+
 interface Props {
   codeName: string;
   phoneName: string;
   required?: boolean;
-  defaultCode?: string;
 }
 
-const {
-  codeName,
-  phoneName,
-  required = false,
-  defaultCode = "+91",
-} = Astro.props;
+const { codeName, phoneName, required = false } = Astro.props;
 
-const codeListId = `${codeName}-suggestions`;
+const countryFlag = (country: string) =>
+  [...country.toUpperCase()]
+    .map((character) => String.fromCodePoint(127397 + character.charCodeAt(0)))
+    .join("");
 ---
 
 <fieldset class="ehf-phone-field">
   <legend>Phone number{required ? " *" : ""}</legend>
   <div class="ehf-phone-field__control">
-    <input
+    <select
       class="ehf-phone-field__code"
-      type="tel"
       name={codeName}
-      value={defaultCode}
-      list={codeListId}
-      inputmode="tel"
       autocomplete="tel-country-code"
       aria-label="Country code"
-      pattern="[+][0-9]{1,4}"
-      title="Enter a country code such as +91"
       required={required}
-    />
+      data-geo-phone-code
+    >
+      <option value="" selected>Select code</option>
+      {
+        phoneCountries.map(({ country, dial, name }) => (
+          <option value={dial} data-country={country}>
+            {countryFlag(country)} {dial} · {name}
+          </option>
+        ))
+      }
+    </select>
     <span class="ehf-phone-field__divider" aria-hidden="true"></span>
     <input
       class="ehf-phone-field__number"
@@ -44,23 +47,70 @@ const codeListId = `${codeName}-suggestions`;
       required={required}
     />
   </div>
-  <datalist id={codeListId}>
-    <option value="+91">India</option>
-    <option value="+971">United Arab Emirates</option>
-    <option value="+973">Bahrain</option>
-    <option value="+966">Saudi Arabia</option>
-    <option value="+974">Qatar</option>
-    <option value="+965">Kuwait</option>
-    <option value="+968">Oman</option>
-    <option value="+1">United States / Canada</option>
-    <option value="+44">United Kingdom</option>
-    <option value="+60">Malaysia</option>
-    <option value="+65">Singapore</option>
-    <option value="+61">Australia</option>
-    <option value="+49">Germany</option>
-    <option value="+33">France</option>
-  </datalist>
 </fieldset>
+
+<script>
+  interface GeoCountryResponse {
+    country?: string | null;
+  }
+
+  interface GeoWindow extends Window {
+    __eventhexGeoCountry?: Promise<string | null>;
+  }
+
+  const getVisitorCountry = () => {
+    const geoWindow = window as GeoWindow;
+
+    if (!geoWindow.__eventhexGeoCountry) {
+      geoWindow.__eventhexGeoCountry = fetch("/api/geo-country", {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+        .then(async (response) => {
+          if (!response.ok) return null;
+
+          const payload = (await response.json()) as GeoCountryResponse;
+          const country = payload.country?.toUpperCase() ?? null;
+
+          return country && /^[A-Z]{2}$/.test(country) ? country : null;
+        })
+        .catch(() => null);
+    }
+
+    return geoWindow.__eventhexGeoCountry;
+  };
+
+  const initializePhoneCountry = async () => {
+    const selects = Array.from(
+      document.querySelectorAll<HTMLSelectElement>(
+        "select[data-geo-phone-code]:not([data-geo-initialized])",
+      ),
+    );
+
+    if (selects.length === 0) return;
+    selects.forEach((select) => (select.dataset.geoInitialized = "true"));
+
+    const country = await getVisitorCountry();
+    if (!country) return;
+
+    selects.forEach((select) => {
+      if (select.value) return;
+
+      const option = Array.from(select.options).find(
+        (candidate) => candidate.dataset.country === country,
+      );
+
+      if (!option) return;
+      select.selectedIndex = option.index;
+      select.dataset.detectedCountry = country;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  };
+
+  initializePhoneCountry();
+  document.addEventListener("astro:page-load", initializePhoneCountry);
+</script>
 
 <style>
   .ehf-phone-field {
@@ -81,7 +131,7 @@ const codeListId = `${codeName}-suggestions`;
 
   .ehf-phone-field__control {
     display: grid;
-    grid-template-columns: 78px 1px minmax(0, 1fr);
+    grid-template-columns: 140px 1px minmax(0, 1fr);
     align-items: center;
     min-width: 0;
     border: 1px solid #e8ecf2;
@@ -110,7 +160,12 @@ const codeListId = `${codeName}-suggestions`;
   }
 
   .ehf-phone-field__code {
-    padding-right: 8px;
+    appearance: none;
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23868C98' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    cursor: pointer;
     font-weight: 650;
   }
 
