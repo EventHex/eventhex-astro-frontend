@@ -1,6 +1,10 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
-import { DEMO_HOST_TIME_ZONE, requiresDemoApproval } from "../../lib/demo-booking-policy";
+import {
+  DEMO_HOST_TIME_ZONE,
+  isDemoSlotBookable,
+  requiresDemoApproval,
+} from "../../lib/demo-booking-policy";
 
 export const prerender = false;
 
@@ -74,7 +78,11 @@ export const GET: APIRoute = async ({ url, locals }) => {
             start: slot.start,
             requiresConfirmation: eventType.requiresConfirmation,
           }))
-          .filter((slot) => requiresDemoApproval(slot.start) === slot.requiresConfirmation);
+          .filter(
+            (slot) =>
+              isDemoSlotBookable(slot.start, now) &&
+              requiresDemoApproval(slot.start) === slot.requiresConfirmation,
+          );
       }),
     ).catch((error) => {
       console.error("Cal.com slots failed:", error);

@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
-import { requiresDemoApproval } from "../../lib/demo-booking-policy";
+import { isDemoSlotBookable, requiresDemoApproval } from "../../lib/demo-booking-policy";
 
 export const prerender = false;
 
@@ -57,6 +57,9 @@ export const POST: APIRoute = async ({ request }) => {
 
   let requiresConfirmation: boolean;
   try {
+    if (!isDemoSlotBookable(start)) {
+      return json({ error: "That time is not available. Please choose another time." }, 409);
+    }
     requiresConfirmation = requiresDemoApproval(start);
   } catch {
     return json({ error: "Invalid start time" }, 400);
