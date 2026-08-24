@@ -517,23 +517,20 @@ const wpUrl = import.meta.env.WP_URL || "https://cms.eventhex.ai";
     const partnerType = String(formData.get('partner_type') || '').trim();
 
     const payload: Record<string, string> = {
+      'text-1': String(formData.get('company') || '').trim(),
       'name-1': String(formData.get('contact_name') || '').trim(),
       'email-1': String(formData.get('email') || '').trim(),
-      'name-2': String(formData.get('company') || '').trim(),
-      'text-1': country,
       'phone-1': String(formData.get('phone') || '').trim(),
+      'text-2': country,
+      'url-1': website,
       'select-1': partnerType,
-      'textarea-1': [
-        website ? `Website: ${website}` : '',
-        goals ? `Partnership goals:\n${goals}` : '',
-        'Form source: Partnership page',
-      ].filter(Boolean).join('\n\n'),
+      'textarea-1': goals,
       ehf_hp_field: String(formData.get('ehf_hp_field') || ''),
     };
 
     const consent = form.querySelector('[name="consent"]') as HTMLInputElement;
     if (consent?.checked) {
-      payload['checkbox-1'] = 'I agree to receive email notifications and updates from EventHex. I understand that I can unsubscribe at any time.';
+      payload['checkbox-1'] = 'one';
     }
 
     button.disabled = true;
@@ -541,20 +538,20 @@ const wpUrl = import.meta.env.WP_URL || "https://cms.eventhex.ai";
     message.style.display = 'none';
 
     try {
-      const response = await fetch(`${WP_URL}/wp-json/ehf/v1/submit/contact-form`, {
+      const response = await fetch(`${WP_URL}/wp-json/ehf/v1/submit/partnership`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      const result = await response.json();
+      const result = await response.json().catch(() => null);
 
-      if (response.ok && result.success) {
+      if (response.ok && result?.success) {
         message.className = 'partner-form__message partner-form__message--success';
         message.textContent = result.message;
         message.style.display = 'block';
         form.reset();
       } else {
-        throw new Error(result.message || 'Submission failed.');
+        throw new Error(result?.message || `Submission failed (${response.status}).`);
       }
     } catch (error: any) {
       message.className = 'partner-form__message partner-form__message--error';

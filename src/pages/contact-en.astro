@@ -358,7 +358,7 @@ const offices = [
 </style>
 
 <script>
-  const WP_URL = 'https://eventhex.ai';
+  const WP_URL = 'https://cms.eventhex.ai';
 
   document.getElementById('ehf-contact-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -374,7 +374,7 @@ const offices = [
     // Consent checkbox
     const cb = form.querySelector('[name="checkbox-1"]') as HTMLInputElement;
     if (cb?.checked) {
-      data['checkbox-1'] = 'I agree to receive email notifications and updates from EventHex. I understand that I can unsubscribe at any time.';
+      data['checkbox-1'] = 'one';
     }
 
     btn.disabled = true;
@@ -387,15 +387,15 @@ const offices = [
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-      const json = await res.json();
+      const json = await res.json().catch(() => null);
 
-      if (res.ok && json.success) {
+      if (res.ok && json?.success) {
         msg.className = 'contact-form__message contact-form__message--success';
         msg.textContent = json.message;
         msg.style.display = 'block';
         form.reset();
       } else {
-        throw new Error(json.message || 'Submission failed.');
+        throw new Error(json?.message || `Submission failed (${res.status}).`);
       }
     } catch (err: any) {
       msg.className = 'contact-form__message contact-form__message--error';
