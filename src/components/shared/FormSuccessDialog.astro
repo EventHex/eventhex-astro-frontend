@@ -1,0 +1,188 @@
+---
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  message: string;
+}
+
+const { id, eyebrow, title, message } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<dialog class="ehf-success-dialog" {id} aria-labelledby={titleId}>
+  <form method="dialog" class="ehf-success-dialog__card">
+    <button class="ehf-success-dialog__close" value="close" aria-label="Close confirmation">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18"></path>
+      </svg>
+    </button>
+
+    <span class="ehf-success-dialog__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="m7 12.5 3.2 3.2L17.5 8.5"></path>
+      </svg>
+    </span>
+
+    <p class="ehf-success-dialog__eyebrow">{eyebrow}</p>
+    <h2 id={titleId}>{title}</h2>
+    <p class="ehf-success-dialog__message">{message}</p>
+    <button class="ehf-success-dialog__done" value="close">Done</button>
+  </form>
+</dialog>
+
+<style>
+  .ehf-success-dialog {
+    width: min(440px, calc(100vw - 32px));
+    padding: 0;
+    border: 0;
+    border-radius: 24px;
+    background: transparent;
+    color: #22272f;
+    overflow: visible;
+  }
+
+  .ehf-success-dialog::backdrop {
+    background: rgba(16, 24, 40, 0.54);
+    backdrop-filter: blur(5px);
+  }
+
+  .ehf-success-dialog[open] {
+    animation: ehf-dialog-in 180ms ease-out;
+  }
+
+  .ehf-success-dialog__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 38px 36px 32px;
+    border: 1px solid rgba(172, 161, 241, 0.34);
+    border-radius: 24px;
+    background: #ffffff;
+    box-shadow: 0 30px 90px -34px rgba(15, 23, 42, 0.55);
+    text-align: center;
+  }
+
+  .ehf-success-dialog__close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: #f5f7fb;
+    color: #667085;
+    cursor: pointer;
+  }
+
+  .ehf-success-dialog__close svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+  }
+
+  .ehf-success-dialog__close:hover {
+    background: #e9edff;
+    color: #375dfb;
+  }
+
+  .ehf-success-dialog__icon {
+    display: grid;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 20px;
+    place-items: center;
+    border: 10px solid #eef1ff;
+    border-radius: 50%;
+    background: #375dfb;
+    box-shadow: 0 0 0 1px rgba(55, 93, 251, 0.12);
+  }
+
+  .ehf-success-dialog__icon svg {
+    width: 30px;
+    height: 30px;
+    fill: none;
+    stroke: #ffffff;
+    stroke-width: 2.3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ehf-success-dialog__eyebrow {
+    margin: 0 0 8px;
+    color: #375dfb;
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ehf-success-dialog h2 {
+    margin: 0;
+    font-family: "Creato Display", var(--font-heading);
+    font-size: clamp(1.7rem, 6vw, 2.15rem);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .ehf-success-dialog__message {
+    max-width: 34ch;
+    margin: 14px 0 24px;
+    color: #596273;
+    font-family: var(--font-body);
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+
+  .ehf-success-dialog__done {
+    width: 100%;
+    padding: 13px 18px;
+    border: 0;
+    border-radius: 11px;
+    background: #375dfb;
+    color: #ffffff;
+    font-family: "Creato Display", var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .ehf-success-dialog__done:hover {
+    background: #1c46d4;
+  }
+
+  .ehf-success-dialog__close:focus-visible,
+  .ehf-success-dialog__done:focus-visible {
+    outline: 3px solid rgba(55, 93, 251, 0.28);
+    outline-offset: 3px;
+  }
+
+  @keyframes ehf-dialog-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.98);
+    }
+  }
+
+  @media (max-width: 520px) {
+    .ehf-success-dialog__card {
+      padding: 34px 24px 26px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ehf-success-dialog[open] {
+      animation: none;
+    }
+  }
+</style>

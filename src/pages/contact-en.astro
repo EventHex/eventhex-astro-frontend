@@ -1,5 +1,6 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
+import FormSuccessDialog from "../components/shared/FormSuccessDialog.astro";
 
 const title = "Contact Us - EventHex";
 const description = "Contact EventHex to elevate your events with cutting-edge AI technology. Offices in India, UAE, and Malaysia.";
@@ -34,8 +35,9 @@ const offices = [
   <section class="contact-hero">
     <div class="contact-hero__inner">
       <div class="contact-hero__content">
-        <h1 class="contact-hero__title">Contact Us to Elevate Your Events with Cutting-Edge AI Technology</h1>
-        <p class="contact-hero__desc">Did you know that 60% of attendees never return to your events? EventHex's all-in-one Event Management Software is designed to help you boost retention up to 30-40% through enhanced attendee engagement and personalized experiences.</p>
+        <p class="contact-hero__eyebrow">Contact EventHex</p>
+        <h1 class="contact-hero__title">Let’s make your next event easier to run.</h1>
+        <p class="contact-hero__desc">Tell us what you’re planning and where you need support. Our team will take it from there.</p>
         <img
           src="https://eventhex.ai/wp-content/uploads/2025/01/Free_Ticket_Mockup_1-copy-1.png"
           alt="EventHex ticket mockup"
@@ -46,34 +48,47 @@ const offices = [
         />
       </div>
       <div class="contact-hero__form-wrap">
+        <div class="contact-form__intro">
+          <p>Start a conversation</p>
+          <h2>Tell us about your event</h2>
+        </div>
         <form class="contact-form" id="ehf-contact-form">
-          <div class="contact-form__field">
-            <input type="text" name="name-1" placeholder="Name" required class="contact-form__input" />
-          </div>
-          <div class="contact-form__field">
-            <input type="email" name="email-1" placeholder="Email" required class="contact-form__input" />
-          </div>
-          <div class="contact-form__field">
-            <input type="text" name="name-2" placeholder="Enterprise Name" required class="contact-form__input" />
-          </div>
-          <div class="contact-form__field">
-            <input type="text" name="text-1" placeholder="Region" class="contact-form__input" />
-          </div>
-          <div class="contact-form__field">
-            <input type="tel" name="phone-1" placeholder="Phone Number" required class="contact-form__input" />
-          </div>
-          <div class="contact-form__field">
-            <select name="select-1" class="contact-form__input contact-form__select">
-              <option value="" disabled selected>How did You Know About us</option>
-              <option value="one">Google/Search Engine</option>
-              <option value="two">Social Media</option>
-              <option value="Advertisement">Advertisement</option>
-              <option value="Event-Exhibition">Event/Exhibition</option>
-              <option value="Others">Others</option>
-            </select>
-          </div>
-          <div class="contact-form__field">
-            <textarea name="textarea-1" placeholder="Message" rows="4" class="contact-form__input contact-form__textarea"></textarea>
+          <div class="contact-form__grid">
+            <label class="contact-form__field">
+              <span>Full name *</span>
+              <input type="text" name="name-1" autocomplete="name" required class="contact-form__input" />
+            </label>
+            <label class="contact-form__field">
+              <span>Work email *</span>
+              <input type="email" name="email-1" autocomplete="email" required class="contact-form__input" />
+            </label>
+            <label class="contact-form__field">
+              <span>Company name *</span>
+              <input type="text" name="name-2" autocomplete="organization" required class="contact-form__input" />
+            </label>
+            <label class="contact-form__field">
+              <span>Country</span>
+              <input type="text" name="text-1" autocomplete="country-name" class="contact-form__input" />
+            </label>
+            <label class="contact-form__field">
+              <span>Phone number *</span>
+              <input type="tel" name="phone-1" autocomplete="tel" required class="contact-form__input" />
+            </label>
+            <label class="contact-form__field">
+              <span>How did you hear about us?</span>
+              <select name="select-1" class="contact-form__input contact-form__select">
+                <option value="">Select one</option>
+                <option value="one">Google / Search engine</option>
+                <option value="two">Social media</option>
+                <option value="Advertisement">Advertisement</option>
+                <option value="Event-Exhibition">Event / Exhibition</option>
+                <option value="Others">Other</option>
+              </select>
+            </label>
+            <label class="contact-form__field contact-form__field--full">
+              <span>How can we help?</span>
+              <textarea name="textarea-1" placeholder="Tell us a little about your event or question" rows="3" class="contact-form__input contact-form__textarea"></textarea>
+            </label>
           </div>
           <!-- Honeypot -->
           <div style="position:absolute;left:-9999px" aria-hidden="true">
@@ -81,16 +96,23 @@ const offices = [
           </div>
           <div class="contact-form__field contact-form__checkbox">
             <label>
-              <input type="checkbox" name="checkbox-1" required />
+              <input type="checkbox" name="checkbox-1" checked required />
               <span>I agree to the <a href="/privacy-policy/">Privacy Policy</a> and <a href="/terms-of-service/">Terms of Service</a></span>
             </label>
           </div>
-          <button type="submit" class="contact-form__submit">Send Message</button>
-          <div id="ehf-contact-msg" class="contact-form__message" style="display:none"></div>
+          <button type="submit" class="contact-form__submit">Send message</button>
+          <div id="ehf-contact-msg" class="contact-form__message" role="alert" style="display:none"></div>
         </form>
       </div>
     </div>
   </section>
+
+  <FormSuccessDialog
+    id="ehf-contact-success"
+    eyebrow="Message sent"
+    title="Thanks — we’ve got your message."
+    message="Our team will review the details and get back to you soon."
+  />
 
   <!-- Offices Section -->
   <section class="contact-offices">
@@ -131,8 +153,9 @@ const offices = [
   }
 
   .contact-hero__inner {
-    display: flex;
-    gap: 60px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(480px, 1.1fr);
+    gap: 52px;
     align-items: flex-start;
   }
 
@@ -140,12 +163,22 @@ const offices = [
     flex: 1;
   }
 
+  .contact-hero__eyebrow {
+    margin: 6px 0 14px;
+    color: #375dfb;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .contact-hero__title {
     font-family: "Creato Display", var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -1px;
+    font-size: clamp(2.7rem, 5vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.055em;
     color: #22272F;
     margin: 0 0 20px;
   }
@@ -167,11 +200,36 @@ const offices = [
   }
 
   .contact-hero__form-wrap {
-    flex-shrink: 0;
-    width: 420px;
+    width: 100%;
     background: rgba(187, 194, 255, 0.16);
-    border-radius: 24px;
-    padding: 40px;
+    border: 1px solid rgba(172, 161, 241, 0.34);
+    border-radius: 28px;
+    padding: 34px;
+    box-shadow: 0 24px 80px -58px rgba(55, 93, 251, 0.45);
+  }
+
+  .contact-form__intro {
+    margin-bottom: 24px;
+  }
+
+  .contact-form__intro p {
+    margin: 0 0 8px;
+    color: #375dfb;
+    font-family: var(--font-body);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .contact-form__intro h2 {
+    margin: 0;
+    color: #22272f;
+    font-family: "Creato Display", var(--font-heading);
+    font-size: 2rem;
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
   }
 
   .contact-form {
@@ -180,22 +238,46 @@ const offices = [
     gap: 16px;
   }
 
+  .contact-form__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contact-form__field > span {
+    color: #525866;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .contact-form__field--full {
+    grid-column: 1 / -1;
+  }
+
   .contact-form__input {
     width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #E2E4E9;
+    padding: 12px 14px;
+    border: 1px solid #e8ecf2;
     border-radius: 10px;
     font-family: var(--font-body);
     font-size: 15px;
     color: #22272F;
     background: #ffffff;
     outline: none;
-    transition: border-color 0.2s;
+    transition: border-color 0.15s, box-shadow 0.15s;
     box-sizing: border-box;
   }
 
   .contact-form__input:focus {
     border-color: #375DFB;
+    box-shadow: 0 0 0 3px rgba(55, 93, 251, 0.14);
   }
 
   .contact-form__input::placeholder {
@@ -204,12 +286,16 @@ const offices = [
 
   .contact-form__select {
     appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23868C98' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
     cursor: pointer;
   }
 
   .contact-form__textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 82px;
   }
 
   .contact-form__checkbox {
@@ -221,8 +307,15 @@ const offices = [
   .contact-form__checkbox label {
     display: flex;
     align-items: flex-start;
-    gap: 8px;
+    gap: 10px;
     cursor: pointer;
+  }
+
+  .contact-form__checkbox input {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: #375dfb;
   }
 
   .contact-form__checkbox a {
@@ -231,20 +324,42 @@ const offices = [
   }
 
   .contact-form__submit {
-    padding: 12px 24px;
+    padding: 14px 18px;
     background-color: #375DFB;
     color: #ffffff;
     font-family: var(--font-body);
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.15s, box-shadow 0.15s;
   }
 
   .contact-form__submit:hover {
     background-color: #1C46D4;
+    box-shadow: 0 8px 18px rgba(55, 93, 251, 0.3);
+  }
+
+  .contact-form__submit.is-loading {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .contact-form__submit.is-loading::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: contact-spin 0.7s linear infinite;
+  }
+
+  @keyframes contact-spin {
+    to { transform: rotate(360deg); }
   }
 
   /* Offices */
@@ -303,7 +418,7 @@ const offices = [
 
   @media (max-width: 1024px) {
     .contact-hero__inner {
-      flex-direction: column;
+      grid-template-columns: 1fr;
     }
 
     .contact-hero__form-wrap {
@@ -331,6 +446,14 @@ const offices = [
     .contact-hero__form-wrap {
       padding: 24px;
     }
+
+    .contact-form__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .contact-form__field--full {
+      grid-column: auto;
+    }
   }
 
   .contact-form__message {
@@ -341,19 +464,20 @@ const offices = [
     line-height: 1.5;
     text-align: center;
   }
-  .contact-form__message--success {
-    background: #d1fadf;
-    color: #12b76a;
-    border: 1px solid #12b76a;
-  }
   .contact-form__message--error {
     background: #fee4e2;
     color: #d92d20;
     border: 1px solid #d92d20;
   }
   .contact-form__submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    opacity: 0.85;
+    cursor: progress;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-form__submit.is-loading::before {
+      animation: none;
+    }
   }
 </style>
 
@@ -365,6 +489,7 @@ const offices = [
     const form = e.target as HTMLFormElement;
     const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
     const msg = document.getElementById('ehf-contact-msg')!;
+    const successDialog = document.getElementById('ehf-contact-success') as HTMLDialogElement;
     const fd = new FormData(form);
 
     const data: Record<string, string | boolean> = {};
@@ -378,7 +503,8 @@ const offices = [
     }
 
     btn.disabled = true;
-    btn.textContent = 'Sending...';
+    btn.classList.add('is-loading');
+    btn.textContent = 'Sending message…';
     msg.style.display = 'none';
 
     try {
@@ -390,10 +516,8 @@ const offices = [
       const json = await res.json().catch(() => null);
 
       if (res.ok && json?.success) {
-        msg.className = 'contact-form__message contact-form__message--success';
-        msg.textContent = json.message;
-        msg.style.display = 'block';
         form.reset();
+        successDialog.showModal();
       } else {
         throw new Error(json?.message || `Submission failed (${res.status}).`);
       }
@@ -403,7 +527,8 @@ const offices = [
       msg.style.display = 'block';
     } finally {
       btn.disabled = false;
-      btn.textContent = 'Send Message';
+      btn.classList.remove('is-loading');
+      btn.textContent = 'Send message';
     }
   });
 </script>
