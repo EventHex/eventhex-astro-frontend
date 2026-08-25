@@ -26,6 +26,7 @@ interface WPPost {
 }
 
 const WP_URL = import.meta.env.WP_URL || 'https://cms.eventhex.ai';
+const BLOG_FALLBACK_IMAGE = '/about/eventhex-conference-showcase.jpg';
 let posts: WPPost[] = [];
 
 const formatDate = (date: string) =>
@@ -42,7 +43,7 @@ const getFirstTerm = (post: WPPost, taxonomy: string) =>
     ?.name;
 
 try {
-  const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts?per_page=6&_embed&_fields=id,title,link,date,slug,_embedded,_links`);
+  const res = await fetch(`${WP_URL}/wp-json/wp/v2/posts?per_page=6&status=publish&orderby=date&order=desc&_embed&_fields=id,title,link,date,slug,_embedded,_links`);
   if (res.ok) posts = await res.json();
 } catch {}
 ---
@@ -62,15 +63,12 @@ try {
   </div>
 
   <div class="blog-grid" data-blog-track>
-    {posts.map((post, index) => {
+    {posts.map((post) => {
       const img = post._embedded?.['wp:featuredmedia']?.[0];
-      const imageOverride = index === 0
-        ? '/blog-images/badge-printing-system.webp'
-        : index === 1
-        ? '/blog-images/accessible-events.webp'
-        : index === 2
-        ? '/blog-images/registration-forms-friction.webp'
-        : null;
+      const imageSrc = img?.source_url || BLOG_FALLBACK_IMAGE;
+      const imageAlt = img?.alt_text || (img
+        ? decodeHtmlEntities(post.title.rendered)
+        : 'EventHex conference and event management showcase');
       const category = decodeHtmlEntities(getFirstTerm(post, 'category') ?? 'Uncategorized');
       const formattedDate = formatDate(post.date);
       const articleHref = `/blog/${post.slug}/`;
@@ -78,13 +76,11 @@ try {
       return (
         <article class="blog-card">
           <a href={articleHref} class="blog-card__img" aria-label={decodeHtmlEntities(post.title.rendered)}>
-            {(imageOverride || img) && (
-              <img
-                src={imageOverride || img!.source_url}
-                alt={img?.alt_text || post.title.rendered}
-                loading="lazy"
-              />
-            )}
+            <img
+              src={imageSrc}
+              alt={imageAlt}
+              loading="lazy"
+            />
           </a>
 
           <div class="blog-card__meta">
@@ -302,14 +298,29 @@ try {
     }
 
     .blog-header {
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
     }
 
     .blog-title {
-      font-size: 28px;
-      line-height: 1.2em;
-      max-width: 100%;
+      flex: 1 1 auto;
+      min-width: 0;
+      font-size: 24px;
+      line-height: 1.08;
+      max-width: none;
       letter-spacing: 0;
+    }
+
+    .blog-nav {
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    .blog-nav__btn {
+      width: 40px;
+      height: 40px;
     }
 
     .blog-grid {
