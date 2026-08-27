@@ -57,6 +57,7 @@ export function formatSubmissionContext(
     `Submission ID: ${clean(meta.submissionId, 80) || "Unavailable"}`,
     `Clarity Session ID: ${clean(meta.claritySessionId, 80) || "Unavailable"}`,
     `Clarity Status: ${clean(meta.clarityStatus, 30) || "Unavailable"}`,
+    "Clarity Dashboard: https://clarity.microsoft.com/",
     `Country: ${requestCountry(request)}`,
     `Timezone: ${clean(meta.timeZone, 100) || "Unavailable"}`,
     `Device: ${[clean(meta.device, 30), clean(meta.browser, 50), clean(meta.operatingSystem, 50)].filter(Boolean).join(" · ") || "Unavailable"}`,

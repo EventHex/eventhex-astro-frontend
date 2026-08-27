@@ -45,6 +45,7 @@ test("formats a sanitized submission context with backend-owned IP and country",
   );
 
   assert.match(context, /Submission ID: EH-test Injected/);
+  assert.match(context, /Clarity Dashboard: https:\/\/clarity\.microsoft\.com\//);
   assert.match(context, /Country: Qatar/);
   assert.match(context, /Device: Mobile · Safari · iOS/);
   assert.match(context, /IP: 103\.\*\*\*\.\*\*\*\.42/);
