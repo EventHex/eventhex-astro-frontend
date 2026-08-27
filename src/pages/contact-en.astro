@@ -642,6 +642,8 @@ const offices = [
 </style>
 
 <script>
+  import { collectSubmissionMetadata } from '../lib/submission-metadata';
+
   const WP_URL = 'https://cms.eventhex.ai';
 
   document.getElementById('ehf-contact-form')?.addEventListener('submit', async (e) => {
@@ -665,6 +667,7 @@ const offices = [
     if (cb?.checked) {
       data['checkbox-1'] = 'one';
     }
+    data['textarea-2'] = JSON.stringify(await collectSubmissionMetadata());
 
     btn.disabled = true;
     btn.classList.add('is-loading');

@@ -788,6 +788,8 @@ const canonical = "https://eventhex.ai/book-a-demo/";
 </style>
 
 <script>
+  import { collectSubmissionMetadata } from "../lib/submission-metadata";
+
   // Custom slot picker — availability via /api/demo-slots (Calendly API), inline Calendly confirm.
   const picker = document.getElementById("ehx-picker");
   if (picker) {
@@ -899,12 +901,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       submitBtn.classList.add("is-loading");
       submitBtn.textContent = selectedRequiresConfirmation ? "Sending your request…" : "Confirming your slot…";
       formMsgEl.textContent = "";
-      // Clarity segmentation tags (no-op if Clarity absent)
-      const cl = (window as any).clarity;
-      if (typeof cl === "function") {
-        cl("set", "demo_company", company);
-        if (role) cl("set", "demo_role", role);
-      }
+      const submissionMetadata = await collectSubmissionMetadata();
       track("demo_booking_submitted", {
         slot_start: selectedStart,
         confirmation_mode: selectedRequiresConfirmation ? "requested" : "instant",
@@ -913,7 +910,18 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         const r = await fetch("/api/book-demo", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ start: selectedStart, name, email, company, phone, role, notes, timeZone: tz, hp }),
+          body: JSON.stringify({
+            start: selectedStart,
+            name,
+            email,
+            company,
+            phone,
+            role,
+            notes,
+            timeZone: tz,
+            hp,
+            submissionMetadata,
+          }),
         });
         const data = await r.json();
         if (!r.ok || !data.ok) throw new Error(data.error || "Booking failed");

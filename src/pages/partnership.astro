@@ -514,6 +514,8 @@ const partnerBenefits = [
 </style>
 
 <script>
+  import { collectSubmissionMetadata } from '../lib/submission-metadata';
+
   const WP_URL = 'https://cms.eventhex.ai';
 
   document.getElementById('ehf-partnership-form')?.addEventListener('submit', async (event) => {
@@ -548,6 +550,7 @@ const partnerBenefits = [
     if (consent?.checked) {
       payload['checkbox-1'] = 'one';
     }
+    payload['textarea-2'] = JSON.stringify(await collectSubmissionMetadata());
 
     button.disabled = true;
     button.classList.add('is-loading');

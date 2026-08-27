@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
 import { isDemoSlotBookable, requiresDemoApproval } from "../../lib/demo-booking-policy";
+import { formatSubmissionContext } from "../../lib/submission-context";
 
 export const prerender = false;
 
@@ -46,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "Invalid request" }, 400);
   }
 
-  const { start, name, email, company, phone, role, timeZone, notes, hp } = payload || {};
+  const { start, name, email, company, phone, role, timeZone, notes, hp, submissionMetadata } = payload || {};
 
   // Honeypot — bots fill hidden field.
   if (hp) return json({ error: "Rejected" }, 400);
@@ -71,9 +72,10 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: "That time is not available. Please choose another time." }, 503);
   }
 
+  const submissionContext = formatSubmissionContext(submissionMetadata, request);
   const bookingFieldsResponses: Record<string, string> = { company };
   if (role) bookingFieldsResponses.role = role;
-  if (notes) bookingFieldsResponses.notes = notes;
+  bookingFieldsResponses.notes = [notes, "Submission Context", submissionContext].filter(Boolean).join("\n\n");
 
   const guests = getGuests();
 
@@ -139,6 +141,7 @@ export const POST: APIRoute = async ({ request }) => {
       role ? `Role: ${role}` : "",
       meetingUrl ? `Meet: ${meetingUrl}` : "",
       notes ? `Notes: ${notes}` : "",
+      `Submission Context: ${submissionContext.replace(/\n/g, " | ")}`,
     ]
       .filter(Boolean)
       .join(" | ");
