@@ -118,17 +118,28 @@ export const POST: APIRoute = async ({ request }) => {
   // are caught per-task so they can never break the confirmed booking.
   const tasks: Promise<unknown>[] = [];
 
-  // Branded pre-demo brochure email via the SaaS API (SES).
+  // Booker brochure (confirmed slots) + internal submission-context email via SES.
   const notifyUrl = readEnv("DEMO_NOTIFY_URL");
   const notifySecret = readEnv("DEMO_NOTIFY_SECRET");
-  if (status === "accepted" && notifyUrl && notifySecret) {
+  if (notifyUrl && notifySecret) {
     tasks.push(
       fetch(notifyUrl, {
         method: "POST",
         headers: { "content-type": "application/json", "X-Demo-Secret": notifySecret },
-        body: JSON.stringify({ name, email, company, start: b.start || start, meetingUrl, timeZone }),
+        body: JSON.stringify({
+          name,
+          email,
+          company,
+          phone,
+          start: b.start || start,
+          meetingUrl,
+          timeZone,
+          status,
+          submissionContext,
+          adminOnly: status !== "accepted",
+        }),
         signal: AbortSignal.timeout(DISPATCH_TIMEOUT_MS),
-      }).catch((err) => console.error("brochure email dispatch failed:", err)),
+      }).catch((err) => console.error("demo notification dispatch failed:", err)),
     );
   }
 
