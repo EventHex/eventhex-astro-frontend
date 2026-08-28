@@ -21,11 +21,9 @@ function readEventTypeId(key: string, fallback?: number): number | undefined {
   return Number.isInteger(id) && id > 0 ? id : undefined;
 }
 
-// Post-booking side effects (brochure email + CRM lead) must be AWAITED before
-// the handler returns. On Cloudflare Workers an un-awaited fetch is cancelled
-// when the response is sent (ctx.waitUntil isn't reliably exposed here), which
-// silently dropped leads. Each fetch is bounded by a timeout so a slow/hung
-// downstream can never hang or fail the booking.
+// Post-booking side effects (brochure email + CRM lead) are registered with the
+// Cloudflare execution context so they finish after the booking response is sent.
+// Each fetch is also bounded so background work cannot run indefinitely.
 const DISPATCH_TIMEOUT_MS = 8000;
 
 // Internal addresses added as guests to every booking (comma-separated env).
@@ -36,7 +34,7 @@ function getGuests(): string[] {
     .filter(Boolean);
 }
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const apiKey = readEnv("CALCOM_API_KEY");
   if (!apiKey) return json({ error: "Scheduler not configured" }, 500);
 
@@ -114,8 +112,8 @@ export const POST: APIRoute = async ({ request }) => {
   }
   const meetingUrl = status === "accepted" ? b.meetingUrl || b.location || null : null;
 
-  // Post-booking side effects — AWAITED (see DISPATCH_TIMEOUT_MS note). Failures
-  // are caught per-task so they can never break the confirmed booking.
+  // Post-booking side effects. Failures are caught per-task so they can never
+  // break the confirmed booking.
   const tasks: Promise<unknown>[] = [];
 
   // Booker brochure (confirmed slots) + internal submission-context email via SES.
@@ -221,8 +219,14 @@ export const POST: APIRoute = async ({ request }) => {
     );
   }
 
-  // Keep the worker alive until both complete (or time out) so neither is dropped.
-  if (tasks.length) await Promise.allSettled(tasks);
+  // Keep the worker alive until both complete (or time out), without delaying
+  // the browser response after Cal.com has already confirmed the booking.
+  if (tasks.length) {
+    const completion = Promise.allSettled(tasks);
+    const ctx = locals.cfContext;
+    if (ctx?.waitUntil) ctx.waitUntil(completion);
+    else await completion;
+  }
 
   return json({
     ok: true,
