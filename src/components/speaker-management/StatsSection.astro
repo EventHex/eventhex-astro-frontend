@@ -1,152 +1,82 @@
 ---
-// Dark section — engagement text + stats (no overlapping dashboard since hero has image)
 const stats = [
+  { value: "500+", label: "Events Run on EventHex" },
   { value: "2,000+", label: "Speakers Managed" },
-  { value: "85%", label: "Time Saved on Coordination" },
-  { value: "20+", label: "Countries Worldwide" },
-  { value: "4.8/5", label: "Organizer Satisfaction" },
+  { value: "15+", label: "Countries" },
+  { value: "90%", label: "Less Data Entry" },
 ];
+
 ---
 
-<section class="smd-dark">
-  <!-- Engagement heading -->
-  <div class="smd-engagement">
-    <div class="smd-engagement-text">
-      <h2 class="smd-heading animate-on-scroll" data-animation="fadeInDown">
-        <span class="smd-white">Centralize speaker coordination with </span>
-        <span class="smd-purple">AI-powered automation </span>
-        <span class="smd-white">and </span>
-        <span class="smd-cyan">real-time engagement tools</span>
-      </h2>
+<section class="sms-reference" aria-label="Speaker management features">
+  <div class="sms-trust" aria-label="Speaker management results">
+    <div class="sms-trust__inner">
+      <span class="sms-trust__label">Trusted By Event Teams</span>
+      {stats.map((stat) => (
+        <span class="sms-trust__stat"><b>{stat.value}</b> {stat.label}</span>
+      ))}
     </div>
-  </div>
-
-  <!-- Stats grid -->
-  <div class="smd-stats">
-    {stats.map((stat) => (
-      <div class="smd-stat animate-on-scroll" data-animation="fadeInUp">
-        <span class="smd-stat-value">{stat.value}</span>
-        <span class="smd-stat-label">{stat.label}</span>
-      </div>
-    ))}
   </div>
 </section>
 
 <style>
-  .smd-dark {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .sms-reference {
     width: 100%;
-    padding: 110px 24px;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: transparent;
+    color: #22272f;
+    padding-bottom: 0;
   }
 
-  .smd-engagement {
-    width: 100%;
-    padding: 0 0 60px;
-    display: flex;
-    justify-content: center;
+  .sms-trust {
+    border-top: 1px solid #e8edf5;
+    border-bottom: 1px solid #e8edf5;
+    background: transparent;
   }
-  .smd-engagement-text {
-    width: 65%;
-  }
-  .smd-heading {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 52px;
-    letter-spacing: -1px;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-  }
-  /* Single H2 — font size handled via media queries below */
-  .smd-white { color: #fff; }
-  .smd-purple { color: #AFA3FF; }
-  .smd-cyan { color: #ABFFFF; }
 
-  .smd-stats {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: nowrap;
-    max-width: 1100px;
+  .sms-trust__inner {
+    width: min(1120px, calc(100% - 40px));
+    min-height: 78px;
     margin: 0 auto;
-    padding: 0 20px;
-    width: 100%;
-  }
-  .smd-stat {
-    flex: 1 1 0;
-    max-width: 260px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    padding: 2.25rem 1.5rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    text-align: center;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    gap: 36px;
   }
-  .smd-stat:hover {
-    transform: translateY(-6px);
-    border-color: rgba(159, 129, 255, 0.35);
-    box-shadow: 0 8px 32px rgba(159, 129, 255, 0.12);
-  }
-  .smd-stat-value {
-    font-family: var(--font-heading);
-    font-size: 2.75rem;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -1.5px;
-    color: #fff;
-  }
-  .smd-stat-label {
+
+  .sms-trust__label,
+  .sms-trust__stat {
     font-family: var(--font-body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.55);
-    letter-spacing: 0.02em;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #596579;
+    text-align: center;
+  }
+
+  .sms-trust__label {
+    color: #7f8898;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .sms-trust__stat b {
+    color: #22272f;
+    font-weight: 750;
   }
 
   @media (max-width: 1024px) {
-    .smd-dark { padding: 80px 0; }
-    .smd-engagement { padding: 0 20px 40px; }
-    .smd-engagement-text { width: 85%; }
-    .smd-heading { font-size: 40px; line-height: 1.1em; }
-    .smd-stats { gap: 1rem; }
-    .smd-stat-value { font-size: 2.25rem; }
-    .smd-stat-label { font-size: 0.8rem; }
+    .sms-trust__inner {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 28px;
+      padding: 22px 0;
+    }
+    .sms-trust__label { grid-column: 1 / -1; }
   }
 
   @media (max-width: 767px) {
-    .smd-dark { padding: 64px 0; }
-    .smd-engagement { padding: 0 15px 30px; }
-    .smd-engagement-text { width: 100%; }
-    .smd-heading { font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
-    .smd-stats {
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-    .smd-stat { width: calc(50% - 0.5rem); max-width: none; flex: none; }
-    .smd-stat-value { font-size: 1.75rem; }
-    .smd-stat-label { font-size: 0.75rem; }
+    .sms-trust__inner { width: min(100% - 32px, 1240px); }
   }
 </style>

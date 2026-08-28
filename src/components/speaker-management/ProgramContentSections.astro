@@ -1,0 +1,948 @@
+---
+interface Props {
+  section: "setup" | "agenda" | "cfp" | "event-day" | "speaker-value";
+}
+
+const { section } = Astro.props;
+
+const setupCards = [
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`, title: "Rich speaker profiles", body: "Name, bio, designation, company, photo and social links, ordered exactly how you want them to appear." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`, title: "AI LinkedIn autofill", body: "Paste a profile URL and the details fill themselves in, including the photo." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`, title: "Speaker categories", body: "Keynote, panellist, presenter or your own labels, with drag ordering." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>`, title: "Speaker Settings", body: 'Your own confirmation email template, an optional <a href="/badge-certificate-designer/">speaker badge</a> attached, and a log showing what was delivered, opened or bounced.' },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`, title: "Bulk operations", body: "Import 50 speakers from a spreadsheet, export them, or resend every confirmation in one action." },
+];
+
+const agendaCards = [
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`, title: "Visual timeline", body: "See every session on a colour-coded grid by day and stage, and drag one to a new slot." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12h-8"></path><path d="M21 6H8"></path><path d="M21 18h-8"></path><path d="M12 12H8V3"></path><path d="M12 18H8"></path><path d="M8 6H3"></path></svg>`, title: "Sub-sessions and breaks", body: 'Nest breakouts under a parent session and mark breaks so they stay out of the recording pipeline. See the full <a href="/session-management/">session and agenda tools</a>.' },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>`, title: "Multi-stage and tracks", body: "Run parallel stages and group the agenda by your own track taxonomy." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`, title: "Per-session speaker roles", body: "Mark who is moderating and who is on the panel, using role labels you control." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>`, title: "Ticket-restricted sessions", body: "Limit a session to specific ticket types, and cap how many people can book it." },
+];
+
+const eventCards = [
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>`, title: "Works offline", body: 'The schedule and speaker list stay cached in the <a href="/event-mobile-app/">attendee mobile app</a>, so they keep working when the venue wifi does not.' },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>`, title: "Reminders that reach them", body: 'Attendees save the sessions they want and get a reminder by push and <a href="/whatsapp-event-concierge/">WhatsApp</a> before each one starts.' },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`, title: "Live translation", body: "Live transcription and translation run during the talk, in the language they choose." },
+  { icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>`, title: "No app needed to join in", body: '<a href="/live-polling-qa/">Live polls and Q&amp;A</a> open from a QR code — no app to install, no account to create.' },
+];
+
+const steps = [
+  { 
+    title: "Publish your call for papers",
+    desc: 'Publish a <a href="/call-for-papers/">call for papers</a> and collect abstracts through a submission form you design, with your own topics.', 
+    bullets: ["Customizable submission forms", "Define your own topics", "Easy abstract collection"],
+    image: "/feature-images/speaker-management/cfp-event-info.png", 
+    alt: "EventHex event information and submission setup" 
+  },
+  { 
+    title: "Review and score",
+    desc: "Reviewers score submissions against a rubric you set, assigned automatically or by hand.", 
+    bullets: ["Custom scoring rubrics", "Automatic or manual assignment", "Streamlined review process"],
+    image: "/feature-images/speaker-management/cfp-tickets.png", 
+    alt: "EventHex configuration workflow" 
+  },
+  { 
+    title: "Accept and export",
+    desc: "Accept the ones you want and export the rest for your records.", 
+    bullets: ["One-click acceptance", "Export data easily", "Maintain complete records"],
+    image: "/feature-images/speaker-management/cfp-speakers.png", 
+    alt: "EventHex speaker management workspace" 
+  },
+  { 
+    title: "Auto-create sessions",
+    desc: "Push accepted abstracts straight into the program — EventHex creates the sessions for you.", 
+    bullets: ["Seamless data transfer", "Automatic session creation", "Saves time and effort"],
+    image: "/feature-images/speaker-management/cfp-sessions.png", 
+    alt: "EventHex sessions and agenda workspace" 
+  },
+  { 
+    title: "Publish the agenda",
+    desc: "Speakers, sessions and the full agenda go live on your event website.", 
+    bullets: ["Instant publishing", "Live on event website", "Engage your attendees"],
+    image: "/feature-images/speaker-management/cfp-dashboard.png", 
+    alt: "EventHex published event dashboard" 
+  },
+];
+---
+
+{section === "setup" && (
+  <section class="smp-clickup-hero">
+    <div class="smp-clickup-hero__inner">
+      <header class="smp-clickup-hero__header">
+        <h2>Set up the lineup</h2>
+      </header>
+      
+      <div class="smp-setup-grid">
+        {setupCards.map(card => (
+          <div class="smp-setup-card">
+            <div class="smp-setup-card__icon" set:html={card.icon} />
+            <div class="smp-setup-card__content">
+              <h3>{card.title}</h3>
+              <p set:html={card.body} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "agenda" && (
+  <section class="smp-content smp-content--agenda">
+    <div class="smp-content__inner">
+      <header class="smp-content__header">
+        <h2>Build the agenda</h2>
+      </header>
+      <div class="smp-agenda-grid">
+        {agendaCards.map((card) => (
+          <article class="smp-content__card">
+            <span class="smp-content__icon" set:html={card.icon} />
+            <div class="smp-content__card-text">
+              <h3>{card.title}</h3>
+              <p set:html={card.body} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "cfp" && (
+  <section class="smp-content smp-content--clickup smp-content--workflow">
+    <div class="smp-content__inner smp-content__inner--narrow">
+      <header class="smp-workflow__header">
+        <div class="smp-workflow__heading">
+          <span class="smp-workflow__pill"><i aria-hidden="true">✦</i> Submission workflow</span>
+          <h2>From call for papers to published program</h2>
+        </div>
+        <a class="smp-workflow__cta" href="/call-for-papers/">Explore submissions <span aria-hidden="true">→</span></a>
+      </header>
+      <ol class="smp-steps">
+        {steps.map((step, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary>
+                <span>0{index + 1}</span>
+                <div class="smp-step__content">
+                  <h3 class="smp-step__title">{step.title}</h3>
+                  <p set:html={step.desc} class="smp-step__desc" />
+                  {step.bullets && (
+                    <ul class="smp-step__bullets">
+                      {step.bullets.map(bullet => (
+                        <li><i aria-hidden="true">✦</i> {bullet}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <i class="smp-workflow__plus" aria-hidden="true">+</i>
+              </summary>
+              <div class="smp-workflow__visual">
+                <img src={step.image} alt={step.alt} loading="lazy" decoding="async" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+)}
+
+{section === "cfp" && (
+  <script>
+    document.querySelectorAll<HTMLDetailsElement>(".smp-content--workflow details").forEach((item, _, all) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        all.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  </script>
+)}
+
+{section === "event-day" && (
+  <section class="smp-content smp-content--clickup smp-content--event-day">
+    <div class="smp-content__inner">
+      <header class="smp-content__header">
+        <span>Event day</span>
+        <h2>Your attendees get the agenda in their pocket — signal or not</h2>
+      </header>
+      <div class="smp-content__grid smp-content__grid--features">
+        {eventCards.map((card) => (
+          <article class="smp-content__card">
+            <span class="smp-content__icon" set:html={card.icon} />
+            <div class="smp-content__card-text">
+              <h3>{card.title}</h3>
+              <p set:html={card.body} />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "speaker-value" && (
+  <section class="smp-content smp-content--clickup smp-content--speaker-value">
+    <div class="smp-content__inner">
+      <div class="smp-spotlight">
+        <div class="smp-spotlight__copy">
+          <span>After the session</span>
+          <h2>Speakers leave with something to post</h2>
+          <p>After a session, <a href="/ai-session-recap/">AI session recap</a> turns the recording into a summary with key takeaways, drafts a LinkedIn and an X post, and generates a shareable poster. Send it to your speakers and they promote the event for you — while it is still fresh. Recordings can come from a live capture, an uploaded file, or a YouTube link.</p>
+        </div>
+        <div class="smp-recap" aria-label="Example session recap">
+          <div class="smp-recap__bar"><i></i><i></i><i></i><span>Session recap</span></div>
+          <div class="smp-recap__body">
+            <h3>Key takeaways</h3>
+            <p>• Hiring ahead of revenue broke three of four teams surveyed.</p>
+            <p>• Onboarding under two weeks correlated with retention.</p>
+            <p>• Documentation debt compounds faster than technical debt.</p>
+            <h3>Drafted LinkedIn post</h3>
+            <blockquote>“Three things I learned speaking at #EventHexSummit today…”</blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<style is:global>
+  .smp-content { padding: 96px 24px; background: transparent; color: #22272f; }
+  .smp-content--tinted { background: transparent; }
+  .smp-content--showcase { padding-top: 112px; }
+  .smp-content__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .smp-content__inner--narrow { width: min(880px, 100%); }
+  .smp-content__header { max-width: 850px; margin: 0 auto 52px; text-align: center; }
+  .smp-content__header > span,
+  .smp-spotlight__copy > span { display: block; margin-bottom: 16px; color: #375dfb; font: 750 12px/1.2 var(--font-body); letter-spacing: .13em; text-transform: uppercase; }
+  .smp-content__header h2,
+  .smp-spotlight h2 { 
+    margin: 0; font-family: var(--font-heading); font-size: clamp(38px, 4.5vw, 56px); font-weight: 650; line-height: 1.08; letter-spacing: -.04em; 
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smp-content__grid { display: grid; border-top: 1px solid #e3e8f1; border-bottom: 1px solid #e3e8f1; }
+  .smp-content__grid--five { grid-template-columns: repeat(5, 1fr); }
+  .smp-content__grid--four { grid-template-columns: repeat(4, 1fr); }
+  .smp-content__card { min-width: 0; padding: 32px 26px 38px; border-left: 1px solid #e3e8f1; }
+  .smp-content__card:first-child { border-left: 0; }
+  .smp-content__icon { display: block; margin-bottom: 40px; color: #375dfb; font: 750 12px/1 var(--font-body); letter-spacing: .12em; }
+  .smp-content__card h3 { margin: 0; font-family: var(--font-heading); font-size: 21px; line-height: 1.25; }
+  .smp-content__card p,
+  .smp-spotlight__copy p { margin: 18px 0 0; color: #596579; font: 400 15px/1.6 var(--font-body); }
+  .smp-content a { color: #375dfb; text-decoration-color: rgba(55,93,251,.35); text-underline-offset: 3px; }
+  .smp-content--showcase .smp-content__header { max-width: 920px; margin-bottom: 62px; }
+  .smp-content--showcase .smp-content__header > span { color: #6941ff; }
+  .smp-content--showcase .smp-content__header h2 {
+    font-size: clamp(48px, 5.4vw, 72px);
+    background: linear-gradient(100deg, #24272f 46%, #9a9ca3 78%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  .smp-showcase-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+    border: 0;
+  }
+  .smp-showcase-grid .smp-content__card {
+    grid-column: span 2;
+    padding: 16px 16px 26px;
+    border: 0;
+    border-radius: 12px;
+    background: #f6f7f9;
+  }
+  .smp-showcase-grid .smp-content__card:nth-last-child(-n+2) { grid-column: span 3; }
+  .smp-content__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 278px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: radial-gradient(circle at 50% 45%, rgba(99, 74, 255, .24), transparent 45%), #090a0f;
+  }
+  .smp-content__visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform .45s ease;
+  }
+  .smp-showcase-grid .smp-content__card:hover .smp-content__visual img { transform: scale(1.025); }
+  .smp-showcase-grid .smp-content__icon { margin: 0 0 12px; color: #6941ff; }
+  .smp-showcase-grid .smp-content__card h3 { font-size: 21px; }
+  .smp-showcase-grid .smp-content__card p { margin-top: 10px; }
+  .smp-steps { margin: 0; padding: 0; list-style: none; border-top: 1px solid #dfe5ee; }
+  .smp-steps li { display: grid; grid-template-columns: 70px 1fr; gap: 24px; padding: 25px 0; border-bottom: 1px solid #dfe5ee; }
+  .smp-steps li > span { color: #375dfb; font: 750 12px/1.7 var(--font-body); letter-spacing: .12em; }
+  .smp-steps p { margin: 0; color: #596579; font: 400 17px/1.65 var(--font-body); }
+  .smp-content--dark { background: radial-gradient(circle at 15% 20%, rgba(55,93,251,.24), transparent 42%), #050817; color: #fff; }
+  .smp-content--dark .smp-content__header > span { color: #afa3ff; }
+  .smp-content--dark .smp-content__grid { border-color: rgba(255,255,255,.12); }
+  .smp-content--dark .smp-content__card { border-color: rgba(255,255,255,.12); }
+  .smp-content--dark .smp-content__icon { color: #afa3ff; }
+  .smp-content--dark .smp-content__card p { color: rgba(255,255,255,.62); }
+  .smp-content--dark a { color: #afa3ff; }
+  .smp-spotlight { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(46px, 8vw, 110px); align-items: center; padding: clamp(48px, 7vw, 88px); border: 1px solid #dfe6ff; border-radius: 30px; background: radial-gradient(circle at 88% 12%, rgba(75,200,222,.22), transparent 32%), linear-gradient(135deg,#f6f8ff,#eef3ff 52%,#f6fdff); }
+  .smp-spotlight__copy p { font-size: 17px; }
+  .smp-recap { overflow: hidden; border: 1px solid #dfe5ee; border-radius: 18px; background: #fff; box-shadow: 0 24px 60px rgba(35,50,90,.12); }
+  .smp-recap__bar { display: flex; align-items: center; gap: 7px; padding: 14px 17px; border-bottom: 1px solid #e8edf5; color: #596579; font: 600 13px/1 var(--font-body); }
+  .smp-recap__bar i { width: 8px; height: 8px; border-radius: 50%; background: #ccd4e0; }
+  .smp-recap__bar span { margin-left: 6px; }
+  .smp-recap__body { padding: 25px; }
+  .smp-recap__body h3 { margin: 18px 0 10px; font: 650 16px/1.3 var(--font-heading); }
+  .smp-recap__body h3:first-child { margin-top: 0; }
+  .smp-recap__body p { margin: 6px 0; color: #596579; font: 400 14px/1.5 var(--font-body); }
+  .smp-recap blockquote { margin: 0; padding: 14px 16px; border: 1px solid #e3e8f1; border-radius: 10px; background: #f7f9fd; color: #596579; font: 400 14px/1.5 var(--font-body); }
+
+  /* ClickUp-inspired Hero Design System for Speaker Setup */
+  .smp-clickup-hero {
+    padding: clamp(90px, 10vw, 140px) 24px;
+    background: #fff;
+  }
+  .smp-clickup-hero__inner {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+  }
+  .smp-clickup-hero__header {
+    text-align: center;
+    margin-bottom: clamp(60px, 8vw, 90px);
+  }
+  .smp-clickup-hero__header h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(44px, 5.5vw, 68px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    margin: 0;
+    line-height: 1.1;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smp-clickup-hero__header h2 span.text-grey {
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+  }
+
+  /* New Setup Grid Design */
+  .smp-setup-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    .smp-setup-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .smp-setup-grid { grid-template-columns: 1fr; }
+  }
+  .smp-setup-card {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .smp-setup-card__icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6366f1; /* Purple icon color */
+  }
+  .smp-setup-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  .smp-setup-card__content {
+    display: flex;
+    flex-direction: column;
+  }
+  .smp-setup-card__content h3 {
+    margin: 0 0 6px 0;
+    font-size: 15.5px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.3;
+  }
+  .smp-setup-card__content p {
+    margin: 0;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+  }
+  .smp-setup-card__content a {
+    color: #6366f1;
+    text-decoration: none;
+  }
+
+  /* ClickUp Health-inspired system for the remaining content sections. */
+  .smp-content--clickup {
+    padding-block: clamp(92px, 10vw, 144px);
+    background: transparent;
+  }
+  .smp-content--clickup .smp-content__inner { width: min(1120px, 100%); }
+  .smp-content--clickup .smp-content__header {
+    max-width: 820px;
+    margin-bottom: clamp(46px, 6vw, 72px);
+  }
+  .smp-content--clickup .smp-content__header > span,
+  .smp-content--clickup .smp-spotlight__copy > span {
+    margin-bottom: 18px;
+    color: #7b68ee;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+  .smp-content--clickup .smp-content__header h2,
+  .smp-content--clickup .smp-spotlight h2 {
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smp-content--clickup .smp-content__grid {
+    gap: 16px;
+    border: 0;
+  }
+  .smp-content--clickup .smp-content__grid--five {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .smp-content--clickup .smp-content__grid--five .smp-content__card {
+    grid-column: span 2;
+  }
+  .smp-content--clickup .smp-content__grid--five .smp-content__card:nth-last-child(-n + 2) {
+    grid-column: span 3;
+  }
+  .smp-content--clickup .smp-content__grid--four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .smp-content--clickup .smp-content__card {
+    min-height: 285px;
+    padding: clamp(28px, 3.5vw, 42px);
+    border: 1px solid #ececf2;
+    border-radius: 18px;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(123, 104, 238, .1), transparent 30%),
+      #f7f7f9;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .smp-content--clickup .smp-content__card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(123, 104, 238, .28);
+    box-shadow: 0 24px 60px rgba(38, 32, 78, .1);
+  }
+  .smp-content--clickup .smp-content__icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 48px;
+    border-radius: 12px;
+    background: #fff;
+    color: #7b68ee;
+    box-shadow: 0 8px 24px rgba(42, 38, 76, .08);
+  }
+  .smp-content--clickup .smp-content__card h3 {
+    color: #202020;
+    font-size: 24px;
+    font-weight: 650;
+    letter-spacing: -.025em;
+  }
+  .smp-content--clickup .smp-content__card p {
+    color: #656572;
+    font-size: 16px;
+    line-height: 1.58;
+  }
+  .smp-content--clickup a { color: #6c56dc; }
+
+  .smp-content--workflow {
+    padding-block: clamp(110px, 12vw, 160px);
+    background: transparent;
+  }
+  .smp-content--workflow .smp-content__inner--narrow { width: min(1218px, 100%); }
+  .smp-workflow__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 64px;
+  }
+  .smp-workflow__heading { max-width: 820px; }
+  .smp-workflow__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 30px;
+    padding: 9px 17px;
+    border: 1px solid rgba(15, 23, 42, .08);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 10px 28px rgba(40, 48, 70, .09);
+    color: #7b68ee;
+    font: 700 13px/1.2 var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .smp-workflow__pill i { color: #7b68ee; font-style: normal; }
+  .smp-workflow__heading h2 {
+    max-width: 780px;
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smp-workflow__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 22px;
+    flex: 0 0 auto;
+    margin-bottom: 8px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    background: #050505;
+    color: #fff !important;
+    font: 600 15px/1 var(--font-body);
+    text-decoration: none;
+    transition: transform .25s ease, background .25s ease;
+  }
+  .smp-workflow__cta:hover { transform: translateY(-3px); background: #315cf5; }
+  .smp-workflow__cta span { font-size: 22px; font-weight: 400; }
+  .smp-content--workflow .smp-steps {
+    display: block;
+    margin: 0;
+    border-top: 1px solid #ccc;
+  }
+  .smp-content--workflow .smp-steps li {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+  }
+  .smp-content--workflow .smp-steps details {
+    overflow: hidden;
+    transition: border-radius .35s ease, background .35s ease, padding .35s ease, margin .35s ease;
+  }
+  .smp-content--workflow .smp-steps summary {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr) 34px;
+    align-items: center;
+    gap: 28px;
+    min-height: 120px;
+    padding: 34px 48px 34px 64px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease, padding-left .25s ease;
+  }
+  .smp-content--workflow .smp-steps summary::-webkit-details-marker { display: none; }
+  .smp-content--workflow .smp-steps summary:hover {
+    padding-left: 74px;
+    background: rgba(255, 255, 255, .62);
+  }
+  .smp-content--workflow .smp-steps summary > span {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #111;
+    font: 400 32px/1.1 var(--font-heading);
+    letter-spacing: -.05em;
+  }
+  
+  .smp-step__content {
+    display: flex;
+    flex-direction: column;
+  }
+  .smp-step__title {
+    margin: 0;
+    color: #111;
+    font: 500 22px/1.2 var(--font-body);
+    letter-spacing: -.02em;
+  }
+  .smp-step__desc {
+    display: none;
+  }
+  .smp-step__bullets {
+    display: none;
+  }
+
+  .smp-workflow__plus {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #111;
+    border-radius: 50%;
+    color: #111;
+    font: 400 22px/1 var(--font-body);
+    font-style: normal;
+    transition: transform .25s ease, color .25s ease, background .25s ease;
+  }
+
+  .smp-content--workflow .smp-steps details[open] .smp-workflow__plus {
+    transform: rotate(45deg);
+    background: #05052f;
+    color: #fff;
+    display: none;
+  }
+  .smp-content--workflow .smp-steps details[open] {
+    display: flex;
+    align-items: stretch;
+    border-radius: 24px;
+    margin: 24px 0;
+  }
+  
+  .smp-content--workflow .smp-steps li:nth-child(1) details[open] { background: linear-gradient(135deg, #aed4fb, #d6ebfd); }
+  .smp-content--workflow .smp-steps li:nth-child(2) details[open] { background: linear-gradient(135deg, #b9e9d6, #dbf5ea); }
+  .smp-content--workflow .smp-steps li:nth-child(3) details[open] { background: linear-gradient(135deg, #c5bdfc, #e4dffd); }
+  .smp-content--workflow .smp-steps li:nth-child(4) details[open] { background: linear-gradient(135deg, #fbc6f7, #fde4fb); }
+  .smp-content--workflow .smp-steps li:nth-child(5) details[open] { background: linear-gradient(135deg, #fce1b4, #fef0d7); }
+
+  .smp-content--workflow .smp-steps details[open] summary {
+    flex: 0 0 55%;
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    align-items: start;
+    padding: 64px 40px 64px 64px;
+    background: transparent;
+    min-height: 0;
+  }
+  .smp-content--workflow .smp-steps details[open] summary:hover {
+    padding-left: 64px;
+    background: transparent;
+  }
+  .smp-content--workflow .smp-steps details[open] summary > span { 
+    font-size: 44px; 
+    line-height: 1;
+    color: #050505; 
+  }
+  .smp-content--workflow .smp-steps details[open] .smp-step__title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #050505;
+  }
+  .smp-content--workflow .smp-steps details[open] .smp-step__desc {
+    display: block;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+    margin: 0 0 32px;
+    max-width: 90%;
+  }
+  .smp-content--workflow .smp-steps details[open] .smp-step__bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .smp-content--workflow .smp-steps details[open] .smp-step__bullets li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #111;
+    border: none;
+    padding: 0;
+    background: transparent;
+  }
+  .smp-content--workflow .smp-steps details[open] .smp-step__bullets li i {
+    font-size: 16px;
+  }
+  
+  .smp-workflow__visual {
+    display: none;
+    margin: 0;
+    opacity: 0;
+  }
+  .smp-content--workflow details[open] .smp-workflow__visual {
+    flex: 0 0 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 64px 40px 0;
+    opacity: 1;
+    transform: none;
+    max-height: none;
+    overflow: visible;
+  }
+  .smp-workflow__visual img {
+    display: block;
+    width: 100%;
+    max-width: 440px; 
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    background: transparent;
+    border: none;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.08);
+  }
+
+  .smp-content--agenda {
+    padding-block: clamp(92px, 10vw, 144px);
+    background: transparent;
+  }
+  .smp-content--agenda .smp-content__header {
+    max-width: 820px;
+    margin: 0 auto clamp(60px, 8vw, 84px);
+    text-align: center;
+  }
+  .smp-content--agenda .smp-content__header h2 {
+    color: #202020;
+    font-size: clamp(38px, 4.5vw, 52px);
+    font-weight: 650;
+    line-height: 1.1;
+    letter-spacing: -.03em;
+  }
+  .smp-agenda-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 56px 48px;
+  }
+  .smp-content--agenda .smp-content__card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 0;
+    border: none;
+    background: transparent;
+  }
+  .smp-content--agenda .smp-content__icon {
+    flex: 0 0 auto;
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #f4f3ff;
+    color: #6941ff;
+    margin: 0;
+  }
+  .smp-content--agenda .smp-content__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .smp-content--agenda .smp-content__card h3 {
+    margin: 0 0 8px;
+    color: #1a1a1a;
+    font-size: 19px;
+    font-weight: 650;
+    line-height: 1.3;
+  }
+  .smp-content--agenda .smp-content__card p {
+    margin: 0;
+    color: #656572;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .smp-content--event-day {
+    background: transparent;
+    color: #202020;
+    padding-block: clamp(92px, 10vw, 144px);
+  }
+  .smp-content--event-day .smp-content__header {
+    margin-bottom: clamp(60px, 8vw, 84px);
+  }
+  .smp-content--event-day .smp-content__header h2 {
+    font-size: clamp(38px, 4.5vw, 52px);
+    max-width: 700px;
+    margin-inline: auto;
+  }
+  .smp-content--event-day .smp-content__grid--features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px 40px;
+    border: none;
+  }
+  .smp-content--event-day .smp-content__card {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    min-height: auto;
+    transform: none !important;
+  }
+  .smp-content--event-day .smp-content__card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .smp-content--event-day .smp-content__icon {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #fbfbfe;
+    border: 1px solid #f1f1f8;
+    color: #5c41ff;
+    box-shadow: 0 2px 8px rgba(92, 65, 255, .04);
+  }
+  .smp-content--event-day .smp-content__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .smp-content--event-day .smp-content__card h3 {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 650;
+    color: #1a1a1a;
+  }
+  .smp-content--event-day .smp-content__card p { 
+    margin: 0;
+    color: #656572; 
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+
+  .smp-content--speaker-value { padding-top: 48px; }
+  .smp-content--speaker-value .smp-spotlight {
+    gap: clamp(44px, 7vw, 88px);
+    padding: clamp(42px, 7vw, 82px);
+    border: 1px solid #ececf2;
+    border-radius: 22px;
+    background:
+      radial-gradient(circle at 95% 5%, rgba(123, 104, 238, .14), transparent 32%),
+      #f7f7f9;
+    box-shadow: none;
+  }
+  .smp-content--speaker-value .smp-spotlight__copy p {
+    color: #656572;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  .smp-content--speaker-value .smp-recap {
+    border-color: #e7e7ee;
+    border-radius: 14px;
+    box-shadow: 0 24px 70px rgba(32, 32, 44, .12);
+    transform: rotate(1.25deg);
+    transition: transform .35s ease;
+  }
+  .smp-content--speaker-value .smp-spotlight:hover .smp-recap { transform: rotate(0deg) translateY(-5px); }
+  @media (max-width: 960px) {
+    .sc-bento-row {
+      flex-direction: column;
+    }
+    .sc-bento-row:nth-child(even) {
+      flex-direction: column-reverse;
+    }
+    .sc-bento-content--alt {
+      border-right: none;
+    }
+    .sc-bento-visual {
+      border-right: none;
+      border-bottom: 1px solid #ececf2;
+      min-height: 400px;
+    }
+    .sc-bento-row--three .sc-bento-card {
+      border-right: none;
+      border-bottom: 1px solid #ececf2;
+    }
+    .sc-bento-row--three .sc-bento-card:last-child {
+      border-bottom: none;
+    }
+    .smp-content__grid--five { grid-template-columns: repeat(2, 1fr); }
+    .smp-content__grid--four { grid-template-columns: repeat(2, 1fr); }
+    .smp-content__card:nth-child(odd) { border-left: 0; }
+    .smp-content__card:nth-child(n+3) { border-top: 1px solid #e3e8f1; }
+    .smp-spotlight { grid-template-columns: 1fr; }
+    .smp-showcase-grid { grid-template-columns: repeat(2, 1fr); }
+    .smp-showcase-grid .smp-content__card,
+    .smp-showcase-grid .smp-content__card:nth-last-child(-n+2) { grid-column: auto; border-top: 0; }
+    .smp-content--clickup .smp-content__grid--five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .smp-content--clickup .smp-content__grid--five .smp-content__card,
+    .smp-content--clickup .smp-content__grid--five .smp-content__card:nth-last-child(-n + 2) { grid-column: auto; }
+    .smp-content--clickup .smp-content__grid--five .smp-content__card:last-child { grid-column: 1 / -1; }
+    .smp-content--event-day .smp-content__grid--features { grid-template-columns: 1fr; gap: 40px; }
+    .smp-agenda-grid { grid-template-columns: repeat(2, 1fr); gap: 48px 32px; }
+  }
+  @media (max-width: 620px) {
+    .smp-clickup-hero { padding: 60px 20px; }
+    .sc-bento-visual { min-height: 300px; }
+    .sc-collage { transform: scale(0.85); transform-origin: center; }
+    .smp-content { padding: 68px 20px; }
+    .smp-content__grid--five,
+    .smp-content__grid--four { grid-template-columns: 1fr; }
+    .smp-content__card { padding: 28px 4px 32px; border-left: 0; border-top: 1px solid #e3e8f1; }
+    .smp-content__card:first-child { border-top: 0; }
+    .smp-content__icon { margin-bottom: 20px; }
+    .smp-showcase-grid { grid-template-columns: 1fr; }
+    .smp-showcase-grid .smp-content__card:last-child { grid-column: auto; }
+    .smp-content__visual { height: 240px; }
+    .smp-steps li { grid-template-columns: 42px 1fr; gap: 12px; }
+    .smp-steps p { font-size: 15px; }
+    .smp-spotlight { padding: 42px 22px; border-radius: 22px; }
+    .smp-content--clickup { padding-block: 76px; }
+    .smp-content--clickup .smp-content__grid--five,
+    .smp-content--clickup .smp-content__grid--four,
+    .smp-content--clickup .smp-content__grid--five .smp-content__card:last-child,
+    .smp-content--workflow .smp-steps li:last-child { grid-column: auto; }
+    .smp-content--clickup .smp-content__card { min-height: 0; padding: 28px 24px 32px; }
+    .smp-content--clickup .smp-content__icon { margin-bottom: 30px; }
+    .smp-workflow__header { align-items: flex-start; flex-direction: column; margin-bottom: 46px; }
+    .smp-workflow__heading h2 { font-size: 42px; }
+    .smp-content--workflow .smp-steps summary,
+    .smp-content--workflow .smp-steps summary:hover {
+      grid-template-columns: 54px minmax(0, 1fr) 30px;
+      gap: 14px;
+      min-height: 124px;
+      padding: 26px 4px;
+    }
+    .smp-content--workflow .smp-steps summary > span { font-size: 30px; }
+    .smp-content--workflow .smp-steps p { font-size: 17px; }
+    .smp-content--workflow .smp-steps details[open] summary,
+    .smp-content--workflow .smp-steps details[open] summary:hover { padding: 34px 24px 24px; }
+    .smp-content--workflow .smp-steps details[open] summary p { margin-top: 30px; font-size: 22px; }
+    .smp-workflow__visual { margin-inline: 0; border-radius: 12px; }
+    .smp-content--workflow details[open] .smp-workflow__visual { margin-bottom: 30px; }
+    .smp-workflow__visual img { border-radius: 12px; }
+    .smp-content--speaker-value .smp-spotlight { padding: 38px 22px; }
+    .smp-agenda-grid { grid-template-columns: 1fr; gap: 40px; }
+    .smp-content--agenda .smp-content__card { gap: 16px; }
+  }
+</style>

@@ -1,0 +1,682 @@
+---
+interface Props {
+  section: "problem" | "ai" | "use-cases";
+}
+
+const { section } = Astro.props;
+
+const useCasesTabs = [
+  {
+    id: "multi-track",
+    label: "Multi-track conferences",
+    title: "Coordinate complex agendas, faster",
+    description: "Manage complex schedules, multiple stages, and thousands of attendees in one unified workspace.",
+    checklist: [
+      "Visual timeline builder",
+      "Drag-and-drop rescheduling",
+      "Instant conflict detection"
+    ],
+    cards: [
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Event&backgroundColor=ffd6a5",
+        title: "Schedule Builder",
+        desc: "Optimizes track placement automatically"
+      },
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Hex&backgroundColor=ffadad",
+        title: "Speaker Portal",
+        desc: "Collects availability and sessions"
+      },
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=AI&backgroundColor=9bf6ff",
+        title: "Live Agenda",
+        desc: "Syncs instantly to apps and web"
+      }
+    ]
+  },
+  {
+    id: "panel-heavy",
+    label: "Panel-heavy summits",
+    title: "Manage moderators and panellists",
+    description: "Per-session roles so moderators and panellists are labelled correctly everywhere they appear.",
+    checklist: [
+      "Assign granular session roles",
+      "Automated speaker communications",
+      "Real-time panel balancing"
+    ],
+    cards: [
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Panel&backgroundColor=caffbf",
+        title: "Role Management",
+        desc: "Tag speakers dynamically per session"
+      },
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Comm&backgroundColor=bdb2ff",
+        title: "Smart Comms",
+        desc: "Send targeted emails by role"
+      }
+    ]
+  },
+  {
+    id: "academic",
+    label: "Academic conferences",
+    title: "From submission to publication",
+    description: "Abstract collection, reviewer rubrics and accepted papers pushed directly into the program.",
+    checklist: [
+      "Custom scoring rubrics",
+      "Blind peer review workflows",
+      "One-click acceptance to agenda"
+    ],
+    cards: [
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Review&backgroundColor=fdffb6",
+        title: "CFP Dashboard",
+        desc: "Collect and route abstracts"
+      },
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Score&backgroundColor=a0c4ff",
+        title: "Reviewer Portal",
+        desc: "Score submissions systematically"
+      }
+    ]
+  },
+  {
+    id: "recurring",
+    label: "Recurring events",
+    title: "Intelligence from past events",
+    description: "Returning attendees get session recommendations based on what they attended last time.",
+    checklist: [
+      "Historical attendance tracking",
+      "Smart session recommendations",
+      "Persistent speaker profiles"
+    ],
+    cards: [
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=History&backgroundColor=ffc6ff",
+        title: "Attendee Insights",
+        desc: "Track journey across years"
+      },
+      {
+        iconUrl: "https://api.dicebear.com/7.x/notionists/svg?seed=Profile&backgroundColor=9bf6ff",
+        title: "Global Speakers",
+        desc: "Maintain profiles indefinitely"
+      }
+    ]
+  }
+];
+---
+
+{section === "problem" && (
+  <section class="smd-problem" aria-label="The speaker management problem">
+    <div class="smd-problem__inner">
+      <div class="smd-problem__content">
+      <span class="smd-problem__eyebrow animate-on-scroll" data-animation="fadeIn">One connected workflow</span>
+      <h2 class="smd-problem__lead animate-on-scroll" data-animation="fadeInUp">
+        The lineup changes. <span>Everything downstream has to keep up.</span>
+      </h2>
+      <div class="smd-problem__copy animate-on-scroll" data-animation="fadeInUp">
+        <p>A keynote moves to a different stage. A panellist drops out two days before. A workshop fills up. In most teams that means a spreadsheet, a WhatsApp group, a re-export of the agenda, and an email nobody opens.</p>
+        <p>EventHex keeps the speaker record, the session, the published agenda, and the attendee's phone as one connected thing — change it once and everywhere it appears updates with it.</p>
+      </div>
+      </div>
+      <div class="smd-problem__visual animate-on-scroll" data-animation="fadeInUp" aria-label="EventHex connected speaker and agenda workflow">
+        <div class="smd-problem__orb smd-problem__orb--one"></div>
+        <div class="smd-problem__orb smd-problem__orb--two"></div>
+        <div class="smd-problem__screen"><img src="/feature-images/speaker-management/session-timeline-v2.svg" alt="EventHex agenda timeline updating with speaker changes" loading="lazy" decoding="async" /></div>
+        <div class="smd-problem__float"><img src="/feature-images/speaker-management/hero-mobile-speakers.png" alt="EventHex mobile speaker directory" loading="lazy" decoding="async" /></div>
+        <div class="smd-problem__status smd-problem__status--top"><i></i><span>Speaker updated</span><strong>Live</strong></div>
+        <div class="smd-problem__status smd-problem__status--bottom"><i></i><span>Agenda synced</span><strong>Everywhere</strong></div>
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "ai" && (
+  <section class="smd-ai" aria-labelledby="smd-ai-title">
+    <div class="smd-ai__inner">
+      <div class="smd-ai__left">
+        <h2 id="smd-ai-title" class="smd-ai__title animate-on-scroll" data-animation="fadeInUp">
+          <span>describe the agenda<br/>and EventHex builds it</span>
+        </h2>
+        <p class="smd-ai__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Tell the EventHex assistant who is speaking and when, and it creates the speakers, creates the sessions, and assigns each speaker to the right slot. You can do it inside EventHex, or from ChatGPT and Claude through the EventHex Copilot connector — useful when the schedule arrives as a document and you would rather not retype it. Review what it proposes before anything is saved.
+        </p>
+
+        <div class="smd-ai__features animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <span class="smd-ai__features-title">
+            REPLACES 
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </span>
+          <ul class="smd-ai__features-list">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              AI LinkedIn speaker import
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Visual session timeline scheduling
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Call for papers and reviewer workflows
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="smd-ai__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="smd-ai__cards">
+          <div class="smd-ai__card">
+             <div class="smd-ai__card-icon"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Event&backgroundColor=ffd6a5" alt="Agent" width="24" height="24" /></div>
+             <span>Your Event Copilot manages your agenda</span>
+          </div>
+          <div class="smd-ai__card">
+             <div class="smd-ai__card-icon"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Hex&backgroundColor=ffadad" alt="Agent" width="24" height="24" /></div>
+             <span>AI instantly builds and optimizes schedules</span>
+          </div>
+          <div class="smd-ai__card">
+             <div class="smd-ai__card-icon"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=AI&backgroundColor=9bf6ff" alt="Agent" width="24" height="24" /></div>
+             <span>Smart conflict resolution prevents double-booking</span>
+          </div>
+          <div class="smd-ai__card">
+             <div class="smd-ai__card-icon"><img src="https://api.dicebear.com/7.x/notionists/svg?seed=Copilot&backgroundColor=caffbf" alt="Agent" width="24" height="24" /></div>
+             <span>Continuous learning from your past events</span>
+          </div>
+        </div>
+
+        <div class="smd-ai__actions">
+          <a href="/book-a-demo/" class="smd-ai__btn smd-ai__btn--dark">Get Started Free &rarr;</a>
+          <a href="/ai-event-copilot/" class="smd-ai__btn smd-ai__btn--light">Explore Solution &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "use-cases" && (
+  <>
+    <section class="smd-agent-suites" aria-labelledby="smd-agent-title">
+      <div class="smd-agent-suites__inner">
+        <header class="smd-agent__header">
+          <span class="smd-agent__badge">USE CASES</span>
+          <h2 id="smd-agent-title" class="smd-agent__title animate-on-scroll" data-animation="fadeInUp">
+            Built for the events that are<br/>hardest to coordinate
+          </h2>
+          <p class="smd-agent__subtitle animate-on-scroll" data-animation="fadeInUp">
+            Manage complex schedules, multiple stages, and thousands of attendees in one unified workspace.
+          </p>
+        </header>
+
+        <div class="smd-agent__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist">
+          {useCasesTabs.map((tab, index) => (
+            <button 
+              class={`smd-agent__tab ${index === 0 ? 'smd-agent__tab--active' : ''}`}
+              role="tab" 
+              aria-selected={index === 0 ? "true" : "false"}
+              aria-controls={`panel-${tab.id}`}
+              id={`tab-${tab.id}`}
+              data-target={tab.id}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="smd-agent__box animate-on-scroll" data-animation="fadeInUp">
+          {useCasesTabs.map((tab, index) => (
+            <div 
+              class={`smd-agent__panel ${index === 0 ? 'smd-agent__panel--active' : ''}`}
+              id={`panel-${tab.id}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${tab.id}`}
+              data-panel={tab.id}
+            >
+              <div class="smd-agent__left">
+                <h3 class="smd-agent__panel-title" set:html={tab.title.replace(/,\s*(.*)$/, ',<br/><strong>$1</strong>')} />
+                <p class="smd-agent__panel-desc">{tab.description}</p>
+                
+                <div class="smd-agent__replaces">
+                  <span class="smd-agent__replaces-label">REPLACES</span>
+                  <span class="smd-agent__replaces-icons">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                  </span>
+                </div>
+
+                <ul class="smd-agent__checklist">
+                  {tab.checklist.map(item => (
+                    <li>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="smd-agent__right">
+                <div class="smd-agent__cards">
+                  {tab.cards.map(card => (
+                    <div class="smd-agent__card">
+                      <div class="smd-agent__card-icon">
+                        <img src={card.iconUrl} alt={card.title} loading="lazy" />
+                      </div>
+                      <div class="smd-agent__card-content">
+                        {card.title} {card.desc}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const tabs = document.querySelectorAll('.smd-agent__tab');
+        const panels = document.querySelectorAll('.smd-agent__panel');
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const targetId = tab.getAttribute('data-target');
+            
+            tabs.forEach(t => {
+              t.classList.remove('smd-agent__tab--active');
+              t.setAttribute('aria-selected', 'false');
+            });
+            
+            panels.forEach(p => {
+              p.classList.remove('smd-agent__panel--active');
+            });
+
+            tab.classList.add('smd-agent__tab--active');
+            tab.setAttribute('aria-selected', 'true');
+            const activePanel = document.getElementById(`panel-${targetId}`);
+            if(activePanel) {
+               activePanel.classList.add('smd-agent__panel--active');
+            }
+          });
+        });
+      });
+    </script>
+  </>
+)}
+
+<style>
+  .smd-problem,
+  .smd-ai,
+  .smd-use { background: transparent; color: #22272f; }
+  .smd-problem { padding: 112px 24px; }
+  .smd-problem__inner {
+    width: min(1120px, 100%); margin: 0 auto; display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(48px, 8vw, 112px); align-items: start;
+  }
+  .smd-problem__lead,
+  .smd-ai__title,
+  .smd-use__title {
+    margin: 0; font-family: var(--font-heading); font-size: clamp(42px, 5vw, 64px);
+    font-weight: 650; line-height: 1.05; letter-spacing: -.045em;
+  }
+  .smd-problem__lead span,
+  .smd-ai__title span,
+  .smd-use__title span { color: #a3aab8; }
+  .smd-problem__copy { padding-top: 8px; }
+  .smd-problem__copy p,
+  .smd-ai__copy,
+  .smd-use__item p { font-family: var(--font-body); color: #596579; line-height: 1.7; }
+  .smd-problem__copy p { margin: 0 0 22px; font-size: 18px; }
+
+  .smd-ai { padding: 48px 24px; display: flex; justify-content: center; background: transparent; }
+  .smd-ai__inner {
+    width: min(1000px, 100%); padding: 48px 48px;
+    border: none; border-radius: 16px;
+    background: #f9f9f9;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    align-items: center;
+  }
+  .smd-ai__left { max-width: 480px; }
+  .smd-ai__title {
+    margin: 0; font-family: var(--font-heading); font-size: clamp(32px, 3.5vw, 42px);
+    font-weight: 650; line-height: 1.1; letter-spacing: -.03em;
+    display: flex; flex-direction: column;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smd-ai__title strong { margin-bottom: -4px; font-weight: inherit; }
+  .smd-ai__title span { font-weight: 500; font-size: 0.95em; }
+  
+  .smd-ai__copy { margin: 16px 0 32px; font-size: 15px; color: #374151; line-height: 1.5; font-weight: 500; }
+  
+  .smd-ai__features-title {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    color: #6b7280; font-family: var(--font-body); font-size: 11px;
+    font-weight: 700; letter-spacing: .1em;
+  }
+  .smd-ai__features-title svg { color: #9ca3af; width: 12px; height: 12px; }
+  .smd-ai__features-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .smd-ai__features-list li {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-body); font-size: 13.5px; color: #4b5563; font-weight: 500;
+  }
+  .smd-ai__features-list li svg { flex-shrink: 0; }
+
+  .smd-ai__right { display: flex; flex-direction: column; gap: 20px; max-width: 420px; }
+  .smd-ai__cards { display: flex; flex-direction: column; gap: 10px; }
+  .smd-ai__card {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; background: #ffffff;
+    border: 1px solid #f3f4f6; border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .smd-ai__card:hover {
+    transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .smd-ai__card-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .smd-ai__card-icon img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .smd-ai__card-icon::after {
+    content: "✦"; position: absolute; bottom: -2px; right: -2px;
+    font-size: 8px; color: #a855f7; background: #fff;
+    border-radius: 50%; width: 10px; height: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .smd-ai__card span { font-family: var(--font-body); font-size: 13.5px; color: #1f2937; font-weight: 500; }
+  
+  .smd-ai__actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+  .smd-ai__btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 10px 20px; border-radius: 6px; font-family: var(--font-body);
+    font-size: 13.5px; font-weight: 600; text-decoration: none; transition: all 0.2s ease;
+  }
+  .smd-ai__btn--dark { background: #27272a; color: #ffffff; }
+  .smd-ai__btn--dark:hover { background: #18181b; }
+  .smd-ai__btn--light { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
+  .smd-ai__btn--light:hover { background: #e5e7eb; }
+
+  .smd-agent-suites { padding: 112px 24px; background: transparent; }
+  .smd-agent-suites__inner { width: min(1080px, 100%); margin: 0 auto; }
+  
+  .smd-agent__header { text-align: center; margin-bottom: 32px; display: flex; flex-direction: column; align-items: center; }
+  .smd-agent__badge {
+    color: #6366f1;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-family: monospace;
+  }
+  .smd-agent__title {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4.5vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+    max-width: 800px;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smd-agent__subtitle {
+    font-size: 17.5px;
+    color: #6b7280;
+    max-width: 700px;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 500;
+  }
+
+  .smd-agent__tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .smd-agent__tab {
+    background: transparent;
+    border: 1.5px solid transparent;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-body);
+  }
+  .smd-agent__tab:hover {
+    background: transparent;
+    border-color: #cbd5e1;
+    color: #334155;
+  }
+  .smd-agent__tab--active {
+    background: transparent !important;
+    color: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+  }
+
+  .smd-agent__box {
+    background: #f9fafb;
+    border-radius: 28px;
+    padding: 64px 80px;
+    border: none;
+    box-shadow: none;
+  }
+
+  .smd-agent__panel {
+    display: none;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 80px;
+    align-items: center;
+    animation: agentFadeIn 0.4s ease forwards;
+  }
+  @keyframes agentFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .smd-agent__panel--active {
+    display: grid;
+  }
+
+  .smd-agent__panel-title {
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 3.8vw, 42px);
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.1;
+    margin: 0 0 24px;
+    letter-spacing: -0.03em;
+  }
+  .smd-agent__panel-title strong {
+    color: #9ca3af;
+    display: block;
+    font-weight: 700;
+  }
+  .smd-agent__panel-desc {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0 0 48px;
+    font-weight: 500;
+  }
+
+  .smd-agent__replaces {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .smd-agent__replaces-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9ca3af;
+    letter-spacing: 0.12em;
+  }
+  .smd-agent__replaces-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9ca3af;
+  }
+
+  .smd-agent__checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .smd-agent__checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+  .smd-agent__checklist li svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    stroke: #9ca3af;
+  }
+
+  .smd-agent__right {
+    display: flex;
+    flex-direction: column;
+  }
+  .smd-agent__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .smd-agent__card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    border: 1px solid #f3f4f6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .smd-agent__card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+  .smd-agent__card-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .smd-agent__card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .smd-agent__card-icon::after {
+    content: "✦"; position: absolute; bottom: -2px; right: -2px;
+    font-size: 9px; color: #a855f7; background: #fff; border-radius: 50%;
+    width: 14px; height: 14px; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .smd-agent__card-content {
+    margin: 0;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.4;
+  }
+
+  /* Removed CTAs as per design */
+
+  .smd-problem { position: relative; overflow: hidden; padding: clamp(92px,10vw,148px) 24px; background: radial-gradient(circle at 88% 18%,rgba(111,93,245,.13),transparent 28%),radial-gradient(circle at 10% 88%,rgba(74,192,233,.1),transparent 25%),transparent; }
+  .smd-problem__inner { width: min(1200px,100%); grid-template-columns: minmax(0,.88fr) minmax(420px,1.12fr); gap: clamp(54px,7vw,96px); align-items: center; }
+  .smd-problem__content { position: relative; z-index: 2; }
+  .smd-problem__eyebrow { display: inline-flex; margin-bottom: 24px; padding: 9px 16px; border: 1px solid rgba(26,30,45,.08); border-radius: 999px; background: rgba(255,255,255,.82); box-shadow: 0 12px 32px rgba(35,42,70,.08); color: #5f4bd8; font: 650 13px/1.2 var(--font-body); }
+  .smd-problem__lead { 
+    font-size: clamp(44px,4.6vw,64px); 
+    line-height: 1.02; 
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+  .smd-problem__lead span { display: block; }
+  .smd-problem__copy { padding-top: 34px; }
+  .smd-problem__copy p { margin-bottom: 18px; font-size: 17px; line-height: 1.65; }
+  .smd-problem__visual { position: relative; min-height: 570px; isolation: isolate; }
+  .smd-problem__visual::before { content: ""; position: absolute; inset: 7% 2% 4% 9%; z-index: -2; border: 1px solid rgba(90,75,205,.12); border-radius: 34px; background: linear-gradient(145deg,rgba(255,255,255,.92),rgba(239,237,252,.74)); box-shadow: 0 42px 100px rgba(43,38,87,.15); }
+  .smd-problem__screen { position: absolute; inset: 13% 0 7% 13%; overflow: hidden; border: 1px solid rgba(44,48,72,.1); border-radius: 22px; background: #fff; box-shadow: 0 26px 70px rgba(38,35,72,.17); animation: smd-problem-float 6s ease-in-out infinite; }
+  .smd-problem__screen img { width: 100%; height: 100%; object-fit: contain; }
+  .smd-problem__float { position: absolute; z-index: 3; left: 0; bottom: 0; width: 29%; height: 52%; overflow: hidden; border: 6px solid #fff; border-radius: 26px; background: #fff; box-shadow: 0 28px 70px rgba(32,29,68,.25); animation: smd-problem-float-alt 5.2s ease-in-out infinite; }
+  .smd-problem__float img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .smd-problem__status { position: absolute; z-index: 4; display: grid; grid-template-columns: 10px 1fr; gap: 3px 10px; min-width: 165px; padding: 14px 17px; border: 1px solid rgba(255,255,255,.72); border-radius: 14px; background: rgba(255,255,255,.9); box-shadow: 0 18px 42px rgba(40,36,80,.16); backdrop-filter: blur(14px); animation: smd-problem-drift 4.4s ease-in-out infinite; }
+  .smd-problem__status i { grid-row: 1/3; align-self: center; width: 9px; height: 9px; border-radius: 50%; background: #24c97a; box-shadow: 0 0 0 5px rgba(36,201,122,.13); }
+  .smd-problem__status span { color: #22272f; font: 650 13px/1.2 var(--font-body); }
+  .smd-problem__status strong { color: #72798a; font: 500 11px/1.2 var(--font-body); }
+  .smd-problem__status--top { top: 5%; right: -2%; }
+  .smd-problem__status--bottom { right: 2%; bottom: 2%; animation-delay: -2.2s; }
+  .smd-problem__orb { position: absolute; z-index: -1; border-radius: 50%; }
+  .smd-problem__orb--one { top: 1%; right: 5%; width: 150px; height: 150px; background: rgba(126,104,238,.2); animation: smd-problem-pulse 6s ease-in-out infinite; }
+  .smd-problem__orb--two { left: 7%; bottom: 4%; width: 110px; height: 110px; background: rgba(75,192,219,.18); animation: smd-problem-pulse 6s ease-in-out -3s infinite; }
+  @keyframes smd-problem-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-11px)} }
+  @keyframes smd-problem-float-alt { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-14px) rotate(-.7deg)} }
+  @keyframes smd-problem-drift { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
+  @keyframes smd-problem-pulse { 0%,100%{transform:scale(.92);opacity:.55} 50%{transform:scale(1.08);opacity:1} }
+
+  @media (max-width: 900px) {
+    .smd-problem__inner { grid-template-columns: 1fr; }
+    .smd-problem__content { max-width: 720px; }
+    .smd-problem__visual { width: min(680px,100%); min-height: 540px; margin: 0 auto; }
+    .smd-agent__panel { grid-template-columns: 1fr; gap: 48px; }
+    .smd-agent__box { padding: 48px; }
+  }
+  @media (max-width: 620px) {
+    .smd-problem, .smd-agent-suites { padding: 72px 20px; }
+    .smd-ai { padding: 12px 16px; }
+    .smd-ai__inner { padding: 32px 24px; border-radius: 16px; grid-template-columns: 1fr; gap: 32px; }
+    .smd-problem__lead, .smd-agent__title { font-size: 38px; }
+    .smd-ai__title { font-size: 28px; }
+    .smd-ai__actions { flex-direction: column; width: 100%; align-items: stretch; }
+    .smd-ai__btn { width: 100%; }
+    .smd-problem__copy { padding-top: 24px; }
+    .smd-problem__copy p { font-size: 16px; }
+    .smd-problem__visual { min-height: 430px; }
+    .smd-problem__screen { inset: 11% 0 9% 8%; }
+    .smd-problem__float { width: 32%; height: 46%; border-width: 4px; border-radius: 18px; }
+    .smd-problem__status { min-width: 138px; padding: 11px 13px; }
+    .smd-problem__status span { font-size: 11px; }
+    .smd-ai__copy { font-size: 16px; }
+    .smd-agent__box { padding: 32px 24px; border-radius: 20px; }
+    .smd-agent__actions { flex-direction: column; width: 100%; }
+    .smd-agent__btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .smd-problem__screen,.smd-problem__float,.smd-problem__status,.smd-problem__orb { animation: none; }
+  }
+</style>
