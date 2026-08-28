@@ -1,8 +1,9 @@
 export const DEMO_HOST_TIME_ZONE = "Asia/Kolkata";
 
-const APPROVAL_START_MINUTE = 23 * 60 + 30;
-const APPROVAL_END_MINUTE = 8 * 60 + 30;
+const APPROVAL_START_MINUTE = 22 * 60;
+const APPROVAL_END_MINUTE = 2 * 60 + 30;
 const SAME_DAY_LAST_VISIBLE_MINUTE = 22 * 60 + 30;
+const NEXT_DAY_FIRST_VISIBLE_MINUTE = 8 * 60 + 30;
 
 type HostDateParts = {
   year: number;
@@ -47,7 +48,7 @@ export function requiresDemoApproval(start: string | Date): boolean {
   const parts = hostDateParts(parseDate(start, "demo start time"));
   const minuteOfDay = parts.hour * 60 + parts.minute;
 
-  // Guarded window is [23:30, 08:30): 23:30 requires approval; 08:30 does not.
+  // Guarded window is [22:00, 02:30): 22:00 through 02:00 require approval.
   return minuteOfDay >= APPROVAL_START_MINUTE || minuteOfDay < APPROVAL_END_MINUTE;
 }
 
@@ -66,9 +67,9 @@ export function isDemoSlotBookable(start: string | Date, now: string | Date = ne
   const currentMinute = current.hour * 60 + current.minute;
   const currentDay = localClock(current, 0, 0);
   const dayMs = 24 * 60 * 60 * 1000;
-  const blackoutDay = currentMinute < APPROVAL_END_MINUTE ? currentDay - dayMs : currentDay;
+  const blackoutDay = currentMinute < NEXT_DAY_FIRST_VISIBLE_MINUTE ? currentDay - dayMs : currentDay;
   const blackoutStart = blackoutDay + SAME_DAY_LAST_VISIBLE_MINUTE * 60 * 1000;
-  const blackoutEnd = blackoutDay + dayMs + APPROVAL_END_MINUTE * 60 * 1000;
+  const blackoutEnd = blackoutDay + dayMs + NEXT_DAY_FIRST_VISIBLE_MINUTE * 60 * 1000;
 
   // 22:30 and 08:30 remain visible. Only the nearest overnight window is hidden;
   // later overnight slots stay available with the existing approval policy.
