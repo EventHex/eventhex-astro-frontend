@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { env } from "cloudflare:workers";
 import { isDemoSlotBookable, requiresDemoApproval } from "../../lib/demo-booking-policy";
+import { buildCalBookingFieldsResponses } from "../../lib/demo-booking-fields";
 import { formatSubmissionContext } from "../../lib/submission-context";
 
 export const prerender = false;
@@ -71,9 +72,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const submissionContext = formatSubmissionContext(submissionMetadata, request);
-  const bookingFieldsResponses: Record<string, string> = { company };
-  if (role) bookingFieldsResponses.role = role;
-  bookingFieldsResponses.notes = [notes, "Submission Context", submissionContext].filter(Boolean).join("\n\n");
+  const bookingFieldsResponses = buildCalBookingFieldsResponses({ company, role, notes });
 
   const guests = getGuests();
 
