@@ -1,20 +1,134 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
 const faqs = [
-  { q: "What is speaker management software?", a: "Speaker management software helps event organizers centralize all speaker-related tasks from collecting bios and photos to scheduling sessions, automating communications, and engaging audiences with live polls and Q&A. EventHex provides an all-in-one AI-powered solution for managing speakers at conferences, summits, and corporate events." },
-  { q: "How does the AI LinkedIn import work?", a: "Simply paste a speaker's LinkedIn profile URL into EventHex, and our AI automatically extracts their name, title, company, bio, and profile photo. This eliminates most manual data entry and keeps speaker profiles accurate and up to date." },
-  { q: "Can I manage multiple sessions and stages?", a: "Yes. EventHex supports unlimited sessions across multiple stages and venues. You can use the visual timeline to schedule sessions, create sub-sessions and breakouts, set capacity limits, restrict access by ticket type, and let speakers manage their own schedules." },
-  { q: "What audience engagement tools are available?", a: "EventHex includes live polls with real-time analytics, audience Q&A with spotlight mode for fullscreen display, emoji reactions, star ratings, and session feedback, all accessible from attendees' phones without any app download." },
-  { q: "What is InstaRecap?", a: "InstaRecap is EventHex's AI-powered transcription and summary tool. It supports audio uploads, YouTube links, and live recording, then generates transcripts, AI summaries, key takeaways, and translated content for multilingual events." },
-  { q: "Can I automate speaker communication and reminders?", a: "Yes. EventHex helps you streamline speaker coordination with automated reminders, direct communication workflows, update sharing, and material collection from one place. This reduces follow-up delays and keeps speakers aligned before and during the event." },
-  { q: "Is there a free trial available?", a: "You can book a free demo to see EventHex's speaker management workflow in action. No credit card is required, and the team provides onboarding support to help you launch quickly." },
+  { q: "Does EventHex handle automated speaker communication?", a: "Yes. Each speaker gets a confirmation email from a template you control, with their badge attached if you want it. You can resend to one speaker or all of them at once, and a delivery log shows what was opened, bounced or failed. Attendees separately get push and WhatsApp reminders before sessions they saved." },
+  { q: "Can I manage speaker bios and session information together?", a: "Yes. A speaker's bio, photo, company, designation and social links live on their profile, and assigning them to a session links the two — so their profile page on your event website lists every session they are speaking at, and each session lists its speakers." },
+  { q: "How does EventHex handle panel coordination?", a: "Assign several speakers to one session and give each a role — moderator, panellist, or a label you create. Roles show on the agenda and on speaker profiles, so attendees know who is running the discussion." },
+  { q: "Can I run multiple tracks and stages?", a: "Yes. Create as many stages as you need and schedule sessions in parallel across them. The timeline shows every stage side by side per day, breakouts nest under a parent session, and attendees can filter the agenda by stage or track. Note that EventHex does not currently block you from double-booking a speaker — the timeline shows overlaps, but it will let you save one." },
+  { q: "What happens when a session time or room changes?", a: "Change it once. The event website and the attendee app update, and you can send a notification describing the change. That notification goes to everyone registered for the event rather than only the people who saved that session." },
+  { q: "Do attendees need to download an app?", a: "Not to take part. Polls and Q&A open from a QR code with no app and no account. The mobile app adds a saved agenda, offline access, reminders and session recaps for attendees who want it." },
+  { q: "What do speakers get afterwards?", a: "A summary of their session with key takeaways, a drafted LinkedIn and X post, and a shareable poster. Sessions can also be transcribed and translated for attendees who were not in the room." },
+  { q: "Can I collect and review talk submissions?", a: "Yes. Publish a call for papers with your own topics and submission form, assign reviewers, score against a rubric, and push accepted abstracts straight into the program as sessions." },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need a custom setup?"
-  title="Frequently Asked Questions"
-  description="We help event teams shape speaker onboarding, approvals, reminder flows, and live engagement around how their conference operations actually run."
-/>
+<section class="sm-faq">
+  <div class="sm-faq__inner">
+    <div class="sm-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="sm-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 class="sm-faq__heading">Speaker Management<br />Questions, Answered.</h2>
+      <p class="sm-faq__intro">Find quick answers about speaker onboarding, session coordination, agenda updates, and attendee engagement.</p>
+      <a href="/contact-en/" class="sm-faq__cta">
+        Visit Help Center
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="sm-faq__list">
+      {faqs.map((faq, index) => (
+        <details
+          class="sm-faq__item animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 50)}
+          data-sm-faq-item
+          open={index === 0}
+        >
+          <summary class="sm-faq__question">
+            <strong>{faq.q}</strong>
+            <span class="sm-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="sm-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const speakerFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-sm-faq-item]'));
+  speakerFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      speakerFaqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .sm-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .sm-faq__inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .sm-faq__sidebar { position: sticky; top: 6rem; }
+  .sm-faq__eyebrow {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
+    border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px;
+    color: #000; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500;
+  }
+  .sm-faq__heading {
+    font-family: 'Creato Display', var(--font-heading); font-size: 44px; font-weight: 500;
+    color: #000; margin: 0 0 20px; line-height: 1.1; letter-spacing: -1px;
+  }
+  .sm-faq__intro { margin: 0 0 28px; color: var(--body-light); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+  .sm-faq__cta {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px;
+    border-radius: 999px; background: #171a21; color: #fff; font-family: var(--font-body);
+    font-size: 0.9375rem; font-weight: 500; text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .sm-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .sm-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: speaker-faq; }
+  .sm-faq__item {
+    counter-increment: speaker-faq; padding: 4px 28px; overflow: hidden;
+    border: 1px solid #e4e7ec; border-radius: 20px; background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  .sm-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .sm-faq__question {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 16px 0; font-family: 'Creato Display', var(--font-heading); font-size: 1.0625rem;
+    font-weight: 500; color: #000; cursor: pointer; list-style: none;
+  }
+  .sm-faq__question strong { font-weight: 500; }
+  .sm-faq__question strong::before { content: counter(speaker-faq) '. '; }
+  .sm-faq__question::-webkit-details-marker { display: none; }
+  .sm-faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .sm-faq__icon::before,
+  .sm-faq__icon::after {
+    content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%);
+  }
+  .sm-faq__icon::before { width: 14px; height: 2px; }
+  .sm-faq__icon::after { width: 2px; height: 14px; transition: opacity 0.2s ease; }
+  .sm-faq__item[open] .sm-faq__icon { transform: scale(0.9); }
+  .sm-faq__item[open] .sm-faq__icon::after { opacity: 0; }
+  .sm-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .sm-faq__answer p { font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.7; color: #000; margin: 0; }
+  @media (prefers-reduced-motion: reduce) {
+    .sm-faq__item, .sm-faq__icon, .sm-faq__icon::after { transition: none; }
+  }
+  @media (max-width: 1024px) {
+    .sm-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .sm-faq__sidebar { position: static; }
+    .sm-faq__heading { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .sm-faq { padding: 56px 16px; }
+    .sm-faq__heading { font-size: 28px; }
+    .sm-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .sm-faq__question { font-size: 0.9375rem; padding: 18px 0; }
+  }
+</style>

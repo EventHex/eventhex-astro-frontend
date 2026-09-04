@@ -39,8 +39,6 @@ const shareLinks = item
 
       <div class="art-hero__meta">
         <span class="art-hero__category">{item.category}</span>
-        <time datetime={item.date} itemprop="datePublished">{item.formattedDate}</time>
-        <span>{item.readingTime} min read</span>
       </div>
 
       <h1 class="art-hero__title" itemprop="headline">{item.title}</h1>
@@ -55,6 +53,10 @@ const shareLinks = item
             <span itemprop="name">{item.author}</span>
           </span>
           <span class="art-hero__author-role">EventHex Editorial</span>
+        </div>
+        <div class="art-hero__author-meta">
+          <time datetime={item.date} itemprop="datePublished">{item.formattedDate}</time>
+          <span>{item.readingTime} min read</span>
         </div>
       </div>
     </div>
@@ -178,16 +180,11 @@ const shareLinks = item
   .art-hero {
     position: relative;
     margin-top: -90px;
-    background:
-      radial-gradient(circle at 18% 30%, rgba(175, 163, 255, 0.14), transparent 28%),
-      radial-gradient(circle at 80% 24%, rgba(171, 255, 255, 0.14), transparent 30%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
   }
 
   .art-hero__inner {
     max-width: 1000px;
     margin: 0 auto;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
     padding: 180px 24px 80px;
   }
 
@@ -238,11 +235,11 @@ const shareLinks = item
     font-size: 0.75rem;
   }
 
-  /* Fix #2: Match site hero typography — 42px/600 Manrope */
+  /* Match the Event Registration hero title weight. */
   .art-hero__title {
     font-family: var(--font-heading);
     font-size: 42px;
-    font-weight: 600;
+    font-weight: 500;
     line-height: 50px;
     letter-spacing: -0.5px;
     color: var(--heading-dark, #22272f);
@@ -292,6 +289,33 @@ const shareLinks = item
     font-family: var(--font-body);
     font-size: 0.8125rem;
     color: var(--label-gray, #868c98);
+  }
+  .art-hero__author-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--body-gray, #525866);
+    white-space: nowrap;
+  }
+  .art-hero__author-meta > * + * {
+    position: relative;
+    padding-left: 1rem;
+  }
+  .art-hero__author-meta > * + *::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateY(-50%);
+    opacity: 0.55;
   }
 
   /* Fix #4: Cover image — unified width, no awkward translateY */
@@ -690,6 +714,16 @@ const shareLinks = item
     .art-hero__lead {
       font-size: 16px;
       line-height: 24px;
+    }
+    .art-hero__author {
+      gap: 0.625rem;
+    }
+    .art-hero__author-meta {
+      gap: 0.5rem;
+      font-size: 0.6875rem;
+    }
+    .art-hero__author-meta > * + * {
+      padding-left: 0.5rem;
     }
     .art-cover {
       padding: 0 16px;

@@ -1,5 +1,6 @@
 ---
 import EditorialCard from "./EditorialCard.astro";
+import EditorialFeaturedCard from "./EditorialFeaturedCard.astro";
 import type { EditorialEntry, EditorialKind } from "../../lib/editorial";
 import { getUniqueCategories } from "../../lib/editorial";
 
@@ -16,9 +17,12 @@ const { kind, pageTitle, pageDescription, eyebrow, items } = Astro.props;
 const featuredItem = items[0] ?? null;
 const archiveItems = items.slice(1);
 const topics = getUniqueCategories(items);
+const activeCategorySlug = Astro.url.pathname.match(/^\/blog\/category\/([^/]+)\/?$/)?.[1] ?? "";
+const isBlogHome = kind === "blog" && !activeCategorySlug;
+const blogGridItems = isBlogHome ? archiveItems : items;
 ---
 
-<section class="editorial-shell">
+<section class:list={["editorial-shell", `editorial-shell--${kind}`]}>
   <!-- Hero header with textured background matching site-wide pattern -->
   <div class="editorial-hero">
     <div class="editorial-hero__inner">
@@ -27,7 +31,7 @@ const topics = getUniqueCategories(items);
         <h1 class="editorial-title">{pageTitle}</h1>
         <p class="editorial-lead">{pageDescription}</p>
 
-        {topics.length > 0 && (
+        {kind !== "blog" && topics.length > 0 && (
           <div class="editorial-categories">
             {topics.map((topic) => (
               <a class="editorial-category-tag" href={`/blog/category/${topic.slug}/`}>{topic.name}</a>
@@ -39,18 +43,51 @@ const topics = getUniqueCategories(items);
   </div>
 
   <div class="editorial-container">
+    {isBlogHome && featuredItem && (
+      <section class="editorial-blog-featured" aria-label="Featured article">
+        <EditorialFeaturedCard item={featuredItem} />
+      </section>
+    )}
+
+    {kind === "blog" && (
+      <nav class="editorial-filter-nav" aria-label="Blog categories">
+        <a
+          class:list={["editorial-filter-link", { "is-active": !activeCategorySlug }]}
+          href="/blog/"
+          aria-current={!activeCategorySlug ? "page" : undefined}
+        >All</a>
+        {topics.map((topic) => (
+          <a
+            class:list={["editorial-filter-link", { "is-active": activeCategorySlug === topic.slug }]}
+            href={`/blog/category/${topic.slug}/`}
+            aria-current={activeCategorySlug === topic.slug ? "page" : undefined}
+          >{topic.name}</a>
+        ))}
+      </nav>
+    )}
+
     {featuredItem ? (
       <main class="editorial-main">
-        <section class="editorial-featured">
-          <EditorialCard item={featuredItem} variant="feature" />
-        </section>
-
-        {archiveItems.length > 0 && (
-          <section class="editorial-grid">
-            {archiveItems.map((item) => (
-              <EditorialCard item={item} />
+        {kind === "blog" ? (
+          <section class="editorial-grid editorial-grid--blog">
+            {blogGridItems.map((item) => (
+              <EditorialCard item={item} variant="blog" />
             ))}
           </section>
+        ) : (
+          <>
+            <section class="editorial-featured">
+              <EditorialCard item={featuredItem} variant="feature" />
+            </section>
+
+            {archiveItems.length > 0 && (
+              <section class="editorial-grid">
+                {archiveItems.map((item) => (
+                  <EditorialCard item={item} />
+                ))}
+              </section>
+            )}
+          </>
         )}
       </main>
     ) : (
@@ -93,6 +130,24 @@ const topics = getUniqueCategories(items);
     padding: 180px 20px 80px;
   }
 
+  .editorial-shell--blog .editorial-hero {
+    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+  }
+
+  .editorial-shell--blog .editorial-hero__inner {
+    background: none;
+  }
+
+  .editorial-shell--blog .editorial-eyebrow,
+  .editorial-shell--blog .editorial-title,
+  .editorial-shell--blog .editorial-lead {
+    color: #181816;
+    background: linear-gradient(110deg, #11110f 8%, #4f4f4a 62%, #85857f 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   .editorial-header {
     max-width: 720px;
     margin: 0 auto;
@@ -123,6 +178,10 @@ const topics = getUniqueCategories(items);
     letter-spacing: -1px;
     color: var(--heading-dark, #22272F);
     margin: 0 0 20px;
+  }
+
+  .editorial-shell--blog .editorial-title {
+    font-weight: 500;
   }
 
   .editorial-lead {
@@ -168,12 +227,67 @@ const topics = getUniqueCategories(items);
 
   /* ── Content container ── */
   .editorial-container {
-    max-width: 1200px;
+    max-width: 1320px;
     margin: 0 auto;
-    padding: 60px 20px 100px;
+    padding: 60px 48px 100px;
     display: flex;
     flex-direction: column;
     gap: 60px;
+  }
+
+  .editorial-shell--blog .editorial-container {
+    padding-top: 14px;
+  }
+
+  .editorial-filter-nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 18px;
+    min-width: 0;
+    padding: 4px 2px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .editorial-filter-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .editorial-filter-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-height: 48px;
+    padding: 12px 2px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #242422;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+    text-decoration: none;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .editorial-filter-link:hover {
+    color: var(--brand-blue, #375DFB);
+  }
+
+  .editorial-filter-link.is-active {
+    min-width: 70px;
+    padding-inline: 22px;
+    border-color: #e1e1de;
+    background: #ffffff;
+    color: #181816;
+    box-shadow: 0 3px 8px rgba(25, 25, 23, 0.1), 0 18px 34px rgba(25, 25, 23, 0.05);
+  }
+
+  .editorial-filter-link:focus-visible {
+    outline: 2px solid var(--brand-blue, #375DFB);
+    outline-offset: 3px;
   }
 
   .editorial-main {
@@ -191,6 +305,17 @@ const topics = getUniqueCategories(items);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
+  }
+
+  .editorial-grid--blog {
+    align-items: stretch;
+    gap: 26px;
+  }
+
+  @media (max-width: 1180px) {
+    .editorial-grid--blog {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   .editorial-empty {
@@ -292,6 +417,10 @@ const topics = getUniqueCategories(items);
       line-height: 1.1em;
     }
 
+    .editorial-container {
+      padding-inline: 32px;
+    }
+
     .editorial-grid {
       grid-template-columns: repeat(2, 1fr);
       gap: 20px;
@@ -331,6 +460,27 @@ const topics = getUniqueCategories(items);
     .editorial-container {
       padding: 40px 16px 80px;
       gap: 40px;
+    }
+
+    .editorial-shell--blog .editorial-container {
+      padding-top: 10px;
+    }
+
+    .editorial-filter-nav {
+      flex-wrap: nowrap;
+      gap: 16px;
+      margin-inline: -16px;
+      padding: 4px 16px 10px;
+    }
+
+    .editorial-filter-link {
+      min-height: 44px;
+      font-size: 16px;
+    }
+
+    .editorial-filter-link.is-active {
+      min-width: 62px;
+      padding-inline: 18px;
     }
 
     .editorial-main {
