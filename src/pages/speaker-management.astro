@@ -3,7 +3,6 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
 import HeroSection from "../components/speaker-management/HeroSection.astro";
 import StatsSection from "../components/speaker-management/StatsSection.astro";
 import FeatureCards from "../components/speaker-management/FeatureCards.astro";
-import CTASection from "../components/speaker-management/CTASection.astro";
 import FaqSection from "../components/speaker-management/FaqSection.astro";
 import DeckSections from "../components/speaker-management/DeckSections.astro";
 import ProgramContentSections from "../components/speaker-management/ProgramContentSections.astro";
@@ -42,6 +41,13 @@ const softwareSchema = {
   {description}
   canonical="https://eventhex.ai/speaker-management/"
   ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/03/Untitled-design-11-1024x576.webp"
+  footerCtaEyebrow="Start Your Next Event Faster"
+  footerCtaTitle="Ready to Simplify Your Speaker Workflow?"
+  footerCtaSubtitle="Join hundreds of event organizers who manage speakers, sessions, and engagement—all in one AI-powered platform."
+  footerCtaProofItems={["AI-powered setup", "Live event-day tools", "Free onboarding support"]}
+  footerCtaButtonText="Book a Free Demo"
+  footerCtaImageSrc="/feature-images/speaker-management/cta-illustration.svg"
+  footerCtaImageAlt="Speaker management profiles and workflow in EventHex"
 >
   <div class="smp-page-bg">
     <HeroSection />
@@ -54,7 +60,6 @@ const softwareSchema = {
     <FeatureCards />
     <DeckSections section="use-cases" />
     <FaqSection />
-    <CTASection />
 
     <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
   </div>
@@ -112,6 +117,60 @@ const softwareSchema = {
   .smp-page-bg > div > section {
     background: transparent !important;
   }
+  .smp-page-bg > .sm-faq {
+    background: #fff !important;
+  }
+  .smp-page-bg > .smf-shell {
+    background-color: #000 !important;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    ) !important;
+  }
+
+  /* Keep primary section titles consistent with Event Registration. */
+  .smp-page-bg .smp-clickup-hero__header h2,
+  .smp-page-bg .smp-content--agenda .smp-content__header h2,
+  .smp-page-bg .smd-ai__title,
+  .smp-page-bg .smp-workflow__heading h2,
+  .smp-page-bg .smf-title,
+  .smp-page-bg .smd-agent__title {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+  .smp-page-bg .smd-ai__title span {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  /* Speaker-specific footer CTA content treatment. */
+  body:has(.smp-page-bg) .site-footer .cta-devices-img {
+    width: 84%;
+    max-width: 480px;
+  }
+  body:has(.smp-page-bg) .site-footer .cta-proof-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  body:has(.smp-page-bg) .site-footer .cta-proof-row span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.92);
+    font: 600 12px/16px var(--font-body);
+  }
 
   /* Keep the long-form page flowing without oversized blank bands between sections. */
   .smp-page-bg .smp-clickup-hero,
@@ -130,15 +189,21 @@ const softwareSchema = {
   .smp-page-bg .smf-cards {
     padding-top: 40px;
   }
-  .smp-page-bg .sh-faq {
-    padding-block: clamp(48px, 6vw, 72px);
-  }
-  .smp-page-bg .sm-cta {
-    padding-top: 32px;
-    padding-bottom: 56px;
-  }
 
   @media (max-width: 767px) {
+    body:has(.smp-page-bg) .site-footer .cta-devices-img {
+      width: 360px;
+      max-width: none;
+    }
+    body:has(.smp-page-bg) .site-footer .cta-proof-row {
+      display: flex;
+      gap: 6px;
+    }
+    body:has(.smp-page-bg) .site-footer .cta-proof-row span {
+      padding: 5px 8px;
+      font-size: 11px;
+      line-height: 15px;
+    }
     .smp-page-bg .smp-clickup-hero,
     .smp-page-bg .smp-content--clickup {
       padding-block: 48px;
@@ -154,13 +219,6 @@ const softwareSchema = {
     }
     .smp-page-bg .smf-cards {
       padding-top: 36px;
-    }
-    .smp-page-bg .sh-faq {
-      padding-block: 44px;
-    }
-    .smp-page-bg .sm-cta {
-      padding-top: 28px;
-      padding-bottom: 44px;
     }
   }
 </style>

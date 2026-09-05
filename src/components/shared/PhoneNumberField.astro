@@ -1,0 +1,189 @@
+---
+import { phoneCountries } from "../../lib/phone-country-codes";
+
+interface Props {
+  codeName: string;
+  phoneName: string;
+  required?: boolean;
+}
+
+const { codeName, phoneName, required = false } = Astro.props;
+
+const countryFlag = (country: string) =>
+  [...country.toUpperCase()]
+    .map((character) => String.fromCodePoint(127397 + character.charCodeAt(0)))
+    .join("");
+---
+
+<fieldset class="ehf-phone-field">
+  <legend>Phone number{required ? " *" : ""}</legend>
+  <div class="ehf-phone-field__control">
+    <select
+      class="ehf-phone-field__code"
+      name={codeName}
+      autocomplete="tel-country-code"
+      aria-label="Country code"
+      required={required}
+      data-geo-phone-code
+    >
+      <option value="" selected>Select code</option>
+      {
+        phoneCountries.map(({ country, dial, name }) => (
+          <option
+            value={dial}
+            data-country={country}
+            aria-label={`${name} ${dial}`}
+          >
+            {countryFlag(country)} {dial}
+          </option>
+        ))
+      }
+    </select>
+    <span class="ehf-phone-field__divider" aria-hidden="true"></span>
+    <input
+      class="ehf-phone-field__number"
+      type="tel"
+      name={phoneName}
+      inputmode="tel"
+      autocomplete="tel-national"
+      aria-label="Phone number"
+      placeholder="Phone number"
+      required={required}
+    />
+  </div>
+</fieldset>
+
+<script>
+  interface GeoCountryResponse {
+    country?: string | null;
+  }
+
+  interface GeoWindow extends Window {
+    __eventhexGeoCountry?: Promise<string | null>;
+  }
+
+  const getVisitorCountry = () => {
+    const geoWindow = window as GeoWindow;
+
+    if (!geoWindow.__eventhexGeoCountry) {
+      geoWindow.__eventhexGeoCountry = fetch("/api/geo-country", {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: { Accept: "application/json" },
+      })
+        .then(async (response) => {
+          if (!response.ok) return null;
+
+          const payload = (await response.json()) as GeoCountryResponse;
+          const country = payload.country?.toUpperCase() ?? null;
+
+          return country && /^[A-Z]{2}$/.test(country) ? country : null;
+        })
+        .catch(() => null);
+    }
+
+    return geoWindow.__eventhexGeoCountry;
+  };
+
+  const initializePhoneCountry = async () => {
+    const selects = Array.from(
+      document.querySelectorAll<HTMLSelectElement>(
+        "select[data-geo-phone-code]:not([data-geo-initialized])",
+      ),
+    );
+
+    if (selects.length === 0) return;
+    selects.forEach((select) => (select.dataset.geoInitialized = "true"));
+
+    const country = await getVisitorCountry();
+    if (!country) return;
+
+    selects.forEach((select) => {
+      if (select.value) return;
+
+      const option = Array.from(select.options).find(
+        (candidate) => candidate.dataset.country === country,
+      );
+
+      if (!option) return;
+      select.selectedIndex = option.index;
+      select.dataset.detectedCountry = country;
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+  };
+
+  initializePhoneCountry();
+  document.addEventListener("astro:page-load", initializePhoneCountry);
+</script>
+
+<style>
+  .ehf-phone-field {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .ehf-phone-field legend {
+    margin-bottom: 6px;
+    padding: 0;
+    color: #525866;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .ehf-phone-field__control {
+    display: grid;
+    grid-template-columns: 104px 1px minmax(0, 1fr);
+    align-items: center;
+    min-width: 0;
+    border: 1px solid #e8ecf2;
+    border-radius: 10px;
+    background: #ffffff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .ehf-phone-field__control:focus-within {
+    border-color: #375dfb;
+    box-shadow: 0 0 0 3px rgba(55, 93, 251, 0.14);
+  }
+
+  .ehf-phone-field__code,
+  .ehf-phone-field__number {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #22272f;
+    font-family: var(--font-body);
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+
+  .ehf-phone-field__code {
+    appearance: none;
+    padding-right: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23868C98' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    font-weight: 650;
+  }
+
+  .ehf-phone-field__number {
+    padding-left: 12px;
+  }
+
+  .ehf-phone-field__number::placeholder {
+    color: #868c98;
+  }
+
+  .ehf-phone-field__divider {
+    width: 1px;
+    height: 24px;
+    background: #e2e4e9;
+  }
+</style>

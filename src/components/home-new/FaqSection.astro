@@ -55,13 +55,68 @@ const faqSchema = {
 <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
 
 <script>
-  const hnfFaqItems = Array.from(document.querySelectorAll('[data-hnf-faq-item]'));
+  const hnfFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-hnf-faq-item]'));
+  const hnfFaqAnimations = new WeakMap<HTMLDetailsElement, Animation[]>();
+  const hnfFaqReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const animateHnfFaq = (item: HTMLDetailsElement, shouldOpen: boolean) => {
+    const summary = item.querySelector<HTMLElement>('.hnf-faq__question');
+    const answer = item.querySelector<HTMLElement>('.hnf-faq__answer');
+    if (!summary || !answer) return;
+
+    const startHeight = item.getBoundingClientRect().height;
+    hnfFaqAnimations.get(item)?.forEach((animation) => animation.cancel());
+
+    if (shouldOpen) item.open = true;
+    const styles = window.getComputedStyle(item);
+    const closedHeight = summary.getBoundingClientRect().height
+      + parseFloat(styles.paddingTop)
+      + parseFloat(styles.paddingBottom)
+      + parseFloat(styles.borderTopWidth)
+      + parseFloat(styles.borderBottomWidth);
+    const endHeight = shouldOpen ? item.getBoundingClientRect().height : closedHeight;
+
+    item.dataset.hnfFaqExpanded = String(shouldOpen);
+
+    if (hnfFaqReducedMotion.matches) {
+      item.open = shouldOpen;
+      return;
+    }
+
+    const itemAnimation = item.animate(
+      { height: [`${startHeight}px`, `${endHeight}px`] },
+      { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+    );
+    const answerAnimation = answer.animate(
+      shouldOpen
+        ? { opacity: [0, 1], transform: ['translateY(-6px)', 'translateY(0)'] }
+        : { opacity: [1, 0], transform: ['translateY(0)', 'translateY(-6px)'] },
+      { duration: shouldOpen ? 240 : 180, easing: 'ease-out', fill: 'both' },
+    );
+
+    hnfFaqAnimations.set(item, [itemAnimation, answerAnimation]);
+    itemAnimation.addEventListener('finish', () => {
+      item.open = shouldOpen;
+      answerAnimation.cancel();
+      hnfFaqAnimations.delete(item);
+    }, { once: true });
+  };
+
   hnfFaqItems.forEach((item) => {
-    item.addEventListener('toggle', () => {
-      if (!(item instanceof HTMLDetailsElement) || !item.open) return;
-      hnfFaqItems.forEach((other) => {
-        if (other !== item && other instanceof HTMLDetailsElement) other.open = false;
-      });
+    item.dataset.hnfFaqExpanded = String(item.open);
+    item.querySelector('.hnf-faq__question')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      const shouldOpen = item.dataset.hnfFaqExpanded !== 'true';
+
+      if (shouldOpen) {
+        hnfFaqItems.forEach((other) => {
+          if (other !== item && other.dataset.hnfFaqExpanded === 'true') {
+            animateHnfFaq(other, false);
+          }
+        });
+      }
+
+      animateHnfFaq(item, shouldOpen);
     });
   });
 </script>
@@ -150,6 +205,7 @@ const faqSchema = {
     border-radius: 20px;
     padding: 4px 28px;
     background: #fff;
+    overflow: hidden;
     transition: background 0.25s ease, border-color 0.25s ease;
   }
 
@@ -181,6 +237,7 @@ const faqSchema = {
     flex-shrink: 0;
     width: 18px;
     height: 18px;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .hnf-faq__icon::before,
@@ -204,6 +261,10 @@ const faqSchema = {
     transition: opacity 0.2s ease;
   }
 
+  .hnf-faq__item[open] .hnf-faq__icon {
+    transform: scale(0.9);
+  }
+
   .hnf-faq__item[open] .hnf-faq__icon::after {
     opacity: 0;
   }
@@ -219,6 +280,14 @@ const faqSchema = {
     line-height: 1.7;
     color: #000;
     margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hnf-faq__item,
+    .hnf-faq__icon,
+    .hnf-faq__icon::after {
+      transition: none;
+    }
   }
 
   @media (max-width: 1024px) {

@@ -19,7 +19,7 @@
     <span class="cc__title">Cookie Consent</span>
   </div>
   <p class="cc__text">
-    We use cookies to enhance your experience. <a href="/cookie-policy/" class="cc__link">Learn more</a>.
+    We use cookies to enhance your experience. <a href="/cookie-policy/" class="cc__link">Read our cookie policy</a>.
   </p>
   <button id="cookie-accept" class="cc__btn cc__btn--accept" type="button">Accept All</button>
   <div class="cc__row">
@@ -43,28 +43,35 @@
   </div>
 </div>
 
-<script is:inline>
+<script>
   (function () {
-    var STORAGE_KEY = 'eh_cookie_consent';
-    var banner = document.getElementById('cookie-consent-banner');
-    var panel = document.getElementById('cookie-settings-panel');
-    var saved = null;
+    const eventHexWindow = window as typeof window & {
+      gtag?: (...args: unknown[]) => void;
+      loadEventHexAnalytics?: () => void;
+    };
+    const STORAGE_KEY = 'eh_cookie_consent';
+    const banner = document.getElementById('cookie-consent-banner');
+    const panel = document.getElementById('cookie-settings-panel');
+    let saved: string | null = null;
     try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
 
-    function updateConsent(analytics, marketing) {
-      var aState = analytics ? 'granted' : 'denied';
-      var mState = marketing ? 'granted' : 'denied';
-      if (typeof gtag === 'function') {
-        gtag('consent', 'update', {
+    function updateConsent(analytics: boolean, marketing: boolean) {
+      const aState = analytics ? 'granted' : 'denied';
+      const mState = marketing ? 'granted' : 'denied';
+      if (typeof eventHexWindow.gtag === 'function') {
+        eventHexWindow.gtag('consent', 'update', {
           'analytics_storage': aState,
           'ad_storage': mState,
           'ad_user_data': mState,
           'ad_personalization': mState
         });
       }
+      if ((analytics || marketing) && typeof eventHexWindow.loadEventHexAnalytics === 'function') {
+        eventHexWindow.loadEventHexAnalytics();
+      }
     }
 
-    function saveAndHide(choice) {
+    function saveAndHide(choice: { analytics: boolean; marketing: boolean }) {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(choice)); } catch (e) {}
       updateConsent(choice.analytics, choice.marketing);
       if (banner) banner.style.display = 'none';
@@ -73,7 +80,7 @@
     // Returning visitor — apply saved choice silently
     if (saved) {
       try {
-        var parsed = JSON.parse(saved);
+        const parsed = JSON.parse(saved);
         updateConsent(parsed.analytics, parsed.marketing);
       } catch (e) {
         // Legacy string value
@@ -85,10 +92,10 @@
     // New visitor — show banner
     if (banner) banner.style.display = 'flex';
 
-    var acceptBtn = document.getElementById('cookie-accept');
-    var rejectBtn = document.getElementById('cookie-reject');
-    var settingsBtn = document.getElementById('cookie-settings');
-    var saveBtn = document.getElementById('cookie-save');
+    const acceptBtn = document.getElementById('cookie-accept');
+    const rejectBtn = document.getElementById('cookie-reject');
+    const settingsBtn = document.getElementById('cookie-settings');
+    const saveBtn = document.getElementById('cookie-save');
 
     if (acceptBtn) {
       acceptBtn.addEventListener('click', function () {
@@ -107,8 +114,8 @@
     }
     if (saveBtn) {
       saveBtn.addEventListener('click', function () {
-        var a = document.getElementById('cc-analytics');
-        var m = document.getElementById('cc-marketing');
+        const a = document.getElementById('cc-analytics') as HTMLInputElement | null;
+        const m = document.getElementById('cc-marketing') as HTMLInputElement | null;
         saveAndHide({
           analytics: a ? a.checked : false,
           marketing: m ? m.checked : false

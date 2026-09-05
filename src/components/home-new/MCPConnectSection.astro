@@ -38,22 +38,35 @@
           <div class="mcp-glass">
           <div class="mcp-terminal">
             <div class="mcp-terminal__bar">
-              <span class="mcp-dot mcp-dot--red"></span>
-              <span class="mcp-dot mcp-dot--yellow"></span>
-              <span class="mcp-dot mcp-dot--green"></span>
-              <span class="mcp-terminal__title">Claude — connected to EventHex</span>
+              <span class="mcp-app__brand">
+                <span class="mcp-app__brand-mark" aria-hidden="true">✦</span>
+                <strong>Claude</strong>
+              </span>
+              <span class="mcp-app__connection"><span aria-hidden="true"></span>EventHex connected</span>
             </div>
             <div class="mcp-terminal__body">
-              <p class="mcp-terminal__prompt">
-                <span class="mcp-terminal__caret" aria-hidden="true">&rsaquo;</span>
-                Create a two-day AI summit in Dubai, add three ticket tiers with early-bird pricing, and publish the website.
-              </p>
-              <p class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><strong>Event created</strong> — "Dubai AI Summit 2026" &middot; Nov 18&ndash;19</p>
-              <p class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><strong>Tickets</strong> — Standard, Pro, VIP &middot; early-bird until Oct 1</p>
-              <p class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><strong>Website</strong> — 3 designs generated &middot; brand color from your logo</p>
-              <p class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><strong>Published</strong> — live with SEO</p>
-              <div class="mcp-terminal__result">
-                Done. Registrations are open at <span class="mcp-terminal__link">dubaiaisummit.eventhex.ai</span> — want me to draft the launch campaign next?
+              <span class="mcp-app__thread-label">New event workspace</span>
+              <div class="mcp-terminal__prompt">
+                <span class="mcp-app__avatar mcp-app__avatar--user" aria-hidden="true">You</span>
+                <p>Create a two-day AI summit in Dubai, add three ticket tiers with early-bird pricing, and publish the website.</p>
+              </div>
+              <div class="mcp-app__assistant-row">
+                <span class="mcp-app__avatar mcp-app__avatar--assistant" aria-hidden="true">✦</span>
+                <div class="mcp-app__assistant-content">
+                  <p class="mcp-terminal__line mcp-app__lead">I&rsquo;ll build the event and connect each launch step.</p>
+                  <div class="mcp-app__actions">
+                    <div class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><span><strong>Event created</strong><small>Dubai AI Summit 2026 &middot; Nov 18&ndash;19</small></span></div>
+                    <div class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><span><strong>Tickets configured</strong><small>Standard, Pro and VIP &middot; early-bird until Oct 1</small></span></div>
+                    <div class="mcp-terminal__line"><span class="mcp-check mcp-check--dark" aria-hidden="true">✓</span><span><strong>Website published</strong><small>Responsive design, brand styling and SEO ready</small></span></div>
+                  </div>
+                  <div class="mcp-terminal__result">
+                    Registrations are open at <span class="mcp-terminal__link">dubaiaisummit.eventhex.ai</span>. Want me to draft the launch campaign next?
+                  </div>
+                </div>
+              </div>
+              <div class="mcp-app__composer" aria-hidden="true">
+                <span>Ask Claude to update this event&hellip;</span>
+                <span class="mcp-app__send">&uarr;</span>
               </div>
             </div>
           </div>
@@ -113,7 +126,7 @@
                   <span class="wa-ticket__notch wa-ticket__notch--right" aria-hidden="true"></span>
                   <div class="wa-ticket__stub">
                     <div class="wa-qr" aria-hidden="true">
-                      <img src="/brand/wa-ticket-qr.svg" alt="" loading="lazy" decoding="async" width="120" height="120" />
+                      <img src="/brand/wa-ticket-qr.svg" alt="Sample event ticket QR code" loading="lazy" decoding="async" width="120" height="120" />
                     </div>
                     <div class="wa-ticket__meta">
                       <span class="wa-ticket__day">Day 2</span>
@@ -203,7 +216,7 @@
                   <small>EventHex Technologies</small>
                 </div>
                 <div class="att-qr" aria-hidden="true">
-                  <img src="/brand/wa-ticket-qr.svg" alt="" loading="lazy" decoding="async" width="120" height="120" />
+                  <img src="/brand/wa-ticket-qr.svg" alt="Sample event ticket QR code" loading="lazy" decoding="async" width="120" height="120" />
                 </div>
               </div>
             </div>
@@ -274,7 +287,7 @@
     flex-direction: column;
     justify-content: center;
     gap: 0;
-    padding: 96px 0;
+    padding: 72px 0 24px;
   }
   .mcp-container {
     max-width: 1140px;
@@ -288,7 +301,7 @@
     align-items: center;
     gap: 14px;
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
   }
   @property --mcp-eyebrow-angle {
     syntax: '<angle>';
@@ -508,10 +521,11 @@
   .mcp-terminal {
     width: 100%;
     max-width: 480px;
-    background: #14151d;
-    border-radius: 14px;
+    background: #f7f7f5;
+    border: 1px solid #deded9;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: none;
+    box-shadow: 0 18px 50px rgba(31, 41, 55, 0.12);
     opacity: 0;
     transform: translateY(48px);
     transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
@@ -523,73 +537,200 @@
   .mcp-terminal__bar {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #ecece8;
+    border-bottom: 1px solid #deded9;
+  }
+  .mcp-app__brand {
+    display: inline-flex;
+    align-items: center;
     gap: 8px;
-    padding: 12px 16px;
-    background: #1c1d27;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-  .mcp-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-  }
-  .mcp-dot--red { background: #ff5f57; }
-  .mcp-dot--yellow { background: #febc2e; }
-  .mcp-dot--green { background: #28c840; }
-  .mcp-terminal__title {
-    margin-left: 4px;
+    color: #242424;
     font-family: var(--font-body);
+    font-size: 13px;
+  }
+  .mcp-app__brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    color: #fff;
+    background: #c76f4f;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.5);
+  }
+  .mcp-app__connection {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #d7d7d1;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #5f635f;
+  }
+  .mcp-app__connection > span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1f9d55;
+    box-shadow: 0 0 0 3px rgba(31, 157, 85, 0.12);
   }
 
   .mcp-terminal__body {
-    padding: 22px 20px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    gap: 12px;
+    font-family: var(--font-body);
+  }
+  .mcp-app__thread-label {
+    align-self: center;
+    color: #626762;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
   .mcp-terminal__prompt {
-    margin: 0 0 4px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #fff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 8px;
   }
-  .mcp-terminal__caret {
-    color: var(--accent-purple-light);
-    margin-right: 6px;
+  .mcp-terminal__prompt p {
+    max-width: 82%;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 14px 14px 4px 14px;
+    background: #e8ebff;
+    color: #252b3a;
+    font-size: 11.5px;
+    line-height: 1.45;
+  }
+  .mcp-app__avatar {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 700;
+  }
+  .mcp-app__avatar--user {
+    order: 2;
+    color: #fff;
+    background: #375dfb;
+  }
+  .mcp-app__assistant-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+  }
+  .mcp-app__avatar--assistant {
+    color: #fff;
+    background: #c76f4f;
+  }
+  .mcp-app__assistant-content {
+    flex: 1;
+    min-width: 0;
+  }
+  .mcp-app__lead {
+    padding: 3px 0 8px;
+    color: #353833;
+    font-weight: 600;
   }
   .mcp-terminal__line {
     margin: 0;
-    font-size: 12.5px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.55);
+    font-size: 10.5px;
+    line-height: 1.4;
+    color: #656960;
   }
   .mcp-terminal__line .mcp-check {
     margin-top: 0;
-    margin-right: 8px;
-    vertical-align: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: #e5f6eb;
+    color: #18864b;
+    font-size: 10px;
   }
   .mcp-terminal__line strong {
-    color: var(--accent-purple-light);
+    display: block;
+    color: #292c28;
     font-weight: 600;
   }
+  .mcp-terminal__line small {
+    display: block;
+    margin-top: 1px;
+    color: #777b73;
+    font-size: 9.5px;
+    line-height: 1.35;
+  }
+  .mcp-app__actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .mcp-app__actions .mcp-terminal__line {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    min-width: 0;
+    padding: 8px;
+    background: #fff;
+    border: 1px solid #e1e2dd;
+    border-radius: 10px;
+  }
   .mcp-check--dark {
-    color: #28c840;
+    color: #18864b;
   }
   .mcp-terminal__result {
-    margin-top: 4px;
-    background: #1c1d27;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 8px;
+    background: #fff;
+    border: 1px solid #e1e2dd;
+    border-left: 3px solid #375dfb;
     border-radius: 10px;
-    padding: 14px 16px;
-    font-size: 12.5px;
-    line-height: 1.6;
-    color: rgba(255, 255, 255, 0.75);
+    padding: 9px 10px;
+    font-size: 10.5px;
+    line-height: 1.45;
+    color: #565a53;
   }
   .mcp-terminal__link {
-    color: #7aa2ff;
+    color: #2447d8;
+    font-weight: 600;
+  }
+  .mcp-app__composer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 36px;
+    padding: 7px 8px 7px 12px;
+    border: 1px solid #d9dad5;
+    border-radius: 12px;
+    background: #fff;
+    color: #9a9d96;
+    font-size: 10.5px;
+  }
+  .mcp-app__send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: #242424;
+    color: #fff;
+    font-size: 14px;
   }
 
   :global(.tw-char) {
@@ -610,7 +751,7 @@
     width: 2px;
     height: 1em;
     margin-left: 1px;
-    background: currentColor;
+    background: #375dfb;
     vertical-align: -0.15em;
     animation: mcp-caret-blink 0.9s steps(1) infinite;
   }
@@ -1313,6 +1454,59 @@
     height: 18px;
   }
 
+  @media (min-width: 1025px) and (max-height: 760px) {
+    .mcp-card,
+    .wa-card,
+    .web-card {
+      height: clamp(460px, calc(100svh - 208px), 560px);
+    }
+    .mcp-card__content,
+    .wa-card__content,
+    .web-card__content {
+      gap: 10px;
+      padding: 20px 28px;
+    }
+    .mcp-card__title,
+    .wa-card__title,
+    .web-card__title {
+      font-size: 26px;
+    }
+    .mcp-card__desc,
+    .wa-card__desc,
+    .web-card__desc {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .mcp-checklist,
+    .wa-checklist {
+      margin-top: 4px;
+      gap: 6px;
+    }
+    .mcp-checklist li,
+    .wa-checklist li {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .mcp-btn,
+    .wa-btn,
+    .web-btn {
+      margin-top: 4px;
+    }
+    .mcp-card__visual,
+    .wa-card__visual,
+    .web-card__visual {
+      padding: 12px;
+    }
+    .mcp-glass {
+      padding: 12px;
+    }
+    .mcp-terminal,
+    .wa-phone,
+    .att-phone {
+      zoom: 0.82;
+    }
+  }
+
   @media (max-width: 1024px) {
     .mcp-section { height: auto !important; }
     .mcp-pin-inner { position: static; min-height: 0; padding: 88px 0; }
@@ -1456,7 +1650,7 @@
     }
 
     // Wrap every character once up front; loop iterations just toggle visibility.
-    const promptSpans = wrapChars(promptEl, ['.mcp-terminal__caret']);
+    const promptSpans = wrapChars(promptEl, ['.mcp-app__avatar']);
     const lineChecks = lines.map((line) => line.querySelector('.mcp-check'));
     const lineSpansList = lines.map((line) => wrapChars(line, ['.mcp-check']));
     const resultSpans = wrapChars(resultEl, []);

@@ -75,8 +75,8 @@ const featureCards: FeatureCard[] = [
         <span class="smf-subtitle">From setup to session recap</span>
       </div>
       <h2 class="smf-title">
-        Speaker workflows that keep the <span class="smf-highlight">agenda</span
-        ><br />& audience connected
+        <span class="smf-title-line">Speaker workflows that keep the <span class="smf-highlight">agenda</span></span>
+        <span class="smf-title-line">&amp; audience connected</span>
       </h2>
     </div>
 
@@ -120,6 +120,32 @@ const featureCards: FeatureCard[] = [
   </div>
 </section>
 
+<script>
+  const workflowSection = document.querySelector<HTMLElement>('.smf-shell');
+  const workflowHeader = workflowSection?.querySelector<HTMLElement>('.smf-header');
+  const workflowCards = workflowSection?.querySelectorAll<HTMLElement>('.smf-card');
+  const finalWorkflowCard = workflowCards?.[workflowCards.length - 1];
+
+  if (workflowHeader && finalWorkflowCard) {
+    let workflowFrame = 0;
+    const syncWorkflowRelease = () => {
+      workflowFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalWorkflowCard).top) || 0;
+      const releaseOffset = Math.min(0, finalWorkflowCard.getBoundingClientRect().top - stickyTop);
+      workflowHeader.style.setProperty('--smf-release-y', `${releaseOffset}px`);
+      workflowHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueWorkflowRelease = () => {
+      if (workflowFrame) return;
+      workflowFrame = requestAnimationFrame(syncWorkflowRelease);
+    };
+
+    window.addEventListener('scroll', queueWorkflowRelease, { passive: true });
+    window.addEventListener('resize', queueWorkflowRelease, { passive: true });
+    syncWorkflowRelease();
+  }
+</script>
+
 <style is:global>
   .smf-shell {
     width: 100%;
@@ -152,7 +178,7 @@ const featureCards: FeatureCard[] = [
     top: 69px;
     z-index: 20;
     isolation: isolate;
-    width: 82%;
+    width: min(94%, 1050px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -160,6 +186,8 @@ const featureCards: FeatureCard[] = [
     gap: 16px;
     text-align: center;
     padding: 24px 0;
+    transform: translateY(var(--smf-release-y, 0px));
+    will-change: transform;
   }
   .smf-header::before {
     content: "";
@@ -222,8 +250,17 @@ const featureCards: FeatureCard[] = [
     margin: 0;
     line-height: 1.15;
   }
+  .smf-title-line {
+    display: block;
+  }
   .smf-highlight {
     color: #afa3ff;
+  }
+
+  @media (min-width: 768px) {
+    .smf-title-line {
+      white-space: nowrap;
+    }
   }
 
   /* Stacking cards — sticky scroll */

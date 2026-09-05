@@ -1,58 +1,102 @@
 ---
 import type { EditorialEntry } from "../../lib/editorial";
+import { getEditorialCardImage } from "../../lib/editorial-card-images";
 
 interface Props {
   item: EditorialEntry;
-  variant?: "feature" | "stack" | "standard";
+  variant?: "blog" | "feature" | "stack" | "standard";
   showDescription?: boolean;
 }
 
 const { item, variant = "standard", showDescription = true } = Astro.props;
+const cardImage = getEditorialCardImage(item);
+const shortDate = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+}).format(new Date(item.date));
 ---
 
 <article class={`editorial-card editorial-card--${variant}`}>
-  <a class="editorial-card__media" href={item.href} aria-label={`Open ${item.title}`}>
-    {item.image ? (
-      <img
-        src={item.image.src}
-        alt={item.image.alt}
-        loading="lazy"
-        width={item.image.width}
-        height={item.image.height}
-      />
-    ) : (
-      <div class="editorial-card__media-fallback">
-        <span>{item.category}</span>
+  {variant === "blog" ? (
+    <>
+      <a class="editorial-card__overlay-link" href={item.href} aria-label={`Read ${item.title}`}></a>
+
+      <div class="editorial-card__body">
+        <time class="editorial-card__date" datetime={item.date}>{shortDate}</time>
+
+        <h3 class="editorial-card__title">{item.title}</h3>
+
+        {showDescription && <p class="editorial-card__description">{item.description}</p>}
+
+        <div class="editorial-card__actions">
+          <span class="editorial-card__pill">{item.category}</span>
+          <span class="editorial-card__read" aria-hidden="true">Read article</span>
+        </div>
       </div>
-    )}
-  </a>
 
-  <div class="editorial-card__body">
-    <div class="editorial-card__meta">
-      {item.categorySlug ? (
-        <a class="editorial-card__pill" href={`/blog/category/${item.categorySlug}/`}>{item.category}</a>
-      ) : (
-        <span class="editorial-card__pill">{item.category}</span>
-      )}
-      <span class="editorial-card__date">{item.formattedDate}</span>
-    </div>
-
-    <h3 class="editorial-card__title">
-      <a href={item.href}>{item.title}</a>
-    </h3>
-
-    {showDescription && <p class="editorial-card__description">{item.description}</p>}
-
-    <div class="editorial-card__footer">
-      <span class="editorial-card__author">{item.author}</span>
-      <a href={item.href} class="editorial-card__arrow" aria-label={`Read ${item.title}`}>
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="17" cy="17" r="16.5" stroke="#E8ECF2"/>
-          <path d="M14 11l6 6-6 6" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+      <div class="editorial-card__media">
+        {cardImage ? (
+          <img
+            src={cardImage.src}
+            alt={cardImage.alt}
+            loading="lazy"
+            width={cardImage.width}
+            height={cardImage.height}
+          />
+        ) : (
+          <div class="editorial-card__media-fallback">
+            <span>{item.category}</span>
+          </div>
+        )}
+      </div>
+    </>
+  ) : (
+    <>
+      <a class="editorial-card__media" href={item.href} aria-label={`Open ${item.title}`}>
+        {cardImage ? (
+          <img
+            src={cardImage.src}
+            alt={cardImage.alt}
+            loading="lazy"
+            width={cardImage.width}
+            height={cardImage.height}
+          />
+        ) : (
+          <div class="editorial-card__media-fallback">
+            <span>{item.category}</span>
+          </div>
+        )}
       </a>
-    </div>
-  </div>
+
+      <div class="editorial-card__body">
+        <div class="editorial-card__meta">
+          {item.categorySlug ? (
+            <a class="editorial-card__pill" href={`/blog/category/${item.categorySlug}/`}>{item.category}</a>
+          ) : (
+            <span class="editorial-card__pill">{item.category}</span>
+          )}
+          <span class="editorial-card__date">{item.formattedDate}</span>
+        </div>
+
+        <h3 class="editorial-card__title">
+          <a href={item.href}>{item.title}</a>
+        </h3>
+
+        {showDescription && <p class="editorial-card__description">{item.description}</p>}
+
+        <div class="editorial-card__footer">
+          <span class="editorial-card__author">{item.author}</span>
+          <a href={item.href} class="editorial-card__arrow" aria-label={`Read ${item.title}`}>
+            <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="17" cy="17" r="16.5" stroke="#E8ECF2"/>
+              <path d="M14 11l6 6-6 6" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </>
+  )}
 </article>
 
 <style>
@@ -215,6 +259,158 @@ const { item, variant = "standard", showDescription = true } = Astro.props;
   }
 
   /* ══════════════════════════════════════
+     BLOG variant — editorial reference card
+     ══════════════════════════════════════ */
+  .editorial-card--blog {
+    position: relative;
+    min-width: 0;
+    min-height: 540px;
+    padding: 7px;
+    border-color: #dededb;
+    border-radius: 26px;
+    box-shadow: 0 3px 10px rgba(25, 25, 23, 0.06);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+
+  .editorial-card__overlay-link {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block;
+    border-radius: inherit;
+  }
+
+  .editorial-card--blog:hover {
+    transform: none;
+    border-color: #d0d0cc;
+    box-shadow: 0 10px 30px rgba(25, 25, 23, 0.1);
+  }
+
+  .editorial-card--blog .editorial-card__body {
+    min-height: 0;
+    padding: 22px 20px 18px;
+  }
+
+  .editorial-card--blog .editorial-card__date {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #999996;
+  }
+
+  .editorial-card--blog .editorial-card__title {
+    display: -webkit-box;
+    min-height: 0;
+    padding: 0;
+    margin-bottom: 14px;
+    font-family: var(--font-heading);
+    font-size: clamp(23px, calc(2vw - 2px), 30px);
+    font-weight: 500;
+    line-height: calc(1.06em + 1px);
+    letter-spacing: calc(-0.035em + 1px);
+    color: #181816;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  .editorial-card--blog .editorial-card__overlay-link:focus-visible {
+    outline: 2px solid var(--brand-blue, #375DFB);
+    outline-offset: -3px;
+  }
+
+  .editorial-card--blog .editorial-card__description {
+    margin: 0 0 14px;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #6b6b67;
+    -webkit-line-clamp: 2;
+  }
+
+  .editorial-card__actions {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    margin-top: auto;
+  }
+
+  .editorial-card--blog .editorial-card__pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    max-width: 100%;
+    padding: 8px 12px;
+    border-radius: 999px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+    line-height: 18px;
+    white-space: nowrap;
+    background: #f1f1ef;
+    color: #242422;
+    transition: max-width 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .editorial-card--blog .editorial-card__pill:hover {
+    color: #000000;
+    background: #e8e8e5;
+  }
+
+  .editorial-card__read {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    color: var(--brand-blue, #375DFB);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(8px, -50%);
+    transition: opacity 0.2s ease, transform 0.2s ease, color 0.2s ease, visibility 0.2s;
+  }
+
+  .editorial-card--blog:hover .editorial-card__read,
+  .editorial-card--blog:focus-within .editorial-card__read {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, -50%);
+  }
+
+  .editorial-card--blog:hover .editorial-card__pill,
+  .editorial-card--blog:focus-within .editorial-card__pill {
+    max-width: calc(100% - 92px);
+  }
+
+  .editorial-card--blog .editorial-card__media {
+    height: auto;
+    aspect-ratio: 1.55 / 1;
+    margin-top: auto;
+    border-radius: 20px;
+    background: #efefec;
+  }
+
+  .editorial-card--blog .editorial-card__media img {
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .editorial-card--blog:hover .editorial-card__media img,
+  .editorial-card--blog:focus-within .editorial-card__media img {
+    transform: scale(1.04);
+  }
+
+  /* ══════════════════════════════════════
      FEATURE variant — wide two-column
      ══════════════════════════════════════ */
   .editorial-card--feature {
@@ -290,6 +486,19 @@ const { item, variant = "standard", showDescription = true } = Astro.props;
     .editorial-card--feature .editorial-card__body {
       padding: 16px 4px 4px;
     }
+
+    .editorial-card--blog {
+      min-height: 520px;
+    }
+
+    .editorial-card--blog .editorial-card__body {
+      min-height: 0;
+      padding: 20px 18px 18px;
+    }
+
+    .editorial-card--blog .editorial-card__title {
+      font-size: 25px;
+    }
   }
 
   /* ── Mobile ── */
@@ -312,6 +521,55 @@ const { item, variant = "standard", showDescription = true } = Astro.props;
 
     .editorial-card__body {
       padding: 12px 2px 2px;
+    }
+
+    .editorial-card--blog {
+      min-height: 0;
+      padding: 6px;
+      border-radius: 22px;
+    }
+
+    .editorial-card--blog .editorial-card__body {
+      min-height: 0;
+      padding: 18px 16px 16px;
+    }
+
+    .editorial-card--blog .editorial-card__title {
+      font-size: 26px;
+      margin-bottom: 12px;
+    }
+
+    .editorial-card--blog .editorial-card__description {
+      margin-bottom: 14px;
+    }
+
+    .editorial-card--blog .editorial-card__media {
+      height: auto;
+      border-radius: 17px;
+    }
+
+    .editorial-card__read {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%);
+    }
+
+    .editorial-card--blog .editorial-card__pill {
+      max-width: calc(100% - 92px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .editorial-card,
+    .editorial-card__arrow,
+    .editorial-card__read,
+    .editorial-card--blog .editorial-card__media img {
+      transition: none;
+    }
+
+    .editorial-card--blog:hover .editorial-card__media img,
+    .editorial-card--blog:focus-within .editorial-card__media img {
+      transform: none;
     }
   }
 </style>

@@ -9,13 +9,13 @@ const canonical = "https://eventhex.ai/book-a-demo/thank-you/";
 <MarketingLayout {title} {description} {canonical} showFooterCta={false} robots="noindex, nofollow">
   <section class="ty">
     <div class="ty__inner">
-      <span class="ty__icon" aria-hidden="true">
+      <span class="ty__icon" id="ty-icon" aria-hidden="true">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
       </span>
-      <p class="ty__eyebrow">Booking confirmed</p>
-      <h1 class="ty__title">You're booked! 🎉</h1>
+      <p class="ty__eyebrow" id="ty-eyebrow">Booking confirmed</p>
+      <h1 class="ty__title" id="ty-title">You're booked! 🎉</h1>
       <p class="ty__when" id="ty-when">Your 30-minute EventHex walkthrough is confirmed.</p>
-      <p class="ty__desc">
+      <p class="ty__desc" id="ty-desc">
         A calendar invite with the Google Meet link is on its way to your inbox.
         Add it to your calendar so you don't miss it.
       </p>
@@ -84,6 +84,10 @@ const canonical = "https://eventhex.ai/book-a-demo/thank-you/";
     background: #d1fadf;
     color: #12b76a;
     margin-bottom: 22px;
+  }
+  .ty__icon.is-pending {
+    background: #fff0c2;
+    color: #b54708;
   }
   .ty__eyebrow {
     font-size: 13px;
@@ -217,9 +221,11 @@ const canonical = "https://eventhex.ai/book-a-demo/thank-you/";
 </style>
 
 <script>
-  // Fire the conversion event + show the booked time (from ?at=ISO).
+  // Show the accepted or pending state returned by the booking API.
   const params = new URLSearchParams(window.location.search);
   const at = params.get("at");
+  const pending = params.get("status") === "pending";
+  const whenEl = document.getElementById("ty-when");
   if (at) {
     const d = new Date(at);
     if (!isNaN(d.getTime())) {
@@ -231,18 +237,39 @@ const canonical = "https://eventhex.ai/book-a-demo/thank-you/";
         hour: "numeric",
         minute: "2-digit",
       });
-      const el = document.getElementById("ty-when");
-      if (el) el.textContent = "Your 30-minute EventHex walkthrough is confirmed for " + fmt.format(d) + " (" + tz + ").";
+      if (whenEl) {
+        whenEl.textContent = pending
+          ? "Your preferred 30-minute EventHex demo time is " + fmt.format(d) + " (" + tz + ")."
+          : "Your 30-minute EventHex walkthrough is confirmed for " + fmt.format(d) + " (" + tz + ").";
+      }
     }
   }
-  // GTM conversion — configure GA4/Ads tags off this event.
+
+  if (pending) {
+    const icon = document.getElementById("ty-icon");
+    if (icon) {
+      icon.classList.add("is-pending");
+      icon.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>';
+    }
+    const eyebrow = document.getElementById("ty-eyebrow");
+    const title = document.getElementById("ty-title");
+    const desc = document.getElementById("ty-desc");
+    if (eyebrow) eyebrow.textContent = "Booking request received";
+    if (title) title.textContent = "We received your preferred demo time";
+    if (!at && whenEl) whenEl.textContent = "Your preferred 30-minute EventHex demo time has been requested.";
+    if (desc) {
+      desc.innerHTML = "<strong>Note:</strong> This is a booking request and the timing is not confirmed yet. Our team will contact you to confirm the time or suggest an alternative within a few hours.";
+    }
+  }
+
+  // Only accepted bookings fire the conversion event.
   (window as any).dataLayer = (window as any).dataLayer || [];
   (window as any).dataLayer.push({
-    event: "demo_booking_confirmed",
+    event: pending ? "demo_booking_requested" : "demo_booking_confirmed",
     booking_time: at || null,
   });
   const clr = (window as any).clarity;
-  if (typeof clr === "function") clr("event", "demo_booking_confirmed");
+  if (typeof clr === "function") clr("event", pending ? "demo_booking_requested" : "demo_booking_confirmed");
 
   // WhatsApp click tracking on the thank-you page.
   const waBtn = document.querySelector('[data-wa="thankyou"]');

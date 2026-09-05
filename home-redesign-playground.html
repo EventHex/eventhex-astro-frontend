@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EventHex Home — Redesign Playground</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #14171f;
+    --panel-2: #1b1f29;
+    --border: #262b36;
+    --text: #e6e9ef;
+    --muted: #8a93a3;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    --ui: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: var(--ui);
+    background: var(--bg);
+    color: var(--text);
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ---------- Controls panel ---------- */
+  .controls {
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 18px 18px 60px;
+    background: var(--panel);
+  }
+  .controls h1 {
+    font-size: 15px;
+    margin: 0 0 2px;
+    letter-spacing: -0.2px;
+  }
+  .controls .sub {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .group {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: var(--panel-2);
+  }
+  .group > .legend {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--muted);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .row { margin-bottom: 12px; }
+  .row:last-child { margin-bottom: 0; }
+  label.fld { display: block; font-size: 12px; margin-bottom: 6px; color: #c4cad4; }
+  label.fld .val { color: var(--muted); font-variant-numeric: tabular-nums; float: right; font-family: var(--mono); font-size: 11px; }
+
+  input[type="range"] { width: 100%; accent-color: var(--accent, #375DFB); }
+  select {
+    width: 100%; padding: 7px 8px; border-radius: 7px;
+    background: #0e1118; color: var(--text);
+    border: 1px solid var(--border); font-size: 12px; font-family: var(--ui);
+  }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button {
+    flex: 1 1 auto; min-width: 0; padding: 7px 6px;
+    border-radius: 7px; border: 1px solid var(--border);
+    background: #0e1118; color: #c4cad4; font-size: 11.5px;
+    cursor: pointer; font-family: var(--ui); transition: .15s;
+    white-space: nowrap;
+  }
+  .seg button:hover { border-color: #3a4150; }
+  .seg button.on {
+    background: var(--accent, #375DFB); color: #fff;
+    border-color: transparent; font-weight: 600;
+  }
+  .swatches { display: flex; gap: 7px; flex-wrap: wrap; }
+  .swatches button {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 2px solid transparent; cursor: pointer; padding: 0;
+  }
+  .swatches button.on { border-color: #fff; box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px #fff; }
+  .toggle { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .toggle span { font-size: 12px; color: #c4cad4; }
+  .switch { position: relative; width: 38px; height: 22px; flex: 0 0 auto; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch .sl { position: absolute; inset: 0; background: #2a3040; border-radius: 22px; transition: .2s; }
+  .switch .sl::before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .2s; }
+  .switch input:checked + .sl { background: var(--accent, #375DFB); }
+  .switch input:checked + .sl::before { transform: translateX(16px); }
+
+  .presetbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .presetbar button {
+    padding: 6px 11px; border-radius: 999px; font-size: 11.5px;
+    border: 1px solid var(--border); background: #0e1118;
+    color: #c4cad4; cursor: pointer; font-family: var(--ui);
+  }
+  .presetbar button:hover { border-color: var(--accent, #375DFB); color: #fff; }
+
+  /* ---------- Stage ---------- */
+  .stage { position: relative; display: flex; flex-direction: column; overflow: hidden; }
+  .stage-top {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; border-bottom: 1px solid var(--border);
+    background: var(--panel); flex: 0 0 auto;
+  }
+  .stage-top .vp { display: flex; gap: 6px; }
+  .stage-top .vp button {
+    padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer;
+    border: 1px solid var(--border); background: #0e1118; color: #c4cad4; font-family: var(--ui);
+  }
+  .stage-top .vp button.on { background: var(--panel-2); color: #fff; border-color: #3a4150; }
+  .stage-top .hint { font-size: 11px; color: var(--muted); margin-left: auto; }
+
+  .preview-scroll { flex: 1; overflow-y: auto; padding: 22px; display: flex; justify-content: center; background: #06070a; }
+  #frame {
+    width: 1080px; transition: width .25s ease;
+    background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5); align-self: flex-start;
+  }
+  #frame.vp-tablet { width: 760px; }
+  #frame.vp-mobile { width: 390px; }
+
+  /* ===== rendered site (scoped under #frame) ===== */
+  #frame .site { font-family: var(--site-body); color: var(--ink); }
+  #frame .nav {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px var(--gutter); border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  #frame .nav .logo { font-family: var(--site-head); font-weight: 800; font-size: 17px; letter-spacing: -.5px; }
+  #frame .nav .logo b { color: var(--accent); }
+  #frame .nav .links { display: flex; gap: 16px; font-size: 12.5px; color: #5b6472; margin-left: 14px; }
+  #frame.vp-mobile .nav .links { display: none; }
+  #frame .nav .cta {
+    margin-left: auto; background: var(--accent); color: #fff;
+    font-size: 12.5px; font-weight: 600; padding: 8px 16px; border-radius: var(--btn-radius);
+  }
+
+  /* hero */
+  #frame .hero { padding: var(--hero-pad) var(--gutter); }
+  #frame .hero .eyebrow {
+    font-size: 12px; color: var(--accent); font-weight: 600; letter-spacing: .3px;
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  #frame .hero h1 {
+    font-family: var(--site-head); font-weight: var(--head-weight);
+    font-size: var(--h1); line-height: 1.04; letter-spacing: -1.5px;
+    margin: 0 0 18px; color: var(--ink-strong); max-width: 16ch;
+  }
+  #frame .hero h1 em { font-style: normal; color: var(--accent); }
+  #frame .hero p { font-size: 15px; color: #5b6472; line-height: 1.6; max-width: 46ch; margin: 0 0 26px; }
+  #frame .hero .btns { display: flex; gap: 12px; flex-wrap: wrap; }
+  #frame .hero .btn-pri { background: var(--accent); color: #fff; font-weight: 600; font-size: 14px; padding: 12px 26px; border-radius: var(--btn-radius); }
+  #frame .hero .btn-sec { background: transparent; color: var(--ink-strong); font-weight: 600; font-size: 14px; padding: 12px 24px; border-radius: var(--btn-radius); border: 1.5px solid rgba(0,0,0,.12); }
+
+  /* hero layout: split */
+  #frame .hero.split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 40px; align-items: center; }
+  #frame .hero.split .visual {
+    aspect-ratio: 4/3; border-radius: 16px;
+    background:
+      radial-gradient(120% 120% at 80% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 60%),
+      linear-gradient(135deg, #eef2ff, #e6ecfb);
+    border: 1px solid rgba(0,0,0,.06); display: grid; place-items: center;
+    color: #aab3c5; font-size: 12px;
+  }
+  #frame .hero.centered { text-align: center; }
+  #frame .hero.centered h1, #frame .hero.centered p { margin-left: auto; margin-right: auto; }
+  #frame .hero.centered .btns { justify-content: center; }
+  #frame .hero.centered .visual { display: none; }
+  #frame .hero.left .visual { display: none; }
+  #frame.vp-mobile .hero.split { grid-template-columns: 1fr; }
+
+  /* trust strip */
+  #frame .trust { padding: 4px var(--gutter) 30px; }
+  #frame .trust .lbl { font-size: 11px; color: #9aa3b2; text-align: center; margin-bottom: 14px; letter-spacing: .4px; }
+  #frame .trust .logos { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; opacity: .55; }
+  #frame .trust .logos span { font-weight: 700; font-size: 14px; color: #7a8494; font-family: var(--site-head); }
+
+  /* dark band */
+  #frame .dark {
+    padding: var(--sec-pad) var(--gutter); color: #fff; position: relative; overflow: hidden;
+  }
+  #frame .dark.soup {
+    background:
+      radial-gradient(at 46% 60%, color-mix(in srgb, var(--accent) 60%, #000) 0, transparent 45%),
+      radial-gradient(at 70% 20%, #3a0d4f 0, transparent 45%),
+      radial-gradient(at 20% 80%, #06283d 0, transparent 45%), #07080d;
+  }
+  #frame .dark.clean { background: #0a0c12; }
+  #frame .dark.mesh {
+    background:
+      conic-gradient(from 200deg at 70% 30%, color-mix(in srgb, var(--accent) 50%, #000), #120a2e, #04111f, color-mix(in srgb, var(--accent) 40%, #000));
+  }
+  #frame .dark.aurora {
+    background:
+      linear-gradient(160deg, #05060a 0%, #0a0f1e 60%),
+      radial-gradient(60% 80% at 50% -10%, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%);
+    background-blend-mode: screen;
+  }
+  #frame .dark h2 {
+    font-family: var(--site-head); font-weight: var(--head-weight);
+    font-size: var(--h2); line-height: 1.1; letter-spacing: -1px; margin: 0 auto 10px; text-align: center; max-width: 22ch;
+  }
+  #frame .dark h2 em { font-style: normal; color: color-mix(in srgb, var(--accent) 55%, #fff); }
+  #frame .dark .dash {
+    margin: 26px auto 0; width: min(680px, 88%); aspect-ratio: 16/9; border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+    border: 1px solid rgba(255,255,255,.14); display: grid; place-items: center; color: rgba(255,255,255,.4); font-size: 12px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* features bento */
+  #frame .features { padding: var(--sec-pad) var(--gutter); background: var(--surface); }
+  #frame .features .head { text-align: center; margin-bottom: 26px; }
+  #frame .features h2 { font-family: var(--site-head); font-weight: var(--head-weight); font-size: var(--h2); letter-spacing: -1px; margin: 0 0 16px; color: var(--ink-strong); }
+  #frame .features .tabs { display: inline-flex; gap: 4px; background: #eef1f6; border-radius: 999px; padding: 4px; }
+  #frame .features .tabs span { font-size: 12.5px; padding: 7px 18px; border-radius: 999px; color: #5b6472; font-weight: 500; }
+  #frame .features .tabs span.on { background: var(--accent); color: #fff; }
+  #frame .bento { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--card-gap); }
+  #frame.vp-mobile .bento { grid-template-columns: 1fr 1fr; }
+  #frame .bento .cell {
+    background: var(--card-bg); border: var(--card-border); border-radius: var(--card-radius);
+    padding: var(--card-pad); box-shadow: var(--card-shadow); min-height: 124px;
+  }
+  #frame .bento .cell.tall { grid-row: span 2; }
+  #frame .bento .ico { width: 30px; height: 30px; border-radius: 8px; background: color-mix(in srgb, var(--accent) 16%, transparent); margin-bottom: 12px; display: grid; place-items: center; }
+  #frame .bento .ico::after { content: ""; width: 14px; height: 14px; border-radius: 4px; background: var(--accent); }
+  #frame .bento h3 { font-family: var(--site-head); font-size: 15.5px; font-weight: 700; margin: 0 0 5px; color: var(--ink-strong); }
+  #frame .bento p { font-size: 12px; color: #6a7384; line-height: 1.5; margin: 0; }
+
+  /* blog */
+  #frame .blog { padding: var(--sec-pad) var(--gutter); }
+  #frame .blog h2 { font-family: var(--site-head); font-weight: var(--head-weight); font-size: var(--h2); letter-spacing: -1px; margin: 0 0 24px; max-width: 50%; color: var(--ink-strong); }
+  #frame .blog .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  #frame.vp-mobile .blog .cards { grid-template-columns: 1fr; }
+  #frame .blog .card { background: var(--card-bg); border: var(--card-border); border-radius: var(--card-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+  #frame .blog .card .ph { height: 120px; background: linear-gradient(135deg, #e7ecf6, #dde6f5); }
+  #frame .blog .card .bd { padding: 14px; }
+  #frame .blog .card .mt { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 7px; }
+  #frame .blog .card h4 { font-family: var(--site-head); font-size: 14px; line-height: 1.35; margin: 0; color: var(--ink-strong); font-weight: 600; }
+
+  /* prompt dock */
+  .dock {
+    flex: 0 0 auto; border-top: 1px solid var(--border); background: var(--panel);
+    padding: 12px 16px; max-height: 38%; display: flex; flex-direction: column; gap: 8px;
+  }
+  .dock .dock-top { display: flex; align-items: center; gap: 10px; }
+  .dock .dock-top .ttl { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); font-weight: 600; }
+  .dock .copy {
+    margin-left: auto; background: var(--accent, #375DFB); color: #fff; border: 0;
+    font-size: 12px; font-weight: 600; padding: 7px 16px; border-radius: 7px; cursor: pointer; font-family: var(--ui);
+  }
+  .dock .copy:active { transform: translateY(1px); }
+  #prompt {
+    font-family: var(--mono); font-size: 12px; line-height: 1.6; color: #cdd4df;
+    background: #0e1118; border: 1px solid var(--border); border-radius: 9px;
+    padding: 12px 14px; margin: 0; white-space: pre-wrap; overflow-y: auto;
+  }
+</style>
+</head>
+<body>
+  <!-- ============ CONTROLS ============ -->
+  <aside class="controls">
+    <h1>EventHex Home — Redesign Playground</h1>
+    <p class="sub">Tune the redesign direction. Preview updates live. Copy the brief at the bottom back into Claude to apply it to the real Astro components.</p>
+
+    <div class="presetbar" id="presets"></div>
+
+    <div class="group">
+      <p class="legend">Brand accent</p>
+      <div class="row">
+        <div class="swatches" id="swatches"></div>
+      </div>
+      <div class="row">
+        <label class="fld">Custom hue <span class="val" id="hueVal"></span></label>
+        <input type="range" id="hue" min="0" max="360" value="226" />
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="legend">Hero</p>
+      <div class="row">
+        <label class="fld">Layout</label>
+        <div class="seg" id="heroLayout" data-key="heroLayout">
+          <button data-v="centered">Centered</button>
+          <button data-v="left">Left copy</button>
+          <button data-v="split">Split + visual</button>
+        </div>
+      </div>
+      <div class="row toggle">
+        <span>Show subhead paragraph</span>
+        <label class="switch"><input type="checkbox" id="heroSub" checked><span class="sl"></span></label>
+      </div>
+      <div class="row toggle">
+        <span>Secondary "Watch demo" button</span>
+        <label class="switch"><input type="checkbox" id="heroSecBtn" checked><span class="sl"></span></label>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="legend">Dark section treatment</p>
+      <div class="row">
+        <div class="seg" id="darkStyle" data-key="darkStyle">
+          <button data-v="soup">Gradient soup</button>
+          <button data-v="clean">Clean dark</button>
+          <button data-v="mesh">Mesh</button>
+          <button data-v="aurora">Aurora glow</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="legend">Cards</p>
+      <div class="row">
+        <label class="fld">Style</label>
+        <div class="seg" id="cardStyle" data-key="cardStyle">
+          <button data-v="soft">Soft</button>
+          <button data-v="flat">Flat outline</button>
+          <button data-v="glass">Glass</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="fld">Corner radius <span class="val" id="radVal"></span></label>
+        <input type="range" id="cardRadius" min="0" max="28" value="18" />
+      </div>
+    </div>
+
+    <div class="group">
+      <p class="legend">Typography &amp; density</p>
+      <div class="row">
+        <label class="fld">Heading font</label>
+        <select id="headFont">
+          <option value="'Manrope', system-ui, sans-serif">Manrope (current)</option>
+          <option value="'Sora', system-ui, sans-serif">Sora</option>
+          <option value="'Clash Display', Georgia, serif">Clash Display</option>
+          <option value="Georgia, 'Times New Roman', serif">Editorial serif</option>
+          <option value="'Space Grotesk', system-ui, sans-serif">Space Grotesk</option>
+        </select>
+      </div>
+      <div class="row">
+        <label class="fld">Heading weight <span class="val" id="hwVal"></span></label>
+        <input type="range" id="headWeight" min="500" max="800" step="100" value="700" />
+      </div>
+      <div class="row">
+        <label class="fld">Density (H1 size) <span class="val" id="densVal"></span></label>
+        <input type="range" id="density" min="34" max="68" value="52" />
+      </div>
+    </div>
+  </aside>
+
+  <!-- ============ STAGE ============ -->
+  <main class="stage">
+    <div class="stage-top">
+      <div class="vp" id="vp">
+        <button data-vp="desktop" class="on">Desktop</button>
+        <button data-vp="tablet">Tablet</button>
+        <button data-vp="mobile">Mobile</button>
+      </div>
+      <span class="hint">Live preview — real EventHex sections, mock content</span>
+    </div>
+
+    <div class="preview-scroll">
+      <div id="frame">
+        <div class="site">
+          <!-- nav -->
+          <div class="nav">
+            <div class="logo">Event<b>Hex</b></div>
+            <div class="links"><span>Platform</span><span>Features</span><span>Pricing</span><span>Blog</span></div>
+            <div class="cta">Request a demo</div>
+          </div>
+
+          <!-- hero -->
+          <div class="hero" id="hero">
+            <div class="copy">
+              <div class="eyebrow">Simplify Events · Amplify Results</div>
+              <h1>The AI-Powered <em>Event Platform</em> for Every Event</h1>
+              <p id="heroPara">From registration to post-event analytics — one platform that runs your whole event with AI doing the heavy lifting.</p>
+              <div class="btns">
+                <span class="btn-pri">Request a demo</span>
+                <span class="btn-sec" id="heroSecEl">Watch demo</span>
+              </div>
+            </div>
+            <div class="visual">dashboard preview</div>
+          </div>
+
+          <!-- trust -->
+          <div class="trust">
+            <div class="lbl">TRUSTED BY 500+ EVENT TEAMS</div>
+            <div class="logos"><span>Wellbeing</span><span>Global AI</span><span>Biohack</span><span>MediaOne</span><span>NIPM</span></div>
+          </div>
+
+          <!-- dark -->
+          <div class="dark soup" id="dark">
+            <h2>Boost retention through <em>enhanced engagement</em> &amp; personalized experiences</h2>
+            <div class="dash">live dashboard animation</div>
+          </div>
+
+          <!-- features bento -->
+          <div class="features">
+            <div class="head">
+              <h2>Countless Events, One AI Platform</h2>
+              <div class="tabs"><span class="on">Pre-Event</span><span>Event Day</span><span>Post-Event</span></div>
+            </div>
+            <div class="bento">
+              <div class="cell"><div class="ico"></div><h3>Event Builder</h3><p>Build your event website in a few clicks.</p></div>
+              <div class="cell"><div class="ico"></div><h3>Ticketing</h3><p>Sell tickets and monetize your event.</p></div>
+              <div class="cell tall"><div class="ico"></div><h3>Event Marketing</h3><p>Built-in email &amp; WhatsApp campaign modules to market your event effectively.</p></div>
+              <div class="cell"><div class="ico"></div><h3>Sponsors</h3><p>Manage sponsors &amp; track payments.</p></div>
+              <div class="cell"><div class="ico"></div><h3>AI Form Builder</h3><p>Speak to build and fill forms.</p></div>
+            </div>
+          </div>
+
+          <!-- blog -->
+          <div class="blog">
+            <h2>Your Countless Events Begin Here</h2>
+            <div class="cards">
+              <div class="card"><div class="ph"></div><div class="bd"><div class="mt">Product</div><h4>How AI is reshaping event registration in 2026</h4></div></div>
+              <div class="card"><div class="ph"></div><div class="bd"><div class="mt">Guide</div><h4>The complete checklist for hybrid event check-in</h4></div></div>
+              <div class="card"><div class="ph"></div><div class="bd"><div class="mt">Story</div><h4>How Global AI Show scaled to 10k attendees</h4></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- prompt dock -->
+    <div class="dock">
+      <div class="dock-top">
+        <span class="ttl">Redesign brief</span>
+        <button class="copy" id="copyBtn">Copy brief</button>
+      </div>
+      <pre id="prompt"></pre>
+    </div>
+  </main>
+
+<script>
+  // ---------------- state ----------------
+  const DEFAULTS = {
+    hue: 226, accentHex: "#375DFB", accentName: "EventHex blue",
+    heroLayout: "centered", heroSub: true, heroSecBtn: true,
+    darkStyle: "soup", cardStyle: "soft", cardRadius: 18,
+    headFont: "'Manrope', system-ui, sans-serif", headFontName: "Manrope",
+    headWeight: 700, density: 52
+  };
+  const state = { ...DEFAULTS };
+
+  const SWATCHES = [
+    { hex: "#375DFB", name: "EventHex blue", hue: 226 },
+    { hex: "#6D4AFF", name: "violet", hue: 255 },
+    { hex: "#0E9F88", name: "teal", hue: 168 },
+    { hex: "#FF5C35", name: "coral", hue: 14 },
+    { hex: "#E0218A", name: "magenta", hue: 327 },
+    { hex: "#111827", name: "ink (mono)", hue: 222 }
+  ];
+
+  const PRESETS = {
+    "Current (baseline)": { ...DEFAULTS },
+    "Clean SaaS": { hue: 226, accentHex: "#375DFB", accentName: "EventHex blue", heroLayout: "split", heroSub: true, heroSecBtn: true, darkStyle: "clean", cardStyle: "flat", cardRadius: 12, headFont: "'Manrope', system-ui, sans-serif", headFontName: "Manrope", headWeight: 700, density: 50 },
+    "Bold AI": { hue: 255, accentHex: "#6D4AFF", accentName: "violet", heroLayout: "left", heroSub: true, heroSecBtn: false, darkStyle: "aurora", cardStyle: "glass", cardRadius: 22, headFont: "'Space Grotesk', system-ui, sans-serif", headFontName: "Space Grotesk", headWeight: 700, density: 60 },
+    "Editorial": { hue: 14, accentHex: "#FF5C35", accentName: "coral", heroLayout: "centered", heroSub: true, heroSecBtn: false, darkStyle: "clean", cardStyle: "flat", cardRadius: 4, headFont: "Georgia, 'Times New Roman', serif", headFontName: "Editorial serif", headWeight: 600, density: 64 },
+    "Mono minimal": { hue: 222, accentHex: "#111827", accentName: "ink", heroLayout: "left", heroSub: false, heroSecBtn: false, darkStyle: "clean", cardStyle: "flat", cardRadius: 0, headFont: "'Sora', system-ui, sans-serif", headFontName: "Sora", headWeight: 600, density: 46 }
+  };
+
+  // ---------------- helpers ----------------
+  function hslToHex(h, s, l) {
+    s/=100; l/=100;
+    const k = n => (n + h/30) % 12;
+    const a = s * Math.min(l, 1-l);
+    const f = n => l - a * Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n), 1)));
+    const to = x => Math.round(255*x).toString(16).padStart(2,"0");
+    return "#" + to(f(0)) + to(f(8)) + to(f(4));
+  }
+
+  // ---------------- render ----------------
+  const frame = document.getElementById("frame");
+  function render() {
+    document.documentElement.style.setProperty("--accent", state.accentHex);
+    const f = frame.style;
+    f.setProperty("--accent", state.accentHex);
+    f.setProperty("--ink", "#374152");
+    f.setProperty("--ink-strong", "#161b24");
+    f.setProperty("--site-head", state.headFont);
+    f.setProperty("--site-body", "'Inter', system-ui, sans-serif");
+    f.setProperty("--head-weight", state.headWeight);
+    f.setProperty("--h1", state.density + "px");
+    f.setProperty("--h2", Math.round(state.density * 0.74) + "px");
+    f.setProperty("--btn-radius", Math.min(state.cardRadius, 14) + "px");
+    f.setProperty("--card-radius", state.cardRadius + "px");
+    f.setProperty("--gutter", "44px");
+    f.setProperty("--hero-pad", "56px");
+    f.setProperty("--sec-pad", "56px");
+    f.setProperty("--card-gap", "14px");
+    f.setProperty("--card-pad", "18px");
+    f.setProperty("--surface", "#f7f9fe");
+
+    // card style
+    let cb = "#ffffff", bd = "1px solid #e8ecf2", sh = "0 2px 12px rgba(0,0,0,.04)";
+    if (state.cardStyle === "flat") { cb = "#ffffff"; bd = "1.5px solid #dde3ec"; sh = "none"; }
+    if (state.cardStyle === "glass") { cb = "rgba(255,255,255,.55)"; bd = "1.5px solid rgba(200,205,225,.5)"; sh = "0 8px 30px rgba(0,0,0,.06)"; }
+    if (state.cardStyle === "soft") { cb = "#ffffff"; bd = "1px solid #eef1f6"; sh = "0 6px 22px rgba(20,30,60,.07)"; }
+    f.setProperty("--card-bg", cb);
+    f.setProperty("--card-border", bd);
+    f.setProperty("--card-shadow", sh);
+
+    // hero
+    const hero = document.getElementById("hero");
+    hero.className = "hero " + state.heroLayout;
+    document.getElementById("heroPara").style.display = state.heroSub ? "" : "none";
+    document.getElementById("heroSecEl").style.display = state.heroSecBtn ? "" : "none";
+
+    // dark
+    document.getElementById("dark").className = "dark " + state.darkStyle;
+  }
+
+  // ---------------- prompt ----------------
+  function updatePrompt() {
+    const p = [];
+    p.push("Redesign the EventHex home page (src/pages/index.astro + src/components/home-new/*).");
+    const ch = [];
+
+    if (state.accentHex !== DEFAULTS.accentHex)
+      ch.push(`Switch the brand accent from #375DFB to ${state.accentHex} (${state.accentName}) — update --brand-blue / --color-eh-blue tokens in src/styles/design-tokens.css + global.css and all CTA/button/tab/dot colors.`);
+
+    const heroMap = {
+      centered: "Keep the hero centered but tighten it",
+      left: "Switch the hero to a left-aligned single-column layout",
+      split: "Switch the hero to a two-column split: copy left, product/dashboard visual right"
+    };
+    if (state.heroLayout !== DEFAULTS.heroLayout) ch.push(heroMap[state.heroLayout] + ".");
+    if (state.heroSub !== DEFAULTS.heroSub) ch.push(state.heroSub ? "Add a supporting subhead paragraph under the H1." : "Drop the subhead paragraph — H1 + CTA only.");
+    if (state.heroSecBtn !== DEFAULTS.heroSecBtn) ch.push(state.heroSecBtn ? "Add a secondary 'Watch demo' button next to the primary CTA." : "Remove the secondary button — single primary CTA.");
+
+    const darkMap = {
+      soup: "keep the multi-radial-gradient dark treatment",
+      clean: "replace the 12-layer gradient-soup dark sections (DashboardSection, AISection) with a flat near-black (#0a0c12) for a cleaner, faster look",
+      mesh: "replace the gradient-soup dark sections with a single smooth conic mesh gradient in the accent color",
+      aurora: "replace the gradient-soup dark sections with a subtle aurora glow — near-black base with one soft accent-colored radial bloom from the top"
+    };
+    if (state.darkStyle !== DEFAULTS.darkStyle) ch.push("For the dark sections, " + darkMap[state.darkStyle] + ".");
+
+    const cardMap = {
+      soft: "soft elevated cards (white, faint border, medium shadow)",
+      flat: "flat outline cards (white, crisp 1.5px border, no shadow)",
+      glass: "glassmorphic cards (translucent white, backdrop blur, soft shadow)"
+    };
+    if (state.cardStyle !== DEFAULTS.cardStyle || state.cardRadius !== DEFAULTS.cardRadius)
+      ch.push(`Restyle the feature bento + blog cards as ${cardMap[state.cardStyle]} with ${state.cardRadius}px corners.`);
+
+    if (state.headFont !== DEFAULTS.headFont) ch.push(`Change the heading font to ${state.headFontName} (keep Inter for body).`);
+    if (state.headWeight !== DEFAULTS.headWeight) ch.push(`Set headings to a consistent weight of ${state.headWeight} (the current page mixes 400–700 — unify it).`);
+    if (state.density !== DEFAULTS.density) {
+      const word = state.density >= 60 ? "larger, more impactful" : state.density <= 44 ? "tighter, more compact" : "balanced";
+      ch.push(`Make the type scale ${word} — hero H1 around ${state.density}px, section H2s proportionally.`);
+    }
+
+    let out = p[0] + "\n\n";
+    if (ch.length === 0) {
+      out += "No changes from the current design — this is the baseline. Adjust a control to generate a redesign brief.";
+    } else {
+      out += "Changes:\n" + ch.map(c => "• " + c).join("\n");
+      out += "\n\nKeep all existing copy, section order, animations, and responsive breakpoints. Apply via the design tokens where possible so changes cascade.";
+    }
+    document.getElementById("prompt").textContent = out;
+  }
+
+  function updateAll() { render(); updatePrompt(); }
+
+  // ---------------- wire controls ----------------
+  // swatches
+  const swWrap = document.getElementById("swatches");
+  SWATCHES.forEach(s => {
+    const b = document.createElement("button");
+    b.style.background = s.hex; b.title = s.name; b.dataset.hex = s.hex;
+    b.onclick = () => {
+      state.accentHex = s.hex; state.accentName = s.name; state.hue = s.hue;
+      document.getElementById("hue").value = s.hue; document.getElementById("hueVal").textContent = s.hue + "°";
+      syncSwatches(); updateAll();
+    };
+    swWrap.appendChild(b);
+  });
+  function syncSwatches() {
+    [...swWrap.children].forEach(b => b.classList.toggle("on", b.dataset.hex.toLowerCase() === state.accentHex.toLowerCase()));
+  }
+
+  // hue slider
+  const hue = document.getElementById("hue");
+  hue.oninput = () => {
+    state.hue = +hue.value;
+    state.accentHex = hslToHex(state.hue, 78, 56);
+    state.accentName = "custom hue " + state.hue + "°";
+    document.getElementById("hueVal").textContent = state.hue + "°";
+    syncSwatches(); updateAll();
+  };
+
+  // segmented
+  document.querySelectorAll(".seg").forEach(seg => {
+    const key = seg.dataset.key;
+    seg.querySelectorAll("button").forEach(btn => {
+      btn.onclick = () => { state[key] = btn.dataset.v; syncSeg(seg, key); updateAll(); };
+    });
+  });
+  function syncSeg(seg, key) {
+    seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === state[key]));
+  }
+  function syncAllSegs() { document.querySelectorAll(".seg").forEach(s => syncSeg(s, s.dataset.key)); }
+
+  // toggles
+  document.getElementById("heroSub").onchange = e => { state.heroSub = e.target.checked; updateAll(); };
+  document.getElementById("heroSecBtn").onchange = e => { state.heroSecBtn = e.target.checked; updateAll(); };
+
+  // sliders
+  const cardRadius = document.getElementById("cardRadius");
+  cardRadius.oninput = () => { state.cardRadius = +cardRadius.value; document.getElementById("radVal").textContent = state.cardRadius + "px"; updateAll(); };
+  const headWeight = document.getElementById("headWeight");
+  headWeight.oninput = () => { state.headWeight = +headWeight.value; document.getElementById("hwVal").textContent = state.headWeight; updateAll(); };
+  const density = document.getElementById("density");
+  density.oninput = () => { state.density = +density.value; document.getElementById("densVal").textContent = state.density + "px"; updateAll(); };
+  const headFont = document.getElementById("headFont");
+  headFont.onchange = () => {
+    state.headFont = headFont.value;
+    state.headFontName = headFont.options[headFont.selectedIndex].text.replace(" (current)", "");
+    updateAll();
+  };
+
+  // viewport
+  document.getElementById("vp").querySelectorAll("button").forEach(b => {
+    b.onclick = () => {
+      document.querySelectorAll("#vp button").forEach(x => x.classList.remove("on"));
+      b.classList.add("on");
+      frame.className = "vp-" + b.dataset.vp;
+    };
+  });
+
+  // presets
+  const presetWrap = document.getElementById("presets");
+  Object.keys(PRESETS).forEach(name => {
+    const b = document.createElement("button");
+    b.textContent = name;
+    b.onclick = () => { Object.assign(state, PRESETS[name]); syncControlsFromState(); updateAll(); };
+    presetWrap.appendChild(b);
+  });
+
+  function syncControlsFromState() {
+    document.getElementById("hue").value = state.hue;
+    document.getElementById("hueVal").textContent = state.hue + "°";
+    document.getElementById("heroSub").checked = state.heroSub;
+    document.getElementById("heroSecBtn").checked = state.heroSecBtn;
+    cardRadius.value = state.cardRadius; document.getElementById("radVal").textContent = state.cardRadius + "px";
+    headWeight.value = state.headWeight; document.getElementById("hwVal").textContent = state.headWeight;
+    density.value = state.density; document.getElementById("densVal").textContent = state.density + "px";
+    headFont.value = state.headFont;
+    syncSwatches(); syncAllSegs();
+  }
+
+  // copy
+  document.getElementById("copyBtn").onclick = () => {
+    navigator.clipboard.writeText(document.getElementById("prompt").textContent).then(() => {
+      const b = document.getElementById("copyBtn"); const t = b.textContent;
+      b.textContent = "Copied!"; setTimeout(() => b.textContent = t, 1200);
+    });
+  };
+
+  // init
+  syncControlsFromState();
+  updateAll();
+</script>
+</body>
+</html>
