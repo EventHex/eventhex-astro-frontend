@@ -1,17 +1,18 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/live-polling-qa/HeroSection.astro";
-import StatsSection from "../components/live-polling-qa/StatsSection.astro";
-import BentoGrid from "../components/live-polling-qa/BentoGrid.astro";
-import FeatureCards from "../components/live-polling-qa/FeatureCards.astro";
-import HowItWorksSection from "../components/live-polling-qa/HowItWorksSection.astro";
-import CTASection from "../components/live-polling-qa/CTASection.astro";
-import CoordinationTools from "../components/live-polling-qa/CoordinationTools.astro";
-import FaqSection from "../components/live-polling-qa/FaqSection.astro";
+import LivePollingPage from "../components/live-polling-qa/LivePollingPage.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Live Polling & Q&A for Events — Real-Time Interaction | EventHex";
-const description = "Live polling & Q&A for events — launch polls, moderate questions, and display results on venue screens in real time. Keep every session audience engaged.";
+const title = "Live Polling & Q&A for Events | EventHex";
+const description = "Run session polls, anonymous audience voting, live Q&A spotlight, and post-session feedback from the same EventHex session workflow.";
+
+const faqs = [
+  ["What poll type is currently supported?", "EventHex supports multiple-choice polls with option-level vote totals and percentages."],
+  ["Can attendees vote anonymously?", "Yes, when anonymous mode is enabled. The public vote path uses a client token so a browser can retain its selection without exposing an attendee identity."],
+  ["How do attendees open a poll?", "Organizers can share a participation link or QR code, and polls can also appear in the configured attendee mobile experience."],
+  ["Can audience questions be anonymous?", "Yes. Anonymous questions remove attendee identity from the returned question. Organizers can review the queue and choose one question for spotlight."],
+  ["Does Q&A include upvoting or moderation approval?", "Upvoting and moderation approval are not currently included in this workflow."],
+  ["What feedback can we collect?", "Session feedback supports written feedback, a reaction value, and an optional 1–5 rating, with organizer review in the session workspace."],
+];
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -20,29 +21,15 @@ const softwareSchema = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/live-polling-qa/",
-  description: "Live audience polling, moderated Q&A, real-time venue display, and session feedback collection for events.",
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
-  featureList: [
-    "Multiple-Choice Polls",
-    "Word Clouds",
-    "Live Stage Display",
-    "Moderated Q&A",
-    "Question Upvoting",
-    "Session Feedback Forms",
-    "NPS Surveys",
-    "Speaker Reports",
-    "Data Export",
-  ],
+  description,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: ["Multiple-choice session polls", "Registered and anonymous voting", "QR code and share-link access", "Vote totals and percentages", "Anonymous audience questions", "Single-question stage spotlight", "Text, reaction, and 1–5 session feedback"],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
@@ -50,22 +37,16 @@ const softwareSchema = {
   title={title}
   description={description}
   canonical="https://eventhex.ai/live-polling-qa/"
-  ogImage={ogImage}
+  footerCtaEyebrow="Map one live session"
+  footerCtaTitle="Bring your audience interaction plan to the demo"
+  footerCtaSubtitle="Show us the session, poll, Q&A policy, participation path, stage display, and feedback outcome you need. We’ll walk through the matching EventHex workflow."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={true}
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <LivePollingPage faqs={faqs} />
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
