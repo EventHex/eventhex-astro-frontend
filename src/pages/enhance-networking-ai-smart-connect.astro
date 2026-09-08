@@ -1,14 +1,21 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/ai-smart-connect/HeroSection.astro";
-import BentoGridSection from "../components/ai-smart-connect/BentoGridSection.astro";
-import FeatureCardsSection from "../components/ai-smart-connect/FeatureCardsSection.astro";
-import CTASection from "../components/ai-smart-connect/CTASection.astro";
-import BenefitCardsSection from "../components/ai-smart-connect/BenefitCardsSection.astro";
-import FaqLightSection from "../components/ai-smart-connect/FaqLightSection.astro";
+import SmartConnectPage from "../components/ai-smart-connect/SmartConnectPage.astro";
 
-const title = "AI Event Smart-Connect | Intelligent Networking | EventHex";
-const description = "By leveraging advanced AI, EventHex personalizes networking opportunities, ensuring attendees connect with the right people for a truly impactful experience.";
+const title = "AI Event Matchmaking & Smart Networking | EventHex";
+const description = "Help attendees discover relevant people, review profile context, connect by choice, chat, and schedule one-to-one meetings in the EventHex event app.";
+
+const faq = [
+  ["What is AI event matchmaking?", "AI event matchmaking uses participant profile information to recommend people an attendee may want to meet. In EventHex, recommendations are a discovery aid; the attendee reviews the profile and decides whether to connect."],
+  ["How does EventHex recommend people?", "EventHex uses profile similarity to surface candidate profiles from the event the attendee has opened. The recommendation card leads to the participant's profile and current connection state."],
+  ["Does AI Smart-Connect send connection requests automatically?", "No. The attendee chooses a recommended profile, reviews the available context, and decides whether to send a request."],
+  ["What happens after a connection request is accepted?", "The accepted participant appears under Connections. From the connected profile, attendees can continue in chat and open the one-to-one meeting flow."],
+  ["Can attendees schedule meetings?", "Yes. In the verified attendee journey, meeting scheduling becomes available after the participants connect. The attendee chooses to open and complete the meeting flow."],
+  ["Can organizers control who uses networking?", "Yes. Organizers can enable the networking module and select which ticket types can access it. The exact attendee experience depends on the event's enabled modules and settings."],
+  ["Can speakers and exhibitor booth members appear in networking?", "Organizers can choose whether speakers and booth members are included in the networking directory."],
+  ["Can organizers choose what appears on a profile card?", "Yes. Organizers can select and order up to three networking-card fields from designation, company, and eligible event or ticket form responses."],
+  ["Does Smart-Connect create meeting schedules for attendees?", "Smart-Connect recommends profiles. Attendees choose whom to connect with and can schedule a one-to-one meeting after a connection is accepted."],
+];
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -17,49 +24,31 @@ const softwareSchema = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/enhance-networking-ai-smart-connect/",
-  description: description,
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "AI-powered networking included with EventHex event management platform",
-  },
+  description,
+  featureList: ["Event-scoped profile recommendations", "Attendee-controlled connection requests", "Networking chat", "One-to-one meeting scheduling", "Organizer networking access controls"],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
 <MarketingLayout
-  title={title}
-  description={description}
+  {title}
+  {description}
   canonical="https://eventhex.ai/enhance-networking-ai-smart-connect/"
-  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/04/iPhone-16.svg"
-  footerCtaTitle={"Explore EventHex's\nAI Smart Connect Now!"}
-  footerCtaButtonText="Get a demo"
+  ogImage="https://eventhex.ai/feature-images/ai/ai-smart-networking.webp"
+  footerCtaEyebrow="See the attendee journey"
+  footerCtaTitle="Bring your attendee groups. See how Smart-Connect would work for them."
+  footerCtaSubtitle="Show us who should network, which profile context matters, and how attendees should move from discovery to conversation."
+  footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
 >
-  <HeroSection
-    eyebrow="AI Smart-Connect"
-    titleHtml="AI Networking App for <b>Meaningful</b> Event <b>Connections</b>"
-    description={description}
-    ctaText="Get a Free Demo"
-    ctaHref="/book-a-demo/"
-    image="https://cms.eventhex.ai/wp-content/uploads/2025/04/iPhone-16.svg"
-    imageAlt="EventHex AI Smart-Connect networking app on iPhone"
-  />
-
-  <BentoGridSection />
-
-  <FeatureCardsSection />
-
-  <CTASection />
-
-  <BenefitCardsSection />
-
-  <FaqLightSection />
-
-  <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(softwareSchema)}</script>`} />
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <SmartConnectPage {faq} />
 </MarketingLayout>
-
-<style is:global>
-  html { scroll-behavior: smooth; }
-  main { background-color: #ffffff; }
-</style>

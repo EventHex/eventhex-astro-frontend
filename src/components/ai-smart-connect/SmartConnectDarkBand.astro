@@ -1,0 +1,81 @@
+---
+interface Props { items: string[][]; }
+const { items } = Astro.props;
+---
+
+<section class="scd-band">
+  <div class="scd-heading">
+    <h2>Turn available profile information into a better place to start</h2>
+  </div>
+  <div class="scd-grid">
+    {items.map(([title, text], index) => (
+      <article class="animate-on-scroll" data-animation="fadeInUp">
+        <h3>{title}</h3>
+        <p>{text}</p>
+        <div class={`scd-visual scd-visual--${index + 1}`} aria-hidden="true">
+          {index === 0 && <div class="scd-match"><div class="scd-match__person"><span>AM</span><b>Aisha Malik</b></div><div class="scd-match__signals"><i>Fintech</i><i>Partnerships</i><i>Community</i></div><div class="scd-match__score"><strong>92%</strong><small>profile match</small></div></div>}
+          {index === 1 && <div class="scd-event"><div class="scd-event__bar"><i></i><span>Future Forum 2026</span><b>Live</b></div><div class="scd-event__people"><span>AM</span><span>JR</span><span>MC</span><span>+24</span></div><div class="scd-event__scope"><i></i>Searching this event only</div></div>}
+          {index === 2 && <div class="scd-profile"><div class="scd-profile__head"><span>JR</span><div><b>Jon Reed</b><small>Product · SaaS</small></div></div><div class="scd-profile__fields"><p><small>Company</small><b>Northstar Labs</b></p><p><small>Interested in</small><b>Event technology</b></p></div><div class="scd-profile__hint">Review before connecting</div></div>}
+          {index === 3 && <div class="scd-states"><div class="scd-states__tabs"><span>All</span><span>Connected</span><span class="is-active">Requested</span></div><div class="scd-states__row"><i>MC</i><div><b>Maya Chen</b><small>Request sent</small></div><em>Pending</em></div><div class="scd-states__row"><i>RK</i><div><b>Ravi Kumar</b><small>Invitation received</small></div><em>Review</em></div></div>}
+          {index === 4 && <div class="scd-action"><div class="scd-action__profile"><span>AM</span><div><b>Aisha Malik</b><small>Partnerships · Fintech</small></div></div><button type="button">Send connection request</button><div class="scd-action__status"><i></i><span>Attendee chooses the next step</span></div></div>}
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .scd-band{--band-p:0;position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 0 0;background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);background-repeat:no-repeat;--band-gap:calc((1 - var(--band-p)) * clamp(16px,3.5vw,56px));clip-path:inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));will-change:clip-path}.scd-band:before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}.scd-band>*{position:relative;z-index:1}.scd-heading{max-width:1140px;margin:0 auto;padding:0 24px 72px;text-align:center}.scd-heading h2{max-width:1000px;margin:0 auto;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em;background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.scd-grid{display:grid;grid-template-columns:repeat(6,1fr);max-width:1140px;margin:0 auto;padding:0 24px clamp(56px,7vw,88px)}.scd-grid article{position:relative;grid-column:span 2;display:flex;flex-direction:column;min-height:420px;padding:36px 32px;border-top:1px solid #3b3a47;border-right:1px solid #3b3a47}.scd-grid article:first-child{border-left:1px solid #3b3a47;border-radius:16px 0 0 0}.scd-grid article:nth-child(3){border-radius:0 16px 0 0}.scd-grid article:nth-child(n+4){grid-column:span 3;border-bottom:1px solid #3b3a47}.scd-grid article:nth-child(4){border-left:1px solid #3b3a47;border-radius:0 0 0 16px}.scd-grid article:nth-child(5){border-radius:0 0 16px 0}.scd-grid h3{margin:0 0 14px;color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:-.01em}.scd-grid p{max-width:34ch;margin:0;color:rgba(255,255,255,.62);font-family:var(--font-body);font-size:.9375rem;line-height:1.38}.scd-visual{display:flex;align-items:flex-end;justify-content:center;flex:1;gap:8px;margin-top:32px}.scd-visual i{display:block;width:30%;height:40%;border:1px solid #375dfb;border-radius:9px;background:rgba(55,93,251,.12)}.scd-visual i:nth-child(2){height:75%;border-color:#7c8fff;background:rgba(124,143,255,.16)}.scd-visual i:nth-child(3){height:55%;border-color:#b8c2ff;background:rgba(184,194,255,.14)}
+  @media(prefers-reduced-motion:reduce){.scd-band{clip-path:none;will-change:auto}}
+  @media(max-width:900px){.scd-grid{grid-template-columns:1fr}.scd-grid article,.scd-grid article:nth-child(n+4){grid-column:auto;min-height:320px;border:1px solid #3b3a47;border-bottom:0;border-radius:0}.scd-grid article:first-child{border-radius:16px 16px 0 0}.scd-grid article:last-child{border-bottom:1px solid #3b3a47;border-radius:0 0 16px 16px}}
+  @media(max-width:640px){.scd-heading{padding-bottom:48px}.scd-grid{padding-inline:16px}.scd-grid article,.scd-grid article:nth-child(n+4){min-height:280px;padding:30px 26px}}
+
+  .scd-visual{position:relative;min-height:190px;align-items:center;font-family:var(--font-body)}.scd-visual>div{width:100%;max-width:330px;color:#fff;animation:scd-float 6s ease-in-out infinite}.scd-grid article:nth-child(2) .scd-visual>div{animation-delay:-1.2s}.scd-grid article:nth-child(3) .scd-visual>div{animation-delay:-2.4s}.scd-grid article:nth-child(4) .scd-visual>div{animation-delay:-3.6s}.scd-grid article:nth-child(5) .scd-visual>div{animation-delay:-4.8s}.scd-match,.scd-event,.scd-profile,.scd-states,.scd-action{position:relative;padding:16px;border:1px solid #333846;border-radius:16px;background:rgba(16,18,25,.92);box-shadow:0 16px 34px rgba(0,0,0,.25)}
+  .scd-match:after{content:'';position:absolute;inset:-1px;border:1px solid #375dfb;border-radius:16px;opacity:0;animation:scd-scan 3.2s ease-in-out infinite}.scd-match__person,.scd-profile__head,.scd-action__profile,.scd-states__row{display:flex;align-items:center;gap:10px}.scd-match__person span,.scd-profile__head>span,.scd-action__profile>span,.scd-states__row>i{display:grid;width:36px;height:36px;place-items:center;border-radius:50%;background:#202b54;color:#91a6ff;font-size:11px;font-style:normal;font-weight:700}.scd-match__person b,.scd-profile__head b,.scd-action__profile b,.scd-states__row b{font-size:12px}.scd-match__signals{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0}.scd-match__signals i{width:auto;height:auto;padding:5px 8px;border:1px solid #3b4254;border-radius:999px;background:#1b1e27;color:#abb3c3;font-size:10px;font-style:normal}.scd-match__score{display:flex;align-items:baseline;gap:7px;padding-top:12px;border-top:1px solid #2e3340}.scd-match__score strong{color:#8ea5ff;font-size:22px}.scd-match__score small{color:#858d9d}
+  .scd-event__bar{display:flex;align-items:center;gap:8px;padding-bottom:14px;border-bottom:1px solid #2e3340;font-size:11px}.scd-event__bar i,.scd-action__status i{display:block;width:7px;height:7px;border:0;border-radius:50%;background:#20c997;animation:scd-pulse 2s ease-in-out infinite}.scd-event__bar span{flex:1}.scd-event__bar b{padding:4px 7px;border-radius:999px;background:#153a32;color:#6ee7bd;font-size:9px}.scd-event__people{display:flex;justify-content:center;padding:24px 0}.scd-event__people span{display:grid;width:42px;height:42px;margin-left:-8px;place-items:center;border:2px solid #101219;border-radius:50%;background:#27304b;color:#becaff;font-size:10px;font-weight:700}.scd-event__people span:first-child{margin-left:0}.scd-event__scope{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px;border-radius:9px;background:#171c2d;color:#8ea5ff;font-size:10px}.scd-event__scope i{width:7px;height:7px;border:1px solid #8ea5ff;border-radius:50%;animation:scd-scope 2.6s ease-in-out infinite}
+  .scd-profile__head>div,.scd-action__profile>div,.scd-states__row>div{display:flex;flex:1;flex-direction:column}.scd-profile__head small,.scd-action__profile small,.scd-states__row small{color:#848c9c;font-size:9px}.scd-profile__fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.scd-profile__fields p{margin:0;padding:10px;border:1px solid #2c3240;border-radius:9px;background:#161922}.scd-profile__fields small,.scd-profile__fields b{display:block}.scd-profile__fields small{margin-bottom:4px;color:#747d8e;font-size:8px}.scd-profile__fields b{font-size:10px}.scd-profile__hint{margin-top:10px;padding:8px;text-align:center;color:#91a6ff;font-size:9px;animation:scd-reveal 3s ease-in-out infinite}
+  .scd-states__tabs{display:flex;gap:4px;padding:4px;border-radius:9px;background:#0d0f14}.scd-states__tabs span{flex:1;padding:6px 3px;border-radius:6px;color:#727b8d;font-size:8px;text-align:center}.scd-states__tabs .is-active{background:#26345f;color:#9fb0ff}.scd-states__row{margin-top:9px;padding:8px;border:1px solid #292e3a;border-radius:9px}.scd-states__row>i{width:28px;height:28px}.scd-states__row em{color:#91a6ff;font-size:8px;font-style:normal}.scd-states__row:nth-child(3){animation:scd-row 3.4s ease-in-out infinite}
+  .scd-action__profile{padding-bottom:14px;border-bottom:1px solid #2e3340}.scd-action button{width:100%;margin-top:14px;padding:10px;border:1px solid #5273ff;border-radius:9px;background:#375dfb;color:#fff;font:600 10px var(--font-body);animation:scd-button 3.2s ease-in-out infinite}.scd-action__status{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;color:#858d9d;font-size:9px}
+  @keyframes scd-scan{0%,20%,100%{opacity:0;transform:scale(.98)}45%,65%{opacity:1;transform:scale(1.015)}}@keyframes scd-pulse{0%,100%{box-shadow:0 0 0 0 rgba(32,201,151,.4)}50%{box-shadow:0 0 0 6px rgba(32,201,151,0)}}@keyframes scd-scope{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.8);opacity:1}}@keyframes scd-reveal{0%,100%{opacity:.55}50%{opacity:1}}@keyframes scd-row{0%,100%{border-color:#292e3a}50%{border-color:#526ed7;background:#171d30}}@keyframes scd-button{0%,100%{box-shadow:0 0 0 0 rgba(55,93,251,0)}50%{box-shadow:0 0 0 5px rgba(55,93,251,.18)}}@keyframes scd-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(.35deg)}}
+  @media(prefers-reduced-motion:reduce){.scd-match:after,.scd-event__bar i,.scd-action__status i,.scd-event__scope i,.scd-profile__hint,.scd-states__row:nth-child(3),.scd-action button,.scd-visual>div{animation:none}}
+  .scd-grid{position:relative;border:1px solid rgba(55,93,251,.9);border-radius:16px;box-shadow:0 0 0 1px rgba(124,143,255,.18),0 18px 60px rgba(55,93,251,.12);background:linear-gradient(180deg,rgba(55,93,251,.06),transparent 28%)}
+</style>
+
+<script>
+  function initSmartConnectDarkBand() {
+    const band = document.querySelector<HTMLElement>('.scd-band');
+    if (!band || band.dataset.bleedReady === 'true') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    band.dataset.bleedReady = 'true';
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let ticking = false;
+    let lastProgress = -1;
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+    const update = () => {
+      ticking = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === lastProgress) return;
+      lastProgress = rounded;
+      band.style.setProperty('--band-p', String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => { measure(); lastProgress = -1; onScroll(); };
+    measure();
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize, { passive: true });
+    window.addEventListener('load', onResize);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initSmartConnectDarkBand);
+  else initSmartConnectDarkBand();
+</script>
