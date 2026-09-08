@@ -28,7 +28,10 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
   }
 
   // Old blog URL slug change: 2025 edition → 2026 edition (7,400+ impressions in GSC)
-  if (path === "/blog/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/") {
+  if (
+    path === "/blog/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/" ||
+    path === "/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/"
+  ) {
     return redirect301("/blog/25-best-event-management-software-tools-2026-edition/");
   }
 
