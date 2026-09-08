@@ -1,23 +1,93 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
 const faqs = [
-  { q: "How does the AI photo gallery's face recognition work?", a: "The AI photo gallery uses AWS Rekognition to cluster faces automatically when photos are uploaded. Attendees take a selfie on the event app or web gallery, and the AI matches their face against all event photos to deliver results in seconds." },
-  { q: "Do attendees need to install an app?", a: "No. The gallery works via the event's web-based gallery or the EventHex attendee app. Attendees simply visit the gallery link, take a selfie, and get their matched photos without any extra installation step." },
-  { q: "Is the AI photo gallery GDPR compliant?", a: "Yes. EventHex follows a privacy-first design. Photo permissions can be configured by the organizer, attendees can opt out of face recognition, and facial data is encrypted and deleted according to the event's retention rules." },
-  { q: "How many photos can the gallery process?", a: "The AI photo gallery handles thousands of photos per event. The AI pipeline is designed for bulk uploads from professional photographers and can cluster and index the gallery while the event is still active." },
-  { q: "Can sponsors advertise in the photo gallery?", a: "Yes. Organizers can place sponsor banners, branded frames, and promotional content inside the gallery, creating a new monetization channel directly tied to attendee engagement." },
-  { q: "What happens if face matching fails?", a: "If the AI cannot confidently find a match, attendees can still browse the full gallery manually. Match accuracy improves with high-quality photos and strong lighting, and the system keeps learning as more images are processed." },
-  { q: "Can attendees opt out of face recognition?", a: "Absolutely. Organizers can enable opt-out controls so attendees choose whether to participate in face recognition while their photos remain available in the broader event gallery." },
-  { q: "Does EventHex work with professional photographers?", a: "Yes. Photographers can bulk upload photos via the organizer dashboard. The gallery processes, clusters, and indexes the files automatically, saving hours of manual sorting." },
-  { q: "Can attendees access event photo sharing with a QR code?", a: "Yes. Every gallery gets a shareable QR code — print it at the venue or show it on screens, and attendees scan to open the gallery, take a selfie, and receive their face-matched photos instantly. No app install and no cost to attendees." },
-  { q: "How is this different from sharing photos over Google Drive or WeTransfer?", a: "Shared drives dump every photo on every attendee and strip your branding. The AI photo gallery gives each attendee only their own photos on a branded, sponsor-ready page — with download controls, watermarking, and engagement analytics for the organizer." },
+  { q: "What Is an AI Event Photo Gallery?", a: "An AI event photo gallery uses face matching to help an attendee find event photos that include them. In EventHex, the organizer uploads and curates the event gallery while the attendee searches with a selfie and opens a personal collection." },
+  { q: "How Does EventHex Match a Selfie to Event Photos?", a: "EventHex compares the attendee's selfie with face groups indexed from photos uploaded to the selected event. When a group matches, the attendee can open the associated photos in My Photos." },
+  { q: "Do Attendees Have to Search Through the Full Gallery?", a: "No. An attendee can use selfie search to go to a personal collection. The wider Moments view can remain available when the organizer enables it." },
+  { q: "Can the Gallery Be Public or Attendee-Only?", a: "Yes. The organizer can choose Public or Attendees Only photo access. Additional registration or WhatsApp verification behavior depends on the event configuration." },
+  { q: "Can Attendees Receive Alerts for New Photos?", a: "Yes. When event-level match notifications are enabled, an attendee can opt in to WhatsApp alerts for newly matched photos and return to the updated gallery." },
+  { q: "Can Photographers Import Photos from Google Drive?", a: "The organizer workspace supports importing photos from a public Google Drive folder, including subfolders. The preview step reports eligible files and duplicates before the import starts." },
+  { q: "Can Organizers Create Folders and Highlights?", a: "Yes. Organizers can group photos into folders, move photos, and mark highlights. They can also choose whether Moments shows all photos or highlights and whether folder tabs are visible." },
+  { q: "Can Attendees Contribute Their Own Photos?", a: "Yes. Organizers can allow attendee contributions, set a per-attendee limit, and choose whether contributed photos require approval before publication." },
+  { q: "Can EventHex Add a Watermark to Downloads?", a: "Yes. Organizers can configure an image or text watermark and adjust its position, scale, and opacity for photo downloads." },
+  { q: "What Can Attendees Do After They Find Their Photos?", a: "They can view matched photos, choose photos, download them, generate or rewrite a share caption, use available device sharing options, or share a personal gallery link." },
+  { q: "Is a Specific Match Speed or Accuracy Guaranteed?", a: "No performance guarantee is stated on this page. Matching depends on the event photos, selfie quality, event settings, and processing conditions. Organizers can choose from the available matching thresholds." },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need a custom gallery setup?"
-  title="Frequently Asked Questions"
-  description="We help event teams shape AI photo delivery, sponsor-ready gallery flows, and privacy controls around how their live event operations actually run."
-/>
+<section class="apg-faq" id="apg-faq">
+  <div class="apg-faq__inner">
+    <div class="apg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="apg-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        AI event photo gallery questions
+      </span>
+      <h2 class="apg-faq__heading">What Organizers Should Know About InstaSnap</h2>
+      <p class="apg-faq__intro">Straight answers about matching, access, imports, alerts, curation, contribution, branding, and sharing.</p>
+      <a href="/book-a-demo/" class="apg-faq__cta">Discuss your gallery workflow <span aria-hidden="true">→</span></a>
+    </div>
+
+    <div class="apg-faq__list">
+      {faqs.map((faq, index) => (
+        <details class="apg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 35)} data-apg-faq-item open={index === 0}>
+          <summary class="apg-faq__question"><strong>{faq.q}</strong><span class="apg-faq__icon" aria-hidden="true"></span></summary>
+          <div class="apg-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-apg-faq-item]'));
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+</script>
+
+<style>
+  .apg-faq { width: 100%; padding: 80px 24px; background: #fff !important; }
+  .apg-faq__inner { display: grid; grid-template-columns: 360px 1fr; align-items: start; gap: 64px; max-width: 1140px; margin: 0 auto; }
+  .apg-faq__sidebar { position: sticky; top: 6rem; }
+  .apg-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; }
+  .apg-faq__heading { margin: 0 0 20px; background: linear-gradient(98deg, #111827 43.06%, #8f8f8f 91.81%); background-clip: text; color: transparent; font-family: 'Creato Display', var(--font-heading); font-size: 40px; font-weight: 500; line-height: 1.1; letter-spacing: -1px; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .apg-faq__intro { margin: 0 0 28px; color: var(--body-light); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+  .apg-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 500; text-decoration: none; transition: transform 0.2s ease, background 0.2s ease; }
+  .apg-faq__cta:hover { transform: translateY(-1px); background: #000; }
+  .apg-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: apg-faq; }
+  .apg-faq__item { counter-increment: apg-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background 0.25s ease, border-color 0.25s ease; }
+  .apg-faq__item[open] { background: #e4e7ec; border-color: #e4e7ec; }
+  .apg-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font-family: 'Creato Display', var(--font-heading); font-size: 1.0625rem; font-weight: 500; cursor: pointer; list-style: none; }
+  .apg-faq__question::-webkit-details-marker { display: none; }
+  .apg-faq__question strong { font-weight: 500; }
+  .apg-faq__question strong::before { content: counter(apg-faq) ". "; }
+  .apg-faq__icon { position: relative; flex: 0 0 18px; width: 18px; height: 18px; transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .apg-faq__icon::before, .apg-faq__icon::after { content: ""; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .apg-faq__icon::before { width: 14px; height: 2px; }
+  .apg-faq__icon::after { width: 2px; height: 14px; transition: opacity 0.2s ease; }
+  .apg-faq__item[open] .apg-faq__icon { transform: scale(0.9); }
+  .apg-faq__item[open] .apg-faq__icon::after { opacity: 0; }
+  .apg-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .apg-faq__answer p { margin: 0; color: #000; font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.7; }
+  @media (max-width: 1024px) { .apg-faq__inner { grid-template-columns: 1fr; gap: 40px; } .apg-faq__sidebar { position: static; } }
+  @media (max-width: 767px) {
+    .apg-faq { padding: 56px 16px; }
+    .apg-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .apg-faq__question { padding: 18px 0; font-size: 0.9375rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .apg-faq__cta, .apg-faq__item, .apg-faq__icon, .apg-faq__icon::after { transition: none; } }
+</style>

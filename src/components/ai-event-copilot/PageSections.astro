@@ -1,0 +1,1482 @@
+---
+const prompts = [
+  { q: "What still needs attention before launch?", a: "Review tickets, sessions, speakers, website, registration form, badge setup, and campaigns as a readiness checklist." },
+  { q: "How many attendees have checked in?", a: "See registered and checked-in totals, the check-in rate, ticket breakdown, and recent arrivals." },
+  { q: "Find VIP attendees who have not checked in.", a: "Search attendees by ticket, check-in state, approval, payment, date, name, email, or phone." },
+  { q: "Show recent paid or failed orders.", a: "Filter event orders by payment status, ticket, attendee name, or email." },
+  { q: "Which exhibitors captured the most leads?", a: "Compare exhibitor lead totals, priority mix, and active booth members." },
+  { q: "How are registrations and revenue trending?", a: "Turn supported event metrics into a focused answer, chart, or summary." },
+];
+
+const process = [
+  { step: "01", title: "Ask in plain language", text: "Describe the question or outcome in the same language your event team already uses.", bullets: ["Typed requests", "Voice notes when supported", "Specific questions or outcomes"], image: "/feature-images/ai-event-copilot/portal/dashboard.png", alt: "EventHex organizer dashboard for Athar 2026" },
+  { step: "02", title: "Anchor it to the right event", text: "Copilot uses the event you selected, the organizer page you are viewing, and the relevant records available to you.", bullets: ["Selected event context", "Current organizer page", "Relevant event records"], image: "/feature-images/ai-event-copilot/portal/event-setup.png", alt: "Event settings in the EventHex organizer portal" },
+  { step: "03", title: "Let Copilot do the supported work", text: "It reads the right event area, prepares the result, or calls the supported EventHex tool for the request.", bullets: ["Read the right event area", "Prepare a structured result", "Call a supported tool"], image: "/feature-images/ai-event-copilot/portal/sessions.png", alt: "Session workspace in the EventHex organizer portal" },
+  { step: "04", title: "Review the important decision", text: "Refine drafts when details are missing and confirm destructive or event-wide changes before they run.", bullets: ["Review proposed values", "Refine missing details", "Confirm higher-impact changes"], image: "/feature-images/ai-event-copilot/portal/registrations.png", alt: "Registration workspace in the EventHex organizer portal" },
+  { step: "05", title: "Continue from the result", text: "See the answer or completed action, open the affected workflow, and continue the event-scoped conversation.", bullets: ["Open the affected workflow", "Return through conversation history", "Ask the next event question"], image: "/feature-images/ai-event-copilot/portal/analytics.png", alt: "Analytics workspace in the EventHex organizer portal" },
+];
+
+const continuity = [
+  ["01", "Use event-aware starters", "Begin with suggestions shaped by the selected event and current organizer page.", "/feature-images/ai-event-copilot/portal/dashboard.png", "EventHex organizer dashboard"],
+  ["02", "Type, speak, or mention", "Send a typed request, transcribe a voice note, or mention a specific event record when supported.", "/feature-images/ai-event-copilot/portal/speakers.png", "Speaker records in the EventHex organizer portal"],
+  ["03", "Watch the work", "For multi-step requests, follow the plan and tool activity while the response is prepared.", "/feature-images/ai-event-copilot/portal/sessions.png", "Session records in the EventHex organizer portal"],
+  ["04", "Return to conversations", "Use event-scoped threads and history to continue related work without starting from a blank chat.", "/feature-images/ai-event-copilot/portal/analytics.png", "Event analytics in the EventHex organizer portal"],
+];
+
+const lifecycle = [
+  { phase: "Prepare", title: "Before launch", text: "Audit setup, inspect tickets, prepare sessions, build forms, create coupons, and draft promotion copy.", image: "/feature-images/ai-event-copilot/portal/event-setup.png", alt: "EventHex event setup workspace", status: "Setup and readiness" },
+  { phase: "Monitor", title: "As registrations grow", text: "Search attendees, review orders, compare registration signals, and export the audience segment you need.", image: "/feature-images/ai-event-copilot/portal/registrations.png", alt: "EventHex attendee registration workspace", status: "Attendees and orders" },
+  { phase: "Operate", title: "On event day", text: "Check live attendance, find a registration, review exhibitors, and create or inspect a session poll.", image: "/feature-images/ai-event-copilot/portal/dashboard.png", alt: "EventHex live event overview dashboard", status: "Live event activity" },
+  { phase: "Review", title: "After the event", text: "Review the event data, exhibitor lead activity, poll results, and the operational questions your team needs to answer next.", image: "/feature-images/ai-event-copilot/portal/analytics.png", alt: "EventHex event analytics workspace", status: "Results and reporting" },
+];
+
+const audiences = [
+  { id: "exhibitions", title: "Exhibitions", text: "Move between exhibitor directories, booth lead activity, attendee search, tickets, and live check-in questions.", checklist: ["Exhibitor and attendee records", "Lead-capture activity", "Tickets and live check-in"], image: "/feature-images/ai-event-copilot/portal/dashboard.png", alt: "Event overview in EventHex" },
+  { id: "conferences", title: "Conferences and Tech Events", text: "Coordinate agenda records, speakers, polls, registrations, ticket setup, and operational reporting.", checklist: ["Agenda and speaker records", "Session engagement tools", "Registration reporting"], image: "/feature-images/ai-event-copilot/portal/sessions.png", alt: "Conference session management in EventHex" },
+  { id: "associations", title: "Associations", text: "Support recurring member events with focused attendee, form, agenda, coupon, and order tasks.", checklist: ["Attendee and form tasks", "Agenda and coupon setup", "Order review"], image: "/feature-images/ai-event-copilot/portal/registrations.png", alt: "Attendee registration management in EventHex" },
+  { id: "corporate", title: "Corporate Events and Agencies", text: "Give teams one conversational route into supported workflows while keeping each event separately scoped.", checklist: ["Event-scoped workflows", "Supported organizer actions", "Separate event context"], image: "/feature-images/ai-event-copilot/portal/speakers.png", alt: "Speaker management in EventHex" },
+];
+
+const related = [
+  ["AI Platform", "/ai-platform/", "Forms, networking, photo, and recap tools"],
+  ["Event Analytics", "/event-analytics/", "Dashboards and reporting workflows"],
+  ["Session Management", "/session-management/", "Agenda, speakers, schedules, and conflicts"],
+  ["Event Ticketing", "/event-ticketing/", "Ticket setup, inventory, delivery, and rules"],
+  ["AI Form Builder", "/ai-form-builder/", "Build forms from a plain-language start"],
+];
+---
+
+<section class="aecp-comparison" id="aec-event-aware">
+  <header class="aecp-heading animate-on-scroll" data-animation="fadeInUp">
+    <span>Event-aware by design</span>
+    <h2>Go Beyond a Generic Chat Window</h2>
+    <p>EventHex Copilot combines conversation with supported tools for the event your team is managing.</p>
+  </header>
+  <div class="aecp-comparison__grid">
+    <article class="aecp-comparison__copy animate-on-scroll" data-animation="fadeInUp">
+      <span class="aecp-comparison__tag">Useful for general ideas</span>
+      <h3>A generic AI chat</h3>
+      <p>Works from the context you paste in, then leaves your team to find the record, open the right screen, and carry out the next step.</p>
+    </article>
+    <div class="aecp-comparison__media animate-on-scroll" data-animation="fadeInRight">
+      <div class="aecp-comparison__composite">
+        <img class="aecp-comparison__screen aecp-comparison__screen--primary" src="/feature-images/ai-event-copilot/portal/event-setup.png" alt="EventHex event setup workspace" width="1117" height="837" loading="lazy" decoding="async" />
+        <img class="aecp-comparison__screen aecp-comparison__screen--secondary" src="/feature-images/ai-event-copilot/portal/sessions.png" alt="EventHex session management workspace" width="1117" height="837" loading="lazy" decoding="async" />
+        <img class="aecp-comparison__screen aecp-comparison__screen--detail" src="/feature-images/ai-event-copilot/portal/speakers.png" alt="EventHex speaker management workspace" width="1117" height="837" loading="lazy" decoding="async" />
+        <span class="aecp-comparison__status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+          Gather context manually
+        </span>
+        <span class="aecp-comparison__action">Paste into chat</span>
+        <img class="aecp-comparison__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+      </div>
+    </div>
+    <div class="aecp-comparison__media aecp-comparison__media--accent animate-on-scroll" data-animation="fadeInLeft">
+      <div class="aecp-comparison__composite">
+        <img class="aecp-comparison__screen aecp-comparison__screen--primary" src="/feature-images/ai-event-copilot/portal/dashboard.png" alt="EventHex event overview dashboard" width="1117" height="837" loading="lazy" decoding="async" />
+        <img class="aecp-comparison__screen aecp-comparison__screen--secondary" src="/feature-images/ai-event-copilot/portal/analytics.png" alt="EventHex event analytics workspace" width="1117" height="837" loading="lazy" decoding="async" />
+        <img class="aecp-comparison__screen aecp-comparison__screen--detail" src="/feature-images/ai-event-copilot/portal/registrations.png" alt="EventHex registration records workspace" width="1117" height="837" loading="lazy" decoding="async" />
+        <span class="aecp-comparison__status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+          Selected event context
+        </span>
+        <span class="aecp-comparison__action">Continue in EventHex</span>
+        <img class="aecp-comparison__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+      </div>
+    </div>
+    <article class="aecp-comparison__copy aecp-comparison__copy--accent animate-on-scroll" data-animation="fadeInUp">
+      <span class="aecp-comparison__tag">Built for organizer workflows</span>
+      <h3>EventHex Copilot</h3>
+      <p>Works within an event you can access, uses the relevant EventHex tool, and can return a chart, table, draft, checklist, download, or action result.</p>
+    </article>
+    <span class="aecp-comparison__cross" aria-hidden="true">
+      <svg width="18" height="18" viewBox="-14 -14 28 28">
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e5eb"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e5eb" transform="scale(1,-1)"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e5eb" transform="rotate(90)"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e5eb" transform="rotate(-90)"></path>
+      </svg>
+    </span>
+  </div>
+  <p class="aecp-note">Move across supported organizer workflows without choosing a different assistant for each job.</p>
+</section>
+
+<section class="aecp-dark" id="aec-capabilities">
+  <header class="aecp-capabilities-heading">
+    <span class="aecp-capabilities-heading__eyebrow">Ask the event, not the dashboard</span>
+    <h2 class="animate-on-scroll" data-animation="fadeInUp">
+      Start with the Question <span>Your Team Is Already Asking</span>
+    </h2>
+    <p>Copilot routes each request to the relevant event area and returns the answer in a useful format.</p>
+  </header>
+  <div class="aecp-grid-section">
+    <div class="aecp-prompt-grid">
+      {prompts.map((prompt, index) => (
+        <article class="aecp-prompt animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+          {(index === 1 || index === 2) && (
+            <>
+              <span class="aecp-prompt__petal aecp-prompt__petal--top" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+              </span>
+              <span class="aecp-prompt__petal aecp-prompt__petal--bottom" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>
+              </span>
+            </>
+          )}
+          <span class="aecp-prompt__number">{String(index + 1).padStart(2, "0")}</span>
+          <h3>“{prompt.q}”</h3>
+          <p>{prompt.a}</p>
+          <div class="aecp-prompt__visual" aria-hidden="true">
+            {index === 0 && (
+              <div class="aecp-cap-checklist">
+                <strong>Launch readiness</strong>
+                <span><i></i>Tickets<b>Ready</b></span>
+                <span><i></i>Sessions<b>Review</b></span>
+                <span><i></i>Speakers<b>Ready</b></span>
+              </div>
+            )}
+            {index === 1 && (
+              <div class="aecp-cap-progress">
+                <strong>Live attendance</strong>
+                <span>Registered</span><i><b></b></i>
+                <span>Checked in</span><i><b></b></i>
+              </div>
+            )}
+            {index === 2 && (
+              <div class="aecp-cap-filters">
+                <strong>Attendee search</strong>
+                <div><span>VIP</span><span class="is-active">Not checked in</span><span>Search</span></div>
+              </div>
+            )}
+            {index === 3 && (
+              <div class="aecp-cap-orders">
+                <strong>Recent orders</strong>
+                <span><i></i>Order status<b>Paid</b></span>
+                <span><i></i>Order status<b class="is-failed">Failed</b></span>
+              </div>
+            )}
+            {index === 4 && (
+              <div class="aecp-cap-leads">
+                <strong>Exhibitor leads</strong>
+                <span><i style="--bar: 88%"></i></span>
+                <span><i style="--bar: 68%"></i></span>
+                <span><i style="--bar: 46%"></i></span>
+              </div>
+            )}
+            {index === 5 && (
+              <div class="aecp-cap-trend">
+                <strong>Registration trend</strong>
+                <svg viewBox="0 0 260 104" preserveAspectRatio="none">
+                  <path d="M0 87 C35 80 46 62 73 68 S116 48 142 52 S178 26 201 34 S232 13 260 17"></path>
+                </svg>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="aecp-workflow">
+  <div class="aecp-workflow__inner">
+    <header class="aecp-workflow__header animate-on-scroll" data-animation="fadeInUp">
+      <div class="aecp-workflow__heading">
+        <h2>Keep the Conversation Moving Until the Work Is Done</h2>
+      </div>
+    </header>
+    <ol class="aecp-workflow__steps">
+      {process.map((item, index) => (
+        <li>
+          <details open={index === 0}>
+            <summary tabindex="-1">
+              <span class="aecp-workflow__number">{item.step}</span>
+              <div class="aecp-workflow__copy">
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+                <ul>{item.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}</ul>
+              </div>
+              <button type="button" class="aecp-workflow__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${item.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg>
+              </button>
+            </summary>
+            <div class="aecp-workflow__visual">
+              <img src={item.image} alt={item.alt} loading="lazy" decoding="async" width="1117" height="837" />
+            </div>
+          </details>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<section class="aecp-sticky" id="aec-supported-work">
+  <div class="aecp-sticky__inner">
+    <header class="aecp-sticky__header">
+      <span>One Copilot across event operations</span>
+      <h2>Supported Work, Useful Results, and the Right Control Point</h2>
+    </header>
+    <div class="aecp-sticky__cards">
+      <article class="aecp-sticky__card">
+        <div class="aecp-sticky__copy">
+          <span>Supported event work</span>
+          <h3>Use one Copilot across the event areas that create the most admin</h3>
+          <p>The request stays conversational, while the underlying job remains tied to a specific EventHex workflow.</p>
+        </div>
+        <div class="aecp-sticky-collage">
+          <figure class="aecp-sticky-shot aecp-sticky-shot--primary">
+            <img src="/feature-images/ai-event-copilot/portal/sessions.png" alt="EventHex session management workspace" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+          <figure class="aecp-sticky-shot aecp-sticky-shot--secondary">
+            <img src="/feature-images/ai-event-copilot/portal/speakers.png" alt="EventHex speaker management workspace" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+        </div>
+      </article>
+
+      <article class="aecp-sticky__card">
+        <div class="aecp-sticky__copy">
+          <span>Answers built for the next decision</span>
+          <h3>Get more than a wall of chat text</h3>
+          <p>Copilot can match the response format to the job, so the important part is easier to inspect and use.</p>
+        </div>
+        <div class="aecp-sticky-collage">
+          <figure class="aecp-sticky-shot aecp-sticky-shot--primary">
+            <img src="/feature-images/ai-event-copilot/portal/dashboard.png" alt="EventHex event overview dashboard" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+          <figure class="aecp-sticky-shot aecp-sticky-shot--secondary">
+            <img src="/feature-images/ai-event-copilot/portal/analytics.png" alt="EventHex analytics workspace" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+        </div>
+      </article>
+
+      <article class="aecp-sticky__card">
+        <div class="aecp-sticky__copy">
+          <span>Control that follows the action</span>
+          <h3>Move quickly without hiding the important decision</h3>
+          <p>Copilot uses different control points for an answer, a complete instruction, an incomplete draft, and a higher-impact change.</p>
+        </div>
+        <div class="aecp-sticky-collage">
+          <figure class="aecp-sticky-shot aecp-sticky-shot--primary">
+            <img src="/feature-images/ai-event-copilot/portal/event-setup.png" alt="EventHex event settings workspace" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+          <figure class="aecp-sticky-shot aecp-sticky-shot--secondary">
+            <img src="/feature-images/ai-event-copilot/portal/registrations.png" alt="EventHex registration records workspace" loading="lazy" decoding="async" width="1117" height="837" />
+          </figure>
+        </div>
+      </article>
+      <div class="aecp-sticky__spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section class="aecp-access">
+  <div class="aecp-access__inner">
+    <div class="aecp-access__intro animate-on-scroll" data-animation="fadeInLeft">
+      <span class="aecp-access__eyebrow">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 16 5v4.2c0 4-2.6 6.7-6 8.3-3.4-1.6-6-4.3-6-8.3V5l6-2.5Z"></path><path d="m7.4 10 1.7 1.7 3.6-3.8"></path></svg>
+        Built for ongoing event work
+      </span>
+      <h2>Start Faster, Point to <em>the Right Record</em>, and Return to the Thread</h2>
+      <p>The organizer experience supports the small interaction details that make a Copilot useful beyond one prompt.</p>
+      <a href="/book-a-demo/">See Copilot in action <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="aecp-access__cards">
+      {continuity.map(([num, title, text, image, alt], index) => (
+        <article class="aecp-access__card" style={`--access-index: ${index}`}>
+          <div class="aecp-access__card-header">
+            <i>{num}</i>
+            <div><h3>{title}</h3><p>{text}</p></div>
+          </div>
+          <div class="aecp-access__visual">
+            <img src={image} alt={alt} loading="lazy" width="1117" height="837" />
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="aecp-lifecycle">
+  <div class="aecp-lifecycle__container">
+    <header class="aecp-heading aecp-lifecycle__header animate-on-scroll" data-animation="fadeInUp">
+      <span>Before, during, and after the event</span>
+      <h2>Bring Copilot into the Moments Where Context Switching Costs the Most</h2>
+      <p>Use the same organizer conversation for a focused job at each stage of the event.</p>
+    </header>
+    <div class="aecp-lifecycle__grid animate-on-scroll" data-animation="fadeInUp">
+      <span class="aecp-lifecycle__notch aecp-lifecycle__notch--top" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+      </span>
+      <span class="aecp-lifecycle__notch aecp-lifecycle__notch--bottom" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+      </span>
+      {lifecycle.map((item, index) => (
+        <article class:list={["aecp-lifecycle__row", { "aecp-lifecycle__row--reverse": index % 2 === 1 }]}>
+          <div class="aecp-lifecycle__cell aecp-lifecycle__visual">
+            <div class:list={["aecp-lifecycle__stage", `aecp-lifecycle__stage--${index + 1}`]}>
+              <img src={item.image} alt={item.alt} loading="lazy" decoding="async" width="1117" height="837" />
+              <span class="aecp-lifecycle__float aecp-lifecycle__float--top"><b>{item.status}</b><small>EventHex Copilot</small></span>
+              <span class="aecp-lifecycle__float aecp-lifecycle__float--bottom"><i></i><b>{item.phase}</b></span>
+            </div>
+          </div>
+          <div class="aecp-lifecycle__cell aecp-lifecycle__content">
+            <span>{item.phase}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </div>
+          <span class="aecp-lifecycle__cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="aecp-audiences">
+  <div class="aecp-audiences__inner">
+    <header class="aecp-audiences__header animate-on-scroll" data-animation="fadeInUp">
+      <span>For teams with a lot of event context to hold</span>
+      <h2><span>One Copilot Model.</span><span>Different Event Operations.</span></h2>
+      <p>The event changes; the need to find the right record, understand it, and take the next step does not.</p>
+    </header>
+    <div class="aecp-audiences__tabs" role="tablist" aria-label="Event team types">
+      {audiences.map((audience, index) => (
+        <button type="button" role="tab" id={`aecp-tab-${audience.id}`} aria-controls={`aecp-panel-${audience.id}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-aecp-audience-tab={audience.id}>{audience.title}</button>
+      ))}
+    </div>
+    <div class="aecp-audiences__panels">
+      {audiences.map((audience, index) => (
+        <article class:list={["aecp-audiences__panel", index === 0 && "is-active"]} role="tabpanel" id={`aecp-panel-${audience.id}`} aria-labelledby={`aecp-tab-${audience.id}`} hidden={index !== 0} data-aecp-audience-panel={audience.id}>
+          <div class="aecp-audiences__copy">
+            <h3>{audience.title}</h3>
+            <p>{audience.text}</p>
+            <span>Works across</span>
+            <ul>{audience.checklist.map((item) => <li><i aria-hidden="true">✓</i>{item}</li>)}</ul>
+          </div>
+          <div class="aecp-audiences__showcase">
+            <img src={audience.image} alt={audience.alt} loading="lazy" width="1117" height="837" />
+            <span>EventHex organizer workspace</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="aecp-related">
+  <header class="aecp-heading animate-on-scroll" data-animation="fadeInUp">
+    <span>Explore the connected workflow</span>
+    <h2>See the EventHex Features Behind<br />the Copilot Conversation</h2>
+    <p>Go deeper when you need the full workflow, configuration,<br />and controls for a specific event job.</p>
+  </header>
+  <nav class="aecp-related__grid" aria-label="Related EventHex features">
+    {[1, 2, 3, 4].map((notch) => (
+      <span class:list={["aecp-related__notch", `aecp-related__notch--${notch}`]} aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #dfe4ec)"></path></svg>
+      </span>
+    ))}
+    {related.map(([title, href, text], index) => (
+      <article class="aecp-related__card animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+        {index === 2 && (
+          <span class="aecp-related__cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #dfe4ec)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #dfe4ec)" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #dfe4ec)" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #dfe4ec)" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        )}
+        <span class="aecp-related__icon" aria-hidden="true">
+          {index === 0 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"></path><circle cx="12" cy="12" r="3"></circle></svg>}
+          {index === 1 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>}
+          {index === 2 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 10h18M8 14h3M8 17h6"></path></svg>}
+          {index === 3 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13 13 20 4 11V4h7l9 9Z"></path><circle cx="8.5" cy="8.5" r="1"></circle></svg>}
+          {index === 4 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 8h8M8 12h5M8 16h8"></path></svg>}
+        </span>
+        <h3><a href={href}>{title}</a></h3>
+        <p>{text}</p>
+      </article>
+    ))}
+  </nav>
+</section>
+
+<script>
+  const copilotStickySection = document.querySelector<HTMLElement>('.aecp-sticky');
+  const copilotStickyHeader = copilotStickySection?.querySelector<HTMLElement>('.aecp-sticky__header');
+  const copilotStickyCards = copilotStickySection?.querySelectorAll<HTMLElement>('.aecp-sticky__card');
+  const copilotFinalStickyCard = copilotStickyCards?.[copilotStickyCards.length - 1];
+
+  if (copilotStickyHeader && copilotFinalStickyCard) {
+    let frame = 0;
+    const syncHeaderRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(copilotFinalStickyCard).top) || 0;
+      const releaseOffset = Math.min(0, copilotFinalStickyCard.getBoundingClientRect().top - stickyTop);
+      copilotStickyHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueHeaderRelease = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(syncHeaderRelease);
+    };
+    window.addEventListener('scroll', queueHeaderRelease, { passive: true });
+    window.addEventListener('resize', queueHeaderRelease, { passive: true });
+    syncHeaderRelease();
+  }
+
+  const copilotDarkBand = document.querySelector<HTMLElement>('.aecp-dark');
+  if (copilotDarkBand && copilotDarkBand.dataset.bleedReady !== 'true' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    copilotDarkBand.dataset.bleedReady = 'true';
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let bandFrame = 0;
+    let lastProgress = -1;
+
+    const measureBand = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = copilotDarkBand.getBoundingClientRect().top + window.scrollY;
+    };
+    const updateBand = () => {
+      bandFrame = 0;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.round(Math.min(1, Math.max(0, travelled / (viewportHeight * .7))) * 100) / 100;
+      if (progress === lastProgress) return;
+      lastProgress = progress;
+      copilotDarkBand.style.setProperty('--band-p', String(progress));
+    };
+    const queueBandUpdate = () => {
+      if (bandFrame) return;
+      bandFrame = requestAnimationFrame(updateBand);
+    };
+    const resetBand = () => {
+      measureBand();
+      lastProgress = -1;
+      queueBandUpdate();
+    };
+
+    measureBand();
+    updateBand();
+    window.addEventListener('scroll', queueBandUpdate, { passive: true });
+    window.addEventListener('resize', resetBand);
+    window.addEventListener('load', resetBand);
+  }
+
+  const copilotWorkflow = document.querySelector<HTMLElement>('.aecp-workflow');
+  if (copilotWorkflow && copilotWorkflow.dataset.workflowReady !== 'true') {
+    copilotWorkflow.dataset.workflowReady = 'true';
+    const details = Array.from(copilotWorkflow.querySelectorAll<HTMLDetailsElement>('details'));
+    details.forEach((detail) => {
+      const summary = detail.querySelector('summary');
+      const trigger = detail.querySelector<HTMLButtonElement>('.aecp-workflow__arrow');
+
+      summary?.addEventListener('click', (event) => {
+        event.preventDefault();
+        detail.open = !detail.open;
+      });
+      detail.addEventListener('toggle', () => {
+        trigger?.setAttribute('aria-expanded', String(detail.open));
+        trigger?.setAttribute('aria-label', `${detail.open ? 'Collapse' : 'Expand'} workflow step`);
+        if (!detail.open) return;
+        details.forEach((other) => {
+          if (other !== detail) other.open = false;
+        });
+      });
+    });
+  }
+
+  const copilotAudiences = document.querySelector<HTMLElement>('.aecp-audiences');
+  if (copilotAudiences && copilotAudiences.dataset.tabsReady !== 'true') {
+    copilotAudiences.dataset.tabsReady = 'true';
+    const tabs = Array.from(copilotAudiences.querySelectorAll<HTMLButtonElement>('[data-aecp-audience-tab]'));
+    const panels = Array.from(copilotAudiences.querySelectorAll<HTMLElement>('[data-aecp-audience-panel]'));
+    let rotation = 0;
+
+    const activateAudience = (id: string, moveFocus = false) => {
+      tabs.forEach((tab) => {
+        const active = tab.dataset.aecpAudienceTab === id;
+        tab.setAttribute('aria-selected', String(active));
+        tab.tabIndex = active ? 0 : -1;
+        if (active && moveFocus) tab.focus();
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.aecpAudiencePanel === id;
+        panel.hidden = !active;
+        panel.classList.toggle('is-active', active);
+      });
+    };
+
+    const stopRotation = () => window.clearInterval(rotation);
+    const startRotation = () => {
+      stopRotation();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      rotation = window.setInterval(() => {
+        const current = tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+        const next = tabs[(current + 1) % tabs.length];
+        if (next?.dataset.aecpAudienceTab) activateAudience(next.dataset.aecpAudienceTab);
+      }, 6500);
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        if (tab.dataset.aecpAudienceTab) activateAudience(tab.dataset.aecpAudienceTab);
+        startRotation();
+      });
+      tab.addEventListener('keydown', (event) => {
+        let nextIndex = index;
+        if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') nextIndex = 0;
+        else if (event.key === 'End') nextIndex = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        const next = tabs[nextIndex];
+        if (next?.dataset.aecpAudienceTab) activateAudience(next.dataset.aecpAudienceTab, true);
+      });
+    });
+    copilotAudiences.addEventListener('mouseenter', stopRotation);
+    copilotAudiences.addEventListener('mouseleave', startRotation);
+    copilotAudiences.addEventListener('focusin', stopRotation);
+    copilotAudiences.addEventListener('focusout', startRotation);
+    startRotation();
+  }
+</script>
+
+<style is:global>
+  .aecp-heading {
+    max-width: 850px;
+    margin: 0 auto 52px;
+    text-align: center;
+  }
+  .aecp-heading > span,
+  .aecp-audiences__header > span {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--brand-blue);
+    font: 700 12px/1.2 var(--font-body);
+    letter-spacing: .13em;
+    text-transform: uppercase;
+  }
+  .aecp-heading h2,
+  .aecp-sticky__header h2 {
+    margin: 0;
+    color: var(--heading-dark);
+    font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading);
+    letter-spacing: var(--aec-section-title-tracking);
+  }
+  .aecp-heading h2 {
+    background: var(--aec-light-title-gradient);
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .aecp-heading p,
+  .aecp-audiences__header > p {
+    max-width: 680px;
+    margin: 18px auto 0;
+    color: var(--body-gray);
+    font: 17px/1.6 var(--font-body);
+  }
+
+  .aecp-comparison {
+    padding: 80px 24px 96px;
+    background: #fff;
+  }
+  .aecp-comparison__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, 1fr);
+    width: 100%;
+    max-width: 1180px;
+    margin: 24px auto;
+  }
+  .aecp-comparison__copy,
+  .aecp-comparison__media {
+    display: flex;
+    min-height: 360px;
+    padding: 56px 48px;
+    border-right: 1px solid #eef0f3;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .aecp-comparison__grid > :nth-child(2n) { border-right: 0; }
+  .aecp-comparison__grid > :nth-child(n + 3):not(.aecp-comparison__cross) { border-bottom: 0; }
+  .aecp-comparison__copy {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .aecp-comparison__media {
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 22px;
+    background: #fff;
+  }
+  .aecp-comparison__media--accent {
+    background: #fff;
+  }
+  .aecp-comparison__cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 18px;
+    height: 18px;
+    line-height: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .aecp-comparison__tag {
+    align-self: flex-start;
+    margin-bottom: 18px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    color: #475467;
+    background: #fff;
+    font: 500 13px/1.2 var(--font-body);
+  }
+  .aecp-comparison__copy--accent .aecp-comparison__tag {
+    color: #2946b7;
+    border-color: #d9e1ff;
+    background: #f3f5ff;
+  }
+  .aecp-comparison__copy h3 {
+    margin: 0 0 16px;
+    color: var(--heading-dark);
+    font: 500 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+  }
+  .aecp-comparison__copy p {
+    max-width: 40ch;
+    margin: 0;
+    color: var(--body-gray);
+    font: 16px/1.6 var(--font-body);
+  }
+  .aecp-comparison__composite { position: relative; width: 100%; height: 320px; overflow: visible; }
+  .aecp-comparison__screen {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(209, 214, 226, .92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, .14);
+  }
+  .aecp-comparison__screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; }
+  .aecp-comparison__screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; }
+  .aecp-comparison__screen--detail { bottom: 12px; left: 24px; z-index: 3; width: 30%; height: 48%; }
+  .aecp-comparison__status,
+  .aecp-comparison__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, .16);
+    font: 700 11px/1 var(--font-body);
+    white-space: nowrap;
+  }
+  .aecp-comparison__status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; color: #18864b; background: #effbf4; }
+  .aecp-comparison__status svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2.25; }
+  .aecp-comparison__action { right: 14px; bottom: 14px; padding: 10px 13px; color: #fff; background: #4b65f6; }
+  .aecp-comparison__cursor { position: absolute; right: 4px; bottom: 34px; z-index: 6; width: 22px; height: 26px; filter: drop-shadow(0 3px 3px rgba(17, 24, 39, .25)); pointer-events: none; }
+  .aecp-note {
+    max-width: 760px;
+    margin: 22px auto 0;
+    color: #667085;
+    font: 14px/1.55 var(--font-body);
+    text-align: center;
+  }
+
+  .aecp-dark {
+    --band-p: 0;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    color: #fff;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, .22) 0%, rgba(124, 108, 255, .1) 45%, transparent 72%);
+    background-repeat: no-repeat;
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+  .aecp-dark::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: .55;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  }
+  .aecp-dark > * { position: relative; z-index: 1; }
+  .aecp-capabilities-heading {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
+    text-align: center;
+  }
+  .aecp-capabilities-heading__eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #a9b7ff;
+    font: 700 13px/1.2 var(--font-body);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .aecp-capabilities-heading h2 {
+    margin: 0 0 12px;
+    background: var(--aec-dark-title-gradient);
+    background-clip: text;
+    color: transparent;
+    font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading);
+    letter-spacing: var(--aec-section-title-tracking);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .aecp-capabilities-heading h2 span { background: none; -webkit-text-fill-color: transparent; }
+  .aecp-capabilities-heading p {
+    max-width: 680px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, .62);
+    font: 17px/1.65 var(--font-body);
+  }
+  .aecp-grid-section {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: clamp(40px, 5vw, 72px) 24px clamp(56px, 7vw, 88px);
+  }
+  .aecp-prompt-grid {
+    --cap-grad: linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%);
+    --cap-surface: #08080e;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    overflow: hidden;
+    border: 1px solid #3b3a47;
+    border-radius: 16px;
+  }
+  .aecp-prompt {
+    position: relative;
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 36px 32px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+  }
+  .aecp-prompt:nth-child(3n) { border-right: 0; }
+  .aecp-prompt:nth-last-child(-n + 3) { border-bottom: 0; }
+  .aecp-prompt__petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .aecp-prompt__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .aecp-prompt__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .aecp-prompt__number { display: block; margin-bottom: 14px; color: #8797e8; font: 700 11px/1 var(--font-body); }
+  .aecp-prompt h3 { margin: 0 0 14px; color: #fff; font: 700 15px/1.3 var(--font-heading); letter-spacing: -.01em; }
+  .aecp-prompt p { max-width: 34ch; margin: 0; color: rgba(255, 255, 255, .62); font: .9375rem/1.38 var(--font-body); }
+  .aecp-prompt__visual {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  .aecp-prompt__visual::before {
+    content: "";
+    position: absolute;
+    bottom: -10%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(92, 138, 255, .28), rgba(124, 108, 255, .15) 55%, transparent 100%);
+    filter: blur(30px);
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: aecp-cap-bloom 6s ease-in-out infinite;
+  }
+  .aecp-prompt__visual > * {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 290px);
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: linear-gradient(var(--cap-surface), var(--cap-surface)) padding-box, var(--cap-grad) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, .5);
+    animation: aecp-cap-float 7s ease-in-out infinite;
+  }
+  .aecp-prompt__visual strong { color: rgba(255, 255, 255, .82); font: 650 12px/1.3 var(--font-body); }
+  .aecp-cap-checklist,
+  .aecp-cap-orders { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
+  .aecp-cap-checklist > span,
+  .aecp-cap-orders > span { display: grid; grid-template-columns: 8px 1fr auto; gap: 8px; align-items: center; padding-top: 9px; border-top: 1px solid rgba(255, 255, 255, .08); color: rgba(255, 255, 255, .68); font: 11px/1.2 var(--font-body); }
+  .aecp-cap-checklist i,
+  .aecp-cap-orders i { width: 7px; height: 7px; border-radius: 50%; background: #5c8aff; box-shadow: 0 0 0 3px rgba(92, 138, 255, .14); }
+  .aecp-cap-checklist b,
+  .aecp-cap-orders b { color: #b9ccff; font-weight: 600; }
+  .aecp-cap-progress { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 16px; }
+  .aecp-cap-progress > span { color: rgba(255, 255, 255, .58); font: 11px/1.2 var(--font-body); }
+  .aecp-cap-progress > i { position: relative; overflow: hidden; height: 7px; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+  .aecp-cap-progress > i b { display: block; width: 78%; height: 100%; border-radius: inherit; background: var(--cap-grad); }
+  .aecp-cap-progress > i:last-child b { width: 56%; }
+  .aecp-cap-filters { display: flex; flex-direction: column; gap: 16px; padding: 16px; }
+  .aecp-cap-filters > div { display: flex; flex-wrap: wrap; gap: 7px; }
+  .aecp-cap-filters span { padding: 8px 10px; border: 1px solid rgba(255, 255, 255, .12); border-radius: 12px; color: rgba(255, 255, 255, .62); background: rgba(255, 255, 255, .04); font: 11px/1 var(--font-body); }
+  .aecp-cap-filters span.is-active { border-color: transparent; color: #fff; background: linear-gradient(135deg, #0d1a30, #1b1740) padding-box, var(--cap-grad) border-box; }
+  .aecp-cap-orders b.is-failed { color: #ff9ea8; }
+  .aecp-cap-leads { display: flex; flex-direction: column; gap: 12px; padding: 16px; }
+  .aecp-cap-leads span { overflow: hidden; height: 10px; border-radius: 999px; background: rgba(255, 255, 255, .08); }
+  .aecp-cap-leads span i { display: block; width: var(--bar); height: 100%; border-radius: inherit; background: var(--cap-grad); }
+  .aecp-cap-trend { padding: 16px 16px 8px; }
+  .aecp-cap-trend svg { display: block; width: 100%; height: 96px; margin-top: 8px; overflow: visible; }
+  .aecp-cap-trend path { fill: none; stroke: #6f86ff; stroke-width: 3; stroke-linecap: round; filter: drop-shadow(0 6px 8px rgba(92, 138, 255, .42)); }
+  .aecp-prompt:nth-child(2) .aecp-prompt__visual > * { animation-delay: -1.4s; }
+  .aecp-prompt:nth-child(3) .aecp-prompt__visual > * { animation-delay: -2.8s; }
+  .aecp-prompt:nth-child(4) .aecp-prompt__visual > * { animation-delay: -4.2s; }
+  .aecp-prompt:nth-child(5) .aecp-prompt__visual > * { animation-delay: -5.6s; }
+  .aecp-prompt:nth-child(6) .aecp-prompt__visual > * { animation-delay: -2.1s; }
+  @keyframes aecp-cap-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes aecp-cap-bloom { 0%, 100% { opacity: .68; } 50% { opacity: 1; } }
+
+  .aecp-workflow {
+    padding: clamp(110px, 12vw, 160px) 24px;
+    background: transparent;
+  }
+  .aecp-workflow__inner {
+    width: min(1218px, 100%);
+    margin: 0 auto;
+  }
+  .aecp-workflow__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 64px;
+    text-align: center;
+  }
+  .aecp-workflow__heading {
+    max-width: 820px;
+    margin-inline: auto;
+  }
+  .aecp-workflow__heading h2 {
+    max-width: 780px;
+    margin: 0 auto;
+    background: var(--aec-light-title-gradient);
+    background-clip: text;
+    color: transparent;
+    font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading);
+    letter-spacing: var(--aec-section-title-tracking);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .aecp-workflow__steps {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none;
+  }
+  .aecp-workflow__steps > li {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .aecp-workflow__steps > li:nth-child(1) { --aecp-workflow-tint: #fff8dc; --aecp-workflow-border: #f0dfa6; }
+  .aecp-workflow__steps > li:nth-child(2) { --aecp-workflow-tint: #edf7ff; --aecp-workflow-border: #d4e7f7; }
+  .aecp-workflow__steps > li:nth-child(3) { --aecp-workflow-tint: #f3efff; --aecp-workflow-border: #e2d8fa; }
+  .aecp-workflow__steps > li:nth-child(4) { --aecp-workflow-tint: #eefbf4; --aecp-workflow-border: #d4efdf; }
+  .aecp-workflow__steps > li:nth-child(5) { --aecp-workflow-tint: #fff0f7; --aecp-workflow-border: #f4d6e5; }
+  .aecp-workflow__steps details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--aecp-workflow-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--aecp-workflow-tint) 0%, #fff 82%);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, .04);
+    transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .aecp-workflow__steps summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease;
+  }
+  .aecp-workflow__steps summary::-webkit-details-marker { display: none; }
+  .aecp-workflow__steps summary:hover { background: rgba(255, 255, 255, .28); }
+  .aecp-workflow__steps details:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 41, 55, .08);
+  }
+  .aecp-workflow__number {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+    color: #111;
+    background: transparent;
+    font: 500 15px/1.1 var(--font-heading);
+    letter-spacing: -.05em;
+  }
+  .aecp-workflow__copy { display: flex; flex-direction: column; }
+  .aecp-workflow__steps details:not([open]) .aecp-workflow__copy {
+    display: grid;
+    grid-template-columns: minmax(230px, .7fr) minmax(320px, 1.3fr);
+    align-items: center;
+    gap: 36px;
+  }
+  .aecp-workflow__copy h3 {
+    margin: 0;
+    color: #111;
+    font: 500 22px/1.2 var(--font-body);
+    letter-spacing: -.02em;
+  }
+  .aecp-workflow__copy p { display: none; }
+  .aecp-workflow__steps details:not([open]) .aecp-workflow__copy p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-width: 460px;
+    margin: 0;
+    color: #5f6673;
+    font: 400 14.5px/1.5 var(--font-body);
+  }
+  .aecp-workflow__copy ul { display: none; }
+  .aecp-workflow__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(17, 24, 39, .2);
+    border-radius: 50%;
+    color: #111827;
+    background: rgba(255, 255, 255, .78);
+    cursor: pointer;
+    transition: transform .25s ease, background .2s ease, border-color .2s ease;
+  }
+  .aecp-workflow__arrow:hover { border-color: rgba(17, 24, 39, .42); background: #fff; }
+  .aecp-workflow__arrow:focus-visible { outline: 3px solid rgba(59, 130, 246, .28); outline-offset: 2px; }
+  .aecp-workflow__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .aecp-workflow__steps details[open] {
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--aecp-workflow-tint) 0%, #fff 72%);
+  }
+  .aecp-workflow__steps details[open] summary {
+    flex: 0 0 55%;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    min-height: 0;
+    padding: 64px 40px 64px 28px;
+    background: transparent;
+  }
+  .aecp-workflow__steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .aecp-workflow__steps details[open] .aecp-workflow__number { color: #050505; font-size: 26px; line-height: 1; }
+  .aecp-workflow__steps details[open] .aecp-workflow__copy h3 {
+    margin-bottom: 16px;
+    color: #050505;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .aecp-workflow__steps details[open] .aecp-workflow__copy p {
+    display: block;
+    max-width: 90%;
+    margin: 0 0 32px;
+    color: #333;
+    font: 400 17px/1.6 var(--font-body);
+  }
+  .aecp-workflow__steps details[open] .aecp-workflow__copy ul {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .aecp-workflow__steps details[open] .aecp-workflow__copy li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    border: 0;
+    color: #111;
+    background: transparent;
+    font: 500 16px/1.3 var(--font-body);
+  }
+  .aecp-workflow__steps details[open] .aecp-workflow__copy li i { font-size: 16px; font-style: normal; }
+  .aecp-workflow__steps details[open] .aecp-workflow__arrow { top: 28px; transform: rotate(180deg); }
+  .aecp-workflow__visual {
+    display: none;
+    margin: 0;
+    opacity: 0;
+  }
+  .aecp-workflow__steps details[open] .aecp-workflow__visual {
+    flex: 0 0 45%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    max-height: none;
+    padding: 40px 88px 40px 0;
+    overflow: visible;
+    opacity: 1;
+    transform: none;
+  }
+  .aecp-workflow__visual img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .08);
+    object-fit: contain;
+  }
+
+  .aecp-sticky {
+    position: relative;
+    width: 100%;
+    overflow: clip;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, .28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: aecp-sticky-mesh 30s linear infinite;
+  }
+  @keyframes aecp-sticky-mesh {
+    0%, 100% { background-position: 0 0, 0 0; }
+    50% { background-position: 0 0, 10% 6%; }
+  }
+  .aecp-sticky__inner { max-width: 1140px; margin: 0 auto; padding: 4px 0 30px; }
+  .aecp-sticky__header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: min(94%, 1050px);
+    margin: 0 auto;
+    padding: 24px 0;
+    text-align: center;
+    will-change: transform;
+  }
+  .aecp-sticky__header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    background: linear-gradient(180deg, rgba(13, 10, 44, .99) 0%, rgba(7, 11, 27, .98) 72%, rgba(7, 11, 27, 0) 100%);
+  }
+  .aecp-sticky__header > span {
+    display: inline-flex;
+    padding: 8px 16px;
+    border: 1px solid #ffffff2b;
+    border-radius: 999px;
+    color: #c7d0ff;
+    font: 500 13px/1.2 var(--font-body);
+  }
+  .aecp-sticky__header h2 { max-width: 920px; color: #fff; }
+  .aecp-sticky__cards { --stack-top: 300px; width: min(94%, 1050px); margin: 0 auto; padding: 80px 0 50px; }
+  .aecp-sticky__card {
+    position: sticky;
+    top: var(--stack-top);
+    display: flex;
+    min-height: 500px;
+    margin-bottom: 60px;
+    overflow: hidden;
+    border: 1px solid #ffffff17;
+    border-radius: 20px;
+    color: #fff;
+    background: linear-gradient(140deg, #171b2d, #0c1020);
+    box-shadow: 0 28px 70px #0008;
+  }
+  .aecp-sticky__card:nth-child(2) { top: calc(var(--stack-top) + 20px); background: linear-gradient(140deg, #18172d, #0d0d1c); }
+  .aecp-sticky__card:nth-child(3) { top: calc(var(--stack-top) + 40px); background: linear-gradient(140deg, #111d2e, #0b1019); }
+  .aecp-sticky__copy {
+    display: flex;
+    flex: 0 0 45%;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+  }
+  .aecp-sticky__copy > span { margin-bottom: 16px; color: #8fa1ff; font: 700 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .aecp-sticky__copy h3 { margin: 0 0 16px; color: #fff; font: 500 32px/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .aecp-sticky__copy p { margin: 0; color: #b7bfce; font: 17px/1.65 var(--font-body); }
+  .aecp-sticky-collage {
+    position: relative;
+    isolation: isolate;
+    align-self: center;
+    flex: 1;
+    height: 390px;
+    min-width: 0;
+    min-height: 390px;
+    margin: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .1);
+    border-radius: 16px;
+    background: radial-gradient(circle at 78% 24%, rgba(111, 134, 255, .22), transparent 34%), linear-gradient(145deg, rgba(255, 255, 255, .07), rgba(255, 255, 255, .025));
+  }
+  .aecp-sticky-shot {
+    position: absolute;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .28);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, .38);
+    transition: transform .35s ease;
+  }
+  .aecp-sticky-shot--primary { top: 26px; left: 24px; z-index: 1; width: 78%; height: 260px; }
+  .aecp-sticky-shot--secondary { top: 140px; right: 24px; z-index: 2; width: 56%; height: 150px; }
+  .aecp-sticky-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; background: #fff; }
+  .aecp-sticky__card:hover .aecp-sticky-shot--primary { transform: translateY(-5px); }
+  .aecp-sticky__card:hover .aecp-sticky-shot--secondary { transform: translateY(-7px); }
+  .aecp-sticky__spacer { height: 100px; }
+
+  .aecp-access { padding: 100px 24px; background: #fff; }
+  .aecp-access__inner { display: flex; align-items: flex-start; gap: 80px; width: min(1200px, 100%); margin: 0 auto; }
+  .aecp-access__intro { position: sticky; top: 120px; flex: 0 0 40%; padding-top: 12px; }
+  .aecp-access__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 22px; padding: 8px 13px; border-radius: 999px; color: #525866; background: #f2f3f5; font: 600 12px/1.2 var(--font-body); letter-spacing: .01em; }
+  .aecp-access__eyebrow svg { width: 17px; height: 17px; fill: none; stroke: #3f4653; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
+  .aecp-access__intro h2 { margin: 0; background: var(--aec-light-title-gradient); background-clip: text; color: transparent; font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading); letter-spacing: var(--aec-section-title-tracking); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .aecp-access__intro h2 em { font-style: normal; }
+  .aecp-access__intro > p { margin: 24px 0 30px; color: #697386; font: 18px/1.6 var(--font-body); }
+  .aecp-access__intro > a { display: inline-flex; align-items: center; gap: 12px; padding: 13px 20px; border-radius: 999px; color: #fff; background: #171a21; font: 650 14px/1.2 var(--font-body); text-decoration: none; transition: transform .2s ease, background .2s ease; }
+  .aecp-access__intro > a:hover { background: #335cff; transform: translateY(-2px); }
+  .aecp-access__cards { display: flex; flex: 1; flex-direction: column; gap: 32px; min-width: 0; }
+  .aecp-access__card { position: sticky; top: calc(80px + var(--access-index) * 20px); padding: 32px; overflow: hidden; border-radius: 24px; background: #f4f5f7; }
+  .aecp-access__card-header { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 24px; }
+  .aecp-access__card-header > i { display: grid; place-items: center; flex: 0 0 40px; height: 40px; border-radius: 50%; color: #fff; background: #161a22; font: 700 11px/1 var(--font-body); font-style: normal; }
+  .aecp-access__card-header h3 { margin: 1px 0 8px; color: #171a21; font: 700 20px/1.25 var(--font-heading); letter-spacing: -.02em; }
+  .aecp-access__card-header p { margin: 0; color: #697386; font: 16px/1.6 var(--font-body); }
+  .aecp-access__visual { padding: 24px; border: 1px solid rgba(82, 94, 121, .1); border-radius: 20px; background: linear-gradient(145deg, #e9efff, #f5f1ff); }
+  .aecp-access__card:nth-child(2) .aecp-access__visual { background: linear-gradient(145deg, #fff3df, #ffeef4); }
+  .aecp-access__card:nth-child(3) .aecp-access__visual { background: linear-gradient(145deg, #e8f8f0, #eef8ff); }
+  .aecp-access__card:nth-child(4) .aecp-access__visual { background: linear-gradient(145deg, #f2edff, #edf3ff); }
+  .aecp-access__visual img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; border: 1px solid rgba(82, 94, 121, .14); border-radius: 12px; background: #fff; box-shadow: 0 16px 30px rgba(31, 41, 72, .14); }
+
+  .aecp-lifecycle {
+    padding: 80px 5% 48px;
+    background: transparent;
+  }
+  .aecp-lifecycle__container { max-width: 1200px; margin: 0 auto; }
+  .aecp-lifecycle__header { margin-bottom: 60px; }
+  .aecp-lifecycle__grid {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: transparent;
+  }
+  .aecp-lifecycle__notch {
+    position: absolute;
+    left: 50%;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+  }
+  .aecp-lifecycle__notch--top { top: 0; transform: translate(-50%, -50%); }
+  .aecp-lifecycle__notch--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .aecp-lifecycle__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .aecp-lifecycle__row:last-child { border-bottom: 0; }
+  .aecp-lifecycle__cell { display: flex; flex-direction: column; justify-content: center; padding: 4rem; }
+  .aecp-lifecycle__row .aecp-lifecycle__visual { border-right: 1px solid #e5e7eb; }
+  .aecp-lifecycle__row--reverse .aecp-lifecycle__content { grid-column: 1; grid-row: 1; }
+  .aecp-lifecycle__row--reverse .aecp-lifecycle__visual { grid-column: 2; grid-row: 1; border-right: 0; }
+  .aecp-lifecycle__row--reverse .aecp-lifecycle__content { border-right: 1px solid #e5e7eb; }
+  .aecp-lifecycle__visual { align-items: center; background: transparent; }
+  .aecp-lifecycle__stage { position: relative; isolation: isolate; width: 100%; padding: 32px 18px; border-radius: 22px; }
+  .aecp-lifecycle__stage--1 { background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%); }
+  .aecp-lifecycle__stage--2 { background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%); }
+  .aecp-lifecycle__stage--3 { background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%); }
+  .aecp-lifecycle__stage--4 { background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%); }
+  .aecp-lifecycle__stage img { display: block; width: 100%; border: 1px solid #dfe4ec; border-radius: 14px; animation: aecp-lifecycle-breathe 7s ease-in-out infinite; will-change: transform; }
+  .aecp-lifecycle__row:nth-child(even) .aecp-lifecycle__stage img { animation-delay: -3.5s; }
+  .aecp-lifecycle__float {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 14px;
+    border: 1px solid rgba(206, 215, 232, .9);
+    border-radius: 12px;
+    color: #111827;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: 0 14px 34px rgba(30, 45, 88, .2);
+    font-family: var(--font-body);
+    line-height: 1.15;
+    animation: aecp-lifecycle-float 4.8s ease-in-out infinite;
+    backdrop-filter: blur(10px);
+  }
+  .aecp-lifecycle__float b { font-size: .78rem; font-weight: 700; white-space: nowrap; }
+  .aecp-lifecycle__float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .aecp-lifecycle__float i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25, 184, 116, .13); }
+  .aecp-lifecycle__float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .aecp-lifecycle__float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .aecp-lifecycle__visual:hover .aecp-lifecycle__stage img { animation-play-state: paused; transform: scale(1.018); }
+  .aecp-lifecycle__content > span { display: block; margin-bottom: 1rem; color: #5b21b6; font: 600 .875rem/1.2 var(--font-body); letter-spacing: .05em; text-transform: uppercase; }
+  .aecp-lifecycle__content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .aecp-lifecycle__content p { margin: 0; color: #4b5563; font: 1.125rem/1.45 var(--font-body); }
+  .aecp-lifecycle__cross { position: absolute; bottom: 0; left: 50%; z-index: 2; width: 28px; height: 28px; line-height: 0; transform: translate(-50%, 50%); pointer-events: none; }
+  .aecp-lifecycle__row:last-child .aecp-lifecycle__cross { display: none; }
+  @keyframes aecp-lifecycle-breathe { 0%, 100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes aecp-lifecycle-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -9px, 0); } }
+
+  .aecp-audiences { padding: 64px 24px 72px; background: #fff; }
+  .aecp-audiences__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .aecp-audiences__header { max-width: 830px; margin: 0 auto 42px; text-align: center; }
+  .aecp-audiences__header h2 { margin: 0; background: var(--aec-light-title-gradient); background-clip: text; color: transparent; font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading); letter-spacing: var(--aec-section-title-tracking); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .aecp-audiences__header h2 > span { display: block; }
+  .aecp-audiences__header > p { max-width: none; white-space: nowrap; }
+  .aecp-audiences__tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; width: fit-content; max-width: 100%; margin: 0 auto 24px; padding: 6px; border: 1px solid #e5e8ef; border-radius: 999px; background: #f6f7f9; }
+  .aecp-audiences__tabs button { padding: 10px 17px; border: 0; border-radius: 999px; color: #687182; background: transparent; font: 500 13px/1.2 var(--font-body); cursor: pointer; transition: color .2s ease, background .2s ease, box-shadow .2s ease; }
+  .aecp-audiences__tabs button[aria-selected="true"] { color: #161a22; background: #fff; box-shadow: 0 4px 13px rgba(28, 36, 55, .11); }
+  .aecp-audiences__panels { min-height: 460px; }
+  .aecp-audiences__panel { display: none; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: center; min-height: 460px; padding: 36px 48px; border: 1px solid #e1e6ef; border-radius: 28px; background: linear-gradient(135deg, #fff8dc, #fff 72%); }
+  .aecp-audiences__panel.is-active { display: grid; animation: aecp-panel-in .32s ease both; }
+  .aecp-audiences__panel:nth-child(2) { background: linear-gradient(135deg, #edf7ff, #fff 72%); }
+  .aecp-audiences__panel:nth-child(3) { background: linear-gradient(135deg, #eefbf4, #fff 72%); }
+  .aecp-audiences__panel:nth-child(4) { background: linear-gradient(135deg, #f3efff, #fff 72%); }
+  .aecp-audiences__copy h3 { margin: 0 0 18px; color: #171a21; font: 500 42px/1.08 var(--font-heading); letter-spacing: -.04em; }
+  .aecp-audiences__copy > p { margin: 0 0 32px; color: #657084; font: 16px/1.65 var(--font-body); }
+  .aecp-audiences__copy > span { display: block; margin-bottom: 15px; color: #81899a; font: 700 11px/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .aecp-audiences__copy ul { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
+  .aecp-audiences__copy li { display: flex; gap: 11px; align-items: center; color: #343b49; font: 600 14px/1.4 var(--font-body); }
+  .aecp-audiences__copy li i { display: grid; place-items: center; flex: 0 0 22px; height: 22px; border-radius: 50%; color: #fff; background: #171a21; font: 700 11px/1 var(--font-body); font-style: normal; }
+  .aecp-audiences__showcase { position: relative; justify-self: end; width: 100%; max-width: 440px; padding: 18px; border: 1px solid rgba(82, 94, 121, .13); border-radius: 24px; background: rgba(255, 255, 255, .68); box-shadow: 0 22px 48px rgba(31, 41, 72, .1); }
+  .aecp-audiences__showcase img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: top; border: 1px solid #e0e4eb; border-radius: 13px; background: #fff; }
+  .aecp-audiences__showcase > span { position: absolute; right: 34px; bottom: 34px; padding: 8px 12px; border-radius: 999px; color: #fff; background: rgba(17, 21, 30, .82); backdrop-filter: blur(10px); font: 600 10px/1.2 var(--font-body); }
+  @keyframes aecp-panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .aecp-related {
+    padding: 32px 24px 56px;
+    background: transparent;
+  }
+  .aecp-related .aecp-heading { max-width: none; margin-bottom: clamp(32px, 3vw, 40px); }
+  .aecp-related .aecp-heading h2 { max-width: 900px; margin-inline: auto; }
+  .aecp-related__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 1200px;
+    margin: 0 auto;
+    border-top: 1px solid var(--surface-card-border, #dfe4ec);
+  }
+  .aecp-related__card { position: relative; min-height: 300px; padding: 28px; border-left: 1px solid var(--surface-card-border, #dfe4ec); background: transparent; box-shadow: none; }
+  .aecp-related__card:first-of-type { border-left: 0; }
+  .aecp-related__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 28px; color: var(--brand-blue); }
+  .aecp-related__icon svg { width: 100%; height: 100%; }
+  .aecp-related__card h3 { max-width: 230px; min-height: 2.3em; margin: 0 0 28px; color: var(--heading-dark); font: 500 21px/1.15 var(--font-heading); }
+  .aecp-related__card h3 a { color: inherit; text-decoration: none; }
+  .aecp-related__card p { margin: 14px 0 0; color: var(--body-gray); font: 15px/1.4 var(--font-body); }
+  .aecp-related__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; transform: translate(-50%, -50%); pointer-events: none; }
+  .aecp-related__notch--1 { left: 20%; }
+  .aecp-related__notch--2 { left: 40%; }
+  .aecp-related__notch--3 { left: 60%; }
+  .aecp-related__notch--4 { left: 80%; }
+  .aecp-related__cross { display: none; }
+
+  @media (max-width: 1024px) {
+    .aecp-sticky__cards { --stack-top: 280px; }
+    .aecp-sticky__card { flex-direction: column; min-height: 600px; }
+    .aecp-sticky__copy { flex: none; padding: 36px; }
+    .aecp-sticky-collage { flex: none; align-self: stretch; height: 350px; min-height: 350px; }
+    .aecp-sticky-shot--primary { top: 24px; left: 24px; width: 70%; height: 230px; }
+    .aecp-sticky-shot--secondary { top: 130px; right: 24px; width: 50%; height: 135px; }
+    .aecp-access__inner { gap: 48px; }
+    .aecp-access__intro { flex-basis: 42%; }
+    .aecp-audiences__panel { gap: 40px; padding: 36px; }
+  }
+
+  @media (max-width: 860px) {
+    .aecp-prompt-grid { grid-template-columns: 1fr; }
+    .aecp-prompt,
+    .aecp-prompt:nth-child(n) {
+      grid-column: span 1;
+      min-height: 0;
+      padding: 32px 24px;
+      border-right: 0;
+      border-bottom: 1px solid #3b3a47;
+    }
+    .aecp-prompt:last-child { border-bottom: 0; }
+    .aecp-prompt__petal { display: none; }
+    .aecp-prompt p { max-width: none; }
+    .aecp-prompt__visual { min-height: 170px; }
+    .aecp-access__inner { flex-direction: column; }
+    .aecp-access__intro { position: static; flex: none; max-width: 720px; padding-top: 0; }
+    .aecp-access__cards { width: 100%; }
+    .aecp-audiences__panel { grid-template-columns: 1fr; min-height: 0; }
+    .aecp-audiences__panels { min-height: 0; }
+    .aecp-related__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .aecp-related__notch { display: none; }
+    .aecp-related__card:nth-of-type(odd) { border-left: 0; }
+    .aecp-related__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border, #dfe4ec); }
+    .aecp-related__cross { display: block; position: absolute; top: 0; right: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; transform: translate(50%, -50%); pointer-events: none; }
+    .aecp-lifecycle__row { display: flex; flex-direction: column; }
+    .aecp-lifecycle__cell { padding: 3rem 1.5rem; }
+    .aecp-lifecycle__row .aecp-lifecycle__cell { border-right: 0; }
+    .aecp-lifecycle__content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .aecp-lifecycle__visual { order: 2; }
+  }
+
+  @media (max-width: 767px) {
+    .aecp-heading { margin-bottom: 36px; text-align: left; }
+    .aecp-heading p { margin-left: 0; font-size: 15px; }
+    .aecp-comparison { padding: 64px 16px; }
+    .aecp-related { padding: 32px 16px 48px; }
+    .aecp-lifecycle { padding: 64px 16px 40px; }
+    .aecp-lifecycle__header { margin-bottom: 36px; }
+    .aecp-comparison__grid { grid-template-columns: 1fr; grid-template-rows: auto; margin-bottom: 18px; }
+    .aecp-comparison__cross { display: none; }
+    .aecp-comparison__copy,
+    .aecp-comparison__media,
+    .aecp-comparison__grid > :nth-child(n):not(.aecp-comparison__cross) { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .aecp-comparison__media { min-height: 280px; padding: 20px; }
+    .aecp-comparison__grid > :nth-child(3) { order: 4; border-bottom: 0; }
+    .aecp-comparison__grid > :nth-child(4) { order: 3; }
+    .aecp-comparison__composite { height: 285px; }
+    .aecp-comparison__screen--primary { width: 78%; }
+    .aecp-comparison__screen--secondary { width: 68%; }
+    .aecp-sticky__header { position: relative; top: 0; align-items: flex-start; padding: 58px 0 24px; text-align: left; transform: none !important; }
+    .aecp-sticky__header::before { display: none; }
+    .aecp-sticky__cards { padding: 20px 0 64px; }
+    .aecp-sticky__card,
+    .aecp-sticky__card:nth-child(n) { position: relative; top: 0; min-height: 0; margin-bottom: 24px; }
+    .aecp-sticky__copy { padding: 28px 22px 16px; }
+    .aecp-sticky__copy h3 { font-size: 24px; }
+    .aecp-sticky__copy p { font-size: 15px; }
+    .aecp-sticky-collage { height: 280px; min-height: 280px; margin: 12px; }
+    .aecp-sticky-shot--primary { top: 16px; left: 14px; width: 84%; height: 190px; }
+    .aecp-sticky-shot--secondary { top: 102px; right: 12px; width: 62%; height: 108px; }
+    .aecp-sticky__spacer { display: none; }
+    .aecp-access { padding: 72px 16px; }
+    .aecp-access__intro > p { font-size: 16px; }
+    .aecp-access__card { padding: 26px 20px; }
+    .aecp-access__visual { padding: 14px; }
+    .aecp-audiences { padding: 48px 16px; }
+    .aecp-audiences__header { margin-bottom: 30px; text-align: left; }
+    .aecp-audiences__header > p { margin-left: 0; font-size: 15px; white-space: normal; }
+    .aecp-audiences__tabs { flex-wrap: nowrap; justify-content: flex-start; width: 100%; margin-bottom: 18px; overflow-x: auto; border-radius: 18px; scrollbar-width: none; }
+    .aecp-audiences__tabs::-webkit-scrollbar { display: none; }
+    .aecp-audiences__tabs button { flex: 0 0 auto; }
+    .aecp-audiences__panel { gap: 32px; padding: 32px 24px; }
+    .aecp-audiences__copy h3 { font-size: 32px; }
+    .aecp-audiences__showcase { padding: 14px; border-radius: 18px; }
+    .aecp-audiences__showcase > span { right: 24px; bottom: 24px; }
+  }
+
+  @media (max-width: 560px) {
+    .aecp-capabilities-heading { padding-inline: 20px; }
+    .aecp-capabilities-heading p { font-size: 15px; }
+    .aecp-grid-section { padding: 40px 16px 48px; }
+    .aecp-sticky-collage { height: 235px; min-height: 235px; }
+    .aecp-sticky-shot--primary { height: 155px; }
+    .aecp-sticky-shot--secondary { top: 84px; height: 90px; }
+    .aecp-related { padding-inline: 16px; }
+    .aecp-related__grid { grid-template-columns: 1fr; }
+    .aecp-related__card { min-height: 0; padding: 24px 20px; border-top: 1px solid var(--surface-card-border, #dfe4ec); border-left: 0; }
+    .aecp-related__card:first-of-type { border-top: 0; }
+    .aecp-related__card h3 { min-height: 0; }
+    .aecp-related__cross { display: none; }
+  }
+
+  @media (max-width: 620px) {
+    .aecp-workflow { padding: 76px 20px; }
+    .aecp-workflow__header { align-items: center; margin-bottom: 46px; text-align: center; }
+    .aecp-workflow__steps summary,
+    .aecp-workflow__steps summary:hover {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      min-height: 96px;
+      padding: 18px 62px 18px 14px;
+    }
+    .aecp-workflow__arrow { top: 31px; right: 16px; }
+    .aecp-workflow__number { font-size: 13px; }
+    .aecp-workflow__steps details:not([open]) .aecp-workflow__copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .aecp-workflow__steps details:not([open]) .aecp-workflow__copy p { font-size: 13px; line-height: 1.4; }
+    .aecp-workflow__steps details[open] summary,
+    .aecp-workflow__steps details[open] summary:hover {
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      padding: 34px 62px 24px 14px;
+    }
+    .aecp-workflow__steps details[open] .aecp-workflow__arrow { top: 24px; right: 16px; }
+    .aecp-workflow__steps details[open] .aecp-workflow__number { font-size: 21px; }
+    .aecp-workflow__steps details[open] { flex-direction: column; }
+    .aecp-workflow__steps details[open] summary { flex: none; }
+    .aecp-workflow__steps details[open] .aecp-workflow__copy p { margin-top: 30px; font-size: 22px; }
+    .aecp-workflow__steps details[open] .aecp-workflow__visual {
+      flex: none;
+      margin: 0;
+      padding: 0 24px 28px;
+    }
+    .aecp-workflow__visual img { max-width: none; border-radius: 12px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aecp-dark { clip-path: none; will-change: auto; }
+    .aecp-prompt__visual::before,
+    .aecp-prompt__visual > * { animation: none; }
+    .aecp-audiences__panel.is-active { animation: none; }
+    .aecp-access__intro > a,
+    .aecp-audiences__tabs button,
+    .aecp-related__card h3 a { transition: none; }
+    .aecp-sticky { animation: none; }
+    .aecp-sticky__header { will-change: auto; }
+    .aecp-sticky-shot { transition: none; }
+    .aecp-lifecycle__stage img,
+    .aecp-lifecycle__float { animation: none; will-change: auto; }
+    .aecp-lifecycle__visual:hover .aecp-lifecycle__stage img { transform: none; }
+  }
+</style>

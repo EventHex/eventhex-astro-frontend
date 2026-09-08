@@ -1,0 +1,1088 @@
+---
+interface Faq {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  faqs: Faq[];
+}
+
+const { faqs } = Astro.props;
+
+const workflow = [
+  ["Describe", "What the Form Needs"],
+  ["Generate", "A Draft Field Set"],
+  ["Arrange", "Questions and Layout"],
+  ["Preview", "The Attendee View"],
+  ["Publish", "Registration or Public Form"],
+  ["Review", "Responses and Exports"],
+];
+
+const aiSteps = [
+  {
+    title: "Describe the Form",
+    copy: "Name the event task and the information you want from each respondent.",
+  },
+  {
+    title: "Generate the Fields",
+    copy: "EventHex selects suitable standard or custom field types and drafts relevant options where needed.",
+  },
+  {
+    title: "Check the Questions",
+    copy: "Review labels, required fields, choice options, and the information the form will collect.",
+  },
+  {
+    title: "Refine in the Builder",
+    copy: "Add, remove, edit, resize, or reorder fields before opening the attendee preview.",
+  },
+];
+
+const useCases = [
+  {
+    eyebrow: "Registration",
+    title: "Ticket Registration Forms",
+    copy: "Add shared event questions and ticket-specific questions to the registration journey.",
+    image: "/feature-images/event-registration/single-registration-form.png",
+    alt: "EventHex ticket registration form",
+    width: 760,
+    height: 480,
+    stage: "describe",
+    top: "Ticket form",
+    topDetail: "Registration questions",
+    bottom: "Ready to review",
+  },
+  {
+    eyebrow: "Checkout",
+    title: "Multi-Ticket Checkout",
+    copy: "Collect buyer information once, then ask the right questions for each attendee and ticket.",
+    image: "/feature-images/event-registration/checkout-attendee-details.png",
+    alt: "EventHex multi-ticket checkout attendee details",
+    width: 1180,
+    height: 540,
+    stage: "generate",
+    top: "Buyer details",
+    topDetail: "Collected once",
+    bottom: "Attendee questions",
+  },
+  {
+    eyebrow: "Standalone",
+    title: "Standalone Event Forms",
+    copy: "Create a public form for applications, enquiries, surveys, or other event workflows that need their own link.",
+    image: "/feature-images/ai-platform/form-builder-preview.jpg",
+    alt: "Attendee preview of a standalone EventHex form",
+    width: 1117,
+    height: 837,
+    stage: "check",
+    top: "Public form",
+    topDetail: "Attendee preview",
+    bottom: "Share by link",
+  },
+  {
+    eyebrow: "Feedback",
+    title: "Event Feedback Forms",
+    copy: "Build NPS, rating, choice, and open-text questions, then connect the responses to the event's feedback workflow.",
+    image: "/feature-images/ai-platform/form-builder-add-field.jpg",
+    alt: "EventHex form field palette with NPS and rating fields",
+    width: 1117,
+    height: 837,
+    stage: "refine",
+    top: "NPS + rating",
+    topDetail: "Feedback fields",
+    bottom: "Responses connected",
+  },
+];
+
+const fieldGroups = [
+  ["Attendee and Company Details", "Use name, email, phone, company, job title, country, website, and profile fields."],
+  ["Answers and Selections", "Use short or long text, dropdown, checkbox, and multi-select questions with the options your event needs."],
+  ["Dates, Times, and Numbers", "Ask for structured values that are easier to validate and review."],
+  ["Files and Images", "Collect supported uploads for applications, profiles, or event materials."],
+  ["NPS, Ratings, and Guidance", "Add feedback scores or information text that explains the next part of the form."],
+];
+
+const registrationModes = [
+  {
+    id: "single-registration",
+    label: "Single Registration",
+    title: "Single Registration",
+    copy: "Ask shared questions across ticket forms, then add questions that appear only for a selected ticket.",
+    scope: "One attendee. One focused registration.",
+    checklist: [
+      "Shared event questions across ticket forms",
+      "Ticket-specific questions for the selected ticket",
+      "One focused registration journey per attendee",
+    ],
+    image: "/feature-images/event-registration/single-registration-form.png",
+    alt: "Single Registration form showing shared and ticket-specific questions",
+    visualLabel: "Registration scope",
+    width: 760,
+    height: 480,
+  },
+  {
+    id: "multi-ticket-checkout",
+    label: "Multi-Ticket Checkout",
+    title: "Multi-Ticket Checkout",
+    copy: "Collect shared buyer details once and collect ticket-specific information for each attendee in the order.",
+    scope: "One buyer. The right questions per attendee.",
+    checklist: [
+      "Shared buyer details collected once",
+      "Ticket-specific information for each attendee",
+      "The right questions for every ticket in the order",
+    ],
+    image: "/feature-images/event-registration/checkout-attendee-details.png",
+    alt: "Multi-ticket checkout showing buyer details and attendee questions",
+    visualLabel: "Checkout scope",
+    width: 1180,
+    height: 540,
+  },
+];
+
+const related = [
+  {
+    title: "Draft the Field Set With AI",
+    copy: "Describe the information you need and let EventHex create a reviewable field draft inside the visual builder.",
+    bullets: ["Typed form description", "Supported field types and choice options", "Organizer review before publishing"],
+    href: "/ai-platform/",
+    linkLabel: "Explore AI Platform",
+    image: "/feature-images/ai-platform/form-builder-describe.jpg",
+    alt: "EventHex AI form builder prompt for describing the required fields",
+    width: 1117,
+    height: 837,
+  },
+  {
+    title: "Choose the Registration Context",
+    copy: "Use Single Registration or multi-ticket Checkout so shared details and ticket-specific questions appear in the right place.",
+    bullets: ["Shared questions across ticket forms", "Ticket-specific questions for a selected ticket", "Buyer details collected once in Checkout"],
+    href: "/event-registration/",
+    linkLabel: "Explore Event Registration",
+    image: "/feature-images/event-registration/single-registration-form.png",
+    alt: "EventHex Single Registration form with shared and ticket-specific questions",
+    width: 760,
+    height: 480,
+  },
+  {
+    title: "Apply the Ticket-Level Rules",
+    copy: "Keep each question aligned with the ticket types, availability, pricing, and attendee rules configured for the event.",
+    bullets: ["Ticket types and availability", "Pricing and ticket-level rules", "Questions scoped to the right attendee"],
+    href: "/event-ticketing/",
+    linkLabel: "Explore Event Ticketing",
+    image: "/feature-images/event-registration/ticket-specific-rules.png",
+    alt: "EventHex ticket-specific registration rules",
+    width: 800,
+    height: 620,
+  },
+  {
+    title: "Place and Publish the Form",
+    copy: "Preview the attendee experience, publish when ready, and continue through registration, a public link, QR code, or the event website.",
+    bullets: ["Attendee-facing preview", "Public link and QR sharing", "Selected form on the EventHex website"],
+    href: "/event-website-builder/",
+    linkLabel: "Explore Website Builder",
+    image: "/feature-images/event-registration/website-embed.png",
+    alt: "EventHex registration form embedded on an event website",
+    width: 762,
+    height: 696,
+  },
+];
+---
+
+<div class="afb-page">
+  <section class="afb-hero" id="top">
+    <div class="afb-hero__grid">
+      <div class="afb-hero__content">
+        <span class="afb-hero__badge animate-on-scroll" data-animation="fadeInDown">AI Event Form Builder</span>
+        <h1 class="afb-hero__title animate-on-scroll" data-animation="fadeInUp">
+          Build Event Forms From a Prompt—Then Make Them Fit Your Event
+        </h1>
+        <p class="afb-hero__copy animate-on-scroll" data-animation="fadeInUp">
+          Describe the information you need. EventHex drafts the fields inside the same visual builder used for ticket registration, standalone forms, and event feedback. Review every question, preview the attendee experience, and publish when it is ready.
+        </p>
+        <ul class="afb-hero__proof animate-on-scroll" data-animation="fadeIn">
+          <li>AI-generated field draft</li>
+          <li>Organizer-reviewed before publish</li>
+          <li>Registration and standalone forms</li>
+        </ul>
+        <div class="afb-hero__actions animate-on-scroll" data-animation="fadeInUp">
+          <a class="afb-button afb-button--primary" href="/book-a-demo/">
+            Book a Demo
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 3l5 5-5 5" /></svg>
+          </a>
+          <a class="afb-button afb-button--outline" href="#ai-draft">See the builder flow</a>
+        </div>
+      </div>
+
+      <div class="afb-hero__visual animate-on-scroll" data-animation="fadeIn">
+        <div class="afb-hero__visual-card">
+          <div class="afb-hero__visual-inner">
+            <div class="afb-hero-collage" role="group" aria-label="EventHex AI Form Builder from prompt to editable field draft">
+              <figure class="afb-hero-shot afb-hero-shot--builder">
+                <img
+                  src="/feature-images/ai-platform/form-builder-generated.jpg"
+                  alt="EventHex visual form builder with shared and ticket-specific fields"
+                  width="1117"
+                  height="837"
+                  loading="eager"
+                  fetchpriority="high"
+                  decoding="async"
+                />
+                <figcaption>Editable Field Draft</figcaption>
+              </figure>
+              <figure class="afb-hero-shot afb-hero-shot--prompt">
+                <img
+                  src="/feature-images/ai-platform/form-builder-describe.jpg"
+                  alt="EventHex AI prompt for generating form fields"
+                  width="1117"
+                  height="837"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>Describe the Form</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="afb-rail" aria-label="Connected form workflow">
+    <div class="afb-rail__inner">
+      <span class="afb-rail__label">Connected workflow</span>
+      {workflow.map(([title, copy], index) => (
+        <span class="afb-rail__stat" aria-label={`${String(index + 1).padStart(2, "0")} ${title}: ${copy}`}>
+          <b>{String(index + 1).padStart(2, "0")}</b> {title}
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <section class="afb-use" id="ai-draft">
+    <div class="afb-shell">
+      <header class="afb-heading animate-on-scroll" data-animation="fadeInUp">
+        <h2>Tell EventHex What to Collect. Start Editing the Result.</h2>
+        <p>The AI step creates a field draft from your description. The organizer decides what stays, what changes, and what gets published.</p>
+      </header>
+      <div class="afb-use__grid">
+        {[25, 50, 75].map((left) => (
+          <span class="afb-grid-notch" style={`left:${left}%`} aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--afb-line)"></path></svg>
+          </span>
+        ))}
+        {aiSteps.map((step, index) => (
+          <article class="afb-use__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            <div class="afb-use__icon" aria-hidden="true">
+              {index === 0 && <svg viewBox="0 0 24 24"><path d="M4 21v-9h16v9M7 12V5h10v7M8 16h8" /></svg>}
+              {index === 1 && <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM4 10h16M8 14h3M15 14h2" /></svg>}
+              {index === 2 && <svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 12h7M9 16h7" /></svg>}
+              {index === 3 && <svg viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2" /></svg>}
+            </div>
+            <h3>{step.title}</h3>
+            <p>{step.copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="afb-bento-section" id="event-use-cases">
+    <div class="afb-bento-container">
+      <header class="afb-bento-header animate-on-scroll" data-animation="fadeInUp">
+        <h2>Use One Builder Across Registration, Feedback, and <span>Follow-Up</span></h2>
+        <p>Build questions where they belong instead of moving form data between disconnected tools.</p>
+      </header>
+      <div class="afb-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="afb-bento-notch afb-bento-notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+        </span>
+        <span class="afb-bento-notch afb-bento-notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+        </span>
+
+        {useCases.map((useCase, index) => (
+          <div class:list={["afb-bento-row", { "afb-bento-row--reverse": index % 2 === 1 }]}>
+            {index % 2 === 1 && (
+              <div class="afb-bento-cell afb-bento-content">
+                <span class="afb-bento-eyebrow">{useCase.eyebrow}</span>
+                <h3>{useCase.title}</h3>
+                <p>{useCase.copy}</p>
+              </div>
+            )}
+            <div class="afb-bento-cell afb-bento-visual">
+              <div class={`afb-bento-shot-stage afb-bento-shot-stage--${useCase.stage}`}>
+                <img class="afb-bento-product-shot" src={useCase.image} alt={useCase.alt} width={useCase.width} height={useCase.height} loading="lazy" />
+                <span class="afb-shot-float afb-shot-float--top"><b>{useCase.top}</b><small>{useCase.topDetail}</small></span>
+                <span class="afb-shot-float afb-shot-float--bottom"><i></i><b>{useCase.bottom}</b></span>
+              </div>
+            </div>
+            {index % 2 === 0 && (
+              <div class="afb-bento-cell afb-bento-content">
+                <span class="afb-bento-eyebrow">{useCase.eyebrow}</span>
+                <h3>{useCase.title}</h3>
+                <p>{useCase.copy}</p>
+              </div>
+            )}
+            <span class="afb-bento-cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+              </svg>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="afb-fields" id="field-library">
+    <div class="afb-shell">
+      <header class="afb-heading afb-heading--dark animate-on-scroll" data-animation="fadeInUp">
+        <h2>Build With Event-Ready Fields—Not Generic Blanks</h2>
+        <p>Start with familiar attendee details, then add the input type that fits the decision or response.</p>
+      </header>
+      <div class="afb-fields__grid">
+        {fieldGroups.map(([title, copy], index) => (
+          <article class="afb-field-card animate-on-scroll" data-animation="fadeInUp" data-delay={String((index % 3) * 70)}>
+            {[1, 2, 4].includes(index) && (
+              <>
+                <span class="afb-field-petal afb-field-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+                <span class="afb-field-petal afb-field-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+              </>
+            )}
+            <div class={`afb-field-card__preview afb-field-card__preview--${index}`} aria-hidden="true">
+              {index === 0 && <><span>Name</span><i></i><span>Company</span><i></i></>}
+              {index === 1 && <><span>Session format</span><i class="has-chevron"></i><small><b></b> Workshop</small><small><b></b> Keynote</small></>}
+              {index === 2 && <><span>Preferred date</span><i class="has-date">18</i><span>Group size</span><i class="has-number">120</i></>}
+              {index === 3 && <><span>Upload headshot</span><i class="has-upload">↑ &nbsp; Choose file</i><small>PNG, JPG or supported file</small></>}
+              {index === 4 && <><span>How likely are you to recommend?</span><div class="afb-rating"><b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b></div></>}
+            </div>
+            <span class="afb-field-card__num">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{title}</h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+    <div class="afb-field-cta animate-on-scroll" data-animation="fadeInUp">
+      <h2>Build the Questions Your <span>Event Actually Needs</span></h2>
+      <a href="/book-a-demo/">Book a Demo</a>
+    </div>
+  </section>
+
+  <section class="afb-modes" id="registration-logic">
+    <div class="afb-modes__inner">
+      <header class="afb-modes__header">
+        <h2 class="afb-modes__title animate-on-scroll" data-animation="fadeInUp">Keep Shared Details Separate From Ticket-Specific Questions</h2>
+        <p class="afb-modes__subtitle animate-on-scroll" data-animation="fadeInUp">EventHex changes the form-builder context to match the registration flow selected for the event.</p>
+      </header>
+
+      <div class="afb-modes__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" data-afb-mode-tabs>
+        {registrationModes.map((item, index) => (
+          <button
+            class:list={["afb-modes__tab", { "afb-modes__tab--active": index === 0 }]}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`afb-mode-panel-${item.id}`}
+            id={`afb-mode-tab-${item.id}`}
+            data-afb-mode-target={item.id}
+          >
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="afb-modes__box animate-on-scroll" data-animation="fadeInUp">
+        {registrationModes.map((item, index) => (
+          <div
+            class:list={["afb-mode-panel", { "afb-mode-panel--active": index === 0 }]}
+            id={`afb-mode-panel-${item.id}`}
+            role="tabpanel"
+            aria-labelledby={`afb-mode-tab-${item.id}`}
+            data-afb-mode-panel={item.id}
+            hidden={index !== 0}
+          >
+            <div class="afb-mode-panel__left">
+              <h3>{item.title}</h3>
+              <p class="afb-mode-panel__description">{item.copy}</p>
+              <div class="afb-mode-panel__scope">
+                <span>Form Scope</span>
+                <strong>{item.scope}</strong>
+              </div>
+              <ul class="afb-mode-panel__checklist">
+                {item.checklist.map((point) => (
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="afb-mode-panel__right">
+              <div class="afb-mode-panel__showcase">
+                <img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+                <span class="afb-mode-panel__visual-label">
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <rect x="3" y="3.5" width="14" height="13" rx="2"></rect>
+                    <path d="M6.5 8h7M6.5 11h5M6.5 14h3"></path>
+                  </svg>
+                  {item.visualLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="afb-modes__note">For the full flow decision, explore <a href="/event-registration/">Event Registration</a>. This page focuses on how the builder shapes questions inside each flow.</p>
+    </div>
+  </section>
+
+  <section class="afb-stories" id="builder-control">
+    <div class="afb-stories__inner">
+      <header class="afb-stories__header">
+        <span class="afb-pill afb-pill--dark">From Draft to Response</span>
+        <h2>Organizer Control at Every Step</h2>
+      </header>
+      <div class="afb-stories__cards">
+        <article class="afb-story" style="--card-index: 0;">
+          <div class="afb-story__copy">
+            <span>Visual control after AI generation</span>
+            <h3>Fine-Tune the Form Without Rebuilding It</h3>
+            <p>Open a field and edit its label, helper text, required and validation settings, choices, width, order, configured-language copy, or cloned ticket questions—while the form structure stays visible.</p>
+            <a href="/book-a-demo/">Explore the builder</a>
+          </div>
+          <div class="afb-story__visual" role="img" aria-label="EventHex field canvas beside a form settings sidebar">
+            <div class="afb-editor-ui" aria-hidden="true">
+              <div class="afb-editor-ui__canvas"><small>Registration questions</small><i>Full name</i><i class="is-selected">Company name</i><i>Job title</i><i>Country</i></div>
+              <div class="afb-editor-ui__settings"><b>Company name</b><span>Field label</span><i>Company name</i><span>Width</span><div><em>Full</em><em class="is-active">Half</em></div><label><i></i> Required field</label><button>Save field</button></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="afb-story" style="--card-index: 1;">
+          <div class="afb-story__copy">
+            <span>See the attendee experience before it goes out</span>
+            <h3>Preview, Publish, and Place the Form Where People Need It</h3>
+            <p>Configure the questions, open the attendee preview, publish when ready, then use the registration flow, a public link, QR code, or an EventHex website page.</p>
+            <a href="/book-a-demo/">See the publish flow</a>
+          </div>
+          <div class="afb-story__visual" role="img" aria-label="An event form preview with public link, QR code, and website placement options">
+            <div class="afb-publish-ui" aria-hidden="true">
+              <div class="afb-publish-ui__screen"><small>Attendee preview</small><b>Speaker application</b><i></i><i></i><i class="is-tall"></i><span>Submit application</span></div>
+              <div class="afb-publish-ui__destinations"><div><b>Public link</b><small>eventhex.ai/form/…</small></div><div class="afb-qr"><i></i><i></i><i></i><i></i><i></i></div><div><b>Event website</b><small>Form section selected</small></div></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="afb-story" id="responses" style="--card-index: 2;">
+          <div class="afb-story__copy">
+            <span>Response handling stays with the event</span>
+            <h3>Keep Every Response Next to the Form That Collected It</h3>
+            <p>See submission counts, review response-aware columns, export data when needed, and keep supported feedback scores and comments connected to the event record.</p>
+            <a href="/book-a-demo/">Review the response flow</a>
+          </div>
+          <div class="afb-story__visual" role="img" aria-label="EventHex form submissions table with response counts and export action">
+            <div class="afb-response-ui" aria-hidden="true">
+              <div class="afb-response-ui__head"><span><small>Form submissions</small><b>Speaker application</b></span><i>Export responses</i></div>
+              <div class="afb-response-ui__stats"><span><small>Total submissions</small><b>128</b></span><span><small>Today's submissions</small><b>12</b></span></div>
+              <div class="afb-response-ui__table"><b>Name</b><b>Session topic</b><b>Format</b><span>Ana Silva</span><span>Designing trust</span><span>Keynote</span><span>Marcus Lee</span><span>Better breakouts</span><span>Workshop</span><span>Priya Nair</span><span>Event accessibility</span><span>Panel</span></div>
+            </div>
+          </div>
+        </article>
+        <div class="afb-stories__spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="afb-related" id="connected-workflows">
+    <div class="afb-related__inner">
+      <header class="afb-related__header animate-on-scroll" data-animation="fadeInUp">
+        <h2>Connect the Form to the Next Event Decision</h2>
+      </header>
+      <ol class="afb-related__steps" data-afb-workflow>
+        {related.map((item, index) => (
+          <li class="animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            <details data-afb-workflow-item open={index === 0}>
+              <summary>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div class="afb-related-step__content">
+                  <h3>{item.title}</h3>
+                  <p>{item.copy}</p>
+                  <ul class="afb-related-step__bullets">
+                    {item.bullets.map((bullet) => <li><i aria-hidden="true">✦</i> {bullet}</li>)}
+                  </ul>
+                  <a class="afb-related-step__link" href={item.href}>{item.linkLabel} <span aria-hidden="true">&#8250;</span></a>
+                </div>
+                <span class="afb-related__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 20 20"><path d="m5 7.5 5 5 5-5" /></svg>
+                </span>
+              </summary>
+              <div class="afb-related__visual">
+                <img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="afb-faq" id="faq">
+    <div class="afb-faq__inner">
+      <div class="afb-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="afb-pill">AI Form Builder FAQs</span>
+        <h2>Questions Event Teams Ask Before Building</h2>
+        <p>Clear answers about AI drafting, registration context, public forms, languages, and responses.</p>
+        <a class="afb-button afb-button--dark" href="/book-a-demo/">Book a Demo</a>
+      </div>
+      <div class="afb-faq__list">
+        {faqs.map((faq, index) => (
+          <details class="afb-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String((index % 4) * 50)} data-afb-faq open={index === 0}>
+            <summary><strong>{faq.q}</strong><span aria-hidden="true"></span></summary>
+            <div><p>{faq.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-afb-mode-tabs]').forEach((tablist) => {
+    if (tablist.dataset.tabsReady === 'true') return;
+    tablist.dataset.tabsReady = 'true';
+    const section = tablist.closest<HTMLElement>('.afb-modes');
+    if (!section) return;
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[data-afb-mode-target]'));
+    const panels = Array.from(section.querySelectorAll<HTMLElement>('[data-afb-mode-panel]'));
+
+    const activateMode = (activeTab: HTMLButtonElement) => {
+      const target = activeTab.dataset.afbModeTarget;
+      tabs.forEach((tab) => {
+        const active = tab === activeTab;
+        tab.classList.toggle('afb-modes__tab--active', active);
+        tab.setAttribute('aria-selected', String(active));
+      });
+      panels.forEach((panel) => {
+        const active = panel.dataset.afbModePanel === target;
+        panel.classList.toggle('afb-mode-panel--active', active);
+        panel.hidden = !active;
+      });
+    };
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => activateMode(tab)));
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-afb-workflow]').forEach((group) => {
+    if (group.dataset.accordionReady === 'true') return;
+    group.dataset.accordionReady = 'true';
+    const items = Array.from(group.querySelectorAll<HTMLDetailsElement>('[data-afb-workflow-item]'));
+    items.forEach((item) => {
+      item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  });
+
+  const afbFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-afb-faq]'));
+  afbFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      afbFaqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const afbFieldBand = document.querySelector<HTMLElement>('.afb-fields');
+  if (afbFieldBand && afbFieldBand.dataset.bleedReady !== 'true' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    afbFieldBand.dataset.bleedReady = 'true';
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let ticking = false;
+    let lastProgress = -1;
+
+    const measureBand = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = afbFieldBand.getBoundingClientRect().top + window.scrollY;
+    };
+    const updateBand = () => {
+      ticking = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * 0.7)));
+      const roundedProgress = Math.round(progress * 100) / 100;
+      if (roundedProgress === lastProgress) return;
+      lastProgress = roundedProgress;
+      afbFieldBand.style.setProperty('--afb-band-p', String(roundedProgress));
+    };
+    const handleBandScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateBand);
+    };
+    const handleBandResize = () => {
+      measureBand();
+      lastProgress = -1;
+      handleBandScroll();
+    };
+
+    measureBand();
+    updateBand();
+    window.addEventListener('scroll', handleBandScroll, { passive: true });
+    window.addEventListener('resize', handleBandResize, { passive: true });
+    window.addEventListener('load', handleBandResize);
+  }
+</script>
+
+<style is:global>
+  .afb-page {
+    --afb-line: #e4e7ec;
+    --afb-ink: #171a21;
+    --afb-muted: #596579;
+    overflow: clip;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .afb-page [id] { scroll-margin-top: 80px; }
+  .afb-shell { width: min(1140px, calc(100% - 48px)); margin: 0 auto; }
+  .afb-pill { display: inline-flex; align-items: center; width: fit-content; margin-bottom: 20px; padding: 8px 15px; border: 1px solid var(--afb-line); border-radius: 999px; color: var(--afb-ink); background: #fff; font: 500 .8125rem/1 var(--font-body); }
+  .afb-pill::before { content: "✦"; margin-right: 7px; color: var(--brand-blue); }
+  .afb-pill--dark { border-color: rgba(255,255,255,.18); color: #fff; background: rgba(255,255,255,.08); }
+  .afb-heading { max-width: 850px; margin: 0 auto 54px; text-align: center; }
+  .afb-heading h2 { margin: 0; color: var(--afb-ink); font: 500 clamp(2.25rem, 5vw, 3.5rem)/1.08 var(--font-heading); letter-spacing: -.035em; }
+  .afb-heading p { max-width: 720px; margin: 20px auto 0; color: var(--afb-muted); font: 400 1.04rem/1.7 var(--font-body); }
+  .afb-heading--dark h2 { color: #fff; }
+  .afb-heading--dark p { color: rgba(255,255,255,.64); }
+  .afb-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 48px; padding: 12px 24px; border: 1px solid transparent; border-radius: 10px; font: 600 .9375rem/1.2 var(--font-body); text-decoration: none; transition: transform .2s ease, background .2s ease, border-color .2s ease; }
+  .afb-button svg { width: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .afb-button:hover { transform: translateY(-2px); }
+  .afb-button:focus-visible, .afb-field-cta a:focus-visible, .afb-related summary:focus-visible, .afb-related-step__link:focus-visible, .afb-faq summary:focus-visible { outline: 3px solid rgba(55,93,251,.32); outline-offset: 4px; }
+  .afb-button--primary { color: #fff; background: var(--afb-ink); }
+  .afb-button--outline { color: var(--afb-ink); border-color: var(--afb-line); background: #fff; }
+  .afb-button--dark { color: #fff; background: var(--afb-ink); }
+  .afb-button--white { color: var(--afb-ink); background: #fff; }
+
+  .afb-hero { position: relative; overflow: hidden; margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .afb-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; z-index: 2; width: 220px; max-width: 30vw; background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf); pointer-events: none; }
+  .afb-hero__grid { width: min(1080px, 100%); margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .afb-hero__content { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .afb-hero__badge { color: var(--brand-blue); font: 500 16px/24px var(--font-body); text-transform: uppercase; }
+  .afb-hero__title { width: 100%; margin: 0; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background: linear-gradient(98deg, var(--afb-ink) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .afb-hero__copy { width: 100%; max-width: 560px; margin: 0; color: var(--afb-muted); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .afb-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; padding-top: 6px; }
+  .afb-hero__proof { display: flex; flex-wrap: wrap; gap: 10px 18px; margin: 0; padding: 0; list-style: none; color: #475467; font: 500 14px/20px var(--font-body); }
+  .afb-hero__proof li { display: flex; align-items: center; gap: 7px; }
+  .afb-hero__proof li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .afb-hero__visual { position: relative; z-index: 3; min-width: 0; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .afb-hero__visual-card { padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57; backdrop-filter: blur(16px); }
+  .afb-hero__visual-inner { position: relative; overflow: hidden; padding: 20px 24px; border-radius: 16px 0 0 16px; background: linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff); }
+  .afb-hero-collage { position: relative; height: clamp(320px,38vw,420px); }
+  .afb-hero-shot { position: absolute; z-index: 1; margin: 0; overflow: hidden; border: 1px solid rgba(218,225,238,.96); border-radius: 14px; background: #fff; box-shadow: 0 22px 52px rgba(28,49,92,.16); }
+  .afb-hero-shot img { display: block; width: 100%; height: auto; aspect-ratio: 1117/837; object-fit: cover; }
+  .afb-hero-shot figcaption { position: absolute; bottom: 9px; left: 9px; padding: 7px 10px; border: 1px solid rgba(210,220,238,.9); border-radius: 8px; color: #3158d4; background: rgba(245,248,255,.94); box-shadow: 0 7px 18px rgba(35,60,130,.14); font: 700 10px/1.2 var(--font-body); backdrop-filter: blur(10px); }
+  .afb-hero-shot--builder { top: 78px; left: 0; z-index: 2; width: 82%; animation: afb-hero-float 6s ease-in-out infinite; }
+  .afb-hero-shot--prompt { top: 12px; right: 0; z-index: 3; width: 56%; animation: afb-hero-drift 5.2s ease-in-out infinite; }
+  @keyframes afb-hero-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes afb-hero-drift { 0%,100% { transform: translateY(0) rotate(.7deg); } 50% { transform: translateY(-12px) rotate(0); } }
+
+  .afb-rail { padding: 24px; border-top: 1px solid var(--afb-line); border-bottom: 1px solid var(--afb-line); background: rgba(255,255,255,.9); }
+  .afb-rail__inner { width: min(1280px,100%); margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 20px 34px; }
+  .afb-rail__label { color: #818898; font: 600 .8125rem/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .08em; }
+  .afb-rail__stat { color: var(--afb-muted); font: 400 .9375rem/1.3 var(--font-body); white-space: nowrap; }
+  .afb-rail__stat b { margin-right: 4px; color: var(--afb-ink); font-weight: 700; }
+
+  .afb-use { padding: clamp(64px,7vw,96px) 24px; background: transparent; }
+
+  .afb-bento-section { padding: 80px 5%; background: transparent; }
+  .afb-bento-container { max-width: 1200px; margin: 0 auto; }
+  .afb-bento-header { max-width: 850px; margin: 0 auto 60px; text-align: center; }
+  .afb-bento-header h2 { margin: 0; color: var(--afb-ink); font: 500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .afb-bento-header h2 span { color: transparent; background: linear-gradient(90deg,#555 0%,#aaa 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .afb-bento-header p { max-width: 720px; margin: 20px auto 0; color: var(--afb-muted); font: 400 1.04rem/1.7 var(--font-body); }
+  .afb-bento-grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .afb-bento-notch { position: absolute; left: 50%; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .afb-bento-notch--top { top: 0; transform: translate(-50%,-50%); }
+  .afb-bento-notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .afb-bento-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .afb-bento-row:last-child { border-bottom: 0; }
+  .afb-bento-cell { display: flex; flex-direction: column; justify-content: center; padding: 4rem; }
+  .afb-bento-row .afb-bento-cell:first-child { border-right: 1px solid #e5e7eb; }
+  .afb-bento-content, .afb-bento-visual { background: transparent; }
+  .afb-bento-visual { align-items: center; }
+  .afb-bento-visual > * { max-width: 100%; height: auto; }
+  .afb-bento-shot-stage { position: relative; isolation: isolate; width: 100%; padding: 32px 18px; border-radius: 22px; }
+  .afb-bento-shot-stage--describe { background: linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%); }
+  .afb-bento-shot-stage--generate { background: linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%); }
+  .afb-bento-shot-stage--check { background: linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%); }
+  .afb-bento-shot-stage--refine { background: linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%); }
+  .afb-bento-cross { position: absolute; bottom: 0; left: 50%; z-index: 2; width: 28px; height: 28px; transform: translate(-50%,50%); pointer-events: none; line-height: 0; }
+  .afb-bento-row:last-child .afb-bento-cross { display: none; }
+  .afb-bento-product-shot { display: block; width: 100%; border: 1px solid #dfe4ec; border-radius: 14px; animation: afb-bento-product-shot-breathe 7s ease-in-out infinite; will-change: transform; }
+  .afb-bento-row:nth-child(even) .afb-bento-product-shot { animation-delay: -3.5s; }
+  .afb-shot-float { position: absolute; z-index: 2; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; color: #111827; background: rgba(255,255,255,.96); box-shadow: 0 14px 34px rgba(30,45,88,.2); font: 400 1rem/1.15 var(--font-body); animation: afb-shot-card-float 4.8s ease-in-out infinite; backdrop-filter: blur(10px); }
+  .afb-shot-float b { font-size: .78rem; font-weight: 700; white-space: nowrap; }
+  .afb-shot-float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .afb-shot-float i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .afb-shot-float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .afb-shot-float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .afb-bento-shot-stage--check .afb-shot-float--top, .afb-bento-shot-stage--refine .afb-shot-float--top { animation-delay: -1.2s; }
+  .afb-bento-visual:hover .afb-bento-product-shot { animation-play-state: paused; transform: scale(1.018); }
+  @keyframes afb-bento-product-shot-breathe { 0%,100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes afb-shot-card-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-9px,0); } }
+  .afb-bento-eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font: 600 .875rem/1.2 var(--font-body); text-transform: uppercase; letter-spacing: .05em; }
+  .afb-bento-content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .afb-bento-content p { margin: 0; color: #4b5563; font: 400 1.125rem/1.45 var(--font-body); }
+
+  .afb-grid-notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; transform: translate(-50%,-50%); pointer-events: none; line-height: 0; }
+
+  .afb-use__grid { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: 1px solid var(--afb-line); }
+  .afb-use__card { min-height: 300px; padding: 28px; border-left: 1px solid var(--afb-line); }
+  .afb-use__card:first-child { border-left: 0; }
+  .afb-use__icon { width: 31px; height: 31px; margin-bottom: 34px; color: var(--brand-blue); }
+  .afb-use__icon svg { width: 100%; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .afb-use__card h3 { min-height: 2.3em; margin: 0 0 28px; color: var(--afb-ink); font: 500 1.3125rem/1.15 var(--font-heading); }
+  .afb-use__card p { margin: 14px 0 0; color: var(--afb-muted); font: 400 .9375rem/1.4 var(--font-body); }
+
+  .afb-fields { --afb-band-p: 0; --afb-band-gap: calc((1 - var(--afb-band-p)) * clamp(16px,3.5vw,56px)); position: relative; overflow: hidden; padding: clamp(64px,8vw,96px) 0 0; background: radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%), #000; clip-path: inset(0 var(--afb-band-gap) round calc((1 - var(--afb-band-p)) * 28px)); will-change: clip-path; }
+  .afb-fields::before { content: ""; position: absolute; inset: 0; z-index: 0; opacity: .55; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
+  .afb-fields > * { position: relative; z-index: 1; }
+  .afb-fields .afb-heading { margin-bottom: clamp(40px,5vw,72px); }
+  .afb-fields .afb-heading h2 { background: linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .afb-fields__grid { display: grid; grid-template-columns: repeat(6,1fr); overflow: hidden; border: 1px solid #3b3a47; border-radius: 16px; }
+  .afb-field-card { position: relative; grid-column: span 2; min-width: 0; min-height: 420px; display: flex; flex-direction: column; padding: 36px 32px; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; background: transparent; }
+  .afb-field-card:nth-child(n+4) { grid-column: span 3; border-bottom: 0; }
+  .afb-field-card:nth-child(3), .afb-field-card:nth-child(5) { border-right: 0; }
+  .afb-field-petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .afb-field-petal--top { top: 0; transform: translate(-50%,-50%); }
+  .afb-field-petal--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .afb-field-card__preview { order: 4; min-height: 190px; display: flex; flex-direction: column; justify-content: center; gap: 8px; margin-top: auto; padding: 24px; border: 1px solid transparent; border-radius: 16px; background: linear-gradient(#08080e,#08080e) padding-box, linear-gradient(135deg,#38bdf8,#5c8aff 38%,#7c6cff 70%,#a45cff) border-box; box-shadow: 0 18px 44px -22px rgba(92,138,255,.5); color: rgba(255,255,255,.78); animation: afb-field-float 7s ease-in-out infinite; }
+  @keyframes afb-field-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  .afb-field-card__preview > span { font: 500 .66rem/1 var(--font-body); }
+  .afb-field-card__preview > i { height: 30px; display: flex; align-items: center; padding: 0 9px; border: 1px solid rgba(255,255,255,.16); border-radius: 6px; background: rgba(3,7,20,.42); color: rgba(255,255,255,.65); font: 500 .66rem/1 var(--font-body); font-style: normal; }
+  .afb-field-card__preview > i.is-tall { height: 54px; }
+  .afb-field-card__preview > small { display: flex; align-items: center; gap: 7px; color: rgba(255,255,255,.58); font: 500 .66rem/1 var(--font-body); }
+  .afb-field-card__preview > small b { width: 12px; height: 12px; border: 1px solid rgba(255,255,255,.25); border-radius: 3px; }
+  .afb-field-card__preview > .has-chevron::after { content: "⌄"; margin-left: auto; }
+  .afb-field-card__preview > .has-date, .afb-field-card__preview > .has-number { justify-content: space-between; }
+  .afb-field-card__preview > .has-date::before { content: "Oct"; }
+  .afb-field-card__preview > .has-number::before { content: "Attendees"; }
+  .afb-field-card__preview > .has-upload { border-style: dashed; justify-content: center; color: #afa3ff; }
+  .afb-rating { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
+  .afb-rating b { display: grid; place-items: center; aspect-ratio: 1; border: 1px solid rgba(255,255,255,.16); border-radius: 5px; font: 600 .62rem/1 var(--font-body); }
+  .afb-field-card__num { order: 1; color: #afa3ff; font: 700 .68rem/1 var(--font-body); }
+  .afb-field-card h3 { order: 2; margin: 10px 0 8px; color: #fff; font: 700 .94rem/1.25 var(--font-heading); }
+  .afb-field-card p { order: 3; max-width: 34ch; margin: 0 0 30px; color: rgba(255,255,255,.62); font: 400 .92rem/1.45 var(--font-body); }
+
+  .afb-field-cta { position: relative; max-width: 900px; display: flex; flex-direction: column; align-items: center; gap: 22px; margin: 0 auto; padding: clamp(96px,11vw,168px) 24px clamp(80px,9vw,132px); text-align: center; }
+  .afb-field-cta::before { content: ""; position: absolute; top: -420px; bottom: 0; left: 50%; z-index: 0; width: 100vw; transform: translateX(-50%); pointer-events: none; background: radial-gradient(60% 55% at 30% 100%,rgba(56,189,248,.26) 0%,transparent 72%), radial-gradient(55% 50% at 78% 62%,rgba(164,92,255,.2) 0%,transparent 74%); -webkit-mask-image: linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 34%,#000 62%); mask-image: linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 34%,#000 62%); }
+  .afb-field-cta::after { content: ""; position: absolute; inset: 0 auto 0 50%; z-index: 0; width: 100vw; transform: translateX(-50%); pointer-events: none; background-image: repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 46px); -webkit-mask-image: repeating-linear-gradient(90deg,#000 0 10px,transparent 10px 24px), linear-gradient(180deg,transparent 0%,#000 38%,#000 100%); -webkit-mask-composite: source-in; mask-image: repeating-linear-gradient(90deg,#000 0 10px,transparent 10px 24px), linear-gradient(180deg,transparent 0%,#000 38%,#000 100%); mask-composite: intersect; }
+  .afb-field-cta > * { position: relative; z-index: 1; }
+  .afb-field-cta h2 { margin: 0; color: #fff; font: 500 clamp(30px,4.4vw,52px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .afb-field-cta h2 span { display: block; }
+  .afb-field-cta a { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; border-radius: 12px; color: #14151a; background: #fff; font: 650 16px/1.2 var(--font-body); letter-spacing: -.32px; text-decoration: none; transition: transform .3s ease; }
+  .afb-field-cta a:hover { transform: translateY(-2px); }
+
+  .afb-modes { padding: 112px 24px; background: #fff; }
+  .afb-modes__inner { width: min(1080px,100%); margin: 0 auto; }
+  .afb-modes__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .afb-modes__title { max-width: 800px; margin: 0 0 16px; color: transparent; background: linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font: 500 50px/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .afb-modes__subtitle { max-width: 760px; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); }
+  .afb-modes__tabs { width: fit-content; max-width: 100%; display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; margin: 0 auto 40px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .afb-modes__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; color: #64748b; background: transparent; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease; }
+  .afb-modes__tab:hover { color: #334155; background: rgba(255,255,255,.65); }
+  .afb-modes__tab--active { border-color: #dbe4f0; color: #3b82f6; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); }
+  .afb-modes__box { padding: 0; border: 0; background: transparent; }
+  .afb-mode-panel { --afb-mode-tint: #fff8dc; --afb-mode-border: #f0dfa6; display: none; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 64px; padding: 52px 64px; border: 1px solid var(--afb-mode-border); border-radius: 28px; background: linear-gradient(135deg,var(--afb-mode-tint) 0%,#fff 72%); animation: afb-mode-panel-in .4s ease forwards; }
+  .afb-mode-panel:nth-child(2) { --afb-mode-tint: #edf7ff; --afb-mode-border: #d4e7f7; }
+  .afb-mode-panel--active { display: grid; }
+  @keyframes afb-mode-panel-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .afb-mode-panel__left h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .afb-mode-panel__description { margin: 0 0 32px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .afb-mode-panel__scope { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 18px; }
+  .afb-mode-panel__scope span { color: #9ca3af; font: 700 11px/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .afb-mode-panel__scope strong { color: #6b7280; font: 500 13px/1.4 var(--font-body); }
+  .afb-mode-panel__checklist { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .afb-mode-panel__checklist li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .afb-mode-panel__checklist svg { flex: 0 0 14px; width: 14px; height: 14px; margin-top: 2px; fill: none; stroke: #9ca3af; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .afb-mode-panel__right { min-width: 0; }
+  .afb-mode-panel__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .afb-mode-panel__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--afb-mode-border); filter: blur(22px); opacity: .48; }
+  .afb-mode-panel__showcase > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1117/837; object-fit: contain; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .afb-mode-panel__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid #cddcff; border-radius: 10px; color: #3158d4; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); font: 700 11px/1.2 var(--font-body); }
+  .afb-mode-panel__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .afb-modes__note { max-width: 760px; margin: 24px auto 0; color: #667085; text-align: center; font: 500 .9rem/1.5 var(--font-body); }
+  .afb-modes__note a { color: var(--brand-blue); }
+
+  .afb-stories { background: linear-gradient(180deg,#0d0a2c 0%,transparent 320px), radial-gradient(circle at 12% 30%,rgba(70,130,255,.28),transparent 55%), #000; }
+  .afb-stories__inner { width: min(1140px, calc(100% - 48px)); margin: 0 auto; padding: 4px 0 30px; }
+  .afb-stories__header { position: sticky; top: 69px; z-index: 20; isolation: isolate; padding: 28px 0; text-align: center; }
+  .afb-stories__header::before { content: ""; position: absolute; z-index: -1; inset: -1px 50% -32px; width: 100vw; transform: translateX(-50%); background: linear-gradient(180deg,rgba(5,8,23,.99) 0%,rgba(5,8,23,.96) 70%,transparent 100%); }
+  .afb-stories__header h2 { margin: 0; color: #fff; font: 500 clamp(2.25rem,5vw,3.5rem)/1.08 var(--font-heading); letter-spacing: -.035em; }
+  .afb-stories__cards { --afb-stack-top: 300px; padding: 80px 0 50px; }
+  .afb-story { position: sticky; top: calc(var(--afb-stack-top) + var(--card-index) * 20px); z-index: calc(var(--card-index) + 1); height: 500px; display: flex; align-items: stretch; margin-bottom: 60px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; background: radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%), radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%), #0a0a0f; }
+  .afb-story:first-child { background: radial-gradient(circle at 82% 12%,rgba(109,92,235,.24),transparent 34%), radial-gradient(circle at 8% 92%,rgba(66,173,218,.13),transparent 28%), #090a10; }
+  .afb-story__copy { flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .afb-story__copy > span { margin-bottom: 14px; color: #afa3ff; font: 600 .74rem/1.2 var(--font-body); }
+  .afb-story__copy h3 { margin: 0; color: #e7e4fa; font: 500 2rem/1.2 var(--font-heading); }
+  .afb-story__copy > p { margin: 0; color: rgba(255,255,255,.55); font: 400 1rem/1.65 var(--font-body); }
+  .afb-story__copy > a { align-self: flex-start; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; color: #fff; background: rgba(255,255,255,.06); font: 500 .9375rem/1.2 var(--font-body); text-decoration: none; }
+  .afb-story__visual { min-width: 0; flex: 1; display: grid; place-items: center; margin: 16px 16px 16px 0; padding: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04)); }
+  .afb-stories__spacer { height: 190px; }
+  .afb-editor-ui { width: min(560px,100%); display: grid; grid-template-columns: 1.15fr .85fr; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 13px; background: #f7f9fc; box-shadow: 0 28px 70px rgba(0,0,0,.35); }
+  .afb-editor-ui__canvas { display: grid; gap: 9px; padding: 22px; border-right: 1px solid #e2e7ef; }
+  .afb-editor-ui__canvas small { margin-bottom: 8px; color: #667085; font: 600 .68rem/1 var(--font-body); }
+  .afb-editor-ui__canvas i { padding: 14px; border: 1px solid #e0e5ed; border-radius: 8px; color: #667085; background: #fff; font: 500 .68rem/1 var(--font-body); font-style: normal; }
+  .afb-editor-ui__canvas i.is-selected { border-color: var(--brand-blue); box-shadow: 0 0 0 2px rgba(55,93,251,.1); color: var(--afb-ink); }
+  .afb-editor-ui__settings { display: flex; flex-direction: column; padding: 22px 18px; background: #fff; }
+  .afb-editor-ui__settings > b { margin-bottom: 18px; color: var(--afb-ink); font: 650 .78rem/1 var(--font-heading); }
+  .afb-editor-ui__settings > span { margin: 10px 0 6px; color: #667085; font: 500 .58rem/1 var(--font-body); }
+  .afb-editor-ui__settings > i { padding: 9px; border: 1px solid #dfe4ec; border-radius: 6px; color: #475467; font: 500 .62rem/1 var(--font-body); font-style: normal; }
+  .afb-editor-ui__settings > div { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .afb-editor-ui__settings em { padding: 8px; border: 1px solid #e2e7ef; border-radius: 6px; color: #667085; text-align: center; font: 500 .58rem/1 var(--font-body); font-style: normal; }
+  .afb-editor-ui__settings em.is-active { border-color: var(--brand-blue); color: var(--brand-blue); background: #eef2ff; }
+  .afb-editor-ui__settings label { display: flex; align-items: center; gap: 7px; margin: 15px 0; color: #475467; font: 500 .62rem/1 var(--font-body); }
+  .afb-editor-ui__settings label i { width: 12px; height: 12px; border-radius: 3px; background: var(--brand-blue); }
+  .afb-editor-ui__settings button { margin-top: auto; padding: 10px; border: 0; border-radius: 7px; color: #fff; background: var(--brand-blue); font: 600 .62rem/1 var(--font-body); }
+  .afb-publish-ui { width: min(560px,100%); position: relative; min-height: 390px; }
+  .afb-publish-ui__screen { width: 70%; min-height: 350px; display: flex; flex-direction: column; padding: 24px; border: 1px solid #dfe5ee; border-radius: 14px; background: #fff; box-shadow: 0 25px 65px rgba(0,0,0,.3); }
+  .afb-publish-ui__screen small { color: var(--brand-blue); font: 600 .6rem/1 var(--font-body); }
+  .afb-publish-ui__screen b { margin: 11px 0 22px; color: var(--afb-ink); font: 650 1rem/1.2 var(--font-heading); }
+  .afb-publish-ui__screen i { height: 35px; margin-bottom: 10px; border: 1px solid #e1e6ee; border-radius: 7px; background: #fafbfc; }
+  .afb-publish-ui__screen i.is-tall { height: 62px; }
+  .afb-publish-ui__screen > span { margin-top: auto; padding: 11px; border-radius: 7px; color: #fff; background: var(--brand-blue); text-align: center; font: 600 .62rem/1 var(--font-body); }
+  .afb-publish-ui__destinations { position: absolute; right: 0; top: 48px; width: 43%; display: grid; gap: 9px; }
+  .afb-publish-ui__destinations > div { padding: 15px; border: 1px solid rgba(255,255,255,.16); border-radius: 11px; background: rgba(15,18,30,.92); box-shadow: 0 15px 38px rgba(0,0,0,.28); }
+  .afb-publish-ui__destinations b { display: block; margin-bottom: 5px; color: #fff; font: 600 .68rem/1 var(--font-body); }
+  .afb-publish-ui__destinations small { color: rgba(255,255,255,.5); font: 500 .54rem/1.2 var(--font-body); }
+  .afb-publish-ui__destinations .afb-qr { width: 74px; display: grid; grid-template-columns: repeat(3,1fr); gap: 4px; justify-self: end; background: #fff; }
+  .afb-qr i { aspect-ratio: 1; background: #151922; }
+  .afb-qr i:nth-child(2), .afb-qr i:nth-child(4) { background: transparent; }
+  .afb-response-ui { width: min(590px,100%); overflow: hidden; border: 1px solid #dfe5ee; border-radius: 14px; background: #fff; box-shadow: 0 28px 70px rgba(0,0,0,.32); }
+  .afb-response-ui__head { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid #e7ebf1; }
+  .afb-response-ui__head span { display: grid; gap: 4px; }
+  .afb-response-ui__head small { color: #8a94a6; font: 500 .55rem/1 var(--font-body); }
+  .afb-response-ui__head b { color: var(--afb-ink); font: 650 .82rem/1 var(--font-heading); }
+  .afb-response-ui__head i { padding: 8px 10px; border-radius: 6px; color: #fff; background: var(--brand-blue); font: 600 .56rem/1 var(--font-body); font-style: normal; }
+  .afb-response-ui__stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 14px 20px; background: #f7f9fc; }
+  .afb-response-ui__stats span { display: grid; gap: 6px; padding: 12px; border: 1px solid #e3e8ef; border-radius: 8px; background: #fff; }
+  .afb-response-ui__stats small { color: #7a8495; font: 500 .54rem/1 var(--font-body); }
+  .afb-response-ui__stats b { color: var(--afb-ink); font: 650 1.05rem/1 var(--font-heading); }
+  .afb-response-ui__table { display: grid; grid-template-columns: .8fr 1.3fr .7fr; }
+  .afb-response-ui__table > * { min-width: 0; padding: 12px 10px; overflow: hidden; border-top: 1px solid #e9edf3; color: #667085; font: 500 .56rem/1 var(--font-body); text-overflow: ellipsis; white-space: nowrap; }
+  .afb-response-ui__table b { color: #475467; background: #fbfcfd; }
+
+  .afb-related { padding: clamp(110px,12vw,160px) 24px; background: #fff; }
+  .afb-related__inner { width: min(1218px,100%); margin: 0 auto; }
+  .afb-related__header { max-width: 820px; margin: 0 auto 64px; text-align: center; }
+  .afb-related__header h2 { max-width: 780px; margin: 0 auto; color: transparent; background: linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font: 650 clamp(40px,5vw,62px)/1.08 var(--font-heading); letter-spacing: -.045em; }
+  .afb-related__header p { max-width: 680px; margin: 22px auto 0; color: var(--afb-muted); font: 400 1.04rem/1.65 var(--font-body); }
+  .afb-related__steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .afb-related__steps > li { --afb-workflow-tint: #fff8dc; --afb-workflow-border: #f0dfa6; position: relative; display: block; padding: 0; }
+  .afb-related__steps > li:nth-child(2) { --afb-workflow-tint: #edf7ff; --afb-workflow-border: #d4e7f7; }
+  .afb-related__steps > li:nth-child(3) { --afb-workflow-tint: #f3efff; --afb-workflow-border: #e2d8fa; }
+  .afb-related__steps > li:nth-child(4) { --afb-workflow-tint: #eefbf4; --afb-workflow-border: #d4efdf; }
+  .afb-related details { position: relative; overflow: hidden; border: 1px solid var(--afb-workflow-border); border-radius: 18px; background: linear-gradient(135deg,var(--afb-workflow-tint) 0%,#fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease; }
+  .afb-related summary { position: relative; display: grid; grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .afb-related summary::-webkit-details-marker { display: none; }
+  .afb-related summary:hover { background: rgba(255,255,255,.28); }
+  .afb-related details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .afb-related summary > span:first-child { display: block; color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .afb-related-step__content { display: flex; flex-direction: column; }
+  .afb-related details:not([open]) .afb-related-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .afb-related-step__content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .afb-related-step__content p { display: none; }
+  .afb-related details:not([open]) .afb-related-step__content p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 460px; margin: 0; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .afb-related-step__bullets { display: none; }
+  .afb-related-step__link { display: none; }
+  .afb-related__arrow { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; transition: transform .25s ease,background .2s ease,border-color .2s ease; }
+  .afb-related__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .afb-related details[open] { display: flex; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg,var(--afb-workflow-tint) 0%,#fff 72%); }
+  .afb-related details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; background: transparent; }
+  .afb-related details[open] summary:hover { background: transparent; }
+  .afb-related details[open] summary > span:first-child { color: #050505; font-size: 26px; line-height: 1; }
+  .afb-related details[open] .afb-related-step__content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .afb-related details[open] .afb-related-step__content p { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 400 17px/1.6 var(--font-body); }
+  .afb-related details[open] .afb-related-step__bullets { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .afb-related details[open] .afb-related-step__bullets li { display: flex; align-items: center; gap: 14px; margin: 0; padding: 0; border: 0; color: #111; background: transparent; font: 500 16px/1.4 var(--font-body); }
+  .afb-related details[open] .afb-related-step__bullets i { font-size: 16px; font-style: normal; }
+  .afb-related details[open] .afb-related-step__link { display: inline-flex; align-items: center; gap: 7px; align-self: flex-start; margin-top: 28px; color: var(--brand-blue); font: 600 15px/1.2 var(--font-body); text-decoration: none; }
+  .afb-related details[open] .afb-related-step__link span { font-size: 22px; line-height: .8; }
+  .afb-related details[open] .afb-related__arrow { top: 28px; transform: rotate(180deg); }
+  .afb-related__visual { display: none; margin: 0; opacity: 0; }
+  .afb-related details[open] .afb-related__visual { flex: 0 0 45%; display: flex; align-items: center; justify-content: flex-start; padding: 40px 88px 40px 0; opacity: 1; }
+  .afb-related__visual img { display: block; width: 100%; max-width: 400px; max-height: 310px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+
+  .afb-faq { padding: clamp(78px,9vw,116px) 24px; background: #fff; }
+  .afb-faq__inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .afb-faq__sidebar { position: sticky; top: 6rem; }
+  .afb-faq__sidebar h2 { margin: 0 0 20px; color: var(--afb-ink); font: 500 2.75rem/1.08 var(--font-heading); letter-spacing: -.025em; }
+  .afb-faq__sidebar p { margin: 0 0 28px; color: var(--afb-muted); font: 400 1rem/1.65 var(--font-body); }
+  .afb-faq .afb-button { border-radius: 999px; }
+  .afb-faq__list { display: flex; flex-direction: column; gap: 14px; counter-reset: afb-faq; }
+  .afb-faq__item { counter-increment: afb-faq; overflow: hidden; padding: 4px 27px; border: 1px solid var(--afb-line); border-radius: 18px; background: #fff; transition: background .2s ease; }
+  .afb-faq__item[open] { background: #e9edf4; }
+  .afb-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 0; cursor: pointer; list-style: none; }
+  .afb-faq summary::-webkit-details-marker { display: none; }
+  .afb-faq summary strong { color: var(--afb-ink); font: 500 1.03rem/1.35 var(--font-heading); }
+  .afb-faq summary strong::before { content: counter(afb-faq) ". "; }
+  .afb-faq summary span { position: relative; flex: 0 0 18px; height: 18px; }
+  .afb-faq summary span::before, .afb-faq summary span::after { content: ""; position: absolute; top: 50%; left: 50%; width: 14px; height: 2px; background: var(--afb-ink); transform: translate(-50%,-50%); }
+  .afb-faq summary span::after { transform: translate(-50%,-50%) rotate(90deg); transition: opacity .2s ease; }
+  .afb-faq__item[open] summary span::after { opacity: 0; }
+  .afb-faq__item > div { max-width: 640px; padding: 0 0 24px; }
+  .afb-faq__item p { margin: 0; color: var(--afb-ink); font: 400 .94rem/1.7 var(--font-body); }
+
+  @media (max-width: 1024px) {
+    .afb-grid-notch { display: none; }
+    .afb-use__grid { grid-template-columns: repeat(2,1fr); }
+    .afb-use__card:nth-child(3) { border-left: 0; }
+    .afb-use__card:nth-child(n+3) { border-top: 1px solid var(--afb-line); }
+    .afb-story { height: 450px; }
+    .afb-story__copy { flex-basis: 50%; }
+    .afb-story__copy h3 { font-size: 1.75rem; }
+    .afb-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .afb-faq__sidebar { position: static; }
+  }
+
+  @media (max-width: 960px) {
+    .afb-hero { padding: 130px 20px 48px; }
+    .afb-hero::after { display: none; }
+    .afb-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .afb-hero__content { max-width: 760px; margin: 0 auto; align-items: center; text-align: center; }
+    .afb-hero__visual { width: min(760px,100%); margin: 0 auto; }
+    .afb-hero__visual-card { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .afb-hero__visual-inner { border-radius: 16px; }
+    .afb-hero__proof, .afb-hero__actions { justify-content: center; }
+  }
+
+  @media (max-width: 900px) {
+    .afb-bento-row { display: flex; flex-direction: column; }
+    .afb-bento-cell { padding: 3rem 1.5rem; }
+    .afb-bento-row .afb-bento-cell:first-child { border-right: 0; }
+    .afb-bento-content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .afb-bento-visual { order: 2; }
+    .afb-mode-panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+  }
+
+  @media (max-width: 860px) {
+    .afb-fields__grid { grid-template-columns: 1fr; }
+    .afb-field-card, .afb-field-card:nth-child(n+4) { grid-column: span 1; min-height: 0; border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .afb-field-card:last-child { border-bottom: 0; }
+    .afb-field-petal { display: none; }
+  }
+
+  @media (max-width: 767px) {
+    body:has(.afb-page) .footer-main-inner { padding-inline: 12px; }
+    body:has(.afb-page) .footer-columns { gap: 12px; }
+    body:has(.afb-page) .footer-col { min-width: 0; }
+    body:has(.afb-page) .footer-link { white-space: normal; }
+    .afb-shell, .afb-stories__inner { width: min(100% - 32px,1140px); }
+    .afb-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .afb-hero__grid { padding-bottom: 30px; }
+    .afb-hero__title { font-size: 38px; line-height: 1.2; letter-spacing: 0; }
+    .afb-hero__copy { font-size: 15px; line-height: 1.7; }
+    .afb-hero__actions { flex-direction: column; align-items: stretch; }
+    .afb-hero__proof { justify-content: center; }
+    .afb-hero__visual-card { padding: 10px; border-radius: 18px; }
+    .afb-hero__visual-inner { padding: 18px; border-radius: 14px; }
+    .afb-rail { padding: 22px 16px; }
+    .afb-rail__inner { justify-content: flex-start; gap: 12px 20px; }
+    .afb-rail__label { width: 100%; }
+    .afb-rail__stat { font-size: .84rem; }
+    .afb-heading { margin-bottom: 40px; text-align: left; }
+    .afb-heading h2 { font-size: 2.25rem; }
+    .afb-heading p { font-size: .96rem; }
+    .afb-bento-section { padding: 70px 16px; }
+    .afb-bento-header { margin-bottom: 40px; text-align: left; }
+    .afb-bento-header h2 { font-size: 2.25rem; }
+    .afb-bento-header p { margin-left: 0; font-size: .96rem; }
+    .afb-use { padding: 70px 0; }
+    .afb-use__grid, .afb-fields__grid { grid-template-columns: 1fr; }
+    .afb-use__card { min-height: 0; border-left: 0; border-top: 1px solid var(--afb-line); }
+    .afb-use__card:first-child { border-top: 0; }
+    .afb-fields { padding-top: 72px; }
+    .afb-field-card__preview { min-height: 170px; }
+    .afb-modes { padding: 72px 20px; }
+    .afb-modes__tabs { width: 100%; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; border-radius: 20px; scrollbar-width: none; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+    .afb-modes__tabs::-webkit-scrollbar { display: none; }
+    .afb-modes__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .afb-mode-panel { gap: 34px; padding: 32px 24px; border-radius: 20px; }
+    .afb-mode-panel__showcase { padding: 14px; border-radius: 18px; }
+    .afb-mode-panel__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .afb-stories__header { top: 62px; padding: 22px 0; }
+    .afb-stories__header h2 { font-size: 30px; }
+    .afb-stories__cards { --afb-stack-top: 320px; padding-top: 80px; }
+    .afb-story { height: 520px; flex-direction: column; border-radius: 18px; }
+    .afb-story__copy { flex: 0 0 50%; padding: 20px 20px 0; }
+    .afb-story__copy h3 { font-size: 24px; }
+    .afb-story__copy > p { font-size: 15px; line-height: 1.55; }
+    .afb-story__copy > a { padding: 10px 18px; font-size: .82rem; }
+    .afb-story__visual { min-height: 0; margin: 12px; padding: 16px; }
+    .afb-editor-ui { grid-template-columns: 1fr 1fr; }
+    .afb-editor-ui__canvas, .afb-editor-ui__settings { padding: 14px 10px; }
+    .afb-publish-ui { min-height: 220px; }
+    .afb-publish-ui__screen { min-height: 215px; padding: 13px; }
+    .afb-publish-ui__destinations { top: 20px; }
+    .afb-response-ui__table { grid-template-columns: .8fr 1.2fr; }
+    .afb-response-ui__table > *:nth-child(3n) { display: none; }
+    .afb-stories__spacer { height: 90px; }
+    .afb-related { padding: 76px 20px; }
+    .afb-related__header { margin-bottom: 46px; }
+    .afb-related__header h2 { font-size: 42px; }
+    .afb-related__header p { font-size: 15px; }
+    .afb-related summary,
+    .afb-related summary:hover { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    .afb-related__arrow { top: 31px; right: 16px; }
+    .afb-related summary > span:first-child { font-size: 13px; }
+    .afb-related details:not([open]) .afb-related-step__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .afb-related details:not([open]) .afb-related-step__content p { font-size: 13px; line-height: 1.4; }
+    .afb-related details[open] { flex-direction: column; }
+    .afb-related details[open] summary,
+    .afb-related details[open] summary:hover { flex: none; grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 62px 24px 14px; }
+    .afb-related details[open] .afb-related__arrow { top: 24px; right: 16px; }
+    .afb-related details[open] summary > span:first-child { font-size: 21px; }
+    .afb-related details[open] .afb-related-step__content h3 { font-size: 28px; }
+    .afb-related details[open] .afb-related-step__content p { max-width: 100%; margin-bottom: 22px; font-size: 16px; }
+    .afb-related details[open] .afb-related__visual { flex: none; justify-content: center; padding: 0 24px 28px; }
+    .afb-related__visual img { max-height: 280px; border-radius: 12px; }
+    .afb-faq { padding: 68px 16px; }
+    .afb-faq__sidebar h2 { font-size: 2.2rem; }
+    .afb-faq__item { padding: 4px 20px; border-radius: 15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .afb-fields { clip-path: none; will-change: auto; }
+    .afb-bento-product-shot, .afb-shot-float { animation: none; will-change: auto; }
+    .afb-bento-visual:hover .afb-bento-product-shot { transform: none; }
+  }
+
+  @media (max-width: 560px) {
+    .afb-field-cta { gap: 18px; padding-top: 56px; }
+    .afb-field-cta h2 span { display: inline; }
+    .afb-field-cta a { width: 100%; }
+  }
+
+  @media (max-width: 420px) {
+    .afb-hero__title { font-size: 33px; line-height: 1.15; }
+    .afb-editor-ui__settings > div { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .afb-page *, .afb-page *::before, .afb-page *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+
+  .afb-page h2 { font-size: 50px; font-weight: 500; }
+</style>

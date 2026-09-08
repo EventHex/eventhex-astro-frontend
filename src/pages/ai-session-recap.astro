@@ -1,22 +1,14 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/ai-session-recap/HeroSection.astro";
-import StatsSection from "../components/ai-session-recap/StatsSection.astro";
-import BentoGrid from "../components/ai-session-recap/BentoGrid.astro";
-import FeatureCards from "../components/ai-session-recap/FeatureCards.astro";
-import HowItWorksSection from "../components/ai-session-recap/HowItWorksSection.astro";
-import CTASection from "../components/ai-session-recap/CTASection.astro";
-import CoordinationTools from "../components/ai-session-recap/CoordinationTools.astro";
-import FaqSection from "../components/ai-session-recap/FaqSection.astro";
+import PageSections from "../components/ai-session-recap/PageSections.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "AI Session Recap — Auto Transcription & Summaries | EventHex";
-const description = "AI session recap that auto-transcribes talks, generates summaries, extracts key takeaways, and publishes shareable recap pages — no manual work required.";
+const title = "AI Session Recap & Live Event Transcription | EventHex";
+const description = "Capture live or recorded event sessions with live transcription, AI summaries, personalized takeaways, resources, and share-ready content.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex InstaRecap AI Session Recap",
+  name: "EventHex InstaRecap",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/ai-session-recap/",
@@ -26,47 +18,55 @@ const softwareSchema = {
     name: "EventHex",
     url: "https://eventhex.ai",
   },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
   featureList: [
-    "Real-time AI transcription",
-    "Automated session summaries and key takeaways",
-    "25+ language support for transcription",
-    "SEO-optimized recap pages",
-    "Speaker quotes extraction",
-    "Topic classification",
-    "Email digest and recap delivery",
-    "Speaker analytics dashboard",
-    "Social sharing snippets",
-    "PDF report export",
+    "Live and recorded event-session capture",
+    "Live transcription",
+    "Reviewable session summaries and takeaways",
+    "Referenced session resources",
+    "Profile-aware attendee takeaways",
+    "Organizer-selected recap translation",
+    "LinkedIn and X drafts",
+    "Takeaway posters and recap PDF",
+    "Scoped AV-team access",
+    "Event-level recap reporting",
   ],
 };
 ---
 
 <MarketingLayout
-  title={title}
-  description={description}
+  {title}
+  {description}
   canonical="https://eventhex.ai/ai-session-recap/"
-  ogImage={ogImage}
+  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png"
+  footerCtaEyebrow="See InstaRecap with Your Event"
+  footerCtaTitle="Turn Every Session Into Something Attendees Can Use"
+  footerCtaSubtitle="Bring us your agenda, capture setup, and audience requirements. We’ll show you how the recap workflow fits your event."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/footer-cta-devices.webp"
+  footerCtaImageAlt="EventHex platform displayed on a laptop and mobile phone"
+  showFooterCta={true}
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  </Fragment>
 
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <PageSections />
 </MarketingLayout>
 
-<style>
-  :global(main) {
-    background-color: #ffffff;
+<style is:global>
+  body:has(.asrv-page) .site-footer .cta-devices-img {
+    width: auto;
+    max-width: 360px;
+    height: 320px;
+    object-fit: contain;
+  }
+
+  @media (max-width: 767px) {
+    body:has(.asrv-page) .site-footer .cta-devices-img {
+      width: auto;
+      max-width: 240px;
+      height: 220px;
+    }
   }
 </style>

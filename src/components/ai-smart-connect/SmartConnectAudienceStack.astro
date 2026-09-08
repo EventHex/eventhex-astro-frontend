@@ -1,0 +1,284 @@
+---
+interface AudienceCard {
+  eyebrow: string;
+  title: string;
+  description: string;
+  image: string;
+  alt: string;
+}
+
+const audienceCards: AudienceCard[] = [
+  {
+    eyebrow: "Exhibitions",
+    title: "Make booth members visible to the right delegates",
+    description: "Help delegates explore attendees and visible booth members, then connect before starting a conversation.",
+    image: "/feature-images/ai-smart-connect/networking-audience-visibility.jpg",
+    alt: "EventHex networking visibility settings for booth members, speakers, and ticket types",
+  },
+  {
+    eyebrow: "Conferences and tech events",
+    title: "Start with relevant profiles instead of an endless directory",
+    description: "Surface relevant participant profiles and keep speakers visible when the organizer enables them.",
+    image: "/feature-images/ai-smart-connect/networking-audience-features.jpg",
+    alt: "EventHex networking features with AI Recommendations and Similar People enabled",
+  },
+  {
+    eyebrow: "Associations",
+    title: "Give every member useful context before they connect",
+    description: "Create a familiar networking path for members, guests, committees, and recurring event communities.",
+    image: "/feature-images/ai-smart-connect/networking-audience-profile-fields.jpg",
+    alt: "EventHex networking profile-card field settings for designation and company",
+  },
+  {
+    eyebrow: "Corporate events and agencies",
+    title: "Configure meeting rules for each event independently",
+    description: "Configure networking access, meeting availability, and profile context separately for each event and attendee group.",
+    image: "/feature-images/ai-smart-connect/networking-audience-meeting.jpg",
+    alt: "EventHex networking meeting scheduling controls for slots, hours, and meeting points",
+  },
+];
+---
+
+<section class="sca-shell" aria-labelledby="sca-title">
+  <div class="sca-section">
+    <header class="sca-header">
+      <div class="sca-eyebrow">
+        <span class="sca-eyebrow__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"></path><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"></path></svg>
+        </span>
+        <span>Smart-Connect use cases</span>
+      </div>
+      <h2 id="sca-title">Built for events where <span>who you meet</span> matters</h2>
+    </header>
+
+    <div class="sca-cards">
+      {audienceCards.map((card, index) => (
+        <article class="sca-card" style={`--card-index:${index}`}>
+          <div class="sca-card__content">
+            <span class="sca-card__eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+            <a href="/book-a-demo/">Explore More</a>
+          </div>
+          <figure class="sca-card__image">
+            <img src={card.image} alt={card.alt} width="1280" height="720" loading="lazy" decoding="async" />
+          </figure>
+        </article>
+      ))}
+      <div class="sca-spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const audienceSection = document.querySelector<HTMLElement>(".sca-shell");
+  const audienceHeader = audienceSection?.querySelector<HTMLElement>(".sca-header");
+  const audienceCards = audienceSection?.querySelectorAll<HTMLElement>(".sca-card");
+  const finalAudienceCard = audienceCards?.[audienceCards.length - 1];
+
+  if (audienceHeader && finalAudienceCard) {
+    let audienceFrame = 0;
+    const syncAudienceRelease = () => {
+      audienceFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalAudienceCard).top) || 0;
+      const releaseOffset = Math.min(0, finalAudienceCard.getBoundingClientRect().top - stickyTop);
+      audienceHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueAudienceRelease = () => {
+      if (audienceFrame) return;
+      audienceFrame = requestAnimationFrame(syncAudienceRelease);
+    };
+
+    window.addEventListener("scroll", queueAudienceRelease, { passive: true });
+    window.addEventListener("resize", queueAudienceRelease, { passive: true });
+    syncAudienceRelease();
+  }
+</script>
+
+<style is:global>
+  .sca-shell {
+    width: 100%;
+    color: #fff;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, .28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: sca-mesh-move 30s linear infinite;
+  }
+  @keyframes sca-mesh-move {
+    0%, 100% { background-position: 0 0, 0% 0%; }
+    50% { background-position: 0 0, 8% 10%; }
+  }
+  .sca-section {
+    display: flex;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 4px 0 30px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sca-header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    display: flex;
+    width: min(94%, 1050px);
+    padding: 24px 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    will-change: transform;
+  }
+  .sca-header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -1px auto -28px 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(13, 10, 44, .99), rgba(7, 11, 27, .98) 72%, rgba(7, 11, 27, 0));
+  }
+  .sca-eyebrow {
+    display: flex;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, .24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    box-shadow: inset 0 1px rgba(255, 255, 255, .16), 0 6px 16px -6px rgba(0, 0, 0, .35);
+    backdrop-filter: blur(16px);
+    font: 500 15px/24px var(--font-body);
+  }
+  .sca-eyebrow__icon { display: flex; width: 16px; height: 16px; }
+  .sca-eyebrow__icon svg { width: 100%; height: 100%; }
+  .sca-header h2 {
+    margin: 0;
+    color: #fff;
+    font: 500 46px/1.15 var(--font-heading);
+    letter-spacing: -.02em;
+  }
+  .sca-header h2 span { color: #afa3ff; }
+  .sca-cards {
+    --sca-stack-top: 300px;
+    position: relative;
+    width: 100%;
+    padding: 80px 0 50px;
+  }
+  .sca-card {
+    position: sticky;
+    top: calc(var(--sca-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    height: 500px;
+    margin-bottom: 60px;
+    align-items: stretch;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 20px;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, .16), transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, .18), transparent 40%),
+      #0a0a0f;
+  }
+  .sca-card:first-child {
+    background:
+      radial-gradient(circle at 82% 12%, rgba(109, 92, 235, .24), transparent 34%),
+      radial-gradient(circle at 8% 92%, rgba(66, 173, 218, .13), transparent 28%),
+      #090a10;
+  }
+  .sca-card__content {
+    display: flex;
+    flex: 0 0 45%;
+    padding: 40px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .sca-card__eyebrow {
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid rgba(175, 163, 255, .28);
+    border-radius: 999px;
+    background: rgba(175, 163, 255, .1);
+    color: #afa3ff;
+    font: 600 12px/1.2 var(--font-body);
+  }
+  .sca-card h3 { margin: 0; color: #e7e4fa; font: 500 32px/1.2 var(--font-heading); }
+  .sca-card p { margin: 0; color: rgba(255, 255, 255, .55); font: 400 17px/1.65 var(--font-body); }
+  .sca-card__content a {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 12px 26px;
+    border: 1px solid rgba(255, 255, 255, .14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+    font: 500 15px var(--font-body);
+    text-decoration: none;
+    transition: transform .3s, background .3s;
+  }
+  .sca-card__content a:hover { transform: scale(1.05); background: rgba(255, 255, 255, .1); }
+  .sca-card__image {
+    display: flex;
+    flex: 1;
+    margin: 16px 16px 16px 0;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, .16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04));
+    box-shadow: inset 0 1px rgba(255, 255, 255, .12);
+    backdrop-filter: blur(24px);
+  }
+  .sca-card__image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, .32);
+    object-fit: contain;
+    animation: sca-float 4s ease-in-out infinite;
+  }
+  @keyframes sca-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .sca-spacer { height: 190px; }
+
+  @media (max-width: 1024px) {
+    .sca-section { padding: 20px 20px 30px; }
+    .sca-header { width: 94%; }
+    .sca-header h2 { font-size: 40px; line-height: 1; }
+    .sca-cards { --sca-stack-top: 292px; }
+    .sca-card { height: 450px; }
+    .sca-card__content { flex-basis: 50%; }
+    .sca-card h3 { font-size: 28px; }
+    .sca-card p { font-size: 16px; }
+  }
+  @media (max-width: 767px) {
+    .sca-section { padding: 16px 20px 30px; }
+    .sca-header { width: 100%; }
+    .sca-header h2 { font-size: 30px; }
+    .sca-cards { --sca-stack-top: 320px; padding: 80px 0 40px; }
+    .sca-card { height: 520px; flex-direction: column; }
+    .sca-card__content { flex: 0 0 50%; padding: 20px 20px 0; }
+    .sca-card__image { margin: 12px; padding: 16px; }
+    .sca-card h3 { font-size: 24px; }
+    .sca-card p { font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sca-shell, .sca-card__image img { animation: none; }
+  }
+</style>

@@ -1,0 +1,763 @@
+---
+import { faqs } from "./content";
+
+const lifecycle = [
+  ["Configure", "Call + form"],
+  ["Collect", "Abstracts"],
+  ["Assign", "Reviewers"],
+  ["Score", "Rubrics"],
+  ["Decide", "Notify authors"],
+  ["Programme", "Create sessions"],
+];
+
+const setupCapabilities = [
+  { title: "Submission window", text: "Set opening and closing dates, availability, and limits." },
+  { title: "Late submissions", text: "Allow a separate late-submission window when required." },
+  { title: "Multiple authors", text: "Enable multi-author submissions for the call." },
+  { title: "Review timeline", text: "Set review start, deadline, decision deadline, and notification date." },
+  { title: "Review settings", text: "Choose reviewer counts, blind review, conflict flags, reminders, and decision behavior." },
+];
+
+const workflowCards = [
+  {
+    eyebrow: "Structured submissions",
+    title: "Collect the information your programme committee actually needs",
+    description: "Use the event form flow to capture author details, abstract content, files, and event-specific questions in a consistent submission record. Track every response through review and decisions from one central queue.",
+    image: "/feature-images/call-for-papers/submission-portal-card.svg",
+    alt: "EventHex abstract submission portal and response queue",
+    width: 657,
+    height: 479,
+    points: ["Custom fields", "Author details", "File collection", "Submission status"],
+  },
+  {
+    eyebrow: "Reviewer coordination",
+    title: "Move submissions to the right reviewers with a visible assignment workflow",
+    description: "Build the reviewer panel, assign work in bulk or through the available automatic assignment path, send configured notices, and give each reviewer a scoped portal for their assigned submissions.",
+    image: "/feature-images/call-for-papers/peer-review-card.svg",
+    alt: "EventHex reviewer assignment and scoped review workspace",
+    width: 603,
+    height: 574,
+    points: ["Add reviewers", "Assign submissions", "Notify reviewers", "Scoped reviewer portal"],
+  },
+  {
+    eyebrow: "Comparable review",
+    title: "Give every reviewer the same decision framework",
+    description: "Use stored rubric criteria and weights while preserving criterion comments, overall scores, recommendation, and confidence. Reviewers can save a draft before submitting their review.",
+    image: "/feature-images/call-for-papers/compliance-card.svg",
+    alt: "EventHex rubric scoring and reviewer recommendation interface",
+    width: 588,
+    height: 508,
+    points: ["Weighted criteria", "Criterion comments", "Recommendation", "Blind review setting"],
+  },
+  {
+    eyebrow: "Programme decisions",
+    title: "Move from reviewer input to a clear author outcome",
+    description: "Review scores and committee context, then apply accepted, conditional, waitlisted, or rejected decisions individually or in bulk. Reviewer input informs the workbench; the organizer controls the decision.",
+    image: "/feature-images/call-for-papers/decision-flow-card.svg",
+    alt: "EventHex programme decision workbench with submission outcomes",
+    width: 582,
+    height: 543,
+    points: ["Accepted", "Conditional accept", "Waitlisted", "Rejected"],
+  },
+];
+
+const evidenceRows = [
+  {
+    eyebrow: "Author follow-up",
+    title: "Give authors a clear path after submission",
+    description: "Authors can return to their own submissions, view released status and permitted feedback, upload an eligible revision, or withdraw before a final accepted or rejected state.",
+    image: "/feature-images/call-for-papers/submission-portal-card.svg",
+    alt: "EventHex author portal showing a submission record and status",
+    width: 657,
+    height: 479,
+    facts: ["Submission history", "Released decision", "Reviewer feedback", "Revision upload", "Withdrawal"],
+  },
+  {
+    eyebrow: "Scheduled communication",
+    title: "Coordinate the messages that keep the review moving",
+    description: "Use event email settings and notification dates for confirmations, assignments, reminders, and decisions. Delivery depends on valid templates, recipients, and channel configuration.",
+    image: "/feature-images/call-for-papers/cta-visual.svg",
+    alt: "EventHex communication controls for call for papers notifications",
+    width: 589,
+    height: 438,
+    facts: ["Submission confirmation", "Assignment notice", "Reviewer reminder", "Decision notification", "Scheduled release"],
+  },
+  {
+    eyebrow: "From accepted abstract to agenda",
+    title: "Carry selected work into the event programme without rebuilding the record",
+    description: "Use the accepted-submission workbench to create corresponding sessions, then complete timing, stage, track, and lineup in Session Management. Export submission and score context as CSV when needed.",
+    image: "/feature-images/call-for-papers/decision-flow-card.svg",
+    alt: "EventHex accepted-submission workflow connected to session management",
+    width: 582,
+    height: 543,
+    facts: ["Ranked submission view", "Bulk decisions", "Push to sessions", "CSV export", "Complete the agenda"],
+  },
+];
+
+const relatedLinks = [
+  { title: "Session Management", text: "Schedule accepted work across days, stages, and tracks.", href: "/session-management/" },
+  { title: "Speaker Management", text: "Coordinate presenter profiles and wider speaker operations.", href: "/speaker-management/" },
+  { title: "Event Notifications", text: "Manage broader attendee and event communication workflows.", href: "/event-notifications/" },
+  { title: "Event Website Builder", text: "Publish the event programme and supporting pages.", href: "/event-website-builder/" },
+];
+
+const useCases = [
+  { title: "Academic conferences", titleLines: ["Academic", "conferences"], text: "Collect and review research abstracts.", textLines: ["Collect and review", "research abstracts."], bullets: ["Structured abstract forms", "Blind review settings", "Weighted scoring rubrics"], image: "/feature-images/speaker-management/cfp-portal-call-settings.jpg", alt: "EventHex call for papers settings for an academic conference", width: 1117, height: 837 },
+  { title: "Association events", titleLines: ["Association", "events"], text: "Build member-led educational programmes.", textLines: ["Build member-led", "educational programmes."], bullets: ["Multi-author submissions", "Reviewer assignments", "Scheduled decision notices"], image: "/feature-images/speaker-management/cfp-portal-published-agenda.jpg", alt: "Published EventHex programme for an association event", width: 1102, height: 826 },
+  { title: "Medical congresses", titleLines: ["Medical", "congresses"], text: "Coordinate structured submissions and reviewer panels.", textLines: ["Coordinate structured submissions", "and reviewer panels."], bullets: ["Scoped reviewer access", "Conflict flags", "Criterion-level comments"], image: "/feature-images/speaker-management/cfp-portal-rubric.jpg", alt: "EventHex review rubric for a medical congress", width: 1117, height: 837 },
+  { title: "Tech conferences", titleLines: ["Tech", "conferences"], text: "Select talks, workshops, and practitioner sessions.", textLines: ["Select talks, workshops,", "and practitioner sessions."], bullets: ["Talk and workshop intake", "Bulk reviewer assignments", "Accepted-session handoff"], image: "/feature-images/speaker-management/cfp-portal-submissions.jpg", alt: "EventHex submission workspace for a technology conference", width: 1117, height: 837 },
+  { title: "Awards and showcases", titleLines: ["Awards and", "showcases"], text: "Adapt rubric-led review to judged submissions.", textLines: ["Adapt rubric-led review", "to judged submissions."], bullets: ["Weighted review criteria", "Reviewer recommendations", "Bulk programme decisions"], image: "/feature-images/speaker-management/cfp-portal-rubric.jpg", alt: "EventHex scoring rubric for awards and showcases", width: 1117, height: 837 },
+  { title: "Corporate programmes", titleLines: ["Corporate", "programmes"], text: "Curate internal experts and session proposals.", textLines: ["Curate internal experts", "and session proposals."], bullets: ["Internal expert submissions", "Revision workflows", "Session Management handoff"], image: "/feature-images/speaker-management/cfp-portal-sessions.jpg", alt: "EventHex session workspace for a corporate programme", width: 1117, height: 837 },
+];
+---
+
+<div class="cfpr-page">
+  <section class="cfpr-hero">
+    <div class="cfpr-hero__grid">
+      <div class="cfpr-hero__content">
+        <span class="cfpr-eyebrow animate-on-scroll" data-animation="fadeInDown">Call for papers software</span>
+        <h1 class="cfpr-hero__title animate-on-scroll" data-animation="fadeInUp">Run your call for papers from first submission to final programme</h1>
+        <p class="cfpr-hero__description animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">Collect structured abstracts, coordinate reviewers, score with a shared rubric, release decisions, and move accepted work into the event agenda from one connected workflow.</p>
+        <div class="cfpr-hero__points animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1200ms">
+          <span>Open a structured call</span>
+          <span>Keep reviews comparable</span>
+          <span>Turn accepted work into sessions</span>
+        </div>
+        <div class="cfpr-hero__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1000ms">
+          <a class="cfpr-button cfpr-button--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          <a class="cfpr-button cfpr-button--secondary" href="#cfpr-workflow">See the workflow</a>
+        </div>
+      </div>
+
+      <div class="cfpr-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="cfpr-hero__visual-card">
+          <div class="cfpr-hero__visual-inner">
+            <img src="/feature-images/call-for-papers/hero-visual.svg" alt="EventHex call for papers workflow from submission to programme" width="730" height="591" loading="eager" decoding="async" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cfpr-lifecycle" id="cfpr-workflow" aria-label="Call for papers lifecycle">
+    <div class="cfpr-lifecycle__inner">
+      {lifecycle.map(([title, text]) => (
+        <div class="cfpr-lifecycle__item">
+          <strong>{title}</strong>
+          <small>{text}</small>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="cfpr-capabilities">
+    <div class="cfpr-shell">
+      <div class="cfpr-section-head cfpr-section-head--light animate-on-scroll" data-animation="fadeInUp">
+        <span class="cfpr-eyebrow">Open the call</span>
+        <h2>Set the Submission and Review Timeline Before Invitations Go Out</h2>
+        <p>Define the call, dates, author options, and review configuration that belong to this event.</p>
+      </div>
+      <div class="cfpr-capabilities__grid">
+        {setupCapabilities.map((item, index) => (
+          <article class="cfpr-capability animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+            {[1, 2, 4].includes(index) && (
+              <>
+                <span class="cfpr-petal cfpr-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+                <span class="cfpr-petal cfpr-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+              </>
+            )}
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <div class="cfpr-capability__visual" aria-hidden="true">
+              {index === 0 && <div class="cfpr-cap-ui cfpr-cap-ui--dates"><small>Submission window</small><span><b>Opens</b><i></i></span><span><b>Closes</b><i></i></span><em>Accepting submissions</em></div>}
+              {index === 1 && <div class="cfpr-cap-ui cfpr-cap-ui--switches"><span><b>Late window</b><i class="is-on"></i></span><span><b>Separate deadline</b><i class="is-on"></i></span><span><b>Availability limit</b><i></i></span></div>}
+              {index === 2 && <div class="cfpr-cap-ui cfpr-cap-ui--authors"><small>Submission authors</small><span><i>AM</i><b>Alex Morgan</b><em>Lead author</em></span><span><i>SK</i><b>Sam Kim</b><em>Co-author</em></span><button>+ Add author</button></div>}
+              {index === 3 && <div class="cfpr-cap-ui cfpr-cap-ui--timeline"><span><b>Review starts</b><i></i></span><span class="is-active"><b>Review deadline</b><i></i></span><span><b>Decision release</b><i></i></span></div>}
+              {index === 4 && <div class="cfpr-cap-ui cfpr-cap-ui--rubric"><small>Review configuration</small><span><b>Blind review</b><i class="is-on"></i></span><span><b>Conflict flags</b><i class="is-on"></i></span><span><b>Reviewer reminder</b><em>3 days before</em></span></div>}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cfpr-evidence">
+    <div class="cfpr-shell">
+      <div class="cfpr-section-head animate-on-scroll" data-animation="fadeInUp">
+        <span class="cfpr-eyebrow">After the review</span>
+        <h2>Keep Authors, Decisions, and the Programme Connected</h2>
+      </div>
+      <div class="cfpr-evidence__grid">
+        <span class="cfpr-evidence__notch cfpr-evidence__notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="cfpr-evidence__notch cfpr-evidence__notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+        {evidenceRows.map((row, index) => (
+          <article class:list={["cfpr-evidence__row", index % 2 === 1 && "cfpr-evidence__row--reverse"]}>
+            <div class="cfpr-evidence__media animate-on-scroll" data-animation={index % 2 === 1 ? "fadeInRight" : "fadeInLeft"}>
+              <img src={row.image} alt={row.alt} width={row.width} height={row.height} loading="lazy" decoding="async" />
+            </div>
+            <div class="cfpr-evidence__content animate-on-scroll" data-animation="fadeInUp">
+              <span class="cfpr-eyebrow">{row.eyebrow}</span>
+              <h3>{row.title}</h3>
+              <p>{row.description}</p>
+              <ul>{row.facts.map((fact) => <li>{fact}</li>)}</ul>
+            </div>
+            {index < evidenceRows.length - 1 && <span class="cfpr-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cfpr-workflows">
+    <div class="cfpr-workflows__inner">
+      <header class="cfpr-workflows__header">
+        <span class="cfpr-workflows__pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>Submission to decision</span>
+        <h2>A Review Workflow Your Programme Team Can Follow</h2>
+      </header>
+      <div class="cfpr-workflows__cards">
+        {workflowCards.map((card, index) => (
+          <article class="cfpr-workflow-card" style={`--cfpr-card-index: ${index}`}>
+            <div class="cfpr-workflow-card__content">
+              <span class="cfpr-workflow-card__eyebrow">{card.eyebrow}</span>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+              <div class="cfpr-workflow-card__points">
+                {card.points.map((point) => <span>{point}</span>)}
+              </div>
+            </div>
+            <div class="cfpr-workflow-card__media">
+              <img src={card.image} alt={card.alt} width={card.width} height={card.height} loading="lazy" decoding="async" />
+            </div>
+          </article>
+        ))}
+        <div class="cfpr-workflows__spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cfpr-related">
+    <div class="cfpr-shell">
+      <div class="cfpr-section-head animate-on-scroll" data-animation="fadeInUp">
+        <span class="cfpr-eyebrow">Connected content operations</span>
+        <h2>Continue Into the Workflow That Owns the Next Task</h2>
+        <p>Keep each route focused while preserving the full programme journey.</p>
+      </div>
+      <div class="cfpr-related__grid">
+        {[25, 50, 75].map((left) => <span class="cfpr-grid-notch" style={`left:${left}%`} aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e6f0"></path></svg></span>)}
+        {relatedLinks.map((item, index) => (
+          <a class="cfpr-related__card animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60} href={item.href}>
+            <span class="cfpr-related__icon" aria-hidden="true">
+              {index === 0 && <svg viewBox="0 0 24 24"><path d="M4 5h16v15H4zM8 3v4m8-4v4M4 10h16M8 14h3m2 0h3M8 17h3" /></svg>}
+              {index === 1 && <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
+              {index === 2 && <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>}
+              {index === 3 && <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18M7 6.5h.01M10 6.5h.01" /></svg>}
+            </span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            {index === 2 && <span class="cfpr-related__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e6f0"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e6f0" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e6f0" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e1e6f0" transform="rotate(-90)"></path></svg></span>}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="cfpr-use-cases">
+    <div class="cfpr-use-cases__inner">
+      <header class="cfpr-use-cases__header animate-on-scroll" data-animation="fadeInUp">
+        <span class="cfpr-eyebrow">Built for reviewed programmes</span>
+        <h2>Use One Workflow Across Different Submission-Led Events</h2>
+        <p>Configure the call, review, and decision model around the programme committee.</p>
+      </header>
+      <ol class="cfpr-use-cases__steps">
+        {useCases.map((item, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary tabindex="-1">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div class="cfpr-use-case__content">
+                  <h3 class="cfpr-use-case__title">
+                    {item.titleLines.map((line, lineIndex) => (
+                      <span class="cfpr-use-case__line">{line}{lineIndex === 0 && <span class="cfpr-use-case__line-space">&nbsp;</span>}</span>
+                    ))}
+                  </h3>
+                  <p class="cfpr-use-case__desc">
+                    {item.textLines.map((line, lineIndex) => (
+                      <span class="cfpr-use-case__line">{line}{lineIndex === 0 && <span class="cfpr-use-case__line-space">&nbsp;</span>}</span>
+                    ))}
+                  </p>
+                  <ul class="cfpr-use-case__bullets">
+                    {item.bullets.map((bullet) => (
+                      <li><i aria-hidden="true">✦</i> {bullet}</li>
+                    ))}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  class="cfpr-use-cases__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${item.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                </button>
+              </summary>
+              <div class="cfpr-use-case__visual">
+                <img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="cfpr-faq" id="cfpr-faq">
+    <div class="cfpr-faq__inner">
+      <aside class="cfpr-faq__sidebar">
+        <span class="cfpr-faq__eyebrow"><span aria-hidden="true">↗</span> Call for papers questions</span>
+        <h2>What Programme Teams Ask Before Opening Submissions</h2>
+        <p>Need to map a specific review model? Bring it to a product walkthrough.</p>
+        <a class="cfpr-button cfpr-button--primary" href="/book-a-demo/">Book a Demo</a>
+      </aside>
+      <div class="cfpr-faq__list">
+        {faqs.map((faq, index) => (
+          <details class="cfpr-faq__item" open={index === 0}>
+            <summary class="cfpr-faq__question"><strong>{faq.question}</strong><span class="cfpr-faq__icon" aria-hidden="true"></span></summary>
+            <div class="cfpr-faq__answer"><p>{faq.answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const capabilitiesBand = document.querySelector<HTMLElement>(".cfpr-capabilities");
+
+  if (capabilitiesBand && capabilitiesBand.dataset.bleedReady !== "true" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    capabilitiesBand.dataset.bleedReady = "true";
+
+    let capabilitiesTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let capabilitiesFrame = 0;
+    let lastCapabilitiesProgress = -1;
+
+    const measureCapabilities = () => {
+      viewportHeight = window.innerHeight || 1;
+      capabilitiesTop = capabilitiesBand.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const updateCapabilitiesBleed = () => {
+      capabilitiesFrame = 0;
+      const travelled = viewportHeight - (capabilitiesTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      const roundedProgress = Math.round(progress * 100) / 100;
+      if (roundedProgress === lastCapabilitiesProgress) return;
+      lastCapabilitiesProgress = roundedProgress;
+      capabilitiesBand.style.setProperty("--capabilities-p", String(roundedProgress));
+    };
+
+    const queueCapabilitiesBleed = () => {
+      if (capabilitiesFrame) return;
+      capabilitiesFrame = requestAnimationFrame(updateCapabilitiesBleed);
+    };
+
+    const resizeCapabilitiesBleed = () => {
+      measureCapabilities();
+      lastCapabilitiesProgress = -1;
+      queueCapabilitiesBleed();
+    };
+
+    measureCapabilities();
+    updateCapabilitiesBleed();
+    window.addEventListener("scroll", queueCapabilitiesBleed, { passive: true });
+    window.addEventListener("resize", resizeCapabilitiesBleed, { passive: true });
+    window.addEventListener("load", resizeCapabilitiesBleed);
+  }
+
+  const workflowSection = document.querySelector<HTMLElement>(".cfpr-workflows");
+  const workflowHeader = workflowSection?.querySelector<HTMLElement>(".cfpr-workflows__header");
+  const workflowCards = workflowSection?.querySelectorAll<HTMLElement>(".cfpr-workflow-card");
+  const finalWorkflowCard = workflowCards?.[workflowCards.length - 1];
+
+  if (workflowHeader && finalWorkflowCard) {
+    let frame = 0;
+    const syncRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalWorkflowCard).top) || 0;
+      const releaseOffset = Math.min(0, finalWorkflowCard.getBoundingClientRect().top - stickyTop);
+      workflowHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueRelease = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(syncRelease);
+    };
+    window.addEventListener("scroll", queueRelease, { passive: true });
+    window.addEventListener("resize", queueRelease, { passive: true });
+    syncRelease();
+  }
+
+  document.querySelectorAll<HTMLDetailsElement>(".cfpr-use-cases__steps details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".cfpr-use-cases__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} programme type`);
+      if (!item.open) return;
+      all.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  document.querySelectorAll<HTMLDetailsElement>(".cfpr-faq__item").forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      document.querySelectorAll<HTMLDetailsElement>(".cfpr-faq__item").forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style is:global>
+  .cfpr-page {
+    overflow: clip;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(246,248,255,.96) 0%, rgba(255,255,255,0) 72%),
+      linear-gradient(to bottom, rgba(255,255,255,.98) 0%, rgba(255,255,255,0) 31%),
+      linear-gradient(to top, rgba(255,255,255,.98) 0%, rgba(255,255,255,0) 28%),
+      radial-gradient(circle 420px at 2% 34%, rgba(175,163,255,.18), transparent 100%),
+      radial-gradient(circle 360px at 98% 72%, rgba(130,170,255,.15), transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .cfpr-shell { width: min(1140px, calc(100% - 48px)); margin: 0 auto; }
+  .cfpr-eyebrow { display: inline-block; color: var(--brand-blue); font: 600 14px/1.4 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .cfpr-section-head { max-width: 850px; margin: 0 auto 48px; }
+  .cfpr-section-head h2,
+  .cfpr-faq__sidebar h2 { margin: 12px 0 16px; font: 500 50px/1.08 var(--font-heading); letter-spacing: -.035em; text-align: center; background: linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .cfpr-section-head p,
+  .cfpr-faq__sidebar p { max-width: 720px; color: var(--subheading-gray); font: 400 17px/1.65 var(--font-body); }
+  .cfpr-button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 12px 28px; border-radius: 10px; font: 600 15px/1.4 var(--font-body); text-decoration: none; transition: transform .25s, background .25s, border-color .25s; }
+  .cfpr-button:hover { transform: translateY(-2px); }
+  .cfpr-button--primary { color: #fff; background: var(--heading-dark); }
+  .cfpr-button--primary:hover { background: #000; }
+  .cfpr-button--secondary { color: var(--heading-dark); border: 1px solid #dce4ff; background: rgba(255,255,255,.9); }
+
+  .cfpr-hero { position: relative; overflow: hidden; margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .cfpr-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; width: 220px; max-width: 28vw; background: linear-gradient(to right, transparent, #ffffff9c); pointer-events: none; }
+  .cfpr-hero__grid { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); align-items: center; gap: 48px; max-width: 1080px; margin: 0 auto; }
+  .cfpr-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+  .cfpr-hero__title { width: 100%; max-width: 620px; margin: 0; color: transparent; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; }
+  .cfpr-hero__description { width: 100%; max-width: 560px; margin: 0; color: var(--subheading-gray); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .cfpr-hero__actions { display: flex; gap: 14px; padding-top: 6px; }
+  .cfpr-hero__points { display: flex; flex-wrap: wrap; gap: 10px; }
+  .cfpr-hero__points span { position: relative; padding-left: 16px; color: #475467; font: 500 14px/20px var(--font-body); }
+  .cfpr-hero__points span::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .cfpr-hero__visual { position: relative; z-index: 3; min-width: 0; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .cfpr-hero__visual-card { position: relative; padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; backdrop-filter: blur(16px); }
+  .cfpr-hero__visual-inner { overflow: hidden; padding: 28px; border-radius: 16px 0 0 16px; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); backdrop-filter: blur(18px); }
+  .cfpr-hero__visual img { display: block; width: 100%; max-height: 520px; height: auto; object-fit: contain; animation: cfpr-hero-float 6s ease-in-out infinite; }
+  @keyframes cfpr-hero-float { 50% { transform: translateY(-14px); } }
+
+  .cfpr-lifecycle { min-height: 78px; display: flex; align-items: center; border-block: 1px solid #e8edf5; background: rgba(255,255,255,.82); }
+  .cfpr-lifecycle__inner { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 18px 36px; width: min(1140px, calc(100% - 48px)); margin: 0 auto; padding: 18px 0; }
+  .cfpr-lifecycle__item { display: inline-flex; align-items: baseline; gap: 7px; min-width: 0; }
+  .cfpr-lifecycle__item strong { color: #22272f; font: 700 14px/1.3 var(--font-heading); }
+  .cfpr-lifecycle__item small { color: #697386; font: 400 13px/1.3 var(--font-body); }
+
+  .cfpr-capabilities { --capabilities-p: 0; --capabilities-gap: calc((1 - var(--capabilities-p)) * clamp(16px,3.5vw,56px)); position: relative; overflow: hidden; padding: clamp(64px,8vw,96px) 0 clamp(56px,7vw,88px); color: #fff; background-color: #000; background-image: radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.22), rgba(124,108,255,.1) 45%, transparent 72%); clip-path: inset(0 var(--capabilities-gap) round calc((1 - var(--capabilities-p)) * 28px)); will-change: clip-path; }
+  .cfpr-capabilities::before { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .4; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E"); }
+  .cfpr-capabilities > * { position: relative; z-index: 1; }
+  .cfpr-capabilities .cfpr-section-head { margin-inline: auto; text-align: center; }
+  .cfpr-capabilities .cfpr-section-head p { margin-inline: auto; }
+  .cfpr-section-head--light h2 { background: linear-gradient(98deg,#fff 38%,rgba(255,255,255,.52) 94%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .cfpr-section-head--light p { color: rgba(255,255,255,.58); }
+  .cfpr-section-head--light .cfpr-eyebrow { color: #afa3ff; }
+  .cfpr-capabilities__grid { --cap-grad: linear-gradient(135deg,#38bdf8,#5c8aff 38%,#7c6cff 70%,#a45cff); display: grid; grid-template-columns: repeat(6,1fr); overflow: hidden; border: 1px solid #3b3a47; border-radius: 16px; }
+  .cfpr-capability { position: relative; grid-column: span 2; display: flex; flex-direction: column; min-height: 420px; padding: 36px 32px; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; }
+  .cfpr-capability:nth-child(n+4) { grid-column: span 3; border-bottom: 0; }
+  .cfpr-capability:nth-child(3), .cfpr-capability:nth-child(5) { border-right: 0; }
+  .cfpr-capability h3 { margin: 0 0 14px; color: #fff; font: 700 15px/1.2 var(--font-heading); letter-spacing: -.01em; }
+  .cfpr-capability p { max-width: 34ch; margin: 0; color: rgba(255,255,255,.62); font: 400 15px/1.38 var(--font-body); }
+  .cfpr-petal { position: absolute; left: 0; width: 28px; height: 28px; z-index: 2; pointer-events: none; line-height: 0; }
+  .cfpr-petal--top { top: 0; transform: translate(-50%,-50%); }
+  .cfpr-petal--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .cfpr-capability__visual { position: relative; display: flex; align-items: flex-end; justify-content: center; flex: 1; margin-top: 32px; }
+  .cfpr-capability__visual::before { content: ""; position: absolute; left: 50%; bottom: -10%; width: 80%; height: 80%; transform: translateX(-50%); border-radius: 50%; filter: blur(30px); background: radial-gradient(closest-side,rgba(92,138,255,.28),rgba(124,108,255,.15) 55%,transparent); }
+  .cfpr-cap-ui { position: relative; z-index: 1; width: 100%; max-width: 300px; padding: 16px; border: 1px solid transparent; border-radius: 16px; background: linear-gradient(#08080e,#08080e) padding-box,var(--cap-grad) border-box; box-shadow: 0 18px 44px -22px rgba(92,138,255,.5); }
+  .cfpr-cap-ui small { display: block; margin-bottom: 10px; color: rgba(255,255,255,.55); font: 400 12px/1.2 var(--font-body); }
+  .cfpr-cap-ui > span { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 42px; margin-top: 9px; padding: 10px 12px; border-radius: 9px; background: rgba(255,255,255,.05); color: rgba(255,255,255,.84); font: 400 12px/1.2 var(--font-body); }
+  .cfpr-cap-ui b { font-weight: 500; }
+  .cfpr-cap-ui em { color: rgba(255,255,255,.46); font: 400 10px/1.2 var(--font-body); font-style: normal; }
+  .cfpr-cap-ui--dates > span i, .cfpr-cap-ui--timeline > span i { width: 40%; height: 6px; border-radius: 999px; background: rgba(255,255,255,.14); }
+  .cfpr-cap-ui--dates > em { display: block; margin-top: 10px; padding: 9px; border: 1px dashed rgba(110,150,255,.45); border-radius: 9px; color: #a8b6ff; text-align: center; }
+  .cfpr-cap-ui--switches i, .cfpr-cap-ui--rubric i { position: relative; width: 30px; height: 17px; border-radius: 999px; background: #343641; }
+  .cfpr-cap-ui--switches i::after, .cfpr-cap-ui--rubric i::after { content: ""; position: absolute; top: 3px; left: 3px; width: 11px; height: 11px; border-radius: 50%; background: #777b88; }
+  .cfpr-cap-ui--switches i.is-on, .cfpr-cap-ui--rubric i.is-on { background: linear-gradient(90deg,#5c8aff,#a45cff); }
+  .cfpr-cap-ui--switches i.is-on::after, .cfpr-cap-ui--rubric i.is-on::after { left: 16px; background: #fff; }
+  .cfpr-cap-ui--authors > span { display: grid; grid-template-columns: 32px 1fr auto; }
+  .cfpr-cap-ui--authors > span i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: #dce5ff; background: #29365b; font: 700 9px/1 var(--font-body); font-style: normal; }
+  .cfpr-cap-ui--authors button { width: 100%; margin-top: 10px; padding: 9px; border: 1px dashed rgba(110,150,255,.45); border-radius: 9px; color: #a8b6ff; background: transparent; }
+  .cfpr-cap-ui--timeline { display: flex; align-items: stretch; gap: 10px; max-width: 430px; }
+  .cfpr-cap-ui--timeline > span { flex: 1; min-height: 110px; flex-direction: column; align-items: flex-start; justify-content: space-between; margin: 0; border: 1px solid rgba(255,255,255,.12); }
+  .cfpr-cap-ui--timeline > span.is-active { border-color: transparent; background: linear-gradient(135deg,#0d1a30,#1b1740) padding-box,var(--cap-grad) border-box; }
+  .cfpr-cap-ui--timeline > span i { width: 100%; background: var(--cap-grad); }
+
+  .cfpr-workflows { background: #000; background-image: linear-gradient(180deg,#0d0a2c 0%,transparent 320px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28),transparent 55%); background-repeat: no-repeat; background-size: 100% 100%,120% 120%; animation: cfpr-mesh 30s linear infinite; }
+  @keyframes cfpr-mesh { 50% { background-position: 0 0,8% 10%; } }
+  .cfpr-workflows__inner { display: flex; flex-direction: column; align-items: center; max-width: 1140px; margin: 0 auto; padding: 4px 0 30px; }
+  .cfpr-workflows__header { position: sticky; top: 69px; z-index: 20; isolation: isolate; width: min(94%,1050px); display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 24px 0; text-align: center; will-change: transform; }
+  .cfpr-workflows__header::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -28px; left: 50%; width: 100vw; transform: translateX(-50%); background: linear-gradient(180deg,rgba(13,10,44,.99),rgba(7,11,27,.98) 72%,transparent); }
+  .cfpr-workflows__pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 6px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; color: #fff; background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35); backdrop-filter: blur(16px); font: 500 15px/24px var(--font-body); }
+  .cfpr-workflows__pill svg { width: 16px; height: 16px; }
+  .cfpr-workflows__header h2 { max-width: 900px; margin: 0; font: 500 50px/1.08 var(--font-heading); letter-spacing: -.035em; background: linear-gradient(98deg,#fff 38%,rgba(255,255,255,.52) 94%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .cfpr-workflows__cards { --cfpr-stack-top: 300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .cfpr-workflow-card { position: sticky; top: calc(var(--cfpr-stack-top) + var(--cfpr-card-index) * 20px); z-index: var(--cfpr-card-index); display: flex; align-items: stretch; height: 500px; margin-bottom: 60px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; background: radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f; }
+  .cfpr-workflow-card:first-child { background: radial-gradient(circle at 82% 12%,rgba(109,92,235,.24),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.13),transparent 28%),#090a10; }
+  .cfpr-workflow-card__content { flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .cfpr-workflow-card__eyebrow { align-self: flex-start; padding: 7px 13px; border: 1px solid rgba(175,163,255,.28); border-radius: 999px; color: #afa3ff; background: rgba(175,163,255,.1); font: 600 12px/1.2 var(--font-body); }
+  .cfpr-workflow-card h3 { margin: 0; color: #e7e4fa; font: 500 32px/1.18 var(--font-heading); }
+  .cfpr-workflow-card p { margin: 0; color: rgba(255,255,255,.55); font: 400 17px/1.65 var(--font-body); }
+  .cfpr-workflow-card__points { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 2px; }
+  .cfpr-workflow-card__points span { padding: 6px 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: rgba(255,255,255,.72); font: 500 11px/1.2 var(--font-body); }
+  .cfpr-workflow-card__media { flex: 1; display: flex; align-items: center; justify-content: center; margin: 16px 16px 16px 0; padding: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04)); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(24px); }
+  .cfpr-workflow-card__media img { width: 100%; height: 100%; object-fit: contain; animation: cfpr-float 4s ease-in-out infinite; }
+  .cfpr-workflows__spacer { height: 190px; }
+  @keyframes cfpr-float { 50% { transform: translateY(-9px); } }
+
+  .cfpr-evidence { padding: 80px 5%; background: transparent; }
+  .cfpr-evidence .cfpr-shell { width: min(1200px,100%); }
+  .cfpr-evidence .cfpr-section-head { text-align: center; }
+  .cfpr-evidence__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .cfpr-evidence__notch { position: absolute; left: 50%; width: 28px; height: 28px; z-index: 2; pointer-events: none; line-height: 0; }
+  .cfpr-evidence__notch--top { top: 0; transform: translate(-50%,-50%); }
+  .cfpr-evidence__notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .cfpr-evidence__row { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; border-bottom: 1px solid #e5e7eb; }
+  .cfpr-evidence__row:last-child { border-bottom: 0; }
+  .cfpr-evidence__row--reverse .cfpr-evidence__media { order: 2; }
+  .cfpr-evidence__media, .cfpr-evidence__content { padding: 4rem; border-right: 1px solid #e5e7eb; }
+  .cfpr-evidence__media { display: flex; align-items: center; justify-content: center; min-width: 0; background: transparent; }
+  .cfpr-evidence__row--reverse .cfpr-evidence__content { border-right: 1px solid #e5e7eb; }
+  .cfpr-evidence__row--reverse .cfpr-evidence__media { border-right: 0; }
+  .cfpr-evidence__media img { max-width: 100%; max-height: 390px; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(31,52,128,.12)); }
+  .cfpr-evidence__content { display: flex; flex-direction: column; justify-content: center; }
+  .cfpr-evidence__content h3 { margin: 16px 0 20px; color: #111827; font: 500 36px/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .cfpr-evidence__content > p { margin: 0; color: #4b5563; font: 400 18px/1.45 var(--font-body); }
+  .cfpr-evidence__content ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
+  .cfpr-evidence__content li { padding: 7px 10px; border: 1px solid #e0e5ef; border-radius: 999px; color: #4e596d; background: #fff; font: 500 12px/1.2 var(--font-body); }
+  .cfpr-cross { position: absolute; bottom: 0; left: 50%; width: 28px; height: 28px; z-index: 2; transform: translate(-50%,50%); pointer-events: none; line-height: 0; }
+
+  .cfpr-use-cases { padding: clamp(56px,6vw,76px) 24px clamp(110px,12vw,160px); background: transparent; color: #22272f; }
+  .cfpr-related { padding: clamp(40px,4.5vw,60px) 24px clamp(36px,4vw,52px); background: transparent; }
+  .cfpr-related .cfpr-shell { overflow: visible; width: min(1140px,100%); }
+  .cfpr-related .cfpr-section-head { max-width: none; margin: 0; padding: 0 24px clamp(20px,2.4vw,32px); text-align: center; }
+  .cfpr-related .cfpr-section-head h2 { max-width: 850px; margin-inline: auto; }
+  .cfpr-related .cfpr-section-head p { margin-inline: auto; }
+  .cfpr-related__grid { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: 1px solid #e1e6f0; border-bottom: 0; }
+  .cfpr-grid-notch { position: absolute; top: 0; width: 28px; height: 28px; z-index: 3; transform: translate(-50%,-50%); pointer-events: none; line-height: 0; }
+  .cfpr-related__card { position: relative; display: block; min-height: 300px; padding: 28px; border: 0; border-left: 1px solid #e1e6f0; color: inherit; background: transparent; text-decoration: none; transition: background .25s; }
+  .cfpr-related__card:first-of-type { border-left: 0; }
+  .cfpr-related__card:hover { position: relative; z-index: 1; background: rgba(255,255,255,.68); }
+  .cfpr-related__icon { display: block; width: 30px; height: 30px; margin-bottom: 28px; color: var(--brand-blue); }
+  .cfpr-related__icon svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .cfpr-related__card h3 { min-height: 2.3em; max-width: 230px; margin: 0 0 28px; color: var(--heading-dark); font: 500 21px/1.15 var(--font-heading); }
+  .cfpr-related__card p { margin: 14px 0 0; color: var(--subheading-gray); font: 400 15px/1.4 var(--font-body); }
+  .cfpr-related__cross { display: none; }
+  .cfpr-use-cases__inner { width: min(1218px,100%); margin: 0 auto; }
+  .cfpr-use-cases__header { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; max-width: 850px; margin: 0 auto 64px; text-align: center; }
+  .cfpr-use-cases__header h2 { max-width: 780px; margin: 0 auto; font: 500 50px/1.08 var(--font-heading); letter-spacing: -.035em; background: linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .cfpr-use-cases__header p { max-width: 720px; margin: 0 auto; color: #596579; font: 400 17px/1.65 var(--font-body); }
+  .cfpr-use-cases__steps { display: grid; gap: 14px; margin: 0; padding: 0; border: 0; list-style: none; }
+  .cfpr-use-cases__steps > li { position: relative; display: block; padding: 0; border: 0; background: transparent; }
+  .cfpr-use-cases__steps details { position: relative; overflow: hidden; border: 1px solid var(--cfpr-use-case-border); border-radius: 18px; background: linear-gradient(135deg,var(--cfpr-use-case-tint) 0%,#fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease; }
+  .cfpr-use-cases__steps summary { display: grid; grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .cfpr-use-cases__steps summary::-webkit-details-marker { display: none; }
+  .cfpr-use-cases__steps summary:hover { background: rgba(255,255,255,.28); }
+  .cfpr-use-cases__steps details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .cfpr-use-cases__steps summary > span { display: block; margin: 0; color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .cfpr-use-case__content { display: flex; flex-direction: column; }
+  .cfpr-use-cases__steps details:not([open]) .cfpr-use-case__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .cfpr-use-case__title { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .cfpr-use-case__desc { display: none; }
+  .cfpr-use-case__bullets { display: none; }
+  .cfpr-use-case__line { display: inline; }
+  .cfpr-use-cases__steps details:not([open]) .cfpr-use-case__desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 460px; margin: 0; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .cfpr-use-cases__arrow { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer; transition: transform .25s ease,background .2s ease,border-color .2s ease; }
+  .cfpr-use-cases__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .cfpr-use-cases__arrow:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .cfpr-use-cases__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-cases__arrow { top: 28px; transform: rotate(180deg); }
+  .cfpr-use-cases__steps details[open] { display: flex; align-items: stretch; margin: 0; border-radius: 28px; background: linear-gradient(135deg,var(--cfpr-use-case-tint) 0%,#fff 72%); }
+  .cfpr-use-cases__steps > li:nth-child(1) { --cfpr-use-case-tint: #fff8dc; --cfpr-use-case-border: #f0dfa6; }
+  .cfpr-use-cases__steps > li:nth-child(2) { --cfpr-use-case-tint: #edf7ff; --cfpr-use-case-border: #d4e7f7; }
+  .cfpr-use-cases__steps > li:nth-child(3) { --cfpr-use-case-tint: #f3efff; --cfpr-use-case-border: #e2d8fa; }
+  .cfpr-use-cases__steps > li:nth-child(4) { --cfpr-use-case-tint: #eefbf4; --cfpr-use-case-border: #d4efdf; }
+  .cfpr-use-cases__steps > li:nth-child(5) { --cfpr-use-case-tint: #fff0f7; --cfpr-use-case-border: #f4d6e5; }
+  .cfpr-use-cases__steps > li:nth-child(6) { --cfpr-use-case-tint: #f0f5ff; --cfpr-use-case-border: #d8e2fa; }
+  .cfpr-use-cases__steps details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; background: transparent; }
+  .cfpr-use-cases__steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .cfpr-use-cases__steps details[open] summary > span { color: #050505; font-size: 26px; line-height: 1; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__title { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__desc { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 400 17px/1.6 var(--font-body); }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__bullets { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__bullets li { display: flex; align-items: center; gap: 14px; margin: 0; padding: 0; border: 0; background: transparent; color: #111; font: 500 16px/1.35 var(--font-body); }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__bullets i { color: var(--brand-blue); font-size: 16px; font-style: normal; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__line { display: block; white-space: nowrap; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__line-space { display: none; }
+  .cfpr-use-case__visual { display: none; margin: 0; opacity: 0; }
+  .cfpr-use-cases__steps details[open] .cfpr-use-case__visual { display: flex; flex: 0 0 45%; align-items: center; justify-content: flex-start; max-height: none; overflow: visible; padding: 40px 88px 40px 0; opacity: 1; }
+  .cfpr-use-case__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+
+  .cfpr-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .cfpr-faq__inner { display: grid; grid-template-columns: 360px 1fr; gap: 64px; max-width: 1140px; margin: 0 auto; align-items: start; }
+  .cfpr-faq__sidebar { position: sticky; top: 6rem; }
+  .cfpr-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 13px/1.2 var(--font-body); }
+  .cfpr-faq__sidebar h2 { margin: 0 0 20px; text-align: left; }
+  .cfpr-faq__sidebar p { margin: 0 0 28px; color: var(--body-light); font: 400 16px/1.6 var(--font-body); }
+  .cfpr-faq__sidebar .cfpr-button { margin-top: 28px; }
+  .cfpr-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: cfpr-faq; }
+  .cfpr-faq__item { counter-increment: cfpr-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s,border-color .25s; }
+  .cfpr-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .cfpr-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; cursor: pointer; list-style: none; font: 500 17px/1.4 var(--font-heading); }
+  .cfpr-faq__question::-webkit-details-marker { display: none; }
+  .cfpr-faq__question strong { font-weight: 500; }
+  .cfpr-faq__question strong::before { content: counter(cfpr-faq) ". "; }
+  .cfpr-faq__icon { position: relative; flex: 0 0 18px; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .cfpr-faq__icon::before, .cfpr-faq__icon::after { content: ""; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%,-50%); }
+  .cfpr-faq__icon::before { width: 14px; height: 2px; }
+  .cfpr-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s; }
+  .cfpr-faq__item[open] .cfpr-faq__icon { transform: scale(.9); }
+  .cfpr-faq__item[open] .cfpr-faq__icon::after { opacity: 0; }
+  .cfpr-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .cfpr-faq__answer p { margin: 0; color: #000; font: 400 15px/1.7 var(--font-body); }
+
+  @media (max-width: 1024px) {
+    .cfpr-hero { padding: 140px 20px 56px; }
+    .cfpr-hero__grid { grid-template-columns: minmax(0,1fr) minmax(0,460px); gap: 32px; }
+    .cfpr-hero__title { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }
+    .cfpr-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .cfpr-faq__sidebar { position: static; }
+    .cfpr-workflows__inner { padding-inline: 20px; }
+  }
+
+  @media (max-width: 960px) {
+    .cfpr-hero { padding: 130px 20px 48px; }
+    .cfpr-hero::after { display: none; }
+    .cfpr-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .cfpr-hero__content { align-items: center; text-align: center; }
+    .cfpr-hero__title, .cfpr-hero__description { max-width: 760px; }
+    .cfpr-hero__visual { width: min(760px,100%); margin: 0 auto; }
+    .cfpr-hero__visual-card { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .cfpr-hero__visual-inner { border-radius: 16px; }
+    .cfpr-evidence__row { display: flex; flex-direction: column; }
+    .cfpr-evidence__content { order: 1; border-right: 0; border-bottom: 1px solid #e5e7eb; }
+    .cfpr-evidence__media, .cfpr-evidence__row--reverse .cfpr-evidence__media { order: 2; border: 0; }
+  }
+
+  @media (max-width: 900px) {
+    .cfpr-related__grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .cfpr-grid-notch:nth-of-type(1), .cfpr-grid-notch:nth-of-type(3) { display: none; }
+    .cfpr-related__card:nth-of-type(odd) { border-left: 0; }
+    .cfpr-related__card:nth-of-type(n+3) { border-top: 1px solid #e1e6f0; }
+    .cfpr-related__cross { position: absolute; top: 0; right: 0; display: block; width: 28px; height: 28px; z-index: 2; transform: translate(50%,-50%); pointer-events: none; line-height: 0; }
+  }
+
+  @media (max-width: 860px) {
+    .cfpr-capabilities__grid { grid-template-columns: 1fr; }
+    .cfpr-capability, .cfpr-capability:nth-child(n+4) { grid-column: auto; min-height: 0; padding: 32px 24px; border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .cfpr-capability:last-child { border-bottom: 0; }
+    .cfpr-petal { display: none; }
+  }
+
+  @media (max-width: 767px) {
+    body:has(.cfpr-page) .footer-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+    body:has(.cfpr-page) .footer-link { white-space: normal; }
+    .cfpr-shell,
+    .cfpr-lifecycle__inner,
+    .cfpr-faq__inner { width: min(100% - 32px, 1140px); }
+    .cfpr-evidence .cfpr-shell { width: min(100% - 32px, 1140px); }
+    .cfpr-section-head { margin-bottom: 34px; }
+    .cfpr-section-head h2,
+    .cfpr-faq__sidebar h2 { font-size: 34px; }
+    .cfpr-hero { margin-top: -80px; padding: 124px 16px 52px; }
+    .cfpr-hero__title { font-size: 40px; line-height: 45px; letter-spacing: -1.2px; }
+    .cfpr-hero__description { font-size: 16px; }
+    .cfpr-hero__actions { width: 100%; flex-direction: column; }
+    .cfpr-hero__points { justify-content: center; }
+    .cfpr-hero__visual-inner { padding: 18px; }
+    .cfpr-lifecycle__inner { justify-content: flex-start; gap: 14px 22px; }
+    .cfpr-capabilities,
+    .cfpr-evidence,
+    .cfpr-faq { padding: 72px 0; }
+    .cfpr-workflows__header { width: 100%; }
+    .cfpr-workflows__header h2 { font-size: 34px; }
+    .cfpr-workflows__cards { --cfpr-stack-top: 320px; padding-top: 80px; }
+    .cfpr-workflow-card { height: 520px; flex-direction: column; }
+    .cfpr-workflow-card__content { flex: 0 0 50%; justify-content: flex-start; padding: 20px 20px 0; }
+    .cfpr-workflow-card h3 { font-size: 24px; }
+    .cfpr-workflow-card p { font-size: 15px; line-height: 1.5; }
+    .cfpr-workflow-card__points { display: none; }
+    .cfpr-workflow-card__media { min-height: 0; margin: 12px; padding: 16px; }
+    .cfpr-workflows__spacer { height: 100px; }
+    .cfpr-evidence__media, .cfpr-evidence__content { padding: 3rem 1.5rem; }
+    .cfpr-evidence__media { min-height: 310px; }
+    .cfpr-evidence__media img { max-height: 270px; }
+    .cfpr-evidence__content h3 { font-size: 28px; }
+    .cfpr-faq { padding: 56px 16px; }
+    .cfpr-faq__sidebar h2 { font-size: 34px; }
+    .cfpr-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .cfpr-faq__question { padding: 18px 0; font-size: 15px; }
+  }
+
+  @media (max-width: 620px) {
+    .cfpr-use-cases { padding: 56px 20px 76px; }
+    .cfpr-use-cases__header { align-items: center; margin-bottom: 46px; text-align: center; }
+    .cfpr-use-cases__header h2 { font-size: 34px; }
+    .cfpr-use-cases__steps summary,
+    .cfpr-use-cases__steps summary:hover { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    .cfpr-use-cases__arrow { top: 31px; right: 16px; }
+    .cfpr-use-cases__steps summary > span { font-size: 13px; }
+    .cfpr-use-cases__steps details:not([open]) .cfpr-use-case__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .cfpr-use-cases__steps details:not([open]) .cfpr-use-case__desc { font-size: 13px; line-height: 1.4; }
+    .cfpr-use-cases__steps details[open] summary,
+    .cfpr-use-cases__steps details[open] summary:hover { grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 50px 24px 14px; }
+    .cfpr-use-cases__steps details[open] .cfpr-use-cases__arrow { top: 24px; right: 16px; }
+    .cfpr-use-cases__steps details[open] summary > span { font-size: 21px; }
+    .cfpr-use-cases__steps details[open] { flex-direction: column; }
+    .cfpr-use-cases__steps details[open] summary { flex: none; }
+    .cfpr-use-cases__steps details[open] .cfpr-use-case__desc { max-width: 100%; margin: 30px 0 24px; font-size: 14px; letter-spacing: -.15px; }
+    .cfpr-use-cases__steps details[open] .cfpr-use-case__bullets { gap: 14px; }
+    .cfpr-use-cases__steps details[open] .cfpr-use-case__bullets li { gap: 10px; font-size: 14px; }
+    .cfpr-use-case__visual { margin-inline: 0; border-radius: 12px; }
+    .cfpr-use-cases__steps details[open] .cfpr-use-case__visual { flex: none; margin: 0; padding: 0 24px 28px; }
+    .cfpr-use-case__visual img { border-radius: 12px; }
+  }
+
+  @media (max-width: 600px) {
+    .cfpr-related { padding-inline: 16px; }
+    .cfpr-related .cfpr-shell { width: 100%; }
+    .cfpr-related .cfpr-section-head { padding-inline: 0; }
+    .cfpr-related__grid { grid-template-columns: 1fr; }
+    .cfpr-related__card { min-height: 0; padding: 24px 20px; border-left: 0; border-top: 1px solid #e1e6f0; }
+    .cfpr-related__card:first-of-type { border-top: 0; }
+    .cfpr-related__card h3 { min-height: 0; }
+    .cfpr-grid-notch, .cfpr-related__cross { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cfpr-capabilities { clip-path: none; will-change: auto; }
+    .cfpr-workflows, .cfpr-workflow-card__media img, .cfpr-hero__visual img { animation: none; }
+  }
+</style>

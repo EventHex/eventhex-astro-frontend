@@ -1,73 +1,66 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/call-for-papers/HeroSection.astro";
-import StatsSection from "../components/call-for-papers/StatsSection.astro";
-import BentoGrid from "../components/call-for-papers/BentoGrid.astro";
-import FeatureCards from "../components/call-for-papers/FeatureCards.astro";
-import HowItWorksSection from "../components/call-for-papers/HowItWorksSection.astro";
-import CTASection from "../components/call-for-papers/CTASection.astro";
-import CoordinationTools from "../components/call-for-papers/CoordinationTools.astro";
-import FaqSection from "../components/call-for-papers/FaqSection.astro";
+import PageSections from "../components/call-for-papers/PageSections.astro";
+import { faqs } from "../components/call-for-papers/content";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Call for Papers Software — Abstract Submission & Review | EventHex";
-const description = "Call for papers software with online abstract submission, peer review, rubric scoring, acceptance workflows, and proceedings export. Manage your CFP end-to-end.";
+const title = "Call for Papers Software for Events | EventHex";
+const description = "Collect abstracts, assign reviewers, score with rubrics, manage decisions and revisions, notify authors, and move accepted submissions into your event programme.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex Call for Papers & Abstract Submission",
+  name: "EventHex Call for Papers",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/call-for-papers/",
-  description: "End-to-end call for papers management: submission portal, peer review, rubric scoring, acceptance workflows, and proceedings export.",
+  description,
   creator: {
     "@type": "Organization",
     name: "EventHex",
     url: "https://eventhex.ai",
   },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
   featureList: [
-    "Abstract Submission Portal",
-    "Peer Review Assignment",
-    "Custom Scoring Rubrics",
-    "Blind & Double-Blind Review",
-    "Automated Decision Emails",
-    "Session Assignment",
-    "Proceedings Export",
-    "Camera-Ready Submission",
-    "Conflict of Interest Management",
+    "Configurable abstract submission forms",
+    "Reviewer assignment and scoped reviewer access",
+    "Rubric scoring and reviewer comments",
+    "Blind review settings",
+    "Submission decisions and revision workflows",
+    "Decision notifications",
+    "Accepted-submission handoff to Session Management",
+    "Submission CSV export",
   ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  })),
 };
 ---
 
 <MarketingLayout
-  title={title}
-  description={description}
+  {title}
+  {description}
   canonical="https://eventhex.ai/call-for-papers/"
-  ogImage={ogImage}
+  footerCtaEyebrow="Call for Papers"
+  footerCtaTitle="Bring Your Submission and Review Workflow to the Demo"
+  footerCtaSubtitle="See how EventHex connects structured submissions, reviewer workflows, decisions, and accepted sessions in one product walkthrough."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/call-for-papers/cta-visual.svg"
+  footerCtaImageAlt="EventHex call for papers submission and review workspace"
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
 
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <PageSections />
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
-
-<!-- Rebuild trigger: July 15, 2026 -->

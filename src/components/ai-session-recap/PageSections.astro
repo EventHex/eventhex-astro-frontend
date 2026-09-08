@@ -1,0 +1,373 @@
+---
+const captureOptions = [
+  ["Record Live", "Start recording and transcription for a selected agenda session."],
+  ["Upload Session Audio", "Add an existing recording and map it to the correct session."],
+  ["Import YouTube Captions", "Use captions exposed by a YouTube URL, or upload audio when captions are unavailable."],
+  ["Use a Virtual Recording", "Connect the meeting-bot workflow where it is configured for the event."],
+  ["Track Processing", "Follow each recap from queued and transcribing through processed or failed."],
+];
+
+const featureCards = [
+  {
+    eyebrow: "One event-native workflow",
+    title: "The Recap Stays Connected to the Session Attendees Already Know",
+    text: "Keep each recording, transcript, speaker, and generated output attached to its agenda session. Attendees move from the event program into live or processed recap content on web and mobile.",
+    image: "/feature-images/speaker-management/instarecap-v2.svg",
+    alt: "EventHex InstaRecap session recap shown on attendee mobile screens",
+    width: 603,
+    height: 746,
+  },
+  {
+    eyebrow: "Personalized attendee takeaways",
+    title: "One Session Record, Made More Relevant for Each Attendee",
+    text: "Use available attendee profile context to shape supported takeaways and social drafts while keeping the shared summary and referenced resources grounded in the captured session.",
+    image: "/feature-images/ai/instasnap-ai.webp",
+    alt: "EventHex AI recap experience with attendee-focused session content",
+    width: 640,
+    height: 522,
+  },
+  {
+    eyebrow: "Event-day operations",
+    title: "Give the AV Team a Focused Path to Session Capture",
+    text: "Create an AV Team URL, QR code, and access code, scope access to permitted sessions or stages, and let the crew run supported recording and transcription without opening the organizer workspace.",
+    image: "/feature-images/session-management/engagement-visual.svg",
+    alt: "EventHex session controls for event-day teams",
+    width: 674,
+    height: 705,
+  },
+];
+
+const useCases = [
+  ["Exhibitions and Trade Shows", "Turn stage talks, product sessions, and expert panels into recaps delegates can revisit."],
+  ["Conferences and Tech Events", "Connect agenda sessions, speakers, live transcription, takeaways, resources, and attendee access."],
+  ["Association Events", "Create a session knowledge library for members while keeping access aligned with the event."],
+  ["Corporate Events and Agencies", "Use one operating model across client programs while configuring each event separately."],
+];
+
+const faqs = [
+  ["What is an AI session recap?", "An AI session recap turns captured session material into structured content such as a transcript, short and detailed summaries, key takeaways, referenced resources, and supported social drafts. EventHex keeps these outputs connected to the event’s agenda session."],
+  ["Can InstaRecap work during a live event session?", "Yes. EventHex supports live recording and transcription flows. Attendees can view live transcription and, as generated content becomes available, live overview, takeaways, resources, and configured translations."],
+  ["Can we upload a recording after the session?", "Yes. Organizers can upload session audio, monitor processing, and map or remap the recording to the correct session."],
+  ["Can EventHex use a YouTube video as the source?", "EventHex can import exposed captions from a valid YouTube URL. If captions are unavailable, the organizer can upload the audio instead."],
+  ["Can organizers edit an AI-generated recap?", "Organizers can edit the transcript and regenerate individual outputs, including summaries, takeaways, resources, social drafts, and available translations."],
+  ["What can attendees see in a session recap?", "Depending on the event settings and processing state, attendees can use Overview, Summary, Takeaways, Resources, and Social views. Organizers choose which recap tabs are visible."],
+  ["Does InstaRecap support translated session content?", "Organizers can enable translation and choose up to four target languages for the event. Attendees can switch to available translated live transcription and processed recap content."],
+  ["Where can attendees open the recap?", "EventHex provides a web/PWA recap experience and supports InstaRecap views in the attendee mobile app. The exact available actions depend on the event configuration and app surface."],
+  ["Can attendees share takeaways and social content?", "When the organizer enables the relevant controls, attendees can copy or share supported takeaways and social drafts, personalize available social content, and generate takeaway posters."],
+  ["Can the AV team run transcription without organizer access?", "Organizers can create a dedicated AV Team access URL, QR code, and code, then scope that access to permitted sessions or stages."],
+  ["What does the organizer dashboard report?", "The InstaRecap dashboard includes transcribed-session and hour totals, recap users over time, recent processed sessions and users, regenerated takeaways, and generated LinkedIn and X post counts."],
+  ["How is InstaRecap different from an AI meeting notetaker?", "InstaRecap is built around an event’s sessions, speakers, attendees, access settings, and event-day workflow. It combines live transcription with a multi-session attendee recap experience, personalized takeaways, share-ready outputs, and organizer reporting instead of leaving each session as an isolated set of meeting notes."],
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([question, answer]) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
+};
+---
+
+<div class="asrv-page">
+  <section class="asrv-hero">
+    <div class="asrv-hero__grid">
+      <div class="asrv-hero__content">
+        <span class="asrv-hero__badge animate-on-scroll" data-animation="fadeInDown">AI Session Recap</span>
+        <h1 class="asrv-hero__title animate-on-scroll" data-animation="fadeInUp">Turn Live Event Sessions Into AI Recaps Attendees Can Use</h1>
+        <p class="asrv-hero__desc animate-on-scroll" data-animation="fadeInUp">Capture a live session or add a recording. InstaRecap creates live transcription, reviewable summaries, personalized takeaways, referenced resources, and share-ready content—connected to the agenda and available to attendees on web and mobile.</p>
+        <div class="asrv-hero__cta-row animate-on-scroll" data-animation="fadeInUp">
+          <a href="/book-a-demo/" class="asrv-hero__btn">See It With Your Event <span aria-hidden="true">→</span></a>
+          <a href="#asrv-live-processed" class="asrv-hero__btn asrv-hero__btn--outline">See How It Works</a>
+        </div>
+        <div class="asrv-hero__trust animate-on-scroll" data-animation="fadeIn">
+          <span class="asrv-hero__trust-item">Live and recorded sessions</span>
+          <span class="asrv-hero__trust-item">Web and mobile recap</span>
+        </div>
+      </div>
+      <div class="asrv-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="asrv-hero__visual-card"><div class="asrv-hero__visual-inner"><img src="/feature-images/speaker-management/instarecap-v2.svg" alt="EventHex InstaRecap transforming a session into attendee recap content" width="603" height="746" loading="eager" /></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="asrv-trust-strip" aria-label="InstaRecap workflow">
+    <div class="asrv-trust-strip__inner">
+      <span class="asrv-trust-strip__stat"><b>Capture</b> Live or Recorded</span>
+      <span class="asrv-trust-strip__stat"><b>Transcribe</b> Session Audio</span>
+      <span class="asrv-trust-strip__stat"><b>Review</b> Every Output</span>
+      <span class="asrv-trust-strip__stat"><b>Share</b> Web and Mobile</span>
+    </div>
+  </section>
+
+  <section id="asrv-live-processed" class="asrv-flow-section">
+    <div class="asrv-flow-header"><h2 class="asrv-flow-title animate-on-scroll" data-animation="fadeInUp">Live Now, Structured After Processing</h2><p class="asrv-flow-subtitle animate-on-scroll" data-animation="fadeInUp">Two attendee moments, connected to the same agenda session.</p></div>
+    <div class="asrv-flow-quad">
+      <article class="asrv-flow-quad__cell animate-on-scroll" data-animation="fadeInUp"><span class="asrv-flow-kicker">During the session</span><h3 class="asrv-flow-quad__title">Follow the Session in Real Time</h3><p class="asrv-flow-quad__text">Show live transcription and, as content becomes available, live overview, takeaways, resources, and configured translations.</p></article>
+      <div class="asrv-flow-quad__cell asrv-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight"><div class="asrv-flow-composite asrv-flow-composite--live"><img class="asrv-flow-product-shot" src="/feature-images/ai-event-copilot/portal/sessions.png" alt="EventHex organizer session screen with Add Audio and Record Live controls" width="1117" height="837" loading="lazy" decoding="async" /></div></div>
+      <div class="asrv-flow-quad__cell asrv-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft"><div class="asrv-flow-composite asrv-flow-composite--processed"><img class="asrv-flow-product-shot" src="/feature-images/ai-session-recap/attendee-recap-summary.webp" alt="EventHex processed attendee session recap summary" width="2880" height="1560" loading="lazy" decoding="async" /></div></div>
+      <article class="asrv-flow-quad__cell animate-on-scroll" data-animation="fadeInUp"><span class="asrv-flow-kicker">After the session</span><h3 class="asrv-flow-quad__title">Return to a Structured Recap</h3><p class="asrv-flow-quad__text">Open the processed transcript, quick brief, detailed summary, takeaways, resources, social drafts, and recap PDF.</p></article>
+      <span class="asrv-flow-quad__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" />
+        </svg>
+      </span>
+    </div>
+    <p class="asrv-flow-note">Generated content depends on captured session material and processing status. Organizers can review and regenerate individual outputs.</p>
+  </section>
+
+  <div class="asrv-dark-band">
+    <div class="asrv-dark-heading"><h2>Start With the Source <span>Your Event Already Has</span></h2></div>
+    <section class="asrv-grid-section" id="asrv-capture-options"><div class="asrv-cap">
+      {captureOptions.map(([title, text], index) => (
+        <article class="asrv-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          {(index === 1 || index === 2 || index === 4) && (
+            <>
+              <span class="asrv-cap__petal asrv-cap__petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" /></svg></span>
+              <span class="asrv-cap__petal asrv-cap__petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)" /></svg></span>
+            </>
+          )}
+          <h3 class="asrv-cap__label">{title}</h3><p class="asrv-cap__desc">{text}</p>
+          <div class="asrv-cap__visual" aria-hidden="true">
+            {index === 0 && <div class="asrv-cap__record"><i></i><span>Session ready</span><b>Start recording</b></div>}
+            {index === 1 && <div class="asrv-cap__file"><span>WAV</span><div><b>main-stage-session.wav</b><i><em></em></i></div></div>}
+            {index === 2 && <div class="asrv-cap__url"><small>YouTube URL</small><span>youtube.com/watch?v=...</span><b>Import captions</b></div>}
+            {index === 3 && <div class="asrv-cap__stack"><span>Meeting bot <b>Connected</b></span><span>Agenda session <b>Mapped</b></span><span>Transcript <b>Ready</b></span></div>}
+            {index === 4 && <div class="asrv-cap__states"><span>Queued</span><span>Transcribing</span><span class="is-active">Processed</span></div>}
+          </div>
+        </article>
+      ))}
+    </div></section>
+    <div class="asrv-dark-cta animate-on-scroll" data-animation="fadeInUp"><h2>One Capture Workflow, Connected to the Session From the Start</h2><a href="/book-a-demo/">See InstaRecap in EventHex</a></div>
+  </div>
+
+  <section class="asrv-bento-section" id="asrv-recap-workspace">
+    <div class="asrv-bento-container">
+      <div class="asrv-bento-header animate-on-scroll" data-animation="fadeInUp"><span>Organizer and attendee experience</span><h2>Review the Recap, Then Make It Useful Beyond the Session</h2></div>
+      <div class="asrv-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="asrv-bento-notch asrv-bento-notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" /></svg></span>
+        <span class="asrv-bento-notch asrv-bento-notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)" /></svg></span>
+        <div class="asrv-bento-row">
+          <div class="asrv-bento-cell asrv-bento-visual"><div class="asrv-bento-shot-stage asrv-bento-shot-stage--review"><img class="asrv-bento-product-shot" src="/feature-images/ai-session-recap/futuretech-recap-summary.png" alt="EventHex FutureTech Event detailed session summary" width="1536" height="1024" loading="lazy" decoding="async" /></div></div>
+          <div class="asrv-bento-cell asrv-bento-content"><span class="asrv-bento-eyebrow">Organizer workbench</span><h3>Review Every Output Without Rebuilding the Session</h3><p>Edit the transcript, open the quick brief or detailed summary, and regenerate summaries, takeaways, resources, translations, or social drafts individually.</p><p>Map, remap, or remove a recording while keeping processing status visible.</p></div>
+          <span class="asrv-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)" /></svg></span>
+        </div>
+        <div class="asrv-bento-row asrv-bento-row--reverse">
+          <div class="asrv-bento-cell asrv-bento-content"><span class="asrv-bento-eyebrow">Attendee recap library</span><h3>Help Attendees Find the Session They Want to Revisit</h3><p>Start with the event program, then search and filter sessions before opening Overview, Summary, Takeaways, Resources, or Social.</p><p>Live and processed sessions remain part of the same web and mobile recap journey.</p></div>
+          <div class="asrv-bento-cell asrv-bento-visual"><div class="asrv-bento-shot-stage asrv-bento-shot-stage--library"><img class="asrv-bento-product-shot" src="/feature-images/ai-session-recap/futuretech-recap-library.png" alt="EventHex FutureTech Event session recap library" width="1625" height="968" loading="lazy" decoding="async" /></div></div>
+          <span class="asrv-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)" /></svg></span>
+        </div>
+        <div class="asrv-bento-row">
+          <div class="asrv-bento-cell asrv-bento-visual"><div class="asrv-bento-shot-stage asrv-bento-shot-stage--takeaways"><img class="asrv-bento-product-shot" src="/feature-images/ai-session-recap/futuretech-recap-takeaways.png" alt="EventHex FutureTech Event English key takeaways" width="1536" height="1024" loading="lazy" decoding="async" /></div></div>
+          <div class="asrv-bento-cell asrv-bento-content"><span class="asrv-bento-eyebrow">Grounded and personalized</span><h3>Turn What Was Said Into Takeaways Attendees Can Use</h3><p>Create shared summaries, takeaways, and referenced resources from captured session material, then use available attendee profile context for supported personalization.</p><p>Organizers choose which recap tabs and attendee actions are available.</p></div>
+          <span class="asrv-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)" /></svg></span>
+        </div>
+        <div class="asrv-bento-row asrv-bento-row--reverse">
+          <div class="asrv-bento-cell asrv-bento-content"><span class="asrv-bento-eyebrow">Translation and sharing</span><h3>Carry the Session Into the Attendee’s Language and Channels</h3><p>Choose up to four target languages for available live transcription and processed content.</p><p>Prepare LinkedIn and X drafts, supported takeaway posters, and a session recap PDF; sharing and personalization follow organizer controls.</p></div>
+          <div class="asrv-bento-cell asrv-bento-visual"><div class="asrv-bento-shot-stage asrv-bento-shot-stage--share"><img class="asrv-bento-product-shot" src="/feature-images/ai-session-recap/futuretech-recap-social.png" alt="EventHex FutureTech Event English social post drafts" width="1536" height="1024" loading="lazy" decoding="async" /></div></div>
+          <span class="asrv-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)" /></svg></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="asrv-feature-shell" id="asrv-event-workflow">
+    <div class="asrv-feature-section">
+      <div class="asrv-feature-header"><div class="asrv-feature-eyebrow"><span class="asrv-feature-eyebrow__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg></span><span>From agenda to attendee recap</span></div><h2>Session Workflows That Keep the Event and Audience Connected</h2></div>
+      <div class="asrv-feature-cards">
+        {featureCards.map((card, index) => (
+          <article class="asrv-feature-card" style={`--card-index:${index}`}>
+            <div class="asrv-feature-card__content"><span>{card.eyebrow}</span><h3>{card.title}</h3><p>{card.text}</p><a href="/book-a-demo/">Explore more</a></div>
+            <div class="asrv-feature-card__image"><img src={card.image} alt={card.alt} width={card.width} height={card.height} loading="lazy" decoding="async" /></div>
+          </article>
+        ))}
+        <div class="asrv-feature-spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="asrv-use-cases" id="asrv-event-types">
+    <div class="asrv-use-heading"><span>Built for Content-Rich Event Programs</span><h2>Give Every Session Format a<br />Useful Second Life</h2></div>
+    <div class="asrv-use-grid">
+      {[1, 2, 3].map((position) => (<span class={`asrv-use-notch asrv-use-notch--${position}`} aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" /></svg></span>))}
+      {useCases.map(([title, text], index) => (
+        <article class="asrv-use-card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          {index === 2 && <span class="asrv-use-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" /><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" /></svg></span>}
+          <div class="asrv-use-card__icon" aria-hidden="true">
+            {index === 0 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2M8 16h2m4 0h2" /></svg>}
+            {index === 1 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>}
+            {index === 2 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2" /></svg>}
+            {index === 3 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M2 10h20M6 15h4" /></svg>}
+          </div>
+          <h3>{title}</h3><p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="asrv-faq" id="faq">
+    <div class="asrv-faq__inner">
+      <div class="asrv-faq__sidebar animate-on-scroll" data-animation="fadeInLeft"><span class="asrv-faq__eyebrow">Quick answers</span><h2 class="asrv-faq__heading">AI Session Recap Questions, Answered.</h2><p class="asrv-faq__intro">Capture, review, attendee access, translation, sharing, AV workflow, and reporting.</p><a href="/contact-en/" class="asrv-faq__cta">Talk to our team <span aria-hidden="true">→</span></a></div>
+      <div class="asrv-faq__list">{faqs.map(([question, answer], index) => (<details class="asrv-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 30)} data-asrv-faq open={index === 0}><summary class="asrv-faq__question"><strong>{question}</strong><span class="asrv-faq__icon" aria-hidden="true"></span></summary><div class="asrv-faq__answer"><p>{answer}</p></div></details>))}</div>
+    </div>
+  </section>
+</div>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+<script>
+  const recapFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-asrv-faq]"));
+  recapFaqItems.forEach((item) => item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    recapFaqItems.forEach((other) => { if (other !== item) other.open = false; });
+  }));
+
+  const recapBand = document.querySelector<HTMLElement>(".asrv-dark-band");
+  if (recapBand && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let bandFrame = 0;
+    const measureBand = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = recapBand.getBoundingClientRect().top + window.scrollY;
+    };
+    const updateBand = () => {
+      bandFrame = 0;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      recapBand.style.setProperty("--band-p", String(Math.round(progress * 100) / 100));
+    };
+    const queueBandUpdate = () => {
+      if (bandFrame) return;
+      bandFrame = requestAnimationFrame(updateBand);
+    };
+    const resizeBand = () => { measureBand(); queueBandUpdate(); };
+    measureBand();
+    updateBand();
+    window.addEventListener("scroll", queueBandUpdate, { passive: true });
+    window.addEventListener("resize", resizeBand, { passive: true });
+  }
+
+  const recapFeatureHeader = document.querySelector<HTMLElement>(".asrv-feature-header");
+  const recapFeatureCards = document.querySelectorAll<HTMLElement>(".asrv-feature-card");
+  const lastRecapFeatureCard = recapFeatureCards[recapFeatureCards.length - 1];
+  if (recapFeatureHeader && lastRecapFeatureCard) {
+    let releaseFrame = 0;
+    const syncFeatureRelease = () => {
+      releaseFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(lastRecapFeatureCard).top) || 0;
+      const releaseOffset = Math.min(0, lastRecapFeatureCard.getBoundingClientRect().top - stickyTop);
+      recapFeatureHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueFeatureRelease = () => {
+      if (releaseFrame) return;
+      releaseFrame = requestAnimationFrame(syncFeatureRelease);
+    };
+    window.addEventListener("scroll", queueFeatureRelease, { passive: true });
+    window.addEventListener("resize", queueFeatureRelease, { passive: true });
+    syncFeatureRelease();
+  }
+</script>
+
+<style>
+  .asrv-page { color: var(--heading-dark); background: #fff; overflow: clip; }
+
+  /* Event Registration: split hero */
+  .asrv-hero { position: relative; overflow: hidden; margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .asrv-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; width: 220px; max-width: 30vw; background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf); pointer-events: none; z-index: 2; }
+  .asrv-hero__grid { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .asrv-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .asrv-hero__badge { color: var(--brand-blue); font: 500 16px/1.5 var(--font-body); text-transform: uppercase; }
+  .asrv-hero__title { width: 100%; margin: 0; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; color: transparent; font: 500 60px/62px var(--font-heading); letter-spacing: -2.1px; }
+  .asrv-hero__desc { width: 100%; margin: 0; color: var(--subheading-gray); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .asrv-hero__cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 8px; }
+  .asrv-hero__btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; background: var(--heading-dark); color: #fff; font: 650 15px/22px var(--font-body); text-decoration: none; transition: transform .3s, background .3s; }
+  .asrv-hero__btn:hover { transform: translateY(-2px); background: #000; }
+  .asrv-hero__btn--outline { border-color: rgba(16,24,40,.22); background: transparent; color: var(--heading-dark); }
+  .asrv-hero__trust { display: flex; flex-wrap: wrap; gap: 18px; padding-top: 4px; }
+  .asrv-hero__trust-item { position: relative; padding-left: 16px; font: 400 16px/1.4 var(--font-body); }
+  .asrv-hero__trust-item::before { content: ""; position: absolute; left: 0; top: 8px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .asrv-hero__visual { position: relative; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .asrv-hero__visual-card { padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57; backdrop-filter: blur(16px); }
+  .asrv-hero__visual-inner { height: 460px; display: flex; align-items: center; overflow: hidden; padding: 24px; border-radius: 16px 0 0 16px; background: linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff); }
+  .asrv-hero__visual-inner img { width: 100%; height: 100%; object-fit: contain; }
+
+  /* Event Registration: trust strip */
+  .asrv-trust-strip { padding: 1.5rem; border-top: 1px solid var(--surface-card-border); }
+  .asrv-trust-strip__inner { max-width: 1280px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2.25rem; }
+  .asrv-trust-strip__stat { color: var(--subheading-gray); white-space: nowrap; font: 400 .9375rem/1.4 var(--font-body); }
+  .asrv-trust-strip__stat b { color: var(--heading-dark); font-weight: 700; }
+
+  /* Event Registration: two-option comparison */
+  .asrv-flow-section { padding: 60px 24px 80px; display: flex; flex-direction: column; align-items: center; }
+  .asrv-flow-header { max-width: 880px; margin-bottom: 24px; text-align: center; }
+  .asrv-flow-title { margin: 0 0 12px; background: linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); background-clip: text; color: transparent; font: 500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .asrv-flow-subtitle { max-width: 640px; margin: 0 auto; color: var(--subheading-gray); font: 400 18px/1.5 var(--font-body); }
+  .asrv-flow-quad { position: relative; width: 100%; max-width: 1180px; display: grid; grid-template: 1fr 1fr / 1fr 1fr; margin: 24px auto; }
+  .asrv-flow-quad__cell { min-height: 260px; display: flex; flex-direction: column; justify-content: center; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .asrv-flow-quad__cell:nth-child(2n) { border-right: 0; }
+  .asrv-flow-quad__cell:nth-child(n+3) { border-bottom: 0; }
+  .asrv-flow-kicker { margin-bottom: 12px; color: var(--brand-blue); font: 650 12px/1.3 var(--font-body); text-transform: uppercase; letter-spacing: .08em; }
+  .asrv-flow-quad__title { margin: 0 0 16px; color: var(--heading-dark); font: 700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .asrv-flow-quad__text { max-width: 40ch; margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .asrv-flow-quad__cell--media { min-height: 360px; align-items: center; padding: 18px 22px; overflow: hidden; }
+  .asrv-flow-quad__cross { position: absolute; left: 50%; top: 50%; z-index: 3; width: 18px; height: 18px; transform: translate(-50%,-50%); line-height: 0; pointer-events: none; }
+  .asrv-flow-composite { position: relative; width: 100%; height: 320px; display: flex; align-items: center; justify-content: center; padding: 24px 18px; border-radius: 22px; isolation: isolate; }
+  .asrv-flow-composite--live { background: linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%); }
+  .asrv-flow-composite--processed { background: linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%); }
+  .asrv-flow-product-shot { display: block; width: 100%; max-height: 100%; object-fit: contain; border: 1px solid #dfe4ec; border-radius: 14px; animation: asrv-product-shot-breathe 7s ease-in-out infinite; will-change: transform; }
+  .asrv-flow-quad__cell:nth-child(3) .asrv-flow-product-shot { animation-delay: -3.5s; }
+  .asrv-flow-quad__cell--media:hover .asrv-flow-product-shot { animation-play-state: paused; transform: scale(1.018); }
+  .asrv-flow-note { max-width: 740px; margin: 0; color: #667085; text-align: center; font: 400 14px/1.6 var(--font-body); }
+
+  /* Event Registration: dark capability grid and CTA */
+  .asrv-dark-band { --band-p: 0; --band-gap: calc((1 - var(--band-p)) * clamp(16px,3.5vw,56px)); position: relative; overflow: hidden; padding: clamp(64px,8vw,96px) 0 0; background-color: #000; background-image: radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%); background-repeat: no-repeat; clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px)); will-change: clip-path; }
+  .asrv-dark-band::before { content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E") }
+  .asrv-dark-band > * { position:relative;z-index:1 }
+  .asrv-dark-heading { max-width: 900px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .asrv-dark-heading h2 { margin: 0; background: linear-gradient(100deg,#fff,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff); background-clip: text; color: transparent; font: 500 clamp(36px,5vw,60px)/1.08 var(--font-heading); letter-spacing: -.04em; }
+  .asrv-dark-heading span { display: block; }
+  .asrv-grid-section { max-width: 1140px; margin: 0 auto; padding: clamp(40px,5vw,72px) 24px 0; }
+  .asrv-cap { display: grid; grid-template-columns: repeat(6,1fr); overflow: hidden; border: 1px solid #3b3a47; border-radius: 16px; }
+  .asrv-cap__cell { position:relative;grid-column:span 2;min-height:420px;display:flex;flex-direction:column;padding:36px 32px;border-right:1px solid #3b3a47;border-bottom:1px solid #3b3a47 }
+  .asrv-cap__cell:nth-child(n+4){grid-column:span 3;border-top:1px solid #3b3a47}.asrv-cap__cell:nth-child(3),.asrv-cap__cell:nth-child(5){border-right:0}
+  .asrv-cap__cell:nth-child(n+4){border-bottom:0}.asrv-cap__petal{position:absolute;left:0;width:28px;height:28px;pointer-events:none;line-height:0;z-index:2}.asrv-cap__petal--top{top:0;transform:translate(-50%,-50%)}.asrv-cap__petal--bottom{bottom:0;transform:translate(-50%,50%)}
+  .asrv-cap__label { margin: 0 0 14px; color: #fff; font: 700 15px/1.3 var(--font-heading); letter-spacing: -.01em; }
+  .asrv-cap__desc { max-width: 34ch; margin: 0; color: rgba(255,255,255,.62); font: 400 .9375rem/1.38 var(--font-body); }
+  .asrv-cap__visual { position: relative; flex: 1; display: flex; align-items: flex-end; justify-content: center; margin-top: 32px; }
+  .asrv-cap__visual::before { content:""; position:absolute; left:50%; bottom:-10%; width:80%; height:80%; transform:translateX(-50%); border-radius:50%; filter:blur(30px); background:radial-gradient(closest-side,rgba(92,138,255,.28),rgba(124,108,255,.15) 55%,transparent); }
+  .asrv-cap__visual > * { position: relative; z-index: 1; width: 100%; max-width: 300px; border: 1px solid rgba(150,170,255,.35); border-radius: 16px; background: #0d101a; box-shadow: 0 18px 44px -22px rgba(92,138,255,.5); color: #fff; font-family: var(--font-body); }
+  .asrv-cap__record { display: grid; grid-template-columns: 12px 1fr; gap: 12px; align-items:center; padding:18px }.asrv-cap__record i{width:12px;height:12px;border-radius:50%;background:#ef5c69}.asrv-cap__record span{font-size:13px}.asrv-cap__record b{grid-column:1/-1;padding:11px;border-radius:9px;background:#375dfb;text-align:center;font-size:12px}
+  .asrv-cap__file { display:flex;gap:12px;align-items:center;padding:18px }.asrv-cap__file>span{padding:8px;border-radius:7px;background:#5c8aff;color:#07101f;font-size:10px;font-weight:700}.asrv-cap__file div{flex:1;display:grid;gap:8px}.asrv-cap__file b{font-size:11px}.asrv-cap__file i{height:4px;border-radius:9px;background:#2d3240}.asrv-cap__file em{display:block;width:78%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#38bdf8,#a45cff)}
+  .asrv-cap__url { display:grid;gap:10px;padding:18px }.asrv-cap__url small{color:#8993a5}.asrv-cap__url span{padding:10px;border-radius:8px;background:#171b27;color:#aeb8ca;font-size:11px}.asrv-cap__url b{color:#a8b6ff;font-size:12px}
+  .asrv-cap__stack,.asrv-cap__states{display:grid;gap:9px;padding:14px}.asrv-cap__stack span,.asrv-cap__states span{display:flex;justify-content:space-between;padding:11px;border:1px solid #292e3b;border-radius:9px;color:#aeb8ca;font-size:11px}.asrv-cap__stack b{color:#9adabb}.asrv-cap__states span.is-active{border-color:#647cff;background:#111a39;color:#fff}
+  .asrv-dark-cta::before { content:""; position:absolute; top:-420px; bottom:0; left:50%; width:100vw; transform:translateX(-50%); z-index:0; pointer-events:none; background:radial-gradient(60% 55% at 30% 100%,rgba(56,189,248,.26) 0%,transparent 72%),radial-gradient(55% 50% at 78% 62%,rgba(164,92,255,.2) 0%,transparent 74%); -webkit-mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 34%,#000 62%); mask-image:linear-gradient(180deg,transparent 0%,rgba(0,0,0,.35) 34%,#000 62%); }
+  .asrv-dark-cta::after { content:""; position:absolute; inset:0 auto 0 50%; width:100vw; transform:translateX(-50%); z-index:0; pointer-events:none; background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.07) 0 1px,transparent 1px 46px); -webkit-mask-image:repeating-linear-gradient(90deg,#000 0 10px,transparent 10px 24px),linear-gradient(180deg,transparent 0%,#000 38%,#000 100%); -webkit-mask-composite:source-in; mask-image:repeating-linear-gradient(90deg,#000 0 10px,transparent 10px 24px),linear-gradient(180deg,transparent 0%,#000 38%,#000 100%); mask-composite:intersect; }
+  .asrv-dark-cta > * { position:relative; z-index:1; }
+  .asrv-dark-cta { position: relative; max-width: 900px; margin: 0 auto; padding: clamp(96px,11vw,168px) 24px clamp(80px,9vw,132px); display: flex; flex-direction: column; align-items: center; gap: 22px; text-align:center }
+  .asrv-dark-cta h2{margin:0;color:#fff;font:500 clamp(30px,4.4vw,52px)/1.1 var(--font-heading);letter-spacing:-.03em}.asrv-dark-cta a{padding:14px 28px;border-radius:12px;background:#fff;color:#14151a;font:650 16px/1.4 var(--font-body);text-decoration:none}
+
+  /* Event Registration: alternating bento rows */
+  .asrv-bento-section { padding:80px 5%;background:transparent }.asrv-bento-container{max-width:1200px;margin:0 auto}.asrv-bento-header{max-width:820px;margin:0 auto 60px;text-align:center}.asrv-bento-header>span,.asrv-use-heading>span{color:var(--brand-blue);font:650 13px/1.4 var(--font-body);text-transform:uppercase;letter-spacing:.08em}.asrv-bento-header h2,.asrv-use-heading h2{margin:12px 0 0;font:500 clamp(32px,4vw,56px)/1.08 var(--font-heading);letter-spacing:-.03em}
+  .asrv-bento-grid{position:relative;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent}.asrv-bento-notch{position:absolute;left:50%;width:28px;height:28px;pointer-events:none;line-height:0;z-index:2}.asrv-bento-notch--top{top:0;transform:translate(-50%,-50%)}.asrv-bento-notch--bottom{bottom:0;transform:translate(-50%,50%)}.asrv-bento-row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.asrv-bento-row:last-child{border-bottom:0}.asrv-bento-cell{min-width:0;padding:4rem;display:flex;flex-direction:column;justify-content:center}.asrv-bento-row .asrv-bento-cell:first-child{border-right:1px solid #e5e7eb}.asrv-bento-visual{padding:2.5rem 2rem;align-items:center;overflow:hidden;background:transparent}.asrv-bento-content{background:transparent}.asrv-bento-row--reverse .asrv-bento-content{order:0}.asrv-bento-row--reverse .asrv-bento-visual{order:1}.asrv-bento-cross{position:absolute;bottom:0;left:50%;width:28px;height:28px;transform:translate(-50%,50%);pointer-events:none;line-height:0;z-index:2}.asrv-bento-row:last-child .asrv-bento-cross{display:none}.asrv-bento-eyebrow{display:block;margin-bottom:1rem;color:#5b21b6;font:600 .875rem/1.4 var(--font-body);text-transform:uppercase;letter-spacing:.05em}.asrv-bento-content h3{margin:0 0 1.25rem;color:#111827;font:500 2.25rem/1.02 var(--font-heading);letter-spacing:-.02em}.asrv-bento-content p{margin:0 0 1rem;color:#4b5563;font:400 1.125rem/1.45 var(--font-body)}.asrv-bento-content p:last-child{margin-bottom:0}
+  .asrv-bento-shot-stage{position:relative;width:100%;padding:18px 10px;border-radius:22px;isolation:isolate}.asrv-bento-shot-stage--review{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%)}.asrv-bento-shot-stage--library{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}.asrv-bento-shot-stage--takeaways{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%)}.asrv-bento-shot-stage--share{background:linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%)}
+  .asrv-bento-product-shot{display:block;width:100%;border:1px solid #dfe4ec;border-radius:14px;animation:asrv-product-shot-breathe 7s ease-in-out infinite;will-change:transform}.asrv-bento-row:nth-child(even) .asrv-bento-product-shot{animation-delay:-3.5s}.asrv-bento-visual:hover .asrv-bento-product-shot{animation-play-state:paused;transform:scale(1.018)}
+  @keyframes asrv-product-shot-breathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}
+
+  /* Speaker Management: sticky dark narrative cards */
+  .asrv-feature-shell{width:100%;background:linear-gradient(180deg,#0d0a2c 0%,transparent 320px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28),transparent 55%),#000}.asrv-feature-section{max-width:1140px;margin:0 auto;padding:4px 0 30px}.asrv-feature-header{position:sticky;top:69px;z-index:20;isolation:isolate;width:min(94%,1050px);margin:0 auto;padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}.asrv-feature-header::before{content:"";position:absolute;z-index:-1;top:-1px;bottom:-28px;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(180deg,rgba(13,10,44,.99),rgba(7,11,27,.98) 72%,rgba(7,11,27,0))}.asrv-feature-eyebrow{display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;padding:6px 16px 6px 12px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35);backdrop-filter:blur(16px)}.asrv-feature-eyebrow>span:last-child{color:#fff;font:500 15px/1.3 var(--font-body)}.asrv-feature-eyebrow__icon{display:flex;width:16px;height:16px}.asrv-feature-eyebrow__icon svg{width:100%;height:100%}.asrv-feature-header h2{max-width:900px;margin:0;color:#fff;font:500 46px/1.15 var(--font-heading)}
+  .asrv-feature-cards{--stack-top:300px;position:relative;padding:80px 0 50px}.asrv-feature-card{position:sticky;top:calc(var(--stack-top) + var(--card-index) * 20px);z-index:var(--card-index);height:500px;display:flex;margin-bottom:60px;overflow:hidden;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f}.asrv-feature-card__content{flex:0 0 45%;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:40px}.asrv-feature-card__content>span{align-self:flex-start;padding:7px 13px;border:1px solid rgba(175,163,255,.28);border-radius:999px;background:rgba(175,163,255,.1);color:#afa3ff;font:600 12px/1.2 var(--font-body)}.asrv-feature-card h3{margin:0;color:#e7e4fa;font:500 32px/1.2 var(--font-heading)}.asrv-feature-card p{margin:0;color:rgba(255,255,255,.55);font:400 17px/1.65 var(--font-body)}.asrv-feature-card a{align-self:flex-start;margin-top:8px;padding:12px 26px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.06);color:#fff;font:500 15px/1.3 var(--font-body);text-decoration:none}.asrv-feature-card__image{flex:1;display:flex;align-items:center;justify-content:center;margin:16px 16px 16px 0;padding:20px;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04))}.asrv-feature-card__image img{width:100%;height:100%;object-fit:contain}.asrv-feature-spacer{height:190px}
+
+  /* Event Registration: use cases and FAQ */
+  .asrv-use-cases{padding:clamp(82px,9vw,116px) 24px}.asrv-use-heading{max-width:850px;margin:0 auto 42px;text-align:center}.asrv-use-heading>span{font-family:var(--font-heading);text-transform:none}.asrv-use-grid{position:relative;max-width:1140px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--surface-card-border)}.asrv-use-card{position:relative;min-height:300px;padding:28px;border:0;border-left:1px solid var(--surface-card-border);border-radius:0;background:transparent;box-shadow:none}.asrv-use-card:first-of-type{border-left:0}.asrv-use-notch{position:absolute;top:0;width:28px;height:28px;transform:translate(-50%,-50%);pointer-events:none;line-height:0;z-index:2}.asrv-use-notch--1{left:25%}.asrv-use-notch--2{left:50%}.asrv-use-notch--3{left:75%}.asrv-use-cross{display:none}.asrv-use-card__icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:var(--brand-blue)}.asrv-use-card__icon svg{width:100%;height:100%}.asrv-use-card h3{max-width:230px;min-height:2.3em;margin:0 0 28px;color:var(--heading-dark);font:500 21px/1.15 var(--font-heading)}.asrv-use-card p{margin:14px 0 0;color:var(--body-gray);font:400 15px/1.4 var(--font-body)}
+  .asrv-faq{padding:80px 24px;background:#fff}.asrv-faq__inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start}.asrv-faq__sidebar{position:sticky;top:6rem}.asrv-faq__eyebrow{display:inline-flex;padding:8px 16px;margin-bottom:20px;border:1px solid #e4e7ec;border-radius:999px;font:500 .8125rem/1.3 var(--font-body)}.asrv-faq__heading{margin:0 0 20px;color:#000;font:500 44px/1.1 var(--font-heading);letter-spacing:-1px}.asrv-faq__intro{margin:0 0 28px;color:var(--body-light);font:400 1rem/1.6 var(--font-body)}.asrv-faq__cta{display:inline-flex;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 .9375rem/1.3 var(--font-body);text-decoration:none}.asrv-faq__list{display:flex;flex-direction:column;gap:16px;counter-reset:asrv-faq}.asrv-faq__item{counter-increment:asrv-faq;padding:4px 28px;overflow:hidden;border:1px solid #e4e7ec;border-radius:20px;background:#fff}.asrv-faq__item[open]{background:#e4e7ec}.asrv-faq__question{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;list-style:none;cursor:pointer;color:#000;font:500 1.0625rem/1.4 var(--font-heading)}.asrv-faq__question::-webkit-details-marker{display:none}.asrv-faq__question strong{font-weight:500}.asrv-faq__question strong::before{content:counter(asrv-faq) ". "}.asrv-faq__icon{position:relative;flex:0 0 18px;height:18px}.asrv-faq__icon::before,.asrv-faq__icon::after{content:"";position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.asrv-faq__icon::before{width:14px;height:2px}.asrv-faq__icon::after{width:2px;height:14px}.asrv-faq__item[open] .asrv-faq__icon::after{opacity:0}.asrv-faq__answer{max-width:640px;padding:0 0 24px}.asrv-faq__answer p{margin:0;color:#000;font:400 .9375rem/1.7 var(--font-body)}
+
+  @media (max-width:1024px){.asrv-hero__grid{grid-template-columns:minmax(0,1fr) minmax(360px,.9fr);gap:32px}.asrv-hero__title{font-size:46px;line-height:52px;letter-spacing:-1.5px}.asrv-feature-section{padding-inline:20px}.asrv-feature-header h2{font-size:40px}.asrv-feature-card{height:450px}.asrv-feature-card__content{flex-basis:50%}.asrv-feature-card h3{font-size:28px}.asrv-faq__inner{grid-template-columns:1fr;gap:40px}.asrv-faq__sidebar{position:static}.asrv-faq__heading{font-size:32px}}
+  @media (max-width:860px){.asrv-hero{padding-top:142px}.asrv-hero__grid{grid-template-columns:1fr}.asrv-hero__content{align-items:center;text-align:center}.asrv-hero__visual{width:min(680px,100%);margin:10px auto 0}.asrv-hero__visual-card,.asrv-hero__visual-inner{border-radius:22px}.asrv-cap{grid-template-columns:1fr}.asrv-cap__cell,.asrv-cap__cell:nth-child(n+4){grid-column:span 1;min-height:0;padding:32px 24px;border-right:0;border-top:0;border-bottom:1px solid #3b3a47}.asrv-cap__cell:last-child{border-bottom:0}.asrv-cap__petal{display:none}.asrv-bento-row{display:flex;flex-direction:column}.asrv-bento-row .asrv-bento-cell:first-child{border-right:0}.asrv-bento-content,.asrv-bento-row--reverse .asrv-bento-content{order:1;border-bottom:1px solid #e5e7eb}.asrv-bento-visual,.asrv-bento-row--reverse .asrv-bento-visual{order:2}.asrv-use-grid{grid-template-columns:repeat(2,1fr)}.asrv-use-notch--1,.asrv-use-notch--3{display:none}.asrv-use-card:nth-of-type(odd){border-left:0}.asrv-use-card:nth-of-type(n+3){border-top:1px solid var(--surface-card-border)}.asrv-use-cross{display:block;position:absolute;top:0;right:0;width:28px;height:28px;transform:translate(50%,-50%);pointer-events:none;line-height:0;z-index:2}}
+  @media (max-width:767px){.asrv-hero{margin-top:-80px;padding:112px 16px 40px}.asrv-hero__content{align-items:flex-start;text-align:left}.asrv-hero__title{font-size:34px;line-height:40px;letter-spacing:-.8px}.asrv-hero__desc{max-width:100%;font-size:16px}.asrv-hero__cta-row{width:100%;flex-direction:column;align-items:stretch}.asrv-hero__btn{width:100%}.asrv-hero__trust{justify-content:flex-start}.asrv-hero__visual-inner{height:340px;padding:12px}.asrv-trust-strip__inner{gap:12px 22px}.asrv-flow-section{padding:60px 16px}.asrv-flow-quad{grid-template-columns:1fr;grid-template-rows:auto}.asrv-flow-quad__cross{display:none}.asrv-flow-quad__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3!important}.asrv-flow-quad__cell:nth-child(3){order:4;border-bottom:0!important}.asrv-flow-quad__cell:nth-child(4){order:3}.asrv-flow-quad__cell--media{min-height:320px;padding:16px 20px 32px}.asrv-flow-composite{height:285px}.asrv-dark-heading span{display:inline}.asrv-dark-cta{padding-top:70px}.asrv-bento-section{padding:70px 16px}.asrv-bento-cell{min-height:0;padding:3rem 1.5rem}.asrv-bento-visual{min-height:360px}.asrv-bento-content h3{font-size:27px}.asrv-bento-content p{font-size:1rem}.asrv-feature-header{position:static}.asrv-feature-header h2{font-size:30px}.asrv-feature-cards{padding-top:50px}.asrv-feature-card{position:relative;top:auto!important;height:auto;min-height:560px;flex-direction:column}.asrv-feature-card__content{flex:0 0 auto;padding:24px 20px 10px}.asrv-feature-card h3{font-size:24px}.asrv-feature-card p{font-size:15px}.asrv-feature-card__image{min-height:280px;margin:12px;padding:16px}.asrv-feature-spacer{display:none}.asrv-use-cases{padding:70px 16px}.asrv-use-grid{grid-template-columns:1fr}.asrv-use-card,.asrv-use-card:nth-of-type(n){min-height:0;padding:24px 20px;border-left:0;border-top:1px solid var(--surface-card-border)}.asrv-use-card:first-of-type{border-top:0}.asrv-use-card h3{min-height:0;margin:0 0 18px}.asrv-use-cross,.asrv-use-notch--2{display:none}.asrv-faq{padding:56px 16px}.asrv-faq__heading{font-size:28px}.asrv-faq__item{padding:4px 20px;border-radius:16px}.asrv-faq__question{padding:18px 0;font-size:.9375rem}}
+  @media (max-width:480px){.asrv-trust-strip__inner{display:grid;grid-template-columns:1fr 1fr}.asrv-trust-strip__stat{white-space:normal;font-size:13px;text-align:center}.asrv-hero__visual-inner{height:300px}.asrv-feature-section{padding-inline:16px}}
+  @media (prefers-reduced-motion:reduce){.asrv-hero__btn{transition:none}.asrv-dark-band{clip-path:none;will-change:auto}.asrv-flow-product-shot,.asrv-bento-product-shot{animation:none;will-change:auto}.asrv-flow-quad__cell--media:hover .asrv-flow-product-shot,.asrv-bento-visual:hover .asrv-bento-product-shot{transform:none}}
+</style>

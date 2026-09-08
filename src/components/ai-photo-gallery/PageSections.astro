@@ -1,0 +1,971 @@
+---
+const intakeCapabilities = [
+  { title: "Upload from the Workspace", description: "Add photo batches in the organizer workspace and send them into the selected event and folder." },
+  { title: "Import from Google Drive", description: "Preview a public Drive folder, include its subfolders, identify duplicates, and start a server-side import." },
+  { title: "Organize with Folders", description: "Create, rename, order, and move photos between event folders." },
+  { title: "Review Upload History", description: "Follow batch progress, skipped duplicates, and failed files from the organizer workspace." },
+  { title: "Follow Face Indexing", description: "Keep the processing context and face-indexing status tied to each event photo batch." },
+];
+
+const storyCards = [
+  {
+    id: "apg-matching",
+    eyebrow: "How selfie photo matching works",
+    title: "Turn One Selfie Into a Personal Event Photo Collection",
+    description: "Attendees provide a clear selfie. EventHex compares it with face groups indexed from that event and opens matching photos in My Photos. They can return later or enable alerts as new batches arrive.",
+    image: "/feature-images/ai-photo-gallery/selfie-match-visual.svg",
+    alt: "Selfie search opening an attendee's personal event photo collection",
+    width: 775,
+    height: 812,
+  },
+  {
+    id: "apg-access",
+    eyebrow: "Access that fits the event",
+    title: "Choose Who Can Enter the Gallery and What They Need to Provide",
+    description: "Choose a public or attendee-only gallery, optional WhatsApp verification, selected profile fields, and anonymous selfie search when event settings allow it. Access and matching rules stay at event level.",
+    image: "/feature-images/ai-photo-gallery/privacy-controls-visual.svg",
+    alt: "Event gallery access and photo permission settings",
+    width: 1142,
+    height: 930,
+  },
+  {
+    id: "apg-personal-gallery",
+    eyebrow: "A gallery built around the attendee",
+    title: "Give Each Person More Than a Folder of Files",
+    description: "My Photos holds each attendee's matches. Photos Together shows people captured together, while detected-people views and personal links open a selected person's photos.",
+    image: "/feature-images/ai-photo-gallery/hero-visual.svg",
+    alt: "Personal gallery with My Photos, Photos Together, and people views",
+    width: 1137,
+    height: 927,
+  },
+  {
+    id: "apg-alerts",
+    eyebrow: "Photo alerts when the gallery changes",
+    title: "Let Attendees Know When Another Photo of Them Appears",
+    description: "When notifications are enabled, attendees can opt in to WhatsApp alerts. A new match brings them back to their updated personal gallery.",
+    image: "/feature-images/ai-photo-gallery/cta-visual.svg",
+    alt: "Photo alert returning an attendee to an updated personal gallery",
+    width: 819,
+    height: 822,
+  },
+];
+
+const eventTypes = [
+  {
+    id: "exhibitions",
+    label: "Exhibitions and Trade Shows",
+    description: "Organize venue and stage folders, help delegates find themselves, and include sponsor placements in the gallery.",
+    highlights: ["Venue and stage folders", "Delegate selfie matching", "Sponsor placements in the gallery"],
+    image: "/feature-images/ai-platform/lifecycle-during-photos.jpg",
+    imageAlt: "EventHex Manage Photos workspace with event folders and gallery upload controls",
+    width: 1117,
+    height: 837,
+    visualLabel: "Gallery folders organized",
+  },
+  {
+    id: "conferences",
+    label: "Conferences and Tech Events",
+    description: "Connect speaker identities, highlights, attendee matches, and share-ready moments.",
+    highlights: ["Speaker identities", "Attendee photo matches", "Share-ready highlights"],
+    image: "/feature-images/ai/instasnap-ai.webp",
+    imageAlt: "EventHex InstaSnap attendee selfie matching and personal gallery experience",
+    width: 640,
+    height: 522,
+    visualLabel: "Attendee matches ready",
+  },
+  {
+    id: "associations",
+    label: "Association Events",
+    description: "Give members a familiar personal gallery while retaining attendee-only access when needed.",
+    highlights: ["Personal member galleries", "Attendee-only access", "Event-level gallery controls"],
+    image: "/feature-images/ai-photo-gallery/privacy-controls-visual.svg",
+    imageAlt: "EventHex event gallery access and privacy controls",
+    width: 1142,
+    height: 930,
+    visualLabel: "Member access configured",
+  },
+  {
+    id: "corporate",
+    label: "Corporate Events and Agencies",
+    description: "Reuse the workflow across client events while configuring each gallery at event level.",
+    highlights: ["Reusable client workflows", "Event-level configuration", "Gallery branding controls"],
+    image: "/feature-images/ai-photo-gallery/sponsor-frames-visual.svg",
+    imageAlt: "EventHex event gallery sponsor and branding controls",
+    width: 1035,
+    height: 1022,
+    visualLabel: "Client gallery branded",
+  },
+];
+
+const connectedFeatures = [
+  ["AI Platform", "See how InstaSnap fits into the wider EventHex AI toolkit.", "/ai-platform/"],
+  ["Event Mobile App", "Explore the supported attendee app experience around event moments.", "/event-mobile-app/"],
+  ["Event Registration", "Collect the attendee information used across the event journey.", "/event-registration/"],
+  ["Event Notifications", "Review the wider communication layer for event audiences.", "/event-notifications/"],
+];
+---
+
+<section class="apg-choice" id="apg-discovery">
+  <div class="apg-shell">
+    <header class="apg-section-heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="apg-kicker">A faster way to find the right moments</span>
+      <h2>Keep the Event Gallery. Add a Personal Way Into It.</h2>
+      <p>Different attendees want different views. EventHex can keep the wider event story available while helping each person find the photos that include them.</p>
+    </header>
+
+    <div class="apg-choice__grid">
+      <article class="apg-choice__copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Browse Moments</h3>
+        <p>Explore the event's available photos, highlights, folders, and people when the organizer makes those views available.</p>
+      </article>
+      <div class="apg-choice__media apg-choice__media--moments animate-on-scroll" data-animation="fadeInRight">
+        <div class="apg-portal-composite apg-portal-composite--moments">
+          <img class="apg-portal-composite__screen apg-portal-composite__screen--primary" src="/feature-images/ai-platform/lifecycle-during-photos.jpg" alt="EventHex Manage Photos workspace with gallery folders and upload controls" width="1117" height="837" loading="lazy" decoding="async" />
+          <img class="apg-portal-composite__screen apg-portal-composite__screen--secondary" src="/feature-images/ai-platform/lifecycle-during-gallery.jpg" alt="EventHex AI Gallery analytics dashboard" width="1117" height="837" loading="lazy" decoding="async" />
+          <span class="apg-portal-composite__status">Organizer gallery</span>
+        </div>
+      </div>
+      <div class="apg-choice__media apg-choice__media--selfie animate-on-scroll" data-animation="fadeInLeft">
+        <div class="apg-portal-composite apg-portal-composite--selfie">
+          <img class="apg-portal-composite__attendee" src="/feature-images/ai/instasnap-ai.webp" alt="EventHex InstaSnap selfie matching flow and attendee photo gallery" width="640" height="522" loading="lazy" decoding="async" />
+          <img class="apg-portal-composite__screen apg-portal-composite__screen--detail" src="/feature-images/ai-platform/lifecycle-during-gallery.jpg" alt="EventHex face recognition and matched-photo analytics" width="1117" height="837" loading="lazy" decoding="async" />
+          <span class="apg-portal-composite__status">AI photo matching</span>
+        </div>
+      </div>
+      <article class="apg-choice__copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Search with a Selfie</h3>
+        <p>Take or upload one clear selfie and open a personal collection of the matching event photos.</p>
+      </article>
+      <span class="apg-choice__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path>
+        </svg>
+      </span>
+    </div>
+    <p class="apg-choice__note">The organizer decides whether the wider gallery is public, attendee-only, all photos, or highlights only.</p>
+  </div>
+</section>
+
+<section class="apg-intake" id="apg-photo-intake">
+  <div class="apg-shell">
+    <header class="apg-intake__heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="apg-kicker apg-kicker--dark">Photo intake for event teams</span>
+      <h2>Bring Photographer Batches Into a Gallery Your Team Can Operate</h2>
+      <p>Keep uploads moving during or after the event without losing the folder, batch, or processing context behind them.</p>
+    </header>
+    <div class="apg-intake__grid">
+      {intakeCapabilities.map((capability, index) => (
+        <article class="apg-intake__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          {index !== 0 && index !== 3 && (
+            <span class="apg-intake__petal apg-intake__petal--top" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+            </span>
+          )}
+          {index !== 0 && index !== 3 && (
+            <span class="apg-intake__petal apg-intake__petal--bottom" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>
+            </span>
+          )}
+          <h3>{capability.title}</h3>
+          <p>{capability.description}</p>
+          <div class="apg-intake__visual" aria-hidden="true">
+            {index === 0 && (
+              <div class="apg-intake__surface apg-intake__upload">
+                <span class="apg-intake__surface-head">Workspace upload</span>
+                <div class="apg-intake__field"><span>Event folder</span><i></i></div>
+                <div class="apg-intake__field"><span>Photo batch</span><i></i></div>
+                <div class="apg-intake__field apg-intake__field--active"><span>+ Add photos</span></div>
+              </div>
+            )}
+            {index === 1 && (
+              <div class="apg-intake__chips">
+                <span>Public folder</span><span>Subfolders</span><span>Duplicates</span><span class="is-active">Preview import</span>
+              </div>
+            )}
+            {index === 2 && (
+              <div class="apg-intake__stack">
+                <div class="apg-intake__stack-row"><span>Stage</span><small>Folder</small></div>
+                <div class="apg-intake__stack-row is-active"><span>Networking</span><small>Folder</small></div>
+                <div class="apg-intake__stack-row"><span>Uncategorized</span><small>Default</small></div>
+              </div>
+            )}
+            {index === 3 && (
+              <div class="apg-intake__surface apg-intake__history">
+                <span class="apg-intake__surface-head">Upload history</span>
+                <div class="apg-intake__progress"><span>Browser batch</span><div><i></i></div></div>
+                <div class="apg-intake__progress"><span>Drive import</span><div><i></i></div></div>
+              </div>
+            )}
+            {index === 4 && (
+              <div class="apg-intake__stack">
+                <div class="apg-intake__stack-row"><span>Processing</span><small>Queued</small></div>
+                <div class="apg-intake__stack-row is-active"><span>Face indexing</span><small>In progress</small></div>
+                <div class="apg-intake__stack-row"><span>Gallery</span><small>Ready</small></div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="apg-story" id="apg-photo-journey" aria-labelledby="apg-story-title">
+  <div class="apg-story__inner">
+    <header class="apg-story__header animate-on-scroll" data-animation="fadeInUp">
+      <span class="apg-story__eyebrow">From selfie search to an updated personal gallery</span>
+      <h2 id="apg-story-title">A Photo Journey That Stays Tied to the Event</h2>
+    </header>
+    <div class="apg-story__grid animate-on-scroll" data-animation="fadeInUp">
+      <span class="apg-story__notch apg-story__notch--top" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+      </span>
+      <span class="apg-story__notch apg-story__notch--bottom" aria-hidden="true">
+        <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+      </span>
+      {storyCards.map((card, index) => (
+        <article id={card.id} class:list={["apg-story__row", index % 2 === 1 && "apg-story__row--reverse"]}>
+          <div class="apg-story__visual">
+            <div class="apg-story__stage">
+              <img src={card.image} alt={card.alt} width={card.width} height={card.height} loading="lazy" decoding="async" />
+            </div>
+          </div>
+          <div class="apg-story__content">
+            <span>{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.description}</p>
+          </div>
+          {index < storyCards.length - 1 && (
+            <span class="apg-story__cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+              </svg>
+            </span>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="apg-evidence" aria-label="Gallery curation, contribution, sharing, and branding">
+  <div class="apg-evidence__section">
+    <header class="apg-evidence__header">
+      <div class="apg-evidence__eyebrow">
+        <span aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"></path><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"></path></svg>
+        </span>
+        From library controls to attendee-ready moments
+      </div>
+      <h2>
+        <span>Shape What People <strong>See</strong>, Add,</span>
+        <span>Download, and Share</span>
+      </h2>
+    </header>
+
+    <div class="apg-evidence__cards" id="apg-evidence-stacking-cards">
+      <article class="apg-evidence__card" id="apg-curation" style="--card-index: 0;">
+        <div class="apg-evidence__copy">
+          <span>Curate the event story</span>
+          <h3>Decide What Belongs in Moments Before the Audience Starts Browsing</h3>
+          <p>Show all available photos or only organizer-marked highlights. Expose folder navigation when useful, name people and speakers, and let search and pagination keep larger collections practical to browse.</p>
+          <a href="/book-a-demo/">Explore More</a>
+        </div>
+        <div class="apg-evidence__media">
+          <figure class="apg-evidence-shot apg-evidence-shot--primary">
+            <img src="/feature-images/ai-platform/lifecycle-during-photos.jpg" alt="EventHex Manage Photos workspace for organizing event gallery uploads" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="apg-evidence-shot apg-evidence-shot--secondary">
+            <img src="/feature-images/ai-platform/lifecycle-during-gallery.jpg" alt="EventHex AI Gallery organizer dashboard with gallery controls and analytics" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </article>
+
+      <article class="apg-evidence__card" id="apg-contributions" style="--card-index: 1;">
+        <div class="apg-evidence__copy">
+          <span>Attendee-contributed photos</span>
+          <h3>Add the Audience's Perspective Without Giving Up Organizer Control</h3>
+          <p>Keep contributions in review so an organizer can approve or decline them, or publish accepted uploads directly. Set a per-attendee contribution limit, including an unlimited option, from the event's photo settings.</p>
+          <a href="/book-a-demo/">Explore More</a>
+        </div>
+        <div class="apg-evidence__media apg-evidence__media--contributions">
+          <figure class="apg-evidence-shot apg-evidence-shot--primary">
+            <img src="/feature-images/ai-platform/hero-ai-gallery.jpg" alt="EventHex AI Gallery portal with attendee contribution and gallery management navigation" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="apg-evidence-shot apg-evidence-shot--secondary">
+            <img src="/feature-images/ai-platform/lifecycle-during-photos.jpg" alt="EventHex photo management workspace for reviewing event photo batches" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </article>
+
+      <article class="apg-evidence__card" id="apg-sharing" style="--card-index: 2;">
+        <div class="apg-evidence__copy">
+          <span>Share-ready event moments</span>
+          <h3>Help Attendees Move from Finding a Photo to Sharing It</h3>
+          <p>Select matched photos, generate or rewrite a caption using event context, edit the copy, and use available device sharing options. A direct link can also open a personal collection or a selected person's photos.</p>
+          <a href="/book-a-demo/">Explore More</a>
+        </div>
+        <div class="apg-evidence__media apg-evidence__media--sharing">
+          <figure class="apg-evidence-shot apg-evidence-shot--primary">
+            <img src="/feature-images/ai/instasnap-ai.webp" alt="EventHex InstaSnap attendee selfie matching and personal photo gallery experience" width="640" height="522" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="apg-evidence-shot apg-evidence-shot--secondary">
+            <img src="/feature-images/ai-platform/lifecycle-during-gallery.jpg" alt="EventHex AI Gallery dashboard tracking matched photos and downloads" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </article>
+
+      <article class="apg-evidence__card" id="apg-branding" style="--card-index: 3;">
+        <div class="apg-evidence__copy">
+          <span>Brand and sponsor controls</span>
+          <h3>Put the Event Identity Where Attendees Already Want to Look</h3>
+          <p>Use an image or text watermark, then preview its position, scale, and opacity before attendees download. Configured partner spotlights can appear in Moments, My Photos, or both at a chosen frequency.</p>
+          <a href="/book-a-demo/">Explore More</a>
+        </div>
+        <div class="apg-evidence__media apg-evidence__media--branding">
+          <figure class="apg-evidence-shot apg-evidence-shot--primary">
+            <img src="/feature-images/ai-platform/lifecycle-during-gallery.jpg" alt="EventHex AI Gallery portal with watermark, monetization, and gallery settings navigation" width="1117" height="837" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="apg-evidence-shot apg-evidence-shot--secondary">
+            <img src="/feature-images/ai/instasnap-ai.webp" alt="Branded EventHex InstaSnap gallery experience for attendees" width="640" height="522" loading="lazy" decoding="async" />
+          </figure>
+        </div>
+      </article>
+      <div class="apg-evidence__spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<section class="apg-events" id="apg-event-types" aria-labelledby="apg-events-title">
+  <div class="apg-events__inner">
+    <header class="apg-events__header">
+      <span class="apg-events__badge animate-on-scroll" data-animation="fadeInUp">Built for photo-heavy event journeys</span>
+      <h2 id="apg-events-title" class="apg-events__title animate-on-scroll" data-animation="fadeInUp">
+        <span class="apg-events__title-line">Give Every Event Community</span>
+        <span class="apg-events__title-line">a Gallery Path That Fits</span>
+      </h2>
+      <p class="apg-events__subtitle animate-on-scroll" data-animation="fadeInUp">Use the same photo operations and configure access, curation, contribution, and branding for the audience in front of you.</p>
+    </header>
+
+    <div class="apg-events__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Event gallery use cases">
+      {eventTypes.map((eventType, index) => (
+        <button
+          class={`apg-events__tab ${index === 0 ? "apg-events__tab--active" : ""}`}
+          type="button"
+          role="tab"
+          aria-selected={index === 0 ? "true" : "false"}
+          aria-controls={`apg-events-panel-${eventType.id}`}
+          id={`apg-events-tab-${eventType.id}`}
+          data-apg-event-target={eventType.id}
+        >
+          {eventType.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="apg-events__box animate-on-scroll" data-animation="fadeInUp">
+      {eventTypes.map((eventType, index) => (
+        <div
+          class={`apg-events__panel ${index === 0 ? "apg-events__panel--active" : ""}`}
+          id={`apg-events-panel-${eventType.id}`}
+          role="tabpanel"
+          aria-labelledby={`apg-events-tab-${eventType.id}`}
+          data-apg-event-panel={eventType.id}
+        >
+          <div class="apg-events__left">
+            <h3 class="apg-events__panel-title">{eventType.label}</h3>
+            <p class="apg-events__panel-description">{eventType.description}</p>
+            <span class="apg-events__fit-label">GALLERY FIT</span>
+            <ul class="apg-events__checklist">
+              {eventType.highlights.map((highlight) => (
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  {highlight}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="apg-events__right">
+            <div class="apg-events__showcase">
+              <img src={eventType.image} alt={eventType.imageAlt} width={eventType.width} height={eventType.height} loading="lazy" decoding="async" />
+              <span class={`apg-events__visual-label apg-events__visual-label--${eventType.id}`}>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5h14v11H3z"></path><path d="m5.5 13 3-3 2.2 2.2 1.8-1.8 2 2M13.8 7.5h.1"></path></svg>
+                {eventType.visualLabel}
+              </span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="apg-links" id="apg-connected-workflows">
+  <div class="apg-shell">
+    <header class="apg-section-heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="apg-kicker">Explore the connected workflow</span>
+      <h2>Connect the Gallery to the Rest of the Attendee Journey</h2>
+      <p>Go deeper when you need the AI platform, event app, registration, or notifications around InstaSnap.</p>
+    </header>
+    <div class="apg-links__grid">
+      {[1, 2, 3].map((notch) => (
+        <span class={`apg-links__notch apg-links__notch--${notch}`} aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+      ))}
+      {connectedFeatures.map(([title, description, href], index) => (
+        <a class="apg-links__card animate-on-scroll" data-animation="fadeInUp" href={href}>
+          {index === 2 && (
+            <span class="apg-links__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path></svg></span>
+          )}
+          <span class="apg-links__icon" aria-hidden="true">
+            {index === 0 && (
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.2 2.2M16.5 16.5l2.2 2.2M18.7 5.3l-2.2 2.2M7.5 16.5l-2.2 2.2"/></svg>
+            )}
+            {index === 1 && (
+              <svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10 5.5h4M10.5 18.5h3"/></svg>
+            )}
+            {index === 2 && (
+              <svg viewBox="0 0 24 24" fill="none"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M8 8h8M8 12h4M8 16l1.5 1.5L13 14"/></svg>
+            )}
+            {index === 3 && (
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6.5 9.5a5.5 5.5 0 0 1 11 0c0 6 2.5 6.5 2.5 6.5H4s2.5-.5 2.5-6.5Z"/><path d="M9.5 19a2.7 2.7 0 0 0 5 0"/></svg>
+            )}
+          </span><strong>{title}</strong><p>{description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const intakeBand = document.querySelector<HTMLElement>('.apg-intake');
+  if (intakeBand && intakeBand.dataset.bleedReady !== 'true' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    intakeBand.dataset.bleedReady = 'true';
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let frame = 0;
+    let last = -1;
+
+    const measureBand = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = intakeBand.getBoundingClientRect().top + window.scrollY;
+    };
+    const updateBand = () => {
+      frame = 0;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * 0.7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === last) return;
+      last = rounded;
+      intakeBand.style.setProperty('--band-p', String(rounded));
+    };
+    const queueBand = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(updateBand);
+    };
+    const resizeBand = () => {
+      measureBand();
+      last = -1;
+      queueBand();
+    };
+
+    measureBand();
+    updateBand();
+    window.addEventListener('scroll', queueBand, { passive: true });
+    window.addEventListener('resize', resizeBand, { passive: true });
+  }
+
+  const evidenceSection = document.querySelector<HTMLElement>('.apg-evidence');
+  const evidenceHeader = evidenceSection?.querySelector<HTMLElement>('.apg-evidence__header');
+  const evidenceCards = evidenceSection?.querySelectorAll<HTMLElement>('.apg-evidence__card');
+  const finalEvidenceCard = evidenceCards?.[evidenceCards.length - 1];
+
+  if (evidenceHeader && finalEvidenceCard) {
+    let evidenceFrame = 0;
+    const syncEvidenceRelease = () => {
+      evidenceFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalEvidenceCard).top) || 0;
+      const releaseOffset = Math.min(0, finalEvidenceCard.getBoundingClientRect().top - stickyTop);
+      evidenceHeader.style.setProperty('--apg-evidence-release-y', `${releaseOffset}px`);
+      evidenceHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueEvidenceRelease = () => {
+      if (evidenceFrame) return;
+      evidenceFrame = requestAnimationFrame(syncEvidenceRelease);
+    };
+
+    window.addEventListener('scroll', queueEvidenceRelease, { passive: true });
+    window.addEventListener('resize', queueEvidenceRelease, { passive: true });
+    syncEvidenceRelease();
+  }
+
+  const eventSuite = document.querySelector<HTMLElement>('.apg-events');
+  if (eventSuite && eventSuite.dataset.tabsReady !== 'true') {
+    eventSuite.dataset.tabsReady = 'true';
+    const eventTabs = Array.from(eventSuite.querySelectorAll<HTMLButtonElement>('.apg-events__tab'));
+    const eventPanels = Array.from(eventSuite.querySelectorAll<HTMLElement>('.apg-events__panel'));
+    let eventRotationId: number | undefined;
+
+    const activateEventTab = (tab: HTMLButtonElement) => {
+      const targetId = tab.dataset.apgEventTarget;
+      eventTabs.forEach((item) => {
+        item.classList.remove('apg-events__tab--active');
+        item.setAttribute('aria-selected', 'false');
+      });
+      eventPanels.forEach((panel) => panel.classList.remove('apg-events__panel--active'));
+
+      tab.classList.add('apg-events__tab--active');
+      tab.setAttribute('aria-selected', 'true');
+      eventSuite.querySelector<HTMLElement>(`[data-apg-event-panel="${targetId}"]`)?.classList.add('apg-events__panel--active');
+    };
+
+    const stopEventRotation = () => {
+      if (eventRotationId === undefined) return;
+      window.clearInterval(eventRotationId);
+      eventRotationId = undefined;
+    };
+    const startEventRotation = () => {
+      stopEventRotation();
+      if (eventTabs.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      eventRotationId = window.setInterval(() => {
+        const currentIndex = eventTabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+        activateEventTab(eventTabs[(currentIndex + 1) % eventTabs.length]);
+      }, 4000);
+    };
+
+    eventTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        activateEventTab(tab);
+        startEventRotation();
+      });
+    });
+    eventSuite.addEventListener('mouseenter', stopEventRotation);
+    eventSuite.addEventListener('mouseleave', startEventRotation);
+    eventSuite.addEventListener('focusin', stopEventRotation);
+    eventSuite.addEventListener('focusout', (event) => {
+      if (!(event.relatedTarget instanceof Node) || !eventSuite.contains(event.relatedTarget)) startEventRotation();
+    });
+    document.addEventListener('visibilitychange', () => document.hidden ? stopEventRotation() : startEventRotation());
+    startEventRotation();
+  }
+</script>
+
+<style>
+  .apg-shell { width: min(100% - 48px, 1140px); margin-inline: auto; }
+  .apg-kicker { display: block; margin-bottom: 1rem; color: #5b21b6; font-family: var(--font-body); font-size: 0.875rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.05em; text-transform: uppercase; }
+  .apg-kicker--dark { color: #afa3ff; }
+  .apg-section-heading { max-width: 820px; margin: 0 auto 60px; text-align: center; }
+  .apg-section-heading h2, .apg-intake__heading h2 {
+    margin: 0 0 1.25rem; background: linear-gradient(98deg, #111827 43.06%, #8f8f8f 91.81%); background-clip: text; color: transparent; font-family: var(--font-heading); font-size: 40px; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .apg-section-heading p, .apg-intake__heading p {
+    max-width: 720px; margin: 0 auto; color: #4b5563; font-family: var(--font-body); font-size: 1.125rem; font-weight: 400; line-height: 1.45;
+  }
+
+  .apg-choice { display: flex; flex-direction: column; align-items: center; overflow: hidden; padding: 40px 24px; }
+  .apg-choice .apg-section-heading { max-width: 860px; margin: 0 auto 24px; padding: 10px 20px 20px; text-align: center; }
+  .apg-choice .apg-section-heading h2 { max-width: 700px; margin: 0 auto 12px; background: linear-gradient(98deg, #111827 43.06%, #8f8f8f 91.81%); background-clip: text; color: transparent; font-size: 40px; font-weight: 500; line-height: 1.1; letter-spacing: -0.04em; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .apg-choice .apg-section-heading p { max-width: 640px; color: var(--subheading-gray, #555); font-size: 18px; line-height: 1.5; }
+  .apg-choice__grid {
+    position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    width: 100%; max-width: 1180px; margin: 24px auto;
+  }
+  .apg-choice__copy, .apg-choice__media { min-height: 260px; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .apg-choice__media:nth-child(2), .apg-choice__copy:nth-child(4) { border-right: 0; }
+  .apg-choice__media:nth-child(3), .apg-choice__copy:nth-child(4) { border-bottom: 0; }
+  .apg-choice__copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .apg-choice__copy h3 { margin: 0 0 16px; color: var(--heading-dark, #1e1d24); font-family: var(--font-heading); font-size: clamp(24px, 2.6vw, 32px); font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; }
+  .apg-choice__copy p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+  .apg-choice__media { display: grid; place-items: center; overflow: hidden; padding: 18px 22px; }
+  .apg-choice__cross { position: absolute; inset: 50% auto auto 50%; z-index: 2; width: 18px; height: 18px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; }
+  .apg-choice__note { max-width: 720px; margin: 24px auto 0; color: #667085; font-family: var(--font-body); font-size: 0.95rem; font-weight: 500; line-height: 1.6; text-align: center; }
+  .apg-portal-composite { position: relative; width: 100%; height: 300px; overflow: visible; }
+  .apg-portal-composite__screen {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+  .apg-portal-composite__screen--primary { top: 38px; left: 8px; z-index: 1; width: 76%; height: 65%; }
+  .apg-portal-composite__screen--secondary { right: 6px; bottom: 14px; z-index: 2; width: 64%; height: 54%; }
+  .apg-portal-composite__status {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 11px;
+    border: 1px solid #cfead9;
+    border-radius: 10px;
+    background: #effbf4;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+    color: #18864b;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .apg-portal-composite__attendee { position: absolute; inset: 14px auto auto 0; z-index: 2; display: block; width: 86%; height: 88%; object-fit: contain; object-position: left center; }
+  .apg-portal-composite--selfie .apg-portal-composite__screen--detail { right: 2px; bottom: 8px; z-index: 1; width: 58%; height: 48%; }
+  .apg-portal-composite--selfie .apg-portal-composite__status { right: 8px; left: auto; }
+
+  .apg-intake {
+    --band-p: 0;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, 0.22), rgba(124, 108, 255, 0.1) 45%, transparent 72%);
+    background-repeat: no-repeat;
+    color: #fff;
+    will-change: clip-path;
+  }
+  .apg-intake::before { content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0.55; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E"); }
+  .apg-intake > * { position: relative; z-index: 1; }
+  .apg-intake .apg-shell { width: min(100%, 1140px); padding: 0 24px clamp(56px, 7vw, 88px); }
+  .apg-intake__heading { max-width: 980px; margin: 0 auto; padding: 0 24px 8px; text-align: center; }
+  .apg-intake__heading .apg-kicker { color: #8eabff; }
+  .apg-intake__heading h2 { margin: 0 0 0.75rem; background: linear-gradient(98deg, #fff 43.06%, #9ca3af 91.81%); background-clip: text; color: transparent; font-size: 40px; font-weight: 500; line-height: 1.1; letter-spacing: -0.04em; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .apg-intake__heading p { color: rgba(255, 255, 255, 0.62); font-size: 1.0625rem; line-height: 1.65; }
+  .apg-intake__grid { display: grid; grid-template-columns: repeat(6, 1fr); overflow: hidden; margin-top: clamp(40px, 5vw, 72px); border: 1px solid #3b3a47; border-radius: 16px; }
+  .apg-intake__card { position: relative; display: flex; grid-column: span 2; min-height: 420px; flex-direction: column; padding: 36px 32px; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; }
+  .apg-intake__card:nth-child(n + 4) { grid-column: span 3; border-bottom: 0; }
+  .apg-intake__card:nth-child(3), .apg-intake__card:nth-child(5) { border-right: 0; }
+  .apg-intake__petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .apg-intake__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .apg-intake__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .apg-intake__card h3 { margin: 0 0 14px; color: #fff; font-family: var(--font-heading); font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+  .apg-intake__card p { max-width: 34ch; margin: 0; color: rgba(255, 255, 255, 0.62); font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.38; }
+  .apg-intake__visual { position: relative; display: flex; align-items: flex-end; justify-content: center; flex: 1; margin-top: 32px; }
+  .apg-intake__visual::before { content: ""; position: absolute; bottom: -10%; left: 50%; width: 80%; height: 80%; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(92, 138, 255, 0.28), rgba(124, 108, 255, 0.15) 55%, transparent); filter: blur(30px); pointer-events: none; }
+  .apg-intake__visual > * { position: relative; z-index: 1; }
+  .apg-intake__surface, .apg-intake__stack-row, .apg-intake__chips span { border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; background: rgba(255, 255, 255, 0.04); }
+  .apg-intake__surface { display: flex; width: 100%; max-width: 290px; flex-direction: column; gap: 10px; padding: 16px; border-color: transparent; border-radius: 16px; background: linear-gradient(#08080e, #08080e) padding-box, linear-gradient(135deg, #38bdf8, #5c8aff 38%, #7c6cff 70%, #a45cff) border-box; box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5); }
+  .apg-intake__surface-head { color: rgba(255, 255, 255, 0.55); font-family: var(--font-body); font-size: 12px; }
+  .apg-intake__field { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 9px; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.86); font-family: var(--font-body); font-size: 13px; }
+  .apg-intake__field i { width: 42%; height: 6px; border-radius: 999px; background: rgba(255, 255, 255, 0.14); }
+  .apg-intake__field--active { justify-content: center; border: 1px dashed rgba(110, 150, 255, 0.45); background: linear-gradient(135deg, #38bdf8, #5c8aff 38%, #7c6cff 70%, #a45cff); background-clip: text; color: transparent; -webkit-background-clip: text; }
+  .apg-intake__chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .apg-intake__chips span { padding: 7px 12px; border-radius: 999px; color: rgba(255, 255, 255, 0.72); font-family: var(--font-body); font-size: 12.5px; }
+  .apg-intake__chips span.is-active, .apg-intake__stack-row.is-active { border-color: transparent; background: linear-gradient(135deg, #0d1a30, #131938 58%, #1b1740) padding-box, linear-gradient(135deg, #38bdf8, #5c8aff 38%, #7c6cff 70%, #a45cff) border-box; box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6); color: #fff; }
+  .apg-intake__stack { display: flex; width: 100%; max-width: 300px; flex-direction: column; gap: 10px; }
+  .apg-intake__stack-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 14px; color: rgba(255, 255, 255, 0.86); font-family: var(--font-body); font-size: 13px; }
+  .apg-intake__stack-row small { color: rgba(255, 255, 255, 0.5); font-size: 11.5px; }
+  .apg-intake__stack-row.is-active small { color: #b9ccff; }
+  .apg-intake__progress { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 9px; background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.82); font-family: var(--font-body); font-size: 12.5px; }
+  .apg-intake__progress > div { height: 4px; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.12); }
+  .apg-intake__progress i { display: block; width: 100%; height: 100%; transform-origin: left; border-radius: inherit; background: linear-gradient(90deg, #38bdf8, #5c8aff 38%, #7c6cff 70%, #a45cff); }
+  .apg-intake__progress:nth-child(3) i { width: 62%; }
+
+  @keyframes apg-cap-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes apg-cap-fill { 0% { transform: scaleX(0.25); } 60%, 100% { transform: scaleX(1); } }
+  .apg-intake__surface, .apg-intake__stack, .apg-intake__chips { animation: apg-cap-float 7s ease-in-out infinite; }
+  .apg-intake__card:nth-child(2) .apg-intake__chips { animation-delay: -1.4s; }
+  .apg-intake__card:nth-child(3) .apg-intake__stack { animation-delay: -2.8s; }
+  .apg-intake__card:nth-child(4) .apg-intake__surface { animation-delay: -4.2s; }
+  .apg-intake__card:nth-child(5) .apg-intake__stack { animation-delay: -5.6s; }
+  .apg-intake__progress i, .apg-intake__field i { animation: apg-cap-fill 4.5s ease-in-out infinite; }
+  .apg-intake__progress:nth-child(3) i { animation-delay: -1.6s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apg-intake { clip-path: none; will-change: auto; }
+    .apg-intake__surface, .apg-intake__stack, .apg-intake__chips, .apg-intake__progress i, .apg-intake__field i { animation: none; }
+  }
+
+  .apg-story { width: 100%; padding: 80px 5%; scroll-margin-top: 68px; background: transparent; }
+  .apg-story__inner { width: 100%; max-width: 1200px; margin: 0 auto; }
+  .apg-story__header { margin: 0 auto 60px; text-align: center; }
+  .apg-story__eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font-family: var(--font-body); font-size: 0.875rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.05em; text-transform: uppercase; }
+  .apg-story__header h2 { margin: 0; background: linear-gradient(98deg, #111827 43.06%, #8f8f8f 91.81%); background-clip: text; color: transparent; font-family: var(--font-heading); font-size: 40px; font-weight: 500; line-height: 1.1; letter-spacing: -0.03em; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .apg-story__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .apg-story__notch { position: absolute; left: 50%; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .apg-story__notch--top { top: 0; transform: translate(-50%, -50%); }
+  .apg-story__notch--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .apg-story__row { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 470px; border-bottom: 1px solid #e5e7eb; }
+  .apg-story__row:last-child { border-bottom: 0; }
+  .apg-story__visual, .apg-story__content { min-width: 0; padding: 4rem; }
+  .apg-story__visual { display: flex; align-items: center; justify-content: center; border-right: 1px solid #e5e7eb; }
+  .apg-story__row--reverse .apg-story__visual { order: 2; border-right: 0; }
+  .apg-story__row--reverse .apg-story__content { order: 1; border-right: 1px solid #e5e7eb; }
+  .apg-story__stage { display: grid; place-items: center; width: 100%; min-height: 340px; padding: 32px 18px; border-radius: 22px; background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%); }
+  .apg-story__row:nth-child(4) .apg-story__stage { background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%); }
+  .apg-story__row:nth-child(5) .apg-story__stage { background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%); }
+  .apg-story__row:nth-child(6) .apg-story__stage { background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%); }
+  .apg-story__stage img { display: block; width: 100%; max-height: 340px; object-fit: contain; filter: drop-shadow(0 18px 28px rgba(38, 66, 105, 0.12)); }
+  .apg-story__content { display: flex; flex-direction: column; justify-content: center; }
+  .apg-story__content > span { display: block; margin-bottom: 1rem; color: #5b21b6; font-family: var(--font-body); font-size: 0.875rem; font-weight: 600; line-height: 1.2; letter-spacing: 0.05em; text-transform: uppercase; }
+  .apg-story__content h3 { margin: 0 0 1.25rem; color: #111827; font-family: var(--font-heading); font-size: 2.25rem; font-weight: 500; line-height: 1.02; letter-spacing: -0.02em; }
+  .apg-story__content p { margin: 0; color: #4b5563; font-family: var(--font-body); font-size: 1.125rem; font-weight: 400; line-height: 1.45; }
+  .apg-story__cross { position: absolute; bottom: 0; left: 50%; z-index: 2; width: 28px; height: 28px; transform: translate(-50%, 50%); line-height: 0; pointer-events: none; }
+
+  .apg-evidence {
+    width: 100%;
+    background-color: #000;
+    background-image: linear-gradient(180deg, #0d0a2c 0%, transparent 320px), radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28), transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: apg-evidence-mesh 30s linear infinite;
+  }
+  @keyframes apg-evidence-mesh { 0%, 100% { background-position: 0 0, 0 0; } 50% { background-position: 0 0, 8% 10%; } }
+  .apg-evidence__section { display: flex; width: 100%; max-width: 1140px; margin: 0 auto; padding: 4px 0 30px; flex-direction: column; align-items: center; }
+  .apg-evidence__header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    display: flex;
+    width: min(94%, 1050px);
+    padding: 24px 0;
+    transform: translateY(var(--apg-evidence-release-y, 0));
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+    will-change: transform;
+  }
+  .apg-evidence__header::before { content: ""; position: absolute; top: -1px; bottom: -28px; left: 50%; z-index: -1; width: 100vw; transform: translateX(-50%); background: linear-gradient(180deg, rgba(13, 10, 44, 0.99), rgba(7, 11, 27, 0.98) 72%, rgba(7, 11, 27, 0)); pointer-events: none; }
+  .apg-evidence__eyebrow { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 6px 16px 6px 12px; border: 1px solid rgba(255, 255, 255, 0.24); border-radius: 999px; background: rgba(255, 255, 255, 0.12); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -6px rgba(0, 0, 0, 0.35); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 500; line-height: 24px; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .apg-evidence__eyebrow > span { display: flex; width: 16px; height: 16px; }
+  .apg-evidence__eyebrow svg { width: 100%; height: 100%; }
+  .apg-evidence__header h2 { margin: 0; background: linear-gradient(98deg, #fff 43.06%, #9ca3af 91.81%); background-clip: text; color: transparent; font-family: var(--font-heading); font-size: 40px; font-weight: 500; line-height: 1.1; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .apg-evidence__header h2 > span { display: block; }
+  .apg-evidence__header h2 strong { color: inherit; font-weight: inherit; }
+  @media (min-width: 768px) { .apg-evidence__header h2 > span { white-space: nowrap; } }
+  .apg-evidence__cards { --apg-evidence-stack-top: 300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .apg-evidence__spacer { height: 190px; }
+  .apg-evidence__card {
+    position: sticky;
+    top: calc(var(--apg-evidence-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    height: 500px;
+    margin-bottom: 60px;
+    overflow: hidden;
+    align-items: stretch;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.16), transparent 70%), radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18), transparent 40%), #0a0a0f;
+  }
+  .apg-evidence__card:first-child { background: radial-gradient(circle at 82% 12%, rgba(109, 92, 235, 0.24), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66, 173, 218, 0.13), transparent 28%), #090a10; }
+  .apg-evidence__copy { display: flex; flex: 0 0 45%; padding: 40px; flex-direction: column; justify-content: center; gap: 16px; }
+  .apg-evidence__copy > span { display: inline-flex; align-self: flex-start; margin-bottom: 2px; padding: 7px 13px; border: 1px solid rgba(175, 163, 255, 0.28); border-radius: 999px; background: rgba(175, 163, 255, 0.1); color: #afa3ff; font: 600 12px/1.2 var(--font-body); letter-spacing: 0.02em; }
+  .apg-evidence__copy h3 { margin: 0; color: #e7e4fa; font-family: var(--font-heading); font-size: 32px; font-weight: 500; line-height: 1.2; }
+  .apg-evidence__copy p { margin: 0; color: rgba(255, 255, 255, 0.55); font-family: var(--font-body); font-size: 17px; font-weight: 400; line-height: 1.65; }
+  .apg-evidence__copy a { display: inline-flex; align-items: center; align-self: flex-start; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 999px; background: rgba(255, 255, 255, 0.06); box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08); color: #fff; font-family: var(--font-body); font-size: 15px; font-weight: 500; text-decoration: none; transition: transform 0.3s, background 0.3s; }
+  .apg-evidence__copy a:hover { transform: scale(1.05); background: rgba(255, 255, 255, 0.1); }
+  .apg-evidence__media {
+    position: relative;
+    isolation: isolate;
+    align-self: center;
+    flex: 1;
+    height: 390px;
+    min-width: 0;
+    min-height: 390px;
+    margin: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    background: radial-gradient(circle at 78% 24%, rgba(111, 134, 255, 0.22), transparent 34%), linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+  }
+  .apg-evidence-shot {
+    position: absolute;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 24px 56px rgba(0, 0, 0, 0.38);
+    transition: transform 0.35s ease;
+  }
+  .apg-evidence-shot--primary { top: 26px; left: 24px; z-index: 1; width: 78%; height: 260px; }
+  .apg-evidence-shot--secondary { top: 140px; right: 24px; z-index: 2; width: 56%; height: 150px; }
+  .apg-evidence-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; background: #fff; }
+  .apg-evidence__media--contributions .apg-evidence-shot--primary img,
+  .apg-evidence__media--branding .apg-evidence-shot--primary img { object-position: left top; }
+  .apg-evidence__media--sharing .apg-evidence-shot--primary img,
+  .apg-evidence__media--branding .apg-evidence-shot--secondary img { object-fit: contain; }
+  .apg-evidence__card:hover .apg-evidence-shot--primary { transform: translateY(-5px); }
+  .apg-evidence__card:hover .apg-evidence-shot--secondary { transform: translateY(-7px); }
+
+  .apg-events { padding: 112px 24px; background: #fff; }
+  .apg-events__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .apg-events__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .apg-events__badge { margin-bottom: 16px; color: #6366f1; font: 600 13px/1.2 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .apg-events__title {
+    max-width: 800px; margin: 0 0 16px; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); color: transparent;
+    font: 500 40px/1.1 var(--font-heading); letter-spacing: -.03em; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .apg-events__title-line { display: block; }
+  .apg-events__subtitle { max-width: none; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); white-space: nowrap; }
+  .apg-events__tabs {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 4px; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px;
+    border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7;
+  }
+  .apg-events__tab {
+    padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b;
+    font: 600 13.5px/1.2 var(--font-body); cursor: pointer; transition: all .2s ease;
+  }
+  .apg-events__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .apg-events__tab--active { border-color: #dbe4f0 !important; background: #fff !important; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: #3b82f6 !important; }
+  .apg-events__box { padding: 0; border: 0; background: transparent; box-shadow: none; }
+  .apg-events__panel {
+    --apg-events-tint: #fff8dc; --apg-events-border: #f0dfa6; display: none; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 64px;
+    align-items: center; padding: 52px 64px; border: 1px solid var(--apg-events-border); border-radius: 28px;
+    background: linear-gradient(135deg, var(--apg-events-tint) 0%, #fff 72%); animation: apg-events-fade-in .4s ease forwards;
+  }
+  .apg-events__panel:nth-child(2) { --apg-events-tint: #edf7ff; --apg-events-border: #d4e7f7; }
+  .apg-events__panel:nth-child(3) { --apg-events-tint: #f3efff; --apg-events-border: #e2d8fa; }
+  .apg-events__panel:nth-child(4) { --apg-events-tint: #eefbf4; --apg-events-border: #d4efdf; }
+  .apg-events__panel--active { display: grid; }
+  @keyframes apg-events-fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .apg-events__panel-title { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .apg-events__panel-description { margin: 0 0 32px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .apg-events__fit-label { display: block; margin-bottom: 18px; color: #9ca3af; font: 700 11px/1.2 var(--font-body); letter-spacing: .12em; }
+  .apg-events__checklist { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .apg-events__checklist li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .apg-events__checklist svg { flex-shrink: 0; margin-top: 2px; color: #9ca3af; }
+  .apg-events__right { min-width: 0; }
+  .apg-events__showcase {
+    position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px;
+    background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1);
+  }
+  .apg-events__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--apg-events-border); filter: blur(22px); opacity: .48; }
+  .apg-events__showcase > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1117/837; object-fit: contain; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .apg-events__visual-label {
+    --apg-events-label-bg: #eef4ff; --apg-events-label-border: #cddcff; --apg-events-label-color: #3158d4; --apg-events-label-shadow: rgba(49,88,212,.16);
+    position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px;
+    border: 1px solid var(--apg-events-label-border); border-radius: 10px; background: var(--apg-events-label-bg); box-shadow: 0 8px 22px var(--apg-events-label-shadow);
+    color: var(--apg-events-label-color); font: 700 11px/1.2 var(--font-body);
+  }
+  .apg-events__visual-label--conferences { --apg-events-label-bg: #eefbf5; --apg-events-label-border: #cbeedb; --apg-events-label-color: #168a55; --apg-events-label-shadow: rgba(22,138,85,.15); border-radius: 999px; }
+  .apg-events__visual-label--associations { --apg-events-label-bg: #f5f1ff; --apg-events-label-border: #ded2ff; --apg-events-label-color: #7351cf; --apg-events-label-shadow: rgba(115,81,207,.16); border-radius: 7px; }
+  .apg-events__visual-label--corporate { --apg-events-label-bg: #fff8e8; --apg-events-label-border: #f2dfad; --apg-events-label-color: #9a6b12; --apg-events-label-shadow: rgba(154,107,18,.15); border-radius: 10px 10px 10px 3px; }
+  .apg-events__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+  .apg-links { padding: clamp(40px, 4.5vw, 60px) 24px clamp(82px, 9vw, 116px); background: #fff; }
+  .apg-links .apg-shell { width: min(1140px, 100%); }
+  .apg-links .apg-section-heading { max-width: none; margin: 0; padding: 0 24px clamp(20px, 2.4vw, 32px); }
+  .apg-links .apg-section-heading h2 { max-width: 760px; margin: 0 auto 1.25rem; font-size: 40px; font-weight: 500; }
+  .apg-links { padding-top: 40px; }
+  .apg-links__grid { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .apg-links__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; }
+  .apg-links__notch--1 { left: 25%; }
+  .apg-links__notch--2 { left: 50%; }
+  .apg-links__notch--3 { left: 75%; }
+  .apg-links__card { position: relative; min-height: 300px; padding: 28px; border-left: 1px solid var(--surface-card-border, #e8ecf2); color: inherit; text-decoration: none; transition: background 0.25s ease; }
+  .apg-links__card:first-of-type { border-left: 0; }
+  .apg-links__card:hover { background: transparent; }
+  .apg-links__icon { display: inline-flex; width: 30px; height: 30px; margin-bottom: 28px; color: var(--brand-blue); }
+  .apg-links__icon svg { width: 100%; height: 100%; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .apg-links__card > strong { display: block; min-height: 2.3em; max-width: 230px; margin: 0 0 28px; color: var(--heading-dark); font-family: var(--font-heading); font-size: 21px; font-weight: 500; line-height: 1.15; }
+  .apg-links__card p { margin: 14px 0 24px; color: var(--body-gray, #667085); font-family: var(--font-body); font-size: 15px; line-height: 1.4; }
+  .apg-links__cross { display: none; }
+
+  @media (max-width: 1024px) {
+    .apg-evidence__section { padding: 20px 20px 30px; }
+    .apg-evidence__header { width: 94%; }
+    .apg-evidence__header h2 { font-size: 40px; line-height: 1; }
+    .apg-evidence__cards { --apg-evidence-stack-top: 292px; }
+    .apg-evidence__card { height: 450px; }
+    .apg-evidence__copy { flex-basis: 50%; }
+    .apg-evidence__copy h3 { font-size: 28px; }
+    .apg-evidence__copy p { font-size: 16px; }
+  }
+
+  @media (max-width: 900px) {
+    .apg-story__row { display: flex; flex-direction: column; }
+    .apg-story__visual, .apg-story__content { padding: 3rem 1.5rem; }
+    .apg-story__visual, .apg-story__row--reverse .apg-story__visual { order: 2; border-right: 0; }
+    .apg-story__content, .apg-story__row--reverse .apg-story__content { order: 1; border-right: 0; border-bottom: 1px solid #e5e7eb; }
+    .apg-events__panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+    .apg-events__subtitle { max-width: 700px; white-space: normal; }
+    .apg-links__grid { grid-template-columns: repeat(2, 1fr); }
+    .apg-links__notch--1, .apg-links__notch--3 { display: none; }
+    .apg-links__card:nth-of-type(odd) { border-left: 0; }
+    .apg-links__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+    .apg-links__cross { position: absolute; top: 0; right: 0; z-index: 2; display: block; width: 28px; height: 28px; transform: translate(50%, -50%); line-height: 0; pointer-events: none; }
+  }
+
+  @media (max-width: 860px) {
+    .apg-intake__grid { grid-template-columns: 1fr; }
+    .apg-intake__card, .apg-intake__card:nth-child(n + 4) { grid-column: span 1; min-height: 0; padding: 32px 24px; border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .apg-intake__card:last-child { border-bottom: 0; }
+    .apg-intake__petal { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .apg-choice { padding: 60px 16px; }
+    .apg-choice__grid { grid-template-columns: 1fr; }
+    .apg-choice__cross { display: none; }
+    .apg-choice__copy, .apg-choice__media { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .apg-choice__media { min-height: 300px; padding: 16px 20px 32px; }
+    .apg-choice__media--moments { grid-row: 2; }
+    .apg-choice__copy:nth-child(4) { grid-row: 3; }
+    .apg-choice__media--selfie { grid-row: 4; }
+    .apg-choice__copy:last-of-type { border-bottom: 1px solid #eef0f3; }
+    .apg-portal-composite { height: 280px; }
+  }
+
+  @media (max-width: 767px) {
+    .apg-shell { width: min(100% - 32px, 1140px); }
+    .apg-story { padding-inline: 16px; }
+    .apg-evidence__section { padding: 16px 20px 30px; }
+    .apg-evidence__header { width: 100%; }
+    .apg-evidence__header h2 { font-size: 40px; }
+    .apg-evidence__header h2 > span { display: inline; }
+    .apg-evidence__cards { --apg-evidence-stack-top: 320px; padding: 80px 0 40px; }
+    .apg-evidence__card { height: 700px; flex-direction: column; }
+    .apg-evidence__copy { flex: 0 0 58%; padding: 20px 20px 0; }
+    .apg-evidence__copy h3 { font-size: 24px; }
+    .apg-evidence__copy p { font-size: 15px; }
+    .apg-evidence__copy a { padding: 10px 22px; }
+    .apg-evidence__media { width: calc(100% - 24px); height: 270px; min-height: 270px; margin: 12px; }
+    .apg-evidence-shot--primary { top: 18px; left: 16px; width: 80%; height: 180px; }
+    .apg-evidence-shot--secondary { top: 102px; right: 16px; width: 58%; height: 112px; }
+  }
+
+  @media (max-width: 600px) {
+    .apg-events { padding: 72px 20px; }
+    .apg-events__title { font-size: 40px; }
+    .apg-events__title-line { white-space: normal; }
+    .apg-events__tabs { justify-content: flex-start; flex-wrap: nowrap; width: 100%; overflow-x: auto; border-radius: 20px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .apg-events__tabs::-webkit-scrollbar { display: none; }
+    .apg-events__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .apg-events__panel { padding: 32px 24px; border-radius: 20px; }
+    .apg-events__showcase { padding: 14px; border-radius: 18px; }
+    .apg-events__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .apg-links { padding-inline: 16px; }
+    .apg-links__grid { grid-template-columns: 1fr; }
+    .apg-links__notch { display: none; }
+    .apg-links__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .apg-links__card:first-of-type { border-top: 0; }
+    .apg-links__card > strong { min-height: 0; }
+    .apg-links__cross { display: none; }
+  }
+
+  @media (max-width: 560px) { .apg-intake .apg-shell { padding-bottom: 48px; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .apg-evidence { animation: none; }
+    .apg-evidence-shot { transition: none; }
+    .apg-events__panel { animation: none; }
+    .apg-events__tab, .apg-links__card { transition: none; }
+  }
+</style>

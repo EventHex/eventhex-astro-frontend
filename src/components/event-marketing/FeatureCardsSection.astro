@@ -1,26 +1,46 @@
 ---
-// Stacking Cards section — matches event-ticketing FeatureCards pattern
-// Dark bg with bg-2.webp, sticky stacking cards for key Event Marketing features
-// CSS prefix: emf-
-
-const featureCards = [
+const cards = [
   {
-    title: "Targeted Social Media Campaigns",
-    desc: "Create and send personalized email and WhatsApp campaigns to engage with your audience. Select the style of message personalization in the editor using variables such as users and events. Pre-set the time you want your campaign to start running.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-2.svg",
-    alt: "EventHex targeted social media campaign builder interface",
+    eyebrow: "Email campaigns",
+    title: "Create the email, preview it, and send it as your organization",
+    desc: "Build and refine the email in the visual editor, add subject and personalization values, attach supported files, and use the verified marketing identity connected for your organization. Marketing emails include an unsubscribe route in the sending workflow.",
+    type: "email",
+    primaryImage: "/feature-images/solutions/event-marketing-email-campaigns.jpg",
+    primaryAlt: "EventHex Email Campaigns dashboard",
+    primaryWidth: 1117,
+    primaryHeight: 837,
+    secondaryImage: "/feature-images/solutions/event-marketing-audience-builder.jpg",
+    secondaryAlt: "EventHex campaign audience builder",
+    secondaryWidth: 1117,
+    secondaryHeight: 837,
   },
   {
-    title: "Re-Campaign with Saved Audience",
-    desc: "Organize and manage predefined audience groups for targeted campaigns. Filter the audience list from the current or previous event. View how many messages are pending and how many are delivered to the selected audience list.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Marketing-_Campaigns.png",
-    alt: "EventHex re-campaign audience management interface",
+    eyebrow: "WhatsApp campaigns",
+    title: "Turn an approved template into an event-specific message",
+    desc: "Choose an available template, map supported event and recipient variables, add compatible media, and preview the completed message through your connected official WhatsApp Business account.",
+    type: "whatsapp",
+    primaryImage: "/feature-images/solutions/event-marketing-whatsapp-campaigns.jpg",
+    primaryAlt: "EventHex WhatsApp Campaigns dashboard",
+    primaryWidth: 1117,
+    primaryHeight: 837,
+    secondaryImage: "/feature-images/solutions/event-marketing-audience-panel.jpg",
+    secondaryAlt: "EventHex campaign audience selection panel",
+    secondaryWidth: 770,
+    secondaryHeight: 754,
   },
   {
-    title: "Advocacy Posters to Boost Presence",
-    desc: "Create 'I'm attending' posters for participants to share and promote your event online. Customize details like name, profile photo, and company logo. Let your audience do the marketing by sharing advocacy posters on their social media handles.",
-    image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Group.svg",
-    alt: "EventHex advocacy poster creator for event promotion",
+    eyebrow: "Review and schedule",
+    title: "Check the campaign once. Choose when it should move.",
+    desc: "Review the audience, channel, message, personalization, and attachment together. Send immediately or choose a future date and time, then follow scheduled, sending, completed, partial, failed, or cancelled states.",
+    type: "review",
+    primaryImage: "/feature-images/solutions/event-marketing-audience-builder.jpg",
+    primaryAlt: "EventHex campaign workflow with audience, content, and review steps",
+    primaryWidth: 1117,
+    primaryHeight: 837,
+    secondaryImage: "/feature-images/solutions/event-marketing-email-campaign-hero.jpg",
+    secondaryAlt: "EventHex campaign status dashboard",
+    secondaryWidth: 900,
+    secondaryHeight: 340,
   },
 ];
 ---
@@ -28,184 +48,122 @@ const featureCards = [
 <section class="emf-shell">
   <div class="emf-section">
     <div class="emf-header">
-      <span class="emf-subtitle animate-on-scroll" data-animation="fadeInUp">Feature-by-feature</span>
-      <h2 class="emf-title animate-on-scroll" data-animation="fadeInUp">
-        Multi-Channel Marketing in <span class="emf-highlight">Every Campaign</span>
-      </h2>
+      <div class="emf-eyebrow">
+        <span class="emf-eyebrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z" fill="#4F8CFF"></path><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"></path></svg></span>
+        <span class="emf-subtitle">From content to campaign launch</span>
+      </div>
+      <h2 class="emf-title"><span class="emf-title-line">Campaign Workflows That Keep the <span class="emf-highlight">Audience</span></span>{" "}<span class="emf-title-line">and Message Connected</span></h2>
     </div>
 
     <div class="emf-cards" id="emf-stacking-cards">
-      {featureCards.map((card, i) => (
-        <div
-          class="emf-card"
-          data-card-index={i}
-          style={`--card-index: ${i}; top: calc(20px + ${i * 20}px);`}
-        >
+      {cards.map((card, index) => (
+        <article class="emf-card" style={`--card-index:${index}`}>
           <div class="emf-card-content">
-            <h3 class="emf-card-title">{card.title}</h3>
+            <span class="emf-card-eyebrow">{card.eyebrow}</span>
+            <h2 class="emf-card-title">{card.title}</h2>
             <p class="emf-card-desc">{card.desc}</p>
             <a href="/book-a-demo/" class="emf-card-btn">Explore More</a>
           </div>
           <div class="emf-card-image">
-            <img src={card.image} alt={card.alt} loading="lazy" />
+            <div class:list={["emf-shot-stage", `emf-shot-stage--${card.type}`]}>
+              <img
+                class="emf-shot emf-shot--primary"
+                src={card.primaryImage}
+                alt={card.primaryAlt}
+                width={card.primaryWidth}
+                height={card.primaryHeight}
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                class="emf-shot emf-shot--secondary"
+                src={card.secondaryImage}
+                alt={card.secondaryAlt}
+                width={card.secondaryWidth}
+                height={card.secondaryHeight}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </div>
-        </div>
+        </article>
       ))}
+      <div class="emf-stack-spacer" aria-hidden="true"></div>
     </div>
   </div>
 </section>
 
+<script>
+  const marketingWorkflow = document.querySelector<HTMLElement>('.emf-shell');
+  const marketingWorkflowHeader = marketingWorkflow?.querySelector<HTMLElement>('.emf-header');
+  const marketingWorkflowCards = marketingWorkflow?.querySelectorAll<HTMLElement>('.emf-card');
+  const marketingWorkflowLast = marketingWorkflowCards?.[marketingWorkflowCards.length - 1];
+  if (marketingWorkflowHeader && marketingWorkflowLast) {
+    let frame = 0;
+    const syncRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(marketingWorkflowLast).top) || 0;
+      const release = Math.min(0, marketingWorkflowLast.getBoundingClientRect().top - stickyTop);
+      marketingWorkflowHeader.style.transform = `translateY(${release}px)`;
+    };
+    const queueRelease = () => { if (!frame) frame = requestAnimationFrame(syncRelease); };
+    window.addEventListener('scroll', queueRelease, { passive: true });
+    window.addEventListener('resize', queueRelease, { passive: true });
+    syncRelease();
+  }
+</script>
+
 <style is:global>
-  .emf-shell {
-    width: 100%;
-    background-color: #000;
-    background-image: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
-  .emf-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    max-width: 1140px;
-    margin: 0 auto;
-    padding: 80px 0 30px;
-  }
-
-  .emf-header {
-    width: 70%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    text-align: center;
-  }
-
-  .emf-subtitle {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    color: #fff;
-    margin: 0;
-  }
-
-  .emf-title {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    color: #fff;
-    margin: 0;
-    line-height: 1.15;
-  }
-
-  .emf-highlight { color: #AFA3FF; }
-
-  .emf-cards {
-    width: 100%;
-    padding: 30px 0 0;
-    position: relative;
-    padding-bottom: 50px;
-  }
-
-  .emf-card {
-    position: sticky;
-    display: flex;
-    align-items: stretch;
-    background: var(--dark-card-bg, rgba(18, 15, 40, 0.8));
-    border: 1px solid rgba(172, 161, 241, 0.51);
-    border-radius: 20px;
-    overflow: hidden;
-    height: 500px;
-    margin-bottom: 60px;
-    transition: transform 0.3s ease;
-  }
-
-  .emf-card-content {
-    flex: 0 0 45%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 40px;
-    gap: 16px;
-  }
-
-  .emf-card-title {
-    font-family: var(--font-heading);
-    font-size: 32px;
-    font-weight: 500;
-    color: var(--accent-purple, #AFA3FF);
-    margin: 0;
-    line-height: 1.2;
-  }
-
-  .emf-card-desc {
-    font-family: var(--font-body);
-    font-size: 17px;
-    font-weight: 400;
-    color: #fff;
-    margin: 0;
-    line-height: 1.65;
-  }
-
-  .emf-card-btn {
-    display: inline-flex;
-    align-items: center;
-    align-self: flex-start;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 500;
-    color: #0A0D14;
-    background: var(--accent-btn-purple, #D4CAFE);
-    border-radius: 10px;
-    padding: 10px 24px;
-    text-decoration: none;
-    transition: transform 0.3s, background 0.3s;
-    margin-top: 8px;
-  }
-
-  .emf-card-btn:hover { transform: scale(1.05); }
-
-  .emf-card-image {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow: hidden;
-  }
-
-  .emf-card-image img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-
+  /* Exact Speaker Management sticky feature-card pattern. */
+  .emf-shell { width: 100%; color: #fff; background: linear-gradient(180deg,#000 0,#08071b 180px,#0d0a2c 360px,transparent 560px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28),transparent 55%),#000; background-repeat: no-repeat; background-size: 100% 100%,120% 120%; }
+  .emf-section { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1140px; margin: 0 auto; padding: 4px 0 30px; }
+  .emf-header { position: sticky; top: 69px; z-index: 20; isolation: isolate; display: flex; flex-direction: column; align-items: center; gap: 16px; width: min(94%,1050px); padding: 24px 0; text-align: center; will-change: transform; }
+  .emf-header::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -28px; left: 50%; width: 100vw; transform: translateX(-50%); background: linear-gradient(180deg,rgba(0,0,0,.99),rgba(7,11,27,.98) 72%,rgba(7,11,27,0)); pointer-events: none; }
+  .emf-eyebrow { display: flex; align-items: center; gap: 8px; width: fit-content; padding: 6px 16px 6px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 99px; background: rgba(255,255,255,.12); box-shadow: inset 0 1px rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35); backdrop-filter: blur(16px); }
+  .emf-eyebrow-icon { display: flex; width: 16px; height: 16px; }
+  .emf-eyebrow-icon svg { width: 100%; height: 100%; }
+  .emf-subtitle { color: #fff; font: 500 15px/24px var(--font-body); }
+  .emf-title { margin: 0; color: #fff; font: 500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .emf-title-line { display: block; }
+  .emf-highlight { color: #afa3ff; }
+  .emf-cards { --emf-stack-top:300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .emf-stack-spacer { height: 190px; }
+  .emf-card { position: sticky; top: calc(var(--emf-stack-top) + var(--card-index) * 20px); z-index: var(--card-index); display: flex; align-items: stretch; height: 500px; margin-bottom: 60px; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; overflow: hidden; background: radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f; }
+  .emf-card-content { flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .emf-card-eyebrow { display: inline-flex; align-self: flex-start; padding: 7px 13px; border: 1px solid rgba(175,163,255,.28); border-radius: 99px; color: #afa3ff; background: rgba(175,163,255,.1); font: 600 12px/1.2 var(--font-body); }
+  .emf-card-title { margin: 0; color: #e7e4fa; font: 500 32px/1.2 var(--font-heading); }
+  .emf-card-desc { margin: 0; color: rgba(255,255,255,.55); font: 400 17px/1.65 var(--font-body); }
+  .emf-card-btn { display: inline-flex; align-self: flex-start; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255,255,255,.14); border-radius: 99px; color: #fff; background: rgba(255,255,255,.06); font: 500 15px/1 var(--font-body); text-decoration: none; }
+  .emf-card-image { flex: 1; display: flex; align-items: center; justify-content: center; margin: 16px 16px 16px 0; padding: 20px; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; overflow: hidden; background: linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04)); box-shadow: inset 0 1px rgba(255,255,255,.12); backdrop-filter: blur(24px); }
+  .emf-shot-stage { position: relative; isolation: isolate; width: 100%; max-width: 560px; min-height: 380px; }
+  .emf-shot { position: absolute; display: block; border: 1px solid rgba(255,255,255,.24); border-radius: 14px; object-fit: cover; object-position: left top; background: #fff; box-shadow: 0 24px 55px rgba(0,0,0,.34); }
+  .emf-shot--primary { top: 8px; left: 0; z-index: 1; width: 88%; height: auto; }
+  .emf-shot--secondary { right: 0; bottom: 6px; z-index: 2; width: 62%; height: auto; }
+  .emf-shot-stage--whatsapp .emf-shot--secondary { width: 56%; }
+  .emf-shot-stage--review .emf-shot--primary { width: 82%; }
+  .emf-shot-stage--review .emf-shot--secondary { width: 82%; }
+  @media (min-width: 768px) { .emf-title-line { white-space: nowrap; } }
   @media (max-width: 1024px) {
-    .emf-section { padding: 60px 20px 30px; }
-    .emf-header { width: 80%; }
-    .emf-subtitle { font-size: 16px; }
-    .emf-title { font-size: 40px; line-height: 1em; }
+    .emf-section { padding-inline: 20px; }
+    .emf-cards { --emf-stack-top:292px; }
     .emf-card { height: 450px; }
     .emf-card-content { flex-basis: 50%; }
     .emf-card-title { font-size: 28px; }
-    .emf-card-desc { font-size: 16px; }
   }
-
   @media (max-width: 767px) {
-    .emf-section { padding: 50px 20px 30px; }
+    .emf-section { padding: 16px 20px 30px; }
     .emf-header { width: 100%; }
-    .emf-title { font-size: 30px; }
-    .emf-card { flex-direction: column; height: 520px; }
-    .emf-card-content { flex: 0 0 50%; padding: 20px 20px 0; }
-    .emf-card-image { padding: 10px; }
+    .emf-cards { --emf-stack-top:320px; padding-top: 80px; }
+    .emf-card { position: relative; top: auto; flex-direction: column; height: auto; min-height: 690px; }
+    .emf-card-content { flex: none; padding: 20px 20px 0; }
+    .emf-card-image { flex: none; min-height: 300px; margin: 12px; padding: 12px; }
     .emf-card-title { font-size: 24px; }
-    .emf-card-desc { font-size: 15px; }
-    .emf-cards { padding-bottom: 40px; }
+    .emf-card-desc { font-size: 14px; line-height: 1.5; }
+    .emf-shot-stage { min-height: 275px; }
+    .emf-shot--primary { width: 90%; }
+    .emf-shot--secondary { width: 64%; }
+    .emf-shot-stage--whatsapp .emf-shot--secondary { width: 58%; }
+    .emf-shot-stage--review .emf-shot--primary { width: 84%; }
+    .emf-shot-stage--review .emf-shot--secondary { width: 84%; }
   }
 </style>

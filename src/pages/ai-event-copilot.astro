@@ -3,45 +3,45 @@ import MarketingLayout from "../layouts/MarketingLayout.astro";
 
 import HeroSection from "../components/ai-event-copilot/HeroSection.astro";
 import StatsSection from "../components/ai-event-copilot/StatsSection.astro";
-import BentoGrid from "../components/ai-event-copilot/BentoGrid.astro";
-import FeatureCards from "../components/ai-event-copilot/FeatureCards.astro";
-import HowItWorksSection from "../components/ai-event-copilot/HowItWorksSection.astro";
-import CTASection from "../components/ai-event-copilot/CTASection.astro";
-import CoordinationTools from "../components/ai-event-copilot/CoordinationTools.astro";
+import PageSections from "../components/ai-event-copilot/PageSections.astro";
 import FaqSection from "../components/ai-event-copilot/FaqSection.astro";
+import { copilotFaqs } from "../components/ai-event-copilot/content";
 
-const title = "AI Event Copilot — 4 AI Agents for Event Management | EventHex";
-const description = "Four AI agents: Analyst, Session Builder, Copywriter, and Ticket Agent. Automate data analysis, agenda building, content generation, and attendee support.";
+const title = "AI Event Copilot for Event Management | EventHex";
+const description = "Ask about attendees, check-ins, tickets, sessions, orders, exhibitors, and more. Use one EventHex Copilot for supported organizer questions and actions.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "EventHex AI Copilot — AI Event Management Agents",
+  "name": "EventHex Copilot",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
   "url": "https://eventhex.ai/ai-event-copilot/",
-  "description": "Four specialized AI agents for event management: data analysis, session planning, content generation, and attendee support.",
+  "description": "An organizer-facing AI event copilot for supported questions, structured results, drafts, and actions inside an EventHex event.",
   "creator": {
     "@type": "Organization",
     "name": "EventHex",
     "url": "https://eventhex.ai"
   },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "description": "Free demo available"
-  },
   "featureList": [
-    "Analyst Agent",
-    "Session Agent",
-    "Copywriter Agent",
-    "Ticket Agent",
-    "Natural Language Queries",
-    "Multi-Language Content",
-    "24/7 Availability",
-    "Smart Escalation"
+    "Event-scoped organizer conversations",
+    "Natural-language event questions",
+    "Structured metrics, charts, tables, and lists",
+    "Supported agenda, ticket, attendee, form, poll, coupon, and event actions",
+    "Draft and confirmation controls",
+    "Voice-note transcription and record mentions",
+    "Event-scoped conversation history"
   ]
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": copilotFaqs.map(({ q, a }) => ({
+    "@type": "Question",
+    "name": q,
+    "acceptedAnswer": { "@type": "Answer", "text": a },
+  })),
 };
 ---
 
@@ -49,22 +49,57 @@ const softwareSchema = {
   {title}
   {description}
   canonical="https://eventhex.ai/ai-event-copilot/"
-  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png"
+  footerCtaEyebrow="Bring one real event question"
+  footerCtaTitle="See How EventHex Copilot Would Handle the Next Task on Your List"
+  footerCtaSubtitle="Show us the workflow your team keeps switching screens to complete. We’ll map the question, data, supported action, and control point in a focused EventHex demo."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  </Fragment>
+  <div class="aec-page-bg">
+    <HeroSection />
+    <StatsSection />
+    <PageSections />
+    <FaqSection />
+  </div>
 </MarketingLayout>
 
 <style>
   :global(main) {
-    background-color: #ffffff;
+    background: #ffffff;
+  }
+
+  .aec-page-bg {
+    --aec-section-title-size: 50px;
+    --aec-section-title-line: 1.08;
+    --aec-section-title-tracking: -0.04em;
+    --aec-light-title-gradient: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    --aec-dark-title-gradient: linear-gradient(98deg, #fff 43.06%, #aeb4c0 91.81%);
+    background:
+      radial-gradient(ellipse 720px 540px at -8% 18%, rgba(55, 93, 251, 0.08), transparent 72%),
+      radial-gradient(ellipse 760px 620px at 108% 70%, rgba(255, 116, 184, 0.08), transparent 74%),
+      #fff;
+  }
+
+  :global(.site-footer .footer-cta-title) {
+    font-weight: 500;
+  }
+
+  @media (min-width: 1025px) {
+    :global(.site-footer .footer-cta-banner .cta-left) {
+      flex-basis: 58%;
+    }
+
+    :global(.site-footer .footer-cta-banner .cta-right) {
+      flex-basis: 42%;
+      transform: translateX(24px);
+    }
+
+    :global(.site-footer .footer-cta-title) {
+      max-width: 540px;
+    }
   }
 </style>

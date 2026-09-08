@@ -1,21 +1,75 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
+interface Props {
+  faqs: ReadonlyArray<readonly [string, string]>;
+}
 
-const faqs = [
-  { q: "What is event marketing software?", a: "Event marketing software helps organizers promote their events through multiple channels — email campaigns, WhatsApp broadcasts, social media advocacy, and audience retargeting. EventHex combines all these tools in one platform, allowing you to create personalized campaigns, manage audience segments, and track delivery analytics without switching between multiple tools." },
-  { q: "Can I send both email and WhatsApp campaigns?", a: "Yes! EventHex supports multi-channel campaigns. You can send personalized email campaigns with HTML templates and attachments, or WhatsApp broadcasts using Meta-approved message templates. Both channels share the same audience management system, so you can reach your audience wherever they are." },
-  { q: "How does the audience targeting work?", a: "EventHex's audience builder lets you create segments based on ticket type, registration date range, and event history. You can target attendees from your current event, or retarget attendees from previous events. The system automatically calculates unique phone numbers and email addresses, and you can exclude people already registered for your current event." },
-  { q: "What are advocacy posters and how do they work?", a: "Advocacy posters are customizable 'I'm Attending' style graphics that attendees can share on social media to promote your event organically. EventHex provides a drag-and-drop poster builder where you add attendee names, photos, and event branding. Each poster generates a unique shareable link with built-in tracking — you can see clicks, unique visitors, and registrations from shared posters." },
-  { q: "Can I schedule campaigns for later delivery?", a: "Absolutely. EventHex offers two scheduling modes: 'Send Now' for immediate delivery, and 'Schedule Later' where you set a specific date and time. Scheduled campaigns are processed automatically at the designated time with parallel processing for fast delivery." },
-  { q: "How does EventHex track campaign performance?", a: "EventHex provides real-time delivery tracking for every campaign. For emails, monitor delivery rates, open rates, click-through rates, bounce rates, and complaint rates. For WhatsApp, webhook integrations track sent, delivered, read, and failed statuses per recipient." },
-  { q: "Does EventHex handle email bounces automatically?", a: "Yes. EventHex has a smart suppression system that automatically handles email health. Permanent bounces are auto-suppressed to protect your sender reputation. Transient bounces retry up to 3 times." },
-  { q: "Can I use my own email server or WhatsApp provider?", a: "Yes. EventHex supports multiple email providers — including Amazon SES, custom SMTP servers, and organization-level email settings. For WhatsApp, you can use EventHex's default provider or configure your own WhatsApp Business account." },
-];
+const { faqs } = Astro.props;
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need help with event marketing?"
-  title="Frequently Asked Questions"
-  description="We help event teams set up multi-channel marketing campaigns, audience targeting, and delivery tracking."
-/>
+<section class="emfaq" aria-labelledby="emfaq-title">
+  <div class="emfaq__inner">
+    <div class="emfaq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="emfaq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 id="emfaq-title" class="emfaq__heading">Event Marketing<br />{" "}Questions, Answered.</h2>
+      <p class="emfaq__intro">Find quick answers about audiences, email and WhatsApp campaigns, scheduling, senders, and recipient status.</p>
+      <a href="/contact-en/" class="emfaq__cta">
+        Talk to EventHex
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="emfaq__list">
+      {faqs.map(([question, answer], index) => (
+        <details class="emfaq__item animate-on-scroll" data-animation="fadeInUp" data-delay={index * 50} open={index === 0}>
+          <summary class="emfaq__question">
+            <strong>{question}</strong>
+            <span class="emfaq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="emfaq__answer"><p>{answer}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Event Registration FAQ pattern, with Event Marketing content. */
+  .emfaq { width: 100%; padding: 80px 24px; background: #fff; }
+  .emfaq__inner { display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; max-width: 1140px; margin: 0 auto; }
+  .emfaq__sidebar { position: sticky; top: 6rem; }
+  .emfaq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; margin-bottom: 20px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .emfaq__heading { margin: 0 0 20px; color: #000; font: 500 44px/1.1 'Creato Display',var(--font-heading); letter-spacing: -1px; }
+  .emfaq__intro { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .emfaq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease,transform .2s ease; }
+  .emfaq__cta:hover { background: #000; transform: translateY(-1px); }
+  .emfaq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: event-marketing-faq; }
+  .emfaq__item { counter-increment: event-marketing-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease,border-color .25s ease; }
+  .emfaq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .emfaq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font: 500 1.0625rem/1.35 'Creato Display',var(--font-heading); cursor: pointer; list-style: none; }
+  .emfaq__question strong { font-weight: 500; }
+  .emfaq__question strong::before { content: counter(event-marketing-faq) '. '; }
+  .emfaq__question::-webkit-details-marker { display: none; }
+  .emfaq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .emfaq__icon::before,.emfaq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%,-50%); }
+  .emfaq__icon::before { width: 14px; height: 2px; }
+  .emfaq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .emfaq__item[open] .emfaq__icon { transform: scale(.9); }
+  .emfaq__item[open] .emfaq__icon::after { opacity: 0; }
+  .emfaq__answer { max-width: 640px; padding: 0 0 24px; }
+  .emfaq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+  @media (prefers-reduced-motion: reduce) { .emfaq__item,.emfaq__icon,.emfaq__icon::after { transition: none; } }
+  @media (max-width: 1024px) {
+    .emfaq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .emfaq__sidebar { position: static; }
+    .emfaq__heading { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .emfaq { padding: 56px 16px; }
+    .emfaq__heading { font-size: 28px; }
+    .emfaq__item { padding: 4px 20px; border-radius: 16px; }
+    .emfaq__question { padding: 18px 0; font-size: .9375rem; }
+  }
+</style>

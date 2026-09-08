@@ -1,19 +1,65 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
-const faqs = [
-  { q: "What AI agents does EventHex offer?", a: "EventHex provides four specialized AI agents: the Analyst Agent for data insights, the Session Agent for agenda building, the Copywriter Agent for content generation, and the Ticket Agent for attendee support." },
-  { q: "How does the Analyst Agent work?", a: "Ask questions about your event data in natural language — such as 'What's my ticket conversion rate?' — and the Analyst Agent queries your data and generates visualizations and insights instantly." },
-  { q: "Can the Copywriter Agent generate email campaigns?", a: "Yes. The Copywriter Agent generates personalized email sequences, social media posts, session descriptions, and marketing content. You can review and edit before publishing." },
-  { q: "Is the Ticket Agent available to attendees?", a: "Yes. The Ticket Agent operates 24/7 as an AI chatbot embedded in your event page or app. It handles registration questions, ticket issues, and event information queries automatically." },
-  { q: "What AI models power EventHex copilots?", a: "EventHex AI agents are powered by state-of-the-art language models fine-tuned for event management. The exact models are continuously updated to provide the best performance." },
-  { q: "Can I customize AI agent behavior?", a: "Yes. You can configure the Ticket Agent's knowledge base, set content tone for the Copywriter, and define data access permissions for the Analyst — all from the organizer dashboard." },
-];
+import { copilotFaqs } from "./content";
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need help with AI Copilot?"
-  title="Frequently Asked Questions"
-  description="We help event teams set up and configure AI agents for data analysis, content generation, and attendee support."
-/>
+<section class="aecfaq">
+  <div class="aecfaq__inner">
+    <div class="aecfaq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="aecfaq__eyebrow">AI event copilot questions</span>
+      <h2 class="aecfaq__heading">What Event Teams Should Know Before Using Copilot</h2>
+      <p class="aecfaq__intro">Clear answers about the organizer Copilot, supported actions, control points, conversation history, and availability.</p>
+      <a href="/book-a-demo/" class="aecfaq__cta">Ask about your setup <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="aecfaq__list">
+      {copilotFaqs.map((faq, index) => (
+        <details class="aecfaq__item animate-on-scroll" data-animation="fadeInUp" data-delay={index * 35} data-aecfaq-item open={index === 0}>
+          <summary class="aecfaq__question"><strong>{faq.q}</strong><span class="aecfaq__icon" aria-hidden="true"></span></summary>
+          <div class="aecfaq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const copilotFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-aecfaq-item]'));
+  copilotFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      copilotFaqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .aecfaq { width: 100%; padding: 80px 24px; background: #fff; }
+  .aecfaq__inner { display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; max-width: 1140px; margin: 0 auto; }
+  .aecfaq__sidebar { position: sticky; top: 6rem; }
+  .aecfaq__eyebrow { display: inline-flex; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; color: #000; font: 500 .8125rem/1.2 var(--font-body); }
+  .aecfaq__heading { margin: 0 0 20px; background: var(--aec-light-title-gradient); background-clip: text; color: transparent; font: 500 var(--aec-section-title-size)/var(--aec-section-title-line) var(--font-heading); letter-spacing: var(--aec-section-title-tracking); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .aecfaq__intro { margin: 0 0 28px; color: var(--body-light); font: 1rem/1.6 var(--font-body); }
+  .aecfaq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1.2 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .aecfaq__cta:hover { transform: translateY(-1px); background: #000; }
+  .aecfaq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: copilot-faq; }
+  .aecfaq__item { counter-increment: copilot-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease; }
+  .aecfaq__item[open] { background: #e4e7ec; }
+  .aecfaq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font: 500 1.0625rem/1.35 var(--font-heading); cursor: pointer; list-style: none; }
+  .aecfaq__question strong { font-weight: 500; }
+  .aecfaq__question strong::before { content: counter(copilot-faq) '. '; }
+  .aecfaq__question::-webkit-details-marker { display: none; }
+  .aecfaq__icon { position: relative; flex: 0 0 18px; width: 18px; height: 18px; transition: transform .28s ease; }
+  .aecfaq__icon::before, .aecfaq__icon::after { content: ""; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .aecfaq__icon::before { width: 14px; height: 2px; }.aecfaq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .aecfaq__item[open] .aecfaq__icon { transform: scale(.9); }.aecfaq__item[open] .aecfaq__icon::after { opacity: 0; }
+  .aecfaq__answer { max-width: 640px; padding: 0 0 24px; }
+  .aecfaq__answer p { margin: 0; color: #000; font: .9375rem/1.7 var(--font-body); }
+  @media (max-width: 1024px) {
+    .aecfaq__inner { grid-template-columns: 1fr; gap: 40px; }.aecfaq__sidebar { position: static; }
+  }
+  @media (max-width: 767px) {
+    .aecfaq { padding: 56px 16px; }.aecfaq__item { padding: 4px 20px; border-radius: 16px; }.aecfaq__question { padding: 18px 0; font-size: .9375rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .aecfaq__item, .aecfaq__icon, .aecfaq__icon::after, .aecfaq__cta { transition: none; } }
+</style>

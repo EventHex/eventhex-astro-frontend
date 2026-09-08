@@ -1,155 +1,84 @@
 ---
-// AI Event Copilot stats — dark section with engagement heading + stats grid
-const stats = [
-  { value: "4", label: "Specialized AI Agents" },
-  { value: "80%", label: "Time Saved on Repetitive Tasks" },
-  { value: "24/7", label: "Agent Availability" },
-  { value: "15+", label: "Languages Supported" },
+const stages = [
+  { value: "Ask", label: "Event questions" },
+  { value: "Inspect", label: "Records and readiness" },
+  { value: "Prepare", label: "Drafts and structured outputs" },
+  { value: "Act", label: "Supported organizer tasks" },
+  { value: "Continue", label: "Event-scoped conversations" },
 ];
 ---
 
-<section class="aecs-dark">
-  <div class="aecs-engagement">
-    <div class="aecs-engagement-text">
-      <h2 class="aecs-heading animate-on-scroll" data-animation="fadeInDown">
-        <span class="aecs-white">Your AI team </span>
-        <span class="aecs-purple">always on </span>
-        <span class="aecs-white">for</span>
-        <br />
-        <span class="aecs-cyan">every event task</span>
-      </h2>
-    </div>
-  </div>
-
-  <div class="aecs-stats">
-    {stats.map((stat) => (
-      <div class="aecs-stat">
-        <span class="aecs-stat-value">{stat.value}</span>
-        <span class="aecs-stat-label">{stat.label}</span>
-      </div>
+<section class="aecs-reference" aria-label="One Copilot, five ways to move event work forward">
+  <div class="aecs-trust__inner">
+    {stages.map((stage) => (
+      <a class="aecs-trust__stat" href="#aec-capabilities">
+        <b>{stage.value}</b>
+        <span>{stage.label}</span>
+      </a>
     ))}
   </div>
 </section>
 
 <style>
-  .aecs-dark {
-    display: flex;
-    flex-direction: column;
+  .aecs-reference {
     width: 100%;
-    padding: 70px 0;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    padding: 58px 24px;
+    border-top: 1px solid var(--surface-card-border);
+    color: var(--heading-dark);
+    background: #fff;
   }
-
-  .aecs-engagement {
-    width: 100%;
-    padding: 0 0 60px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .aecs-engagement-text {
-    width: 65%;
-  }
-
-  .aecs-heading {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    line-height: 52px;
-    letter-spacing: -1px;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-  }
-
-  .aecs-white { color: #fff; }
-  .aecs-purple { color: #AFA3FF; }
-  .aecs-cyan { color: #ABFFFF; }
-
-  .aecs-stats {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    padding: 0 20px;
-    max-width: 1100px;
+  .aecs-trust__inner {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    max-width: 1180px;
     margin: 0 auto;
-    width: 100%;
   }
-
-  .aecs-stat {
+  .aecs-trust__stat {
     display: flex;
+    min-width: 0;
+    min-height: 74px;
+    padding: 8px 24px;
+    border-right: 1px solid var(--surface-card-border);
     flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 32px 28px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    flex: 1;
-    min-width: 180px;
-    transition: background 0.3s ease, border-color 0.3s ease;
-  }
-
-  .aecs-stat:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.18);
-  }
-
-  .aecs-stat-value {
-    font-family: var(--font-heading);
-    font-size: 40px;
-    font-weight: 700;
-    line-height: 48px;
-    letter-spacing: -1px;
-    color: #fff;
-  }
-
-  .aecs-stat-label {
+    justify-content: center;
+    color: var(--body-light);
     font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 20px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
+    font-size: 13px;
+    line-height: 1.3;
+    text-decoration: none;
+  }
+  .aecs-trust__stat:first-child { padding-left: 24px; }
+  .aecs-trust__stat:last-child { border-right: 0; }
+  .aecs-trust__stat b {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--heading-dark);
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.15;
+  }
+  .aecs-trust__stat:hover b { color: var(--brand-blue); }
+
+  @media (max-width: 960px) {
+    .aecs-reference { padding-block: 34px; }
+    .aecs-trust__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .aecs-trust__stat { border-bottom: 1px solid var(--surface-card-border); }
+    .aecs-trust__stat:nth-child(2n) { border-right: 0; }
+    .aecs-trust__stat:last-child { border-right: 1px solid var(--surface-card-border); border-bottom: 0; }
   }
 
-  @media (max-width: 1024px) {
-    .aecs-dark { padding: 80px 0; }
-    .aecs-engagement { padding: 0 20px 40px; }
-    .aecs-engagement-text { width: 85%; }
-    .aecs-heading { font-size: 40px; line-height: 1.1em; }
-    .aecs-stats { gap: 40px; }
-    .aecs-stat-value { font-size: 32px; }
-    .aecs-stat-label { font-size: 14px; }
-  }
-
-  @media (max-width: 767px) {
-    .aecs-dark { padding: 64px 0; }
-    .aecs-engagement { padding: 0 15px 30px; }
-    .aecs-engagement-text { width: 100%; }
-    .aecs-heading { font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
-    .aecs-stats {
-      flex-wrap: wrap;
-      gap: 24px;
-      justify-content: center;
+  @media (max-width: 640px) {
+    .aecs-reference { padding: 26px 16px; }
+    .aecs-trust__inner { grid-template-columns: 1fr; }
+    .aecs-trust__stat,
+    .aecs-trust__stat:nth-child(2n),
+    .aecs-trust__stat:last-child {
+      min-height: 66px;
+      padding-inline: 16px;
+      border-right: 0;
+      border-bottom: 1px solid var(--surface-card-border);
     }
-    .aecs-stat { width: 40%; padding: 24px 16px; }
-    .aecs-stat-value { font-size: 28px; }
-    .aecs-stat-label { font-size: 13px; }
+    .aecs-trust__stat:last-child { border-bottom: 0; }
   }
 </style>

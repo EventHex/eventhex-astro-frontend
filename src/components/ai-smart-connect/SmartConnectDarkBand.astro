@@ -7,28 +7,145 @@ const { items } = Astro.props;
   <div class="scd-heading">
     <h2>Turn available profile information into a better place to start</h2>
   </div>
-  <div class="scd-grid">
-    {items.map(([title, text], index) => (
-      <article class="animate-on-scroll" data-animation="fadeInUp">
-        <h3>{title}</h3>
-        <p>{text}</p>
-        <div class={`scd-visual scd-visual--${index + 1}`} aria-hidden="true">
-          {index === 0 && <div class="scd-match"><div class="scd-match__person"><span>AM</span><b>Aisha Malik</b></div><div class="scd-match__signals"><i>Fintech</i><i>Partnerships</i><i>Community</i></div><div class="scd-match__score"><strong>92%</strong><small>profile match</small></div></div>}
-          {index === 1 && <div class="scd-event"><div class="scd-event__bar"><i></i><span>Future Forum 2026</span><b>Live</b></div><div class="scd-event__people"><span>AM</span><span>JR</span><span>MC</span><span>+24</span></div><div class="scd-event__scope"><i></i>Searching this event only</div></div>}
-          {index === 2 && <div class="scd-profile"><div class="scd-profile__head"><span>JR</span><div><b>Jon Reed</b><small>Product · SaaS</small></div></div><div class="scd-profile__fields"><p><small>Company</small><b>Northstar Labs</b></p><p><small>Interested in</small><b>Event technology</b></p></div><div class="scd-profile__hint">Review before connecting</div></div>}
-          {index === 3 && <div class="scd-states"><div class="scd-states__tabs"><span>All</span><span>Connected</span><span class="is-active">Requested</span></div><div class="scd-states__row"><i>MC</i><div><b>Maya Chen</b><small>Request sent</small></div><em>Pending</em></div><div class="scd-states__row"><i>RK</i><div><b>Ravi Kumar</b><small>Invitation received</small></div><em>Review</em></div></div>}
-          {index === 4 && <div class="scd-action"><div class="scd-action__profile"><span>AM</span><div><b>Aisha Malik</b><small>Partnerships · Fintech</small></div></div><button type="button">Send connection request</button><div class="scd-action__status"><i></i><span>Attendee chooses the next step</span></div></div>}
-        </div>
-      </article>
-    ))}
+  <div class="scd-grid-section">
+    <div class="scd-grid">
+      {items.map(([title, text], index) => (
+        <article class="animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+          {(index === 1 || index === 2 || index === 4) && (
+            <>
+              <span class="scd-petal scd-petal--top" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+                </svg>
+              </span>
+              <span class="scd-petal scd-petal--bottom" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+                </svg>
+              </span>
+            </>
+          )}
+          <h3>{title}</h3>
+          <p>{text}</p>
+          <div class={`scd-visual scd-visual--${index + 1}`} aria-hidden="true">
+            {index === 0 && <div class="scd-match"><div class="scd-match__person"><span>AM</span><b>Aisha Malik</b></div><div class="scd-match__signals"><i>Fintech</i><i>Partnerships</i><i>Community</i></div><div class="scd-match__score"><strong>92%</strong><small>profile match</small></div></div>}
+            {index === 1 && <div class="scd-event"><div class="scd-event__bar"><i></i><span>Future Forum 2026</span><b>Live</b></div><div class="scd-event__people"><span>AM</span><span>JR</span><span>MC</span><span>+24</span></div><div class="scd-event__scope"><i></i>Searching this event only</div></div>}
+            {index === 2 && <div class="scd-profile"><div class="scd-profile__head"><span>JR</span><div><b>Jon Reed</b><small>Product · SaaS</small></div></div><div class="scd-profile__fields"><p><small>Company</small><b>Northstar Labs</b></p><p><small>Interested in</small><b>Event technology</b></p></div><div class="scd-profile__hint">Review before connecting</div></div>}
+            {index === 3 && <div class="scd-states"><div class="scd-states__tabs"><span>All</span><span>Connected</span><span class="is-active">Requested</span></div><div class="scd-states__row"><i>MC</i><div><b>Maya Chen</b><small>Request sent</small></div><em>Pending</em></div><div class="scd-states__row"><i>RK</i><div><b>Ravi Kumar</b><small>Invitation received</small></div><em>Review</em></div></div>}
+            {index === 4 && <div class="scd-action"><div class="scd-action__profile"><span>AM</span><div><b>Aisha Malik</b><small>Partnerships · Fintech</small></div></div><button type="button">Send connection request</button><div class="scd-action__status"><i></i><span>Attendee chooses the next step</span></div></div>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+  <div class="scd-cta animate-on-scroll" data-animation="fadeInUp">
+    <h2 class="scd-cta__title">
+      Give every attendee a better place to
+      <span class="scd-cta__break">start a connection</span>
+    </h2>
+    <a class="scd-cta__btn" href="/book-a-demo/">Get Started with EventHex</a>
   </div>
 </section>
 
 <style>
-  .scd-band{--band-p:0;position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 0 0;background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);background-repeat:no-repeat;--band-gap:calc((1 - var(--band-p)) * clamp(16px,3.5vw,56px));clip-path:inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));will-change:clip-path}.scd-band:before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}.scd-band>*{position:relative;z-index:1}.scd-heading{max-width:1140px;margin:0 auto;padding:0 24px 72px;text-align:center}.scd-heading h2{max-width:1000px;margin:0 auto;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em;background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.scd-grid{display:grid;grid-template-columns:repeat(6,1fr);max-width:1140px;margin:0 auto;padding:0 24px clamp(56px,7vw,88px)}.scd-grid article{position:relative;grid-column:span 2;display:flex;flex-direction:column;min-height:420px;padding:36px 32px;border-top:1px solid #3b3a47;border-right:1px solid #3b3a47}.scd-grid article:first-child{border-left:1px solid #3b3a47;border-radius:16px 0 0 0}.scd-grid article:nth-child(3){border-radius:0 16px 0 0}.scd-grid article:nth-child(n+4){grid-column:span 3;border-bottom:1px solid #3b3a47}.scd-grid article:nth-child(4){border-left:1px solid #3b3a47;border-radius:0 0 0 16px}.scd-grid article:nth-child(5){border-radius:0 0 16px 0}.scd-grid h3{margin:0 0 14px;color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:-.01em}.scd-grid p{max-width:34ch;margin:0;color:rgba(255,255,255,.62);font-family:var(--font-body);font-size:.9375rem;line-height:1.38}.scd-visual{display:flex;align-items:flex-end;justify-content:center;flex:1;gap:8px;margin-top:32px}.scd-visual i{display:block;width:30%;height:40%;border:1px solid #375dfb;border-radius:9px;background:rgba(55,93,251,.12)}.scd-visual i:nth-child(2){height:75%;border-color:#7c8fff;background:rgba(124,143,255,.16)}.scd-visual i:nth-child(3){height:55%;border-color:#b8c2ff;background:rgba(184,194,255,.14)}
-  @media(prefers-reduced-motion:reduce){.scd-band{clip-path:none;will-change:auto}}
-  @media(max-width:900px){.scd-grid{grid-template-columns:1fr}.scd-grid article,.scd-grid article:nth-child(n+4){grid-column:auto;min-height:320px;border:1px solid #3b3a47;border-bottom:0;border-radius:0}.scd-grid article:first-child{border-radius:16px 16px 0 0}.scd-grid article:last-child{border-bottom:1px solid #3b3a47;border-radius:0 0 16px 16px}}
-  @media(max-width:640px){.scd-heading{padding-bottom:48px}.scd-grid{padding-inline:16px}.scd-grid article,.scd-grid article:nth-child(n+4){min-height:280px;padding:30px 26px}}
+  .scd-band {
+    --band-p: 0;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, .22) 0%, rgba(124, 108, 255, .1) 45%, transparent 72%);
+    background-repeat: no-repeat;
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+  .scd-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+  }
+  .scd-band > * { position: relative; z-index: 1; }
+  .scd-heading { max-width: 980px; margin: 0 auto; padding: 0 24px 8px; text-align: center; }
+  .scd-heading h2 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(2.125rem, 5vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.04em;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .scd-grid-section { max-width: 1140px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) 24px 0; }
+  .scd-grid { display: grid; grid-template-columns: repeat(6, 1fr); overflow: hidden; border: 1px solid #3b3a47; border-radius: 16px; }
+  .scd-grid article { position: relative; grid-column: span 2; display: flex; flex-direction: column; min-height: 420px; padding: 36px 32px; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; }
+  .scd-grid article:nth-child(n + 4) { grid-column: span 3; border-bottom: none; }
+  .scd-grid article:nth-child(3), .scd-grid article:nth-child(5) { border-right: none; }
+  .scd-grid h3 { margin: 0 0 14px; color: #fff; font-family: var(--font-heading); font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+  .scd-grid p { max-width: 34ch; margin: 0; color: rgba(255,255,255,.62); font-family: var(--font-body); font-size: .9375rem; line-height: 1.38; }
+  .scd-petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .scd-petal--top { top: 0; transform: translate(-50%, -50%); }
+  .scd-petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .scd-visual { display: flex; align-items: flex-end; justify-content: center; flex: 1; gap: 8px; margin-top: 32px; }
+  .scd-visual i { display: block; width: 30%; height: 40%; border: 1px solid #375dfb; border-radius: 9px; background: rgba(55,93,251,.12); }
+  .scd-visual i:nth-child(2) { height: 75%; border-color: #7c8fff; background: rgba(124,143,255,.16); }
+  .scd-visual i:nth-child(3) { height: 55%; border-color: #b8c2ff; background: rgba(184,194,255,.14); }
+
+  .scd-cta::before {
+    content: '';
+    position: absolute;
+    top: -420px;
+    bottom: 0;
+    left: 50%;
+    z-index: 0;
+    width: 100vw;
+    pointer-events: none;
+    transform: translateX(-50%);
+    background: radial-gradient(60% 55% at 30% 100%, rgba(56,189,248,.26) 0%, transparent 72%), radial-gradient(55% 50% at 78% 62%, rgba(164,92,255,.2) 0%, transparent 74%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 62%);
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 62%);
+  }
+  .scd-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 50%;
+    z-index: 0;
+    width: 100vw;
+    pointer-events: none;
+    transform: translateX(-50%);
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, transparent 1px 46px);
+    -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 10px, transparent 10px 24px), linear-gradient(180deg, transparent 0%, #000 38%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image: repeating-linear-gradient(90deg, #000 0 10px, transparent 10px 24px), linear-gradient(180deg, transparent 0%, #000 38%, #000 100%);
+    mask-composite: intersect;
+  }
+  .scd-cta > * { position: relative; z-index: 1; }
+  .scd-cta { position: relative; display: flex; max-width: 900px; margin: 0 auto; padding: clamp(96px, 11vw, 168px) 24px clamp(80px, 9vw, 132px); align-items: center; flex-direction: column; gap: 22px; text-align: center; }
+  .scd-cta__break { display: block; }
+  .scd-cta__title { margin: 0; color: #fff; font-family: var(--font-heading); font-size: clamp(30px, 4.4vw, 52px); font-weight: 500; line-height: 1.1; letter-spacing: -.03em; }
+  .scd-cta__btn { display: inline-flex; padding: 14px 28px; align-items: center; justify-content: center; border-radius: 12px; background: #fff; color: #14151a; font-family: var(--font-body); font-size: 16px; font-weight: 650; letter-spacing: -.32px; text-decoration: none; transition: transform .3s ease; }
+  .scd-cta__btn:hover { transform: translateY(-2px); }
+
+  @media(prefers-reduced-motion:reduce) { .scd-band { clip-path: none; will-change: auto; } }
+  @media(max-width:860px) {
+    .scd-grid { grid-template-columns: 1fr; }
+    .scd-grid article, .scd-grid article:nth-child(n + 4) { grid-column: span 1; min-height: 0; padding: 32px 24px; border-right: none; border-bottom: 1px solid #3b3a47; }
+    .scd-grid article:last-child { border-bottom: none; }
+    .scd-petal { display: none; }
+    .scd-grid p { max-width: none; }
+  }
+  @media(max-width:560px) {
+    .scd-cta { gap: 18px; padding-top: 56px; }
+    .scd-cta__break { display: inline; }
+    .scd-cta__btn { width: 100%; }
+  }
 
   .scd-visual{position:relative;min-height:190px;align-items:center;font-family:var(--font-body)}.scd-visual>div{width:100%;max-width:330px;color:#fff;animation:scd-float 6s ease-in-out infinite}.scd-grid article:nth-child(2) .scd-visual>div{animation-delay:-1.2s}.scd-grid article:nth-child(3) .scd-visual>div{animation-delay:-2.4s}.scd-grid article:nth-child(4) .scd-visual>div{animation-delay:-3.6s}.scd-grid article:nth-child(5) .scd-visual>div{animation-delay:-4.8s}.scd-match,.scd-event,.scd-profile,.scd-states,.scd-action{position:relative;padding:16px;border:1px solid #333846;border-radius:16px;background:rgba(16,18,25,.92);box-shadow:0 16px 34px rgba(0,0,0,.25)}
   .scd-match:after{content:'';position:absolute;inset:-1px;border:1px solid #375dfb;border-radius:16px;opacity:0;animation:scd-scan 3.2s ease-in-out infinite}.scd-match__person,.scd-profile__head,.scd-action__profile,.scd-states__row{display:flex;align-items:center;gap:10px}.scd-match__person span,.scd-profile__head>span,.scd-action__profile>span,.scd-states__row>i{display:grid;width:36px;height:36px;place-items:center;border-radius:50%;background:#202b54;color:#91a6ff;font-size:11px;font-style:normal;font-weight:700}.scd-match__person b,.scd-profile__head b,.scd-action__profile b,.scd-states__row b{font-size:12px}.scd-match__signals{display:flex;flex-wrap:wrap;gap:6px;margin:15px 0}.scd-match__signals i{width:auto;height:auto;padding:5px 8px;border:1px solid #3b4254;border-radius:999px;background:#1b1e27;color:#abb3c3;font-size:10px;font-style:normal}.scd-match__score{display:flex;align-items:baseline;gap:7px;padding-top:12px;border-top:1px solid #2e3340}.scd-match__score strong{color:#8ea5ff;font-size:22px}.scd-match__score small{color:#858d9d}
@@ -38,7 +155,6 @@ const { items } = Astro.props;
   .scd-action__profile{padding-bottom:14px;border-bottom:1px solid #2e3340}.scd-action button{width:100%;margin-top:14px;padding:10px;border:1px solid #5273ff;border-radius:9px;background:#375dfb;color:#fff;font:600 10px var(--font-body);animation:scd-button 3.2s ease-in-out infinite}.scd-action__status{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;color:#858d9d;font-size:9px}
   @keyframes scd-scan{0%,20%,100%{opacity:0;transform:scale(.98)}45%,65%{opacity:1;transform:scale(1.015)}}@keyframes scd-pulse{0%,100%{box-shadow:0 0 0 0 rgba(32,201,151,.4)}50%{box-shadow:0 0 0 6px rgba(32,201,151,0)}}@keyframes scd-scope{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.8);opacity:1}}@keyframes scd-reveal{0%,100%{opacity:.55}50%{opacity:1}}@keyframes scd-row{0%,100%{border-color:#292e3a}50%{border-color:#526ed7;background:#171d30}}@keyframes scd-button{0%,100%{box-shadow:0 0 0 0 rgba(55,93,251,0)}50%{box-shadow:0 0 0 5px rgba(55,93,251,.18)}}@keyframes scd-float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-8px) rotate(.35deg)}}
   @media(prefers-reduced-motion:reduce){.scd-match:after,.scd-event__bar i,.scd-action__status i,.scd-event__scope i,.scd-profile__hint,.scd-states__row:nth-child(3),.scd-action button,.scd-visual>div{animation:none}}
-  .scd-grid{position:relative;border:1px solid rgba(55,93,251,.9);border-radius:16px;box-shadow:0 0 0 1px rgba(124,143,255,.18),0 18px 60px rgba(55,93,251,.12);background:linear-gradient(180deg,rgba(55,93,251,.06),transparent 28%)}
 </style>
 
 <script>

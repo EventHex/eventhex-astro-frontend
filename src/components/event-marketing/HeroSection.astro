@@ -1,341 +1,152 @@
----
-// Hero — speaker-management pattern: split layout, single image, floating info cards
-// CSS prefix: em-hero__
-
-interface Props {
-  eyebrow: string;
-  titleHtml: string;
-  description: string;
-  ctaText: string;
-  ctaHref: string;
-  image: string;
-  imageAlt: string;
-}
-
-const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = Astro.props;
----
-
-<section class="em-hero">
-  <div class="em-hero__shell">
-    <div class="em-hero__grid">
-
-      <div class="em-hero__content">
-        <div class="em-hero__badge animate-on-scroll" data-animation="fadeInDown">
-          <span>{eyebrow}</span>
-        </div>
-
-        <h1 class="em-hero__title animate-on-scroll" data-animation="fadeInUp" set:html={titleHtml}></h1>
-
-        <p class="em-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
-          {description}
-        </p>
-
-        <div class="em-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
-          <span class="em-hero__point">Email + WhatsApp</span>
-          <span class="em-hero__point">Smart Audience Targeting</span>
-          <span class="em-hero__point">Real-Time Analytics</span>
-        </div>
-
-        <div class="em-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
-          <a href={ctaHref} class="em-hero__btn em-hero__btn--primary">{ctaText}</a>
-          <a href="#em-features" class="em-hero__btn em-hero__btn--secondary">Explore Features</a>
-        </div>
-
-        <div class="em-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
-          <span class="em-hero__trust-item">5,000+ campaigns sent</span>
-          <span class="em-hero__trust-item">95% delivery rate</span>
-        </div>
+<section class="emh-hero">
+  <div class="emh-hero__grid">
+    <div class="emh-hero__content">
+      <span class="emh-hero__badge animate-on-scroll" data-animation="fadeInDown">Event Marketing</span>
+      <h1 class="emh-hero__title animate-on-scroll" data-animation="fadeInUp">
+        Build Event Campaigns With the Audience Data You Already Have
+      </h1>
+      <p class="emh-hero__desc animate-on-scroll" data-animation="fadeInUp">
+        Build email and WhatsApp campaigns around current registrants, selected ticket groups, saved audiences, people segments, or registrants from previous events. Personalize the message, send now or schedule it, and follow delivery from the same EventHex workspace.
+      </p>
+      <div class="emh-hero__cta-row animate-on-scroll" data-animation="fadeInUp">
+        <a href="/book-a-demo/" class="emh-hero__btn">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <a href="#em-channel-choice" class="emh-hero__btn emh-hero__btn--outline">See the campaign workflow</a>
       </div>
+      <div class="emh-hero__trust animate-on-scroll" data-animation="fadeIn">
+        <span class="emh-hero__trust-item">Email and WhatsApp campaigns</span>
+        <span class="emh-hero__trust-item">Registration-aware audiences</span>
+      </div>
+    </div>
 
-      <div class="em-hero__visual animate-on-scroll" data-animation="fadeInRight">
-        <div class="em-hero__visual-card">
-          <div class="em-hero__floating em-hero__floating--top">
-            <span class="em-hero__floating-label">Campaigns</span>
-            <strong>5,000+ messages delivered</strong>
-          </div>
-
-          <img
-            src={image}
-            alt={imageAlt}
-            width="700"
-            height="500"
-            loading="eager"
-          />
-
-          <div class="em-hero__floating em-hero__floating--bottom">
-            <span class="em-hero__floating-label">Delivery</span>
-            <strong>95% success rate across channels</strong>
+    <div class="emh-hero__visual animate-on-scroll" data-animation="fadeInRight">
+      <div class="emh-hero__visual-card">
+        <div class="emh-hero__visual-inner">
+          <div class="emh-hero__collage">
+            <figure class="emh-hero__shot emh-hero__shot--campaign">
+              <img
+                src="/feature-images/solutions/event-marketing-email-campaign-hero.jpg"
+                alt="EventHex Email Campaigns workspace showing a completed campaign with send and open metrics"
+                width="900"
+                height="340"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </figure>
+            <figure class="emh-hero__shot emh-hero__shot--audience">
+              <img
+                src="/feature-images/solutions/event-marketing-audience-panel.jpg"
+                alt="EventHex campaign audience builder with event, segment, ticket, and saved-audience options"
+                width="770"
+                height="754"
+                loading="eager"
+                decoding="async"
+              />
+            </figure>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<style is:global>
-  .em-hero {
+<section class="emh-trust-strip" aria-label="Event marketing workflow summary">
+  <div class="emh-trust-strip__inner">
+    <span class="emh-trust-strip__stat"><b>Audience</b> Choose who should receive it</span>
+    <span class="emh-trust-strip__stat"><b>Channel</b> Email or WhatsApp</span>
+    <span class="emh-trust-strip__stat"><b>Message</b> Create and personalize</span>
+    <span class="emh-trust-strip__stat"><b>Schedule</b> Send now or later</span>
+    <span class="emh-trust-strip__stat"><b>Monitor</b> Follow every status</span>
+  </div>
+</section>
+
+<style>
+  /* Exact Event Registration hero and trust-strip structure, with marketing content. */
+  .emh-hero {
     position: relative;
     overflow: hidden;
     margin-top: -90px;
-    padding: 0 0 120px;
+    padding: 140px 24px 64px;
     background:
-      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
-      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+      radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%),
+      #fff;
   }
-
-  .em-hero__shell {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    padding: 160px 0 0;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
+  .emh-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    pointer-events: none;
+    z-index: 2;
   }
-
-  .em-hero__grid {
-    max-width: 1280px;
+  .emh-hero__grid {
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 0 20px 60px;
     display: grid;
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
     gap: 48px;
     align-items: center;
   }
-
-  .em-hero__content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
-
-  .em-hero__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .em-hero__title {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: 52px;
-    font-weight: 600;
-    line-height: 60px;
-    letter-spacing: -1px;
-    color: var(--heading-dark);
-  }
-
-  .em-hero__title :global(b),
-  .em-hero__title :global(span) {
-    color: var(--brand-blue);
-  }
-
-  .em-hero__desc {
-    margin: 0;
-    max-width: 580px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 28px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .em-hero__points {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .em-hero__point {
-    display: inline-flex;
-    align-items: center;
-    padding: 9px 14px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #e5ebff;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #475467;
-    box-shadow: 0 8px 24px rgba(34, 39, 47, 0.05);
-  }
-
-  .em-hero__cta {
-    display: flex;
-    gap: 14px;
-    padding-top: 6px;
-  }
-
-  .em-hero__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 12px 32px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
-  }
-
-  .em-hero__btn--primary {
-    color: #fff;
-    background: var(--brand-blue);
-    box-shadow: 0 10px 24px rgba(55, 93, 251, 0.28);
-  }
-
-  .em-hero__btn--primary:hover {
-    transform: translateY(-2px);
-    background: var(--brand-blue-hover);
-    box-shadow: 0 14px 30px rgba(55, 93, 251, 0.34);
-  }
-
-  .em-hero__btn--secondary {
-    color: var(--heading-dark);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #dce4ff;
-  }
-
-  .em-hero__btn--secondary:hover {
-    transform: translateY(-2px);
-    border-color: #c5d2ff;
-    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
-  }
-
-  .em-hero__trust {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .em-hero__trust-item {
-    position: relative;
-    padding-left: 16px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #667085;
-  }
-
-  .em-hero__trust-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-  }
-
-  .em-hero__visual {
-    position: relative;
-  }
-
-  .em-hero__visual-card {
-    position: relative;
-    padding: 20px 0 36px;
-  }
-
-  .em-hero__visual-card img {
-    display: block;
+  .emh-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .emh-hero__badge { font: 500 16px/24px var(--font-body); color: var(--brand-blue); }
+  .emh-hero__title {
     width: 100%;
-    height: auto;
-    border-radius: 0;
-    filter: drop-shadow(0 26px 48px rgba(34, 39, 47, 0.14));
+    margin: 0;
+    font: 500 60px/66px var(--font-heading);
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
   }
-
-  .em-hero__floating {
-    position: absolute;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 14px 16px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.94);
-    color: var(--heading-dark);
-    border: 1px solid rgba(229, 235, 255, 0.9);
-    box-shadow: 0 18px 36px rgba(34, 39, 47, 0.12);
-    backdrop-filter: blur(12px);
+  .emh-hero__desc { width: 100%; margin: 0; color: var(--subheading-gray); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .emh-hero__cta-row { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; padding-top: 8px; }
+  .emh-hero__btn { display: inline-flex; align-items: center; gap: 6px; padding: 12px 20px; border: 1px solid transparent; border-radius: 12px; color: #fff; background: var(--heading-dark); font: 650 15px/22px var(--font-body); letter-spacing: -.3px; text-decoration: none; transition: transform .3s, background .3s; }
+  .emh-hero__btn:hover { transform: translateY(-2px); background: #000; }
+  .emh-hero__btn--outline { border-color: rgba(16,24,40,.22); color: var(--heading-dark); background: transparent; }
+  .emh-hero__btn--outline:hover { border-color: var(--heading-dark); background: transparent; }
+  .emh-hero__trust { display: flex; flex-wrap: wrap; gap: 18px; padding-top: 4px; }
+  .emh-hero__trust-item { position: relative; padding-left: 16px; color: var(--heading-dark); font: 400 16px/1.4 var(--font-body); }
+  .emh-hero__trust-item::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .emh-hero__visual { position: relative; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .emh-hero__visual-card { position: relative; padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57; backdrop-filter: blur(16px); }
+  .emh-hero__visual-inner { position: relative; padding: 24px; border-radius: 16px 0 0 16px; overflow: hidden; background: linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff); }
+  .emh-hero__collage { position: relative; min-height: 380px; isolation: isolate; }
+  .emh-hero__shot { position: absolute; margin: 0; overflow: hidden; border: 1px solid rgba(29,41,57,.1); border-radius: 12px; background: #fff; box-shadow: 0 20px 50px rgba(30,52,92,.16); }
+  .emh-hero__shot img { display: block; width: 100%; height: auto; }
+  .emh-hero__shot--campaign { top: 28px; left: 0; z-index: 1; width: 92%; }
+  .emh-hero__shot--audience { right: 0; bottom: 14px; z-index: 2; width: 55%; }
+  @media (min-width: 901px) {
+    .emh-hero__shot--audience { right: -18px; }
   }
-
-  .em-hero__floating--top {
-    top: -18px;
-    left: -18px;
-    max-width: 260px;
+  .emh-trust-strip { padding: 1.5rem; border-top: 1px solid var(--surface-card-border); }
+  .emh-trust-strip__inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 2.25rem; }
+  .emh-trust-strip__stat { color: var(--subheading-gray); font: 400 .9375rem/1.4 var(--font-body); white-space: nowrap; }
+  .emh-trust-strip__stat b { color: var(--heading-dark); font-weight: 700; }
+  @media (max-width: 900px) {
+    .emh-hero__grid { grid-template-columns: 1fr; }
+    .emh-hero__visual { margin-right: -24px; }
+    .emh-hero__title { font-size: 52px; line-height: 1.05; }
   }
-
-  .em-hero__floating--bottom {
-    right: -18px;
-    bottom: 94px;
-    max-width: 280px;
-  }
-
-  .em-hero__floating-label {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 16px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #667085;
-  }
-
-  .em-hero__floating strong {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.45;
-  }
-
-  @media (max-width: 1120px) {
-    .em-hero { padding: 0 20px 110px; }
-    .em-hero__shell { padding: 136px 0 0; }
-    .em-hero__grid { gap: 28px; padding: 0 0 40px; }
-    .em-hero__desc { max-width: 520px; }
-    .em-hero__title { font-size: 46px; line-height: 1.1em; }
-  }
-
-  @media (max-width: 960px) {
-    .em-hero { padding: 0 20px 96px; }
-    .em-hero__shell { padding: 130px 0 0; }
-    .em-hero__grid { grid-template-columns: 1fr; gap: 34px; padding: 0 0 40px; }
-    .em-hero__content { align-items: center; text-align: center; }
-    .em-hero__desc { max-width: 720px; }
-    .em-hero__trust, .em-hero__points, .em-hero__cta { justify-content: center; }
-    .em-hero__title { font-size: 42px; line-height: 1.1em; }
-    .em-hero__visual-card { padding: 26px 0 0; }
-    .em-hero__floating--top { left: 0; }
-    .em-hero__floating--bottom { right: 0; bottom: 34px; }
-  }
-
   @media (max-width: 767px) {
-    .em-hero { margin-top: -80px; padding: 0 20px 90px; }
-    .em-hero__shell { padding: 120px 0 0; }
-    .em-hero__grid { padding: 0 0 30px; }
-    .em-hero__title { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
-    .em-hero__desc { font-size: 15px; line-height: 1.7; }
-    .em-hero__badge { font-size: 16px; line-height: 1.1em; }
-    .em-hero__point { font-size: 13px; padding: 8px 12px; }
-    .em-hero__cta { width: 100%; flex-direction: column; }
-    .em-hero__btn { width: 100%; }
-    .em-hero__trust { gap: 10px; justify-content: center; }
-    .em-hero__floating { position: static; margin-bottom: 12px; max-width: none; }
-    .em-hero__visual-card { padding: 18px 0 0; }
+    .emh-hero { padding: 128px 18px 48px; }
+    .emh-hero__content { align-items: center; text-align: center; }
+    .emh-hero__title { font-size: 43px; line-height: 1.03; letter-spacing: -1.7px; }
+    .emh-hero__desc { font-size: 16px; line-height: 24px; }
+    .emh-hero__cta-row { width: 100%; }
+    .emh-hero__btn { justify-content: center; width: 100%; }
+    .emh-hero__trust { justify-content: center; }
+    .emh-hero__visual { width: calc(100% + 18px); margin-right: -18px; }
+    .emh-hero__visual-inner { padding: 16px; }
+    .emh-hero__collage { min-height: 320px; }
+    .emh-hero__shot--campaign { top: 18px; width: 94%; }
+    .emh-hero__shot--audience { bottom: 10px; width: 57%; }
+    .emh-trust-strip__inner { align-items: flex-start; flex-direction: column; gap: 12px; }
   }
 </style>
