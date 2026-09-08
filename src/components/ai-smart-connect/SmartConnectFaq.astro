@@ -1,0 +1,39 @@
+---
+interface Props { faq: string[][]; }
+const { faq } = Astro.props;
+---
+
+<section class="scf-faq">
+  <div class="scf-faq__inner">
+    <div class="scf-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="scf-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 class="scf-faq__heading">Smart-Connect<br />Questions, Answered.</h2>
+      <p class="scf-faq__intro">Find quick answers about AI recommendations, connection requests, organizer controls, chat, and one-to-one meetings.</p>
+      <a href="/contact-en/" class="scf-faq__cta">
+        Visit Help Center
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+    <div class="scf-faq__list">
+      {faq.map(([q, a], index) => (
+        <details class="scf-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={index * 50} open={index === 0}>
+          <summary class="scf-faq__question">
+            <strong>{q}</strong>
+            <span class="scf-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="scf-faq__answer"><p>{a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .scf-faq{width:100%;padding:80px 24px;background:#fff}.scf-faq__inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start}.scf-faq__sidebar{position:sticky;top:6rem}.scf-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;margin-bottom:20px;color:#000;font-family:var(--font-body);font-size:.8125rem;font-weight:500}.scf-faq__heading{font-family:'Creato Display',var(--font-heading);font-size:44px;font-weight:500;color:#000;margin:0 0 20px;line-height:1.1;letter-spacing:-1px}.scf-faq__intro{margin:0 0 28px;color:var(--body-light);font-family:var(--font-body);font-size:1rem;line-height:1.6}.scf-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font-family:var(--font-body);font-size:.9375rem;font-weight:500;text-decoration:none;transition:background .2s ease,transform .2s ease}.scf-faq__cta:hover{background:#000;transform:translateY(-1px)}.scf-faq__list{display:flex;flex-direction:column;gap:16px;counter-reset:smart-connect-faq}.scf-faq__item{counter-increment:smart-connect-faq;padding:4px 28px;overflow:hidden;border:1px solid #e4e7ec;border-radius:20px;background:#fff;transition:background .25s ease,border-color .25s ease}.scf-faq__item[open]{border-color:#e4e7ec;background:#e4e7ec}.scf-faq__question{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;font-family:'Creato Display',var(--font-heading);font-size:1.0625rem;font-weight:500;color:#000;cursor:pointer;list-style:none}.scf-faq__question strong{font-weight:500}.scf-faq__question strong:before{content:counter(smart-connect-faq) '. '}.scf-faq__question::-webkit-details-marker{display:none}.scf-faq__icon{position:relative;flex-shrink:0;width:18px;height:18px;transition:transform .28s cubic-bezier(.22,1,.36,1)}.scf-faq__icon:before,.scf-faq__icon:after{content:'';position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.scf-faq__icon:before{width:14px;height:2px}.scf-faq__icon:after{width:2px;height:14px;transition:opacity .2s ease}.scf-faq__item[open] .scf-faq__icon{transform:scale(.9)}.scf-faq__item[open] .scf-faq__icon:after{opacity:0}.scf-faq__answer{max-width:640px;padding:0 0 24px}.scf-faq__answer p{font-family:var(--font-body);font-size:.9375rem;line-height:1.7;color:#000;margin:0}
+  @media(prefers-reduced-motion:reduce){.scf-faq__item,.scf-faq__icon,.scf-faq__icon:after{transition:none}}
+  @media(max-width:1024px){.scf-faq__inner{grid-template-columns:1fr;gap:40px}.scf-faq__sidebar{position:static}.scf-faq__heading{font-size:32px}}
+  @media(max-width:767px){.scf-faq{padding:56px 16px}.scf-faq__heading{font-size:28px}.scf-faq__item{padding:4px 20px;border-radius:16px}.scf-faq__question{font-size:.9375rem;padding:18px 0}}
+</style>
