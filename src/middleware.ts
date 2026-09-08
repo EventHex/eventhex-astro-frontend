@@ -1,5 +1,6 @@
 import type { MiddlewareHandler } from "astro";
 import { getPostBySlug } from "./lib/wordpress";
+import { getLegacyBlogRedirect } from "./lib/blog-redirects";
 
 /** Paths that fetch live WordPress data and should not be cached long. */
 const DYNAMIC_PATTERNS = ["/blog/", "/news/", "/wp-content/"];
@@ -27,20 +28,13 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     return redirect301("/sitemap-index.xml");
   }
 
-  // Old blog URL slug change: 2025 edition → 2026 edition (7,400+ impressions in GSC)
-  if (
-    path === "/blog/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/" ||
-    path === "/20-best-event-management-software-tools-to-simplify-your-event-planning-2025-edition/"
-  ) {
-    return redirect301("/blog/25-best-event-management-software-tools-2026-edition/");
-  }
+  // Renamed and consolidated articles, with or without the old /blog/ prefix.
+  const blogRedirect = getLegacyBlogRedirect(path);
+  if (blogRedirect) return redirect301(blogRedirect);
 
   // Orphan pages that no longer exist → redirect to relevant content
   if (path === "/ai-event-tech/") {
     return redirect301("/ai-event-copilot/");
-  }
-  if (path === "/12-mistakes-first-time-event-organizers-make-and-how-to-avoid-them/") {
-    return redirect301("/blog/");
   }
 
   // Old WordPress /feature/{slug}/ → /{slug}/
