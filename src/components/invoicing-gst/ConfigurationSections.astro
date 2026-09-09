@@ -1,0 +1,203 @@
+---
+const buyerFields = [
+  ["Company name", "Collect the legal or trading name supplied by the buyer.", "Northstar Ltd"],
+  ["Tax ID", "Use GSTIN, VAT number, TRN, or another configured label.", "TRN 100•••••03"],
+  ["Billing address", "Capture the address needed for the organizer's document.", "Dubai, UAE"],
+  ["Required fields", "Choose which supported B2B fields must be completed.", "Company · Tax ID · Address"],
+  ["Invoice preview", "Show the configured buyer details in the available preview flow.", "Preview ready"],
+  ["Order record", "Retain invoice-request context with the registration or order.", "EVT-0248"],
+] as const;
+
+const regions = [
+  ["India", "GST and GSTIN labels"],
+  ["UAE and GCC", "VAT, TRN, or another approved label"],
+  ["United Kingdom", "VAT and approved buyer fields"],
+  ["United States", "Organizer-defined sales-tax label or no tax line"],
+  ["Cross-border events", "Visible currency and buyer detail"],
+  ["Custom terminology", "Supported labels validated by your team"],
+] as const;
+
+const useCases = [
+  ["Conferences", "Give delegates and corporate buyers an order-linked invoice."],
+  ["Exhibitions", "Support exhibitor or attendee ticket purchases with billing detail."],
+  ["Association events", "Handle member and company registrations with invoice requests."],
+  ["Corporate events", "Keep internal or customer-event documents consistent."],
+  ["Tech conferences", "Connect paid ticket orders to buyer finance requirements."],
+  ["Multi-market teams", "Reuse the workflow while configuring the correct regional labels."],
+] as const;
+
+const related = [
+  ["Event Registration", "Collect buyer and attendee details in the chosen sign-up flow.", "/event-registration/"],
+  ["Event Ticketing", "Configure ticket pricing, capacity, sale windows, and access rules.", "/event-ticketing/"],
+  ["Payment Processing", "Connect the order to Stripe, Razorpay, or Tap and manage payment or refund state.", "/event-payment-processing/"],
+  ["Centralized Dashboard", "Review the wider event portfolio outside the individual invoice workflow.", "/centralized-dashboard/"],
+] as const;
+---
+
+<section id="ig-tax-rules" class="igc-flow-section" aria-labelledby="igc-tax-title">
+  <div class="igc-flow-header">
+    <span class="igc-eyebrow">Configurable tax detail</span>
+    <h2 id="igc-tax-title" class="igc-flow-title">Use named tax lines with inclusive or exclusive ticket pricing</h2>
+    <p class="igc-flow-subtitle">Your team supplies the tax names and percentage rates; EventHex applies that configuration to the supported checkout and invoice breakdown.</p>
+  </div>
+  <div class="igc-flow-quad">
+    <article class="igc-flow-quad__cell animate-on-scroll" data-animation="fadeInUp">
+      <h3>Tax-exclusive price</h3>
+      <p>Show the base ticket price and add the configured tax lines to the order total.</p>
+    </article>
+    <div class="igc-flow-quad__cell igc-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight">
+      <div class="igc-price-card" role="img" aria-label="Tax-exclusive ticket price example with VAT added to the base price">
+        <span class="igc-price-card__label">Tax added at checkout</span><strong>Conference pass</strong><div><span>Ticket price</span><b>$200.00</b></div><div><span>VAT 5%</span><b>$10.00</b></div><div class="igc-price-card__total"><span>Total</span><b>$210.00</b></div>
+      </div>
+    </div>
+    <div class="igc-flow-quad__cell igc-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft">
+      <div class="igc-price-card igc-price-card--inclusive" role="img" aria-label="Tax-inclusive ticket price example showing VAT within the advertised price">
+        <span class="igc-price-card__label">Tax included in price</span><strong>Conference pass</strong><div><span>Ticket price</span><b>$210.00</b></div><div><span>Includes VAT 5%</span><b>$10.00</b></div><div class="igc-price-card__total"><span>Total</span><b>$210.00</b></div>
+      </div>
+    </div>
+    <article class="igc-flow-quad__cell animate-on-scroll" data-animation="fadeInUp">
+      <h3>Tax-inclusive price</h3>
+      <p>Treat the displayed ticket price as inclusive and show the configured tax portion in the breakdown.</p>
+    </article>
+    <span class="igc-flow-quad__cross" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14 0A14 14 0 0 1 0 14 14 14 0 0 1 14 0Z" fill="var(--surface-card-border)"></path><path d="M-14 0A14 14 0 0 1 0 14 14 14 0 0 1 14 0Z" fill="var(--surface-card-border)" transform="scale(1 -1)"></path><path d="M-14 0A14 14 0 0 1 0 14 14 14 0 0 1 14 0Z" fill="var(--surface-card-border)" transform="rotate(90)"></path><path d="M-14 0A14 14 0 0 1 0 14 14 14 0 0 1 14 0Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path></svg></span>
+  </div>
+  <p class="igc-content-note">EventHex applies organizer-defined rules; it does not select the legally correct rate or jurisdiction for you.</p>
+</section>
+
+<section class="igc-dark-band" aria-labelledby="igc-buyer-title">
+  <div class="igc-heading">
+    <span class="igc-dark-eyebrow">Buyer billing details</span>
+    <h2 id="igc-buyer-title">Collect the information the invoice needs during registration</h2>
+    <p>When the buyer requests an invoice, surface the configured fields in the same journey instead of chasing them after payment.</p>
+  </div>
+  <div class="igc-grid-section">
+    <div class="igc-cap">
+      {buyerFields.map(([title, copy, example], index) => (
+        <article class="igc-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+          <h3>{title}</h3><p>{copy}</p>
+          <div class="igc-cap__visual"><div class="igc-cap__field"><span>{example}</span><i aria-hidden="true"></i></div></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="igc-bento-section" aria-labelledby="igc-details-title">
+  <div class="igc-bento-container">
+    <div class="igc-bento-header">
+      <span class="igc-eyebrow">Invoice configuration</span>
+      <h2 id="igc-details-title">Make the document match the <span>organizer and transaction</span></h2>
+      <p>Set the fields your finance team has approved before opening ticket sales, then keep each document tied to the order that created it.</p>
+    </div>
+    <div class="igc-bento-grid">
+      <article class="igc-bento-row">
+        <div class="igc-bento-cell igc-bento-content">
+          <span class="igc-bento-eyebrow">Your invoice identity</span><h3>Control the document language and organizer details</h3><p>Use Invoice, Tax Invoice, Receipt, or another approved title. Adapt the Bill To and invoice-number labels, then show the configured billing company, address, and logo.</p>
+        </div>
+        <div class="igc-bento-cell igc-bento-visual">
+          <div class="igc-document" role="img" aria-label="Invoice identity settings with customizable title, Bill To label, organizer details, and invoice number label"><small>DOCUMENT IDENTITY</small><strong>Tax Invoice</strong><span>From · Event organizer</span><span>Bill To · Northstar Ltd</span><span>Invoice No. · EVT-0248</span></div>
+        </div>
+      </article>
+      <article class="igc-bento-row">
+        <div class="igc-bento-cell igc-bento-visual">
+          <div class="igc-numbering" role="img" aria-label="EventHex invoice numbering configuration with prefix and starting number"><label>Prefix <b>EVT-</b></label><label>Starting number <b>0248</b></label><label>Invoice label <b>Invoice No.</b></label><div>Next reference <strong>EVT-0248</strong></div></div>
+        </div>
+        <div class="igc-bento-cell igc-bento-content">
+          <span class="igc-bento-eyebrow">Invoice numbering</span><h3>Start with the prefix and sequence your event uses</h3><p>Configure the approved event or document prefix, starting number, and invoice label so generated documents carry a consistent reference with the source transaction.</p>
+        </div>
+      </article>
+      <article class="igc-bento-row">
+        <div class="igc-bento-cell igc-bento-content">
+          <span class="igc-bento-eyebrow">Global by configuration</span><h3>Use the tax language your market and finance team approve</h3><p>The product mechanism stays the same; the labels, IDs, and rates change with the organizer's approved setup.</p>
+        </div>
+        <div class="igc-bento-cell igc-bento-visual">
+          <div class="igc-regions" role="list" aria-label="Regional invoice configuration examples">{regions.map(([region, detail]) => <div role="listitem"><strong>{region}</strong><span>{detail}</span></div>)}</div>
+        </div>
+      </article>
+      <article class="igc-bento-row">
+        <div class="igc-bento-cell igc-bento-visual">
+          <div class="igc-pdf" role="img" aria-label="Order-linked PDF invoice containing organizer identity, purchase lines, buyer details, and configured tax breakdown"><div class="igc-pdf__icon">PDF</div><div><strong>EVT-0248.pdf</strong><span>Branded organizer identity</span><span>Ticket and order lines</span><span>Configured tax breakdown</span><span>Email delivery</span></div></div>
+        </div>
+        <div class="igc-bento-cell igc-bento-content">
+          <span class="igc-bento-eyebrow">PDF delivery</span><h3>Give the buyer a clear document they can keep with the order</h3><p>Generate the available PDF from order data, include the configured organizer identity, buyer detail, purchase lines, and tax breakdown, then send it through the supported delivery path.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="igc-boundary" aria-labelledby="igc-boundary-title">
+  <div class="igc-boundary__inner">
+    <div><span class="igc-eyebrow">Finance-ready configuration</span><h2 id="igc-boundary-title">Keep tax decisions with the team responsible for them</h2><p>EventHex provides the fields and document workflow; the organizer remains responsible for choosing valid labels, rates, numbering, and required information.</p></div>
+    <ol>
+      <li><strong>EventHex configures</strong><span>Invoice identity, supported buyer fields, tax lines, price mode, numbering, PDF, and delivery.</span></li>
+      <li><strong>Organizer approves</strong><span>Business identity, tax names, rates, required fields, and event setup.</span></li>
+      <li><strong>Adviser validates</strong><span>Jurisdiction, tax treatment, statutory wording, and filing obligations.</span></li>
+      <li><strong>Payment provider handles</strong><span>The selected gateway's payment, settlement, and account requirements.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="igc-use-cases" aria-labelledby="igc-use-title">
+  <div class="igc-use-cases__inner">
+    <div class="igc-section-head"><span class="igc-eyebrow">Designed for paid event orders</span><h2 id="igc-use-title">Use the invoice workflow across the events your team runs</h2><p>Apply one approved setup per event and market.</p></div>
+    <div class="igc-use-grid">
+      {useCases.map(([title, copy], index) => <article class="igc-use-card animate-on-scroll" data-animation="fadeInUp" data-delay={index * 50}><span>{String(index + 1).padStart(2,'0')}</span><h3>{title}</h3><p>{copy}</p></article>)}
+    </div>
+  </div>
+</section>
+
+<section class="igc-related" aria-labelledby="igc-related-title">
+  <div class="igc-related__inner">
+    <div class="igc-section-head"><span class="igc-eyebrow">Connected event commerce</span><h2 id="igc-related-title">Continue into the workflow that owns the next job</h2><p>Invoice data starts in registration and follows the payment and order path.</p></div>
+    <div class="igc-related-grid">
+      {related.map(([title, copy, href]) => <a href={href}><span aria-hidden="true">↗</span><h3>{title}</h3><p>{copy}</p></a>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .igc-eyebrow { display:inline-block; margin-bottom:12px; color:var(--brand-blue); font:700 12px/1.2 var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+  /* Event Registration two-option comparison pattern. */
+  .igc-flow-section { display:flex; flex-direction:column; align-items:center; padding:clamp(72px,9vw,112px) 24px; background:#fff; }
+  .igc-flow-header { display:flex; flex-direction:column; align-items:center; max-width:930px; margin-bottom:24px; text-align:center; }
+  .igc-flow-title { margin:0 0 12px; font:500 clamp(32px,4.2vw,52px)/1.1 var(--font-heading); letter-spacing:-.04em; background:linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); background-clip:text; -webkit-background-clip:text; color:transparent; }
+  .igc-flow-subtitle { max-width:680px; margin:0; color:var(--subheading-gray); font:400 18px/1.5 var(--font-body); }
+  .igc-flow-quad { position:relative; display:grid; grid-template:1fr 1fr/1fr 1fr; width:100%; max-width:1180px; margin:24px auto; }
+  .igc-flow-quad__cross { position:absolute; left:50%; top:50%; z-index:1; width:18px; height:18px; transform:translate(-50%,-50%); line-height:0; pointer-events:none; }
+  .igc-flow-quad__cell { display:flex; flex-direction:column; justify-content:center; min-height:260px; padding:56px 48px; border-right:1px solid #eef0f3; border-bottom:1px solid #eef0f3; }
+  .igc-flow-quad__cell:nth-child(2n) { border-right:0; }.igc-flow-quad__cell:nth-child(n+3) { border-bottom:0; }
+  .igc-flow-quad__cell h3 { margin:0 0 16px; color:var(--heading-dark); font:600 clamp(24px,2.6vw,32px)/1.1 var(--font-heading); letter-spacing:-.03em; }.igc-flow-quad__cell p { max-width:40ch; margin:0; color:var(--subheading-gray); font:400 16px/1.6 var(--font-body); }
+  .igc-flow-quad__cell--media { align-items:center; min-height:360px; padding:24px; overflow:hidden; background:linear-gradient(145deg,#eaf1ff,#f8f5ff); }
+  .igc-price-card { width:min(100%,390px); padding:26px; border:1px solid #dfe4ed; border-radius:18px; background:#fff; box-shadow:0 18px 42px rgba(31,41,72,.15); font-family:var(--font-body); }
+  .igc-price-card__label { display:inline-flex; margin-bottom:18px; padding:7px 10px; border-radius:99px; color:#3158d4; background:#eef3ff; font-size:12px; font-weight:700; }.igc-price-card--inclusive .igc-price-card__label { color:#187747; background:#eafaf0; }
+  .igc-price-card > strong { display:block; margin-bottom:20px; color:#20252f; font-size:20px; }.igc-price-card > div { display:flex; justify-content:space-between; gap:20px; padding:13px 0; border-bottom:1px solid #e7eaf0; color:#687284; font-size:14px; }.igc-price-card b { color:#20252f; }.igc-price-card .igc-price-card__total { padding:18px 0 0; border:0; color:#20252f; font-size:17px; }
+  .igc-content-note { max-width:850px; margin:10px auto 0; color:var(--subheading-gray); font:400 14px/1.6 var(--font-body); text-align:center; }
+
+  /* Event Registration dark capability-grid pattern. */
+  .igc-dark-band { position:relative; overflow:hidden; padding:clamp(64px,8vw,96px) 0 clamp(70px,8vw,100px); background:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22),rgba(124,108,255,.1) 45%,transparent 72%),#000; }
+  .igc-heading { max-width:920px; margin:0 auto; padding:0 24px 8px; text-align:center; }.igc-dark-eyebrow { display:block; margin-bottom:14px; color:#a9b6ff; font:700 12px/1.2 var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+  .igc-heading h2 { margin:0; font:500 clamp(36px,5vw,56px)/1.1 var(--font-heading); letter-spacing:-.03em; background:linear-gradient(100deg,#fff,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff); background-clip:text; -webkit-background-clip:text; color:transparent; }.igc-heading p { max-width:680px; margin:18px auto 0; color:rgba(255,255,255,.6); font:400 17px/1.55 var(--font-body); }
+  .igc-grid-section { max-width:1140px; margin:0 auto; padding:clamp(40px,5vw,72px) 24px 0; }.igc-cap { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #3b3a47; border-radius:16px; overflow:hidden; }
+  .igc-cap__cell { display:flex; flex-direction:column; min-height:310px; padding:32px; border-right:1px solid #3b3a47; border-bottom:1px solid #3b3a47; }.igc-cap__cell:nth-child(3n) { border-right:0; }.igc-cap__cell:nth-child(n+4) { border-bottom:0; }.igc-cap__cell h3 { margin:0 0 12px; color:#fff; font:700 16px/1.2 var(--font-heading); }.igc-cap__cell p { margin:0; color:rgba(255,255,255,.6); font:400 14.5px/1.5 var(--font-body); }
+  .igc-cap__visual { display:flex; align-items:flex-end; flex:1; margin-top:28px; }.igc-cap__field { display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; padding:14px; border:1px solid rgba(255,255,255,.14); border-radius:12px; color:rgba(255,255,255,.88); background:rgba(255,255,255,.05); font:500 13px/1.3 var(--font-body); }.igc-cap__field i { width:34px; height:18px; border:1px solid rgba(139,160,255,.5); border-radius:99px; background:#6079ff; box-shadow:inset 15px 0 0 1px #fff; }
+
+  /* Event Registration alternating product-evidence rows. */
+  .igc-bento-section { padding:100px 5%; background:transparent; }.igc-bento-container { max-width:1200px; margin:0 auto; }.igc-bento-header { max-width:850px; margin:0 auto 60px; text-align:center; }.igc-bento-header h2 { margin:0; font:500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing:-.03em; }.igc-bento-header h2 span { color:#8f8f8f; }.igc-bento-header p { max-width:670px; margin:14px auto 0; color:var(--subheading-gray); font:400 17px/1.55 var(--font-body); }
+  .igc-bento-grid { border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; background:rgba(255,255,255,.58); }.igc-bento-row { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #e5e7eb; }.igc-bento-row:last-child { border-bottom:0; }.igc-bento-cell { display:flex; flex-direction:column; justify-content:center; min-width:0; padding:3.5rem; }.igc-bento-row .igc-bento-cell:first-child { border-right:1px solid #e5e7eb; }.igc-bento-visual { align-items:center; background:linear-gradient(145deg,rgba(231,239,255,.8),rgba(250,247,255,.7)); }.igc-bento-eyebrow { display:block; margin-bottom:1rem; color:#5b21b6; font:600 .875rem/1.2 var(--font-body); text-transform:uppercase; letter-spacing:.05em; }.igc-bento-content h3 { margin:0 0 1.25rem; color:#111827; font:500 2.15rem/1.06 var(--font-heading); letter-spacing:-.02em; }.igc-bento-content p { margin:0; color:#4b5563; font:400 1.06rem/1.55 var(--font-body); }
+  .igc-document,.igc-numbering,.igc-regions,.igc-pdf { width:100%; max-width:440px; padding:28px; border:1px solid #dfe4ed; border-radius:18px; background:#fff; box-shadow:0 18px 42px rgba(31,41,72,.12); font-family:var(--font-body); }.igc-document { display:flex; flex-direction:column; gap:12px; }.igc-document small { color:#7b8495; font-weight:700; letter-spacing:.1em; }.igc-document strong { padding-bottom:20px; border-bottom:1px solid #e5e7eb; color:#20252f; font-size:25px; }.igc-document span { color:#626c7e; font-size:14px; }
+  .igc-numbering { display:grid; grid-template-columns:1fr 1fr; gap:12px; }.igc-numbering label { display:flex; flex-direction:column; gap:9px; padding:14px; border:1px solid #e6e9ef; border-radius:10px; color:#7b8495; font:700 11px/1.2 var(--font-body); text-transform:uppercase; }.igc-numbering label b { color:#262b35; font-size:15px; text-transform:none; }.igc-numbering div { grid-column:1/-1; display:flex; justify-content:space-between; gap:10px; padding:16px; border-radius:10px; color:#5f6878; background:#eef3ff; font-size:13px; }.igc-numbering strong { color:#3158d4; }
+  .igc-regions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }.igc-regions div { display:flex; flex-direction:column; gap:5px; padding:12px; border:1px solid #e5e8ef; border-radius:10px; }.igc-regions strong { color:#20252f; font-size:13px; }.igc-regions span { color:#737d8e; font:400 11px/1.35 var(--font-body); }
+  .igc-pdf { display:flex; align-items:center; gap:24px; }.igc-pdf__icon { display:grid; place-items:center; flex:0 0 90px; height:116px; border-radius:9px; color:#fff; background:linear-gradient(135deg,#375dfb,#7948ff); font:800 18px/1 var(--font-body); box-shadow:0 18px 36px rgba(55,93,251,.22); }.igc-pdf > div:last-child { display:flex; flex-direction:column; gap:7px; }.igc-pdf strong { margin-bottom:4px; color:#20252f; font-size:17px; }.igc-pdf span { color:#737d8e; font-size:12px; }
+
+  /* Registration spotlight responsibility panel. */
+  .igc-boundary { padding:clamp(72px,9vw,112px) 24px; background:#fff; }.igc-boundary__inner { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr); gap:72px; align-items:start; max-width:1100px; margin:0 auto; }.igc-boundary h2 { margin:0 0 18px; color:#171a21; font:500 clamp(32px,4vw,50px)/1.08 var(--font-heading); letter-spacing:-.03em; }.igc-boundary p { margin:0; color:var(--subheading-gray); font:400 17px/1.6 var(--font-body); }.igc-boundary ol { display:flex; flex-direction:column; gap:12px; margin:0; padding:0; list-style:none; counter-reset:boundary; }.igc-boundary li { counter-increment:boundary; display:grid; grid-template-columns:42px 170px 1fr; gap:16px; align-items:start; padding:20px; border:1px solid #e5e7eb; border-radius:16px; background:#fafbfc; }.igc-boundary li::before { content:counter(boundary,decimal-leading-zero); color:#5b6fee; font:700 13px/1.4 var(--font-body); }.igc-boundary li strong { color:#22272f; font:650 14px/1.4 var(--font-body); }.igc-boundary li span { color:#677184; font:400 14px/1.45 var(--font-body); }
+
+  /* Event Registration use-case and adjacent-link card patterns. */
+  .igc-use-cases,.igc-related { padding:96px 24px; }.igc-use-cases { background:transparent; }.igc-related { background:#fff; }.igc-use-cases__inner,.igc-related__inner { max-width:1140px; margin:0 auto; }.igc-section-head { max-width:780px; margin:0 auto 46px; text-align:center; }.igc-section-head h2 { margin:0; color:#171a21; font:500 clamp(32px,4vw,52px)/1.08 var(--font-heading); letter-spacing:-.03em; }.igc-section-head p { margin:14px auto 0; color:var(--subheading-gray); font:400 17px/1.55 var(--font-body); }
+  .igc-use-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; }.igc-use-card { min-height:210px; padding:30px; border-right:1px solid #e5e7eb; border-bottom:1px solid #e5e7eb; background:rgba(255,255,255,.65); }.igc-use-card:nth-child(3n) { border-right:0; }.igc-use-card:nth-child(n+4) { border-bottom:0; }.igc-use-card > span { color:#7c8df8; font:700 12px/1 var(--font-body); }.igc-use-card h3 { margin:34px 0 10px; color:#20252f; font:600 21px/1.2 var(--font-heading); }.igc-use-card p { margin:0; color:#697386; font:400 14px/1.55 var(--font-body); }
+  .igc-related-grid { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid #e5e7eb; border-radius:16px; overflow:hidden; }.igc-related-grid a { position:relative; min-height:230px; padding:30px; border-right:1px solid #e5e7eb; color:inherit; text-decoration:none; transition:background .25s,transform .25s; }.igc-related-grid a:last-child { border-right:0; }.igc-related-grid a:hover { background:#f7f8ff; }.igc-related-grid a > span { display:grid; place-items:center; width:34px; height:34px; margin-left:auto; border:1px solid #e0e4ec; border-radius:50%; color:#375dfb; }.igc-related-grid h3 { margin:42px 0 10px; color:#20252f; font:600 20px/1.2 var(--font-heading); }.igc-related-grid p { margin:0; color:#697386; font:400 14px/1.55 var(--font-body); }
+
+  @media (max-width:900px) { .igc-cap { grid-template-columns:repeat(2,1fr); }.igc-cap__cell:nth-child(3n) { border-right:1px solid #3b3a47; }.igc-cap__cell:nth-child(even) { border-right:0; }.igc-cap__cell:nth-child(n+4) { border-bottom:1px solid #3b3a47; }.igc-cap__cell:nth-child(n+5) { border-bottom:0; }.igc-bento-row { grid-template-columns:1fr; }.igc-bento-row .igc-bento-cell:first-child { border-right:0; border-bottom:1px solid #e5e7eb; }.igc-bento-row:nth-child(even) .igc-bento-visual { order:2; }.igc-boundary__inner { grid-template-columns:1fr; gap:42px; }.igc-related-grid { grid-template-columns:repeat(2,1fr); }.igc-related-grid a:nth-child(2) { border-right:0; }.igc-related-grid a:nth-child(-n+2) { border-bottom:1px solid #e5e7eb; } }
+  @media (max-width:767px) { .igc-flow-section { padding-inline:18px; }.igc-flow-quad { grid-template-columns:1fr; }.igc-flow-quad__cross { display:none; }.igc-flow-quad__cell { min-height:0; padding:32px 20px; border-right:0; border-bottom:1px solid #eef0f3; }.igc-flow-quad__cell:nth-child(3) { order:4; border-bottom:0; }.igc-flow-quad__cell:nth-child(4) { order:3; border-bottom:1px solid #eef0f3; }.igc-flow-quad__cell--media { min-height:330px; padding:22px; }.igc-cap { grid-template-columns:1fr; }.igc-cap__cell,.igc-cap__cell:nth-child(n+4),.igc-cap__cell:nth-child(n+5) { min-height:260px; border-right:0; border-bottom:1px solid #3b3a47; }.igc-cap__cell:last-child { border-bottom:0; }.igc-bento-section { padding:72px 18px; }.igc-bento-cell { padding:2rem 1.4rem; }.igc-bento-content h3 { font-size:1.8rem; }.igc-regions { grid-template-columns:1fr; }.igc-boundary { padding-inline:18px; }.igc-boundary li { grid-template-columns:32px 1fr; }.igc-boundary li span { grid-column:2; }.igc-use-cases,.igc-related { padding:72px 18px; }.igc-use-grid { grid-template-columns:1fr; }.igc-use-card,.igc-use-card:nth-child(3n),.igc-use-card:nth-child(n+4) { border-right:0; border-bottom:1px solid #e5e7eb; }.igc-use-card:last-child { border-bottom:0; }.igc-related-grid { grid-template-columns:1fr; }.igc-related-grid a,.igc-related-grid a:nth-child(2),.igc-related-grid a:nth-child(-n+2) { border-right:0; border-bottom:1px solid #e5e7eb; }.igc-related-grid a:last-child { border-bottom:0; } }
+</style>

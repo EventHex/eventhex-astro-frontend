@@ -5,42 +5,35 @@ import StatsSection from "../components/event-payment-processing/StatsSection.as
 import BentoGrid from "../components/event-payment-processing/BentoGrid.astro";
 import FeatureCards from "../components/event-payment-processing/FeatureCards.astro";
 import HowItWorksSection from "../components/event-payment-processing/HowItWorksSection.astro";
-import CTASection from "../components/event-payment-processing/CTASection.astro";
 import CoordinationTools from "../components/event-payment-processing/CoordinationTools.astro";
 import FaqSection from "../components/event-payment-processing/FaqSection.astro";
+import CTASection from "../components/event-payment-processing/CTASection.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Event Payment Processing — 0% Platform Fees | EventHex";
-const description = "Accept event ticket payments via Stripe, Razorpay, or Tap with zero EventHex platform fees. 135+ currencies, automated refunds, and real-time revenue reporting.";
+const title = "Event Payment Processing for Ticket Sales | EventHex";
+const description =
+  "Connect event checkout to Stripe, Razorpay, or Tap, use your supported gateway account, track payment and refund state, and review event-level finance data.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex Event Payment Processing — 0% Platform Fees",
+  name: "EventHex Event Payment Processing",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/event-payment-processing/",
-  description: description,
+  description,
   creator: {
     "@type": "Organization",
     name: "EventHex",
     url: "https://eventhex.ai",
   },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
   featureList: [
-    "0% Platform Fees",
-    "Stripe Integration",
-    "Razorpay Integration",
-    "Tap Payments Integration",
-    "Multi-Currency Support",
-    "Promo Codes",
-    "Automated Refunds",
-    "Revenue Reports",
+    "Stripe event ticket payments",
+    "Razorpay event payments",
+    "Tap Payments for events",
+    "Order-linked payment status",
+    "Full and partial organizer-managed refunds",
+    "Event-level finance reporting",
+    "Manual payment instructions",
   ],
 };
 ---
@@ -49,22 +42,31 @@ const softwareSchema = {
   title={title}
   description={description}
   canonical="https://eventhex.ai/event-payment-processing/"
-  ogImage={ogImage}
+  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png"
+  footerCtaTitle="Ready to map your event payment setup?"
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={false}
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  </Fragment>
 
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <div class="eppx-page">
+    <HeroSection />
+    <StatsSection />
+    <BentoGrid />
+    <FeatureCards />
+    <HowItWorksSection />
+    <CoordinationTools />
+    <FaqSection />
+    <CTASection />
+  </div>
 </MarketingLayout>
 
-<style>
-  :global(main) {
-    background-color: #ffffff;
+<style is:global>
+  .eppx-page {
+    overflow: clip;
+    background: #fff;
   }
 </style>

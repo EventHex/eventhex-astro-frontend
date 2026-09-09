@@ -1,19 +1,192 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
 const faqs = [
-  { q: "Does EventHex charge any fees on ticket sales?", a: "No. EventHex charges zero platform fees on ticket transactions. You pay only your payment gateway's standard processing rate (e.g., Stripe: 2.9% + $0.30 per transaction)." },
-  { q: "Which payment gateways are supported?", a: "EventHex natively supports Stripe (global), Razorpay (India), and Tap Payments (MENA/GCC). Support for additional gateways is available via our webhook API." },
-  { q: "When does money reach my bank?", a: "EventHex is never in the payment flow — money goes directly from the attendee to your gateway account. Payout timing follows your gateway's schedule (typically T+2 for Stripe, T+3 for Razorpay)." },
-  { q: "Can I issue refunds through EventHex?", a: "Yes. Process full or partial refunds from the attendee management dashboard. EventHex calls your gateway's refund API automatically and emails the attendee a confirmation." },
-  { q: "Can I accept offline payments?", a: "Yes. Mark registrations as paid manually in EventHex for cash, NEFT, or cheque payments. EventHex issues the confirmation and ticket immediately." },
-  { q: "Does EventHex support multi-currency events?", a: "Yes. Set your event currency. Stripe supports 135+ currencies. Attendees pay in the currency you configure; FX conversion is handled at the gateway level." },
+  {
+    q: "Which payment gateways does EventHex support today?",
+    a: "EventHex has active payment paths for Stripe, Razorpay, and Tap. Availability and payment methods still depend on the event currency, market, provider account, and integration setup.",
+  },
+  {
+    q: "Can we use our existing gateway account?",
+    a: "You can configure your own supported Stripe, Razorpay, or Tap credentials. Another provider requires a separate scoping conversation; a generic any-gateway adapter was not verified.",
+  },
+  {
+    q: "Does EventHex always charge zero platform fees?",
+    a: "Fee behavior depends on the subscription, gateway mode, and event configuration. Confirm the commercial setup for your account before relying on a zero-fee option.",
+  },
+  {
+    q: "Can organizers issue refunds?",
+    a: "Authorized organizers can initiate full or partial refunds for supported online gateway payments, up to the remaining refundable balance.",
+  },
+  {
+    q: "Can EventHex accept manual or offline payments?",
+    a: "EventHex can present manual payment instructions and record the order path, but the organizer confirms receipt. It is not automatically reconciled or refunded through a gateway integration.",
+  },
+  {
+    q: "Where can finance teams review event payments?",
+    a: "The event Finance view aggregates gross collected, refunds, estimated fees, tax, and estimated net payout by available currency, status, gateway, and provider context.",
+  },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need Help?"
-  title="Frequently Asked Questions"
-  description="Everything you need to know about payment processing and how it works with EventHex."
-/>
+<section class="eppx-faq" id="faq">
+  <div class="eppx-faq__inner">
+    <div class="eppx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="eppx-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Event payment questions
+      </span>
+      <h2>What teams ask before connecting event payments</h2>
+      <p>Clear answers about gateway support, account setup, fees, refunds, manual payments, and finance reporting.</p>
+      <a href="/book-a-demo/">
+        Talk to our team
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="eppx-faq__list">
+      {faqs.map((faq, index) => (
+        <details class="eppx-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-eppx-faq open={index === 0}>
+          <summary>
+            <strong>{faq.q}</strong>
+            <span aria-hidden="true"></span>
+          </summary>
+          <div><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<script>
+  const paymentFaqs = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-eppx-faq]"));
+  paymentFaqs.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      paymentFaqs.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .eppx-faq { width: 100%; padding: 96px 24px; background: #fff; }
+  .eppx-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .eppx-faq__sidebar { position: sticky; top: 6rem; }
+  .eppx-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    color: #000;
+    font: 500 13px/1.4 var(--font-body);
+  }
+  .eppx-faq__sidebar h2 {
+    margin: 0 0 20px;
+    color: #000;
+    font: 500 44px/1.1 var(--font-heading);
+    letter-spacing: -1px;
+  }
+  .eppx-faq__sidebar p { margin: 0 0 28px; color: var(--body-light); font: 400 16px/1.6 var(--font-body); }
+  .eppx-faq__sidebar > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font: 500 15px/1.4 var(--font-body);
+    text-decoration: none;
+    transition: transform .2s ease, background .2s ease;
+  }
+  .eppx-faq__sidebar > a:hover { transform: translateY(-1px); background: #000; }
+
+  .eppx-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: payment-faq; }
+  .eppx-faq__item {
+    counter-increment: payment-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .eppx-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .eppx-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    color: #000;
+    font: 500 17px/1.4 var(--font-heading);
+    cursor: pointer;
+    list-style: none;
+  }
+  .eppx-faq__item summary::-webkit-details-marker { display: none; }
+  .eppx-faq__item summary strong { font-weight: 500; }
+  .eppx-faq__item summary strong::before { content: counter(payment-faq) ". "; }
+  .eppx-faq__item summary > span {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform .28s cubic-bezier(.22,1,.36,1);
+  }
+  .eppx-faq__item summary > span::before,
+  .eppx-faq__item summary > span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+  .eppx-faq__item summary > span::before { width: 14px; height: 2px; }
+  .eppx-faq__item summary > span::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .eppx-faq__item[open] summary > span { transform: scale(.9); }
+  .eppx-faq__item[open] summary > span::after { opacity: 0; }
+  .eppx-faq__item > div { max-width: 640px; padding: 0 0 24px; }
+  .eppx-faq__item p { margin: 0; color: #000; font: 400 15px/1.7 var(--font-body); }
+
+  @media (max-width: 1024px) {
+    .eppx-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .eppx-faq__sidebar { position: static; }
+    .eppx-faq__sidebar h2 { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .eppx-faq { padding: 72px 16px; }
+    .eppx-faq__sidebar h2 { font-size: 30px; }
+    .eppx-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .eppx-faq__item summary { padding: 18px 0; font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .eppx-faq__item, .eppx-faq__item summary > span, .eppx-faq__item summary > span::after { transition: none; }
+  }
+</style>

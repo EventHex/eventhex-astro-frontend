@@ -1,133 +1,85 @@
 ---
-import FeatureV2Layout from "../components/feature-v2/FeatureV2Layout.astro";
-import { ICONS } from "../lib/featureIcons";
-import { ILLOS } from "../lib/bentoIllustrations";
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import HeroSection from "../components/invoicing-gst/HeroSection.astro";
+import WorkflowSection from "../components/invoicing-gst/WorkflowSection.astro";
+import ConfigurationSections from "../components/invoicing-gst/ConfigurationSections.astro";
+import FaqSection from "../components/invoicing-gst/FaqSection.astro";
 
-const jsonLd = {
+const title = "Event Invoicing & Configurable Tax | EventHex";
+const description = "Create numbered event-order invoices with buyer billing fields, configurable GST, VAT, or custom tax lines, inclusive or exclusive pricing, and PDF delivery.";
+const canonical = "https://eventhex.ai/invoicing-gst/";
+
+const faqs = [
+  ["Can buyers request an invoice during registration?", "Yes. In the supported flow, organizers can enable invoice requests and collect the configured company, tax-ID, and billing-address details."],
+  ["Can we use GST, VAT, or a custom tax label?", "Yes. Your team configures the supported tax names and percentage rates. GST and VAT are examples; EventHex does not decide which tax applies."],
+  ["Can we customize the invoice number?", "You can configure the supported invoice prefix, starting number, document title, and invoice-number label."],
+  ["Does EventHex calculate the legally correct tax automatically?", "No universal tax-determination engine was verified. Your finance or tax adviser should approve the labels, rates, treatment, and required fields."],
+  ["Can EventHex send a PDF invoice?", "The supported invoice workflow generates an order-linked PDF and can send it through the configured delivery path. Confirm the exact trigger and template in the demo."],
+  ["Does this page include credit notes and reconciliation?", "Those invoice-document capabilities were not verified end to end. Payment refunds and event finance reporting belong to the Payment Processing workflow and should not be presented as proof of credit-note automation."],
+] as const;
+
+const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex — Event Invoicing & GST Billing",
+  name: "EventHex Event Invoicing and Configurable Tax",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  description: "Finance-grade invoicing for events — GST-compliant invoices with sequential numbering, tax breakdown, PDF generation, credit notes, refunds, multi-currency billing, and payment reconciliation.",
-  url: "https://eventhex.ai/invoicing-gst/",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free demo available" },
+  url: canonical,
+  description,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
   featureList: [
-    "GST-Compliant Invoices",
-    "Sequential Invoice Numbering",
-    "Tax Breakdown",
-    "PDF Invoice Generation",
-    "Credit Notes",
-    "Refunds",
-    "Multi-Currency Billing",
-    "Payment Reconciliation",
-    "Stripe, Razorpay & Tap Integration",
+    "Organizer-defined invoice identity",
+    "Invoice prefix and starting number configuration",
+    "Buyer company, tax ID, and billing-address fields",
+    "Named tax lines with organizer-defined percentage rates",
+    "Inclusive or exclusive ticket pricing",
+    "Order-linked invoice PDF and configured delivery",
   ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
-<FeatureV2Layout
-  pageTitle="Event Invoicing Software — GST-Compliant Billing for Events | EventHex"
-  pageDescription="Finance-grade event invoicing — GST invoices with sequential numbering and tax breakdown, PDF delivery, credit notes, refunds, multi-currency support, and Stripe/Razorpay/Tap reconciliation."
-  canonical="https://eventhex.ai/invoicing-gst/"
-  badge="Event Invoicing & GST Billing"
-  heroTitleLine1="Finance-Grade Invoicing"
-  heroTitleLine2="Built for Event Organizers"
-  heroCopy="Generate GST-compliant invoices automatically for every ticket sale — with sequential numbering, full tax breakdown, PDF delivery, and built-in credit notes. Designed for finance teams running B2B events in India and the GCC."
-  trustItems={["GST & PAN Fields", "Sequential Invoice Numbering", "Stripe, Razorpay & Tap"]}
-  stats={[
-    { value: "100%", label: "GST Compliant" },
-    { value: "< 5 sec", label: "Invoice Generation" },
-    { value: "3+", label: "Payment Gateways" },
-    { value: "Multi", label: "Currency Support" },
-  ]}
-  statsHeadline={{
-    white1: "Every transaction.",
-    accent: "Every invoice.",
-    white2: "Audit-ready",
-    accent2: "instantly",
-  }}
-  bentoHeading="Complete Event Billing in One Place"
-  bentoSubtitle="From GST invoice generation to credit notes, refunds, and bank reconciliation — EventHex handles the full billing lifecycle for events so your finance team never has to touch a spreadsheet."
-  bentoTabs={[
-    {
-      tab: "GST Invoicing",
-      cards: [
-        { title: "GST-Compliant Invoices", desc: "Every ticket sale generates a compliant tax invoice with GSTIN, HSN/SAC code, CGST/SGST/IGST breakdown, and your registered business details.", illustration: ILLOS.invoice },
-        { title: "Sequential Invoice Numbering", desc: "Invoice numbers follow a configurable sequential series — by financial year or event — meeting GST audit requirements.", illustration: ILLOS.document },
-        { title: "PDF Invoice Generation", desc: "Branded PDF invoices are generated automatically and sent to attendees by email. Download any invoice from the billing dashboard at any time.", illustration: ILLOS.mail },
-        { title: "Billing Address with GST & PAN Fields", desc: "Attendees enter their company name, billing address, GSTIN, and PAN at checkout — all captured and printed on the invoice automatically.", illustration: ILLOS.clipboard },
-        { title: "Multi-Currency Billing", desc: "Accept payments and issue invoices in INR, AED, USD, GBP, EUR, and more. Currency is locked at the time of payment for accurate records.", illustration: ILLOS.globe },
-      ],
-    },
-    {
-      tab: "Credit Notes & Refunds",
-      cards: [
-        { title: "Credit Notes", desc: "Issue a credit note against any invoice in one click — including full or partial amounts — with a compliant reference back to the original invoice.", illustration: ILLOS.document },
-        { title: "Refunds", desc: "Initiate full or partial refunds directly from the billing dashboard. EventHex pushes the refund to Stripe, Razorpay, or Tap and updates the invoice status automatically.", illustration: ILLOS.refund },
-        { title: "Cancellation Billing", desc: "When a registration is cancelled, EventHex can automatically void the invoice or issue a credit note based on your configured cancellation policy.", illustration: ILLOS.refresh },
-        { title: "Refund Audit Trail", desc: "Every credit note and refund is logged with a timestamp, user, and reason — giving your finance team a complete, auditable paper trail.", illustration: ILLOS.clipboard },
-      ],
-    },
-    {
-      tab: "Reconciliation",
-      cards: [
-        { title: "Payment Reconciliation", desc: "Match every payment — online, offline, or manual — against its invoice. Outstanding, settled, and partially paid invoices are surfaced automatically.", illustration: ILLOS.dashboard },
-        { title: "Stripe Integration", desc: "Stripe payments sync in real time — payment intent, charge ID, and settlement status are attached to the corresponding invoice automatically.", illustration: ILLOS.creditcard },
-        { title: "Razorpay Integration", desc: "Razorpay order and payment IDs are linked to invoices at checkout. Capture, refund, and settlement status update without manual reconciliation.", illustration: ILLOS.creditcard },
-        { title: "Tap Integration", desc: "For GCC-based events, Tap payments are reconciled against invoices with the same one-click process as Stripe and Razorpay.", illustration: ILLOS.money },
-        { title: "Manual Payment Tracking", desc: "Record cash, bank transfer, or cheque payments against any invoice. Manual payments appear in the same reconciliation view as gateway transactions.", illustration: ILLOS.clipboard },
-      ],
-    },
-  ]}
-  stackingHeading="Event Billing Features"
-  stackingHighlight="Finance Teams Trust"
-  stackingCards={[
-    {
-      title: "GST Invoices Generated at Checkout — No Manual Work",
-      desc: "When an attendee completes a B2B ticket purchase, EventHex captures their GSTIN and billing address, applies the correct tax rate (CGST+SGST for intra-state, IGST for inter-state), assigns the next sequential invoice number, and generates a PDF — all before the confirmation email lands.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png",
-      alt: "GST-compliant event invoice PDF with tax breakdown and sequential numbering",
-    },
-    {
-      title: "Credit Notes and Refunds Without the Back-and-Forth",
-      desc: "Cancellations and refunds no longer require your finance team to chase the tech team. Issue a credit note or initiate a refund directly from the billing dashboard — EventHex pushes the refund to Stripe, Razorpay, or Tap, links the credit note to the original invoice, and updates the attendee's status in one action.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png",
-      alt: "Credit note issuance workflow in EventHex billing dashboard",
-    },
-    {
-      title: "Full Reconciliation Across Every Payment Channel",
-      desc: "Events rarely collect money through a single channel — online card payments, bank transfers, corporate purchase orders, and comp tickets all need to be accounted for. EventHex reconciliation brings every channel into one view: gateway payments auto-matched, manual payments logged, outstanding invoices flagged, and export-ready for your accounting system.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Galaxy-Tab-S8-Ultra.png",
-      alt: "Payment reconciliation dashboard showing matched invoices and outstanding balances",
-    },
-  ]}
-  howItWorksHeading="How Event Invoicing Works in EventHex"
-  steps={[
-    { title: "Configure Your Tax & Invoice Settings", desc: "Enter your business GSTIN, invoice number series, tax rates, and billing address. Set up payment gateways — Stripe, Razorpay, or Tap — once and they apply to every event." },
-    { title: "Attendees Provide Billing Details at Checkout", desc: "B2B buyers enter their company name, GSTIN, PAN, and billing address during registration. EventHex validates the GSTIN format before checkout completes." },
-    { title: "Invoices Are Generated and Delivered Automatically", desc: "At payment confirmation, EventHex assigns a sequential invoice number, calculates the correct GST split, generates a branded PDF, and emails it to the buyer — no manual action required." },
-    { title: "Manage Refunds and Reconcile from One Dashboard", desc: "Issue credit notes, trigger refunds, and reconcile every payment — gateway or manual — from the billing dashboard. Export invoice reports for your accounting software at any time." },
-  ]}
-  ctaTitle="Ready to Simplify Event Billing?"
-  ctaCopy="See how EventHex automates GST invoicing, credit notes, and payment reconciliation for your next event — built for finance teams who need audit-ready records from day one."
-  whyHeading="Why Finance Teams Choose EventHex Billing"
-  whyCards={[
-    { title: "GST Compliant Out of the Box", desc: "Sequential numbering, GSTIN capture, CGST/SGST/IGST breakdown, HSN/SAC codes, and PDF delivery — all built in, no customisation required.", icon: ICONS.document },
-    { title: "Instant PDF Invoices", desc: "Branded PDF invoices are generated and emailed at the moment of payment — no post-event invoice runs, no manual PDF creation.", icon: ICONS.invoice },
-    { title: "Credit Notes in One Click", desc: "Issue full or partial credit notes against any invoice directly from the billing dashboard. Each credit note links back to the original invoice for a clean audit trail.", icon: ICONS.refresh },
-    { title: "Multi-Gateway Reconciliation", desc: "Stripe, Razorpay, Tap, and manual payments all reconcile in one view. No spreadsheet merging, no gateway log exports.", icon: ICONS.creditcard },
-    { title: "Multi-Currency Support", desc: "Issue invoices in INR, AED, USD, GBP, EUR, and more. Currency is fixed at payment time so exchange-rate discrepancies never appear in your records.", icon: ICONS.money },
-  ]}
-  faqs={[
-    { q: "Does EventHex generate GST-compliant invoices automatically?", a: "Yes. Every ticket sale generates a compliant tax invoice with GSTIN, billing address, CGST/SGST/IGST breakdown, HSN/SAC code, and a sequential invoice number — all automatically at payment confirmation." },
-    { q: "How does sequential invoice numbering work?", a: "You configure an invoice number prefix and starting number (e.g. INV-2025-0001). EventHex assigns the next number in sequence to every new invoice, by financial year or per event, meeting GST audit requirements." },
-    { q: "Can attendees enter their GSTIN and PAN at checkout?", a: "Yes. EventHex adds GSTIN, PAN, company name, and billing address fields to the B2B checkout flow. GSTIN format is validated before checkout completes. All details are printed on the invoice and stored against the attendee record." },
-    { q: "How do I issue a credit note or process a refund?", a: "From the billing dashboard, find the invoice and click 'Issue Credit Note' or 'Refund'. Enter the amount (full or partial), add a reason, and confirm. EventHex pushes the refund to Stripe, Razorpay, or Tap and generates the credit note linked to the original invoice." },
-    { q: "Which payment gateways does EventHex support for invoicing?", a: "EventHex integrates with Stripe (global), Razorpay (India), and Tap (GCC) for online payments. Manual payments — bank transfer, cash, cheque, PO — can also be recorded against invoices in the reconciliation dashboard." },
-    { q: "Can I invoice in multiple currencies?", a: "Yes. EventHex supports INR, AED, USD, GBP, EUR, and other currencies. When a payment is made, the invoice is generated in the transaction currency and the exchange rate is locked at that point." },
-    { q: "Is EventHex invoicing suitable for B2B events in India and the GCC?", a: "Yes — EventHex invoicing was designed for exactly this audience. GSTIN and PAN fields, intra-state vs. inter-state GST logic, and Razorpay integration cover Indian B2B requirements. Multi-currency and Tap integration cover GCC events. Both markets get PDF invoices, credit notes, and full reconciliation." },
-    { q: "Can I export invoices for my accounting software?", a: "Yes. Export all invoices, credit notes, and payment records as CSV from the billing dashboard. The export includes invoice number, buyer details, tax breakdown, payment status, and gateway transaction ID — ready to import into Tally, QuickBooks, Zoho Books, or any accounting system." },
-  ]}
-  jsonLd={jsonLd}
-/>
+<MarketingLayout
+  {title}
+  {description}
+  {canonical}
+  ogImage="https://eventhex.ai/feature-images/invoicing-gst/hero-invoice-workflow.svg"
+  footerCtaEyebrow="Map one invoice workflow"
+  footerCtaTitle={"Bring Your Invoice and Tax\nRequirements to the Demo"}
+  footerCtaSubtitle="Show us one event, ticket, buyer journey, invoice identity, numbering rule, and approved tax setup. We’ll map the supported EventHex workflow and flag anything that needs separate scoping."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/invoicing-gst/hero-invoice-workflow.svg"
+  footerCtaImageAlt="EventHex event invoice workspace with buyer, order, tax, and PDF delivery details"
+  showFooterCta={true}
+>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <div class="ig-page-bg">
+    <HeroSection />
+    <WorkflowSection />
+    <ConfigurationSections />
+    <FaqSection {faqs} />
+  </div>
+</MarketingLayout>
+
+<style is:global>
+  .ig-page-bg { background:radial-gradient(ellipse 75% 68% at 50% 40%,rgba(255,255,255,.94) 0%,rgba(255,255,255,.65) 38%,rgba(255,255,255,.28) 58%,transparent 78%),linear-gradient(to bottom,#fff 0,rgba(255,255,255,.85) 130px,rgba(255,255,255,.5) 260px,rgba(255,255,255,.18) 390px,transparent 500px),linear-gradient(to top,#fff 0,rgba(255,255,255,.7) 70px,rgba(255,255,255,.3) 130px,transparent 190px),radial-gradient(circle 380px at 3% 34%,rgba(175,163,255,.28),transparent 100%),radial-gradient(circle 300px at 97% 30%,rgba(255,182,213,.26),transparent 100%),radial-gradient(circle 340px at 95% 75%,rgba(130,170,255,.24),transparent 100%),radial-gradient(circle 300px at 4% 78%,rgba(255,224,150,.2),transparent 100%),#fff; background-attachment:fixed; }
+  .ig-page-bg a:focus-visible,.ig-page-bg summary:focus-visible { outline:3px solid #f6bd35; outline-offset:4px; }
+  body:has(.ig-page-bg) .site-footer .cta-devices-img { width:90%; max-width:510px; border-radius:18px; }
+  @media (prefers-reduced-motion:reduce) { .ig-page-bg *,.ig-page-bg *::before,.ig-page-bg *::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; animation-iteration-count:1!important; } }
+  @media (max-width:767px) {
+    body:has(.ig-page-bg) .site-footer .footer-cta-banner { flex-direction:column; }
+    body:has(.ig-page-bg) .site-footer .cta-left { flex:none; padding:78px 20px 20px; }
+    body:has(.ig-page-bg) .site-footer .cta-subtitle { max-width:none; }
+    body:has(.ig-page-bg) .site-footer .cta-right { position:relative; inset:auto; width:100%; padding:0 20px 34px; justify-content:center; overflow:hidden; }
+    body:has(.ig-page-bg) .site-footer .cta-devices-img { width:100%; max-width:330px; }
+  }
+</style>

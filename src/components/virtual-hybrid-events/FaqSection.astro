@@ -1,0 +1,71 @@
+---
+interface Props {
+  faqs: ReadonlyArray<readonly [string, string]>;
+}
+
+const { faqs } = Astro.props;
+---
+
+<section class="vhfaq" aria-labelledby="vhfaq-title">
+  <div class="vhfaq__inner">
+    <div class="vhfaq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="vhfaq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 17 10-10m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Virtual and hybrid event questions
+      </span>
+      <h2 id="vhfaq-title" class="vhfaq__heading">What organizers ask before connecting a meeting</h2>
+      <p class="vhfaq__intro">Clear answers about meeting rooms, bot access, streaming, recording, attendance, captions, and translation.</p>
+      <a href="/contact-en/" class="vhfaq__cta">
+        Talk to EventHex
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="vhfaq__list">
+      {faqs.map(([question, answer], index) => (
+        <details name="virtual-hybrid-faq" class="vhfaq__item animate-on-scroll" data-animation="fadeInUp" data-delay={index * 50} open={index === 0}>
+          <summary class="vhfaq__question">
+            <strong>{question}</strong>
+            <span class="vhfaq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="vhfaq__answer"><p>{answer}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".vhfaq__item"));
+  faqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Event Registration sticky-sidebar FAQ pattern. */
+  .vhfaq { width:100%; padding:88px 24px; background:#fff; }
+  .vhfaq__inner { display:grid; grid-template-columns:360px 1fr; gap:64px; align-items:start; max-width:1140px; margin:0 auto; }
+  .vhfaq__sidebar { position:sticky; top:6rem; }
+  .vhfaq__eyebrow { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; margin-bottom:20px; border:1px solid #e4e7ec; border-radius:999px; color:#000; font:500 .8125rem/1.2 var(--font-body); }
+  .vhfaq__heading { margin:0 0 20px; color:#000; font:500 44px/1.1 'Creato Display',var(--font-heading); letter-spacing:-1px; }
+  .vhfaq__intro { margin:0 0 28px; color:var(--body-light); font:400 1rem/1.6 var(--font-body); }
+  .vhfaq__cta { display:inline-flex; align-items:center; gap:10px; padding:14px 24px; border-radius:999px; color:#fff; background:#171a21; font:500 .9375rem/1 var(--font-body); text-decoration:none; transition:background .2s ease,transform .2s ease; }
+  .vhfaq__cta:hover { background:#000; transform:translateY(-1px); }
+  .vhfaq__list { display:flex; flex-direction:column; gap:16px; counter-reset:virtual-hybrid-faq; }
+  .vhfaq__item { counter-increment:virtual-hybrid-faq; padding:4px 28px; overflow:hidden; border:1px solid #e4e7ec; border-radius:20px; background:#fff; transition:background .25s ease,border-color .25s ease; }
+  .vhfaq__item[open] { border-color:#e4e7ec; background:#e4e7ec; }
+  .vhfaq__question { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; color:#000; font:500 1.0625rem/1.35 'Creato Display',var(--font-heading); cursor:pointer; list-style:none; }
+  .vhfaq__question strong { font-weight:500; }.vhfaq__question strong::before{content:counter(virtual-hybrid-faq) '. '}.vhfaq__question::-webkit-details-marker{display:none}
+  .vhfaq__icon { position:relative; flex-shrink:0; width:18px; height:18px; transition:transform .28s cubic-bezier(.22,1,.36,1); }
+  .vhfaq__icon::before,.vhfaq__icon::after{content:"";position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.vhfaq__icon::before{width:14px;height:2px}.vhfaq__icon::after{width:2px;height:14px;transition:opacity .2s ease}.vhfaq__item[open] .vhfaq__icon{transform:scale(.9)}.vhfaq__item[open] .vhfaq__icon::after{opacity:0}
+  .vhfaq__answer { max-width:640px; padding:0 0 24px; }.vhfaq__answer p{margin:0;color:#000;font:400 .9375rem/1.7 var(--font-body)}
+  @media(prefers-reduced-motion:reduce){.vhfaq__item,.vhfaq__icon,.vhfaq__icon::after{transition:none}}
+  @media(max-width:1024px){.vhfaq__inner{grid-template-columns:1fr;gap:40px}.vhfaq__sidebar{position:static}.vhfaq__heading{font-size:32px}}
+  @media(max-width:767px){.vhfaq{padding:56px 16px}.vhfaq__heading{font-size:28px}.vhfaq__item{padding:4px 20px;border-radius:16px}.vhfaq__question{padding:18px 0;font-size:.9375rem}}
+</style>

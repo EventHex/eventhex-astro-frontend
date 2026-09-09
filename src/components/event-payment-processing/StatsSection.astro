@@ -1,209 +1,100 @@
 ---
-const stats = [
-  { value: "0%", label: "EventHex Platform Fees" },
-  { value: "3", label: "Gateways Stripe, Razorpay, Tap" },
-  { value: "135+", label: "Currencies" },
-  { value: "Instant", label: "Revenue in Your Account" },
+const stages = [
+  ["Connect", "Supported account"],
+  ["Checkout", "Payment handoff"],
+  ["Confirm", "Provider result"],
+  ["Deliver", "Ticket outcome"],
+  ["Refund", "Full or partial"],
+  ["Review", "Event finance"],
 ];
 ---
 
-<div class="epph-hero__points-bar">
-  <div class="epph-hero__points-inner">
-    <span class="epph-hero__point">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      0% EventHex Fees
-    </span>
-    <span class="epph-hero__point">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Bring Your Own Gateway
-    </span>
-    <span class="epph-hero__point">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      135+ Currencies
-    </span>
+<section class="eppx-rail" aria-labelledby="eppx-rail-title">
+  <div class="eppx-rail__heading">
+    <span>One connected payment lifecycle</span>
+    <h2 id="eppx-rail-title">From gateway setup to finance review</h2>
   </div>
-</div>
-
-<section class="epps-dark">
-  <div class="epps-engagement">
-    <div class="epps-engagement-text">
-      <h2 class="epps-heading animate-on-scroll" data-animation="fadeInDown">
-        <span class="epps-white">Accept payments with</span>
-        <br />
-        <span class="epps-purple">zero platform fees</span>
-        <br />
-        <span class="epps-white">and </span>
-        <span class="epps-cyan">direct settlement</span>
-      </h2>
-    </div>
-  </div>
-
-  <div class="epps-stats">
-    {stats.map((stat) => (
-      <div class="epps-stat-card">
-        <span class="epps-stat-value">{stat.value}</span>
-        <span class="epps-stat-label">{stat.label}</span>
+  <div class="eppx-rail__inner">
+    {stages.map(([title, detail], index) => (
+      <div class="eppx-rail__stage">
+        <span class="eppx-rail__number">{String(index + 1).padStart(2, "0")}</span>
+        <span><b>{title}</b>{detail}</span>
       </div>
     ))}
   </div>
 </section>
 
 <style>
-  .epph-hero__points-bar {
-    background: var(--surface-light);
-    padding: 1.25rem 1.5rem;
+  .eppx-rail {
+    border-top: 1px solid #e8edf5;
+    border-bottom: 1px solid #e8edf5;
+    background: #fff;
   }
 
-  .epph-hero__points-inner {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    max-width: 1200px;
+  .eppx-rail__heading {
+    width: min(1120px, calc(100% - 40px));
     margin: 0 auto;
-  }
-
-  .epph-hero__point {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-body);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--heading-dark);
-  }
-
-  @media (max-width: 767px) {
-    .epph-hero__point { font-size: 13px; }
-    .epph-hero__points-bar { padding: 1rem 1rem; }
-    .epph-hero__points-inner { gap: 1rem; }
-  }
-
-  .epps-dark {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    padding: 110px 0;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
-  .epps-engagement {
-    width: 100%;
-    padding: 0 0 60px;
-    display: flex;
-    justify-content: center;
-  }
-
-  .epps-engagement-text {
-    width: 65%;
-  }
-
-  .epps-heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: #fff;
+    padding: 24px 0 14px;
     text-align: center;
-    margin: 0;
   }
 
-  .epps-white { color: #fff; }
-  .epps-purple { color: #AFA3FF; }
-  .epps-cyan { color: #ABFFFF; }
+  .eppx-rail__heading span {
+    color: #375dfb;
+    font: 700 12px/1.4 var(--font-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
 
-  .epps-stats {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    padding: 0 20px;
-    max-width: 1100px;
+  .eppx-rail__heading h2 {
+    margin: 5px 0 0;
+    color: #22272f;
+    font: 500 22px/1.25 var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+
+  .eppx-rail__inner {
+    width: min(1120px, calc(100% - 40px));
+    min-height: 78px;
     margin: 0 auto;
-    width: 100%;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
   }
 
-  .epps-stat-card {
-    flex: 1 1 0;
-    max-width: 260px;
+  .eppx-rail__stage {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 2.25rem 1.5rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    text-align: center;
-    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    gap: 10px;
+    padding: 18px 12px;
+    border-left: 1px solid #e8edf5;
+    color: #697386;
+    font: 500 12px/1.35 var(--font-body);
   }
 
-  .epps-stat-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(159,129,255,0.35);
-    box-shadow: 0 8px 32px rgba(159,129,255,0.12);
+  .eppx-rail__stage:last-child { border-right: 1px solid #e8edf5; }
+  .eppx-rail__stage > span:last-child { display: flex; flex-direction: column; gap: 2px; }
+  .eppx-rail__stage b { color: #22272f; font-size: 14px; }
+
+  .eppx-rail__number {
+    display: grid;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #375dfb;
+    font-size: 10px;
+    font-weight: 750;
   }
 
-  .epps-stat-value {
-    font-family: var(--font-heading);
-    font-size: 2.75rem;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: -1.5px;
-    color: #fff;
+  @media (max-width: 900px) {
+    .eppx-rail__inner { grid-template-columns: repeat(3, 1fr); padding-bottom: 16px; }
+    .eppx-rail__stage:nth-child(n + 4) { border-top: 1px solid #e8edf5; }
   }
 
-  .epps-stat-label {
-    font-family: var(--font-body);
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.55);
-  }
-
-  @media (max-width: 1024px) {
-    .epps-dark { padding: 80px 0; }
-    .epps-engagement { padding: 0 20px 40px; }
-    .epps-engagement-text { width: 85%; }
-    .epps-heading { font-size: 40px; line-height: 1.1em; }
-    .epps-stats { gap: 1rem; }
-    .epps-stat-card { padding: 1.75rem 1.25rem; }
-    .epps-stat-value { font-size: 2.25rem; }
-    .epps-stat-label { font-size: 0.8125rem; }
-  }
-
-  @media (max-width: 767px) {
-    .epps-dark { padding: 64px 0; }
-    .epps-engagement { padding: 0 15px 30px; }
-    .epps-engagement-text { width: 100%; }
-    .epps-heading { font-size: 25px; line-height: 1.2em; letter-spacing: 0; }
-    .epps-stats {
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-    }
-    .epps-stat-card {
-      flex: 1 1 calc(50% - 0.5rem);
-      max-width: none;
-      padding: 1.5rem 1rem;
-    }
-    .epps-stat-value { font-size: 1.75rem; }
-    .epps-stat-label { font-size: 0.8125rem; }
+  @media (max-width: 540px) {
+    .eppx-rail__heading { text-align: left; }
+    .eppx-rail__inner { grid-template-columns: repeat(2, 1fr); }
+    .eppx-rail__stage:nth-child(n + 3) { border-top: 1px solid #e8edf5; }
   }
 </style>

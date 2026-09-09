@@ -1,0 +1,34 @@
+---
+interface Props { faqs: ReadonlyArray<readonly [string, string]>; }
+const { faqs } = Astro.props;
+---
+
+<section class="igfaq" aria-labelledby="igfaq-title">
+  <div class="igfaq__inner">
+    <div class="igfaq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="igfaq__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quick Answers</span>
+      <h2 id="igfaq-title" class="igfaq__heading">Event Invoicing<br />Questions, Answered.</h2>
+      <p class="igfaq__intro">Find clear answers about buyer requests, billing fields, invoice numbering, tax labels, PDF delivery, and product boundaries.</p>
+      <a href="/contact-en/" class="igfaq__cta">Talk to EventHex <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+    </div>
+    <div class="igfaq__list">
+      {faqs.map(([question, answer], index) => (
+        <details class="igfaq__item animate-on-scroll" data-animation="fadeInUp" data-delay={index * 50} open={index === 0}>
+          <summary class="igfaq__question"><strong>{question}</strong><span class="igfaq__icon" aria-hidden="true"></span></summary>
+          <div class="igfaq__answer"><p>{answer}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Event Registration sticky-sidebar FAQ pattern. */
+  .igfaq { width:100%; padding:80px 24px; background:#fff; }
+  .igfaq__inner { display:grid; grid-template-columns:360px 1fr; gap:64px; align-items:start; max-width:1140px; margin:0 auto; }
+  .igfaq__sidebar { position:sticky; top:6rem; }.igfaq__eyebrow { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; margin-bottom:20px; border:1px solid #e4e7ec; border-radius:999px; color:#000; font:500 .8125rem/1 var(--font-body); }.igfaq__heading { margin:0 0 20px; color:#000; font:500 44px/1.1 'Creato Display',var(--font-heading); letter-spacing:-1px; }.igfaq__intro { margin:0 0 28px; color:var(--body-light); font:400 1rem/1.6 var(--font-body); }.igfaq__cta { display:inline-flex; align-items:center; gap:10px; padding:14px 24px; border-radius:999px; color:#fff; background:#171a21; font:500 .9375rem/1 var(--font-body); text-decoration:none; transition:background .2s ease,transform .2s ease; }.igfaq__cta:hover { background:#000; transform:translateY(-1px); }
+  .igfaq__list { display:flex; flex-direction:column; gap:16px; counter-reset:invoice-faq; }.igfaq__item { counter-increment:invoice-faq; padding:4px 28px; overflow:hidden; border:1px solid #e4e7ec; border-radius:20px; background:#fff; transition:background .25s ease,border-color .25s ease; }.igfaq__item[open] { border-color:#e4e7ec; background:#e4e7ec; }.igfaq__question { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; color:#000; font:500 1.0625rem/1.35 'Creato Display',var(--font-heading); cursor:pointer; list-style:none; }.igfaq__question strong { font-weight:500; }.igfaq__question strong::before { content:counter(invoice-faq) '. '; }.igfaq__question::-webkit-details-marker { display:none; }.igfaq__icon { position:relative; flex-shrink:0; width:18px; height:18px; transition:transform .28s cubic-bezier(.22,1,.36,1); }.igfaq__icon::before,.igfaq__icon::after { content:''; position:absolute; top:50%; left:50%; background:#000; transform:translate(-50%,-50%); }.igfaq__icon::before { width:14px; height:2px; }.igfaq__icon::after { width:2px; height:14px; transition:opacity .2s ease; }.igfaq__item[open] .igfaq__icon { transform:scale(.9); }.igfaq__item[open] .igfaq__icon::after { opacity:0; }.igfaq__answer { max-width:640px; padding:0 0 24px; }.igfaq__answer p { margin:0; color:#000; font:400 .9375rem/1.7 var(--font-body); }
+  @media (prefers-reduced-motion:reduce) { .igfaq__item,.igfaq__icon,.igfaq__icon::after { transition:none; } }
+  @media (max-width:1024px) { .igfaq__inner { grid-template-columns:1fr; gap:40px; }.igfaq__sidebar { position:static; }.igfaq__heading { font-size:32px; } }
+  @media (max-width:767px) { .igfaq { padding:56px 16px; }.igfaq__heading { font-size:28px; }.igfaq__item { padding:4px 20px; border-radius:16px; }.igfaq__question { padding:18px 0; font-size:.9375rem; } }
+</style>

@@ -1,0 +1,127 @@
+---
+const cards = [
+  {
+    eyebrow: "Meeting bot control",
+    title: "Prepare the bot before the room opens",
+    copy: "Configure the identity and joining behavior, then start the bot manually or use the supported auto-join setting for the event schedule.",
+    items: [
+      ["Save the meeting link", "Attach the correct room before the session."],
+      ["Set bot identity", "Choose the bot name, welcome message, and available behavior."],
+      ["Choose when it joins", "Start manually or enable the scheduled auto-join option."],
+      ["Watch the phase", "See setup, joining, waiting-room, live, processing, and completed states."],
+    ],
+    kind: "bot",
+  },
+  {
+    eyebrow: "Capture the session",
+    title: "Turn the live room into a recording and transcript your team can use",
+    copy: "After processing, supported provider paths can surface the session recording, timestamped transcript, chat, participants, and speaker timeline in the event workspace.",
+    items: [
+      ["Recording playback", "Review available video or audio after the provider finishes processing."],
+      ["Timestamped transcript", "Move between transcript segments and the corresponding moment in the recording when available."],
+      ["Chat record", "Keep supported meeting chat messages with the session record."],
+      ["Speaker and participant context", "Review joins, leaves, participation, and speaker-timeline data where the provider supplies it."],
+    ],
+    kind: "capture",
+  },
+  {
+    eyebrow: "Optional live streaming",
+    title: "Send the meeting feed to the destinations your broadcast plan requires",
+    copy: "Before the bot starts, enable streaming and add one or more supported destinations with the stream details supplied by each platform.",
+    items: [
+      ["YouTube Live", "Add the YouTube RTMP destination and stream key."],
+      ["Facebook Live", "Add the Facebook RTMP destination and stream key."],
+      ["Custom RTMP", "Use the RTMP URL and key supplied by another compatible destination."],
+      ["Multiple destinations", "Configure more than one destination for the same meeting-bot session when the selected provider supports RTMP streaming."],
+    ],
+    kind: "stream",
+  },
+];
+---
+
+<section class="vhw-shell" aria-labelledby="vhw-title">
+  <div class="vhw-section">
+    <header class="vhw-header">
+      <span class="vhw-header__eyebrow">Connected live-session workflow</span>
+      <h2 id="vhw-title">Control the room, capture the outcome, and extend the live feed</h2>
+      <p>Each step stays tied to the same event and session while provider-dependent capabilities remain explicit.</p>
+    </header>
+
+    <div class="vhw-cards">
+      {cards.map((card, cardIndex) => (
+        <article class="vhw-card" style={`--card-index:${cardIndex}`}>
+          <div class="vhw-card__content">
+            <span class="vhw-card__eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.copy}</p>
+            <ul>
+              {card.items.map(([title, copy]) => (
+                <li><b>{title}</b><span>{copy}</span></li>
+              ))}
+            </ul>
+          </div>
+          <div class:list={["vhw-card__visual", `vhw-card__visual--${card.kind}`]} role="img" aria-label={`${card.eyebrow} product workspace`}>
+            <div class="vhw-ui">
+              <div class="vhw-ui__bar"><span><i></i><i></i><i></i></span><b>{card.kind === "bot" ? "Bot setup" : card.kind === "capture" ? "Session results" : "Streaming destinations"}</b></div>
+              {card.kind === "bot" && (
+                <div class="vhw-ui__bot">
+                  <div class="vhw-ui__field"><small>Meeting URL</small><span>meet.example.com/session</span><i>Connected</i></div>
+                  <div class="vhw-ui__field"><small>Bot name</small><span>EventHex Session Bot</span></div>
+                  <div class="vhw-ui__toggle"><span><b>Scheduled auto-join</b><small>Use the event start time</small></span><i></i></div>
+                  <ol><li class="is-done">Setup</li><li class="is-active">Joining</li><li>Live</li><li>Processing</li></ol>
+                </div>
+              )}
+              {card.kind === "capture" && (
+                <div class="vhw-ui__capture">
+                  <div class="vhw-ui__player"><span>Session recording</span><div><i></i></div><small>00:24:18</small></div>
+                  <div class="vhw-ui__transcript"><b>Transcript</b><p><time>24:18</time> The event workflow stays connected...</p><p><time>24:31</time> Next, the team can review...</p><p><time>24:46</time> Attendance remains with the session.</p></div>
+                </div>
+              )}
+              {card.kind === "stream" && (
+                <div class="vhw-ui__stream">
+                  <div class="vhw-ui__source"><i></i><span><b>Meeting bot</b><small>Live source</small></span></div>
+                  <div class="vhw-ui__routes" aria-hidden="true"><i></i><i></i><i></i></div>
+                  <div class="vhw-ui__destinations"><span><i>Y</i><b>YouTube Live</b><small>Configured</small></span><span><i>F</i><b>Facebook Live</b><small>Configured</small></span><span><i>R</i><b>Custom RTMP</b><small>Ready</small></span></div>
+                </div>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+      <div class="vhw-spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Speaker Management sticky dark narrative-card pattern. */
+  .vhw-shell { width:100%; color:#fff; background:radial-gradient(130% 42% at 50% 0,#5c8aff38 0,#7c6cff1a 45%,transparent 72%),#05060a; }
+  .vhw-section { display:flex; flex-direction:column; align-items:center; width:100%; padding:74px 24px 48px; }
+  .vhw-header { position:sticky; top:110px; z-index:0; width:min(760px,100%); margin:0 auto; text-align:center; }
+  .vhw-header__eyebrow { display:inline-flex; padding:7px 13px; border:1px solid #afa3ff47; border-radius:999px; color:#afa3ff; background:#afa3ff1a; font:600 12px/1.2 var(--font-body); }
+  .vhw-header h2 { margin:18px 0 16px; color:#f4f1ff; font:500 clamp(36px,5vw,56px)/1.06 var(--font-heading); letter-spacing:-.04em; }
+  .vhw-header p { max-width:650px; margin:0 auto; color:#ffffff91; font:400 17px/1.55 var(--font-body); }
+  .vhw-cards { --vhw-top:340px; position:relative; z-index:1; display:flex; flex-direction:column; gap:24px; width:min(1120px,100%); padding-top:100px; }
+  .vhw-card { position:sticky; top:calc(var(--vhw-top) + var(--card-index) * 20px); display:flex; min-height:600px; overflow:hidden; border:1px solid #ffffff1f; border-radius:28px; background:radial-gradient(circle at 85% 8%,#6d5ceb35,transparent 34%),#0b0c12; box-shadow:0 -10px 40px #0009; }
+  .vhw-card__content { display:flex; flex:0 0 49%; flex-direction:column; justify-content:center; padding:46px; }
+  .vhw-card__eyebrow { align-self:flex-start; margin-bottom:15px; padding:7px 13px; border:1px solid #afa3ff47; border-radius:999px; color:#afa3ff; background:#afa3ff1a; font:600 12px/1.2 var(--font-body); }
+  .vhw-card__content h3 { margin:0 0 16px; color:#e9e7f5; font:500 clamp(28px,3vw,38px)/1.12 var(--font-heading); letter-spacing:-.03em; }
+  .vhw-card__content > p { margin:0; color:#ffffff8c; font:400 16px/1.6 var(--font-body); }
+  .vhw-card__content ul { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:26px 0 0; padding:0; list-style:none; }
+  .vhw-card__content li { display:flex; flex-direction:column; gap:5px; padding:13px; border:1px solid #ffffff12; border-radius:12px; background:#ffffff08; }
+  .vhw-card__content li b { color:#f0eef8; font:600 12px/1.3 var(--font-body); }.vhw-card__content li span { color:#ffffff78; font:400 11px/1.45 var(--font-body); }
+  .vhw-card__visual { display:flex; flex:1; align-items:center; justify-content:center; margin:18px 18px 18px 0; padding:28px; border:1px solid #ffffff29; border-radius:18px; background:linear-gradient(160deg,#ffffff20,#ffffff0a); }
+  .vhw-ui { width:100%; overflow:hidden; border:1px solid #ffffff21; border-radius:16px; color:#273142; background:#f8fafc; box-shadow:0 24px 60px #0005; font-family:var(--font-body); }
+  .vhw-ui__bar { display:flex; align-items:center; gap:12px; padding:13px 15px; border-bottom:1px solid #e2e7ee; background:#fff; }.vhw-ui__bar span{display:flex;gap:4px}.vhw-ui__bar i{width:7px;height:7px;border-radius:50%;background:#d2d7df}.vhw-ui__bar b{font-size:11px}
+  .vhw-ui__bot,.vhw-ui__capture,.vhw-ui__stream { min-height:350px; padding:24px; }
+  .vhw-ui__field { position:relative; display:flex; flex-direction:column; gap:6px; margin-bottom:14px; padding:13px 14px; border:1px solid #dfe5ec; border-radius:10px; background:#fff; }.vhw-ui__field small{color:#8993a1;font-size:9px}.vhw-ui__field span{font-size:11px;font-weight:600}.vhw-ui__field i{position:absolute;right:12px;bottom:12px;padding:4px 6px;border-radius:6px;color:#067647;background:#ecfdf3;font-size:8px;font-style:normal}
+  .vhw-ui__toggle{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid #dfe5ec;border-radius:10px;background:#fff}.vhw-ui__toggle span{display:flex;flex-direction:column;gap:4px}.vhw-ui__toggle b{font-size:11px}.vhw-ui__toggle small{color:#8993a1;font-size:8px}.vhw-ui__toggle>i{position:relative;width:32px;height:18px;border-radius:999px;background:#375dfb}.vhw-ui__toggle>i::after{content:"";position:absolute;top:3px;right:3px;width:12px;height:12px;border-radius:50%;background:#fff}
+  .vhw-ui__bot ol{display:flex;margin:24px 0 0;padding:0;list-style:none}.vhw-ui__bot li{position:relative;flex:1;padding-top:17px;color:#8993a1;font-size:8px;text-align:center}.vhw-ui__bot li::before{content:"";position:absolute;top:2px;left:50%;width:8px;height:8px;border:2px solid #c7ced8;border-radius:50%;background:#fff}.vhw-ui__bot li::after{content:"";position:absolute;top:7px;left:calc(50% + 8px);width:calc(100% - 16px);border-top:1px solid #d7dce3}.vhw-ui__bot li:last-child::after{display:none}.vhw-ui__bot .is-done::before,.vhw-ui__bot .is-active::before{border-color:#375dfb;background:#375dfb}.vhw-ui__bot .is-active{color:#375dfb;font-weight:700}
+  .vhw-ui__player{display:flex;flex-direction:column;justify-content:flex-end;height:170px;padding:16px;border-radius:12px;color:#fff;background:linear-gradient(135deg,#202943,#0d1220)}.vhw-ui__player>span{font-size:10px}.vhw-ui__player>div{height:3px;margin:65px 0 7px;border-radius:3px;background:#ffffff30}.vhw-ui__player>div i{display:block;width:42%;height:100%;background:#7f8df9}.vhw-ui__player small{font-size:8px}
+  .vhw-ui__transcript{margin-top:14px;padding:14px;border:1px solid #dfe5ec;border-radius:10px;background:#fff}.vhw-ui__transcript>b{display:block;margin-bottom:9px;font-size:10px}.vhw-ui__transcript p{margin:7px 0;color:#687386;font-size:8px}.vhw-ui__transcript time{margin-right:7px;color:#375dfb;font-weight:700}
+  .vhw-ui__stream{display:flex;align-items:center;justify-content:center;gap:18px}.vhw-ui__source{display:flex;align-items:center;gap:9px;padding:14px;border:1px solid #dfe5ec;border-radius:12px;background:#fff}.vhw-ui__source>i{width:28px;height:28px;border-radius:9px;background:#375dfb}.vhw-ui__source span{display:flex;flex-direction:column;gap:3px}.vhw-ui__source b{font-size:9px}.vhw-ui__source small{color:#12a26b;font-size:7px}
+  .vhw-ui__routes{display:flex;flex-direction:column;gap:28px}.vhw-ui__routes i{display:block;width:34px;border-top:1px dashed #8390a1}.vhw-ui__destinations{display:flex;flex-direction:column;gap:10px}.vhw-ui__destinations span{display:grid;grid-template-columns:28px 1fr;column-gap:8px;align-items:center;min-width:145px;padding:11px;border:1px solid #dfe5ec;border-radius:10px;background:#fff}.vhw-ui__destinations i{grid-row:1/3;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;color:#fff;background:#eb3f3f;font-size:9px;font-style:normal}.vhw-ui__destinations span:nth-child(2) i{background:#1877f2}.vhw-ui__destinations span:nth-child(3) i{background:#596579}.vhw-ui__destinations b{font-size:9px}.vhw-ui__destinations small{color:#0b9b65;font-size:7px}
+  .vhw-spacer{height:80px}
+  @media(max-width:1024px){.vhw-cards{--vhw-top:220px}.vhw-card{min-height:560px}.vhw-card__content{padding:32px}.vhw-card__content ul{grid-template-columns:1fr}.vhw-card__content li:nth-child(n+3){display:none}.vhw-card__visual{padding:18px}}
+  @media(max-width:767px){.vhw-section{padding:60px 18px 30px}.vhw-header{position:static}.vhw-cards{padding-top:54px}.vhw-card{position:relative;top:auto!important;flex-direction:column;min-height:0}.vhw-card__content{padding:26px 22px 18px}.vhw-card__content ul{grid-template-columns:1fr}.vhw-card__content li:nth-child(n+3){display:flex}.vhw-card__visual{min-height:390px;margin:12px;padding:14px}.vhw-ui__bot,.vhw-ui__capture,.vhw-ui__stream{min-height:320px;padding:18px}.vhw-ui__stream{gap:8px}.vhw-ui__routes i{width:16px}.vhw-spacer{display:none}}
+</style>

@@ -1,163 +1,242 @@
 ---
-const cards = [
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#375DFB" stroke-width="2"/><path d="M12 6v6l4 2" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12h0" stroke="#22C55E" stroke-width="3" stroke-linecap="round"/></svg>`,
-    title: "0% EventHex platform fees",
-    desc: "Only pay your gateway's standard rate — nothing extra to EventHex.",
-  },
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="2" stroke="#375DFB" stroke-width="2"/><path d="M2 10h20" stroke="#375DFB" stroke-width="2"/><path d="M6 15h4" stroke="#375DFB" stroke-width="2" stroke-linecap="round"/><circle cx="18" cy="15" r="1" fill="#22C55E"/></svg>`,
-    title: "3 leading payment gateways",
-    desc: "Stripe (global), Razorpay (India), and Tap Payments (MENA/GCC) supported.",
-  },
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 20V8l4 4 4-8 4 6 4-4v14H3z" fill="rgba(55,93,251,0.1)" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="19" cy="6" r="2" fill="#22C55E"/></svg>`,
-    title: "Real-time revenue tracking",
-    desc: "Live dashboards, transaction export, and gateway reconciliation in one view.",
-  },
+const trustItems = [
+  ["Masked credentials", "Keep stored credential values out of normal organizer responses."],
+  ["Provider checkout", "Use the active integration path for the selected gateway."],
+  ["Provider settlement", "Treat payout timing and account status as processor-specific."],
+  ["EventHex order state", "Use EventHex for the event order, ticket outcome, refund action, and finance context it records."],
+];
+
+const links = [
+  ["/event-ticketing/", "Event Ticketing", "Configure ticket price, capacity, sale windows, discounts, and access rules."],
+  ["/event-registration/", "Event Registration", "Choose the form or checkout journey that creates the paid order."],
+  ["/invoicing-gst/", "Invoicing and tax", "Collect billing details and generate an order-linked PDF invoice with configured tax lines."],
+  ["/event-check-in/", "Event Check-In", "Use confirmed attendee records and QR tickets at arrival."],
 ];
 ---
 
-<section class="eppc-full">
-  <div class="eppc-full__inner">
-    <div class="eppc-full__header">
-      <span class="eppc-full__tag animate-on-scroll" data-animation="fadeIn">Why Event Organizers Choose EventHex Payments</span>
-      <h2 class="eppc-full__title animate-on-scroll" data-animation="fadeInUp">Zero-Fee <b>Payment Processing</b></h2>
-      <p class="eppc-full__desc animate-on-scroll" data-animation="fadeInUp">Accept payments via Stripe, Razorpay, or Tap with zero EventHex platform fees and direct revenue settlement.</p>
-    </div>
+<section class="eppx-manual" aria-labelledby="manual-heading">
+  <header class="eppx-section-heading">
+    <span>Manual payment instructions</span>
+    <h2 id="manual-heading">Keep an offline payment option separate from gateway automation</h2>
+    <p>
+      For bank transfer or another manual path, EventHex can show organizer-provided
+      instructions and record the order flow without pretending the platform verified the external payment.
+    </p>
+  </header>
 
-    <div class="eppc-full__cards">
-      {cards.map((card) => (
-        <div class="eppc-full__card animate-on-scroll" data-animation="fadeInUp">
-          <div class="eppc-full__card-icon" set:html={card.icon}></div>
-          <h3 class="eppc-full__card-title">{card.title}</h3>
-          <p class="eppc-full__card-desc">{card.desc}</p>
-        </div>
+  <div class="eppx-manual__grid">
+    <article class="eppx-manual__card animate-on-scroll" data-animation="fadeInLeft">
+      <span class="eppx-manual__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>
+      </span>
+      <h3>Online gateway payment</h3>
+      <p>Provider confirmation and webhook paths update the order through the supported integration.</p>
+      <strong><i></i> Automated provider path</strong>
+    </article>
+    <article class="eppx-manual__card animate-on-scroll" data-animation="fadeInRight">
+      <span class="eppx-manual__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M3 20h18M5 17h14M6 9h12v8H6zM4 9l8-5 8 5"></path></svg>
+      </span>
+      <h3>Manual or offline payment</h3>
+      <p>The organizer provides instructions and remains responsible for confirming receipt outside EventHex gateway automation.</p>
+      <strong><i></i> Organizer-verified path</strong>
+    </article>
+  </div>
+  <p class="eppx-manual__note">
+    Manual/offline payments are not automatically reconciled and cannot use the same in-product provider refund path.
+  </p>
+</section>
+
+<section class="eppx-trust" aria-labelledby="trust-heading">
+  <div class="eppx-trust__inner">
+    <header class="eppx-section-heading">
+      <span>Payment setup and trust</span>
+      <h2 id="trust-heading">Keep processor responsibilities clear</h2>
+      <p>
+        EventHex connects the event order to supported gateway flows while the selected
+        payment provider handles its own checkout, methods, settlement, and account requirements.
+      </p>
+    </header>
+    <div class="eppx-trust__grid">
+      {trustItems.map(([title, description], index) => (
+        <article class="eppx-trust__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </article>
       ))}
     </div>
   </div>
 </section>
 
-<style is:global>
-  .eppc-full {
-    width: 100%;
-    margin: 0;
-    padding: 72px 0;
-    background: #000312 url('https://cms.eventhex.ai/wp-content/uploads/2025/03/bg.svg') center / cover no-repeat;
-  }
+<section class="eppx-links" aria-labelledby="links-heading">
+  <div class="eppx-links__inner">
+    <header class="eppx-section-heading">
+      <span>Connected event commerce</span>
+      <h2 id="links-heading">Continue into the job that owns the detail</h2>
+      <p>Payments sit between ticket selection and the financial documents or attendee outcomes that follow.</p>
+    </header>
+    <div class="eppx-links__grid">
+      {links.map(([href, title, description], index) => (
+        <a href={href} class="eppx-links__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          <span class="eppx-links__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+          <strong>Explore feature <span aria-hidden="true">↗</span></strong>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
 
-  .eppc-full__inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 48px;
-  }
-
-  .eppc-full__header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+<style>
+  .eppx-section-heading {
+    max-width: 850px;
+    margin: 0 auto 42px;
     text-align: center;
-    gap: 16px;
-    max-width: 680px;
   }
-
-  .eppc-full__tag {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    color: #afa3ff;
-    letter-spacing: 0.12em;
+  .eppx-section-heading > span {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #375dfb;
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: .08em;
     text-transform: uppercase;
   }
-
-  .eppc-full__title {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: #fff;
+  .eppx-section-heading h2 {
     margin: 0;
+    color: var(--heading-dark);
+    font: 500 clamp(36px, 4.6vw, 56px)/1.05 var(--font-heading);
+    letter-spacing: -.045em;
+  }
+  .eppx-section-heading p {
+    max-width: 720px;
+    margin: 20px auto 0;
+    color: var(--subheading-gray);
+    font: 400 17px/1.65 var(--font-body);
   }
 
-  .eppc-full__title b { font-weight: 700; }
-
-  .eppc-full__desc {
-    font-family: var(--font-body);
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0;
+  .eppx-manual {
+    width: min(1140px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 108px 0;
   }
-
-  .eppc-full__cards {
+  .eppx-manual__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
   }
-
-  .eppc-full__card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 28px 24px;
+  .eppx-manual__card {
+    position: relative;
+    min-height: 370px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    transition: background 0.3s, border-color 0.3s, transform 0.3s;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 54px;
+    background: #fff;
   }
-
-  .eppc-full__card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(175, 163, 255, 0.35);
-    transform: translateY(-2px);
-  }
-
-  .eppc-full__card-icon {
+  .eppx-manual__card + .eppx-manual__card { border-left: 1px solid #e5e7eb; background: linear-gradient(145deg, #f5f7ff, #fff); }
+  .eppx-manual__icon {
+    display: grid;
     width: 48px;
     height: 48px;
+    place-items: center;
+    margin-bottom: 24px;
+    border-radius: 14px;
+    background: #eef2ff;
+    color: #375dfb;
+  }
+  .eppx-manual__icon svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .eppx-manual__card h3 { margin: 0 0 14px; color: var(--heading-dark); font: 500 30px/1.15 var(--font-heading); letter-spacing: -.03em; }
+  .eppx-manual__card p { max-width: 440px; margin: 0 0 24px; color: var(--subheading-gray); font: 400 16px/1.65 var(--font-body); }
+  .eppx-manual__card strong { display: inline-flex; align-items: center; gap: 8px; color: #344054; font: 650 13px/1.4 var(--font-body); }
+  .eppx-manual__card strong i { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+  .eppx-manual__card:last-child strong i { background: #f5b942; }
+  .eppx-manual__note {
+    max-width: 800px;
+    margin: 26px auto 0;
+    padding: 14px 16px;
+    border-left: 3px solid #375dfb;
+    background: #f5f7ff;
+    color: #667085;
+    font: 500 14px/1.6 var(--font-body);
+  }
+
+  .eppx-trust {
+    padding: 104px 24px;
+    background: #f6f8fc;
+  }
+  .eppx-trust__inner, .eppx-links__inner { max-width: 1140px; margin: 0 auto; }
+  .eppx-trust__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #dfe4ec;
+    border-left: 1px solid #dfe4ec;
+  }
+  .eppx-trust__card {
+    min-height: 280px;
+    padding: 34px 28px;
+    border-right: 1px solid #dfe4ec;
+    border-bottom: 1px solid #dfe4ec;
+    background: rgba(255,255,255,.72);
+  }
+  .eppx-trust__card > span { color: #8c96a7; font: 650 11px/1 var(--font-body); letter-spacing: .08em; }
+  .eppx-trust__card h3 { margin: 72px 0 12px; color: var(--heading-dark); font: 500 23px/1.15 var(--font-heading); }
+  .eppx-trust__card p { margin: 0; color: var(--subheading-gray); font: 400 14px/1.6 var(--font-body); }
+
+  .eppx-links { padding: 108px 24px; background: #fff; }
+  .eppx-links__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid #e5e7eb;
+    border-left: 1px solid #e5e7eb;
+  }
+  .eppx-links__card {
+    min-height: 330px;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(55, 93, 251, 0.15);
+    flex-direction: column;
+    padding: 32px;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    color: inherit;
+    text-decoration: none;
+    transition: background .25s ease, transform .25s ease;
+  }
+  .eppx-links__card:hover { z-index: 1; background: #f8f9ff; transform: translateY(-4px); }
+  .eppx-links__icon {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 1px solid #e0e5ed;
     border-radius: 12px;
+    color: #375dfb;
   }
+  .eppx-links__icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+  .eppx-links__card h3 { min-height: 54px; margin: 54px 0 12px; color: var(--heading-dark); font: 500 23px/1.15 var(--font-heading); }
+  .eppx-links__card p { margin: 0; color: var(--subheading-gray); font: 400 14px/1.6 var(--font-body); }
+  .eppx-links__card strong { margin-top: auto; padding-top: 22px; color: #375dfb; font: 650 12px/1.4 var(--font-body); }
 
-  .eppc-full__card-title {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #fff;
-    margin: 0;
+  @media (max-width: 960px) {
+    .eppx-trust__grid, .eppx-links__grid { grid-template-columns: repeat(2, 1fr); }
   }
-
-  .eppc-full__card-desc {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-  }
-
-  @media (max-width: 1024px) {
-    .eppc-full { padding: 64px 0; }
-    .eppc-full__title { font-size: 36px; }
-  }
-
   @media (max-width: 767px) {
-    .eppc-full { padding: 52px 0; }
-    .eppc-full__title { font-size: 30px; line-height: 1.15; }
-    .eppc-full__desc { font-size: 15px; }
-    .eppc-full__cards { grid-template-columns: 1fr; }
+    .eppx-section-heading h2 { font-size: 34px; }
+    .eppx-manual { width: min(100% - 32px, 1140px); padding: 72px 0; }
+    .eppx-manual__grid { grid-template-columns: 1fr; }
+    .eppx-manual__card { min-height: 320px; padding: 36px 24px; }
+    .eppx-manual__card + .eppx-manual__card { border-top: 1px solid #e5e7eb; border-left: 0; }
+    .eppx-trust, .eppx-links { padding: 72px 16px; }
+    .eppx-trust__grid, .eppx-links__grid { grid-template-columns: 1fr; }
+    .eppx-trust__card { min-height: 230px; }
+    .eppx-trust__card h3 { margin-top: 46px; }
+    .eppx-links__card { min-height: 290px; }
+    .eppx-links__card h3 { min-height: 0; margin-top: 42px; }
   }
 </style>

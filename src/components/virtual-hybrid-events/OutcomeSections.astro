@@ -1,0 +1,192 @@
+---
+const evidenceRows = [
+  {
+    eyebrow: "Virtual check-in",
+    title: "Give registered attendees a controlled path into the online session",
+    copy: "Enable a virtual check-in link, choose when it opens, and use the registration-aware entry path instead of distributing only the raw meeting URL.",
+    items: [
+      ["Gated event link", "Generate or regenerate an event-specific virtual check-in URL."],
+      ["Opening window", "Choose how long before the event the check-in path opens."],
+      ["Attendee verification", "Use the supported OTP entry flow to identify the attendee."],
+      ["Attendance record", "Connect virtual participation back to the registration where a match is available."],
+    ],
+    kind: "checkin",
+    tone: "green",
+  },
+  {
+    eyebrow: "Hybrid attendance context",
+    title: "See who joined, when they participated, and how the session progressed",
+    copy: "EventHex retains supported virtual participant data and attaches it to attendee records so operations can review the online side of the event alongside the wider programme.",
+    items: [
+      ["Unique participants", "Review the participant roster captured for the meeting."],
+      ["Join and leave", "Use available meeting events to understand attendance windows."],
+      ["Speaking context", "Review speaker-timeline or speaking-time data where supported."],
+      ["Registration match", "Link identified virtual participants to ticket registrations."],
+      ["Live status", "See whether the meeting bot is joining, waiting, live, or finished."],
+      ["Event-level review", "Keep session results inside the same organizer event workspace."],
+    ],
+    kind: "attendance",
+    tone: "blue",
+  },
+  {
+    eyebrow: "Live transcription options",
+    title: "Scope captions and translation to the session experience you need",
+    copy: "EventHex contains live transcription and translation paths, but language coverage and delivery depend on the configured session and speech provider.",
+    items: [
+      ["Live transcript experience", "Surface spoken content as text in the supported attendee-facing session experience."],
+      ["Translated subtitle experience", "Show translated text where the selected language and transcription configuration support it."],
+    ],
+    note: "Confirm languages, provider, latency expectations, attendee surface, and event format during the demo; do not assume universal coverage.",
+    kind: "captions",
+    tone: "pink",
+  },
+  {
+    eyebrow: "After the session",
+    title: "Move from raw recording to a session record people can revisit",
+    copy: "Keep the available media and transcript together, review generated insights, and continue into the public recap workflow when it is enabled for the event.",
+    items: [
+      ["Recording ready", "Open the processed session media."],
+      ["Transcript ready", "Review text, timestamps, and available speaker labels."],
+      ["Insights ready", "Use generated summary and key-insight outputs where configured."],
+      ["Recap handoff", "Open the connected InstaRecap experience for attendee-facing follow-up."],
+    ],
+    kind: "recap",
+    tone: "yellow",
+  },
+];
+
+const related = [
+  ["/event-registration/", "Event Registration", "Collect attendee details and route people into the selected virtual or hybrid experience."],
+  ["/event-check-in/", "Event Check-In", "Coordinate onsite arrival for the in-person side of a hybrid event."],
+  ["/ai-session-recap/", "AI Session Recap", "Create the attendee-facing transcript, takeaways, and recap experience."],
+  ["/event-analytics/", "Event Analytics", "Review broader event performance beyond the individual meeting session."],
+] as const;
+
+const audiences = [
+  ["Conferences", "Run multi-session programmes with remote access and post-session records."],
+  ["Association events", "Connect recurring member sessions to registration and attendance."],
+  ["Corporate events", "Coordinate internal or external virtual programmes with controlled access."],
+  ["Tech conferences", "Extend product talks and panels to remote viewers and recap journeys."],
+  ["Exhibitions", "Support hybrid briefings, exhibitor sessions, or streamed programme content."],
+  ["Recorded events", "Capture a scheduled live session and reuse its approved output after processing."],
+] as const;
+---
+
+<section class="vho-bento" aria-labelledby="vho-bento-title">
+  <div class="vho-bento__container">
+    <header class="vho-bento__header">
+      <span class="vho-kicker">Access, attendance, language, and follow-up</span>
+      <h2 id="vho-bento-title">Carry the live session into the wider event workflow</h2>
+    </header>
+    <div class="vho-bento__grid">
+      {evidenceRows.map((row, index) => (
+        <article class="vho-bento__row">
+          <div class:list={["vho-bento__cell", "vho-bento__visual", `vho-bento__visual--${row.tone}`, { "vho-bento__visual--reverse": index % 2 === 1 }]}>
+            <div class:list={["vho-product", `vho-product--${row.kind}`]} role="img" aria-label={`${row.eyebrow} EventHex product view`}>
+              <div class="vho-product__bar"><span><i></i><i></i><i></i></span><b>{row.eyebrow}</b></div>
+              {row.kind === "checkin" && (
+                <div class="vho-checkin">
+                  <span class="vho-checkin__badge">Virtual check-in</span>
+                  <h3>Leadership Forum</h3>
+                  <p>Enter the code sent to your registered email.</p>
+                  <div class="vho-checkin__otp"><i>4</i><i>8</i><i>2</i><i>6</i></div>
+                  <button type="button" tabindex="-1">Continue to the event</button>
+                  <small>Access opens before the scheduled session</small>
+                </div>
+              )}
+              {row.kind === "attendance" && (
+                <div class="vho-attendance">
+                  <div class="vho-attendance__stats"><span><small>Participants</small><b>Roster</b></span><span><small>Attendance</small><b>Windows</b></span><span><small>Identity</small><b>Matches</b></span></div>
+                  <div class="vho-attendance__list"><span><i>MC</i><b>Maya Chen</b><small>Registration matched</small></span><span><i>AK</i><b>Alex Kim</b><small>Join and leave captured</small></span><span><i>JL</i><b>Jordan Lee</b><small>Virtual participant</small></span></div>
+                </div>
+              )}
+              {row.kind === "captions" && (
+                <div class="vho-captions">
+                  <div class="vho-captions__stage"><span>Live session</span><i></i><i></i><i></i></div>
+                  <div class="vho-captions__line"><small>Live transcript</small><p>“The event workflow stays connected to the session.”</p></div>
+                  <div class="vho-captions__line is-translation"><small>Translated subtitle</small><p>Configured language output</p></div>
+                </div>
+              )}
+              {row.kind === "recap" && (
+                <div class="vho-recap">
+                  <nav aria-hidden="true"><span class="is-active">Summary</span><span>Transcript</span><span>Insights</span></nav>
+                  <h3>Session recap</h3>
+                  <div class="vho-recap__takeaway"><i></i><span><b>Key insight</b><small>Generated where configured</small></span></div>
+                  <div class="vho-recap__takeaway"><i></i><span><b>Timestamped record</b><small>Connected to available media</small></span></div>
+                  <a href="/ai-session-recap/" tabindex="-1">Open InstaRecap →</a>
+                </div>
+              )}
+            </div>
+          </div>
+          <div class:list={["vho-bento__cell", "vho-bento__content", { "vho-bento__content--reverse": index % 2 === 1 }]}>
+            <span class="vho-bento__eyebrow">{row.eyebrow}</span>
+            <h3>{row.title}</h3>
+            <p>{row.copy}</p>
+            <ul>
+              {row.items.map(([title, copy]) => <li><b>{title}</b><span>{copy}</span></li>)}
+            </ul>
+            {row.note && <p class="vho-bento__note">{row.note}</p>}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="vho-links" aria-labelledby="vho-links-title">
+  <div class="vho-links__shell">
+    <header class="vho-links__heading">
+      <span class="vho-kicker">Connected event operations</span>
+      <h2 id="vho-links-title">Continue into the feature that owns the next job</h2>
+      <p>Virtual delivery works best when access, content, attendance, and follow-up each hand off to the correct EventHex workflow.</p>
+    </header>
+    <div class="vho-links__grid">
+      {related.map(([href, title, copy], index) => (
+        <article class="vho-link-card">
+          {index > 0 && <span class:list={["vho-link-card__notch", `vho-link-card__notch--${index}`]} aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0A14,14 0 0,1 0,14A14,14 0 0,1 14,0Z" fill="var(--surface-card-border)"></path></svg></span>}
+          <span class="vho-link-card__number">0{index + 1}</span>
+          <h3><a href={href}>{title}</a></h3>
+          <p>{copy}</p>
+          <a class="vho-link-card__arrow" href={href} aria-label={`Explore ${title}`}>↗</a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="vho-audiences" aria-labelledby="vho-audiences-title">
+  <div class="vho-audiences__shell">
+    <header class="vho-audiences__heading">
+      <span class="vho-kicker">Built for programmed events</span>
+      <h2 id="vho-audiences-title">Use the same operating model across high-value session formats</h2>
+      <p>Configure each event around its audience, programme, and delivery plan.</p>
+    </header>
+    <div class="vho-audiences__grid">
+      {audiences.map(([title, copy], index) => (
+        <article class="vho-audience-card animate-on-scroll" data-animation="fadeInUp" data-delay={index * 40}>
+          <span class="vho-audience-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 19V8l8-4 8 4v11M8 19v-5h8v5M8 9h.01M12 9h.01M16 9h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+          <h3>{title}</h3><p>{copy}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Event Registration alternating evidence rows and use-case card patterns. */
+  .vho-kicker { display:block; margin-bottom:12px; color:var(--brand-blue); font:700 12px/1.2 var(--font-body); letter-spacing:.12em; text-transform:uppercase; }
+  .vho-bento { padding:96px 5%; background:transparent; }.vho-bento__container{max-width:1180px;margin:0 auto}.vho-bento__header{max-width:850px;margin:0 auto 58px;text-align:center}.vho-bento__header h2,.vho-links__heading h2,.vho-audiences__heading h2{margin:0;color:#111827;font:500 clamp(32px,4vw,56px)/1.08 var(--font-heading);letter-spacing:-.03em}.vho-bento__grid{overflow:hidden;border:1px solid #e5e7eb;border-radius:18px;background:#fff}
+  .vho-bento__row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.vho-bento__row:last-child{border-bottom:0}.vho-bento__cell{display:flex;flex-direction:column;justify-content:center;padding:56px}.vho-bento__row .vho-bento__cell:first-child{border-right:1px solid #e5e7eb}.vho-bento__visual--reverse{order:2;border-right:0!important}.vho-bento__content--reverse{order:1;border-right:1px solid #e5e7eb}
+  .vho-bento__visual{align-items:center;background:linear-gradient(145deg,#eaf8f1,#f8fcfa)}.vho-bento__visual--blue{background:linear-gradient(145deg,#e6efff,#f8faff)}.vho-bento__visual--pink{background:linear-gradient(145deg,#faeaf0,#fff9fb)}.vho-bento__visual--yellow{background:linear-gradient(145deg,#fff3c9,#fffdf5)}
+  .vho-bento__eyebrow{margin-bottom:14px;color:#5b21b6;font:700 12px/1.2 var(--font-body);letter-spacing:.08em;text-transform:uppercase}.vho-bento__content h3{margin:0 0 18px;color:#111827;font:500 clamp(28px,3.2vw,38px)/1.08 var(--font-heading);letter-spacing:-.03em}.vho-bento__content>p{margin:0;color:#4b5563;font:400 16px/1.6 var(--font-body)}.vho-bento__content ul{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 0;padding:0;list-style:none}.vho-bento__content li{display:flex;flex-direction:column;gap:5px;padding:12px;border:1px solid #e5e7eb;border-radius:10px;background:#fafafa}.vho-bento__content li b{color:#273142;font:650 12px/1.35 var(--font-body)}.vho-bento__content li span{color:#667085;font:400 11px/1.45 var(--font-body)}.vho-bento__note{margin-top:16px!important;padding:12px 14px;border-left:3px solid var(--brand-blue);background:#eef3ff;font-size:12px!important}
+  .vho-product{width:100%;overflow:hidden;border:1px solid #d8e0e9;border-radius:16px;background:#fff;box-shadow:0 20px 42px #1f29482b;font-family:var(--font-body)}.vho-product__bar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #e7ebf0}.vho-product__bar>span{display:flex;gap:4px}.vho-product__bar i{width:7px;height:7px;border-radius:50%;background:#d4d9e1}.vho-product__bar b{font-size:10px}
+  .vho-checkin,.vho-attendance,.vho-captions,.vho-recap{min-height:330px;padding:26px}.vho-checkin{display:flex;flex-direction:column;align-items:center;text-align:center}.vho-checkin__badge{padding:6px 9px;border-radius:999px;color:#067647;background:#ecfdf3;font-size:9px;font-weight:700}.vho-checkin h3{margin:18px 0 7px;font-size:20px}.vho-checkin p{margin:0;color:#667085;font-size:10px}.vho-checkin__otp{display:flex;gap:8px;margin:25px 0}.vho-checkin__otp i{display:grid;place-items:center;width:40px;height:46px;border:1px solid #ccd5e0;border-radius:8px;font-size:16px;font-style:normal}.vho-checkin button{width:100%;padding:12px;border:0;border-radius:9px;color:#fff;background:#171a21;font-size:10px}.vho-checkin>small{margin-top:12px;color:#8b95a3;font-size:8px}
+  .vho-attendance__stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.vho-attendance__stats span{display:flex;flex-direction:column;gap:5px;padding:12px;border:1px solid #dfe5ec;border-radius:10px;background:#f8fafc}.vho-attendance__stats small{color:#8993a1;font-size:7px}.vho-attendance__stats b{font-size:10px}.vho-attendance__list{display:flex;flex-direction:column;gap:9px;margin-top:20px}.vho-attendance__list span{display:grid;grid-template-columns:32px 1fr;column-gap:10px;align-items:center;padding:11px;border:1px solid #dfe5ec;border-radius:10px}.vho-attendance__list i{grid-row:1/3;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#e2e9ff;font-size:8px;font-style:normal}.vho-attendance__list b{font-size:9px}.vho-attendance__list small{color:#6b7280;font-size:7px}
+  .vho-captions__stage{position:relative;height:150px;padding:16px;border-radius:12px;overflow:hidden;color:#fff;background:linear-gradient(145deg,#2a3550,#101522)}.vho-captions__stage span{font-size:9px}.vho-captions__stage i{position:absolute;bottom:20px;width:64px;height:64px;border-radius:50%;background:#58647a}.vho-captions__stage i:nth-child(2){left:28px}.vho-captions__stage i:nth-child(3){left:50%;transform:translateX(-50%);background:#7b85a0}.vho-captions__stage i:nth-child(4){right:28px}.vho-captions__line{margin-top:12px;padding:12px;border:1px solid #dfe5ec;border-radius:10px;background:#fff}.vho-captions__line small{color:#375dfb;font-size:8px;font-weight:700}.vho-captions__line p{margin:5px 0 0;color:#354052;font-size:9px}.vho-captions__line.is-translation{background:#f7f4ff}.vho-captions__line.is-translation small{color:#7f56d9}
+  .vho-recap nav{display:flex;gap:4px;padding:4px;border-radius:8px;background:#f2f4f7}.vho-recap nav span{flex:1;padding:7px;border-radius:6px;color:#667085;font-size:8px;text-align:center}.vho-recap nav .is-active{color:#3158d4;background:#fff;box-shadow:0 2px 6px #1f294812}.vho-recap h3{margin:25px 0 14px;font-size:19px}.vho-recap__takeaway{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:12px;border:1px solid #e2e7ee;border-radius:10px}.vho-recap__takeaway>i{width:30px;height:30px;border-radius:8px;background:#eef3ff}.vho-recap__takeaway span{display:flex;flex-direction:column;gap:4px}.vho-recap__takeaway b{font-size:9px}.vho-recap__takeaway small{color:#7b8491;font-size:7px}.vho-recap>a{display:inline-flex;margin-top:10px;color:#375dfb;font-size:9px;font-weight:700;text-decoration:none}
+  .vho-links,.vho-audiences{padding:clamp(74px,8vw,106px) 24px;background:#fff}.vho-audiences{padding-top:40px;background:linear-gradient(180deg,#fff,#f8f9fc)}.vho-links__shell,.vho-audiences__shell{max-width:1140px;margin:0 auto}.vho-links__heading,.vho-audiences__heading{max-width:820px;margin:0 auto 54px;text-align:center}.vho-links__heading p,.vho-audiences__heading p{max-width:650px;margin:14px auto 0;color:var(--subheading-gray);font:400 17px/1.55 var(--font-body)}
+  .vho-links__grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--surface-card-border);border-bottom:1px solid var(--surface-card-border)}.vho-link-card{position:relative;min-height:285px;padding:30px;border-left:1px solid var(--surface-card-border)}.vho-link-card:first-child{border-left:0}.vho-link-card__notch{position:absolute;left:0;top:0;width:28px;height:28px;transform:translate(-50%,-50%);line-height:0}.vho-link-card__number{color:#9aa4b2;font:700 11px/1 var(--font-body)}.vho-link-card h3{margin:50px 0 18px;font:500 22px/1.15 var(--font-heading)}.vho-link-card h3 a{color:var(--heading-dark);text-decoration:none}.vho-link-card p{margin:0;color:var(--body-gray);font:400 14px/1.5 var(--font-body)}.vho-link-card__arrow{position:absolute;right:28px;bottom:26px;display:grid;place-items:center;width:34px;height:34px;border:1px solid #dbe1e8;border-radius:50%;color:#375dfb;text-decoration:none}
+  .vho-audiences__grid{display:grid;grid-template-columns:repeat(3,1fr);overflow:hidden;border:1px solid var(--surface-card-border);border-radius:18px;background:#fff}.vho-audience-card{min-height:230px;padding:30px;border-right:1px solid var(--surface-card-border);border-bottom:1px solid var(--surface-card-border)}.vho-audience-card:nth-child(3n){border-right:0}.vho-audience-card:nth-last-child(-n+3){border-bottom:0}.vho-audience-card__icon{display:block;width:30px;height:30px;margin-bottom:32px;color:var(--brand-blue)}.vho-audience-card__icon svg{width:100%;height:100%}.vho-audience-card h3{margin:0 0 14px;color:var(--heading-dark);font:500 21px/1.2 var(--font-heading)}.vho-audience-card p{margin:0;color:var(--body-gray);font:400 14px/1.5 var(--font-body)}
+  @media(max-width:900px){.vho-bento__row{display:flex;flex-direction:column}.vho-bento__cell{padding:42px 28px}.vho-bento__row .vho-bento__cell:first-child{border-right:0}.vho-bento__content,.vho-bento__content--reverse{order:1;border-right:0;border-bottom:1px solid #e5e7eb}.vho-bento__visual,.vho-bento__visual--reverse{order:2}.vho-links__grid{grid-template-columns:repeat(2,1fr)}.vho-link-card:nth-child(odd){border-left:0}.vho-link-card:nth-child(n+3){border-top:1px solid var(--surface-card-border)}.vho-audiences__grid{grid-template-columns:repeat(2,1fr)}.vho-audience-card:nth-child(3n){border-right:1px solid var(--surface-card-border)}.vho-audience-card:nth-child(2n){border-right:0}.vho-audience-card:nth-last-child(-n+3){border-bottom:1px solid var(--surface-card-border)}.vho-audience-card:nth-last-child(-n+2){border-bottom:0}}
+  @media(max-width:640px){.vho-bento{padding:64px 18px}.vho-bento__cell{padding:34px 20px}.vho-bento__content ul{grid-template-columns:1fr}.vho-links,.vho-audiences{padding:68px 18px}.vho-links__grid,.vho-audiences__grid{grid-template-columns:1fr}.vho-link-card,.vho-link-card:nth-child(odd),.vho-link-card:nth-child(n+3){min-height:240px;border-left:0;border-top:1px solid var(--surface-card-border)}.vho-link-card:first-child{border-top:0}.vho-link-card__notch{display:none}.vho-audience-card,.vho-audience-card:nth-child(3n),.vho-audience-card:nth-child(2n),.vho-audience-card:nth-last-child(-n+3),.vho-audience-card:nth-last-child(-n+2){min-height:0;border-right:0;border-bottom:1px solid var(--surface-card-border)}.vho-audience-card:last-child{border-bottom:0}}
+</style>

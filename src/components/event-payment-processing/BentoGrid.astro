@@ -1,269 +1,393 @@
 ---
-import { eppbIllustrations as ill } from "./illustrations";
-
-const tabs = [
+const gateways = [
   {
-    label: "Supported Gateways",
-    hero: {
-      title: "Stripe, Razorpay, and Tap Payments with one-click OAuth connection",
-      desc: "Connect your existing gateway account with one OAuth click. Revenue settles directly to your bank on your gateway's normal schedule — EventHex is never in the payment flow.",
-      visual: "gateways",
-    },
-    cards: [
-      { title: "Razorpay", desc: "Accept UPI, net banking, cards, and wallets in India with 0% EventHex fees.", visual: "razorpay" },
-      { title: "Tap Payments", desc: "Accept KNET, mada, Visa, and Mastercard in the GCC and MENA region.", visual: "tap" },
-      { title: "Offline Payments", desc: "Record cash, cheque, and bank transfer payments manually in EventHex.", visual: "offline" },
-      { title: "Complimentary Tickets", desc: "Issue 100% discount codes or mark registrations as complimentary.", visual: "comp" },
-    ],
+    name: "Stripe",
+    description: "Use the supported Stripe checkout and webhook path for the configured event account.",
+    visual: ["Checkout", "Webhook"],
   },
   {
-    label: "Checkout & Pricing",
-    hero: {
-      title: "Multi-tier tickets, promo codes, group purchases, and tax configuration",
-      desc: "Create unlimited ticket types with early-bird windows, group discounts, and promo codes. Configure currency display, tax lines, and automatic tier switching.",
-      visual: "checkout",
-    },
-    cards: [
-      { title: "Promo & Discount Codes", desc: "Percentage or fixed-amount coupons with usage limits and expiry dates.", visual: "promo" },
-      { title: "Group Purchases", desc: "Buy tickets for multiple people in one checkout with separate registrations.", visual: "group" },
-      { title: "Currency Display", desc: "Set your event currency — attendees see prices in your chosen currency.", visual: "currency" },
-      { title: "Tax & VAT", desc: "Add configurable tax lines displayed at checkout and on receipts.", visual: "tax" },
-    ],
+    name: "Razorpay",
+    description: "Use Razorpay paths for relevant India-first payment experiences, including supported hosted or SDK handoffs.",
+    visual: ["Hosted", "SDK"],
   },
   {
-    label: "Refunds & Reporting",
-    hero: {
-      title: "Automated refunds, revenue dashboards, transaction export, and reconciliation",
-      desc: "Process refunds from the dashboard, track real-time revenue, export transactions for accounting, and reconcile with your gateway.",
-      visual: "reporting",
-    },
-    cards: [
-      { title: "Transaction Export", desc: "Export all transactions as CSV or Excel with payment date, amount, and fees.", visual: "txexport" },
-      { title: "Reconciliation View", desc: "Match EventHex transactions against your gateway with side-by-side view.", visual: "reconcile" },
-      { title: "Revenue Roll-Up", desc: "Aggregate revenue across all events in the centralized dashboard.", visual: "rollup" },
-      { title: "Revenue Reports", desc: "Gross sales, net revenue, gateway fees, and revenue by ticket type.", visual: "revreport" },
-    ],
+    name: "Tap",
+    description: "Use Tap for supported GCC/MENA currency and payment-source flows.",
+    visual: ["GCC", "MENA"],
+  },
+  {
+    name: "Configured checkout",
+    description: "The attendee follows the supported gateway path configured for the event.",
+    visual: ["Event", "Gateway", "Order"],
+  },
+  {
+    name: "Need another gateway?",
+    description: "Bring the provider and checkout model to the demo so the EventHex team can scope what would need to be built.",
+    visual: ["Provider", "Scope"],
   },
 ];
-
-const ICON = '<svg class="eppb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
-const layouts = ["a", "b", "c"];
 ---
 
-<section class="eppb-section" id="epp-bento">
-  <div class="eppb">
-    <h2 class="eppb-title">
-      Payment <b>Gateways</b>, Checkout &amp; <b>Reporting</b>
-    </h2>
-    <p class="eppb-subtitle">
-      Connect your gateway, configure pricing, and track every transaction in real time.
-    </p>
+<div class="eppx-gateway-band">
+  <section class="eppx-gateway" aria-labelledby="gateway-heading">
+    <header class="eppx-gateway__header animate-on-scroll" data-animation="fadeInUp">
+      <span>Supported payment gateways</span>
+      <h2 id="gateway-heading">
+        Choose the current gateway path that fits the <em>event market</em>
+      </h2>
+      <p>
+        EventHex has active payment flows for Stripe, Razorpay, and Tap; attendee
+        checkout follows the gateway configured for the event.
+      </p>
+    </header>
 
-    <nav class="eppb-nav">
-      {tabs.map((t, i) => (
-        <button class={`eppb-tab ${i === 0 ? "eppb-tab--active" : ""}`} data-eppb-tab={String(i)}>{t.label}</button>
-      ))}
-    </nav>
-
-    {tabs.map((t, tabIdx) => (
-      <div class={`eppb-panel ${tabIdx === 0 ? "eppb-panel--active" : ""}`} data-eppb-panel={String(tabIdx)}>
-        <div class="eppb-grid" data-layout={layouts[tabIdx % 3]}>
-          <div class="eppb-card eppb-card--tall eppb-pos-0" style="animation-delay:0s">
-            <div class="eppb-card__inner">
-              <div class="eppb-card__text">
-                <Fragment set:html={ICON} />
-                <h3 class="eppb-card__title">{t.hero.title}</h3>
-                <p class="eppb-card__desc">{t.hero.desc}</p>
-              </div>
-              <div class="eppb-card__img" set:html={ill[t.hero.visual]} />
-            </div>
+    <div class="eppx-gateway__grid">
+      {gateways.map((gateway, index) => (
+        <article class="eppx-gateway__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          <div>
+            <span class="eppx-gateway__index">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{gateway.name}</h3>
+            <p>{gateway.description}</p>
           </div>
-          {t.cards.map((c, ci) => (
-            <div class={`eppb-card eppb-card--sm eppb-pos-${ci + 1}`} style={`animation-delay:${((ci + 1) * 0.06).toFixed(2)}s`}>
-              <div class="eppb-card__inner eppb-card__inner--row">
-                <div class="eppb-card__text">
-                  <Fragment set:html={ICON} />
-                  <h3 class="eppb-card__title">{c.title}</h3>
-                  <p class="eppb-card__desc">{c.desc}</p>
-                </div>
-                <div class="eppb-card__img eppb-card__img--sm" set:html={ill[c.visual]} />
-              </div>
-            </div>
-          ))}
-        </div>
+          <div class="eppx-gateway__visual" aria-hidden="true">
+            {gateway.visual.map((item, itemIndex) => (
+              <span class:list={[itemIndex === 0 && "is-active"]}>{item}</span>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</div>
+
+<section class="eppx-account" aria-labelledby="account-heading">
+  <header class="eppx-account__header">
+    <span>Your supported gateway account</span>
+    <h2 id="account-heading">Keep the event connected to the processor account your team controls</h2>
+    <p>Configure supported credentials at the event or organization level and keep sensitive values masked in normal organizer responses.</p>
+  </header>
+
+  <div class="eppx-account__quad">
+    <article class="eppx-account__cell eppx-account__copy animate-on-scroll" data-animation="fadeInUp">
+      <span class="eppx-account__tag">Event-specific</span>
+      <h3>Event-level setup</h3>
+      <p>Use a supported gateway configuration for a specific event when the account or market differs.</p>
+      <strong>Best for event-specific payment operations</strong>
+    </article>
+    <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInRight">
+      <div class="eppx-settings" aria-label="Example event gateway settings">
+        <div class="eppx-settings__top"><i></i><span>Event payment settings</span><b>•••</b></div>
+        <label>Gateway <span>Stripe</span></label>
+        <label>Event currency <span>USD</span></label>
+        <label>Secret key <span>••••••••••••</span></label>
+        <small><i></i> Credentials saved for this event</small>
       </div>
-    ))}
+    </div>
+
+    <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInLeft">
+      <div class="eppx-settings eppx-settings--org" aria-label="Example organization gateway settings">
+        <div class="eppx-settings__top"><i></i><span>Organization payments</span><b>•••</b></div>
+        <div class="eppx-settings__row"><span>Razorpay</span><b>Connected</b></div>
+        <div class="eppx-settings__row"><span>Tap</span><b>Connected</b></div>
+        <small><i></i> Available to supported event setups</small>
+      </div>
+    </div>
+    <article class="eppx-account__cell eppx-account__copy animate-on-scroll" data-animation="fadeInUp">
+      <span class="eppx-account__tag">Reusable</span>
+      <h3>Organization-level setup</h3>
+      <p>Reuse supported payment settings where the organization model allows shared configuration.</p>
+      <strong>Best for repeat event portfolios</strong>
+    </article>
   </div>
+
+  <p class="eppx-account__note">
+    This is bring-your-own account support for Stripe, Razorpay, or Tap—not a universal adapter for any gateway.
+  </p>
 </section>
 
-<script>
-  const eppbTabs = Array.from(document.querySelectorAll('[data-eppb-tab]'));
-  const eppbPanels = Array.from(document.querySelectorAll('[data-eppb-panel]'));
-  let eppbActive = 0;
-  let eppbInterval: ReturnType<typeof setInterval>;
-
-  function setEppbTab(index: number) {
-    eppbTabs.forEach((t) => t.classList.remove('eppb-tab--active'));
-    eppbPanels.forEach((p) => p.classList.remove('eppb-panel--active'));
-    eppbTabs[index]?.classList.add('eppb-tab--active');
-    eppbPanels[index]?.classList.add('eppb-panel--active');
-    eppbActive = index;
-  }
-  function startEppb() {
-    eppbInterval = setInterval(() => setEppbTab((eppbActive + 1) % eppbTabs.length), 5000);
-  }
-  eppbTabs.forEach((tab, i) => tab.addEventListener('click', () => { setEppbTab(i); clearInterval(eppbInterval); startEppb(); }));
-  startEppb();
-  const eppbSection = document.querySelector('.eppb-section');
-  if (eppbSection) {
-    eppbSection.addEventListener('mouseenter', () => clearInterval(eppbInterval));
-    eppbSection.addEventListener('mouseleave', () => startEppb());
-  }
-</script>
-
 <style>
-  .eppb-section {
-    padding: 80px 0 60px;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
-  }
-  .eppb { max-width: 1260px; margin: 0 auto; padding: 0 24px; }
-  .eppb-title {
-    font-family: var(--font-heading);
-    font-size: 42px; font-weight: 400; line-height: 1.1; letter-spacing: -1px;
-    text-align: center; color: var(--heading-dark); margin: 0 0 12px;
-  }
-  .eppb-title b { font-weight: 700; }
-  .eppb-subtitle {
-    font-family: var(--font-body); font-size: 18px; line-height: 1.6;
-    color: var(--subheading-gray); text-align: center; max-width: 620px; margin: 0 auto 40px;
-  }
-
-  .eppb-nav {
-    display: flex; justify-content: center; gap: 0;
-    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
-  }
-  .eppb-tab {
-    background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
-    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
-    cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
-  }
-  .eppb-tab:hover { background: rgba(55,93,251,.08); }
-  .eppb-tab--active {
-    background: var(--brand-blue) !important; color: #fff !important;
-    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
-  }
-
-  .eppb-panel { display: none; }
-  .eppb-panel--active { display: block; animation: eppbFadeUp 0.4s ease; }
-  @keyframes eppbFadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  .eppb-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr;
-    gap: 14px; height: 460px;
-  }
-  .eppb-pos-0 { grid-column: 1; grid-row: 1 / 3; }
-  .eppb-pos-1 { grid-column: 2; grid-row: 1; }
-  .eppb-pos-2 { grid-column: 3; grid-row: 1; }
-  .eppb-pos-3 { grid-column: 2; grid-row: 2; }
-  .eppb-pos-4 { grid-column: 3; grid-row: 2; }
-  [data-layout="b"] .eppb-pos-0 { grid-column: 3; grid-row: 1 / 3; }
-  [data-layout="b"] .eppb-pos-1 { grid-column: 1; grid-row: 1; }
-  [data-layout="b"] .eppb-pos-2 { grid-column: 2; grid-row: 1; }
-  [data-layout="b"] .eppb-pos-3 { grid-column: 1; grid-row: 2; }
-  [data-layout="b"] .eppb-pos-4 { grid-column: 2; grid-row: 2; }
-  [data-layout="c"] .eppb-pos-0 { grid-column: 2; grid-row: 1 / 3; }
-  [data-layout="c"] .eppb-pos-1 { grid-column: 1; grid-row: 1; }
-  [data-layout="c"] .eppb-pos-2 { grid-column: 3; grid-row: 1; }
-  [data-layout="c"] .eppb-pos-3 { grid-column: 1; grid-row: 2; }
-  [data-layout="c"] .eppb-pos-4 { grid-column: 3; grid-row: 2; }
-
-  @property --eppb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-  .eppb-card {
+  .eppx-gateway-band {
     position: relative;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
-    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    opacity: 0; animation: eppbCardIn 0.5s ease forwards;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 80% 8%, rgba(111, 93, 245, 0.2), transparent 30%),
+      radial-gradient(circle at 8% 90%, rgba(74, 192, 233, 0.12), transparent 26%),
+      #080910;
+    color: #fff;
   }
-  .eppb-card::after {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
-    background: conic-gradient(from var(--eppb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
-    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-  }
-  .eppb-card:hover {
-    transform: translateY(-3px); box-shadow: 0 8px 32px rgba(55,93,251,0.12); border-color: rgba(55,93,251,0.15);
-  }
-  .eppb-card:hover::after { opacity: 1; animation: eppbBorder 2.4s linear infinite; }
-  @keyframes eppbBorder { to { --eppb-angle: 360deg; } }
-  @keyframes eppbCardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-  .eppb-pos-1 { animation-delay: 0.06s; }
-  .eppb-pos-2 { animation-delay: 0.12s; }
-  .eppb-pos-3 { animation-delay: 0.18s; }
-  .eppb-pos-4 { animation-delay: 0.24s; }
 
-  .eppb-card__inner { display: flex; flex-direction: column; height: 100%; }
-  .eppb-card__inner--row { flex-direction: row; }
-  .eppb-card__text { display: flex; flex-direction: column; gap: 6px; }
-  .eppb-card--tall .eppb-card__text { padding: 20px 20px 8px; }
-  .eppb-card--sm .eppb-card__text { padding: 20px 8px 20px 20px; flex: 1 1 55%; }
-  .eppb-card__icon { margin-bottom: 8px; flex-shrink: 0; }
-  .eppb-card__title {
-    font-family: var(--font-heading); font-size: 22px; font-weight: 700; line-height: 1.3;
-    color: var(--heading-dark); margin: 0 0 6px;
+  .eppx-gateway-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image: radial-gradient(rgba(255,255,255,.3) .6px, transparent .6px);
+    background-size: 22px 22px;
+    pointer-events: none;
   }
-  .eppb-card--sm .eppb-card__title { font-size: 17px; }
-  .eppb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
-  .eppb-card--sm .eppb-card__desc { font-size: 13px; }
 
-  .eppb-card__img {
-    display: flex; align-items: flex-end; justify-content: center; overflow: hidden;
-    background: radial-gradient(125% 80% at 50% 100%, rgba(55,93,251,.07), transparent 72%);
+  .eppx-gateway {
+    position: relative;
+    z-index: 1;
+    width: min(1140px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 104px 0;
   }
-  .eppb-card--tall .eppb-card__img { flex: 1; padding: 0 12px; min-height: 0; }
-  .eppb-card--sm .eppb-card__img { flex: 0 0 42%; padding: 8px 8px 0 0; }
-  .eppb-card__img :global(svg) {
-    width: 100%; height: auto; max-width: none;
-    filter: drop-shadow(0 8px 16px rgba(31,52,128,.12));
-    transition: transform 0.4s cubic-bezier(.4,0,.2,1), filter 0.4s ease;
-  }
-  .eppb-card:hover .eppb-card__img :global(svg) {
-    transform: translateY(-6px) scale(1.05); filter: drop-shadow(0 14px 22px rgba(31,52,128,.18));
-    animation: eppbFloat 2.2s ease-in-out infinite;
-  }
-  @keyframes eppbFloat { 0%,100% { transform: translateY(-6px) scale(1.05); } 50% { transform: translateY(-12px) scale(1.05); } }
 
-  @media (max-width: 1024px) {
-    .eppb-section { padding: 60px 0 48px; }
-    .eppb-title { font-size: 36px; }
-    .eppb-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
-    .eppb-pos-0 { grid-column: 1 / -1; grid-row: auto; }
-    .eppb-pos-1, .eppb-pos-2, .eppb-pos-3, .eppb-pos-4 { grid-column: auto; grid-row: auto; }
-    [data-layout="b"] .eppb-pos-0, [data-layout="c"] .eppb-pos-0 { grid-column: 1 / -1; }
-    [data-layout="b"] .eppb-pos-1, [data-layout="b"] .eppb-pos-2, [data-layout="b"] .eppb-pos-3, [data-layout="b"] .eppb-pos-4,
-    [data-layout="c"] .eppb-pos-1, [data-layout="c"] .eppb-pos-2, [data-layout="c"] .eppb-pos-3, [data-layout="c"] .eppb-pos-4 { grid-column: auto; grid-row: auto; }
-    .eppb-card--tall .eppb-card__inner { flex-direction: row; }
-    .eppb-card--tall .eppb-card__text { flex: 1; }
-    .eppb-card--tall .eppb-card__img { flex: 0 0 36%; padding: 12px; }
+  .eppx-gateway__header {
+    max-width: 790px;
+    margin: 0 auto 54px;
+    text-align: center;
   }
+
+  .eppx-gateway__header > span,
+  .eppx-account__header > span {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: #8da2ff;
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .eppx-gateway__header h2,
+  .eppx-account__header h2 {
+    margin: 0;
+    font: 500 clamp(36px, 4.6vw, 56px)/1.05 var(--font-heading);
+    letter-spacing: -.045em;
+  }
+
+  .eppx-gateway__header h2 { color: #f7f7fb; }
+  .eppx-gateway__header h2 em { color: #afa3ff; font-style: normal; }
+  .eppx-gateway__header p,
+  .eppx-account__header p {
+    max-width: 700px;
+    margin: 20px auto 0;
+    font: 400 17px/1.65 var(--font-body);
+  }
+  .eppx-gateway__header p { color: rgba(255,255,255,.58); }
+
+  .eppx-gateway__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border-top: 1px solid #3b3a47;
+    border-left: 1px solid #3b3a47;
+  }
+
+  .eppx-gateway__card {
+    grid-column: span 2;
+    min-height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 34px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+    background: rgba(9, 10, 16, .76);
+  }
+  .eppx-gateway__card:nth-child(n + 4) { grid-column: span 3; }
+
+  .eppx-gateway__index {
+    color: #777889;
+    font: 650 11px/1 var(--font-body);
+    letter-spacing: .08em;
+  }
+  .eppx-gateway__card h3 {
+    margin: 18px 0 10px;
+    color: #fff;
+    font: 500 25px/1.15 var(--font-heading);
+  }
+  .eppx-gateway__card p {
+    margin: 0;
+    color: rgba(255,255,255,.56);
+    font: 400 15px/1.65 var(--font-body);
+  }
+
+  .eppx-gateway__visual {
+    min-height: 102px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+  }
+  .eppx-gateway__visual span {
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    background: rgba(255,255,255,.05);
+    color: #b9bcc8;
+    font: 600 11px/1 var(--font-body);
+  }
+  .eppx-gateway__visual span.is-active {
+    border-color: rgba(141,162,255,.5);
+    background: rgba(55,93,251,.18);
+    color: #dce3ff;
+  }
+
+  .eppx-account {
+    width: min(1140px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 104px 0 88px;
+  }
+
+  .eppx-account__header {
+    max-width: 850px;
+    margin: 0 auto 42px;
+    text-align: center;
+  }
+  .eppx-account__header > span { color: #375dfb; }
+  .eppx-account__header h2 { color: var(--heading-dark); }
+  .eppx-account__header p { color: var(--subheading-gray); }
+
+  .eppx-account__quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  .eppx-account__cell {
+    min-height: 360px;
+    padding: 46px;
+  }
+  .eppx-account__cell:nth-child(odd) { border-right: 1px solid #e5e7eb; }
+  .eppx-account__cell:nth-child(n + 3) { border-top: 1px solid #e5e7eb; }
+
+  .eppx-account__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .eppx-account__tag {
+    margin-bottom: 18px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #eef2ff;
+    color: #375dfb;
+    font: 650 12px/1 var(--font-body);
+  }
+  .eppx-account__copy h3 {
+    margin: 0 0 14px;
+    color: var(--heading-dark);
+    font: 500 30px/1.15 var(--font-heading);
+    letter-spacing: -.03em;
+  }
+  .eppx-account__copy p {
+    margin: 0 0 22px;
+    color: var(--subheading-gray);
+    font: 400 16px/1.65 var(--font-body);
+  }
+  .eppx-account__copy strong {
+    color: #344054;
+    font: 650 13px/1.4 var(--font-body);
+  }
+
+  .eppx-account__media {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(145deg, #f4f7ff, #fff);
+  }
+
+  .eppx-settings {
+    width: min(100%, 390px);
+    padding: 20px;
+    border: 1px solid #dfe5f0;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 22px 50px rgba(35, 50, 88, .12);
+    font-family: var(--font-body);
+  }
+  .eppx-settings__top,
+  .eppx-settings label,
+  .eppx-settings__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .eppx-settings__top {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e8edf5;
+    color: #202939;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .eppx-settings__top i {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    background: #375dfb;
+  }
+  .eppx-settings label,
+  .eppx-settings__row {
+    margin-top: 12px;
+    padding: 12px 13px;
+    border: 1px solid #e8edf5;
+    border-radius: 10px;
+    color: #697386;
+    font-size: 11px;
+  }
+  .eppx-settings label span { color: #202939; font-weight: 650; }
+  .eppx-settings small {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
+    color: #667085;
+    font-size: 10px;
+  }
+  .eppx-settings small i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+  .eppx-settings__row b {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: #eafaf3;
+    color: #087a51;
+    font-size: 9px;
+  }
+
+  .eppx-account__note {
+    max-width: 780px;
+    margin: 28px auto 0;
+    padding-left: 16px;
+    border-left: 3px solid #375dfb;
+    color: #667085;
+    font: 500 14px/1.6 var(--font-body);
+  }
+
+  @media (max-width: 900px) {
+    .eppx-gateway__grid { grid-template-columns: repeat(2, 1fr); }
+    .eppx-gateway__card, .eppx-gateway__card:nth-child(n + 4) { grid-column: span 1; }
+    .eppx-gateway__card:last-child { grid-column: 1 / -1; }
+  }
+
   @media (max-width: 767px) {
-    .eppb-title { font-size: 28px; }
-    .eppb-subtitle { font-size: 15px; }
-    .eppb-nav { flex-direction: column; width: 100%; max-width: 300px; border-radius: 16px; }
-    .eppb-tab { border-radius: 12px; }
-    .eppb-grid { grid-template-columns: 1fr; }
-    .eppb-pos-0, .eppb-pos-1, .eppb-pos-2, .eppb-pos-3, .eppb-pos-4,
-    [data-layout="b"] .eppb-pos-0, [data-layout="b"] .eppb-pos-1, [data-layout="b"] .eppb-pos-2, [data-layout="b"] .eppb-pos-3, [data-layout="b"] .eppb-pos-4,
-    [data-layout="c"] .eppb-pos-0, [data-layout="c"] .eppb-pos-1, [data-layout="c"] .eppb-pos-2, [data-layout="c"] .eppb-pos-3, [data-layout="c"] .eppb-pos-4 { grid-column: 1; grid-row: auto; }
-    .eppb-card--sm .eppb-card__inner, .eppb-card--tall .eppb-card__inner { flex-direction: row; }
-    .eppb-card--sm .eppb-card__text, .eppb-card--tall .eppb-card__text { padding: 14px 6px 14px 14px; flex: 1 1 60%; }
-    .eppb-card--sm .eppb-card__img, .eppb-card--tall .eppb-card__img { flex: 0 0 38%; padding: 4px 4px 0 0; align-items: flex-end; justify-content: flex-end; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .eppb-card { animation: none !important; opacity: 1; transform: none; }
-    .eppb-card:hover::after { animation: none !important; }
-    .eppb-card:hover .eppb-card__img :global(svg) { animation: none !important; transform: none; }
+    .eppx-gateway, .eppx-account { width: min(100% - 32px, 1140px); padding: 72px 0; }
+    .eppx-gateway__header h2, .eppx-account__header h2 { font-size: 34px; }
+    .eppx-gateway__grid { grid-template-columns: 1fr; }
+    .eppx-gateway__card, .eppx-gateway__card:nth-child(n + 4), .eppx-gateway__card:last-child {
+      grid-column: 1;
+      min-height: 300px;
+      padding: 28px;
+    }
+    .eppx-account__quad { grid-template-columns: 1fr; }
+    .eppx-account__cell { min-height: auto; padding: 34px 24px; border-right: 0 !important; border-top: 1px solid #e5e7eb; }
+    .eppx-account__cell:first-child { border-top: 0; }
+    .eppx-account__media { min-height: 320px; }
+    .eppx-account__copy:nth-child(4) { grid-row: 3; }
+    .eppx-account__media:nth-child(3) { grid-row: 4; }
   }
 </style>

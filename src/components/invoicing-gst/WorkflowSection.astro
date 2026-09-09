@@ -1,0 +1,123 @@
+---
+const cards = [
+  {
+    eyebrow: "1 · Configure",
+    title: "Set the invoice rules before ticket sales open",
+    desc: "Choose the document title, Bill To label, organizer identity, invoice-number label, prefix, starting number, buyer fields, and tax configuration your finance team has approved.",
+    type: "settings",
+  },
+  {
+    eyebrow: "2 · Request and collect",
+    title: "Collect billing details in the registration journey",
+    desc: "When the buyer requests an invoice, show the configured company, tax-ID, and billing-address fields in the same supported journey instead of chasing those details after payment.",
+    type: "buyer",
+  },
+  {
+    eyebrow: "3 · Complete the order",
+    title: "Keep ticket, buyer, amount, currency, and tax context together",
+    desc: "Apply the organizer-defined tax names and percentage rates in inclusive or exclusive price mode, then retain that breakdown with the paid registration or ticket order.",
+    type: "order",
+  },
+  {
+    eyebrow: "4 · Generate and deliver",
+    title: "Create a numbered PDF that stays connected to its source order",
+    desc: "Build the available invoice PDF from the order data, include the configured organizer and buyer details, and send it through the supported invoice-delivery path.",
+    type: "delivery",
+  },
+] as const;
+---
+
+<section id="ig-workflow" class="igw-shell" aria-labelledby="igw-title">
+  <div class="igw-section">
+    <div class="igw-header">
+      <div class="igw-eyebrow">
+        <span class="igw-eyebrow-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z" fill="#4f8cff"></path><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1-1.5-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#b08bff"></path></svg></span>
+        <span>One order-linked workflow</span>
+      </div>
+      <h2 id="igw-title" class="igw-title">From buyer request to <span>delivered invoice</span></h2>
+    </div>
+
+    <div class="igw-cards">
+      {cards.map((card, index) => (
+        <article class="igw-card" style={`--card-index:${index}`}>
+          <div class="igw-card__content">
+            <span class="igw-card__eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+            <a href="/book-a-demo/">See it in a demo</a>
+          </div>
+          <div class="igw-card__media">
+            <div class:list={["igw-ui", `igw-ui--${card.type}`]} role="img" aria-label={`${card.title} in EventHex`}>
+              <div class="igw-ui__bar"><i></i><i></i><i></i><strong>{card.type === "settings" ? "Invoice settings" : card.type === "buyer" ? "Buyer details" : card.type === "order" ? "Order EVT-0248" : "Invoice EVT-0248"}</strong></div>
+              {card.type === "settings" && <div class="igw-ui__body igw-ui__form"><label>Document title <span>Tax Invoice</span></label><label>Invoice prefix <span>EVT-</span></label><label>Starting number <span>0248</span></label><label>Tax label <span>VAT</span></label></div>}
+              {card.type === "buyer" && <div class="igw-ui__body igw-ui__form"><label>Company name <span>Northstar Ltd</span></label><label>Tax ID <span>TRN 100•••••03</span></label><label>Billing address <span>Dubai, United Arab Emirates</span></label><div class="igw-ui__check">✓ Invoice requested</div></div>}
+              {card.type === "order" && <div class="igw-ui__body igw-ui__receipt"><div><span>Conference pass × 3</span><b>$600.00</b></div><div><span>VAT 5%</span><b>$30.00</b></div><div class="igw-ui__total"><span>Order total</span><b>$630.00</b></div><small>Tax rule supplied by organizer</small></div>}
+              {card.type === "delivery" && <div class="igw-ui__body igw-ui__delivery"><div class="igw-ui__pdf">PDF</div><strong>EVT-0248.pdf</strong><span>Northstar Ltd · 3 tickets</span><div class="igw-ui__check">✓ Ready for configured email delivery</div></div>}
+            </div>
+          </div>
+        </article>
+      ))}
+      <div class="igw-spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const invoiceWorkflow = document.querySelector<HTMLElement>('.igw-shell');
+  const invoiceWorkflowHeader = invoiceWorkflow?.querySelector<HTMLElement>('.igw-header');
+  const invoiceWorkflowCards = invoiceWorkflow?.querySelectorAll<HTMLElement>('.igw-card');
+  const invoiceWorkflowLast = invoiceWorkflowCards?.[invoiceWorkflowCards.length - 1];
+  if (invoiceWorkflowHeader && invoiceWorkflowLast) {
+    let frame = 0;
+    const syncRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(invoiceWorkflowLast).top) || 0;
+      const release = Math.min(0, invoiceWorkflowLast.getBoundingClientRect().top - stickyTop);
+      invoiceWorkflowHeader.style.transform = `translateY(${release}px)`;
+    };
+    const queueRelease = () => { if (!frame) frame = requestAnimationFrame(syncRelease); };
+    window.addEventListener('scroll', queueRelease, { passive: true });
+    window.addEventListener('resize', queueRelease, { passive: true });
+    syncRelease();
+  }
+</script>
+
+<style is:global>
+  /* Speaker Management sticky narrative-card pattern. */
+  .igw-shell { width:100%; color:#fff; background:linear-gradient(180deg,#000 0,#08071b 180px,#0d0a2c 360px,transparent 560px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28),transparent 55%),#000; background-repeat:no-repeat; background-size:100% 100%,120% 120%; }
+  .igw-section { display:flex; flex-direction:column; align-items:center; width:100%; max-width:1140px; margin:0 auto; padding:4px 0 30px; }
+  .igw-header { position:sticky; top:69px; z-index:20; isolation:isolate; display:flex; flex-direction:column; align-items:center; gap:16px; width:min(94%,1050px); padding:24px 0; text-align:center; will-change:transform; }
+  .igw-header::before { content:""; position:absolute; z-index:-1; top:-1px; bottom:-28px; left:50%; width:100vw; transform:translateX(-50%); background:linear-gradient(180deg,rgba(0,0,0,.99),rgba(7,11,27,.98) 72%,rgba(7,11,27,0)); pointer-events:none; }
+  .igw-eyebrow { display:flex; align-items:center; gap:8px; width:fit-content; padding:6px 16px 6px 12px; border:1px solid rgba(255,255,255,.24); border-radius:99px; background:rgba(255,255,255,.12); box-shadow:inset 0 1px rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35); backdrop-filter:blur(16px); color:#fff; font:500 15px/24px var(--font-body); }
+  .igw-eyebrow-icon { display:flex; width:16px; height:16px; }
+  .igw-eyebrow-icon svg { width:100%; height:100%; }
+  .igw-title { margin:0; color:#fff; font:500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing:-.03em; }
+  .igw-title span { color:#afa3ff; }
+  .igw-cards { --igw-stack-top:300px; position:relative; width:100%; padding:80px 0 50px; }
+  .igw-spacer { height:190px; }
+  .igw-card { position:sticky; top:calc(var(--igw-stack-top) + var(--card-index) * 20px); z-index:var(--card-index); display:flex; align-items:stretch; height:500px; margin-bottom:60px; border:1px solid rgba(255,255,255,.08); border-radius:20px; overflow:hidden; background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f; }
+  .igw-card__content { flex:0 0 45%; display:flex; flex-direction:column; justify-content:center; gap:16px; padding:40px; }
+  .igw-card__eyebrow { display:inline-flex; align-self:flex-start; padding:7px 13px; border:1px solid rgba(175,163,255,.28); border-radius:99px; color:#afa3ff; background:rgba(175,163,255,.1); font:600 12px/1.2 var(--font-body); }
+  .igw-card__content h3 { margin:0; color:#e7e4fa; font:500 32px/1.2 var(--font-heading); }
+  .igw-card__content p { margin:0; color:rgba(255,255,255,.58); font:400 16px/1.65 var(--font-body); }
+  .igw-card__content a { display:inline-flex; align-self:flex-start; margin-top:8px; padding:12px 26px; border:1px solid rgba(255,255,255,.14); border-radius:99px; color:#fff; background:rgba(255,255,255,.06); font:500 15px/1 var(--font-body); text-decoration:none; }
+  .igw-card__media { flex:1; display:flex; align-items:center; justify-content:center; margin:16px 16px 16px 0; padding:24px; border:1px solid rgba(255,255,255,.16); border-radius:16px; overflow:hidden; background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04)); box-shadow:inset 0 1px rgba(255,255,255,.12); backdrop-filter:blur(24px); }
+  .igw-ui { width:100%; max-width:530px; min-height:360px; overflow:hidden; border:1px solid rgba(255,255,255,.2); border-radius:16px; color:#22272f; background:#fff; box-shadow:0 24px 55px rgba(0,0,0,.34); }
+  .igw-ui__bar { display:flex; align-items:center; gap:8px; height:54px; padding:0 18px; color:#fff; background:#171a21; font:700 13px/1 var(--font-body); }
+  .igw-ui__bar i { width:8px; height:8px; border-radius:50%; background:#ff796f; }
+  .igw-ui__bar i:nth-child(2) { background:#ffd15c; } .igw-ui__bar i:nth-child(3) { background:#64d98b; } .igw-ui__bar strong { margin-left:8px; }
+  .igw-ui__body { padding:28px; }
+  .igw-ui__form { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .igw-ui__form label { display:flex; flex-direction:column; gap:9px; color:#7b8495; font:700 11px/1.2 var(--font-body); letter-spacing:.06em; text-transform:uppercase; }
+  .igw-ui__form label span { min-height:46px; padding:14px; border:1px solid #e3e7ee; border-radius:10px; color:#272c35; background:#f8f9fb; font:600 14px/1.2 var(--font-body); letter-spacing:0; text-transform:none; }
+  .igw-ui__check { grid-column:1/-1; padding:12px 14px; border-radius:10px; color:#187747; background:#e9fbf0; font:700 13px/1.3 var(--font-body); }
+  .igw-ui__receipt { display:flex; flex-direction:column; gap:18px; }
+  .igw-ui__receipt > div { display:flex; justify-content:space-between; gap:20px; padding-bottom:18px; border-bottom:1px solid #e5e8ef; color:#5f6878; font:500 15px/1.4 var(--font-body); }
+  .igw-ui__receipt b { color:#20252f; }.igw-ui__receipt .igw-ui__total { margin-top:18px; padding:18px; border:0; border-radius:12px; color:#20252f; background:#f0f3ff; font-size:18px; }
+  .igw-ui__receipt small { color:#7d8696; font:500 12px/1.4 var(--font-body); }
+  .igw-ui__delivery { display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; }
+  .igw-ui__pdf { display:grid; place-items:center; width:90px; height:112px; border-radius:8px; color:#fff; background:linear-gradient(135deg,#375dfb,#7948ff); font:800 18px/1 var(--font-body); box-shadow:0 18px 36px rgba(55,93,251,.25); }
+  .igw-ui__delivery strong { font:700 20px/1.2 var(--font-heading); }.igw-ui__delivery span { color:#727b8b; font:500 14px/1.4 var(--font-body); }.igw-ui__delivery .igw-ui__check { width:100%; }
+  @media (max-width:1024px) { .igw-section { padding-inline:20px; } .igw-cards { --igw-stack-top:292px; } .igw-card { height:450px; } .igw-card__content { flex-basis:50%; } .igw-card__content h3 { font-size:28px; } }
+  @media (max-width:767px) { .igw-section { padding:16px 20px 30px; } .igw-header { position:relative; top:auto; width:100%; } .igw-cards { padding-top:42px; } .igw-card { position:relative; top:auto; flex-direction:column; height:auto; min-height:690px; } .igw-card__content { flex:none; padding:20px 20px 0; } .igw-card__media { flex:none; min-height:330px; margin:12px; padding:12px; } .igw-card__content h3 { font-size:24px; } .igw-card__content p { font-size:14px; line-height:1.5; } .igw-ui { min-height:300px; } .igw-ui__body { padding:18px; } .igw-ui__form { grid-template-columns:1fr; gap:10px; } .igw-spacer { display:none; } }
+</style>
