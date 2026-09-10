@@ -1,71 +1,42 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/event-gamification/HeroSection.astro";
-import StatsSection from "../components/event-gamification/StatsSection.astro";
-import BentoGrid from "../components/event-gamification/BentoGrid.astro";
-import FeatureCards from "../components/event-gamification/FeatureCards.astro";
-import HowItWorksSection from "../components/event-gamification/HowItWorksSection.astro";
-import CTASection from "../components/event-gamification/CTASection.astro";
-import CoordinationTools from "../components/event-gamification/CoordinationTools.astro";
-import FaqSection from "../components/event-gamification/FaqSection.astro";
+import GamificationRevamp from "../components/event-gamification/GamificationRevamp.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Event Gamification Software — Leaderboards & Rewards | EventHex";
-const description = "Event gamification software with leaderboards, badges, challenges, and lucky draws. Boost attendee participation and track sponsor ROI with real-time engagement data.";
+const title = "Event Gamification Software & App | EventHex";
+const description = "Create app-action challenges, points, leaderboards, attendee progress, milestone and position rewards, and points-threshold draws for your event.";
+
+const faqs = [
+  { q: "What attendee actions can EventHex reward?", a: "The current action contract supports profile completion, connections, messaging, AI chat, gallery activity, session rating, live Q&A, speaker bookmarking, and active-user actions. Exact availability depends on the event app setup." },
+  { q: "Can a challenge repeat?", a: "Yes. A challenge can be single or recurring. Recurring challenges can use a daily cap and cooldown; single challenges can require the underlying action more than once." },
+  { q: "Can we schedule a challenge?", a: "Yes. Optional start and end dates control when the challenge is listed as available to attendees." },
+  { q: "Can the leaderboard be anonymous?", a: "Yes. Organizer settings include anonymous mode, visibility, displayed rank count, refresh policy, and tie-break behavior." },
+  { q: "What reward types are supported?", a: "EventHex supports position rewards for leaderboard places and milestone rewards for reaching a points threshold. Prize fulfillment and terms stay with the organizer." },
+  { q: "How does the lucky draw work?", a: "An organizer creates a points-threshold draw and runs a server-side winner selection among attendees who are eligible at draw time. Confirm legal and event rules before use." },
+];
 
 const softwareSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "EventHex Event Gamification Platform",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web, iOS, Android",
-  url: "https://eventhex.ai/event-gamification/",
-  description: "Boost event engagement with challenges, leaderboards, lucky draws, and rewards. Track sponsor ROI with QR-verified data.",
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
-  featureList: [
-    "Custom Challenge Builder",
-    "Real-Time Leaderboards",
-    "Lucky Draw System",
-    "QR Code Verification",
-    "Master Game Templates",
-    "Wall of Fame",
-    "Sponsor ROI Tracking",
-    "Engagement Heatmaps",
-    "Milestone Rewards",
-  ],
+  "@context": "https://schema.org", "@type": "SoftwareApplication",
+  name: "EventHex Event Gamification Software", applicationCategory: "BusinessApplication",
+  operatingSystem: "Web, iOS, Android", url: "https://eventhex.ai/event-gamification/", description,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: ["App-action challenges", "Configurable point rules", "Attendee progress and point history", "Event leaderboards", "Position and milestone rewards", "Points-threshold draws"],
 };
+const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(({ q, a }) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })) };
 ---
 
 <MarketingLayout
-  title={title}
-  description={description}
+  {title}
+  {description}
   canonical="https://eventhex.ai/event-gamification/"
-  ogImage={ogImage}
+  footerCtaEyebrow="Map the Earning Loop"
+  footerCtaTitle="Bring Your Attendee Challenge Plan to the Demo"
+  footerCtaSubtitle="Show us the actions, point rules, schedule, leaderboard, rewards, and winner process you need. We'll map them to the EventHex workflow and flag unsupported triggers before launch."
+  footerCtaProofItems={["Supported app actions", "Configurable rules", "Organizer control"]}
+  footerCtaButtonText="Book a Demo"
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <GamificationRevamp {faqs} />
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
