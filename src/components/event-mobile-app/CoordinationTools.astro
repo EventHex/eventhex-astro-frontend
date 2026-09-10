@@ -1,163 +1,68 @@
 ---
 const cards = [
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3" stroke="#375DFB" stroke-width="2"/><path d="M5 20a7 7 0 0114 0" stroke="#375DFB" stroke-width="2" stroke-linecap="round"/><path d="M17 10l2 2 3-3" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    title: "AI-powered networking",
-    desc: "Match attendees by shared interests, industry, and goals with AI Smart Connect. Schedule meetings and message directly inside the app.",
-  },
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="2" width="14" height="20" rx="3" stroke="#375DFB" stroke-width="2"/><path d="M10 18h4" stroke="#375DFB" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="8" r="2" stroke="#375DFB" stroke-width="1.5"/></svg>`,
-    title: "Complete white-label control",
-    desc: "Your brand on every screen — from splash page to App Store listing. Configure home layout, widgets, and sponsor placements from the dashboard.",
-  },
-  {
-    icon: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6l7-3z" stroke="#375DFB" stroke-width="2" stroke-linejoin="round"/><path d="M9.5 12.5l1.8 1.8 3.2-3.6" stroke="#375DFB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
-    title: "Offline-ready engagement",
-    desc: "Core features work without internet. Agenda, maps, and profiles are cached locally and sync automatically when connectivity returns.",
-  },
+  { eyebrow: "Personal event day", title: "Keep the saved agenda close", desc: "Browse the programme by day, open session details, save sessions, and return to the selected agenda during the event.", image: "/images/live-polling-qa/app/attendee-mobile-app.png", alt: "EventHex attendee mobile-app workspace with agenda access", tint: "agenda", pill: "Saved sessions ready" },
+  { eyebrow: "Organizer updates", title: "Put important changes inside the app", desc: "Publish concise event notifications through the configured mobile channel so updates sit alongside the programme and event content.", image: "/images/live-polling-qa/app/mobile-app-updates.png", alt: "EventHex mobile app showing organizer updates for attendees", tint: "updates", pill: "Update published" },
+  { eyebrow: "Resilience where implemented", title: "Use supported locally stored event data", desc: "Supported event, session, speaker, sponsor, profile, and networking views can use locally stored data. Network-dependent actions may still need connectivity.", image: "/images/live-polling-qa/app/mobile-app-analytics.png", alt: "EventHex mobile-app analytics workspace showing attendee activity", tint: "resilience", pill: "Supported views available" },
 ];
 ---
 
 <section class="emac-full">
   <div class="emac-full__inner">
-    <div class="emac-full__header">
-      <span class="emac-full__tag animate-on-scroll" data-animation="fadeIn">Why Event Organizers Choose EventHex Mobile App</span>
-      <h2 class="emac-full__title animate-on-scroll" data-animation="fadeInUp">Seamless Mobile <b>Event Experience</b></h2>
-      <p class="emac-full__desc animate-on-scroll" data-animation="fadeInUp">Keep attendee networking, live engagement, sponsor visibility, and offline access aligned without adding more tools to the event-day stack.</p>
-    </div>
+    <header class="emac-full__header animate-on-scroll" data-animation="fadeInUp">
+      <span class="emac-full__tag">During the event</span>
+      <h2 class="emac-full__title">Guide the day without <span>overpromising connectivity</span></h2>
+      <p class="emac-full__desc">Keep saved sessions, organizer updates, and supported cached information within the attendee experience—and test offline-critical views on the release build.</p>
+    </header>
 
-    <div class="emac-full__cards">
-      {cards.map((card) => (
-        <div class="emac-full__card animate-on-scroll" data-animation="fadeInUp">
-          <div class="emac-full__card-icon" set:html={card.icon}></div>
-          <h3 class="emac-full__card-title">{card.title}</h3>
-          <p class="emac-full__card-desc">{card.desc}</p>
-        </div>
+    <div class="emac-full__grid animate-on-scroll" data-animation="fadeInUp">
+      {cards.map((card, index) => (
+        <article class:list={["emac-full__row", { "emac-full__row--reverse": index % 2 === 1 }]}>
+          <div class="emac-full__cell emac-full__visual">
+            <div class={`emac-full__stage emac-full__stage--${card.tint}`}>
+              <img src={card.image} width="1263" height="697" alt={card.alt} loading="lazy" decoding="async" />
+              <span class="emac-full__status"><i></i>{card.pill}</span>
+            </div>
+          </div>
+          <div class="emac-full__cell emac-full__content">
+            <span class="emac-full__eyebrow">{card.eyebrow}</span>
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+          </div>
+        </article>
       ))}
     </div>
   </div>
 </section>
 
 <style is:global>
-  .emac-full {
-    width: 100%;
-    margin: 0;
-    padding: 72px 0;
-    background: #000312 url('https://cms.eventhex.ai/wp-content/uploads/2025/03/bg.svg') center / cover no-repeat;
-  }
-
-  .emac-full__inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 48px;
-  }
-
-  .emac-full__header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-    max-width: 680px;
-  }
-
-  .emac-full__tag {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    color: #afa3ff;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .emac-full__title {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: #fff;
-    margin: 0;
-  }
-
-  .emac-full__title b { font-weight: 700; }
-
-  .emac-full__desc {
-    font-family: var(--font-body);
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0;
-  }
-
-  .emac-full__cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-  }
-
-  .emac-full__card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: background 0.3s, border-color 0.3s, transform 0.3s;
-  }
-
-  .emac-full__card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(175, 163, 255, 0.35);
-    transform: translateY(-2px);
-  }
-
-  .emac-full__card-icon {
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(55, 93, 251, 0.15);
-    border-radius: 12px;
-  }
-
-  .emac-full__card-title {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #fff;
-    margin: 0;
-  }
-
-  .emac-full__card-desc {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-  }
-
-  @media (max-width: 1024px) {
-    .emac-full { padding: 64px 0; }
-    .emac-full__title { font-size: 36px; }
-  }
-
-  @media (max-width: 767px) {
-    .emac-full { padding: 52px 0; }
-    .emac-full__title { font-size: 30px; line-height: 1.15; }
-    .emac-full__desc { font-size: 15px; }
-    .emac-full__cards { grid-template-columns: 1fr; }
-  }
+  .emac-full { width:100%; padding:88px 24px 96px; background:transparent; }
+  .emac-full__inner { width:min(1120px,100%); margin:0 auto; }
+  .emac-full__header { max-width:900px; margin:0 auto 58px; text-align:center; }
+  .emac-full__tag { display:block; margin-bottom:16px; color:#375dfb; font:700 12px/1.4 var(--font-body); letter-spacing:.12em; text-transform:uppercase; }
+  .emac-full__title { margin:0; color:#182230; font:500 clamp(38px,4.6vw,56px)/1.08 var(--font-heading); letter-spacing:-.035em; }
+  .emac-full__title span { background:linear-gradient(98deg,#434a58,#a1a5ad); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .emac-full__desc { max-width:760px; margin:18px auto 0; color:#667085; font:400 17px/1.6 var(--font-body); }
+  .emac-full__grid { overflow:hidden; border:1px solid #e5e7eb; border-radius:18px; background:rgba(255,255,255,.25); }
+  .emac-full__row { position:relative; display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid #e5e7eb; }
+  .emac-full__row:last-child { border-bottom:0; }
+  .emac-full__cell { min-width:0; padding:56px; display:flex; flex-direction:column; justify-content:center; }
+  .emac-full__row .emac-full__cell:first-child { border-right:1px solid #e5e7eb; }
+  .emac-full__row--reverse .emac-full__visual { order:2; border-right:0!important; }
+  .emac-full__row--reverse .emac-full__content { order:1; border-right:1px solid #e5e7eb; }
+  .emac-full__visual { align-items:center; }
+  .emac-full__stage { position:relative; width:100%; min-height:330px; display:flex; align-items:flex-end; justify-content:center; padding:54px 24px 0; border-radius:22px; overflow:hidden; }
+  .emac-full__stage--agenda { background:linear-gradient(180deg,#fff0bd,#fff8df 48%,#f5f6f9); }
+  .emac-full__stage--updates { background:linear-gradient(180deg,#d6f3e3,#eaf9f0 48%,#f5f6f9); }
+  .emac-full__stage--resilience { background:linear-gradient(180deg,#dfe5ff,#eef1ff 48%,#f5f6f9); }
+  .emac-full__stage img { display:block; max-width:100%; max-height:300px; width:auto; height:auto; object-fit:contain; border:1px solid #dfe4ec; border-radius:14px; box-shadow:0 18px 36px rgba(31,52,128,.14); animation:emacShotFloat 6s ease-in-out infinite; transition:transform .45s ease,box-shadow .45s ease; }
+  .emac-full__stage:hover img { transform:translateY(-6px) scale(1.02); box-shadow:0 26px 52px rgba(31,52,128,.2); animation-play-state:paused; }
+  .emac-full__status { position:absolute; top:18px; right:18px; display:flex; align-items:center; gap:8px; padding:10px 13px; border:1px solid #d4ddea; border-radius:12px; background:rgba(255,255,255,.95); color:#344054; font:700 12px var(--font-body); box-shadow:0 12px 24px rgba(31,52,128,.1); }
+  .emac-full__status i { width:8px; height:8px; border-radius:50%; background:#14b87a; box-shadow:0 0 0 4px rgba(20,184,122,.12); }
+  .emac-full__eyebrow { color:#5d3ec8; font:700 13px/1.4 var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+  .emac-full__content h3 { margin:22px 0 18px; max-width:440px; color:#182230; font:500 clamp(34px,4vw,48px)/1.05 var(--font-heading); letter-spacing:-.035em; }
+  .emac-full__content p { margin:0; color:#5f6b7c; font:400 17px/1.65 var(--font-body); }
+  @keyframes emacShotFloat { 50% { transform:translateY(-7px); } }
+  @media(max-width:900px){.emac-full__cell{padding:38px}.emac-full__stage{min-height:280px}.emac-full__content h3{font-size:38px}}
+  @media(max-width:700px){.emac-full{padding:64px 18px 72px}.emac-full__header{margin-bottom:38px}.emac-full__title{font-size:34px}.emac-full__desc{font-size:15px}.emac-full__row{grid-template-columns:1fr}.emac-full__row .emac-full__cell:first-child,.emac-full__row--reverse .emac-full__content{border-right:0}.emac-full__row--reverse .emac-full__visual,.emac-full__row--reverse .emac-full__content{order:initial}.emac-full__visual{border-bottom:1px solid #e5e7eb}.emac-full__cell{padding:26px}.emac-full__stage{min-height:250px;padding:54px 12px 0}.emac-full__content{padding:34px 26px 40px}.emac-full__content h3{font-size:32px}.emac-full__content p{font-size:15px}}
+  @media(prefers-reduced-motion:reduce){.emac-full *{animation:none!important;transition:none!important}}
 </style>
