@@ -1,71 +1,23 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/badge-certificate-designer/HeroSection.astro";
-import StatsSection from "../components/badge-certificate-designer/StatsSection.astro";
-import BentoGrid from "../components/badge-certificate-designer/BentoGrid.astro";
-import FeatureCards from "../components/badge-certificate-designer/FeatureCards.astro";
-import HowItWorksSection from "../components/badge-certificate-designer/HowItWorksSection.astro";
-import CTASection from "../components/badge-certificate-designer/CTASection.astro";
-import CoordinationTools from "../components/badge-certificate-designer/CoordinationTools.astro";
-import FaqSection from "../components/badge-certificate-designer/FaqSection.astro";
+import BadgeCertificateRevamp from "../components/badge-certificate-designer/BadgeCertificateRevamp.astro";
 
+const title = "Badge & Certificate Designer | EventHex";
+const description = "Design data-aware event badges and certificates with attendee fields, QR controls, audience rules, printing, and delivery workflows.";
 const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Badge & Certificate Designer — Visual Editor & On-Site Printing | EventHex";
-const description = "Design event badges and certificates with drag-and-drop editor, QR codes, dynamic data, on-site printing, and bulk PDF generation.";
-
-const softwareSchema = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  name: "EventHex Badge & Certificate Designer",
-  applicationCategory: "BusinessApplication",
-  operatingSystem: "Web",
-  url: "https://eventhex.ai/badge-certificate-designer/",
-  description: "Visual badge and certificate designer with drag-and-drop editor, QR codes, on-site printing, and bulk PDF generation for events.",
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
-  featureList: [
-    "Drag-and-Drop Badge Editor",
-    "100+ Badge Templates",
-    "QR Code Generation",
-    "Dynamic Data Fields",
-    "On-Site Badge Printing",
-    "Self-Service Kiosks",
-    "Certificate Templates",
-    "Bulk PDF Generation",
-    "Verification URLs",
-  ],
-};
+const faqs = [
+  ["Can we use registration form answers on a badge?", "Yes. The builder can load common and custom form fields alongside attendee, event, ticket, booth, and exhibitor fields. Output depends on the data being present."],
+  ["Can different ticket types use different designs?", "Yes. Badges and certificates support common or specific ticket and participant-type targeting. A specific rule must include at least one selected audience."],
+  ["Can a badge contain a QR code?", "Yes. The QR element supports size, color, padding, and margin controls. Test the final printed QR with the exact scanner and media."],
+  ["Can we print badges in bulk?", "The CMS supports selecting registrations and producing badge outputs with print/download counting. Test the exact printer workflow before the event."],
+  ["How can attendees receive certificates?", "Verified paths include CMS download/generation, customized email workflows, attendee-app download, and share-token links where enabled."],
+  ["Are there more than 100 templates or guaranteed printer compatibility?", "Those claims were not verified. Choose the actual layout and test the exact printer, driver, browser, and stock."],
+];
+const softwareSchema = {"@context":"https://schema.org","@type":"SoftwareApplication",name:"EventHex Badge & Certificate Designer",applicationCategory:"BusinessApplication",operatingSystem:"Web",url:"https://eventhex.ai/badge-certificate-designer/",description,creator:{"@type":"Organization",name:"EventHex",url:"https://eventhex.ai"},featureList:["Data-bound badge layouts","Certificate generation","QR code controls","Audience rules","Badge print workflows","Certificate delivery"]};
+const faqSchema = {"@context":"https://schema.org","@type":"FAQPage",mainEntity:faqs.map(([name,text])=>({"@type":"Question",name,acceptedAnswer:{"@type":"Answer",text}}))};
 ---
-
-<MarketingLayout
-  title={title}
-  description={description}
-  canonical="https://eventhex.ai/badge-certificate-designer/"
-  ogImage={ogImage}
->
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
+<MarketingLayout title={title} description={description} canonical="https://eventhex.ai/badge-certificate-designer/" ogImage={ogImage}>
+  <BadgeCertificateRevamp />
   <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
