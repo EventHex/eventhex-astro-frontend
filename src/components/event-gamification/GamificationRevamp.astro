@@ -1,0 +1,1129 @@
+---
+interface Props { faqs: { q: string; a: string }[] }
+const { faqs } = Astro.props;
+
+const actions = [
+  ["Complete a profile", "Recognize profile setup or profile-picture completion."],
+  ["Build connections", "Reward a first connection or defined connection milestones."],
+  ["Use event messaging", "Recognize a sent message or AI chat action."],
+  ["Contribute or view photos", "Connect gallery participation to points."],
+  ["Engage with content", "Reward a session rating, live Q&A, or speaker bookmark."],
+  ["Return to the event", "Use the supported active-user trigger for recurring participation."],
+];
+const progress = [
+  ["See active challenges", "Display eligible challenges for this event and time window."],
+  ["Complete an action", "Record progress against the matching action key."],
+  ["Receive points", "Update the attendee total after validated completion."],
+  ["Review history", "Show where points came from and the resulting progress."],
+];
+const progressFeatures = [
+  { eyebrow: "01 · AVAILABLE NOW", title: "See active challenges", desc: "Display eligible challenges for this event and time window.", image: "/images/event-gamification/app/gamification-features-live.png", alt: "EventHex attendee gamification features available in the live event workspace", tint: "#fdefb8", chip: "Challenge active", meta: "Available in the event app" },
+  { eyebrow: "02 · ACTION RECORDED", title: "Complete an action", desc: "Record progress against the matching action key.", image: "/images/event-gamification/app/attendee-app-modules-live.png", alt: "EventHex attendee app modules showing connected activity", tint: "#dff5e9", chip: "Action verified", meta: "Progress recorded" },
+  { eyebrow: "03 · POINTS UPDATED", title: "Receive points", desc: "Update the attendee total after validated completion.", image: "/images/event-gamification/app/attendee-engagement-analytics.png", alt: "EventHex attendee engagement analytics showing participation and points progress", tint: "#e1e8ff", chip: "+100 points", meta: "Total updated" },
+  { eyebrow: "04 · HISTORY READY", title: "Review history", desc: "Show where points came from and the resulting progress.", image: "/images/event-gamification/app/platform-analytics-live.png", alt: "EventHex platform analytics used to review attendee and event progress", tint: "#f7e3ef", chip: "History ready", meta: "Every point explained" },
+];
+const leaderboard = [
+  ["Show or hide", "Control whether the event leaderboard is visible."],
+  ["Display top ranks", "Choose the supported top-10, 20, 50, or 100 view."],
+  ["Tie-break rule", "Use first-to-score, recent activity, or alphabetical ordering."],
+  ["Anonymous mode", "Hide attendee identity when the event requires it."],
+  ["Refresh policy", "Configure real-time, hourly, or daily update behavior."],
+  ["Manual adjustment", "Add or remove points with a recorded reason."],
+];
+const leaderboardCards = [
+  {
+    eyebrow: "Organizer control",
+    title: "Shape a leaderboard that fits your event",
+    desc: "Set whether rankings are visible, choose how many positions appear, and keep every leaderboard decision inside one connected organizer workflow.",
+    image: "/images/event-gamification/app/gamification-features-live.png",
+    alt: "EventHex organizer controls for gamification features and leaderboard visibility",
+    controls: leaderboard.slice(0, 2),
+  },
+  {
+    title: "Keep rankings fair, timely, and appropriate for the audience",
+    desc: "Choose the tie-break rule, protect attendee identity with anonymous mode, and decide how frequently positions refresh during the event.",
+    image: "/images/event-gamification/app/gamification-settings.png",
+    alt: "EventHex gamification settings for challenges, leaderboard, rewards, and points history",
+    controls: leaderboard.slice(2, 5),
+  },
+  {
+    title: "Review performance and make accountable adjustments",
+    desc: "See engagement activity alongside rank and points, then add or remove points with a recorded reason when an organizer needs to intervene.",
+    image: "/images/event-gamification/app/attendee-engagement-analytics.png",
+    alt: "EventHex attendee engagement analytics used to review leaderboard performance",
+    controls: leaderboard.slice(5),
+  },
+];
+const rewardModes = [
+  { id: "position", tab: "Position rewards", eyebrow: "01 · TOP FINISHERS", title: "Reward the people who finish on top", description: "Attach a prize name, description, value, or coupon to a leaderboard position.", image: "/images/event-gamification/app/gamification-settings.png", alt: "EventHex gamification settings with leaderboard, reward, and attendee mobile-app controls", tint: "#fff8dc", line: "#f0dfa6", best: "Best for ranked outcomes" },
+  { id: "milestone", tab: "Milestone rewards", eyebrow: "02 · BROADER PARTICIPATION", title: "Celebrate progress beyond the podium", description: "Unlock a named reward when an attendee reaches the configured points threshold.", image: "/images/event-gamification/app/attendee-engagement-analytics.png", alt: "EventHex attendee engagement analytics for reviewing participation milestones", tint: "#edf7ff", line: "#d4e7f7", best: "Best for progress goals" },
+];
+const drawSteps = [
+  { title: "Name the draw", desc: "Give the prize moment a clear identity attendees and organizers can recognize.", points: ["Draw name and description", "Event-specific prize moment", "Clear organizer context"], image: "/images/event-gamification/app/events-overview-live.png", alt: "EventHex events overview used to select the event context for a prize draw" },
+  { title: "Set the prize", desc: "Store the reward details before the draw opens.", points: ["Prize name", "Optional description", "Fulfillment stays with the organizer"], image: "/images/event-gamification/app/gamification-feature-settings.png", alt: "EventHex gamification feature settings with reward controls enabled" },
+  { title: "Choose the threshold", desc: "Define the minimum point total required for entry.", points: ["Points-based eligibility", "Only qualifying attendees", "One connected event score"], image: "/images/event-gamification/app/gamification-app-module.png", alt: "EventHex attendee gamification module used for points-based participation" },
+  { title: "Pick the winner", desc: "Run the server-side selection once the open draw is ready.", points: ["Validated eligible pool", "Single draw action", "Winner selected from qualifiers"], image: "/images/event-gamification/app/attendee-app-modules-live.png", alt: "EventHex attendee app modules used to manage the eligible event audience" },
+  { title: "Record the outcome", desc: "Keep the result and useful draw context together.", points: ["Winner record", "Eligible attendee count", "Draw date and time"], image: "/images/event-gamification/app/platform-analytics-live.png", alt: "EventHex platform analytics for reviewing recorded event outcomes" },
+];
+const useCases = [
+  { id: "conferences", label: "Conferences", title: "Reward the moments that move the room", description: "Connect networking, questions, and session feedback to one visible participation goal.", points: ["Session feedback", "Audience questions", "New connections"], image: "/images/event-gamification/app/attendee-engagement-analytics.png", alt: "EventHex attendee analytics showing engagement across conference activities" },
+  { id: "associations", label: "Associations", title: "Recognize participation across the community", description: "Give members a consistent reason to take part in recurring activities throughout the programme.", points: ["Profile completion", "Member connections", "Session ratings"], image: "/images/event-gamification/app/attendee-mobile-app-features.png", alt: "EventHex attendee mobile-app features for community participation" },
+  { id: "exhibitions", label: "Exhibitions", title: "Guide attendees towards valuable actions", description: "Encourage the app, content, and networking activity that helps attendees explore the event.", points: ["Gallery activity", "Attendee messages", "Profile discovery"], image: "/images/event-gamification/app/attendee-app-modules.png", alt: "EventHex attendee app modules configured for exhibition engagement" },
+  { id: "corporate", label: "Corporate events", title: "Turn learning into active participation", description: "Support learning and community goals with challenges that reinforce the programme, not distract from it.", points: ["Session attendance", "Live Q&A", "Peer connections"], image: "/images/event-gamification/app/gamification-features-live.png", alt: "EventHex gamification controls configured for corporate-event participation" },
+  { id: "tech", label: "Tech conferences", title: "Connect every programme touchpoint", description: "Bring sessions, questions, profiles, and networking into one challenge journey for technical audiences.", points: ["Speaker bookmarks", "Technical questions", "Networking actions"], image: "/images/event-gamification/app/platform-analytics-live.png", alt: "EventHex platform analytics covering conference programme activity" },
+  { id: "hybrid", label: "Hybrid events", title: "Keep one challenge open to every attendee", description: "Use mobile actions shared across the attendee experience so in-person and remote audiences can participate.", points: ["Mobile app activity", "Session feedback", "Attendee connections"], image: "/images/event-gamification/app/events-overview-live.png", alt: "EventHex multi-event overview supporting hybrid event participation" },
+];
+---
+
+<main class="egx-page">
+  <section class="egx-hero" id="hero">
+    <div class="egx-shell egx-hero__grid">
+      <div class="egx-hero__copy">
+        <span class="egx-kicker">Event gamification software</span>
+        <h1>Turn the attendee actions you value into a connected event challenge</h1>
+        <p>Reward meaningful app activity with configurable points, show progress and rank, and keep challenges, leaderboards, rewards, and draws tied to the event.</p>
+        <div class="egx-actions"><a class="egx-btn egx-btn--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">›</span></a><a class="egx-btn egx-btn--secondary" href="#workflow">See the workflow <span aria-hidden="true">›</span></a></div>
+        <ul class="egx-proof"><li>Real app actions</li><li>Clear earning rules</li><li>Visible progress</li></ul>
+      </div>
+      <div class="egx-hero__visual" aria-label="EventHex gamification configuration workflow">
+        <div class="egx-composite">
+          <figure class="egx-composite__rear">
+            <img src="/images/event-gamification/app/gamification-app-module.png" alt="EventHex attendee app module card with Gamification enabled" width="294" height="280" loading="eager" />
+          </figure>
+          <figure class="egx-composite__active">
+            <img src="/images/event-gamification/app/gamification-settings.png" alt="EventHex gamification settings alongside the attendee mobile-app preview" width="1263" height="698" loading="eager" />
+          </figure>
+          <span class="egx-composite__pill egx-composite__pill--status"><i></i> Gamification enabled</span>
+          <span class="egx-composite__pill egx-composite__pill--action">Choose attendee features</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="egx-rail" aria-label="Event gamification earning loop"><div class="egx-rail__inner"><span><b>Choose an action</b> attendees already take</span><span><b>Set rules &amp; award</b> points</span><span><b>Show progress &amp; rank</b> attendees</span><span><b>Rewards &amp; draws</b> in one workflow</span></div></section>
+
+  <section class="egx-problem" aria-labelledby="connected-game-title">
+    <div class="egx-shell egx-problem__grid">
+      <div class="egx-problem__copy">
+        <span class="egx-kicker">Connected gamification</span>
+        <h2 id="connected-game-title">Make the game part of the event—<span>not another disconnected platform</span></h2>
+        <p>Use actions attendees already complete inside the event app, then connect every validated action to points, progress, rank, and the configured outcome. Challenge rules stay tied to supported event-app actions and one attendee record.</p>
+        <div class="egx-problem__actions">
+          <a class="egx-problem__primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          <a class="egx-problem__secondary" href="#workflow">Explore the workflow <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <div class="egx-problem__visual" role="img" aria-label="EventHex attendee app modules and gamification feature settings">
+        <figure class="egx-problem__shot egx-problem__shot--modules"><img src="/images/event-gamification/app/attendee-app-modules.png" alt="EventHex attendee app modules configuration" width="1263" height="698" loading="lazy" decoding="async" /></figure>
+        <figure class="egx-problem__shot egx-problem__shot--settings"><img src="/images/event-gamification/app/gamification-feature-settings.png" alt="EventHex gamification challenge, leaderboard, and reward settings" width="1104" height="600" loading="lazy" decoding="async" /></figure>
+        <span class="egx-problem__status"><i aria-hidden="true">✓</i> Event app connected</span>
+        <span class="egx-problem__action">Configure &amp; launch</span>
+        <svg class="egx-problem__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="egx-actions-dark" id="actions" aria-labelledby="actions-title">
+    <header class="egx-actions-dark__heading"><span>Supported attendee actions</span><h2 id="actions-title">Build challenges around <em>interactions already inside the event app</em></h2><p>Use stable app-action triggers that the current mobile experience can complete.</p></header>
+    <div class="egx-actions-dark__grid-wrap"><div class="egx-action-grid">
+      {actions.map(([title, desc], i) => <article class="egx-action-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 60}>
+        {(i === 1 || i === 2) && <><span class="egx-action-card__petal egx-action-card__petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span><span class="egx-action-card__petal egx-action-card__petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span></>}
+        <span class="egx-action-card__number">{String(i + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{desc}</p>
+        <div class="egx-action-card__visual" aria-hidden="true">
+          {i === 0 ? <div class="egx-action-checklist"><strong>Profile challenge</strong><span><i></i>Basic details<b>Ready</b></span><span><i></i>Profile photo<b>+100</b></span><span><i></i>Completion<b>Verified</b></span></div>
+          : i === 1 ? <div class="egx-action-progress"><strong>Connection goal</strong><span>Connections made</span><i><b></b></i><span>Milestone progress</span><i><b></b></i></div>
+          : i === 2 ? <div class="egx-action-filters"><strong>Messaging actions</strong><div><span>Message</span><span class="is-active">AI chat</span><span>Reward</span></div></div>
+          : i === 3 ? <div class="egx-action-gallery"><strong>Gallery activity</strong><span><i></i>Photo contributed<b>+40</b></span><span><i></i>Gallery viewed<b>+15</b></span></div>
+          : i === 4 ? <div class="egx-action-bars"><strong>Content engagement</strong><span><i style="--bar:88%"></i></span><span><i style="--bar:68%"></i></span><span><i style="--bar:46%"></i></span></div>
+          : <div class="egx-action-trend"><strong>Recurring participation</strong><svg viewBox="0 0 260 104" preserveAspectRatio="none"><path d="M0 87 C35 80 46 62 73 68 S116 48 142 52 S178 26 201 34 S232 13 260 17"></path></svg></div>}
+        </div>
+      </article>)}
+    </div></div>
+  </section>
+
+  <section class="egx-workflow" id="workflow" aria-labelledby="workflow-title">
+    <div class="egx-workflow__container">
+      <div class="egx-workflow__left"><div class="egx-workflow__sticky">
+        <div class="egx-workflow__eyebrow">Challenge rules</div>
+        <h2 id="workflow-title">Configure what counts, when it counts, and how often</h2>
+        <p>Start with one supported action, then shape the earning rule around the event programme.</p>
+        <a class="egx-workflow__cta" href="/book-a-demo/">Map your challenge <span aria-hidden="true">→</span></a>
+      </div></div>
+      <div class="egx-workflow__right">
+        <article class="egx-rule-card"><div class="egx-rule-card__header"><div class="egx-rule-card__number">01</div><div><h3>Choose the features</h3><p>Enable the challenge, leaderboard, reward, points, and history experiences your attendees need.</p></div></div><div class="egx-rule-card__visual"><div class="egx-rule-shot"><img src="/images/event-gamification/app/gamification-feature-settings.png" alt="EventHex settings for attendee gamification features" width="1075" height="600" loading="lazy" /><span class="egx-rule-shot__status">Features selected</span><span class="egx-rule-shot__action">Save changes</span><i class="egx-rule-shot__cursor" aria-hidden="true"></i></div></div></article>
+        <article class="egx-rule-card"><div class="egx-rule-card__header"><div class="egx-rule-card__number">02</div><div><h3>Choose the mode</h3><p>Use a single challenge or allow recurring completion for the same supported action.</p></div></div><div class="egx-rule-card__visual"><figure class="egx-product-shot"><img src="/images/event-gamification/app/gamification-app-module.png" alt="EventHex attendee app module with gamification enabled" width="294" height="280" loading="lazy" /></figure></div></article>
+        <article class="egx-rule-card"><div class="egx-rule-card__header"><div class="egx-rule-card__number">03</div><div><h3>Define completion</h3><p>Set the required action count and the points awarded after validated completion.</p></div></div><div class="egx-rule-card__visual"><figure class="egx-product-shot"><img src="/images/event-gamification/app/attendee-mobile-app-features.png" alt="EventHex attendee mobile-app configuration where supported challenge actions are managed" width="580" height="600" loading="lazy" /></figure></div></article>
+        <article class="egx-rule-card"><div class="egx-rule-card__header"><div class="egx-rule-card__number">04</div><div><h3>Set availability and limits</h3><p>Add optional dates and tracks, then use daily caps and cooldowns for recurring challenges.</p></div></div><div class="egx-rule-card__visual"><figure class="egx-product-shot"><img src="/images/event-gamification/app/events-overview-live.png" alt="EventHex event overview showing event dates, status, and event context" width="1263" height="698" loading="lazy" /></figure></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="egx-progress" aria-labelledby="progress-title">
+    <div class="egx-progress__inner">
+      <header class="egx-progress__heading">
+        <h2 id="progress-title">Show what is available, what is complete, and how points were earned</h2>
+      </header>
+      <div class="egx-progress__bento">
+        {progressFeatures.map((item, i) => <article class:list={["egx-progress__row", { "egx-progress__row--reverse": i % 2 === 1 }]}>
+          <div class="egx-progress__cell egx-progress__visual" style={`--progress-tint:${item.tint}`}>
+            <div class="egx-progress__stage">
+              <img src={item.image} alt={item.alt} width="1263" height="698" loading="lazy" decoding="async" />
+              <span class="egx-progress__float egx-progress__float--top"><b>{item.chip}</b><small>{item.meta}</small></span>
+              <span class="egx-progress__float egx-progress__float--bottom"><i></i><b>{item.title}</b></span>
+            </div>
+          </div>
+          <div class="egx-progress__cell egx-progress__copy">
+            <span class="egx-progress__label">{item.eyebrow}</span>
+            <h3>{item.title}</h3>
+            <p>{item.desc}</p>
+          </div>
+        </article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="egx-choice" aria-labelledby="rewards-title">
+    <div class="egx-choice__inner">
+      <header class="egx-choice__header"><span class="egx-kicker">Rewards</span><h2 id="rewards-title">Recognize both top finishers<br />and milestone progress</h2><p>Configure the reward model that fits the event, then surface it in the attendee experience.</p></header>
+      <div class="egx-choice-tabs" role="tablist" aria-label="Reward models">{rewardModes.map((item, index) => <button class:list={["egx-choice-tab", { "is-active": index === 0 }]} type="button" role="tab" id={`reward-tab-${item.id}`} aria-controls={`reward-panel-${item.id}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-reward-tab={item.id}>{item.tab}</button>)}</div>
+      <div class="egx-choice-panels">{rewardModes.map((item, index) => <article class:list={["egx-choice-panel", { "is-active": index === 0 }]} id={`reward-panel-${item.id}`} role="tabpanel" aria-labelledby={`reward-tab-${item.id}`} data-reward-panel={item.id} hidden={index !== 0} style={`--reward-tint:${item.tint};--reward-line:${item.line}`}><div class="egx-choice-panel__copy"><span>{item.eyebrow}</span><h3>{item.title}</h3><p>{item.description}</p><b>{item.best}</b></div><figure class="egx-reward-preview"><img src={item.image} alt={item.alt} width="1263" height="698" loading="lazy" /></figure></article>)}</div>
+      <p class="egx-choice__note">Reward fulfillment, availability, tax, and terms remain the organizer's responsibility.</p>
+    </div>
+  </section>
+
+  <section class="egx-dark" aria-labelledby="leaderboard-title">
+    <div class="egx-dark__inner">
+      <header class="egx-heading egx-heading--dark">
+        <span class="egx-dark__tag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2-2.9 2.5-5Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1-1.5-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>Leaderboard controls</span>
+        <h2 id="leaderboard-title"><span>Make competition visible on the</span><span>organizer's <em>terms</em></span></h2>
+      </header>
+      <div class="egx-leaderboard-cards">
+        {leaderboardCards.map((card, i) => <article class="egx-leaderboard-stage" style={`--card-index:${i}`}>
+          <div class="egx-leaderboard-copy">
+            {card.eyebrow && <span class="egx-dark__card-tag">{card.eyebrow}</span>}
+            <h3>{card.title}</h3>
+            <p>{card.desc}</p>
+            <div class="egx-leaderboard-controls">
+              {card.controls.map(([title]) => <span>{title}</span>)}
+            </div>
+            <a href="/book-a-demo/">Explore More</a>
+          </div>
+          <div class="egx-leaderboard-visual"><img src={card.image} alt={card.alt} width="1263" height="698" loading="lazy" /></div>
+        </article>)}
+        <div class="egx-leaderboard-spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="egx-draw" aria-labelledby="draw-title"><div class="egx-draw__inner"><header class="egx-draw__heading"><span class="egx-kicker">Points-threshold draw</span><h2 id="draw-title">Give Eligible Attendees <em>Another Path to a Reward</em></h2><p>Create the prize, qualify attendees by points, select a winner, and keep the outcome recorded in one connected workflow.</p></header><div class="egx-draw__steps">{drawSteps.map((step, i) => <article class:list={["egx-draw-step", { "is-open": i === 0 }]} style={`--draw-hue:${i === 0 ? "#fff9df" : i === 1 ? "#eef9f2" : i === 2 ? "#eef2ff" : i === 3 ? "#fff0f3" : "#f3efff"};--draw-line:${i === 0 ? "#efdca0" : i === 1 ? "#cfe9d9" : i === 2 ? "#d4dcfa" : i === 3 ? "#efd3da" : "#ddd2f1"}`} data-draw-step><button type="button" class="egx-draw-step__toggle" aria-expanded={i === 0 ? "true" : "false"}><span>{String(i + 1).padStart(2, "0")}</span><strong>{step.title}</strong><small>{step.desc}</small><i aria-hidden="true"></i></button><div class="egx-draw-step__body" hidden={i !== 0}><div><p>{step.desc}</p><ul>{step.points.map(point => <li><span aria-hidden="true">✦</span>{point}</li>)}</ul></div><figure class="egx-draw-step__visual"><img src={step.image} alt={step.alt} width="1263" height="698" loading="lazy" /></figure></div></article>)}</div></div></section>
+
+  <section class="egx-boundary" aria-labelledby="boundary-title"><div class="egx-boundary__inner"><header class="egx-boundary__heading"><span class="egx-kicker">Ship what attendees can complete</span><h2 id="boundary-title">Only publish challenges backed by a working app action</h2><p>Connect challenge rules to attendee experiences your team can enable and manage inside EventHex.</p></header><div class="egx-boundary__feature"><div class="egx-boundary__visual" aria-label="EventHex organizer controls for attendee app gamification"><figure class="egx-boundary__screen egx-boundary__screen--rear"><img src="/images/event-gamification/app/attendee-app-modules-live.png" alt="EventHex attendee app modules for gallery, networking, meetings, messaging, sessions, speakers, and exhibitors" width="1263" height="698" loading="lazy" /></figure><figure class="egx-boundary__screen egx-boundary__screen--front"><img src="/images/event-gamification/app/gamification-settings.png" alt="EventHex gamification settings beside the attendee mobile-app preview" width="1263" height="698" loading="lazy" /></figure><span class="egx-boundary__status"><i></i> Gamification enabled</span><span class="egx-boundary__action">Configure attendee features</span></div><article class="egx-boundary__copy"><span>Built for attendee-ready workflows</span><h3>Supported mobile actions</h3><p>Profile, connections, messaging, AI chat, gallery activity, session rating, live Q&amp;A, speaker bookmark, and active-user triggers can power challenges attendees can actually finish.</p><div><strong>Planned, not promised</strong><p>Exhibitor QR scan and MCQ quiz keys remain deferred until their app actions are generally available.</p></div></article></div><p class="egx-boundary__note">Custom challenge titles stay flexible; completion remains tied to a supported action key and the event behavior your team configures.</p></div></section>
+
+  <section class="egx-links egx-connected" aria-labelledby="connected-title">
+    <header class="egx-connected__heading animate-on-scroll" data-animation="fadeInUp"><span>Explore the connected workflow</span><h2 id="connected-title">See the EventHex features behind<br />each gamified interaction</h2><p>Go deeper when you need the full workflow, configuration,<br />and controls for a specific attendee action.</p></header>
+    <nav class="egx-connected__grid" aria-label="Connected EventHex gamification features">
+      {[25, 50, 75].map((position, index) => <span class={`egx-connected__notch egx-connected__notch--${index + 1}`} style={`--notch-left:${position}%`} aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path></svg></span>)}
+      <article class="egx-connected__card animate-on-scroll" data-animation="fadeInUp" data-delay="0"><span class="egx-connected__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"></circle><circle cx="17" cy="7" r="2"></circle><path d="M3 20c0-4 2-7 5-7s5 3 5 7M14 13c3 0 5 2 5 5"></path></svg></span><h3><a href="/enhance-networking-ai-smart-connect/">AI Smart-Connect</a></h3><p>Power attendee connection actions.</p></article>
+      <article class="egx-connected__card animate-on-scroll" data-animation="fadeInUp" data-delay="60"><span class="egx-connected__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16v11H8l-4 4V5Z"></path><path d="M8 9h8M8 12h5"></path></svg></span><h3><a href="/live-polling-qa/">Live Polling &amp; Q&amp;A</a></h3><p>Run session questions and feedback.</p></article>
+      <article class="egx-connected__card animate-on-scroll" data-animation="fadeInUp" data-delay="120"><span class="egx-connected__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)" transform="rotate(-90)"></path></svg></span><span class="egx-connected__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="m5 17 4-4 3 3 3-4 4 5"></path></svg></span><h3><a href="/ai-photo-gallery/">AI Photo Gallery</a></h3><p>Host the experiences behind gallery actions.</p></article>
+      <article class="egx-connected__card animate-on-scroll" data-animation="fadeInUp" data-delay="180"><span class="egx-connected__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="2"></rect><path d="M9 5h6M10 18h4"></path></svg></span><h3><a href="/event-mobile-app/">Event Mobile App</a></h3><p>Deliver the attendee gamification experience.</p></article>
+    </nav>
+  </section>
+
+  <section class="egx-use" aria-labelledby="use-title"><div class="egx-use__inner"><header class="egx-use__header"><span class="egx-kicker">Built for participation goals</span><h2 id="use-title">Shape the challenge mix<br />around the event programme</h2><p>Choose the actions, points, and reward path that fit the audience.</p></header><div class="egx-use-tabs" role="tablist" aria-label="Event gamification participation goals">{useCases.map((item, index) => <button class:list={["egx-use-tab", { "is-active": index === 0 }]} type="button" role="tab" id={`use-tab-${item.id}`} aria-controls={`use-panel-${item.id}`} aria-selected={index === 0 ? "true" : "false"} tabindex={index === 0 ? 0 : -1} data-use-tab={item.id}>{item.label}</button>)}</div><div class="egx-use-box">{useCases.map((item, index) => <article class:list={["egx-use-panel", { "is-active": index === 0 }]} id={`use-panel-${item.id}`} role="tabpanel" aria-labelledby={`use-tab-${item.id}`} data-use-panel={item.id} hidden={index !== 0}><div class="egx-use-panel__copy"><h3>{item.title}</h3><p>{item.description}</p><span class="egx-use-panel__label">CHALLENGE SIGNALS</span><ul>{item.points.map(point => <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m20 6-11 11-5-5"></path></svg>{point}</li>)}</ul></div><figure class="egx-use-panel__visual"><img src={item.image} alt={item.alt} width="1263" height="698" loading="lazy" /></figure></article>)}</div></div></section>
+
+  <section class="egx-faq" id="faq" aria-labelledby="faq-title"><div class="egx-shell egx-faq__grid"><aside><span class="egx-kicker">Event gamification questions</span><h2 id="faq-title">What organizers ask before launching challenges</h2><p>Clear answers about challenge logic, leaderboard controls, rewards, and draws.</p><a class="egx-btn egx-btn--primary" href="/book-a-demo/">Ask us in a demo</a></aside><div>{faqs.map((faq, i) => <details open={i === 0}><summary>{faq.q}<span aria-hidden="true"></span></summary><p>{faq.a}</p></details>)}</div></div></section>
+</main>
+
+<style>
+  :global(body:has(.egx-page) .site-footer){overflow:hidden}
+  :global(body:has(.egx-page) .site-footer .cta-devices-img){max-width:100%;height:auto}
+  .egx-page{--ink:#182230;--muted:#5f6b7a;--blue:#375dfb;--line:#dde4ee;--wash:#f5f8ff;color:var(--ink);background:radial-gradient(circle 380px at 3% 24%,rgba(175,163,255,.2),transparent 100%),radial-gradient(circle 320px at 97% 38%,rgba(130,204,255,.18),transparent 100%),radial-gradient(circle 320px at 4% 72%,rgba(255,224,150,.14),transparent 100%),#fff;background-attachment:fixed}.egx-shell{width:min(1180px,calc(100% - 40px));margin:auto}.egx-kicker{display:block;margin-bottom:16px;color:var(--blue);font:700 12px/1.2 var(--font-body);letter-spacing:.12em;text-transform:uppercase}.egx-page h1,.egx-page h2,.egx-page h3{font-family:var(--font-heading);margin:0}.egx-page h2{font-size:clamp(36px,4vw,56px);font-weight:500;line-height:1.08;letter-spacing:-.03em}.egx-page p{font-family:var(--font-body);color:var(--muted);line-height:1.7}.egx-hero{margin-top:-90px;padding:170px 0 110px;overflow:hidden;background:linear-gradient(to bottom,rgba(255,255,255,.45),transparent)}.egx-hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}.egx-hero h1{font-size:clamp(42px,5.4vw,68px);line-height:1.02;letter-spacing:-.045em}.egx-hero__copy>p{font-size:18px;max-width:560px}.egx-actions{display:flex;gap:12px;margin:28px 0}.egx-btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:10px;font:600 15px var(--font-body);text-decoration:none}.egx-btn--primary{background:var(--blue);color:#fff;box-shadow:0 10px 25px #375dfb35}.egx-btn--secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}.egx-proof{display:flex;flex-wrap:wrap;gap:18px;padding:0;margin:0;list-style:none;color:#526173;font:500 13px var(--font-body)}.egx-proof li:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#24b47e;margin-right:8px}.egx-composite{position:relative;min-height:540px;max-width:570px;margin-left:auto}.egx-composite figure{position:absolute;margin:0;overflow:hidden;border:1px solid #dce4f3;border-radius:14px;background:#fff;box-shadow:0 22px 55px rgba(31,52,98,.15)}.egx-composite img{display:block;width:100%;height:100%;object-fit:cover}.egx-composite__rear{z-index:1;left:0;top:16px;width:42%;aspect-ratio:1.05}.egx-composite__active{z-index:2;right:0;bottom:28px;width:88%;aspect-ratio:1.79}.egx-composite__active img{object-position:left top}.egx-composite__pill{position:absolute;z-index:3;padding:10px 14px;border:1px solid rgba(55,93,251,.16);border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 14px 30px rgba(31,52,98,.14);font:600 12px var(--font-body);backdrop-filter:blur(12px)}.egx-composite__pill--status{right:6px;top:100px}.egx-composite__pill--status i{display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#20b47b}.egx-composite__pill--action{left:20px;bottom:8px;color:var(--blue);animation:egxGlow 4s ease-in-out infinite}.egx-rail,.egx-cards,.egx-choice,.egx-boundary,.egx-links,.egx-use,.egx-faq{padding:92px 0}.egx-cards,.egx-choice,.egx-boundary,.egx-use,.egx-faq{background:transparent}.egx-rail h2,.egx-heading{text-align:center}.egx-rail h2{margin-bottom:42px}.egx-rail__grid{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(255,255,255,.75);backdrop-filter:blur(14px)}.egx-rail article,.egx-grid article{padding:24px;border-right:1px solid var(--line)}.egx-rail article:last-child{border:0}.egx-rail article span,.egx-grid article>span{color:var(--blue);font:700 12px var(--font-body)}.egx-rail h3{margin-top:18px;font-size:16px}.egx-problem{padding:100px 0;background:#081228;color:#fff}.egx-problem__grid{display:grid;grid-template-columns:1fr 1fr;gap:90px}.egx-problem p,.egx-problem span{color:#aebbd0}.egx-problem article{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:20px 0;border-top:1px solid #ffffff22;font:14px/1.6 var(--font-body)}.egx-heading{max-width:820px;margin:0 auto 44px}.egx-heading>p{font-size:17px}.egx-grid{display:grid;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:rgba(255,255,255,.78);backdrop-filter:blur(12px)}.egx-grid--six{grid-template-columns:repeat(3,1fr)}.egx-grid--three{grid-template-columns:repeat(3,1fr)}.egx-grid article{min-height:190px;border-bottom:1px solid var(--line)}.egx-grid article:nth-child(3n){border-right:0}.egx-grid h3{margin:20px 0 8px;font-size:20px}.egx-grid p{font-size:14px}.egx-workflow{padding:100px 0;background:rgba(245,248,255,.82)}.egx-workflow__grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px;align-items:start}.egx-workflow__intro>div{position:sticky;top:120px}.egx-workflow__intro p{font-size:17px;margin-bottom:24px}.egx-workflow__cards{display:grid;gap:22px}.egx-workflow__cards article{padding:26px;border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 18px 40px #283b690d}.egx-workflow__cards article>div:first-child{display:grid;grid-template-columns:38px 1fr;column-gap:16px}.egx-workflow__cards h3{font-size:22px}.egx-workflow__cards p{grid-column:2;margin:8px 0}.egx-workflow__cards span{color:var(--blue);font:700 12px var(--font-body)}.egx-rule-ui{display:flex;gap:8px;align-items:center;margin-top:18px;padding:18px;border-radius:14px;background:#f4f6fb}.egx-rule-ui b{font:600 13px var(--font-body);margin-right:auto}.egx-rule-ui i{width:26px;height:8px;border-radius:8px;background:#dce3ee}.egx-progress,.egx-draw{padding:100px 0}.egx-progress__grid,.egx-draw__grid{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:center}.egx-progress ol,.egx-draw ol{list-style:none;margin:0;padding:0}.egx-progress li{display:grid;grid-template-columns:50px 1fr;gap:18px;padding:22px 0;border-bottom:1px solid var(--line)}.egx-progress li>span{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#e9eeff;color:var(--blue);font:700 12px var(--font-body)}.egx-progress h3{font-size:20px}.egx-progress li p{margin:5px 0;font-size:14px}.egx-dark{padding:100px 0;background:radial-gradient(90% 50% at 50% 100%,rgba(55,93,251,.22),transparent 70%),#030713;color:#fff}.egx-heading--dark p{color:#aeb7c8}.egx-dark .egx-grid{border-color:#ffffff20;background:transparent}.egx-dark .egx-grid article{border-color:#ffffff20;background:#ffffff07}.egx-dark .egx-grid i{display:block;color:#91a5ff;font-style:normal}.egx-dark .egx-grid p{color:#aeb7c8}.egx-choice__grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:rgba(255,255,255,.8);backdrop-filter:blur(12px)}.egx-choice__grid article{padding:38px}.egx-choice__grid article+article{border-left:1px solid var(--line)}.egx-choice__grid span{font:700 11px var(--font-body);letter-spacing:.1em;color:var(--blue)}.egx-choice__grid h3{font-size:28px;margin:20px 0 8px}.egx-choice__grid b{display:inline-flex;margin-top:10px;padding:7px 10px;border-radius:20px;background:#eaf7f2;color:#167258;font:600 12px var(--font-body)}.egx-note{padding:16px 20px;border-left:3px solid var(--blue);background:#f2f5ff;font-size:13px}.egx-draw{background:rgba(245,248,255,.82)}.egx-draw li{display:flex;gap:16px;align-items:center;padding:14px;border-radius:14px;background:#fff;border:1px solid var(--line);margin-bottom:10px}.egx-draw li>span{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#1d2a4d;color:#fff;font:700 12px var(--font-body)}.egx-draw li div{display:flex;flex-direction:column}.egx-draw li b{font:600 14px var(--font-body)}.egx-draw li small{color:var(--muted);font:12px/1.5 var(--font-body)}.egx-links{background:rgba(245,248,255,.82)}.egx-links__grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden}.egx-links__grid a{padding:26px;color:var(--ink);text-decoration:none;border-right:1px solid var(--line);background:#fff}.egx-links__grid a:last-child{border:0}.egx-links__grid strong{font:600 18px var(--font-heading)}.egx-links__grid p{font-size:13px;min-height:66px}.egx-links__grid span{color:var(--blue);font:600 13px var(--font-body)}.egx-faq__grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:90px}.egx-faq aside{position:sticky;top:120px;align-self:start}.egx-faq aside p{font-size:16px;margin-bottom:24px}.egx-faq details{border-top:1px solid var(--line);padding:21px 0}.egx-faq details:last-child{border-bottom:1px solid var(--line)}.egx-faq summary{display:flex;justify-content:space-between;gap:20px;cursor:pointer;font:600 17px var(--font-body);list-style:none}.egx-faq summary span:after{content:"+";font-size:24px;color:var(--blue)}.egx-faq details[open] summary span:after{content:"–"}.egx-faq details p{font-size:14px;padding-right:30px}.egx-faq summary::-webkit-details-marker{display:none}@keyframes egxGlow{50%{box-shadow:0 14px 34px rgba(55,93,251,.25)}}
+  .egx-feature-preview{display:grid;gap:10px;padding:22px;font-family:var(--font-body)}.egx-feature-preview small{color:#667085;font-size:10px;font-weight:700;letter-spacing:.1em}.egx-feature-preview div{display:grid;grid-template-columns:26px 1fr auto;align-items:center;gap:10px;padding:12px;border:1px solid #e2e6f1;border-radius:10px;background:#f8f9fd}.egx-feature-preview i{display:grid;place-items:center;width:24px;height:24px;border-radius:7px;background:#e8edff;color:var(--blue);font-style:normal;font-size:11px}.egx-feature-preview span,.egx-feature-preview b{font-size:12px}.egx-feature-preview b{color:var(--blue)}
+  .egx-rail.egx-rail{padding:1.5rem;border-top:1px solid var(--line);background:#fff}.egx-rail__inner{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2.25rem;max-width:1280px;margin:0 auto}.egx-rail__inner span{white-space:nowrap;color:var(--muted);font:400 .9375rem/1.4 var(--font-body)}.egx-rail__inner b{color:var(--ink);font-weight:700}@media(max-width:600px){.egx-rail__inner{justify-content:center;text-align:center;gap:1rem 1.5rem}.egx-rail__inner span{white-space:normal}}
+  .egx-actions-dark{--band-p:0;--band-gap:calc((1 - var(--band-p))*clamp(16px,3.5vw,56px));position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 0 0;color:#fff;background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);background-repeat:no-repeat;clip-path:inset(0 var(--band-gap) round calc((1 - var(--band-p))*28px));will-change:clip-path}.egx-actions-dark:before{content:"";position:absolute;inset:0;z-index:0;opacity:.55;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}.egx-actions-dark>*{position:relative;z-index:1}.egx-actions-dark__heading{max-width:980px;margin:0 auto;padding:0 24px 8px;text-align:center}.egx-actions-dark__heading>span{display:inline-block;margin-bottom:12px;color:#a9b7ff;font:700 13px/1.2 var(--font-body);letter-spacing:.1em;text-transform:uppercase}.egx-actions-dark__heading h2{margin:0 0 12px;background:linear-gradient(98deg,#fff 43.06%,#aeb4c0 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font:500 clamp(36px,4vw,50px)/1.08 var(--font-heading);letter-spacing:-.04em}.egx-actions-dark__heading h2 em{font:inherit;background:none;-webkit-text-fill-color:transparent}.egx-actions-dark__heading p{max-width:680px;margin:0 auto;color:rgba(255,255,255,.62);font:17px/1.65 var(--font-body)}.egx-actions-dark__grid-wrap{max-width:1140px;margin:0 auto;padding:clamp(40px,5vw,72px) 24px clamp(56px,7vw,88px)}.egx-action-grid{--cap-grad:linear-gradient(135deg,#38bdf8 0%,#5c8aff 38%,#7c6cff 70%,#a45cff 100%);--cap-surface:#08080e;display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden;border:1px solid #3b3a47;border-radius:16px}.egx-action-card{position:relative;grid-column:span 2;display:flex;flex-direction:column;min-height:420px;padding:36px 32px;border-right:1px solid #3b3a47;border-bottom:1px solid #3b3a47}.egx-action-card:nth-child(3n){border-right:0}.egx-action-card:nth-last-child(-n+3){border-bottom:0}.egx-action-card__petal{position:absolute;left:0;z-index:2;width:28px;height:28px;line-height:0;pointer-events:none}.egx-action-card__petal--top{top:0;transform:translate(-50%,-50%)}.egx-action-card__petal--bottom{bottom:0;transform:translate(-50%,50%)}.egx-action-card__number{display:block;margin-bottom:14px;color:#8797e8;font:700 11px/1 var(--font-body)}.egx-action-card h3{margin:0 0 14px;color:#fff;font:700 15px/1.3 var(--font-heading);letter-spacing:-.01em}.egx-action-card>p{max-width:34ch;margin:0;color:rgba(255,255,255,.62);font:.9375rem/1.38 var(--font-body)}.egx-action-card__visual{position:relative;display:flex;flex:1;align-items:flex-end;justify-content:center;margin-top:32px}.egx-action-card__visual:before{content:"";position:absolute;bottom:-10%;left:50%;width:80%;height:80%;border-radius:50%;background:radial-gradient(closest-side,rgba(92,138,255,.28),rgba(124,108,255,.15) 55%,transparent 100%);filter:blur(30px);transform:translateX(-50%);pointer-events:none;animation:egxActionBloom 6s ease-in-out infinite}.egx-action-card__visual>*{position:relative;z-index:1;width:min(100%,290px);border:1px solid transparent;border-radius:12px;background:linear-gradient(var(--cap-surface),var(--cap-surface)) padding-box,var(--cap-grad) border-box;box-shadow:0 18px 44px -22px rgba(92,138,255,.5);animation:egxActionFloat 7s ease-in-out infinite}.egx-action-card:nth-child(2) .egx-action-card__visual>*{animation-delay:-1.4s}.egx-action-card:nth-child(3) .egx-action-card__visual>*{animation-delay:-2.8s}.egx-action-card:nth-child(4) .egx-action-card__visual>*{animation-delay:-4.2s}.egx-action-card:nth-child(5) .egx-action-card__visual>*{animation-delay:-5.6s}.egx-action-card:nth-child(6) .egx-action-card__visual>*{animation-delay:-2.1s}.egx-action-card__visual strong{color:rgba(255,255,255,.82);font:650 12px/1.3 var(--font-body)}.egx-action-checklist,.egx-action-gallery{display:flex;flex-direction:column;gap:10px;padding:16px}.egx-action-checklist>span,.egx-action-gallery>span{display:grid;grid-template-columns:8px 1fr auto;gap:8px;align-items:center;padding-top:9px;border-top:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.68);font:11px/1.2 var(--font-body)}.egx-action-checklist i,.egx-action-gallery i{width:7px;height:7px;border-radius:50%;background:#5c8aff;box-shadow:0 0 0 3px rgba(92,138,255,.14)}.egx-action-checklist b,.egx-action-gallery b{color:#b9ccff;font-weight:600}.egx-action-progress{display:grid;grid-template-columns:1fr;gap:8px;padding:16px}.egx-action-progress>span{color:rgba(255,255,255,.58);font:11px/1.2 var(--font-body)}.egx-action-progress>i{position:relative;overflow:hidden;height:7px;border-radius:999px;background:rgba(255,255,255,.08)}.egx-action-progress>i b{display:block;width:78%;height:100%;border-radius:inherit;background:var(--cap-grad)}.egx-action-progress>i:last-child b{width:56%}.egx-action-filters{display:flex;flex-direction:column;gap:16px;padding:16px}.egx-action-filters>div{display:flex;flex-wrap:wrap;gap:7px}.egx-action-filters span{padding:8px 10px;border:1px solid rgba(255,255,255,.12);border-radius:12px;color:rgba(255,255,255,.62);background:rgba(255,255,255,.04);font:11px/1 var(--font-body)}.egx-action-filters span.is-active{border-color:transparent;color:#fff;background:linear-gradient(135deg,#0d1a30,#1b1740) padding-box,var(--cap-grad) border-box}.egx-action-bars{display:flex;flex-direction:column;gap:12px;padding:16px}.egx-action-bars span{overflow:hidden;height:10px;border-radius:999px;background:rgba(255,255,255,.08)}.egx-action-bars span i{display:block;width:var(--bar);height:100%;border-radius:inherit;background:var(--cap-grad)}.egx-action-trend{padding:16px 16px 8px}.egx-action-trend svg{display:block;width:100%;height:96px;margin-top:8px;overflow:visible}.egx-action-trend path{fill:none;stroke:#6f86ff;stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 6px 8px rgba(92,138,255,.42))}@keyframes egxActionFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes egxActionBloom{0%,100%{opacity:.68}50%{opacity:1}}
+  .egx-connected.egx-connected{padding:32px 24px 56px;background:transparent}.egx-connected__heading{max-width:none;margin:0 auto clamp(32px,3vw,40px);text-align:center}.egx-connected__heading>span{display:block;margin-bottom:12px;color:var(--blue);font:700 12px/1.2 var(--font-body);letter-spacing:.13em;text-transform:uppercase}.egx-connected__heading h2{max-width:900px;margin:0 auto;background:linear-gradient(98deg,var(--ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font:500 clamp(36px,4vw,50px)/1.08 var(--font-heading);letter-spacing:-.04em}.egx-connected__heading p{max-width:680px;margin:18px auto 0;color:var(--muted);font:17px/1.6 var(--font-body)}.egx-connected__grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:1200px;margin:0 auto;border-top:1px solid var(--line)}.egx-connected__card{position:relative;min-height:300px;padding:28px;border-left:1px solid var(--line);background:transparent;box-shadow:none}.egx-connected__card:first-of-type{border-left:0}.egx-connected__icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:var(--blue);transition:transform .3s ease}.egx-connected__icon svg{width:100%;height:100%}.egx-connected__card h3{max-width:230px;min-height:2.3em;margin:0 0 28px;color:var(--ink);font:500 21px/1.15 var(--font-heading)}.egx-connected__card h3 a{color:inherit;text-decoration:none;transition:color .25s ease}.egx-connected__card p{margin:14px 0 0;color:var(--muted);font:15px/1.4 var(--font-body)}.egx-connected__card:hover .egx-connected__icon{transform:translateY(-4px)}.egx-connected__card:hover h3 a{color:var(--blue)}.egx-connected__notch{position:absolute;top:0;left:var(--notch-left);z-index:2;width:28px;height:28px;line-height:0;transform:translate(-50%,-50%);pointer-events:none}.egx-connected__cross{display:none}
+  .egx-use{padding:clamp(82px,9vw,112px) 24px;background:linear-gradient(145deg,#fff 0%,#fbf9ff 48%,#edf4ff 100%)}.egx-use__inner{width:min(1080px,100%);margin:0 auto}.egx-use__header{display:flex;flex-direction:column;align-items:center;max-width:940px;margin:0 auto 32px;text-align:center}.egx-use__header .egx-kicker{margin-bottom:16px}.egx-use__header h2{margin:0 0 18px;background:linear-gradient(90deg,#222 0%,#343434 54%,#8c8c8c 100%);background-clip:text;-webkit-background-clip:text;color:transparent;font:500 clamp(36px,4.4vw,56px)/1.08 var(--font-heading);letter-spacing:-.035em}.egx-use__header>p{max-width:none;margin:0;color:#6b7280;font-size:17.5px;font-weight:500;line-height:1.5}.egx-use-tabs{display:flex;justify-content:center;gap:4px;width:fit-content;max-width:100%;margin:0 auto 48px;padding:6px;border:1px solid #e1e6ee;border-radius:999px;background:#f1f3f7}.egx-use-tab{padding:9px 17px;border:1px solid transparent;border-radius:999px;background:transparent;color:#64748b;cursor:pointer;white-space:nowrap;font:600 13px/1.3 var(--font-body);transition:.2s ease}.egx-use-tab:hover{background:rgba(255,255,255,.68);color:#334155}.egx-use-tab:focus-visible{outline:3px solid rgba(55,93,251,.28);outline-offset:2px}.egx-use-tab.is-active{border-color:#dbe4f0;background:#fff;color:#3b82f6;box-shadow:0 2px 8px rgba(30,41,59,.08)}.egx-use-box{padding:0;border:0;background:transparent}.egx-use-panel{--use-tint:#fff8dc;--use-border:#f0dfa6;display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;padding:52px 64px;border:1px solid var(--use-border);border-radius:28px;background:linear-gradient(135deg,var(--use-tint) 0%,#fff 72%);animation:egxUseIn .4s ease forwards}.egx-use-panel:nth-child(2),.egx-use-panel:nth-child(6){--use-tint:#edf7ff;--use-border:#d4e7f7}.egx-use-panel:nth-child(3){--use-tint:#f3efff;--use-border:#e2d8fa}.egx-use-panel:nth-child(4){--use-tint:#eefbf4;--use-border:#d4efdf}.egx-use-panel:nth-child(5){--use-tint:#fff0f3;--use-border:#f5d7df}.egx-use-panel.is-active{display:grid}@keyframes egxUseIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.egx-use-panel__copy{min-width:0}.egx-use-panel__copy h3{margin:0 0 18px;color:#1f2937;font:500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading);letter-spacing:-.03em}.egx-use-panel__copy>p{margin:0 0 28px;color:#4b5563;font-size:16px;font-weight:500;line-height:1.6}.egx-use-panel__label{display:block;margin-bottom:16px;color:#9ca3af;font:700 11px/1 var(--font-body);letter-spacing:.12em}.egx-use-panel__copy ul{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}.egx-use-panel__copy li{display:flex;align-items:flex-start;gap:10px;color:#6b7280;font:500 14.5px/1.4 var(--font-body)}.egx-use-panel__copy li svg{flex:0 0 14px;width:14px;height:14px;margin-top:2px;fill:none;stroke:#9ca3af;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.egx-use-panel__visual{min-width:0}.egx-use-preview{position:relative;isolation:isolate;padding:22px;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:rgba(255,255,255,.58);box-shadow:0 22px 48px rgba(31,41,55,.1)}.egx-use-preview:before{content:"";position:absolute;inset:10% 7% -8%;z-index:-1;border-radius:12px;background:var(--use-border);filter:blur(22px);opacity:.48}.egx-use-preview__status{position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #cddcff;border-radius:10px;background:#eef4ff;color:#3158d4;box-shadow:0 8px 22px rgba(49,88,212,.16);font:700 11px/1.2 var(--font-body)}.egx-use-preview__status svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.egx-use-preview__window{position:relative;z-index:1;display:grid;gap:10px;min-height:284px;padding:54px 18px 18px;border:1px solid #e0e4ec;border-radius:12px;background:#fff;font-family:var(--font-body)}.egx-use-preview__top{display:grid;grid-template-columns:7px 7px 7px 1fr auto;gap:6px;align-items:center;padding-bottom:16px;border-bottom:1px solid #e8ecf2}.egx-use-preview__top i{width:7px;height:7px;border-radius:50%;background:#dfe4ec}.egx-use-preview__top b{margin-left:7px;font-size:12px}.egx-use-preview__top small{color:var(--blue);font-size:11px;font-weight:700}.egx-use-preview__row{display:grid;grid-template-columns:28px 1fr 62px auto;gap:10px;align-items:center;padding:12px;border:1px solid #e7eaf0;border-radius:10px;background:#fafbfe}.egx-use-preview__row>span{display:grid;place-items:center;width:26px;height:26px;border-radius:8px;background:#edf1ff;color:var(--blue);font-size:10px;font-weight:700}.egx-use-preview__row strong{font-size:11px}.egx-use-preview__row>i{height:6px;border-radius:99px;background:linear-gradient(90deg,var(--blue) var(--fill),#e5e9f1 var(--fill));font-style:normal}.egx-use-preview__row small{color:#23855c;font-size:9px;font-weight:700;text-transform:uppercase}
+  .egx-workflow{padding:100px 24px;background:#fff}.egx-workflow__container{max-width:1200px;margin:0 auto;display:flex;gap:80px;align-items:stretch}.egx-workflow__left{flex:0 0 40%}.egx-workflow__sticky{position:sticky;top:120px}.egx-workflow__eyebrow{display:inline-flex;align-items:center;padding:6px 12px;margin-bottom:24px;border-radius:99px;background:#f4f5f7;color:var(--ink);font:600 13px var(--font-body)}.egx-workflow__left h2{margin-bottom:24px}.egx-workflow__left p{font-size:18px;line-height:1.6}.egx-workflow__cta{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 15px var(--font-body);text-decoration:none;transition:transform .2s ease,background .2s ease}.egx-workflow__cta:hover{background:#000;transform:translateY(-1px)}.egx-workflow__right{flex:1;display:flex;flex-direction:column;gap:32px}.egx-rule-card{position:sticky;top:80px;padding:32px;border-radius:24px;background:#f4f5f7;transition:transform .3s ease}.egx-rule-card:nth-child(2){top:100px}.egx-rule-card:nth-child(3){top:120px}.egx-rule-card:nth-child(4){top:140px}.egx-rule-card:hover{transform:translateY(-4px)}.egx-rule-card__header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}.egx-rule-card__number{display:flex;align-items:center;justify-content:center;flex:0 0 40px;width:40px;height:40px;border-radius:50%;background:#111;color:#fff;font:700 16px var(--font-heading)}.egx-rule-card__header h3{margin:0 0 8px;color:var(--ink);font-size:20px;font-weight:700}.egx-rule-card__header p{margin:0;font-size:16px;line-height:1.6}.egx-rule-card__visual{display:flex;align-items:center;justify-content:center;min-height:300px;padding:18px;overflow:hidden;border:1px solid rgba(255,255,255,.86);border-radius:20px}.egx-rule-card:nth-child(1) .egx-rule-card__visual{background:linear-gradient(180deg,#fff9dc,#fffdf1 48%,#fff)}.egx-rule-card:nth-child(2) .egx-rule-card__visual{background:linear-gradient(180deg,#e9f9f0,#f5fcf8 48%,#fff)}.egx-rule-card:nth-child(3) .egx-rule-card__visual{background:linear-gradient(180deg,#eef1ff,#f8f9ff 48%,#fff)}.egx-rule-card:nth-child(4) .egx-rule-card__visual{background:linear-gradient(180deg,#fdeff3,#fff8fa 48%,#fff)}.egx-rule-shot{position:relative;width:100%;height:280px}.egx-rule-shot img{position:absolute;inset:10px 8px 18px;width:calc(100% - 16px);height:calc(100% - 28px);border:1px solid #e2e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 34px rgba(17,24,39,.14);object-fit:cover;object-position:left top}.egx-rule-shot__status,.egx-rule-shot__action{position:absolute;z-index:2;padding:10px 13px;border-radius:10px;box-shadow:0 10px 24px rgba(17,24,39,.16);font:700 12px/1 var(--font-body)}.egx-rule-shot__status{left:0;top:0;border:1px solid #ccebd8;background:#edfbf3;color:#18864b}.egx-rule-shot__action{right:10px;bottom:0;background:#4b65f6;color:#fff}.egx-rule-shot__cursor{position:absolute;right:5px;bottom:28px;z-index:3;width:18px;height:24px;clip-path:polygon(0 0,100% 62%,58% 68%,38% 100%);background:#111827;filter:drop-shadow(0 4px 5px rgba(17,24,39,.25));animation:egxCursorTap 2.4s ease-in-out infinite}.egx-mode-ui,.egx-fields-ui,.egx-schedule-ui{width:min(440px,100%);padding:24px;border:1px solid #e2e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 34px rgba(17,24,39,.1);font-family:var(--font-body)}.egx-mode-ui{display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center}.egx-mode-ui div{display:flex;flex-direction:column;gap:6px}.egx-mode-ui span,.egx-mode-ui small{color:#667085;font-size:12px}.egx-mode-ui b{font-size:18px}.egx-mode-ui button{width:54px;height:30px;padding:3px;border:0;border-radius:30px;background:#4b65f6}.egx-mode-ui button i{display:block;width:24px;height:24px;margin-left:auto;border-radius:50%;background:#fff}.egx-mode-ui small{grid-column:1/-1;padding-top:16px;border-top:1px solid #edf0f5}.egx-fields-ui{display:grid;grid-template-columns:1fr 1fr;gap:14px}.egx-fields-ui label{display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid #e1e5ed;border-radius:10px;color:#667085;font-size:12px}.egx-fields-ui label strong{color:var(--ink);font-size:20px}.egx-fields-ui>div{grid-column:1/-1;display:flex;align-items:center;gap:9px;color:#18864b}.egx-fields-ui>div span{width:8px;height:8px;border-radius:50%;background:#20b47b}.egx-schedule-ui{display:grid;grid-template-columns:1fr 1fr;gap:12px}.egx-schedule-ui>div,.egx-schedule-ui p{padding:14px;border:1px solid #e5e7ec;border-radius:10px}.egx-schedule-ui>div{display:flex;flex-direction:column;gap:7px}.egx-schedule-ui small{color:#8a94a5;font-size:10px}.egx-schedule-ui p{display:flex;justify-content:space-between;margin:0;font-size:12px}.egx-schedule-ui p span{color:#667085}@keyframes egxCursorTap{0%,65%,100%{transform:translate(0)}74%{transform:translate(-3px,3px) scale(.94)}}
+  .egx-boundary{padding:96px 24px;background:#f4f7fc}.egx-boundary__inner{width:min(1200px,100%);margin:0 auto}.egx-boundary__heading{max-width:900px;margin:0 auto 58px;text-align:center}.egx-boundary__heading h2{margin-bottom:18px}.egx-boundary__heading>p{max-width:670px;margin:0 auto;font-size:17px}.egx-boundary__feature{display:grid;grid-template-columns:1.04fr .96fr;min-height:370px;border-top:1px solid #dce4ef;border-bottom:1px solid #dce4ef}.egx-boundary__visual{position:relative;min-height:370px;padding:36px 42px 38px 18px;border-right:1px solid #dce4ef}.egx-boundary__screen{position:absolute;overflow:hidden;margin:0;border:1px solid #dbe3ef;border-radius:10px;background:#fff;box-shadow:0 18px 34px rgba(40,56,88,.12)}.egx-boundary__screen img{display:block;width:100%;height:100%;object-fit:cover;object-position:left top}.egx-boundary__screen--rear{top:38px;left:28px;width:68%;aspect-ratio:1.81}.egx-boundary__screen--front{right:42px;bottom:42px;width:72%;aspect-ratio:1.81}.egx-boundary__screen--front:after{content:"";position:absolute;inset:0;background:rgba(9,16,30,.42)}.egx-boundary__status,.egx-boundary__action{position:absolute;z-index:3;border-radius:10px;box-shadow:0 12px 25px rgba(36,52,85,.16);font:700 11px/1.2 var(--font-body)}.egx-boundary__status{top:20px;left:16px;padding:9px 12px;border:1px solid #cce9d8;background:#eefbf4;color:#168253}.egx-boundary__status i{display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#20b47b}.egx-boundary__action{right:30px;bottom:28px;padding:10px 13px;background:var(--blue);color:#fff;animation:egxGlow 4s ease-in-out infinite}.egx-boundary__copy{display:flex;flex-direction:column;justify-content:center;padding:48px}.egx-boundary__copy>span{align-self:flex-start;padding:8px 15px;border:1px solid #cad8ff;border-radius:999px;background:#edf2ff;color:#3159d7;font:600 13px/1 var(--font-body)}.egx-boundary__copy h3{margin:24px 0 12px;font-size:32px;font-weight:600;letter-spacing:-.02em}.egx-boundary__copy>p{margin:0;font-size:16px;line-height:1.65}.egx-boundary__copy>div{margin-top:24px;padding-top:20px;border-top:1px solid #dce4ef}.egx-boundary__copy strong{font:650 13px/1.2 var(--font-body);color:#27364b}.egx-boundary__copy div p{margin:7px 0 0;font-size:13px;line-height:1.55}.egx-boundary__note{margin:24px 0 0;text-align:center;font-size:14px}
+  @media(max-width:860px){.egx-boundary__feature{grid-template-columns:1fr}.egx-boundary__visual{border-right:0;border-bottom:1px solid #dce4ef}.egx-boundary__copy{padding:42px 32px}.egx-action-grid{grid-template-columns:1fr}.egx-action-card,.egx-action-card:nth-child(n){grid-column:span 1;min-height:0;padding:32px 24px;border-right:0;border-bottom:1px solid #3b3a47}.egx-action-card:last-child{border-bottom:0}.egx-action-card__petal{display:none}.egx-action-card>p{max-width:none}.egx-action-card__visual{min-height:170px}.egx-connected__grid{grid-template-columns:repeat(2,minmax(0,1fr))}.egx-connected__notch{display:none}.egx-connected__card:nth-of-type(2n+1){border-left:0}.egx-connected__card:nth-of-type(n+3){border-top:1px solid var(--line)}.egx-connected__cross{display:block;position:absolute;top:0;right:0;z-index:2;width:28px;height:28px;line-height:0;transform:translate(50%,-50%);pointer-events:none}}
+  @media(max-width:560px){.egx-actions-dark__heading{padding-inline:20px}.egx-actions-dark__heading p{font-size:15px}.egx-actions-dark__grid-wrap{padding:40px 16px 48px}}
+  @media(max-width:900px){.egx-hero__grid,.egx-problem__grid,.egx-progress__grid,.egx-draw__grid,.egx-faq__grid{grid-template-columns:1fr;gap:44px}.egx-hero{text-align:center}.egx-actions,.egx-proof{justify-content:center}.egx-rail__grid{grid-template-columns:repeat(3,1fr)}.egx-rail article:nth-child(3n){border-right:0}.egx-grid--six,.egx-grid--three{grid-template-columns:repeat(2,1fr)}.egx-grid article:nth-child(3n){border-right:1px solid var(--line)}.egx-grid article:nth-child(2n){border-right:0}.egx-links__grid{grid-template-columns:repeat(2,1fr)}.egx-links__grid a:nth-child(2){border-right:0}.egx-links__grid a:nth-child(-n+2){border-bottom:1px solid var(--line)}.egx-workflow__container{flex-direction:column;gap:40px}.egx-workflow__left{flex:none;width:100%}.egx-workflow__sticky,.egx-rule-card,.egx-faq aside{position:static}.egx-rule-card{padding:32px 24px}.egx-use-tabs{justify-content:flex-start;width:100%;overflow-x:auto}.egx-use-panel{grid-template-columns:1fr;gap:48px;padding:48px}}
+  @media(max-width:600px){.egx-shell{width:min(100% - 32px,1180px)}.egx-hero{padding:145px 0 64px}.egx-hero h1{font-size:38px}.egx-hero__copy>p{font-size:16px}.egx-actions{flex-direction:column}.egx-composite{min-height:380px}.egx-composite__rear{width:45%}.egx-composite__active{width:94%;bottom:35px}.egx-composite__pill--status{right:0;top:74px}.egx-composite__pill--action{left:8px}.egx-rail,.egx-cards,.egx-choice,.egx-boundary,.egx-links,.egx-use,.egx-faq,.egx-workflow,.egx-progress,.egx-draw,.egx-dark,.egx-problem{padding:64px 0}.egx-rail__grid,.egx-grid--six,.egx-grid--three,.egx-choice__grid,.egx-links__grid{grid-template-columns:1fr}.egx-rail article,.egx-grid article,.egx-links__grid a{border-right:0;border-bottom:1px solid var(--line)}.egx-choice__grid article+article{border-left:0;border-top:1px solid var(--line)}.egx-problem article{grid-template-columns:1fr;gap:7px}.egx-page h2{font-size:36px}.egx-faq__grid{gap:35px}}
+  @media(max-width:600px){:global(body:has(.egx-page) .site-footer .cta-devices-img){width:340px;max-width:100%}}
+  @media(max-width:600px){.egx-workflow{padding-inline:16px}.egx-rule-card{padding:24px 18px}.egx-rule-card__header{flex-direction:column}.egx-rule-card__visual{min-height:245px;padding:12px}.egx-rule-shot{height:230px}.egx-fields-ui,.egx-schedule-ui{grid-template-columns:1fr}.egx-fields-ui>div{grid-column:1}.egx-schedule-ui p{grid-column:1}}
+  @media(max-width:680px){.egx-use{padding:68px 16px}.egx-use__header{align-items:flex-start;text-align:left}.egx-use__header h2 br{display:none}.egx-use-tabs{margin-bottom:28px}.egx-use-panel{gap:36px;padding:30px 24px;border-radius:22px}.egx-use-preview{padding:14px;border-radius:18px}.egx-use-preview__window{padding-inline:10px}.egx-use-preview__row{grid-template-columns:28px 1fr auto}.egx-use-preview__row>i{display:none}}
+  @media(max-width:767px){.egx-connected.egx-connected{padding:32px 16px 48px}.egx-connected__heading{text-align:left}.egx-connected__heading p{margin-left:0;font-size:15px}.egx-connected__heading br{display:none}}
+  @media(max-width:560px){.egx-connected__grid{grid-template-columns:1fr}.egx-connected__card{min-height:0;padding:24px 20px;border-top:1px solid var(--line);border-left:0}.egx-connected__card:first-of-type{border-top:0}.egx-connected__card h3{min-height:0}.egx-connected__cross{display:none}}
+  @media(prefers-reduced-motion:reduce){.egx-composite__pill--action,.egx-rule-shot__cursor{animation:none}.egx-use-panel,.egx-choice-panel{animation:none}.egx-actions-dark{clip-path:none;will-change:auto}.egx-action-card__visual:before,.egx-action-card__visual>*{animation:none}.egx-connected__icon,.egx-connected__card h3 a{transition:none}}
+  .egx-dark{position:relative;isolation:isolate;overflow:hidden;padding:28px 24px 110px;background:radial-gradient(72% 50% at 50% 100%,rgba(48,91,255,.28),transparent 72%),linear-gradient(180deg,#0b0d31 0%,#050817 68%,#081126 100%);color:#fff}.egx-dark:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.17;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:100% 5px}.egx-dark__inner{width:min(1064px,100%);margin:auto}.egx-dark .egx-heading{max-width:900px;margin:0 auto 82px}.egx-heading--dark h2{color:#f7f8ff;font-size:clamp(40px,4.35vw,58px);font-weight:500}.egx-heading--dark p{max-width:760px;margin:18px auto 0;color:#aeb7c8;font-size:17px;line-height:1.6}.egx-dark__tag{display:inline-flex;margin-bottom:20px;padding:8px 16px;border:1px solid rgba(164,174,255,.22);border-radius:999px;background:rgba(255,255,255,.025);color:#c2c8ff;font:600 13px/1.2 var(--font-body)}.egx-leaderboard-stage{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center;min-height:560px;padding:54px 16px 44px 40px;border:1px solid rgba(146,162,211,.18);border-radius:22px;background:linear-gradient(145deg,rgba(31,40,72,.82),rgba(17,24,48,.72));box-shadow:0 40px 100px rgba(0,0,0,.28)}.egx-leaderboard-copy .egx-kicker{margin-bottom:18px;color:#91a5ff}.egx-leaderboard-copy>h3{max-width:430px;color:#f6f7ff;font-size:clamp(30px,3vw,40px);font-weight:500;line-height:1.08;letter-spacing:-.025em}.egx-leaderboard-copy>p{max-width:460px;margin:16px 0 24px;color:#aeb7c8;font-size:15px;line-height:1.65}.egx-leaderboard-controls{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid rgba(255,255,255,.1);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.1)}.egx-leaderboard-controls article{display:grid;grid-template-columns:28px 1fr;gap:10px;min-height:96px;padding:15px;background:rgba(8,13,31,.78)}.egx-leaderboard-controls article>span{color:#8da2ff;font:700 10px/1.4 var(--font-body)}.egx-leaderboard-controls h4{margin:0;color:#fff;font:600 13px/1.35 var(--font-body)}.egx-leaderboard-controls p{margin:5px 0 0;color:#8e99ad;font-size:10.5px;line-height:1.4}.egx-leaderboard-visual{position:relative;align-self:stretch;min-height:470px;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-right:0;border-radius:18px 0 0 18px;background:linear-gradient(145deg,rgba(39,49,82,.82),rgba(16,24,49,.55))}.egx-leaderboard-shot{position:absolute;margin:0;overflow:hidden;border:1px solid rgba(210,220,255,.3);border-radius:12px;background:#fff;box-shadow:0 24px 55px rgba(0,0,0,.36)}.egx-leaderboard-shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:left top}.egx-leaderboard-shot--rear{top:42px;left:58px;width:86%;aspect-ratio:1.81;opacity:.78;transform:rotate(-.7deg)}.egx-leaderboard-shot--front{right:-72px;bottom:35px;width:88%;aspect-ratio:1.81;transform:rotate(.5deg)}.egx-leaderboard-pill{position:absolute;z-index:3;display:inline-flex;align-items:center;gap:7px;padding:10px 13px;border:1px solid rgba(160,179,255,.25);border-radius:10px;background:rgba(13,20,47,.94);box-shadow:0 12px 30px rgba(0,0,0,.32);color:#dbe3ff;font:700 11px/1.2 var(--font-body);backdrop-filter:blur(10px)}.egx-leaderboard-pill--status{top:20px;left:24px}.egx-leaderboard-pill--status i{width:7px;height:7px;border-radius:50%;background:#37d69b;box-shadow:0 0 0 4px rgba(55,214,155,.12)}.egx-leaderboard-pill--action{right:18px;bottom:17px;animation:egxGlow 4s ease-in-out infinite}.egx-leaderboard-pill--action b{color:#8da2ff}@media(max-width:860px){.egx-leaderboard-stage{grid-template-columns:1fr;padding:38px;gap:36px}.egx-leaderboard-visual{min-height:440px;border-right:1px solid rgba(255,255,255,.12);border-radius:18px}}@media(max-width:600px){.egx-dark{padding:64px 16px}.egx-dark .egx-heading{margin-bottom:44px}.egx-heading--dark h2{font-size:36px}.egx-leaderboard-stage{padding:24px 18px}.egx-leaderboard-controls{grid-template-columns:1fr}.egx-leaderboard-visual{min-height:330px}.egx-leaderboard-shot--rear{left:28px}.egx-leaderboard-shot--front{right:-34px}}
+  .egx-dark{padding-top:88px}
+  .egx-leaderboard-controls{display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:4px 12px 18px 0;border:0;border-radius:0;overflow:visible;background:transparent}.egx-leaderboard-controls article{position:relative;width:calc(100% - 34px);min-height:70px;margin-top:-9px;padding:14px 18px;grid-template-columns:32px 1fr;align-items:center;border:1px solid rgba(153,171,232,.22);border-radius:14px;background:linear-gradient(135deg,rgba(24,34,68,.98),rgba(9,15,36,.97));box-shadow:0 14px 28px rgba(0,0,0,.28);transition:transform .25s ease,border-color .25s ease}.egx-leaderboard-controls article:first-child{margin-top:0}.egx-leaderboard-controls article:nth-child(2){margin-left:7px}.egx-leaderboard-controls article:nth-child(3){margin-left:14px}.egx-leaderboard-controls article:nth-child(4){margin-left:21px}.egx-leaderboard-controls article:nth-child(5){margin-left:28px}.egx-leaderboard-controls article:nth-child(6){margin-left:34px}.egx-leaderboard-controls article:hover{z-index:7;transform:translateY(-5px) translateX(5px);border-color:rgba(141,162,255,.58)}.egx-leaderboard-controls article>span{display:grid;place-items:center;width:26px;height:26px;border:1px solid rgba(141,162,255,.3);border-radius:8px;background:rgba(141,162,255,.1)}.egx-leaderboard-controls h4{font-size:13.5px}.egx-leaderboard-controls p{margin-top:3px;font-size:10.5px}@media(max-width:600px){.egx-leaderboard-controls article{width:calc(100% - 12px)}.egx-leaderboard-controls article:nth-child(n){margin-left:0}.egx-leaderboard-controls article:nth-child(even){margin-left:10px}}
+  .egx-choice{padding:clamp(82px,9vw,112px) 24px;background:linear-gradient(145deg,#fff 0%,#fbf9ff 48%,#edf4ff 100%)}.egx-choice__inner{width:min(1080px,100%);margin:0 auto}.egx-choice__header{display:flex;flex-direction:column;align-items:center;max-width:940px;margin:0 auto 32px;text-align:center}.egx-choice__header h2{margin:0 0 18px;background:linear-gradient(90deg,#222 0%,#343434 54%,#8c8c8c 100%);background-clip:text;-webkit-background-clip:text;color:transparent;font:500 clamp(36px,4.4vw,56px)/1.08 var(--font-heading);letter-spacing:-.035em}.egx-choice__header>p{margin:0;color:#6b7280;font-size:17.5px;font-weight:500;line-height:1.5}.egx-choice-tabs{display:flex;justify-content:center;gap:4px;width:fit-content;max-width:100%;margin:0 auto 48px;padding:6px;border:1px solid #e1e6ee;border-radius:999px;background:#f1f3f7}.egx-choice-tab{padding:9px 24px;border:1px solid transparent;border-radius:999px;background:transparent;color:#64748b;cursor:pointer;white-space:nowrap;font:600 13px/1.3 var(--font-body);transition:.2s ease}.egx-choice-tab:hover{background:rgba(255,255,255,.68);color:#334155}.egx-choice-tab:focus-visible{outline:3px solid rgba(55,93,251,.28);outline-offset:2px}.egx-choice-tab.is-active{border-color:#dbe4f0;background:#fff;color:#3b82f6;box-shadow:0 2px 8px rgba(30,41,59,.08)}.egx-choice-panel{display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;padding:52px 64px;border:1px solid var(--reward-line);border-radius:28px;background:linear-gradient(135deg,var(--reward-tint) 0%,#fff 72%);animation:egxUseIn .4s ease forwards}.egx-choice-panel.is-active{display:grid}.egx-choice-panel__copy>span{color:var(--blue);font:700 11px/1 var(--font-body);letter-spacing:.12em}.egx-choice-panel__copy h3{margin:18px 0;color:#1f2937;font:500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading);letter-spacing:-.03em}.egx-choice-panel__copy>p{margin:0 0 24px;color:#4b5563;font-size:16px;font-weight:500;line-height:1.6}.egx-choice-panel__copy>b{display:inline-flex;padding:8px 12px;border-radius:999px;background:#eaf7f2;color:#167258;font:600 12px var(--font-body)}.egx-reward-preview{position:relative;isolation:isolate;padding:22px;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:rgba(255,255,255,.58);box-shadow:0 22px 48px rgba(31,41,55,.1)}.egx-reward-preview:before{content:"";position:absolute;inset:10% 7% -8%;z-index:-1;border-radius:12px;background:var(--reward-line);filter:blur(22px);opacity:.48}.egx-reward-preview__status{position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #cddcff;border-radius:10px;background:#eef4ff;color:#3158d4;box-shadow:0 8px 22px rgba(49,88,212,.16);font:700 11px/1.2 var(--font-body)}.egx-reward-preview__status i{width:7px;height:7px;border-radius:50%;background:#3b82f6}.egx-reward-preview__window{display:grid;gap:10px;min-height:284px;padding:54px 18px 18px;border:1px solid #e0e4ec;border-radius:12px;background:#fff;font-family:var(--font-body)}.egx-reward-preview__window header{display:grid;grid-template-columns:1fr auto;gap:6px;padding-bottom:16px;border-bottom:1px solid #e8ecf2}.egx-reward-preview__window header span{grid-column:1/-1;color:#9ca3af;font-size:9px;font-weight:700;letter-spacing:.12em}.egx-reward-preview__window header strong{font-size:13px}.egx-reward-preview__window header b{color:var(--blue);font-size:12px}.egx-reward-preview__row{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;padding:11px;border:1px solid #e7eaf0;border-radius:10px;background:#fafbfe}.egx-reward-preview__row>span{display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#edf1ff;color:var(--blue);font:700 10px var(--font-body)}.egx-reward-preview__row div{display:flex;flex-direction:column;gap:2px}.egx-reward-preview__row small{color:#8a94a5;font-size:9px}.egx-reward-preview__row strong{font-size:11px}.egx-reward-preview__row>i{color:#23855c;font:700 9px var(--font-body);font-style:normal;text-transform:uppercase}.egx-choice__note{margin:22px 0 0;text-align:center;color:#778195;font-size:12px}
+  @media(max-width:900px){.egx-choice-panel{grid-template-columns:1fr;gap:48px;padding:48px}}
+  @media(max-width:680px){.egx-choice{padding:68px 16px}.egx-choice__header{align-items:flex-start;text-align:left}.egx-choice__header h2 br{display:none}.egx-choice-tabs{justify-content:flex-start;width:100%;margin-bottom:28px;overflow-x:auto}.egx-choice-panel{gap:36px;padding:30px 24px;border-radius:22px}.egx-reward-preview{padding:14px;border-radius:18px}.egx-reward-preview__window{padding-inline:10px}.egx-reward-preview__row>i{display:none}}
+  .egx-draw{padding:110px 24px;background:#fff}.egx-draw__inner{width:min(1060px,100%);margin:0 auto}.egx-draw__heading{max-width:900px;margin:0 auto 70px;text-align:center}.egx-draw__heading h2{margin:0;background:linear-gradient(94deg,#20242c 25%,#383b42 60%,#a0a0a0 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-size:clamp(42px,5.3vw,64px)}.egx-draw__heading h2 em{font:inherit}.egx-draw__heading>p{max-width:720px;margin:22px auto 0;font-size:17px}.egx-draw__steps{display:grid;gap:14px}.egx-draw-step{overflow:hidden;border:1px solid var(--draw-line);border-radius:28px;background:var(--draw-hue);transition:background .25s ease}.egx-draw-step__toggle{display:grid;grid-template-columns:58px minmax(180px,.8fr) minmax(240px,1.25fr) 50px;gap:20px;align-items:center;width:100%;min-height:94px;padding:18px 28px;border:0;background:transparent;color:var(--ink);cursor:pointer;text-align:left}.egx-draw-step__toggle>span{font:500 27px/1 var(--font-heading)}.egx-draw-step__toggle strong{font:600 22px/1.2 var(--font-heading)}.egx-draw-step__toggle small{color:#596577;font:15px/1.45 var(--font-body)}.egx-draw-step__toggle>i{position:relative;width:44px;height:44px;border:1px solid #cfd5df;border-radius:50%;background:rgba(255,255,255,.66)}.egx-draw-step__toggle>i:before,.egx-draw-step__toggle>i:after{content:"";position:absolute;top:50%;left:50%;width:12px;height:1.5px;background:#202938;transform:translate(-50%,-50%)}.egx-draw-step__toggle>i:after{transform:translate(-50%,-50%) rotate(90deg)}.egx-draw-step.is-open .egx-draw-step__toggle>i:after{opacity:0}.egx-draw-step__body{display:grid;grid-template-columns:.88fr 1.12fr;gap:46px;align-items:center;padding:8px 54px 48px 106px}.egx-draw-step__body>div>p{margin:0 0 26px;color:#333;font-size:18px}.egx-draw-step__body ul{display:grid;gap:14px;margin:0;padding:0;list-style:none}.egx-draw .egx-draw-step__body li{display:flex;gap:13px;align-items:center;margin:0;padding:0;border:0;background:transparent;color:#222;font:500 15px/1.4 var(--font-body)}.egx-draw .egx-draw-step__body li span{display:inline;width:auto;height:auto;border-radius:0;background:transparent;color:#111;font-size:11px}.egx-draw-step__visual{overflow:hidden;min-height:245px;border:1px solid rgba(255,255,255,.9);border-radius:18px;background:rgba(255,255,255,.5);box-shadow:0 18px 40px rgba(31,41,55,.1)}.egx-draw-step__visual img{display:block;width:100%;height:245px;object-fit:cover;object-position:left top}.egx-draw-mini{display:flex;flex-direction:column;justify-content:center;height:245px;padding:34px;font-family:var(--font-body)}.egx-draw-mini>span{color:var(--blue);font-size:10px;font-weight:750;letter-spacing:.12em}.egx-draw-mini>b{margin:18px 0 28px;font-size:24px}.egx-draw-mini>i{overflow:hidden;height:8px;border-radius:99px;background:#e2e7f0}.egx-draw-mini>i em{display:block;width:72%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#375dfb,#8b75ff)}.egx-draw-mini>small{margin-top:12px;color:#697386}.egx-draw-step__toggle:focus-visible{outline:3px solid rgba(55,93,251,.25);outline-offset:-4px}@media(max-width:760px){.egx-draw{padding:72px 16px}.egx-draw__heading{margin-bottom:42px}.egx-draw-step{border-radius:20px}.egx-draw-step__toggle{grid-template-columns:42px 1fr 42px;gap:10px;min-height:82px;padding:15px 18px}.egx-draw-step__toggle>span{font-size:20px}.egx-draw-step__toggle strong{font-size:18px}.egx-draw-step__toggle small{display:none}.egx-draw-step__toggle>i{width:38px;height:38px}.egx-draw-step__body{grid-template-columns:1fr;gap:28px;padding:4px 20px 28px 70px}.egx-draw-step__visual,.egx-draw-step__visual img,.egx-draw-mini{height:190px;min-height:190px}}
+  .egx-draw-step__body[hidden]{display:none}
+  .egx-problem{padding:48px 24px;background:transparent;color:var(--ink)}.egx-problem__grid{width:min(1120px,100%);padding:48px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:36px;align-items:center}.egx-problem__copy{min-width:0;max-width:560px}.egx-problem .egx-kicker{margin-bottom:12px}.egx-problem h2{color:#182230;font-size:clamp(36px,5vw,56px);line-height:1.1}.egx-problem h2>span{background:linear-gradient(90deg,#303541,#969ca8);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}.egx-problem__copy>p{margin:18px 0 30px;color:#475467;font-size:15px;font-weight:500;line-height:1.55}.egx-problem__actions{display:flex;align-items:center;gap:12px}.egx-problem__actions a{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:13px 20px;border-radius:6px;font:650 14px var(--font-body);text-decoration:none;transition:transform .2s ease,background .2s ease}.egx-problem__actions a:hover{transform:translateY(-2px)}.egx-problem__primary{background:#27272a;color:#fff}.egx-problem__secondary{border:1px solid #e1e6ef;background:#f3f4f6;color:#374151}.egx-problem__visual{position:relative;justify-self:end;width:100%;max-width:500px;height:clamp(320px,32vw,350px);overflow:hidden;border-radius:24px;background:radial-gradient(circle at 70% 20%,#eef4ff,#f9f5e6 68%)}.egx-problem__visual:before{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#fff5,#dfe8ff22)}.egx-problem__shot{position:absolute;margin:0;overflow:hidden;border:1px solid #d9dfeb;border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.15)}.egx-problem__shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left}.egx-problem__shot--modules{z-index:1;top:30px;left:20px;width:77%;height:70%}.egx-problem__shot--settings{z-index:2;right:18px;bottom:24px;width:70%;height:68%}.egx-problem__status,.egx-problem__action{position:absolute;z-index:5;display:inline-flex;align-items:center;border-radius:10px;white-space:nowrap;box-shadow:0 10px 24px rgba(31,41,72,.16);font:700 12px/1 var(--font-body)}.egx-problem__status{top:14px;left:16px;gap:7px;padding:11px 14px;border:1px solid #dce4ff;background:#eef2ff;color:#4163ed}.egx-problem__status i{display:grid;place-items:center;width:16px;height:16px;border-radius:50%;background:#5677f1;color:#fff;font-style:normal}.egx-problem__action{right:16px;bottom:16px;padding:13px 16px;background:#4163ed;color:#fff;animation:egxGlow 2.4s ease-in-out infinite}.egx-problem__cursor{position:absolute;right:15px;bottom:49px;z-index:6;width:22px;height:26px;fill:#172033;stroke:#fff;stroke-width:1.4;filter:drop-shadow(0 3px 3px #11182755);animation:egxCursorNudge 2.4s ease-in-out infinite}@keyframes egxCursorNudge{50%{transform:translate(-4px,-5px)}}
+  @media(max-width:900px){.egx-problem__grid{grid-template-columns:1fr;gap:32px}.egx-problem__copy,.egx-problem__visual{max-width:none}}
+  @media(max-width:600px){.egx-problem{padding:16px}.egx-problem__grid{padding:32px 24px}.egx-problem__copy>p{font-size:15px}.egx-problem__actions{flex-direction:column;align-items:stretch}.egx-problem__actions a{width:100%}.egx-problem__visual{height:300px}.egx-problem__shot--modules{left:12px;width:80%}.egx-problem__shot--settings{right:12px;width:72%}}
+  @media(prefers-reduced-motion:reduce){.egx-problem__action,.egx-problem__cursor{animation:none}}
+  .egx-composite__rear{animation:egxHeroRear 6.4s ease-in-out infinite}.egx-composite__active{animation:egxHeroActive 7.2s ease-in-out infinite}.egx-composite__active img{transform:scale(1.01);animation:egxHeroPan 9s ease-in-out infinite}.egx-composite__pill--status{animation:egxHeroStatus 6.4s ease-in-out infinite}.egx-composite__pill--action{animation:egxHeroAction 4s ease-in-out infinite}@keyframes egxHeroRear{0%,100%{transform:translate3d(0,0,0) rotate(-1deg)}50%{transform:translate3d(0,-8px,0) rotate(.5deg)}}@keyframes egxHeroActive{0%,100%{transform:translate3d(0,0,0) rotate(.35deg)}50%{transform:translate3d(-5px,-10px,0) rotate(-.35deg)}}@keyframes egxHeroPan{0%,100%{transform:scale(1.01) translateX(0)}50%{transform:scale(1.045) translateX(-1.2%)}}@keyframes egxHeroStatus{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}@keyframes egxHeroAction{0%,100%{transform:translateY(0);box-shadow:0 14px 30px rgba(31,52,98,.14)}50%{transform:translateY(-5px);box-shadow:0 18px 36px rgba(55,93,251,.27)}}
+  @media(prefers-reduced-motion:reduce){.egx-composite__rear,.egx-composite__active,.egx-composite__active img,.egx-composite__pill--status,.egx-composite__pill--action{animation:none;transform:none}}
+  .egx-progress{position:relative;padding:104px 24px 116px;background:#f5f8ff}.egx-progress__inner{width:min(1008px,100%);margin:0 auto}.egx-progress__heading{max-width:940px;margin:0 auto 76px;text-align:center}.egx-progress__heading .egx-kicker{margin-bottom:20px}.egx-progress__heading h2{color:#202938;font-size:clamp(40px,4.7vw,58px);line-height:1.06}.egx-progress__workspace{display:grid;grid-template-columns:1fr 1fr;min-height:590px;overflow:hidden;border:1px solid #d8e0eb;border-radius:20px;background:rgba(255,255,255,.26)}.egx-progress__visual{position:relative;display:flex;align-items:flex-end;min-width:0;padding:54px 0 54px 38px;overflow:hidden;border-right:1px solid #d8e0eb;background:radial-gradient(circle at 24% 78%,rgba(255,226,126,.46),transparent 34%),linear-gradient(145deg,#f9fbff,#f1f5ff)}.egx-progress__visual:before{content:"";position:absolute;inset:12% 9% 8%;border-radius:50%;background:rgba(88,114,255,.12);filter:blur(45px)}.egx-progress__visual figure{position:relative;width:116%;margin:0 -16% 0 0;overflow:hidden;border:1px solid #dbe3ee;border-radius:14px;background:#fff;box-shadow:0 28px 58px rgba(34,51,91,.16);transform:translateY(8px)}.egx-progress__visual img{display:block;width:100%;height:auto}.egx-progress__status,.egx-progress__points{position:absolute;z-index:2;display:inline-flex;align-items:center;padding:11px 14px;border-radius:11px;background:rgba(255,255,255,.94);box-shadow:0 12px 30px rgba(41,59,101,.15);font:700 11px/1.2 var(--font-body);backdrop-filter:blur(10px)}.egx-progress__status{top:42px;left:28px;gap:8px;color:#3158d4}.egx-progress__status i{width:7px;height:7px;border-radius:50%;background:#2ac485;box-shadow:0 0 0 4px rgba(42,196,133,.13)}.egx-progress__points{right:18px;bottom:30px;color:var(--blue);animation:egxGlow 4s ease-in-out infinite}.egx-progress__copy{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:62px 70px}.egx-progress__label{color:#6335d4;font:700 12px/1.2 var(--font-body);letter-spacing:.11em;text-transform:uppercase}.egx-progress__copy>h3{max-width:390px;margin:24px 0 18px;color:#202938;font-size:clamp(34px,3.4vw,46px);font-weight:500;line-height:1.05;letter-spacing:-.035em}.egx-progress__copy>p{margin:0 0 24px;font-size:15px;line-height:1.6}.egx-progress__copy ol{list-style:none;margin:0;padding:0}.egx-progress__copy li{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:13px 0;border-top:1px solid #dfe5ed;border-bottom:0}.egx-progress__copy li>span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#e9eeff;color:var(--blue);font:700 10px/1 var(--font-body)}.egx-progress__copy h4{margin:0;color:#202938;font:600 14px/1.35 var(--font-body)}.egx-progress__copy li p{margin:3px 0 0;font-size:11px;line-height:1.45}@media(max-width:860px){.egx-progress__heading{margin-bottom:48px}.egx-progress__workspace{grid-template-columns:1fr}.egx-progress__visual{min-height:430px;border-right:0;border-bottom:1px solid #d8e0eb}.egx-progress__copy{padding:50px}}@media(max-width:600px){.egx-progress{padding:68px 16px}.egx-progress__heading{margin-bottom:36px;text-align:left}.egx-progress__heading h2{font-size:36px}.egx-progress__workspace{border-radius:18px}.egx-progress__visual{min-height:310px;padding:44px 0 34px 18px}.egx-progress__visual figure{width:122%;margin-right:-22%}.egx-progress__status{top:20px;left:14px}.egx-progress__points{right:10px;bottom:14px}.egx-progress__copy{padding:38px 24px}.egx-progress__copy>h3{font-size:34px}.egx-progress__copy li p{font-size:12px}}@media(prefers-reduced-motion:reduce){.egx-progress__points{animation:none}}
+
+  /* Match the event-registration page's heading type scale and dark-band ink. */
+  .egx-page {
+    --egx-section-title-size: clamp(2.125rem, 5vw, 3.75rem);
+    --egx-section-title-line: 1.08;
+    --egx-section-title-tracking: -0.04em;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .egx-page > section:not(.egx-actions-dark):not(.egx-dark) {
+    background: transparent !important;
+  }
+  .egx-page h1 {
+    font-family: var(--font-heading);
+    font-size: 60px;
+    font-weight: 500;
+    line-height: 66px;
+    letter-spacing: -2.1px;
+  }
+  .egx-hero .egx-kicker {
+    color: var(--blue);
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: normal;
+  }
+  .egx-hero h1 {
+    background: linear-gradient(98deg, var(--ink) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .egx-hero__copy > p {
+    color: #555;
+  }
+  .egx-page h2 {
+    font-family: var(--font-heading);
+    font-size: var(--egx-section-title-size);
+    font-weight: 500;
+    line-height: var(--egx-section-title-line);
+    letter-spacing: var(--egx-section-title-tracking);
+  }
+  .egx-page h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  .egx-actions-dark h2,
+  .egx-dark h2 {
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+  }
+  .egx-actions-dark h3,
+  .egx-dark h3 {
+    color: #fff;
+  }
+
+  /* Large, readable organizer-control cards inspired by the Copilot feature stack. */
+  .egx-leaderboard-stage {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: clamp(32px, 5vw, 64px);
+  }
+  .egx-leaderboard-copy {
+    max-width: none;
+  }
+  .egx-leaderboard-copy > h3 {
+    max-width: 700px;
+    font-size: clamp(30px, 4vw, 44px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.025em;
+  }
+  .egx-leaderboard-copy > p {
+    max-width: 720px;
+    margin: 18px 0 34px;
+    font-size: 17px;
+  }
+  .egx-leaderboard-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    width: 100%;
+    padding: 0;
+  }
+  .egx-leaderboard-controls article,
+  .egx-leaderboard-controls article:nth-child(n) {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    width: 100%;
+    min-height: 148px;
+    margin: 0;
+    padding: 24px;
+    border: 1px solid rgba(153,171,232,.24);
+    border-radius: 20px;
+    background: linear-gradient(145deg, rgba(27,38,75,.94), rgba(9,15,36,.96));
+    box-shadow: 0 18px 42px rgba(0,0,0,.22);
+  }
+  .egx-leaderboard-controls article:hover {
+    transform: translateY(-4px);
+    border-color: rgba(141,162,255,.58);
+  }
+  .egx-leaderboard-controls article > span {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(141,162,255,.36);
+    border-radius: 12px;
+    background: rgba(141,162,255,.12);
+    color: #aebcff;
+    font-size: 12px;
+  }
+  .egx-leaderboard-controls h4 {
+    margin: 2px 0 8px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .egx-leaderboard-controls p {
+    margin: 0;
+    color: #aeb7c8;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .egx-leaderboard-visual {
+    min-height: 560px;
+    border-right: 1px solid rgba(255,255,255,.12);
+    border-radius: 20px;
+  }
+  @media (max-width: 720px) {
+    .egx-leaderboard-stage {
+      gap: 34px;
+      padding: 24px 18px;
+    }
+    .egx-leaderboard-controls {
+      grid-template-columns: 1fr;
+    }
+    .egx-leaderboard-controls article,
+    .egx-leaderboard-controls article:nth-child(n) {
+      min-height: 132px;
+      padding: 20px;
+    }
+    .egx-leaderboard-visual {
+      min-height: 360px;
+    }
+  }
+
+  /* Registration-style FAQ: intro first, then a rounded accordion stack. */
+  .egx-faq {
+    width: 100%;
+    padding: 80px 24px;
+  }
+  .egx-faq .egx-shell {
+    width: min(1140px, 100%);
+  }
+  .egx-faq__grid {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 64px;
+    align-items: start;
+  }
+  .egx-faq aside {
+    position: sticky;
+    top: 6rem;
+  }
+  .egx-faq aside .egx-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: .8125rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+  .egx-faq aside .egx-kicker::before {
+    content: "↗";
+  }
+  .egx-faq aside h2 {
+    margin: 0 0 20px;
+    color: #000;
+    font-family: var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .egx-faq aside > p {
+    margin: 0 0 28px;
+    color: #667085;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .egx-faq aside .egx-btn {
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    box-shadow: none;
+    font-size: .9375rem;
+    font-weight: 500;
+  }
+  .egx-faq__grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    counter-reset: gamification-faq;
+  }
+  .egx-faq details {
+    counter-increment: gamification-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .egx-faq details[open] {
+    border-color: #e4e7ec;
+    background: #e4e7ec;
+  }
+  .egx-faq summary {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0 16px 24px;
+    color: #000;
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    line-height: normal;
+  }
+  .egx-faq summary::before {
+    content: counter(gamification-faq) ". ";
+    position: absolute;
+    left: 0;
+  }
+  .egx-faq summary > span {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-left: auto;
+  }
+  .egx-faq summary > span::before,
+  .egx-faq summary > span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+  .egx-faq summary > span::before {
+    width: 14px;
+    height: 2px;
+  }
+  .egx-faq summary > span::after {
+    width: 2px;
+    height: 14px;
+  }
+  .egx-faq details[open] summary > span::after {
+    opacity: 0;
+  }
+  .egx-faq details > p {
+    max-width: 640px;
+    margin: 0;
+    padding: 0 0 24px;
+    color: #000;
+    font-size: .9375rem;
+    line-height: 1.7;
+  }
+  @media (max-width: 1024px) {
+    .egx-faq__grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .egx-faq aside {
+      position: static;
+    }
+    .egx-faq aside h2 {
+      font-size: 32px;
+    }
+  }
+  @media (max-width: 767px) {
+    .egx-faq {
+      padding: 56px 16px;
+    }
+    .egx-faq aside h2 {
+      font-size: 28px;
+    }
+    .egx-faq details {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+    .egx-faq summary {
+      padding: 18px 0 18px 24px;
+      font-size: .9375rem;
+    }
+  }
+  @media (max-width: 720px) {
+    .egx-page h1 {
+      font-size: 42px;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  /* Speaker-management stacking-card design system, adapted for leaderboard controls. */
+  .egx-dark {
+    width: 100%;
+    padding: 4px 0 30px;
+    overflow: visible;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, .28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: egx-leaderboard-mesh 30s linear infinite;
+  }
+  @keyframes egx-leaderboard-mesh {
+    0%, 100% { background-position: 0 0, 0 0; }
+    50% { background-position: 0 0, 8% 10%; }
+  }
+  .egx-dark::before { display: none; }
+  .egx-dark__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .egx-dark .egx-heading {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: min(94%, 1050px);
+    max-width: none;
+    margin: 0;
+    padding: 24px 0;
+  }
+  .egx-dark .egx-heading::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(13,10,44,.99), rgba(7,11,27,.98) 72%, rgba(7,11,27,0));
+  }
+  .egx-dark__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 999px;
+    background: rgba(255,255,255,.12);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 6px 16px -6px rgba(0,0,0,.35);
+    color: #fff;
+    font: 500 15px/24px var(--font-body);
+    backdrop-filter: blur(16px);
+  }
+  .egx-dark__tag svg { width: 16px; height: 16px; }
+  .egx-heading--dark h2 {
+    color: #fff;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+    font-size: 46px;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+  .egx-heading--dark h2 > span { display: block; }
+  .egx-heading--dark h2 em { color: #afa3ff; font-style: normal; }
+  .egx-leaderboard-cards {
+    --egx-stack-top: 300px;
+    position: relative;
+    width: 100%;
+    padding: 80px 0 50px;
+  }
+  .egx-leaderboard-stage {
+    position: sticky;
+    top: calc(var(--egx-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    width: 100%;
+    height: 500px;
+    min-height: 0;
+    margin: 0 0 60px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 20px;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255,255,255,.16), transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90,130,255,.18), transparent 40%),
+      #0a0a0f;
+    box-shadow: none;
+  }
+  .egx-leaderboard-stage:first-child {
+    background: radial-gradient(circle at 82% 12%, rgba(109,92,235,.24), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66,173,218,.13), transparent 28%), #090a10;
+  }
+  .egx-leaderboard-copy {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+  }
+  .egx-dark__card-tag {
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid rgba(175,163,255,.28);
+    border-radius: 999px;
+    background: rgba(175,163,255,.1);
+    color: #afa3ff;
+    font: 600 12px/1.2 var(--font-body);
+  }
+  .egx-leaderboard-copy > h3 {
+    max-width: none;
+    color: #e7e4fa;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+  .egx-leaderboard-copy > p {
+    max-width: none;
+    margin: 0;
+    color: rgba(255,255,255,.55);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+  .egx-leaderboard-controls { display: flex; flex-wrap: wrap; gap: 7px; padding: 0; }
+  .egx-leaderboard-controls > span {
+    padding: 6px 9px;
+    border: 1px solid rgba(175,163,255,.2);
+    border-radius: 999px;
+    color: #bdb5ef;
+    font: 500 11px/1.2 var(--font-body);
+  }
+  .egx-leaderboard-copy > a {
+    align-self: flex-start;
+    margin-top: 1px;
+    padding: 12px 26px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    color: #fff;
+    font: 500 15px var(--font-body);
+    text-decoration: none;
+  }
+  .egx-leaderboard-visual {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    margin: 16px 16px 16px 0;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter: blur(24px);
+  }
+  .egx-leaderboard-visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+    animation: egx-leaderboard-float 4s ease-in-out infinite;
+  }
+  @keyframes egx-leaderboard-float { 50% { transform: translateY(-10px); } }
+  .egx-leaderboard-spacer { height: 190px; }
+  @media (max-width: 1024px) {
+    .egx-dark__inner { padding: 20px 20px 30px; }
+    .egx-heading--dark h2 { font-size: 40px; line-height: 1; }
+    .egx-leaderboard-cards { --egx-stack-top: 292px; }
+    .egx-leaderboard-stage { height: 450px; }
+    .egx-leaderboard-copy { flex-basis: 50%; }
+    .egx-leaderboard-copy > h3 { font-size: 28px; }
+    .egx-leaderboard-copy > p { font-size: 16px; }
+  }
+  @media (max-width: 767px) {
+    .egx-dark { padding: 16px 0 30px; }
+    .egx-dark__inner { padding: 0 20px; }
+    .egx-dark .egx-heading { width: 100%; }
+    .egx-heading--dark h2 { font-size: 30px; }
+    .egx-leaderboard-cards { --egx-stack-top: 320px; padding-top: 80px; }
+    .egx-leaderboard-stage { flex-direction: column; height: 560px; }
+    .egx-leaderboard-copy { flex: 0 0 auto; padding: 20px 20px 8px; }
+    .egx-leaderboard-copy > h3 { font-size: 24px; }
+    .egx-leaderboard-copy > p { font-size: 15px; }
+    .egx-leaderboard-visual { margin: 12px; padding: 16px; }
+    .egx-leaderboard-spacer { height: 100px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .egx-dark, .egx-leaderboard-visual img { animation: none; }
+  }
+
+  /* Real EventHex product screenshots, framed with the speaker-management visual treatment. */
+  .egx-composite__rear { animation: egx-shot-drift 5.4s ease-in-out infinite; }
+  .egx-composite__active { animation: egx-shot-float 4.8s ease-in-out infinite; }
+  .egx-composite__active::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(110deg, transparent 25%, rgba(255,255,255,.24) 48%, transparent 70%);
+    transform: translateX(-125%);
+    animation: egx-shot-sheen 6s ease-in-out infinite;
+  }
+  @keyframes egx-shot-float { 50% { transform: translateY(-8px); } }
+  @keyframes egx-shot-drift { 50% { transform: translate(5px, -5px) rotate(.4deg); } }
+  @keyframes egx-shot-sheen { 0%, 55% { transform: translateX(-125%); } 82%, 100% { transform: translateX(125%); } }
+
+  .egx-product-shot {
+    position: relative;
+    width: 100%;
+    height: 270px;
+    margin: 0;
+    padding: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 16px;
+    background: rgba(255,255,255,.64);
+    box-shadow: 0 18px 40px rgba(31,41,55,.12), inset 0 1px 0 #fff;
+  }
+  .egx-product-shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border: 1px solid #e2e7ef;
+    border-radius: 11px;
+    background: #fff;
+    animation: egx-product-breathe 5s ease-in-out infinite;
+  }
+  @keyframes egx-product-breathe { 50% { transform: translateY(-5px) scale(1.008); } }
+
+  .egx-choice-panel .egx-reward-preview {
+    position: relative;
+    min-width: 0;
+    height: 340px;
+    margin: 0;
+    padding: 18px;
+    overflow: hidden;
+  }
+  .egx-choice-panel .egx-reward-preview img,
+  .egx-use-panel__visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    border: 1px solid #dfe5ee;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 18px 38px rgba(31,41,55,.12);
+    animation: egx-product-breathe 5s ease-in-out infinite;
+  }
+  .egx-draw-step__visual { margin: 0; padding: 14px; }
+  .egx-draw-step__visual img {
+    height: 215px;
+    border: 1px solid #e1e6ee;
+    border-radius: 12px;
+    object-fit: contain;
+    object-position: center;
+    background: #fff;
+    animation: egx-product-breathe 5s ease-in-out infinite;
+  }
+  .egx-use-panel__visual {
+    position: relative;
+    height: 350px;
+    margin: 0;
+    padding: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 24px;
+    background: rgba(255,255,255,.58);
+    box-shadow: 0 22px 48px rgba(31,41,55,.1);
+  }
+  .egx-use-panel__visual::before {
+    content: "";
+    position: absolute;
+    inset: 14% 8% -8%;
+    z-index: -1;
+    border-radius: 18px;
+    background: var(--use-border, #dce8ff);
+    filter: blur(24px);
+    opacity: .55;
+  }
+  @media (max-width: 680px) {
+    .egx-product-shot { height: 220px; padding: 10px; }
+    .egx-choice-panel .egx-reward-preview, .egx-use-panel__visual { height: 250px; padding: 12px; }
+    .egx-draw-step__visual { padding: 10px; }
+    .egx-draw-step__visual img { height: 168px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .egx-composite__rear, .egx-composite__active, .egx-composite__active::after,
+    .egx-product-shot img, .egx-reward-preview img, .egx-draw-step__visual img,
+    .egx-use-panel__visual img { animation: none; }
+  }
+
+  /* Registration-page hero design language, adapted for gamification. */
+  .egx-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background: radial-gradient(ellipse 700px 500px at -5% -10%,#375dfb24,#375dfb0f 40%,#375dfb00 75%),radial-gradient(ellipse 800px 600px at 100% 105%,#ff74b83d,#ff74b81a 45%,#ff74b800 78%),#fff !important;
+  }
+  .egx-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 2;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right,#fff0,#ffffff73 70%,#ffffffbf);
+    pointer-events: none;
+  }
+  .egx-hero__grid {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1080px;
+    display: grid;
+    grid-template-columns: minmax(260px,542px) minmax(0,490px);
+    gap: 48px;
+    align-items: center;
+  }
+  .egx-hero__copy { display:flex;flex-direction:column;align-items:flex-start;gap:20px; }
+  .egx-hero .egx-kicker { margin:0;font-size:16px;font-weight:500;text-transform:uppercase; }
+  .egx-hero h1 { width:100%;font-size:60px;line-height:66px;letter-spacing:-2.1px; }
+  .egx-hero__copy>p { width:100%;max-width:none;margin:0;color:#555;font-size:18px;font-weight:400;line-height:24px;letter-spacing:-.25px; }
+  .egx-actions { display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin:0;padding-top:8px; }
+  .egx-btn { gap:6px;padding:12px 20px;border:1px solid transparent;border-radius:12px;background:#182230;color:#fff;font-size:15px;font-weight:650;line-height:22px;letter-spacing:-.3px;transition:transform .3s,background .3s,border-color .3s; }
+  .egx-btn span { font-size:24px;font-weight:400;line-height:16px; }
+  .egx-btn:hover { transform:translateY(-2px);background:#000; }
+  .egx-btn--secondary { border-color:rgba(16,24,40,.22);background:transparent;color:#182230;box-shadow:none; }
+  .egx-btn--secondary:hover { border-color:#182230;background:transparent; }
+  .egx-proof { gap:18px;margin:0;padding-top:4px;color:#182230;font-size:16px;font-weight:400; }
+  .egx-proof li::before { width:6px;height:6px;margin-right:10px;background:#10b981;vertical-align:2px; }
+  .egx-hero__visual { position:relative;margin-right:calc(-1 * (max(0px,(100vw - 1128px) / 2) + 24px)); }
+  .egx-composite { min-height:430px;max-width:none;margin:0;padding:46px 34px;border:1px solid rgba(255,255,255,.62);border-right:0;border-radius:22px 0 0 22px;background:linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff);box-shadow:0 18px 55px rgba(44,61,95,.08); }
+  .egx-composite__active { right:26px;bottom:40px;width:88%;aspect-ratio:1.79;border-radius:14px; }
+  .egx-composite__rear { left:18px;top:28px;width:38%;aspect-ratio:1.05; }
+  .egx-composite__pill--status { right:24px;top:28px; }
+  .egx-composite__pill--action { left:18px;bottom:20px; }
+  @media(max-width:1120px){.egx-hero__grid{grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:32px}.egx-hero h1{font-size:46px;line-height:52px;letter-spacing:-1.5px}}
+  @media(max-width:960px){.egx-hero{padding:130px 20px 48px}.egx-hero::after{display:none}.egx-hero__grid{grid-template-columns:1fr;gap:32px;text-align:center}.egx-hero__copy{align-items:center}.egx-hero__copy>p{max-width:520px}.egx-actions,.egx-proof{justify-content:center}.egx-hero__visual{margin-right:0}.egx-composite{border-right:1px solid rgba(255,255,255,.62);border-radius:22px}}
+  @media(max-width:767px){.egx-hero{margin-top:-80px;padding:112px 16px 40px;text-align:left}.egx-hero__grid{text-align:left}.egx-hero__copy{align-items:flex-start}.egx-hero__copy>p{max-width:100%}.egx-proof{justify-content:flex-start}.egx-hero h1{font-size:34px;line-height:40px;letter-spacing:-.8px}.egx-actions{width:100%;flex-direction:column;align-items:stretch}.egx-btn{width:100%}.egx-composite{min-height:340px;padding:28px 18px}.egx-composite__active{right:14px;bottom:34px;width:92%}.egx-composite__rear{left:12px;top:20px}.egx-composite__pill--status{right:12px;top:18px}.egx-composite__pill--action{left:12px;bottom:12px}}
+
+  /* Registration confirmation bento design, adapted for attendee progress. */
+  .egx-progress { padding:80px 5%;background:transparent !important; }
+  .egx-progress__inner { width:100%;max-width:1200px;margin:0 auto; }
+  .egx-progress__heading { max-width:none;margin:0 0 60px;text-align:center; }
+  .egx-progress__heading .egx-kicker { margin-bottom:16px; }
+  .egx-progress__heading h2 { max-width:1000px;margin:0 auto;background:linear-gradient(90deg,#202938 20%,#9a9da4 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-size:clamp(32px,4vw,56px);font-weight:500;line-height:1.08;letter-spacing:-.03em; }
+  .egx-progress__workspace { position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:0;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent; }
+  .egx-progress__visual,.egx-progress__copy { min-width:0;padding:4rem; }
+  .egx-progress__visual { position:relative;display:flex;align-items:center;justify-content:center;min-height:610px;overflow:hidden;border-right:1px solid #e5e7eb;background:transparent; }
+  .egx-progress__visual::before { content:"";position:absolute;inset:64px;border-radius:22px;background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%);filter:none; }
+  .egx-progress__visual figure { position:relative;width:100%;margin:0;overflow:hidden;border:1px solid #dfe4ec;border-radius:14px;background:#fff;box-shadow:none;transform:none;animation:egxProgressBreathe 7s ease-in-out infinite;will-change:transform; }
+  .egx-progress__visual img { display:block;width:100%;height:auto;object-fit:cover;object-position:top left; }
+  .egx-progress__status,.egx-progress__points { z-index:3;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);box-shadow:0 14px 34px rgba(30,45,88,.2);font-size:.78rem;animation:egxProgressFloat 4.8s ease-in-out infinite; }
+  .egx-progress__status { top:76px;left:auto;right:52px; }
+  .egx-progress__points { right:auto;bottom:76px;left:52px;animation-delay:-2.4s; }
+  .egx-progress__copy { display:flex;flex-direction:column;justify-content:center;background:transparent; }
+  .egx-progress__label { margin-bottom:1rem;color:#5b21b6;font-size:.875rem;font-weight:600;letter-spacing:.05em; }
+  .egx-progress__copy>h3 { max-width:none;margin:0 0 1.25rem;color:#111827;font-size:2.25rem;font-weight:500;line-height:1.02;letter-spacing:-.02em; }
+  .egx-progress__copy>p { margin:0 0 1rem;color:#4b5563;font-size:1.125rem;line-height:1.45; }
+  .egx-progress__copy ol { margin-top:8px; }
+  .egx-progress__copy li { padding:14px 0;border-top:1px solid #e5e7eb; }
+  .egx-progress__copy li>span { width:30px;height:30px; }
+  .egx-progress__copy h4 { font-size:15px; }
+  .egx-progress__copy li p { font-size:12px; }
+  .egx-progress__notch,.egx-progress__cross { position:absolute;left:50%;z-index:4;width:28px;height:28px;pointer-events:none; }
+  .egx-progress__notch::before,.egx-progress__cross::before,.egx-progress__cross::after { content:"";position:absolute;inset:7px 0;border-radius:50%;background:#e5e7eb; }
+  .egx-progress__notch::after,.egx-progress__cross::after { transform:rotate(90deg); }
+  .egx-progress__notch--top { top:0;transform:translate(-50%,-50%); }
+  .egx-progress__notch--bottom { bottom:0;transform:translate(-50%,50%); }
+  .egx-progress__cross { bottom:0;transform:translate(-50%,50%); }
+  @keyframes egxProgressBreathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}
+  @keyframes egxProgressFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-9px,0)}}
+  @media(max-width:900px){.egx-progress__workspace{grid-template-columns:1fr}.egx-progress__copy{order:1;border-bottom:1px solid #e5e7eb}.egx-progress__visual{order:2;min-height:520px;border-right:0}.egx-progress__notch,.egx-progress__cross{display:none}}
+  @media(max-width:600px){.egx-progress{padding:68px 16px}.egx-progress__heading{margin-bottom:40px;text-align:left}.egx-progress__heading h2{font-size:36px}.egx-progress__visual,.egx-progress__copy{padding:3rem 1.5rem}.egx-progress__visual{min-height:380px}.egx-progress__visual::before{inset:32px 18px}.egx-progress__status{top:34px;right:14px}.egx-progress__points{bottom:34px;left:14px}.egx-progress__copy>h3{font-size:2rem}}
+  @media(prefers-reduced-motion:reduce){.egx-progress__visual figure,.egx-progress__status,.egx-progress__points{animation:none;will-change:auto}}
+
+  .egx-progress__bento{position:relative;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent}.egx-progress__row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.egx-progress__row:last-child{border-bottom:0}.egx-progress__cell{min-width:0;padding:4rem;display:flex;flex-direction:column;justify-content:center}.egx-progress__row:not(.egx-progress__row--reverse) .egx-progress__visual{border-right:1px solid #e5e7eb}.egx-progress__row--reverse .egx-progress__copy{order:1;border-right:1px solid #e5e7eb}.egx-progress__row--reverse .egx-progress__visual{order:2}.egx-progress__visual{align-items:center}.egx-progress__stage{position:relative;width:100%;padding:32px 18px;border-radius:22px;background:linear-gradient(180deg,var(--progress-tint),#f5f6f9 100%);isolation:isolate}.egx-progress__stage:before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(145deg,#fff5,#dfe8ff22)}.egx-progress__stage img{display:block;width:100%;border:1px solid #dfe4ec;border-radius:14px;background:#fff;box-shadow:0 18px 42px rgba(30,45,88,.14);animation:egxProgressShotBreathe 7s ease-in-out infinite;will-change:transform}.egx-progress__float{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 14px 34px rgba(30,45,88,.2);font-family:var(--font-body);line-height:1.15;animation:egxProgressFloat 4.8s ease-in-out infinite;backdrop-filter:blur(10px)}.egx-progress__float b{font-size:.78rem;font-weight:700;white-space:nowrap}.egx-progress__float small{display:block;color:#7b8497;font-size:.65rem;white-space:nowrap}.egx-progress__float i{width:9px;height:9px;border-radius:50%;background:#19b874;box-shadow:0 0 0 5px rgba(25,184,116,.13)}.egx-progress__float--top{top:12px;right:3px;align-items:flex-start;flex-direction:column;gap:3px}.egx-progress__float--bottom{bottom:12px;left:3px;animation-delay:-2.4s}.egx-progress__copy{background:transparent}.egx-progress__label{margin-bottom:1rem;color:#5b21b6;font-size:.875rem;font-weight:600;letter-spacing:.05em}.egx-progress__copy h3{margin:0 0 1.25rem;color:#111827;font-size:2.25rem;font-weight:500;line-height:1.02;letter-spacing:-.02em}.egx-progress__copy p{margin:0;color:#4b5563;font-size:1.125rem;line-height:1.45}@keyframes egxProgressShotBreathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}
+  @media(max-width:900px){.egx-progress__row{display:flex;flex-direction:column}.egx-progress__row--reverse .egx-progress__copy,.egx-progress__row--reverse .egx-progress__visual{order:initial}.egx-progress__row .egx-progress__copy{border-right:0;border-bottom:1px solid #e5e7eb}.egx-progress__row .egx-progress__visual{border-right:0}.egx-progress__cell{padding:3rem 1.5rem}}@media(max-width:600px){.egx-progress__stage{padding:24px 14px}.egx-progress__copy h3{font-size:2rem}.egx-progress__float b{font-size:.7rem}.egx-progress__float small{font-size:.58rem}}@media(prefers-reduced-motion:reduce){.egx-progress__stage img,.egx-progress__float{animation:none;will-change:auto}}
+
+  .egx-progress__row:nth-child(1) .egx-progress__stage{background:linear-gradient(180deg,#fff0b8 0%,#fff9e8 58%,#f5f6f9 100%)}.egx-progress__row:nth-child(2) .egx-progress__stage{background:linear-gradient(180deg,#d9f3e4 0%,#f0fbf5 58%,#f5f6f9 100%)}.egx-progress__row:nth-child(3) .egx-progress__stage{background:linear-gradient(180deg,#dce6ff 0%,#f1f4ff 58%,#f5f6f9 100%)}.egx-progress__row:nth-child(4) .egx-progress__stage{background:linear-gradient(180deg,#f5dcec 0%,#fff2fa 58%,#f5f6f9 100%)}
+  .egx-progress__row:nth-child(2) .egx-progress__stage:after,.egx-progress__row:nth-child(3) .egx-progress__stage:after,.egx-progress__row:nth-child(4) .egx-progress__stage:after{content:"";position:absolute;z-index:1;inset:0 0 auto;height:30%;border-radius:22px 22px 0 0;pointer-events:none}.egx-progress__row:nth-child(2) .egx-progress__stage{background:#c9f1df}.egx-progress__row:nth-child(2) .egx-progress__stage:after{background:#c9f1df}.egx-progress__row:nth-child(3) .egx-progress__stage:after{background:#dce6ff}.egx-progress__row:nth-child(4) .egx-progress__stage:after{background:#f5dcec}.egx-progress__row:nth-child(n+2) .egx-progress__float{z-index:4}
+</style>
+
+<script>
+  function initGamificationDraw() {
+    const section = document.querySelector<HTMLElement>(".egx-draw");
+    if (!section || section.dataset.drawReady === "true") return;
+    section.dataset.drawReady = "true";
+    const steps = Array.from(section.querySelectorAll<HTMLElement>("[data-draw-step]"));
+    steps.forEach(step => step.querySelector<HTMLButtonElement>(".egx-draw-step__toggle")?.addEventListener("click", () => {
+      const opening = !step.classList.contains("is-open");
+      steps.forEach(item => {
+        const open = item === step && opening;
+        item.classList.toggle("is-open", open);
+        item.querySelector<HTMLButtonElement>(".egx-draw-step__toggle")?.setAttribute("aria-expanded", String(open));
+        const body = item.querySelector<HTMLElement>(".egx-draw-step__body");
+        if (body) body.hidden = !open;
+      });
+    }));
+  }
+  function initGamificationUseTabs() {
+    const section = document.querySelector<HTMLElement>(".egx-use");
+    if (!section || section.dataset.tabsReady === "true") return;
+    section.dataset.tabsReady = "true";
+    const tabs = Array.from(section.querySelectorAll<HTMLButtonElement>(".egx-use-tab"));
+    const panels = Array.from(section.querySelectorAll<HTMLElement>(".egx-use-panel"));
+    const select = (tab: HTMLButtonElement) => {
+      const target = tab.dataset.useTab;
+      tabs.forEach(item => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach(panel => {
+        const active = panel.dataset.usePanel === target;
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("keydown", event => {
+        let nextIndex = index;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        select(tabs[nextIndex]);
+        tabs[nextIndex].focus();
+      });
+    });
+  }
+  function initGamificationRewardTabs() {
+    const section = document.querySelector<HTMLElement>(".egx-choice");
+    if (!section || section.dataset.tabsReady === "true") return;
+    section.dataset.tabsReady = "true";
+    const tabs = Array.from(section.querySelectorAll<HTMLButtonElement>(".egx-choice-tab"));
+    const panels = Array.from(section.querySelectorAll<HTMLElement>(".egx-choice-panel"));
+    const select = (tab: HTMLButtonElement) => {
+      const target = tab.dataset.rewardTab;
+      tabs.forEach(item => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach(panel => {
+        const active = panel.dataset.rewardPanel === target;
+        panel.classList.toggle("is-active", active);
+        panel.hidden = !active;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("keydown", event => {
+        let nextIndex = index;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        select(tabs[nextIndex]);
+        tabs[nextIndex].focus();
+      });
+    });
+  }
+  function initGamificationActionsBleed() {
+    const section = document.querySelector<HTMLElement>(".egx-actions-dark");
+    if (!section || section.dataset.bleedReady === "true") return;
+    section.dataset.bleedReady = "true";
+    const update = () => {
+      const rect = section.getBoundingClientRect();
+      const start = window.innerHeight * .92;
+      const end = window.innerHeight * .35;
+      const progress = Math.max(0, Math.min(1, (start - rect.top) / (start - end)));
+      section.style.setProperty("--band-p", progress.toFixed(3));
+    };
+    let frame = 0;
+    const requestUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => { frame = 0; update(); });
+    };
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate, { passive: true });
+  }
+  initGamificationDraw();
+  initGamificationUseTabs();
+  initGamificationRewardTabs();
+  initGamificationActionsBleed();
+  document.addEventListener("astro:page-load", initGamificationDraw);
+  document.addEventListener("astro:page-load", initGamificationUseTabs);
+  document.addEventListener("astro:page-load", initGamificationRewardTabs);
+  document.addEventListener("astro:page-load", initGamificationActionsBleed);
+</script>
