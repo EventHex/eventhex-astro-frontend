@@ -2,177 +2,156 @@
 const steps = [
   {
     num: "01",
-    title: "Configure Your App",
-    desc: "Set up branding, upload logo, choose colors, and configure the home screen layout in the organizer dashboard.",
+    title: "Submit the app brief",
+    desc: "Provide the identity, descriptions, contact, logo, and feature graphic.",
+    bullets: ["Add the app identity", "Upload store-ready artwork", "Share contact details"],
+    image: "/images/event-mobile-app/app/app-request-details.png",
+    imageWidth: 672,
+    imageHeight: 471,
+    alt: "EventHex Request an App form with app name, short description, and contact details",
   },
   {
     num: "02",
-    title: "Add Event Content",
-    desc: "Import your agenda, speakers, sponsors, and venue maps. Everything syncs to the app in real time.",
+    title: "Configure the experience",
+    desc: "Choose the theme, home shortcuts, banner, profile fields, interests, and enabled modules.",
+    bullets: ["Match your event brand", "Arrange home shortcuts", "Enable the right modules"],
+    image: "/images/event-mobile-app/app/app-configuration.png",
+    imageWidth: 1020,
+    imageHeight: 570,
+    alt: "EventHex attendee mobile app configuration with login, branding, design, and home settings",
   },
   {
     num: "03",
-    title: "Publish to App Stores",
-    desc: "We publish the white-label app to iOS and Android — listed under your event name.",
+    title: "Follow review status",
+    desc: "Track pending, accepted, waiting-for-review, rejected, or store-rejected outcomes.",
+    bullets: ["See the current status", "Keep review notes together", "Know when action is needed"],
+    image: "/images/event-mobile-app/app/app-publication-overview.png",
+    imageWidth: 1020,
+    imageHeight: 570,
+    alt: "EventHex dedicated mobile app request overview for Google Play and the App Store",
   },
   {
     num: "04",
-    title: "Engage Attendees",
-    desc: "Attendees download the app, build their schedule, network via AI, and engage with live sessions.",
+    title: "Add store destinations",
+    desc: "Use Android and iOS URLs after publication; approval and timing remain subject to each store.",
+    bullets: ["Add the iOS destination", "Add the Android destination", "Share download links"],
+    image: "/images/event-mobile-app/app/app-store-versions.png",
+    imageWidth: 1020,
+    imageHeight: 570,
+    alt: "EventHex mobile app version settings with Android and iOS version and store URL columns",
   },
 ];
 ---
 
 <section class="emahw-full">
   <div class="emahw-full__inner">
-    <div class="emahw-full__header">
-      <span class="emahw-full__tag animate-on-scroll" data-animation="fadeIn">How It Works</span>
-      <h2 class="emahw-full__title animate-on-scroll" data-animation="fadeInUp">From Setup to <b>Attendee Engagement</b></h2>
-      <p class="emahw-full__desc animate-on-scroll" data-animation="fadeInUp">
-        Configure your branded event app, add content, publish to app stores, and watch attendees engage — all in days, not months.
-      </p>
-    </div>
+    <header class="emahw-full__header animate-on-scroll" data-animation="fadeInUp">
+      <h2>Track the app from brief to store publication</h2>
+    </header>
 
-    <div class="emahw-full__cards">
-      {steps.map((step) => (
-        <article class="emahw-full__card animate-on-scroll" data-animation="fadeInUp">
-          <div class="emahw-full__card-icon">{step.num}</div>
-          <h3 class="emahw-full__card-title">{step.title}</h3>
-          <p class="emahw-full__card-desc">{step.desc}</p>
-        </article>
+    <ol class="emahw-steps">
+      {steps.map((step, index) => (
+        <li style={`--emahw-tint:${["#fff8dc", "#edf7ff", "#f3efff", "#eefbf4"][index]};--emahw-border:${["#f0dfa6", "#d4e7f7", "#e2d8fa", "#d4efdf"][index]}`}>
+          <details open={index === 0}>
+            <summary tabindex="-1">
+              <span class="emahw-step__num">{step.num}</span>
+              <div class="emahw-step__content">
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+                <ul>
+                  {step.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}
+                </ul>
+              </div>
+              <button class="emahw-step__toggle" type="button" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+              </button>
+            </summary>
+
+            <div class="emahw-step__visual">
+              <img
+                src={step.image}
+                width={step.imageWidth}
+                height={step.imageHeight}
+                alt={step.alt}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </details>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
 
+<script>
+  document.querySelectorAll<HTMLDetailsElement>(".emahw-steps details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".emahw-step__toggle");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} workflow step`);
+      if (!item.open) return;
+      all.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+</script>
+
 <style is:global>
-  .emahw-full {
-    width: 100%;
-    margin: 0;
-    padding: 72px 0;
-    background: #000 url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp') center / cover no-repeat;
+  .emahw-full { width: 100%; padding: clamp(110px, 12vw, 160px) 24px; background: transparent; color: #111827; }
+  .emahw-full__inner { width: min(1218px, 100%); margin: 0 auto; }
+  .emahw-full__header { max-width: 820px; margin: 0 auto 64px; text-align: center; }
+  .emahw-full__header h2 { max-width: 780px; margin: 0 auto; font-family:var(--font-heading); font-size:clamp(40px,4.1vw,52px); font-weight:500; line-height:1.115; letter-spacing:-2.1px; background:linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .emahw-steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .emahw-steps > li { display: block; margin: 0; padding: 0; }
+  .emahw-steps details { position: relative; overflow: hidden; border: 1px solid var(--emahw-border); border-radius: 18px; background: linear-gradient(135deg, var(--emahw-tint), #fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease; }
+  .emahw-steps details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .emahw-steps summary { position: relative; display: grid; grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; }
+  .emahw-steps summary::-webkit-details-marker { display: none; }
+  .emahw-step__num { color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .emahw-step__content { display: flex; flex-direction: column; }
+  .emahw-step__content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .emahw-step__content p { display: none; }
+  .emahw-step__content ul { display: none; }
+  details:not([open]) .emahw-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  details:not([open]) .emahw-step__content p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 460px; margin: 0; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .emahw-step__toggle { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer; transition: transform .25s ease, background .2s ease, border-color .2s ease; }
+  .emahw-step__toggle:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .emahw-step__toggle:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .emahw-step__toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .emahw-steps details[open] { display: flex; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg, var(--emahw-tint), #fff 72%); }
+  .emahw-steps details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; }
+  .emahw-steps details[open] .emahw-step__toggle { top: 28px; transform: rotate(180deg); }
+  .emahw-steps details[open] .emahw-step__num { color: #050505; font-size: 26px; line-height: 1; }
+  .emahw-steps details[open] .emahw-step__content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .emahw-steps details[open] .emahw-step__content p { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 400 17px/1.6 var(--font-body); }
+  .emahw-steps details[open] .emahw-step__content ul { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .emahw-steps details[open] .emahw-step__content li { display: flex; align-items: center; gap: 14px; color: #111; font: 500 16px/1.3 var(--font-body); }
+  .emahw-steps details[open] .emahw-step__content li i { font-style: normal; }
+  .emahw-step__visual { display: none; opacity: 0; }
+  .emahw-steps details[open] .emahw-step__visual { flex: 0 0 45%; display: flex; align-items: center; padding: 40px 88px 40px 0; opacity: 1; }
+  .emahw-step__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+  @media (max-width: 760px) {
+    .emahw-full { padding: 76px 16px; }
+    .emahw-full__header { margin-bottom: 46px; }
+    .emahw-full__header h2 { font-size: 38px; line-height:1.2; letter-spacing:-1.2px; }
+    .emahw-steps summary { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    details:not([open]) .emahw-step__content { display: flex; gap: 5px; }
+    details:not([open]) .emahw-step__content p { font-size: 13px; line-height: 1.4; }
+    .emahw-step__toggle { top: 31px; right: 16px; }
+    .emahw-steps details[open] { flex-direction: column; }
+    .emahw-steps details[open] summary { flex: none; grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 62px 24px 14px; }
+    .emahw-steps details[open] .emahw-step__toggle { top: 24px; right: 16px; }
+    .emahw-steps details[open] .emahw-step__content h3 { font-size: 26px; }
+    .emahw-steps details[open] .emahw-step__content p { max-width: none; margin-bottom: 24px; }
+    .emahw-steps details[open] .emahw-step__visual { flex: none; padding: 0 24px 28px; }
+    .emahw-step__visual img { max-width: none; }
   }
-
-  .emahw-full__inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 48px;
-  }
-
-  .emahw-full__header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-    max-width: 700px;
-  }
-
-  .emahw-full__tag {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    color: #afa3ff;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .emahw-full__title {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: #fff;
-    margin: 0;
-  }
-
-  .emahw-full__title b { font-weight: 700; }
-
-  .emahw-full__desc {
-    font-family: var(--font-body);
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.65);
-    margin: 0;
-  }
-
-  .emahw-full__cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    width: 100%;
-  }
-
-  .emahw-full__card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 28px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: background 0.3s, border-color 0.3s, transform 0.3s;
-  }
-
-  .emahw-full__card:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(175, 163, 255, 0.35);
-    transform: translateY(-2px);
-  }
-
-  .emahw-full__card-icon {
-    width: 52px;
-    height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(55, 93, 251, 0.15);
-    border-radius: 14px;
-    font-family: var(--font-heading);
-    font-size: 18px;
-    font-weight: 700;
-    color: #7fb4ff;
-  }
-
-  .emahw-full__card-title {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: #fff;
-    margin: 0;
-  }
-
-  .emahw-full__card-desc {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
-  }
-
-  @media (max-width: 1100px) {
-    .emahw-full__cards { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 1024px) {
-    .emahw-full { padding: 64px 0; }
-    .emahw-full__title { font-size: 36px; }
-  }
-
-  @media (max-width: 767px) {
-    .emahw-full { padding: 52px 0; }
-    .emahw-full__title { font-size: 30px; line-height: 1.15; }
-    .emahw-full__desc { font-size: 15px; }
-    .emahw-full__cards { grid-template-columns: 1fr; }
-  }
+  @media (prefers-reduced-motion: reduce) { .emahw-steps details, .emahw-step__toggle { transition: none; } }
 </style>
