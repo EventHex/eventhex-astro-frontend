@@ -1,48 +1,40 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/event-analytics/HeroSection.astro";
-import StatsSection from "../components/event-analytics/StatsSection.astro";
-import BentoGrid from "../components/event-analytics/BentoGrid.astro";
-import FeatureCards from "../components/event-analytics/FeatureCards.astro";
-import HowItWorksSection from "../components/event-analytics/HowItWorksSection.astro";
-import CTASection from "../components/event-analytics/CTASection.astro";
-import CoordinationTools from "../components/event-analytics/CoordinationTools.astro";
-import FaqSection from "../components/event-analytics/FaqSection.astro";
+import AnalyticsRevamp from "../components/event-analytics/AnalyticsRevamp.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Event Analytics Dashboard — Real-Time Reports | EventHex";
-const description = "Event analytics dashboard tracking real-time registrations, check-in rates, session engagement, revenue, and sponsor ROI — all in one place. See your data live.";
+const title = "Event Analytics Dashboard & Reporting Software | EventHex";
+const description = "Track event registrations, ticket revenue, check-ins, attendee-field trends, and event app usage through focused EventHex dashboards.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex Event Analytics & Reports",
+  name: "EventHex Event Analytics Dashboard",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/event-analytics/",
-  description: "Real-time event analytics with dashboards, sponsor ROI reports, AI insights, and data export for events of all sizes.",
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
+  description,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai/" },
   featureList: [
-    "Real-Time Dashboards",
-    "Registration Analytics",
-    "Revenue Tracking",
-    "Session Analytics",
-    "Sponsor ROI Reports",
-    "AI-Powered Insights",
-    "Custom Report Builder",
-    "Multi-Event Comparison",
-    "API Data Access",
+    "Registration analytics",
+    "Ticket revenue monitoring",
+    "Event check-in analytics",
+    "Registration-field charts",
+    "Event mobile app analytics",
+    "App session CSV export",
   ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    ["What can the main event dashboard track?", "Verified views cover registration totals and trends, ticket revenue totals, attendance counts and rates, ticket breakdowns, recent activity, repeat attendance, and selected registration-field distributions."],
+    ["Can we analyze registration fields?", "Yes. Supported categorical fields can become configurable charts with visibility, order, chart type, answered count, and optional ticket filtering."],
+    ["What does app analytics include?", "It includes visitor and session summaries, audience breakdowns, screens and feature use, guest funnel, retention, live activity, and a filtered app-session list."],
+    ["Is every metric real time?", "No blanket real-time claim should be made. Event dashboard queries have view-specific caching, while the app Live tab polls its endpoint every 15 seconds."],
+    ["Can we export reports?", "The reviewed App Analytics session list has a CSV export. A universal custom report builder or export for every dashboard was not verified."],
+    ["Does EventHex calculate sponsor ROI?", "The reviewed route evidence does not establish a sponsor ROI report. Use exhibitor or sponsor-specific evidence and an agreed attribution model before making that claim."],
+  ].map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
@@ -50,22 +42,17 @@ const softwareSchema = {
   title={title}
   description={description}
   canonical="https://eventhex.ai/event-analytics/"
-  ogImage={ogImage}
+  ogImage="https://eventhex.ai/images/platform-analytics-hero.png"
+  footerCtaEyebrow="Map the Decisions"
+  footerCtaTitle="Bring the reports your event team needs to the demo"
+  footerCtaSubtitle="Show us the registration, ticket, check-in, attendee-field, and app questions you need to answer. We’ll map each one to the verified EventHex dashboard and flag where a specialist workflow or additional evidence is required."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={true}
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <AnalyticsRevamp />
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
