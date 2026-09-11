@@ -1,17 +1,17 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/event-website-builder/HeroSection.astro";
-import StatsSection from "../components/event-website-builder/StatsSection.astro";
-import BentoGrid from "../components/event-website-builder/BentoGrid.astro";
-import FeatureCards from "../components/event-website-builder/FeatureCards.astro";
-import HowItWorksSection from "../components/event-website-builder/HowItWorksSection.astro";
-import CTASection from "../components/event-website-builder/CTASection.astro";
-import CoordinationTools from "../components/event-website-builder/CoordinationTools.astro";
-import FaqSection from "../components/event-website-builder/FaqSection.astro";
+import EventWebsiteBuilderRevamp from "../components/event-website-builder/EventWebsiteBuilderRevamp.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Event Website Builder — Drag & Drop with 0 Code | EventHex";
-const description = "Build professional event websites in minutes with drag-and-drop builder, 40+ templates, embedded registration, SEO optimization, and custom domain support.";
+const title = "Event Website Builder for Branded, Connected Event Sites | EventHex";
+const description = "Build a branded, multi-page event website from your EventHex programme, speakers, tickets, sponsors and forms, then review a private draft before publishing.";
+
+const faqs = [
+  ["Can we create more than one page?", "Yes. Website Builder V4 supports a home page and enabled custom pages with slugs, menu state, search listing details and ordered content, within the documented site limits."],
+  ["Can the website use EventHex event data?", "Yes. Supported sections can use event, speaker, session, ticket, sponsor, exhibitor, gallery and form data from the event workspace."],
+  ["Is there a visual editor?", "Yes. Teams can add and reorder event sections, use advanced layout blocks, edit design and content properties, and review a live private draft."],
+  ["How does AI-assisted website creation work?", "AI can generate the current page or refine a selected scope. It returns an unsaved candidate for review, which the team can accept or discard before the private draft changes."],
+  ["Does editing change the live website immediately?", "No. V4 keeps a private draft with saved revisions. A chosen draft revision goes live only after readiness review and explicit publication."],
+];
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -21,57 +21,21 @@ const softwareSchema = {
   operatingSystem: "Web",
   url: "https://eventhex.ai/event-website-builder/",
   description,
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
-  featureList: [
-    "Drag & Drop Visual Editor",
-    "40+ Event Templates",
-    "Custom Domain Support",
-    "Embedded Registration Widget",
-    "Multi-Track Agenda Display",
-    "Speaker Profile Sections",
-    "Tiered Sponsor Showcase",
-    "SEO Auto-Optimization",
-    "Google Analytics Integration",
-    "UTM Tracking",
-    "Core Web Vitals Optimized",
-    "Mobile Responsive Design",
-    "Template Cloning",
-    "Team Collaboration",
-    "Brand Library",
-  ],
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: ["Event-native website sections", "Connected event data", "Multi-page website editing", "Responsive preview controls", "AI-assisted design", "Draft revisions", "SEO and social sharing fields", "Custom domain support"],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
-<MarketingLayout
-  title={title}
-  description={description}
-  canonical="https://eventhex.ai/event-website-builder/"
-  ogImage={ogImage}
->
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
-
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+<MarketingLayout title={title} description={description} canonical="https://eventhex.ai/event-website-builder/" ogImage="/feature-images/event-website-builder-v4/website-builder-studio-draft.png" footerCtaTitle="Ready to plan your event website?" footerCtaButtonText="Book a Demo" footerCtaHref="/book-a-demo/" showFooterCta={true}>
+  <Fragment slot="head">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <EventWebsiteBuilderRevamp {faqs} />
 </MarketingLayout>
-
-<style>
-  :global(main) {
-    background-color: #ffffff;
-  }
-</style>
