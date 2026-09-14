@@ -1,132 +1,38 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/virtual-hybrid-events/HeroSection.astro";
-import FormatPlatformSection from "../components/virtual-hybrid-events/FormatPlatformSection.astro";
-import WorkflowCards from "../components/virtual-hybrid-events/WorkflowCards.astro";
-import OutcomeSections from "../components/virtual-hybrid-events/OutcomeSections.astro";
-import FaqSection from "../components/virtual-hybrid-events/FaqSection.astro";
+import VirtualHybridEventsPage from "../components/virtual-hybrid-events/VirtualHybridEventsPage.astro";
 
 const title = "Virtual & Hybrid Event Platform | EventHex";
 const description = "Connect Zoom, Google Meet, or Microsoft Teams to EventHex for meeting-bot recording, transcripts, RTMP streaming, virtual attendance, and post-session follow-up.";
-const canonical = "https://eventhex.ai/virtual-hybrid-events/";
-
-const faqs = [
-  [
-    "Does EventHex replace Zoom, Google Meet, or Microsoft Teams?",
-    "No. EventHex uses the supported meeting link and adds event operations around it, including bot control, streaming configuration, attendance, session outputs, and follow-up.",
-  ],
-  [
-    "Can the meeting bot join automatically?",
-    "A supported auto-join setting exists alongside manual start. Confirm the event schedule, waiting-room behavior, provider, and host permissions before relying on it.",
-  ],
-  [
-    "Can we stream to more than one destination?",
-    "The organizer can configure YouTube, Facebook, or custom RTMP destinations, including multiple destination entries. RTMP availability still depends on the active meeting-bot provider and valid stream credentials.",
-  ],
-  [
-    "Are recording and transcripts always available?",
-    "They depend on the configured provider, meeting permissions, bot admission, processing success, and feature setup. EventHex shows the outputs and states available for that session; it does not guarantee every meeting will be captured.",
-  ],
-  [
-    "How does virtual check-in work?",
-    "Organizers can enable a gated event link and opening window. The supported OTP path identifies the attendee and can connect the resulting virtual attendance to a registration.",
-  ],
-  [
-    "Does EventHex support live captions and translation?",
-    "EventHex has live transcription and translation paths, but supported languages, attendee surfaces, and behavior depend on the chosen provider and session configuration. Confirm the exact requirement during the demo.",
-  ],
-] as const;
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "Virtual & Hybrid Event Platform",
+  name: "EventHex Virtual & Hybrid Events",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  url: canonical,
   description,
-  creator: {
-    "@type": "Organization",
-    name: "EventHex",
-    url: "https://eventhex.ai",
-  },
+  url: "https://eventhex.ai/virtual-hybrid-events/",
   featureList: [
-    "Connect your meeting",
+    "Zoom, Google Meet, and Microsoft Teams meeting links",
     "Meeting bot control",
-    "Recording playback",
-    "Timestamped transcript",
-    "Multiple destinations",
-    "Virtual check-in",
-    "Recap handoff",
+    "Provider-dependent recording and transcripts",
+    "YouTube, Facebook, and custom RTMP destinations",
+    "Virtual check-in and attendance",
+    "Post-session recap and insights",
   ],
-};
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map(([name, text]) => ({
-    "@type": "Question",
-    name,
-    acceptedAnswer: { "@type": "Answer", text },
-  })),
 };
 ---
 
 <MarketingLayout
   {title}
   {description}
-  {canonical}
-  footerCtaEyebrow="Map One Live Session"
-  footerCtaTitle={"Bring Your Virtual or Hybrid\nRun-of-Show to the Demo"}
-  footerCtaSubtitle="Show us the meeting platform, event format, streaming destinations, access path, and post-session outcome you need. We’ll walk through the matching EventHex workflow and qualify provider-dependent pieces before launch."
-  footerCtaButtonText="Book a Demo"
-  footerCtaHref="/book-a-demo/"
-  footerCtaImageSrc="/feature-images/footer-cta-devices.webp"
-  footerCtaImageAlt="EventHex platform on laptop, tablet, and mobile"
-  showFooterCta={true}
+  canonical="https://eventhex.ai/virtual-hybrid-events/"
+  showFooterCta={false}
 >
   <Fragment slot="head">
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
   </Fragment>
 
-  <div class="vhe-page-bg">
-    <HeroSection />
-    <FormatPlatformSection />
-    <WorkflowCards />
-    <OutcomeSections />
-    <FaqSection {faqs} />
-  </div>
+  <VirtualHybridEventsPage />
 </MarketingLayout>
-
-<style is:global>
-  .vhe-page-bg {
-    overflow: clip;
-    background:
-      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
-      linear-gradient(to bottom,#fff 0,rgba(255,255,255,.85) 130px,rgba(255,255,255,.5) 260px,rgba(255,255,255,.18) 390px,transparent 500px),
-      radial-gradient(circle 380px at 3% 34%,rgba(175,163,255,.24),transparent 100%),
-      radial-gradient(circle 320px at 97% 30%,rgba(122,214,207,.22),transparent 100%),
-      radial-gradient(circle 340px at 95% 75%,rgba(130,170,255,.22),transparent 100%),
-      #fff;
-    background-attachment: fixed;
-  }
-
-  .vhe-page-bg a:focus-visible,
-  .vhe-page-bg button:focus-visible,
-  .vhe-page-bg summary:focus-visible {
-    outline: 3px solid #f6bd35;
-    outline-offset: 4px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .vhe-page-bg *,
-    .vhe-page-bg *::before,
-    .vhe-page-bg *::after {
-      scroll-behavior: auto !important;
-      transition-duration: .01ms !important;
-      animation-duration: .01ms !important;
-      animation-iteration-count: 1 !important;
-    }
-  }
-</style>

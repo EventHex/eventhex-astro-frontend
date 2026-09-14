@@ -1,21 +1,179 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
 const faqs = [
-  { q: "Is the event app published under our brand?", a: "Yes. The app is fully white-labeled and published to iOS and Android app stores under your event or organization name — attendees see your brand, not EventHex." },
-  { q: "Do attendees need to download the app?", a: "We offer both a native app (iOS/Android) and a mobile-responsive web app. Attendees who prefer not to download can access core features via the web version." },
-  { q: "How does AI networking work?", a: "Our AI analyzes attendee profiles, interests, industry, and stated goals to suggest relevant connections. Attendees receive smart match recommendations and can schedule meetings directly in the app." },
-  { q: "Can the app work offline?", a: "Yes. Core features like the agenda, venue maps, and attendee profiles are cached locally. When connectivity returns, data syncs automatically." },
-  { q: "How do sponsors get visibility in the app?", a: "Organizers can place sponsor banners, splash screen ads, sponsored sessions, and push notification sponsorships — creating multiple monetization touchpoints." },
-  { q: "What engagement features are included?", a: "Live polls, session Q&A with moderation, activity feed / social wall, gamification (points, badges, leaderboards), and session feedback — all built in." },
-  { q: "How fast can we launch the app?", a: "The app can be configured and published within days. Content updates sync in real time, so you can keep refining right up to the event." },
-  { q: "Is attendee data secure?", a: "Absolutely. All data is encrypted in transit and at rest. We follow industry best practices for data protection and comply with GDPR requirements." },
+  { q: "Can the app match our event brand?", a: "Yes. Current settings include app identity and store assets, primary and secondary colors, app font, banner options, and supported home-screen variants." },
+  { q: "Can we choose what appears on the home screen?", a: "Yes. Organizers can order, show, or hide supported quick-access items and add configured web links. Some items remain tied to the module that powers them." },
+  { q: "Which attendee experiences can appear in the app?", a: "Verified mobile screens cover agenda, saved sessions, networking, connection requests, chat, notifications, sponsors, photos, polls and Q&A, feedback, and gamification. Availability depends on event setup." },
+  { q: "Is it a dedicated branded app?", a: "EventHex provides a request workflow for a dedicated app and tracks publication status and store URLs. Final approval and timing remain subject to the app stores and delivery process." },
+  { q: "Does the whole app work offline?", a: "No. Several datasets have local storage or cache-first paths, but support varies by module and network-dependent actions may still require connectivity." },
+  { q: "Can attendees use AI matchmaking?", a: "The app can connect to the configured networking experience. See AI Smart-Connect for the matching and recommendation workflow." },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need a custom app setup?"
-  title="Frequently Asked Questions"
-  description="We help event teams shape branded mobile experiences, AI networking flows, and sponsor monetization around how their live event operations actually run."
-/>
+<section class="emaf-faq">
+  <div class="emaf-faq__inner">
+    <div class="emaf-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="emaf-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        Quick Answers
+      </span>
+      <h2 class="emaf-faq__heading">What organizers ask<br />before requesting an app</h2>
+      <p class="emaf-faq__intro">Clear answers about branding, modules, publication, networking, and cached app data.</p>
+      <a href="/book-a-demo/" class="emaf-faq__cta">
+        Book a Demo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      </a>
+    </div>
+
+    <div class="emaf-faq__list">
+      {faqs.map((faq, index) => (
+        <details class="emaf-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-emaf-faq-item open={index === 0}>
+          <summary class="emaf-faq__question">
+            <strong>{faq.q}</strong>
+            <span class="emaf-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="emaf-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const emafFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-emaf-faq-item]'));
+  emafFaqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      emafFaqItems.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+</script>
+
+<style>
+  .emaf-faq {
+    width: 100%;
+    padding: 80px 24px;
+    background:
+      radial-gradient(55% 55% at 92% 48%, rgba(232, 239, 255, .72), transparent 74%),
+      radial-gradient(48% 48% at 8% 58%, rgba(255, 239, 234, .45), transparent 76%),
+      #fff;
+  }
+  .emaf-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .emaf-faq__sidebar { position: sticky; top: 6rem; }
+  .emaf-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: .8125rem;
+    font-weight: 500;
+  }
+  .emaf-faq__heading {
+    margin: 0 0 20px;
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 4.1vw, 52px);
+    font-weight: 500;
+    line-height: 1.115;
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .emaf-faq__intro {
+    margin: 0 0 28px;
+    color: var(--body-light, #667085);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .emaf-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: .9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .emaf-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .emaf-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: emaf-faq; }
+  .emaf-faq__item {
+    counter-increment: emaf-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background .25s ease, border-color .25s ease;
+  }
+  .emaf-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .emaf-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    color: #000;
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    cursor: pointer;
+    list-style: none;
+  }
+  .emaf-faq__question strong { font-weight: 500; }
+  .emaf-faq__question strong::before { content: counter(emaf-faq) '. '; }
+  .emaf-faq__question::-webkit-details-marker { display: none; }
+  .emaf-faq__question::marker { content: ''; }
+  .emaf-faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .emaf-faq__icon::before, .emaf-faq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .emaf-faq__icon::before { width: 14px; height: 2px; }
+  .emaf-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .emaf-faq__item[open] .emaf-faq__icon { transform: scale(.9); }
+  .emaf-faq__item[open] .emaf-faq__icon::after { opacity: 0; }
+  .emaf-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .emaf-faq__answer p { margin: 0; color: #000; font-family: var(--font-body); font-size: .9375rem; line-height: 1.7; }
+
+  @media (max-width: 1024px) {
+    .emaf-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .emaf-faq__sidebar { position: static; }
+    .emaf-faq__heading { font-size: 38px; }
+  }
+  @media (max-width: 767px) {
+    .emaf-faq { padding: 56px 16px; }
+    .emaf-faq__heading { font-size: 34px; line-height: 1.2; letter-spacing: -1.2px; }
+    .emaf-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .emaf-faq__question { padding: 18px 0; font-size: .9375rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .emaf-faq__item, .emaf-faq__icon, .emaf-faq__icon::after, .emaf-faq__cta { transition: none; }
+  }
+</style>

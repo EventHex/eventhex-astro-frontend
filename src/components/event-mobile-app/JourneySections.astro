@@ -1,0 +1,327 @@
+---
+const agendaSteps = [
+  { num: "01", title: "Browse by day", desc: "Move through the configured event dates.", image: "/images/live-polling-qa/app/session-timeline.png", alt: "EventHex session timeline organized by event day", badge: "Day selected", tone: "day" },
+  { num: "02", title: "Review the session", desc: "See time, stage, speakers, and available detail.", image: "/images/live-polling-qa/app/sessions-workspace.png", alt: "EventHex sessions workspace with programme details", badge: "Session details", tone: "detail" },
+  { num: "03", title: "Save the session", desc: "Add it to the attendee's selected agenda.", image: "/images/live-polling-qa/app/mobile-app-modules.png", alt: "EventHex mobile-app modules and attendee agenda access", badge: "Saved to my agenda", tone: "saved" },
+  { num: "04", title: "Return when needed", desc: "Use the saved-session view during the event.", image: "/images/live-polling-qa/app/attendee-mobile-app.png", alt: "EventHex attendee mobile app workspace", badge: "Agenda ready", tone: "return" },
+];
+
+const modules = [
+  ["AI Smart-Connect", "AI-assisted attendee matchmaking and networking recommendations."],
+  ["Live Polling & Q&A", "Polls, session questions, moderation, and feedback."],
+  ["Event Gamification", "Configured challenges, points, progress, and leaderboards."],
+  ["AI Photo Gallery", "A dedicated event photo discovery experience."],
+];
+
+const moduleIcons = [
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.4-4 2.3-6 5.5-6s5.1 2 5.5 6M13.5 15c.8-1 2-1.6 3.5-1.6 2.7 0 4.2 1.9 4.5 5.1"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/><path d="M2 19h22"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l2.2 4.5 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5-3.6-3.5 5-.7L12 3z"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9" r="1.5"/><path d="M4 17l5-4 3 2 3-3 5 5"/></svg>',
+];
+
+const audiences = [
+  { id: "conferences", label: "Conferences", title: "Keep every session and connection close", desc: "Give attendees one place for the agenda, speakers, questions, feedback, and networking.", bullets: ["Day-based agenda", "Speaker and session details", "Networking and feedback"], image: "/images/live-polling-qa/app/mobile-app-modules.png", imageWidth: 1263, imageHeight: 697 },
+  { id: "exhibitions", label: "Exhibitions", title: "Guide visitors around a busy show floor", desc: "Prioritize maps, sponsors, people, updates, and the engagement modules selected for the event.", bullets: ["Event map and quick links", "Sponsor discovery", "Live organizer updates"], image: "/images/live-polling-qa/app/attendee-mobile-app.png", imageWidth: 1263, imageHeight: 697 },
+  { id: "associations", label: "Association events", title: "Put the member programme in one place", desc: "Combine programme content, member connections, updates, and resources in a branded attendee home.", bullets: ["Member connections", "Programme content", "Important updates"], image: "/images/live-polling-qa/app/mobile-app-updates.png", imageWidth: 1263, imageHeight: 697 },
+  { id: "corporate", label: "Corporate events", title: "Configure a focused private experience", desc: "Surface private programme information and only the participation tools the audience needs.", bullets: ["Private event information", "Selected modules", "Brand-aligned home"], image: "/images/event-gamification/app/attendee-app-modules.png", imageWidth: 1263, imageHeight: 697 },
+  { id: "tech", label: "Tech conferences", title: "Turn session discovery into participation", desc: "Keep sessions, networking, Q&A, and community content accessible throughout the event day.", bullets: ["Session discovery", "Live questions and polls", "Community connections"], image: "/images/live-polling-qa/app/mobile-app-analytics.png", imageWidth: 1263, imageHeight: 697 },
+  { id: "multi-day", label: "Multi-day events", title: "Make every event day easier to navigate", desc: "Organize agenda access by date while keeping event-wide information and updates close.", bullets: ["Day-based agenda", "Saved sessions", "Event-wide information"], image: "/images/event-gamification/app/attendee-mobile-app-features.png", imageWidth: 580, imageHeight: 600 },
+];
+---
+
+<section class="emaj-section emaj-section--agenda">
+  <div class="emaj-agenda-layout">
+    <div class="emaj-agenda-intro">
+      <div class="emaj-agenda-sticky animate-on-scroll" data-animation="fadeInUp">
+        <span class="emaj-agenda-pill"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" /></svg>Personal event day</span>
+        <h2>Move from the full programme to a <span>saved agenda</span></h2>
+        <p>Help attendees scan the schedule, open session details, and return to the sessions they chose.</p>
+        <a class="emaj-agenda-cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <div class="emaj-agenda-cards" aria-label="Agenda attendee journey">
+      {agendaSteps.map((step, index) => (
+        <article class={`emaj-agenda-card emaj-agenda-card--${step.tone} animate-on-scroll`} data-animation="fadeInUp" data-delay={String(index * 60)}>
+          <header><span class="emaj-agenda-number">{step.num}</span><div><h3>{step.title}</h3><p>{step.desc}</p></div></header>
+          <div class="emaj-agenda-visual">
+            <div class="emaj-agenda-shot"><img src={step.image} width="1263" height="697" alt={step.alt} loading="lazy" decoding="async" /></div>
+            <span class="emaj-agenda-badge"><span aria-hidden="true">✓</span>{step.badge}</span>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="emaj-connections">
+  <div class="emaj-connections__inner">
+    <header class="emaj-connections__header">
+      <h2 class="animate-on-scroll" data-animation="fadeInUp">Connections that continue</h2>
+      <p class="animate-on-scroll" data-animation="fadeInUp">Bring attendee discovery, connections, and chat into the same app without leaving the event context.</p>
+    </header>
+
+    <div class="emaj-connections__quad">
+      <article class="emaj-connections__cell emaj-connections__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Discover and connect</h3>
+        <p>Browse people, send or respond to requests, and manage connections.</p>
+      </article>
+
+      <div class="emaj-connections__cell emaj-connections__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="emaj-connections__composite">
+          <img class="emaj-connections__screen emaj-connections__screen--primary" src="/images/live-polling-qa/app/mobile-app-modules.png" width="1263" height="697" alt="EventHex attendee mobile app modules with networking enabled" loading="lazy" decoding="async" />
+          <img class="emaj-connections__screen emaj-connections__screen--secondary" src="/images/live-polling-qa/app/attendee-mobile-app.png" width="1263" height="697" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          <span class="emaj-connections__status">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+            Networking enabled
+          </span>
+          <span class="emaj-connections__action">Open connections</span>
+          <img class="emaj-connections__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+        </div>
+      </div>
+
+      <div class="emaj-connections__cell emaj-connections__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="emaj-connections__composite">
+          <img class="emaj-connections__screen emaj-connections__screen--primary" src="/images/live-polling-qa/app/event-chat.png" width="1263" height="697" alt="EventHex attendee event-chat workspace for continuing new connections" loading="lazy" decoding="async" />
+          <img class="emaj-connections__screen emaj-connections__screen--secondary" src="/images/live-polling-qa/app/mobile-app-modules.png" width="1263" height="697" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          <span class="emaj-connections__status">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+            Chat ready
+          </span>
+          <span class="emaj-connections__action">Start conversation</span>
+          <img class="emaj-connections__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+        </div>
+      </div>
+
+      <article class="emaj-connections__cell emaj-connections__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Continue the conversation</h3>
+        <p>Open attendee chat when messaging is enabled.</p>
+      </article>
+
+      <span class="emaj-connections__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path>
+        </svg>
+      </span>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .emaj-connections { display:flex; flex-direction:column; align-items:center; padding:40px 24px; background:#fff; color:#1e1d24; }
+  .emaj-connections__inner { width:100%; max-width:1180px; margin:0 auto; }
+  .emaj-connections__header { display:flex; flex-direction:column; align-items:center; max-width:1100px; margin:0 auto 24px; text-align:center; }
+  .emaj-connections__header h2 { margin:0 0 12px; font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading); letter-spacing:-.04em; background:linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; color:transparent; }
+  .emaj-connections__header p { max-width:640px; margin:0; color:var(--subheading-gray,#555); font:400 18px/1.5 var(--font-body); }
+  .emaj-connections__quad { position:relative; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; width:100%; margin:24px auto; }
+  .emaj-connections__cross { position:absolute; top:50%; left:50%; width:18px; height:18px; transform:translate(-50%,-50%); line-height:0; pointer-events:none; z-index:3; }
+  .emaj-connections__cell { display:flex; flex-direction:column; justify-content:center; min-height:260px; padding:56px 48px; border-right:1px solid #eef0f3; border-bottom:1px solid #eef0f3; }
+  .emaj-connections__cell:nth-child(2n) { border-right:0; }
+  .emaj-connections__cell:nth-child(n+3) { border-bottom:0; }
+  .emaj-connections__cell--copy h3 { margin:0 0 16px; color:var(--heading-dark,#1e1d24); font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading); letter-spacing:-.03em; }
+  .emaj-connections__cell--copy p { max-width:40ch; margin:0; color:var(--subheading-gray,#555); font:400 16px/1.6 var(--font-body); }
+  .emaj-connections__cell--media { align-items:center; min-height:360px; padding:18px 22px; overflow:hidden; }
+  .emaj-connections__composite { position:relative; width:100%; height:320px; overflow:visible; }
+  .emaj-connections__screen { position:absolute; display:block; object-fit:cover; object-position:top left; border:1px solid rgba(209,214,226,.92); border-radius:12px; background:#fff; box-shadow:0 16px 34px rgba(31,41,72,.14); }
+  .emaj-connections__screen--primary { top:42px; left:20px; z-index:1; width:74%; height:62%; }
+  .emaj-connections__screen--secondary { right:18px; bottom:20px; z-index:2; width:64%; height:52%; }
+  .emaj-connections__status,
+  .emaj-connections__action { position:absolute; z-index:5; display:inline-flex; align-items:center; white-space:nowrap; border-radius:10px; font:700 11px/1 var(--font-body); box-shadow:0 10px 24px rgba(31,41,72,.16); }
+  .emaj-connections__status { top:14px; left:14px; gap:7px; padding:9px 11px; border:1px solid #cfead9; background:#effbf4; color:#18864b; }
+  .emaj-connections__status svg { width:15px; height:15px; fill:none; stroke:currentColor; stroke-width:2.25; stroke-linecap:round; stroke-linejoin:round; }
+  .emaj-connections__action { right:14px; bottom:14px; padding:10px 13px; background:#4b65f6; color:#fff; }
+  .emaj-connections__cursor { position:absolute; right:4px; bottom:34px; z-index:6; width:22px; height:26px; filter:drop-shadow(0 3px 3px rgba(17,24,39,.25)); pointer-events:none; }
+  @media(min-width:769px){.emaj-connections__header h2{white-space:nowrap}}
+  @media(max-width:768px){
+    .emaj-connections{padding:60px 16px}
+    .emaj-connections__quad{grid-template-columns:1fr;grid-template-rows:none}
+    .emaj-connections__cross{display:none}
+    .emaj-connections__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}
+    .emaj-connections__cell:nth-child(3){order:4;border-bottom:0}
+    .emaj-connections__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}
+    .emaj-connections__cell--media{min-height:0;padding:16px 20px 32px}
+    .emaj-connections__composite{height:285px}
+    .emaj-connections__screen--primary{width:78%}
+    .emaj-connections__screen--secondary{width:68%}
+  }
+  @media(prefers-reduced-motion:reduce){.emaj-connections *{animation:none!important;transition:none!important}}
+</style>
+
+<section class="emaj-modules">
+  <div class="emaj-inner">
+    <div class="emaj-heading">
+      <span class="emaj-kicker">Add the right participation layer</span>
+      <h2>Connect attendees to the specialist experiences <span>enabled for the event</span></h2>
+      <p>The mobile app is the attendee surface; each feature page explains the workflow behind the module.</p>
+    </div>
+    <div class="emaj-module-grid">
+      {[25, 50, 75].map((position) => (
+        <span class="emaj-module-notch" style={`--notch-position:${position}%`} aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg>
+        </span>
+      ))}
+      {modules.map(([title, desc], index) => (
+        <article class="emaj-module animate-on-scroll" data-animation="fadeInUp">
+          <span class="emaj-module__icon" set:html={moduleIcons[index]}></span><h3>{title}</h3><p>{desc}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<section class="emaj-audience">
+  <div class="emaj-audience__inner">
+    <header class="emaj-audience__header animate-on-scroll" data-animation="fadeInUp">
+      <h2>Configure the attendee home around the programme—not a generic app checklist</h2>
+      <p>Choose the modules and shortcuts that match how each audience will move through the event.</p>
+    </header>
+
+    <ol class="emaj-audience-list">
+      {audiences.map((audience, index) => (
+        <li style={`--emaj-audience-tint:${["#fff8dc", "#edf7ff", "#f3efff", "#eefbf4", "#fff1f5", "#fff4e9"][index]};--emaj-audience-border:${["#f0dfa6", "#d4e7f7", "#e2d8fa", "#d4efdf", "#f1d5df", "#f3ddca"][index]}`}>
+          <details open={index === 0}>
+            <summary tabindex="-1">
+              <span class="emaj-audience-number">{String(index + 1).padStart(2, "0")}</span>
+              <div class="emaj-audience-content">
+                <h3>{audience.title}</h3>
+                <p>{audience.desc}</p>
+                <ul>{audience.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}</ul>
+              </div>
+              <button class="emaj-audience-toggle" type="button" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${audience.label}`} aria-expanded={index === 0 ? "true" : "false"}>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+              </button>
+            </summary>
+            <div class="emaj-audience-visual">
+              <img src={audience.image} width={audience.imageWidth} height={audience.imageHeight} alt={`EventHex mobile app experience for ${audience.label}`} loading="lazy" decoding="async" />
+            </div>
+          </details>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll<HTMLDetailsElement>(".emaj-audience-list details").forEach((item, _, all) => {
+      const summary = item.querySelector("summary");
+      const trigger = item.querySelector<HTMLButtonElement>(".emaj-audience-toggle");
+
+      summary?.addEventListener("click", (event) => {
+        event.preventDefault();
+        item.open = !item.open;
+      });
+
+      item.addEventListener("toggle", () => {
+        trigger?.setAttribute("aria-expanded", String(item.open));
+        trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} audience configuration`);
+        if (!item.open) return;
+        all.forEach((other) => { if (other !== item) other.open = false; });
+      });
+    });
+  });
+</script>
+
+<style>
+  .emaj-section--agenda{padding:100px 24px;background:#fff}.emaj-agenda-layout{width:min(1200px,100%);margin:auto;display:flex;gap:80px;align-items:stretch}.emaj-agenda-intro{flex:0 0 40%}.emaj-agenda-sticky{position:sticky;top:120px}.emaj-agenda-pill{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;padding:6px 12px;border-radius:999px;background:#f4f5f7;color:#202631;font:600 13px/1.4 var(--font-body)}.emaj-agenda-pill svg{width:14px;height:14px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.emaj-agenda-sticky h2{margin:0 0 24px;color:var(--heading-dark);font:500 clamp(36px,4vw,48px)/1.2 var(--font-heading);letter-spacing:-.02em}.emaj-agenda-sticky h2 span{background:linear-gradient(100deg,#202631,#9da2aa);-webkit-background-clip:text;background-clip:text;color:transparent}.emaj-agenda-sticky>p{margin:0;color:var(--subheading-gray,#667085);font:400 18px/1.6 var(--font-body)}.emaj-agenda-cta{display:inline-flex;align-items:center;gap:12px;margin-top:28px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 15px/1 var(--font-body);text-decoration:none;transition:transform .2s ease,background .2s ease}.emaj-agenda-cta:hover{background:#000;transform:translateY(-1px)}
+  .emaj-agenda-cards{flex:1;display:flex;flex-direction:column;gap:32px}.emaj-agenda-card{position:sticky;padding:32px;border-radius:24px;background:#f4f5f7}.emaj-agenda-card:nth-child(1){top:80px}.emaj-agenda-card:nth-child(2){top:100px}.emaj-agenda-card:nth-child(3){top:120px}.emaj-agenda-card:nth-child(4){top:140px}.emaj-agenda-card header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}.emaj-agenda-number{display:grid;place-items:center;flex:0 0 40px;width:40px;height:40px;border-radius:50%;background:#111;color:#fff;font:700 16px/1 var(--font-heading)}.emaj-agenda-card h3{margin:2px 0 8px;color:var(--heading-dark);font:700 20px/1.3 var(--font-heading)}.emaj-agenda-card header p{margin:0;color:var(--subheading-gray,#667085);font:400 16px/1.6 var(--font-body)}.emaj-agenda-visual{position:relative;height:304px;padding:18px;border:1px solid rgba(255,255,255,.86);border-radius:20px;display:flex;align-items:center;justify-content:center;overflow:hidden}.emaj-agenda-card--day .emaj-agenda-visual{background:linear-gradient(180deg,#fff9dc,#fffdf1 48%,#fff)}.emaj-agenda-card--detail .emaj-agenda-visual{background:linear-gradient(180deg,#e9f9f0,#f5fcf8 48%,#fff)}.emaj-agenda-card--saved .emaj-agenda-visual{background:linear-gradient(180deg,#eef1ff,#f8f9ff 48%,#fff)}.emaj-agenda-card--return .emaj-agenda-visual{background:linear-gradient(180deg,#fdeff3,#fff8fa 48%,#fff)}.emaj-agenda-shot{width:100%;height:268px;border:1px solid #e2e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 34px rgba(17,24,39,.14);overflow:hidden}.emaj-agenda-shot img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}.emaj-agenda-card--detail .emaj-agenda-shot img,.emaj-agenda-card--saved .emaj-agenda-shot img{object-fit:contain}.emaj-agenda-card--saved .emaj-agenda-shot img{padding:12px}.emaj-agenda-badge{position:absolute;top:16px;left:16px;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid #d9dfff;border-radius:10px;background:#f1f3ff;color:#4b65f6;box-shadow:0 10px 24px rgba(17,24,39,.14);font:700 12px/1 var(--font-body)}.emaj-agenda-card--detail .emaj-agenda-badge{border-color:#ccebd8;background:#edfbf3;color:#18864b}.emaj-agenda-card--return .emaj-agenda-badge{border-color:#f1d5df;background:#fff3f7;color:#b7446d}
+  @media(max-width:992px){.emaj-agenda-layout{max-width:760px;flex-direction:column;gap:40px}.emaj-agenda-intro{flex:none;width:100%}.emaj-agenda-sticky,.emaj-agenda-card{position:static}.emaj-agenda-card{padding:32px 24px}}
+  @media(max-width:767px){.emaj-section--agenda{padding:64px 20px}.emaj-agenda-sticky h2{font-size:36px}.emaj-agenda-card{padding:24px 18px;border-radius:20px}.emaj-agenda-card header{flex-direction:column}.emaj-agenda-visual{height:240px;padding:12px}.emaj-agenda-shot{height:216px}.emaj-agenda-badge{top:10px;left:10px}}
+  .emaj-section.emaj-section--agenda{padding:100px 24px;background:#fff}
+  @media(max-width:767px){.emaj-section.emaj-section--agenda{padding:64px 20px}}
+  @media(prefers-reduced-motion:reduce){.emaj-agenda-cta{transition:none}}
+</style>
+
+<style>
+  .emaj-section{padding:88px 24px;background:transparent}.emaj-split{width:min(1120px,100%);margin:auto;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}.emaj-split--reverse{grid-template-columns:.95fr 1.05fr}.emaj-copy{max-width:560px}.emaj-kicker{display:block;margin-bottom:14px;font:700 12px/1.4 var(--font-body);letter-spacing:.12em;text-transform:uppercase;color:var(--brand-blue)}.emaj-copy h2,.emaj-heading h2{margin:0;font:500 clamp(36px,4vw,56px)/1.08 var(--font-heading);letter-spacing:-.03em;color:var(--heading-dark)}.emaj-copy h2 span,.emaj-heading h2 span{background:linear-gradient(100deg,#375dfb,#777f91);-webkit-background-clip:text;background-clip:text;color:transparent}.emaj-copy>p,.emaj-heading>p{font:400 17px/1.65 var(--font-body);color:#667085}.emaj-journey{display:grid;gap:10px}.emaj-step{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;padding:18px 20px;border:1px solid #e4e8f1;border-radius:16px;background:rgba(255,255,255,.88);box-shadow:0 12px 30px rgba(31,52,128,.05)}.emaj-step>span,.emaj-module__num{font:700 12px var(--font-body);color:#375dfb}.emaj-step h3,.emaj-mini-grid h3{margin:0 0 4px;font:600 16px/1.35 var(--font-body);color:#22272f}.emaj-step p,.emaj-mini-grid p{margin:0;font:400 14px/1.5 var(--font-body);color:#667085}.emaj-network{position:relative;padding:24px;border-radius:26px;background:linear-gradient(145deg,#edf2ff,#fff 62%,#eef9fa);box-shadow:0 24px 60px rgba(31,52,128,.12)}.emaj-phone{padding:20px;border:1px solid #dfe5ef;border-radius:20px;background:#fff}.emaj-phone__bar{display:block;width:44px;height:5px;margin:0 auto 20px;border-radius:9px;background:#e3e7ef}.emaj-phone>strong{font:700 20px var(--font-heading)}.emaj-person{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;padding:15px 0;border-bottom:1px solid #eef0f4}.emaj-person i{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#edf1ff;color:#375dfb;font:700 11px var(--font-body)}.emaj-person span{display:flex;flex-direction:column}.emaj-person b{font:600 13px var(--font-body)}.emaj-person small{color:#8a92a0}.emaj-person em{font:600 11px var(--font-body);color:#375dfb}.emaj-chip{position:absolute;right:-14px;top:46px;padding:10px 14px;border:1px solid #dce3ef;border-radius:12px;background:#fff;box-shadow:0 14px 30px rgba(31,52,128,.15);font:600 12px var(--font-body)}.emaj-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}.emaj-mini-grid article{padding:18px;border:1px solid #e4e8f1;border-radius:16px;background:#fff}.emaj-link{font:600 14px var(--font-body);color:#375dfb;text-decoration:none}.emaj-modules{padding:88px 24px;background:#090b13;color:#fff}.emaj-inner{width:min(1120px,100%);margin:auto}.emaj-heading{max-width:800px;margin:0 auto 42px;text-align:center}.emaj-modules .emaj-heading h2{color:#fff}.emaj-modules .emaj-heading p{color:rgba(255,255,255,.65)}.emaj-module-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid rgba(255,255,255,.12);border-radius:24px;overflow:hidden}.emaj-module{min-height:270px;padding:26px;display:flex;flex-direction:column;border-right:1px solid rgba(255,255,255,.12);background:radial-gradient(circle at 50% 120%,rgba(55,93,251,.2),transparent 62%)}.emaj-module:last-child{border:0}.emaj-module h3{margin:58px 0 10px;font:600 20px/1.3 var(--font-heading)}.emaj-module p{margin:0 0 18px;font:400 14px/1.6 var(--font-body);color:rgba(255,255,255,.6)}.emaj-notifications{padding:24px;border:1px solid #dfe5ef;border-radius:24px;background:linear-gradient(145deg,#f1f5ff,#fff);box-shadow:0 20px 50px rgba(31,52,128,.1)}.emaj-notifications article{position:relative;padding:18px 18px 18px 54px;border-radius:15px;background:#fff;box-shadow:0 8px 22px rgba(31,52,128,.06)}.emaj-notifications article+article{margin-top:12px}.emaj-notifications article:before{content:'•';position:absolute;left:20px;color:#375dfb;font-size:28px}.emaj-notifications article span{float:right;font:500 11px var(--font-body);color:#98a0af}.emaj-notifications h3{margin:0;font:600 15px var(--font-body)}.emaj-notifications p{margin:5px 0 0;font:400 13px/1.5 var(--font-body);color:#667085}.emaj-flow{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px}.emaj-flow span{padding:7px 10px;border-radius:999px;background:#eaf0ff;font:600 11px var(--font-body);color:#375dfb}.emaj-flow i{color:#98a0af}.emaj-audience{padding:88px 24px;background:rgba(247,249,253,.72)}.emaj-audience-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.emaj-audience-grid article{padding:24px;border:1px solid #e3e8f0;border-radius:18px;background:#fff}.emaj-audience-grid span{font:700 11px var(--font-body);color:#375dfb}.emaj-audience-grid h3{margin:28px 0 8px;font:600 20px var(--font-heading);color:#22272f}.emaj-audience-grid p{margin:0;font:400 14px/1.55 var(--font-body);color:#667085}
+  .emaj-product-shot{position:relative;overflow:hidden;padding:14px;border:1px solid #dfe5ef;border-radius:24px;background:linear-gradient(145deg,#edf2ff,#fff 62%,#eef9fa);box-shadow:0 24px 60px rgba(31,52,128,.13)}
+  .emaj-product-shot:after{content:'';position:absolute;inset:auto 8% -24px;height:48px;border-radius:50%;background:rgba(55,93,251,.2);filter:blur(22px);pointer-events:none}
+  .emaj-product-shot img{display:block;width:100%;height:auto;border:1px solid #e7eaf0;border-radius:14px;background:#fff}
+  .emaj-product-shot--notifications{background:linear-gradient(145deg,#f1f5ff,#fff)}
+  @media(max-width:900px){.emaj-split,.emaj-split--reverse{grid-template-columns:1fr}.emaj-copy{max-width:none}.emaj-product-shot{order:2}.emaj-module-grid{grid-template-columns:1fr 1fr}.emaj-module:nth-child(2){border-right:0}.emaj-module:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.12)}}
+  @media(max-width:767px){.emaj-section,.emaj-modules,.emaj-audience{padding:58px 20px}.emaj-mini-grid,.emaj-module-grid,.emaj-audience-grid{grid-template-columns:1fr}.emaj-module{min-height:220px;border-right:0;border-bottom:1px solid rgba(255,255,255,.12)}.emaj-module h3{margin-top:34px}.emaj-chip{right:8px}.emaj-flow{gap:5px}.emaj-flow span{font-size:10px}.emaj-person{grid-template-columns:38px 1fr}.emaj-person em{display:none}}
+  @media(prefers-reduced-motion:reduce){.emaj-section *,.emaj-modules *{animation:none!important;transition:none!important}}
+</style>
+
+<style>
+  .emaj-modules { padding:clamp(40px,4.5vw,60px) 24px clamp(82px,9vw,116px); background:transparent!important; color:#182230; }
+  .emaj-modules .emaj-inner { width:min(1120px,100%); }
+  .emaj-modules .emaj-heading { max-width:none; margin:0; padding:0 24px clamp(32px,3.4vw,44px); }
+  .emaj-modules .emaj-heading .emaj-kicker,.emaj-modules .emaj-heading p{display:none}
+  .emaj-modules .emaj-heading h2 { max-width:980px; margin:0 auto; color:#182230; font-size:clamp(32px,4vw,56px); font-weight:500; background:linear-gradient(98deg,#182230 48%,#8f96a3 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .emaj-modules .emaj-heading h2 span { background:none; color:inherit; }
+  .emaj-module-grid { position:relative; grid-template-columns:repeat(4,minmax(0,1fr)); overflow:visible; border:0; border-top:1px solid var(--surface-card-border,#dfe4ed); border-bottom:0; border-radius:0; }
+  .emaj-module-notch{position:absolute;top:0;left:var(--notch-position);z-index:2;width:28px;height:28px;line-height:0;transform:translate(-50%,-50%);pointer-events:none}
+  .emaj-module-notch path{fill:var(--surface-card-border,#dfe4ed)}
+  .emaj-module { min-height:300px; padding:28px; border:0; border-left:1px solid var(--surface-card-border,#dfe4ed); background:transparent; transition:background .25s ease; }
+  .emaj-module:first-of-type { border-left:0; }
+  .emaj-module:hover { background:rgba(255,255,255,.35); }
+  .emaj-module:last-child { border-right:0; }
+  .emaj-module__icon { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; margin-bottom:28px; color:#375dfb; }
+  .emaj-module__icon :global(svg) { width:100%; height:100%; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+  .emaj-module h3 { max-width:230px; min-height:2.3em; margin:0 0 28px; color:#182230; font:500 21px/1.15 var(--font-heading); }
+  .emaj-module p { margin:14px 0 0; color:var(--body-gray,#667085); font-size:15px; line-height:1.4; }
+  @media(max-width:980px){.emaj-module-grid{grid-template-columns:repeat(2,1fr)}.emaj-module-notch{display:none}.emaj-module,.emaj-module:nth-child(n){min-height:270px;padding:28px;border-left:1px solid var(--surface-card-border,#dfe4ed);border-bottom:1px solid var(--surface-card-border,#dfe4ed)}.emaj-module:nth-of-type(2n+1){border-left:0}.emaj-module:nth-last-of-type(-n+2){border-bottom:0}}
+  @media(max-width:767px){.emaj-modules{padding-inline:16px}.emaj-modules .emaj-heading{padding-inline:0}.emaj-module-grid{grid-template-columns:1fr}.emaj-module,.emaj-module:nth-child(n){min-height:0;padding:28px;border-left:0;border-bottom:1px solid var(--surface-card-border,#dfe4ed)}.emaj-module:last-of-type{border-bottom:0}.emaj-module h3{min-height:0;font-size:21px}}
+</style>
+
+<style>
+  .emaj-audience { width: 100%; padding: 32px 24px clamp(110px, 12vw, 160px); background: transparent; color: #111827; }
+  .emaj-audience__inner { width: min(1218px, 100%); margin: 0 auto; }
+  .emaj-audience__header { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; margin: 0 auto 64px; text-align: center; }
+  .emaj-audience__header h2 { max-width: 780px; margin: 0 auto; font-family: var(--font-heading); font-size: clamp(40px, 5vw, 62px); font-weight: 500; line-height: 1.08; letter-spacing: -.045em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; }
+  .emaj-audience__header p { margin: 0; color: #667085; font: 500 17.5px/1.65 var(--font-body); white-space: nowrap; }
+  .emaj-audience-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .emaj-audience-list > li { display: block; margin: 0; padding: 0; }
+  .emaj-audience-list details { position: relative; overflow: hidden; border: 1px solid var(--emaj-audience-border); border-radius: 18px; background: linear-gradient(135deg, var(--emaj-audience-tint), #fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease; }
+  .emaj-audience-list details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .emaj-audience-list summary { display: grid; grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .emaj-audience-list summary::-webkit-details-marker { display: none; }
+  .emaj-audience-list summary:hover { background: rgba(255,255,255,.28); }
+  .emaj-audience-number { color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .emaj-audience-content { display: flex; flex-direction: column; }
+  .emaj-audience-content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .emaj-audience-content p, .emaj-audience-content ul { display: none; }
+  .emaj-audience-list details:not([open]) .emaj-audience-content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .emaj-audience-list details:not([open]) .emaj-audience-content p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 460px; margin: 0; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .emaj-audience-toggle { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer; transition: transform .25s ease, background .2s ease, border-color .2s ease; }
+  .emaj-audience-toggle:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .emaj-audience-toggle:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .emaj-audience-toggle svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .emaj-audience-list details[open] { display: flex; align-items: stretch; margin: 0; border-radius: 28px; background: linear-gradient(135deg, var(--emaj-audience-tint), #fff 72%); }
+  .emaj-audience-list details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; }
+  .emaj-audience-list details[open] .emaj-audience-toggle { top: 28px; transform: rotate(180deg); }
+  .emaj-audience-list details[open] .emaj-audience-number { color: #050505; font-size: 26px; line-height: 1; }
+  .emaj-audience-list details[open] .emaj-audience-content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .emaj-audience-list details[open] .emaj-audience-content p { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 400 17px/1.6 var(--font-body); }
+  .emaj-audience-list details[open] .emaj-audience-content ul { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .emaj-audience-list details[open] .emaj-audience-content li { display: flex; align-items: center; gap: 14px; color: #111; font: 500 16px/1.3 var(--font-body); }
+  .emaj-audience-list details[open] .emaj-audience-content li i { font-style: normal; }
+  .emaj-audience-visual { display: none; opacity: 0; }
+  .emaj-audience-list details[open] .emaj-audience-visual { flex: 0 0 45%; display: flex; align-items: center; justify-content: flex-start; padding: 40px 88px 40px 0; opacity: 1; }
+  .emaj-audience-visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+  @media (max-width: 767px) {
+    .emaj-audience { padding: 28px 16px 76px; }
+    .emaj-audience__header { margin-bottom: 46px; }
+    .emaj-audience__header h2 { font-size: 42px; }
+    .emaj-audience__header p { white-space: normal; }
+    .emaj-audience-list summary { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    .emaj-audience-list details:not([open]) .emaj-audience-content { display: flex; gap: 5px; }
+    .emaj-audience-list details:not([open]) .emaj-audience-content p { font-size: 13px; line-height: 1.4; }
+    .emaj-audience-toggle { top: 31px; right: 16px; }
+    .emaj-audience-list details[open] { flex-direction: column; }
+    .emaj-audience-list details[open] summary { flex: none; grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 62px 24px 14px; }
+    .emaj-audience-list details[open] .emaj-audience-toggle { top: 24px; right: 16px; }
+    .emaj-audience-list details[open] .emaj-audience-number { font-size: 21px; }
+    .emaj-audience-list details[open] .emaj-audience-content h3 { font-size: 26px; }
+    .emaj-audience-list details[open] .emaj-audience-content p { max-width: none; margin: 30px 0 24px; font-size: 22px; }
+    .emaj-audience-visual { margin-inline: 0; border-radius: 12px; }
+    .emaj-audience-list details[open] .emaj-audience-visual { flex: none; padding: 0 24px 28px; }
+    .emaj-audience-visual img { max-width: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .emaj-audience-list details, .emaj-audience-toggle { transition: none; } }
+</style>

@@ -1,100 +1,115 @@
 ---
 const stages = [
-  ["Connect", "Supported account"],
-  ["Checkout", "Payment handoff"],
-  ["Confirm", "Provider result"],
-  ["Deliver", "Ticket outcome"],
-  ["Refund", "Full or partial"],
-  ["Review", "Event finance"],
+  { value: "Connect", label: "Supported account" },
+  { value: "Checkout", label: "Payment handoff" },
+  { value: "Confirm", label: "Provider result" },
+  { value: "Deliver", label: "Ticket outcome" },
+  { value: "Refund", label: "Full or partial" },
+  { value: "Review", label: "Event finance" },
 ];
 ---
 
-<section class="eppx-rail" aria-labelledby="eppx-rail-title">
-  <div class="eppx-rail__heading">
-    <span>One connected payment lifecycle</span>
-    <h2 id="eppx-rail-title">From gateway setup to finance review</h2>
-  </div>
-  <div class="eppx-rail__inner">
-    {stages.map(([title, detail], index) => (
-      <div class="eppx-rail__stage">
-        <span class="eppx-rail__number">{String(index + 1).padStart(2, "0")}</span>
-        <span><b>{title}</b>{detail}</span>
-      </div>
+<section class="eppx-reference" aria-label="One connected payment lifecycle">
+  <div class="eppx-reference__inner">
+    {stages.map((stage) => (
+      <a class="eppx-reference__stage" href="#gateway-heading">
+        <b>{stage.value}</b>
+        <span>{stage.label}</span>
+      </a>
     ))}
   </div>
 </section>
 
 <style>
-  .eppx-rail {
-    border-top: 1px solid #e8edf5;
-    border-bottom: 1px solid #e8edf5;
+  /* Matches the compact post-hero reference strip on AI Event Copilot. */
+  .eppx-reference {
+    width: 100%;
+    padding: 58px 24px;
+    border-top: 1px solid var(--surface-card-border);
+    color: var(--heading-dark);
     background: #fff;
   }
 
-  .eppx-rail__heading {
-    width: min(1120px, calc(100% - 40px));
-    margin: 0 auto;
-    padding: 24px 0 14px;
-    text-align: center;
-  }
-
-  .eppx-rail__heading span {
-    color: #375dfb;
-    font: 700 12px/1.4 var(--font-body);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .eppx-rail__heading h2 {
-    margin: 5px 0 0;
-    color: #22272f;
-    font: 500 22px/1.25 var(--font-heading);
-    letter-spacing: -0.02em;
-  }
-
-  .eppx-rail__inner {
-    width: min(1120px, calc(100% - 40px));
-    min-height: 78px;
-    margin: 0 auto;
+  .eppx-reference__inner {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    max-width: 1180px;
+    margin: 0 auto;
   }
 
-  .eppx-rail__stage {
+  .eppx-reference__stage {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 18px 12px;
-    border-left: 1px solid #e8edf5;
-    color: #697386;
-    font: 500 12px/1.35 var(--font-body);
+    min-width: 0;
+    min-height: 74px;
+    padding: 8px 24px;
+    border-right: 1px solid var(--surface-card-border);
+    flex-direction: column;
+    justify-content: center;
+    color: var(--body-light);
+    font: 13px/1.3 var(--font-body);
+    text-decoration: none;
   }
 
-  .eppx-rail__stage:last-child { border-right: 1px solid #e8edf5; }
-  .eppx-rail__stage > span:last-child { display: flex; flex-direction: column; gap: 2px; }
-  .eppx-rail__stage b { color: #22272f; font-size: 14px; }
-
-  .eppx-rail__number {
-    display: grid;
-    flex: 0 0 28px;
-    width: 28px;
-    height: 28px;
-    place-items: center;
-    border-radius: 50%;
-    background: #eef2ff;
-    color: #375dfb;
-    font-size: 10px;
-    font-weight: 750;
+  .eppx-reference__stage:last-child {
+    border-right: 0;
   }
 
-  @media (max-width: 900px) {
-    .eppx-rail__inner { grid-template-columns: repeat(3, 1fr); padding-bottom: 16px; }
-    .eppx-rail__stage:nth-child(n + 4) { border-top: 1px solid #e8edf5; }
+  .eppx-reference__stage b {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--heading-dark);
+    font: 600 18px/1.15 var(--font-heading);
   }
 
-  @media (max-width: 540px) {
-    .eppx-rail__heading { text-align: left; }
-    .eppx-rail__inner { grid-template-columns: repeat(2, 1fr); }
-    .eppx-rail__stage:nth-child(n + 3) { border-top: 1px solid #e8edf5; }
+  .eppx-reference__stage:hover b {
+    color: var(--brand-blue);
+  }
+
+  @media (max-width: 960px) {
+    .eppx-reference {
+      padding-block: 34px;
+    }
+
+    .eppx-reference__inner {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .eppx-reference__stage {
+      border-bottom: 1px solid var(--surface-card-border);
+    }
+
+    .eppx-reference__stage:nth-child(2n) {
+      border-right: 0;
+    }
+
+    .eppx-reference__stage:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .eppx-reference {
+      padding: 26px 16px;
+    }
+
+    .eppx-reference__inner {
+      grid-template-columns: 1fr;
+    }
+
+    .eppx-reference__stage,
+    .eppx-reference__stage:nth-child(2n) {
+      min-height: 66px;
+      padding-inline: 16px;
+      border-right: 0;
+      border-bottom: 1px solid var(--surface-card-border);
+    }
+
+    .eppx-reference__stage:nth-last-child(2) {
+      border-bottom: 1px solid var(--surface-card-border);
+    }
+
+    .eppx-reference__stage:last-child {
+      border-bottom: 0;
+    }
   }
 </style>

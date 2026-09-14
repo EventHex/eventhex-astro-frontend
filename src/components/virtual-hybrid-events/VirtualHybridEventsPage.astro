@@ -1,0 +1,756 @@
+---
+const lifecycle = [
+  { title: "Connect", text: "Meeting link" },
+  { title: "Join", text: "EventHex bot" },
+  { title: "Capture", text: "Recording + transcript" },
+  { title: "Stream", text: "RTMP destinations" },
+  { title: "Track", text: "Virtual attendance" },
+  { title: "Follow up", text: "Recap + insights" },
+];
+
+const formats = [
+  {
+    title: "Virtual event",
+    text: "Use the meeting link, bot, virtual check-in, recording, transcript, and follow-up as the primary attendee journey.",
+    cue: "Best for remote-first programmes",
+  },
+  {
+    title: "Hybrid event",
+    text: "Run the meeting workflow alongside onsite check-in and event-day operations while keeping the same event and sessions at the center.",
+    cue: "Best for connected venues and remote audiences",
+  },
+];
+
+const meetingPlatforms = [
+  { title: "Zoom", text: "Connect a supported Zoom meeting URL.", tone: "blue" },
+  { title: "Google Meet", text: "Connect a Google Meet room or create the supported calendar-led setup.", tone: "green" },
+  { title: "Microsoft Teams", text: "Connect a supported Teams meeting URL.", tone: "violet" },
+  { title: "Event context", text: "Keep the meeting attached to the correct event, schedule, and organizer workspace.", tone: "amber" },
+];
+
+const workflowCards = [
+  {
+    eyebrow: "Meeting bot control",
+    title: "Prepare the bot before the room opens",
+    text: "Configure the identity and joining behavior, then start the bot manually or use the supported auto-join setting for the event schedule.",
+    items: [
+      ["Save the meeting link", "Attach the correct room before the session."],
+      ["Set bot identity", "Choose the bot name, welcome message, and available behavior."],
+      ["Choose when it joins", "Start manually or enable the scheduled auto-join option."],
+      ["Watch the phase", "See setup, joining, waiting-room, live, processing, and completed states."],
+    ],
+    visual: "bot",
+  },
+  {
+    eyebrow: "Capture the session",
+    title: "Turn the live room into a recording and transcript your team can use",
+    text: "After processing, supported provider paths can surface the session recording, timestamped transcript, chat, participants, and speaker timeline in the event workspace.",
+    items: [
+      ["Recording playback", "Review available video or audio after the provider finishes processing."],
+      ["Timestamped transcript", "Move between transcript segments and the corresponding moment in the recording when available."],
+      ["Chat record", "Keep supported meeting chat messages with the session record."],
+      ["Speaker and participant context", "Review joins, leaves, participation, and speaker-timeline data where the provider supplies it."],
+    ],
+    visual: "capture",
+  },
+  {
+    eyebrow: "Optional live streaming",
+    title: "Send the meeting feed to the destinations your broadcast plan requires",
+    text: "Before the bot starts, enable streaming and add one or more supported destinations with the stream details supplied by each platform.",
+    items: [
+      ["YouTube Live", "Add the YouTube RTMP destination and stream key."],
+      ["Facebook Live", "Add the Facebook RTMP destination and stream key."],
+      ["Custom RTMP", "Use the RTMP URL and key supplied by another compatible destination."],
+      ["Multiple destinations", "Configure more than one destination for the same meeting-bot session when the selected provider supports RTMP streaming."],
+    ],
+    visual: "stream",
+  },
+];
+
+const attendanceItems = [
+  ["Unique participants", "Review the participant roster captured for the meeting."],
+  ["Join and leave", "Use available meeting events to understand attendance windows."],
+  ["Speaking context", "Review speaker-timeline or speaking-time data where supported."],
+  ["Registration match", "Link identified virtual participants to ticket registrations."],
+  ["Live status", "See whether the meeting bot is joining, waiting, live, or finished."],
+  ["Event-level review", "Keep session results inside the same organizer event workspace."],
+];
+
+const connectedOperations = [
+  ["Event Registration", "Collect attendee details and route people into the selected virtual or hybrid experience.", "/event-registration/"],
+  ["Event Check-In", "Coordinate onsite arrival for the in-person side of a hybrid event.", "/event-check-in/"],
+  ["AI Session Recap", "Create the attendee-facing transcript, takeaways, and recap experience.", "/ai-session-recap/"],
+  ["Event Analytics", "Review broader event performance beyond the individual meeting session.", "/event-analytics/"],
+];
+
+const eventTypes = [
+  ["Conferences", "Run multi-session programmes with remote access and post-session records."],
+  ["Association events", "Connect recurring member sessions to registration and attendance."],
+  ["Corporate events", "Coordinate internal or external virtual programmes with controlled access."],
+  ["Tech conferences", "Extend product talks and panels to remote viewers and recap journeys."],
+  ["Exhibitions", "Support hybrid briefings, exhibitor sessions, or streamed programme content."],
+  ["Recorded events", "Capture a scheduled live session and reuse its approved output after processing."],
+];
+
+const faqs = [
+  ["Does EventHex replace Zoom, Google Meet, or Microsoft Teams?", "No. EventHex uses the supported meeting link and adds event operations around it, including bot control, streaming configuration, attendance, session outputs, and follow-up."],
+  ["Can the meeting bot join automatically?", "A supported auto-join setting exists alongside manual start. Confirm the event schedule, waiting-room behavior, provider, and host permissions before relying on it."],
+  ["Can we stream to more than one destination?", "The organizer can configure YouTube, Facebook, or custom RTMP destinations, including multiple destination entries. RTMP availability still depends on the active meeting-bot provider and valid stream credentials."],
+  ["Are recording and transcripts always available?", "They depend on the configured provider, meeting permissions, bot admission, processing success, and feature setup. EventHex shows the outputs and states available for that session; it does not guarantee every meeting will be captured."],
+  ["How does virtual check-in work?", "Organizers can enable a gated event link and opening window. The supported OTP path identifies the attendee and can connect the resulting virtual attendance to a registration."],
+  ["Does EventHex support live captions and translation?", "EventHex has live transcription and translation paths, but supported languages, attendee surfaces, and behavior depend on the chosen provider and session configuration. Confirm the exact requirement during the demo."],
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text },
+  })),
+};
+---
+
+<div class="vhx-page">
+  <section class="vhx-hero">
+    <div class="vhx-hero__grid">
+      <div class="vhx-hero__content">
+        <span class="vhx-eyebrow animate-on-scroll" data-animation="fadeInDown">Virtual &amp; hybrid events</span>
+        <h1 class="vhx-hero__title animate-on-scroll" data-animation="fadeInUp">Run virtual and hybrid events around the meeting tools your audience already uses</h1>
+        <p class="vhx-hero__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">Connect Zoom, Google Meet, or Microsoft Teams to EventHex, control a meeting bot, and keep streaming, attendance, recordings, transcripts, and post-session follow-up tied to the event.</p>
+        <div class="vhx-hero__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1000ms">
+          <a class="vhx-button vhx-button--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          <a class="vhx-button vhx-button--secondary" href="#vhx-formats">See the workflow</a>
+        </div>
+        <div class="vhx-hero__points animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1200ms">
+          <span>Use the meeting room you already planned</span>
+          <span>Configure recording and streaming before go-live</span>
+          <span>Carry session outcomes into event operations</span>
+        </div>
+      </div>
+
+      <div class="vhx-hero__visual animate-on-scroll" data-animation="fadeInRight" role="img" aria-label="Connected virtual session showing a meeting link, EventHex bot, recording, streaming, and attendance">
+        <div class="vhx-window">
+          <div class="vhx-window__bar"><i></i><i></i><i></i><span>EventHex · Virtual events</span></div>
+          <div class="vhx-hero-ui">
+            <div class="vhx-hero-ui__side">
+              <small>EVENT WORKSPACE</small>
+              <strong>Meeting link</strong>
+              <span><i></i> EventHex bot · Live</span>
+            </div>
+            <div class="vhx-hero-ui__flow" aria-hidden="true">
+              <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="vhx-hero-ui__cards">
+              <div><small>ROOM</small><strong>Google Meet</strong><span>Existing link</span></div>
+              <div><small>BOT</small><strong>Recording</strong><span>Provider-supported</span></div>
+              <div><small>STREAM</small><strong>RTMP destinations</strong><span>Configured</span></div>
+              <div><small>ATTENDANCE</small><strong>Virtual + onsite</strong><span>Live status</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="vhx-lifecycle" aria-labelledby="vhx-lifecycle-title">
+    <div class="vhx-lifecycle__header">
+      <span>One session lifecycle</span>
+      <h2 id="vhx-lifecycle-title">From meeting link to usable event record</h2>
+    </div>
+    <div class="vhx-lifecycle__grid">
+      {lifecycle.map((item, index) => (
+        <div class="vhx-lifecycle__item">
+          <small>{String(index + 1).padStart(2, "0")}</small>
+          <strong>{item.title}</strong>
+          <span>{item.text}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="vhx-formats" class="vhx-formats">
+    <div class="vhx-section-heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="vhx-eyebrow">Choose the operating model</span>
+      <h2>Use one virtual workflow—or connect it to an in-person programme</h2>
+      <p>Start with the event format, then configure the meeting, streaming, and attendance path that belongs to it.</p>
+    </div>
+    <div class="vhx-format-grid">
+      {formats.map((format, index) => (
+        <article class="vhx-format-card animate-on-scroll" data-animation={index === 0 ? "fadeInLeft" : "fadeInRight"}>
+          <div class="vhx-format-card__visual" aria-hidden="true">
+            <div class:list={["vhx-format-device", index === 1 && "vhx-format-device--hybrid"]}>
+              <span class="vhx-format-device__top"></span>
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+          <div class="vhx-format-card__copy">
+            <span class="vhx-format-card__number">0{index + 1}</span>
+            <h3>{format.title}</h3>
+            <p>{format.text}</p>
+            <strong>{format.cue}</strong>
+          </div>
+        </article>
+      ))}
+    </div>
+    <p class="vhx-format-note">EventHex coordinates the event workflow; Zoom, Meet, or Teams remains the meeting room.</p>
+  </section>
+
+  <div class="vhx-capability-band">
+    <section class="vhx-platforms">
+      <div class="vhx-section-heading vhx-section-heading--dark animate-on-scroll" data-animation="fadeInUp">
+        <span class="vhx-eyebrow">Connect your meeting</span>
+        <h2>Start with the link your speakers and attendees already know</h2>
+        <p>Add the scheduled meeting link to the EventHex event; the platform is identified from the URL and used by the configured bot workflow.</p>
+      </div>
+      <div class="vhx-platform-grid">
+        {meetingPlatforms.map((platform, index) => (
+          <article class="vhx-platform-card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            <div class:list={["vhx-platform-card__icon", `is-${platform.tone}`]} aria-hidden="true">
+              <span></span><i></i>
+            </div>
+            <h3>{platform.title}</h3>
+            <p>{platform.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  </div>
+
+  <section class="vhx-workflows">
+    <div class="vhx-workflows__inner">
+      <div class="vhx-workflows__heading">
+        <span class="vhx-workflows__eyebrow">One session lifecycle</span>
+        <h2>From meeting link to <span>usable event record</span></h2>
+      </div>
+      <div class="vhx-workflows__cards">
+        {workflowCards.map((card, cardIndex) => (
+          <article class="vhx-workflow-card" style={`--card-index: ${cardIndex}`}>
+            <div class="vhx-workflow-card__copy">
+              <span>{card.eyebrow}</span>
+              <h3>{card.title}</h3>
+              <p>{card.text}</p>
+            </div>
+            <div class="vhx-workflow-card__visual">
+              <div class:list={["vhx-workflow-ui", `vhx-workflow-ui--${card.visual}`]}>
+                <div class="vhx-workflow-ui__bar"><i></i><i></i><i></i><span>{card.eyebrow}</span></div>
+                <div class="vhx-workflow-ui__list">
+                  {card.items.map(([title, text], index) => (
+                    <div class="vhx-workflow-ui__item">
+                      <b>{String(index + 1).padStart(2, "0")}</b>
+                      <span><strong>{title}</strong><small>{text}</small></span>
+                      <i aria-hidden="true"></i>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </article>
+        ))}
+        <div class="vhx-workflows__spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="vhx-evidence">
+    <div class="vhx-evidence__intro animate-on-scroll" data-animation="fadeInUp">
+      <span class="vhx-eyebrow">Virtual check-in</span>
+      <h2>Give registered attendees a controlled path into the online session</h2>
+      <p>Enable a virtual check-in link, choose when it opens, and use the registration-aware entry path instead of distributing only the raw meeting URL.</p>
+    </div>
+    <div class="vhx-evidence-grid">
+      <div class="vhx-evidence-media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="vhx-checkin-ui">
+          <div class="vhx-checkin-ui__head"><span>Virtual check-in</span><i>Live</i></div>
+          <div class="vhx-checkin-ui__link"><small>Gated event link</small><strong>Event-specific virtual check-in URL</strong></div>
+          <div class="vhx-checkin-ui__row"><span>Opening window</span><strong>Before the event</strong></div>
+          <div class="vhx-checkin-ui__row"><span>Attendee verification</span><strong>OTP entry flow</strong></div>
+          <div class="vhx-checkin-ui__status"><i></i><span>Attendance record</span><strong>Registration match</strong></div>
+        </div>
+      </div>
+      <div class="vhx-evidence-copy animate-on-scroll" data-animation="fadeInRight">
+        <ol>
+          <li><span>01</span><div><h3>Gated event link</h3><p>Generate or regenerate an event-specific virtual check-in URL.</p></div></li>
+          <li><span>02</span><div><h3>Opening window</h3><p>Choose how long before the event the check-in path opens.</p></div></li>
+          <li><span>03</span><div><h3>Attendee verification</h3><p>Use the supported OTP entry flow to identify the attendee.</p></div></li>
+          <li><span>04</span><div><h3>Attendance record</h3><p>Connect virtual participation back to the registration where a match is available.</p></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="vhx-evidence__intro animate-on-scroll" data-animation="fadeInUp">
+      <span class="vhx-eyebrow">Hybrid attendance context</span>
+      <h2>See who joined, when they participated, and how the session progressed</h2>
+      <p>EventHex retains supported virtual participant data and attaches it to attendee records so operations can review the online side of the event alongside the wider programme.</p>
+    </div>
+    <div class="vhx-attendance-grid">
+      {attendanceItems.map(([title, text], index) => (
+        <article class="vhx-attendance-card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)}>
+          <span>0{index + 1}</span>
+          <h3>{title}</h3>
+          <p>{text}</p>
+          <div aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        </article>
+      ))}
+    </div>
+
+    <div class="vhx-evidence-split vhx-evidence-split--language">
+      <div class="vhx-evidence-copy-block animate-on-scroll" data-animation="fadeInLeft">
+        <span class="vhx-eyebrow">Live transcription options</span>
+        <h2>Scope captions and translation to the session experience you need</h2>
+        <p>EventHex contains live transcription and translation paths, but language coverage and delivery depend on the configured session and speech provider.</p>
+        <div class="vhx-qualification">Confirm languages, provider, latency expectations, attendee surface, and event format during the demo; do not assume universal coverage.</div>
+      </div>
+      <div class="vhx-language-cards animate-on-scroll" data-animation="fadeInRight">
+        <article>
+          <span>01</span><h3>Live transcript experience</h3>
+          <p>Surface spoken content as text in the supported attendee-facing session experience.</p>
+          <strong>Best for accessible session follow-along</strong>
+        </article>
+        <article>
+          <span>02</span><h3>Translated subtitle experience</h3>
+          <p>Show translated text where the selected language and transcription configuration support it.</p>
+          <strong>Best for multilingual audience planning</strong>
+        </article>
+      </div>
+    </div>
+
+    <div class="vhx-evidence-split vhx-evidence-split--recap">
+      <div class="vhx-recap-ui animate-on-scroll" data-animation="fadeInLeft">
+        <div class="vhx-recap-ui__head"><span>After the session</span><i>Insights ready</i></div>
+        <div class="vhx-recap-ui__timeline">
+          <div><b>01</b><span><strong>Recording ready</strong><small>Open the processed session media.</small></span></div>
+          <div><b>02</b><span><strong>Transcript ready</strong><small>Review text, timestamps, and available speaker labels.</small></span></div>
+          <div><b>03</b><span><strong>Insights ready</strong><small>Use generated summary and key-insight outputs where configured.</small></span></div>
+          <div><b>04</b><span><strong>Recap handoff</strong><small>Open the connected InstaRecap experience for attendee-facing follow-up.</small></span></div>
+        </div>
+      </div>
+      <div class="vhx-evidence-copy-block animate-on-scroll" data-animation="fadeInRight">
+        <span class="vhx-eyebrow">After the session</span>
+        <h2>Move from raw recording to a session record people can revisit</h2>
+        <p>Keep the available media and transcript together, review generated insights, and continue into the public recap workflow when it is enabled for the event.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="vhx-connected">
+    <div class="vhx-section-heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="vhx-eyebrow">Connected event operations</span>
+      <h2>Continue into the feature that owns the next job</h2>
+      <p>Virtual delivery works best when access, content, attendance, and follow-up each hand off to the correct EventHex workflow.</p>
+    </div>
+    <div class="vhx-connected-grid">
+      {connectedOperations.map(([title, text, href], index) => (
+        <a class="vhx-connected-card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)} href={href}>
+          <span>0{index + 1}</span>
+          <h3>{title}</h3>
+          <p>{text}</p>
+          <i aria-hidden="true">→</i>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="vhx-event-types">
+    <div class="vhx-section-heading animate-on-scroll" data-animation="fadeInUp">
+      <span class="vhx-eyebrow">Built for programmed events</span>
+      <h2>Use the same operating model across high-value session formats</h2>
+      <p>Configure each event around its audience, programme, and delivery plan.</p>
+    </div>
+    <div class="vhx-event-type-grid">
+      {eventTypes.map(([title, text], index) => (
+        <article class="vhx-event-type-card animate-on-scroll" data-animation="fadeInUp" data-delay={String((index % 4) * 50)}>
+          <span aria-hidden="true">0{index + 1}</span>
+          <h3>{title}</h3>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="vhx-faq">
+    <div class="vhx-faq__inner">
+      <div class="vhx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="vhx-faq__eyebrow">Virtual and hybrid event questions</span>
+        <h2>What organizers ask before connecting a meeting</h2>
+      </div>
+      <div class="vhx-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="vhx-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 45)} data-vhx-faq open={index === 0}>
+            <summary><strong>{question}</strong><span aria-hidden="true"></span></summary>
+            <div><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="vhx-final-cta">
+    <div class="vhx-final-cta__inner animate-on-scroll" data-animation="fadeInUp">
+      <span>Map one live session</span>
+      <h2>Bring your virtual or hybrid run-of-show to the demo</h2>
+      <p>Show us the meeting platform, event format, streaming destinations, access path, and post-session outcome you need. We’ll walk through the matching EventHex workflow and qualify provider-dependent pieces before launch.</p>
+      <a href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+    </div>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+</div>
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-vhx-faq]"));
+  faqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const workflow = document.querySelector<HTMLElement>(".vhx-workflows");
+  const workflowHeading = workflow?.querySelector<HTMLElement>(".vhx-workflows__heading");
+  const workflowCards = workflow?.querySelectorAll<HTMLElement>(".vhx-workflow-card");
+  const finalWorkflowCard = workflowCards?.[workflowCards.length - 1];
+  if (workflowHeading && finalWorkflowCard) {
+    let frame = 0;
+    const syncRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalWorkflowCard).top) || 0;
+      const releaseOffset = Math.min(0, finalWorkflowCard.getBoundingClientRect().top - stickyTop);
+      workflowHeading.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueRelease = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(syncRelease);
+    };
+    window.addEventListener("scroll", queueRelease, { passive: true });
+    window.addEventListener("resize", queueRelease, { passive: true });
+    syncRelease();
+  }
+</script>
+
+<style>
+  .vhx-page {
+    --vhx-ink: var(--heading-dark, #1e1d24);
+    --vhx-muted: var(--subheading-gray, #596579);
+    --vhx-blue: var(--brand-blue, #375dfb);
+    overflow: clip;
+    background:
+      radial-gradient(circle 360px at 2% 38%, rgba(175, 163, 255, .18), transparent 100%),
+      radial-gradient(circle 320px at 98% 68%, rgba(255, 182, 213, .16), transparent 100%),
+      #fff;
+  }
+  .vhx-eyebrow {
+    color: var(--vhx-blue);
+    font: 600 14px/1.35 var(--font-body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .vhx-section-heading {
+    width: min(860px, 100%);
+    margin: 0 auto 48px;
+    text-align: center;
+  }
+  .vhx-section-heading h2,
+  .vhx-evidence__intro h2,
+  .vhx-evidence-copy-block h2 {
+    margin: 12px 0 16px;
+    color: var(--vhx-ink);
+    font: 500 clamp(36px, 5vw, 56px)/1.08 var(--font-heading);
+    letter-spacing: -.04em;
+  }
+  .vhx-section-heading p,
+  .vhx-evidence__intro p,
+  .vhx-evidence-copy-block > p {
+    margin: 0 auto;
+    color: var(--vhx-muted);
+    font: 400 17px/1.65 var(--font-body);
+  }
+
+  .vhx-hero {
+    position: relative;
+    margin-top: -90px;
+    padding: 144px 24px 72px;
+    background:
+      radial-gradient(ellipse 700px 500px at -5% -10%, rgba(55, 93, 251, .14), transparent 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, rgba(255, 116, 184, .24), transparent 78%),
+      #fff;
+  }
+  .vhx-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 2;
+    width: min(220px, 30vw);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .72) 70%, rgba(255, 255, 255, .88));
+    pointer-events: none;
+  }
+  .vhx-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 542px) minmax(0, 1fr);
+    align-items: center;
+    gap: 48px;
+    width: min(1080px, 100%);
+    margin: 0 auto;
+  }
+  .vhx-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .vhx-hero__title {
+    margin: 0;
+    color: transparent;
+    background: linear-gradient(98deg, var(--vhx-ink) 43%, #8f8f8f 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    font: 500 clamp(44px, 5vw, 60px)/1.06 var(--font-heading);
+    letter-spacing: -.045em;
+  }
+  .vhx-hero__copy { margin: 0; color: var(--vhx-muted); font: 400 18px/1.55 var(--font-body); }
+  .vhx-hero__actions { display: flex; flex-wrap: wrap; gap: 14px; padding-top: 6px; }
+  .vhx-button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 9px; padding: 12px 24px; border: 1px solid transparent; border-radius: 12px; font: 650 15px/1.4 var(--font-body); text-decoration: none; transition: transform .25s, background .25s, border-color .25s; }
+  .vhx-button:hover { transform: translateY(-2px); }
+  .vhx-button--primary { color: #fff; background: var(--vhx-ink); }
+  .vhx-button--secondary { color: var(--vhx-ink); border-color: rgba(16, 24, 40, .22); background: transparent; }
+  .vhx-hero__points { display: flex; flex-wrap: wrap; gap: 9px 16px; padding-top: 4px; }
+  .vhx-hero__points span { position: relative; padding-left: 15px; color: #475467; font: 500 13px/1.5 var(--font-body); }
+  .vhx-hero__points span::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .vhx-hero__visual { position: relative; z-index: 1; width: calc(100% + max(0px, (100vw - 1128px) / 2) + 24px); }
+  .vhx-window { padding: 14px 0 14px 14px; border: 1px solid rgba(255, 255, 255, .7); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.36)); box-shadow: 0 28px 70px rgba(35, 49, 90, .14); backdrop-filter: blur(16px); }
+  .vhx-window__bar { display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px; border-radius: 14px 0 0; background: rgba(255,255,255,.82); }
+  .vhx-window__bar > i { width: 8px; height: 8px; border-radius: 50%; background: #ff746c; }
+  .vhx-window__bar > i:nth-child(2) { background: #ffc759; }
+  .vhx-window__bar > i:nth-child(3) { background: #4dcb72; }
+  .vhx-window__bar span { margin-left: 7px; color: #667085; font: 600 10px/1 var(--font-body); letter-spacing: .02em; }
+  .vhx-hero-ui { display: grid; grid-template-columns: 150px 30px minmax(280px, 1fr); min-height: 390px; padding: 24px; border-radius: 0 0 0 14px; background: linear-gradient(135deg, #e8f0ff, #f7f9ff 50%, #fff); }
+  .vhx-hero-ui__side { display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 20px; border: 1px solid #dfe5f0; border-radius: 16px; background: #fff; box-shadow: 0 14px 30px rgba(37, 55, 99, .1); }
+  .vhx-hero-ui small { color: #8a94a6; font: 700 9px/1.3 var(--font-body); letter-spacing: .09em; }
+  .vhx-hero-ui__side strong { color: var(--vhx-ink); font: 600 18px/1.2 var(--font-heading); }
+  .vhx-hero-ui__side > span { display: inline-flex; align-items: center; gap: 7px; color: #087a51; font: 650 11px/1.3 var(--font-body); }
+  .vhx-hero-ui__side > span i { width: 7px; height: 7px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 4px rgba(16, 185, 129, .12); }
+  .vhx-hero-ui__flow { display: flex; flex-direction: column; align-items: center; justify-content: space-around; padding-block: 38px; }
+  .vhx-hero-ui__flow span { width: 100%; height: 1px; background: #cad3e4; }
+  .vhx-hero-ui__cards { display: grid; grid-template-columns: repeat(2, minmax(125px, 1fr)); gap: 12px; }
+  .vhx-hero-ui__cards > div { display: flex; min-height: 132px; flex-direction: column; justify-content: center; gap: 7px; padding: 18px; border: 1px solid #dfe5f0; border-radius: 16px; background: rgba(255,255,255,.92); box-shadow: 0 12px 26px rgba(37, 55, 99, .08); }
+  .vhx-hero-ui__cards strong { color: var(--vhx-ink); font: 600 15px/1.25 var(--font-heading); }
+  .vhx-hero-ui__cards span { color: #667085; font: 500 11px/1.4 var(--font-body); }
+
+  .vhx-lifecycle { border-top: 1px solid #e8edf5; border-bottom: 1px solid #e8edf5; background: rgba(255,255,255,.7); }
+  .vhx-lifecycle__header { display: flex; align-items: baseline; justify-content: center; gap: 18px; padding: 22px 24px 0; text-align: center; }
+  .vhx-lifecycle__header span { color: #7f8898; font: 700 11px/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .vhx-lifecycle__header h2 { color: var(--vhx-ink); font: 500 16px/1.4 var(--font-heading); }
+  .vhx-lifecycle__grid { display: grid; grid-template-columns: repeat(6, 1fr); width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+  .vhx-lifecycle__item { position: relative; display: grid; align-content: center; gap: 3px; min-height: 96px; padding: 16px 22px; border-left: 1px solid #e8edf5; }
+  .vhx-lifecycle__item:last-child { border-right: 1px solid #e8edf5; }
+  .vhx-lifecycle__item small { color: #a6afbd; font: 700 10px/1 var(--font-body); }
+  .vhx-lifecycle__item strong { color: var(--vhx-ink); font: 650 14px/1.3 var(--font-heading); }
+  .vhx-lifecycle__item > span { color: #667085; font: 400 12px/1.35 var(--font-body); }
+
+  .vhx-formats { padding: clamp(76px, 9vw, 118px) 24px 88px; }
+  .vhx-format-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(1140px, 100%); margin: 0 auto; border-top: 1px solid #e5e9f0; border-bottom: 1px solid #e5e9f0; }
+  .vhx-format-card { display: grid; grid-template-rows: 300px 1fr; min-width: 0; }
+  .vhx-format-card:first-child { border-right: 1px solid #e5e9f0; }
+  .vhx-format-card__visual { display: grid; place-items: center; padding: 32px; overflow: hidden; background: linear-gradient(145deg, #f5f8ff, #eef8ff); }
+  .vhx-format-card:nth-child(2) .vhx-format-card__visual { background: linear-gradient(145deg, #fff5fa, #f7f2ff); }
+  .vhx-format-device { position: relative; display: grid; grid-template-columns: repeat(2, 88px); gap: 10px; width: 250px; padding: 48px 24px 24px; border: 1px solid #d9e2f1; border-radius: 20px; background: rgba(255,255,255,.92); box-shadow: 0 22px 44px rgba(33, 52, 98, .14); transform: rotate(-2deg); }
+  .vhx-format-device--hybrid { grid-template-columns: repeat(3, 58px); transform: rotate(2deg); }
+  .vhx-format-device__top { position: absolute; top: 20px; left: 24px; width: 70px; height: 8px; border-radius: 8px; background: #dce3ef; }
+  .vhx-format-device > i { display: block; height: 64px; border-radius: 10px; background: linear-gradient(150deg, #bdccff, #e4eaff); }
+  .vhx-format-device > i:nth-last-child(1) { background: linear-gradient(150deg, #ffbfdc, #ffe9f3); }
+  .vhx-format-card__copy { position: relative; padding: 42px 46px 48px; }
+  .vhx-format-card__number { display: block; margin-bottom: 20px; color: var(--vhx-blue); font: 700 12px/1 var(--font-body); }
+  .vhx-format-card h3 { margin: 0 0 12px; color: var(--vhx-ink); font: 600 30px/1.15 var(--font-heading); letter-spacing: -.025em; }
+  .vhx-format-card p { margin: 0 0 24px; color: var(--vhx-muted); font: 400 16px/1.65 var(--font-body); }
+  .vhx-format-card strong { display: inline-flex; padding: 7px 11px; border-radius: 999px; color: #087a51; background: #e9f8f5; font: 650 12px/1.35 var(--font-body); }
+  .vhx-format-note { width: min(760px, 100%); margin: 28px auto 0; color: #667085; font: 500 14px/1.55 var(--font-body); text-align: center; }
+
+  .vhx-capability-band { position: relative; padding: 92px 24px 104px; overflow: hidden; color: #fff; background: radial-gradient(circle at 8% 18%, rgba(83, 114, 255, .24), transparent 34%), radial-gradient(circle at 92% 88%, rgba(161, 99, 255, .18), transparent 34%), #090a10; }
+  .vhx-platforms { width: min(1140px, 100%); margin: 0 auto; }
+  .vhx-section-heading--dark h2 { color: #fff; }
+  .vhx-section-heading--dark p { color: rgba(255,255,255,.58); }
+  .vhx-section-heading--dark .vhx-eyebrow { color: #9ab2ff; }
+  .vhx-platform-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid rgba(255,255,255,.14); border-bottom: 1px solid rgba(255,255,255,.14); }
+  .vhx-platform-card { min-height: 330px; padding: 32px 28px; border-left: 1px solid rgba(255,255,255,.14); }
+  .vhx-platform-card:first-child { border-left: 0; }
+  .vhx-platform-card__icon { position: relative; width: 52px; height: 52px; margin-bottom: 72px; border: 1px solid rgba(255,255,255,.14); border-radius: 15px; background: rgba(255,255,255,.07); }
+  .vhx-platform-card__icon span { position: absolute; inset: 14px; border: 2px solid #8da8ff; border-radius: 5px; }
+  .vhx-platform-card__icon i { position: absolute; right: 9px; bottom: 9px; width: 11px; height: 11px; border-radius: 50%; background: #6d8eff; box-shadow: 0 0 0 4px rgba(109,142,255,.16); }
+  .vhx-platform-card__icon.is-green span { border-color: #55c795; }.vhx-platform-card__icon.is-green i { background: #55c795; box-shadow: 0 0 0 4px rgba(85,199,149,.16); }
+  .vhx-platform-card__icon.is-violet span { border-color: #af8cff; }.vhx-platform-card__icon.is-violet i { background: #af8cff; box-shadow: 0 0 0 4px rgba(175,140,255,.16); }
+  .vhx-platform-card__icon.is-amber span { border-color: #f1bd69; }.vhx-platform-card__icon.is-amber i { background: #f1bd69; box-shadow: 0 0 0 4px rgba(241,189,105,.16); }
+  .vhx-platform-card h3 { margin: 0 0 12px; color: #fff; font: 500 22px/1.2 var(--font-heading); }
+  .vhx-platform-card p { margin: 0; color: rgba(255,255,255,.56); font: 400 15px/1.6 var(--font-body); }
+
+  .vhx-workflows { color: #fff; background: radial-gradient(circle at 12% 30%, rgba(70,130,255,.25), transparent 52%), linear-gradient(180deg, #0d0a2c, #070b1b 340px, #05060a); }
+  .vhx-workflows__inner { display: flex; flex-direction: column; align-items: center; width: min(1140px, 100%); margin: 0 auto; padding: 4px 0 24px; }
+  .vhx-workflows__heading { position: sticky; top: 69px; z-index: 20; isolation: isolate; width: min(94%, 1050px); padding: 28px 0; text-align: center; will-change: transform; }
+  .vhx-workflows__heading::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -32px; left: 50%; width: 100vw; transform: translateX(-50%); background: linear-gradient(180deg, rgba(13,10,44,.99), rgba(7,11,27,.98) 72%, transparent); pointer-events: none; }
+  .vhx-workflows__eyebrow { display: inline-flex; margin-bottom: 15px; padding: 7px 14px; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #fff; background: rgba(255,255,255,.1); font: 500 13px/1.2 var(--font-body); }
+  .vhx-workflows__heading h2 { margin: 0; color: #fff; font: 500 clamp(34px, 4.6vw, 52px)/1.1 var(--font-heading); letter-spacing: -.035em; }
+  .vhx-workflows__heading h2 span { color: #afa3ff; }
+  .vhx-workflows__cards { --vhx-stack-top: 294px; position: relative; width: 100%; padding: 78px 0 30px; }
+  .vhx-workflow-card { position: sticky; top: calc(var(--vhx-stack-top) + var(--card-index) * 20px); z-index: var(--card-index); display: flex; align-items: stretch; height: 520px; margin-bottom: 58px; overflow: hidden; border: 1px solid rgba(255,255,255,.09); border-radius: 20px; background: radial-gradient(circle at 86% 10%, rgba(109,92,235,.2), transparent 36%), #090a10; }
+  .vhx-workflow-card__copy { display: flex; flex: 0 0 43%; flex-direction: column; justify-content: center; gap: 15px; padding: 40px; }
+  .vhx-workflow-card__copy > span { align-self: flex-start; padding: 7px 12px; border: 1px solid rgba(175,163,255,.28); border-radius: 999px; color: #afa3ff; background: rgba(175,163,255,.1); font: 600 12px/1.2 var(--font-body); }
+  .vhx-workflow-card h3 { margin: 0; color: #e7e4fa; font: 500 31px/1.18 var(--font-heading); letter-spacing: -.02em; }
+  .vhx-workflow-card__copy p { margin: 0; color: rgba(255,255,255,.56); font: 400 16px/1.65 var(--font-body); }
+  .vhx-workflow-card__visual { display: flex; flex: 1; align-items: center; justify-content: center; margin: 16px 16px 16px 0; padding: 22px; overflow: hidden; border: 1px solid rgba(255,255,255,.14); border-radius: 16px; background: linear-gradient(160deg, rgba(255,255,255,.13), rgba(255,255,255,.035)); backdrop-filter: blur(20px); }
+  .vhx-workflow-ui { width: min(100%, 520px); overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: rgba(9,11,20,.88); box-shadow: 0 30px 60px rgba(0,0,0,.24); }
+  .vhx-workflow-ui__bar { display: flex; align-items: center; gap: 7px; min-height: 46px; padding: 0 16px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .vhx-workflow-ui__bar i { width: 7px; height: 7px; border-radius: 50%; background: #ff746c; }.vhx-workflow-ui__bar i:nth-child(2) { background: #ffc759; }.vhx-workflow-ui__bar i:nth-child(3) { background: #4dcb72; }
+  .vhx-workflow-ui__bar span { margin-left: 7px; color: rgba(255,255,255,.6); font: 600 11px/1.3 var(--font-body); }
+  .vhx-workflow-ui__list { padding: 10px; }
+  .vhx-workflow-ui__item { display: grid; grid-template-columns: 30px minmax(0, 1fr) 10px; align-items: center; gap: 12px; min-height: 76px; padding: 12px; border-bottom: 1px solid rgba(255,255,255,.08); }
+  .vhx-workflow-ui__item:last-child { border-bottom: 0; }
+  .vhx-workflow-ui__item > b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: #9ab2ff; background: rgba(89,121,255,.14); font: 700 10px/1 var(--font-body); }
+  .vhx-workflow-ui__item > span { display: grid; gap: 4px; }
+  .vhx-workflow-ui__item strong { color: #fff; font: 550 13px/1.3 var(--font-heading); }
+  .vhx-workflow-ui__item small { color: rgba(255,255,255,.45); font: 400 10px/1.4 var(--font-body); }
+  .vhx-workflow-ui__item > i { width: 8px; height: 8px; border-radius: 50%; background: #6d8eff; box-shadow: 0 0 0 4px rgba(109,142,255,.13); }
+  .vhx-workflow-ui--capture .vhx-workflow-ui__item > i { background: #55c795; box-shadow: 0 0 0 4px rgba(85,199,149,.13); }
+  .vhx-workflow-ui--stream .vhx-workflow-ui__item > i { background: #e68bb6; box-shadow: 0 0 0 4px rgba(230,139,182,.13); }
+  .vhx-workflows__spacer { height: 170px; }
+
+  .vhx-evidence { padding: 104px 24px 112px; }
+  .vhx-evidence__intro { width: min(820px, 100%); margin: 0 auto 48px; text-align: center; }
+  .vhx-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: min(1140px, 100%); margin: 0 auto 120px; border: 1px solid #dce3ee; }
+  .vhx-evidence-media { display: grid; place-items: center; min-height: 480px; padding: 48px; overflow: hidden; border-right: 1px solid #dce3ee; background: linear-gradient(145deg, #edf5ff, #f7fbff); }
+  .vhx-checkin-ui { width: min(100%, 430px); padding: 22px; border: 1px solid #dfe6f1; border-radius: 22px; background: #fff; box-shadow: 0 28px 60px rgba(37,56,98,.14); }
+  .vhx-checkin-ui__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .vhx-checkin-ui__head span { color: var(--vhx-ink); font: 600 17px/1.3 var(--font-heading); }
+  .vhx-checkin-ui__head i { padding: 6px 9px; border-radius: 999px; color: #087a51; background: #e9f8f5; font: 650 10px/1 var(--font-body); font-style: normal; }
+  .vhx-checkin-ui__link { display: grid; gap: 7px; padding: 17px; border: 1px solid #dfe5f0; border-radius: 13px; background: #f8faff; }
+  .vhx-checkin-ui small { color: #8a94a6; font: 600 10px/1.3 var(--font-body); text-transform: uppercase; }
+  .vhx-checkin-ui strong { color: var(--vhx-ink); font: 600 12px/1.4 var(--font-body); }
+  .vhx-checkin-ui__row { display: flex; justify-content: space-between; gap: 16px; padding: 17px 4px; border-bottom: 1px solid #edf0f5; color: #667085; font: 500 12px/1.4 var(--font-body); }
+  .vhx-checkin-ui__status { display: grid; grid-template-columns: 10px 1fr auto; align-items: center; gap: 9px; margin-top: 16px; padding: 14px; border-radius: 12px; background: #effbf4; }
+  .vhx-checkin-ui__status i { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+  .vhx-checkin-ui__status span { color: #39774d; font: 500 11px/1.3 var(--font-body); }
+  .vhx-evidence-copy { display: flex; align-items: center; min-height: 480px; padding: clamp(36px, 6vw, 64px); }
+  .vhx-evidence-copy ol { width: 100%; list-style: none; }
+  .vhx-evidence-copy li { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 20px 0; border-bottom: 1px solid #e8ecf2; }
+  .vhx-evidence-copy li:last-child { border-bottom: 0; }
+  .vhx-evidence-copy li > span { color: var(--vhx-blue); font: 700 11px/1.4 var(--font-body); }
+  .vhx-evidence-copy h3 { margin: 0 0 5px; color: var(--vhx-ink); font: 600 18px/1.3 var(--font-heading); }
+  .vhx-evidence-copy p { margin: 0; color: var(--vhx-muted); font: 400 14px/1.55 var(--font-body); }
+  .vhx-attendance-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: min(1140px, 100%); margin: 0 auto 128px; border-top: 1px solid #dce3ee; border-left: 1px solid #dce3ee; }
+  .vhx-attendance-card { position: relative; min-height: 300px; padding: 30px; overflow: hidden; border-right: 1px solid #dce3ee; border-bottom: 1px solid #dce3ee; background: rgba(255,255,255,.76); }
+  .vhx-attendance-card > span { color: var(--vhx-blue); font: 700 11px/1 var(--font-body); }
+  .vhx-attendance-card h3 { margin: 54px 0 10px; color: var(--vhx-ink); font: 600 21px/1.25 var(--font-heading); }
+  .vhx-attendance-card p { position: relative; z-index: 1; margin: 0; color: var(--vhx-muted); font: 400 14px/1.55 var(--font-body); }
+  .vhx-attendance-card > div { position: absolute; right: 22px; bottom: 20px; display: flex; align-items: flex-end; gap: 4px; height: 44px; opacity: .55; }
+  .vhx-attendance-card > div i { display: block; width: 6px; height: 35%; border-radius: 5px; background: #8da8ff; }.vhx-attendance-card > div i:nth-child(2) { height: 75%; }.vhx-attendance-card > div i:nth-child(3) { height: 52%; }.vhx-attendance-card > div i:nth-child(4) { height: 100%; }
+  .vhx-evidence-split { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: clamp(44px, 7vw, 88px); width: min(1140px, 100%); margin: 0 auto 132px; }
+  .vhx-evidence-copy-block { max-width: 520px; }
+  .vhx-qualification { margin-top: 26px; padding: 16px 18px; border-left: 3px solid var(--vhx-blue); color: #475467; background: #eef3ff; font: 500 13px/1.6 var(--font-body); }
+  .vhx-language-cards { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border: 1px solid #dce3ee; }
+  .vhx-language-cards article { display: flex; min-height: 380px; flex-direction: column; padding: 34px; }
+  .vhx-language-cards article + article { border-left: 1px solid #dce3ee; }
+  .vhx-language-cards span { color: var(--vhx-blue); font: 700 11px/1 var(--font-body); }
+  .vhx-language-cards h3 { margin: 74px 0 12px; color: var(--vhx-ink); font: 600 23px/1.2 var(--font-heading); }
+  .vhx-language-cards p { margin: 0; color: var(--vhx-muted); font: 400 14px/1.6 var(--font-body); }
+  .vhx-language-cards strong { align-self: flex-start; margin-top: auto; padding: 7px 10px; border-radius: 999px; color: #087a51; background: #e9f8f5; font: 600 10px/1.35 var(--font-body); }
+  .vhx-evidence-split--recap { grid-template-columns: 1.08fr .92fr; margin-bottom: 0; }
+  .vhx-recap-ui { padding: 24px; border: 1px solid #dfe6f1; border-radius: 24px; background: #fff; box-shadow: 0 28px 70px rgba(37,56,98,.12); }
+  .vhx-recap-ui__head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid #edf0f5; }
+  .vhx-recap-ui__head span { color: var(--vhx-ink); font: 600 17px/1.3 var(--font-heading); }
+  .vhx-recap-ui__head i { padding: 6px 9px; border-radius: 999px; color: #087a51; background: #e9f8f5; font: 600 10px/1 var(--font-body); font-style: normal; }
+  .vhx-recap-ui__timeline { padding: 16px 0 0; }
+  .vhx-recap-ui__timeline > div { display: grid; grid-template-columns: 34px 1fr; gap: 13px; padding: 14px 4px; }
+  .vhx-recap-ui__timeline b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: var(--vhx-blue); background: #eef3ff; font: 700 10px/1 var(--font-body); }
+  .vhx-recap-ui__timeline span { display: grid; gap: 4px; }
+  .vhx-recap-ui__timeline strong { color: var(--vhx-ink); font: 600 13px/1.3 var(--font-heading); }
+  .vhx-recap-ui__timeline small { color: #667085; font: 400 11px/1.4 var(--font-body); }
+
+  .vhx-connected { padding: 100px 24px 112px; background: linear-gradient(135deg, #f7f9ff, #f4fbff); }
+  .vhx-connected-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); width: min(1140px, 100%); margin: 0 auto; border-top: 1px solid #dce3ee; border-bottom: 1px solid #dce3ee; }
+  .vhx-connected-card { position: relative; display: flex; min-height: 320px; flex-direction: column; padding: 30px 28px; border-left: 1px solid #dce3ee; text-decoration: none; transition: background .25s, transform .25s; }
+  .vhx-connected-card:first-child { border-left: 0; }
+  .vhx-connected-card:hover { z-index: 1; background: #fff; transform: translateY(-4px); }
+  .vhx-connected-card > span { color: var(--vhx-blue); font: 700 11px/1 var(--font-body); }
+  .vhx-connected-card h3 { margin: 64px 0 12px; color: var(--vhx-ink); font: 600 21px/1.25 var(--font-heading); }
+  .vhx-connected-card p { margin: 0; color: var(--vhx-muted); font: 400 14px/1.55 var(--font-body); }
+  .vhx-connected-card i { margin-top: auto; color: var(--vhx-blue); font: 400 24px/1 var(--font-body); font-style: normal; }
+
+  .vhx-event-types { padding: 100px 24px 116px; }
+  .vhx-event-type-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); width: min(1140px, 100%); margin: 0 auto; border-top: 1px solid #dce3ee; border-left: 1px solid #dce3ee; }
+  .vhx-event-type-card { min-height: 270px; padding: 28px; border-right: 1px solid #dce3ee; border-bottom: 1px solid #dce3ee; }
+  .vhx-event-type-card > span { display: inline-flex; color: var(--vhx-blue); font: 700 11px/1 var(--font-body); }
+  .vhx-event-type-card h3 { margin: 62px 0 12px; color: var(--vhx-ink); font: 500 21px/1.2 var(--font-heading); }
+  .vhx-event-type-card p { margin: 0; color: var(--vhx-muted); font: 400 14px/1.55 var(--font-body); }
+
+  .vhx-faq { padding: 96px 24px; background: #fff; }
+  .vhx-faq__inner { display: grid; grid-template-columns: 360px 1fr; align-items: start; gap: 64px; width: min(1140px, 100%); margin: 0 auto; }
+  .vhx-faq__sidebar { position: sticky; top: 6rem; }
+  .vhx-faq__eyebrow { display: inline-flex; margin-bottom: 20px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 12px/1.3 var(--font-body); }
+  .vhx-faq__sidebar h2 { margin: 0; color: #000; font: 500 44px/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .vhx-faq__list { display: flex; flex-direction: column; gap: 14px; counter-reset: vhx-faq; }
+  .vhx-faq__item { counter-increment: vhx-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s; }
+  .vhx-faq__item[open] { background: #e4e7ec; }
+  .vhx-faq__item summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 0; color: #000; cursor: pointer; list-style: none; font: 500 17px/1.4 var(--font-heading); }
+  .vhx-faq__item summary::-webkit-details-marker { display: none; }
+  .vhx-faq__item summary strong { font-weight: 500; }
+  .vhx-faq__item summary strong::before { content: counter(vhx-faq) ". "; }
+  .vhx-faq__item summary span { position: relative; flex: 0 0 18px; width: 18px; height: 18px; }
+  .vhx-faq__item summary span::before, .vhx-faq__item summary span::after { content: ""; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%,-50%); }
+  .vhx-faq__item summary span::before { width: 14px; height: 2px; }.vhx-faq__item summary span::after { width: 2px; height: 14px; transition: opacity .2s; }
+  .vhx-faq__item[open] summary span::after { opacity: 0; }
+  .vhx-faq__item > div { max-width: 650px; padding: 0 0 24px; }
+  .vhx-faq__item p { margin: 0; color: #000; font: 400 15px/1.7 var(--font-body); }
+
+  .vhx-final-cta { padding: 24px; background: #fff; }
+  .vhx-final-cta__inner { position: relative; width: min(1180px, 100%); margin: 0 auto; padding: clamp(72px, 9vw, 112px) 24px; overflow: hidden; border-radius: 28px; color: #fff; background: radial-gradient(circle at 18% 18%, rgba(85,126,255,.34), transparent 38%), radial-gradient(circle at 82% 80%, rgba(163,108,255,.22), transparent 38%), #080b15; text-align: center; }
+  .vhx-final-cta__inner > span { color: #9ab2ff; font: 600 13px/1.3 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .vhx-final-cta h2 { width: min(760px, 100%); margin: 14px auto 18px; color: #fff; font: 500 clamp(38px, 5vw, 58px)/1.06 var(--font-heading); letter-spacing: -.04em; }
+  .vhx-final-cta p { width: min(720px, 100%); margin: 0 auto 30px; color: rgba(255,255,255,.62); font: 400 17px/1.65 var(--font-body); }
+  .vhx-final-cta a { display: inline-flex; min-height: 50px; align-items: center; gap: 10px; padding: 13px 25px; border-radius: 12px; color: #111522; background: #fff; font: 650 15px/1.3 var(--font-body); text-decoration: none; transition: transform .25s; }
+  .vhx-final-cta a:hover { transform: translateY(-2px); }
+
+  @media (max-width: 1024px) {
+    .vhx-hero__grid { grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr); gap: 32px; }
+    .vhx-hero-ui { grid-template-columns: 120px 20px minmax(260px,1fr); padding: 18px; }
+    .vhx-lifecycle__grid { grid-template-columns: repeat(3, 1fr); }
+    .vhx-lifecycle__item:nth-child(4) { border-left: 0; }.vhx-lifecycle__item:nth-child(n+4) { border-top: 1px solid #e8edf5; }
+    .vhx-platform-grid, .vhx-connected-grid, .vhx-event-type-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .vhx-platform-card:nth-child(3), .vhx-connected-card:nth-child(3) { border-left: 0; }
+    .vhx-platform-card:nth-child(n+3), .vhx-connected-card:nth-child(n+3) { border-top: 1px solid rgba(255,255,255,.14); }
+    .vhx-connected-card:nth-child(n+3) { border-top-color: #dce3ee; }
+    .vhx-attendance-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .vhx-faq__inner { grid-template-columns: 1fr; gap: 40px; }.vhx-faq__sidebar { position: static; max-width: 640px; }
+  }
+
+  @media (max-width: 767px) {
+    .vhx-section-heading { margin-bottom: 34px; }
+    .vhx-section-heading h2, .vhx-evidence__intro h2, .vhx-evidence-copy-block h2 { font-size: 34px; }
+    .vhx-hero { padding: 132px 16px 48px; }
+    .vhx-hero::after { display: none; }
+    .vhx-hero__grid { grid-template-columns: 1fr; gap: 36px; }
+    .vhx-hero__title { font-size: 43px; line-height: 1.06; }
+    .vhx-hero__copy { font-size: 16px; }
+    .vhx-hero__actions { width: 100%; }.vhx-button { flex: 1 1 160px; }
+    .vhx-hero__visual { width: calc(100% + 16px); }
+    .vhx-window { padding: 8px 0 8px 8px; border-radius: 16px 0 0 16px; }
+    .vhx-hero-ui { grid-template-columns: 1fr; min-height: 0; padding: 14px; }
+    .vhx-hero-ui__side { min-height: 110px; }.vhx-hero-ui__flow { display: none; }
+    .vhx-hero-ui__cards { grid-template-columns: repeat(2, minmax(0,1fr)); margin-top: 10px; }.vhx-hero-ui__cards > div { min-height: 104px; padding: 12px; }
+    .vhx-lifecycle__header { display: grid; gap: 4px; }
+    .vhx-lifecycle__grid { grid-template-columns: repeat(2, 1fr); width: calc(100% - 32px); }
+    .vhx-lifecycle__item { min-height: 88px; padding: 14px; }
+    .vhx-lifecycle__item:nth-child(odd) { border-left: 0; }.vhx-lifecycle__item:nth-child(n+3) { border-top: 1px solid #e8edf5; }
+    .vhx-formats { padding: 68px 16px; }
+    .vhx-format-grid { grid-template-columns: 1fr; }.vhx-format-card:first-child { border-right: 0; border-bottom: 1px solid #e5e9f0; }
+    .vhx-format-card { grid-template-rows: 240px 1fr; }.vhx-format-card__copy { padding: 32px 24px 38px; }
+    .vhx-capability-band { padding: 72px 16px 80px; }.vhx-platform-grid { grid-template-columns: 1fr; }.vhx-platform-card { min-height: 250px; border-top: 1px solid rgba(255,255,255,.14); border-left: 0; }.vhx-platform-card:first-child { border-top: 0; }.vhx-platform-card__icon { margin-bottom: 48px; }
+    .vhx-workflows__inner { padding-inline: 16px; }.vhx-workflows__heading { width: 100%; }.vhx-workflows__heading h2 { font-size: 31px; }
+    .vhx-workflows__cards { --vhx-stack-top: 298px; padding-top: 70px; }.vhx-workflow-card { flex-direction: column; height: 610px; }.vhx-workflow-card__copy { flex: 0 0 auto; padding: 24px 22px 18px; }.vhx-workflow-card h3 { font-size: 25px; }.vhx-workflow-card__copy p { font-size: 14px; }.vhx-workflow-card__visual { min-height: 310px; margin: 0 12px 12px; padding: 12px; }.vhx-workflow-ui__item { min-height: 63px; padding: 8px; }.vhx-workflow-ui__item small { font-size: 9px; }
+    .vhx-evidence { padding: 76px 16px 84px; }.vhx-evidence-grid { grid-template-columns: 1fr; margin-bottom: 88px; }.vhx-evidence-media { min-height: 370px; padding: 28px 20px; border-right: 0; border-bottom: 1px solid #dce3ee; }.vhx-evidence-copy { min-height: 0; padding: 24px; }
+    .vhx-attendance-grid { grid-template-columns: 1fr; margin-bottom: 92px; }.vhx-attendance-card { min-height: 240px; }
+    .vhx-evidence-split, .vhx-evidence-split--recap { grid-template-columns: 1fr; margin-bottom: 92px; }.vhx-language-cards { grid-template-columns: 1fr; }.vhx-language-cards article { min-height: 320px; }.vhx-language-cards article + article { border-top: 1px solid #dce3ee; border-left: 0; }.vhx-evidence-split--recap .vhx-evidence-copy-block { order: -1; }
+    .vhx-connected, .vhx-event-types, .vhx-faq { padding: 72px 16px; }.vhx-connected-grid, .vhx-event-type-grid { grid-template-columns: 1fr; }.vhx-connected-card, .vhx-connected-card:nth-child(3), .vhx-event-type-card { min-height: 240px; border-top: 1px solid #dce3ee; border-left: 0; }.vhx-connected-card:first-child, .vhx-event-type-card:first-child { border-top: 0; }.vhx-connected-card h3, .vhx-event-type-card h3 { margin-top: 46px; }
+    .vhx-faq__sidebar h2 { font-size: 32px; }.vhx-faq__item { padding: 4px 20px; border-radius: 16px; }.vhx-faq__item summary { font-size: 15px; }
+    .vhx-final-cta { padding: 12px; }.vhx-final-cta__inner { border-radius: 22px; padding-inline: 20px; }.vhx-final-cta p { font-size: 15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vhx-button, .vhx-connected-card, .vhx-faq__item, .vhx-faq__item summary span::after, .vhx-final-cta a { transition: none; }
+  }
+</style>
