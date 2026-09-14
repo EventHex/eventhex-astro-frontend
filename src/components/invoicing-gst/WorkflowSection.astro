@@ -1,27 +1,23 @@
 ---
 const cards = [
   {
-    eyebrow: "1 · Configure",
-    title: "Set the invoice rules before ticket sales open",
-    desc: "Choose the document title, Bill To label, organizer identity, invoice-number label, prefix, starting number, buyer fields, and tax configuration your finance team has approved.",
+    title: "Set the invoice rules",
+    desc: "Choose identity, numbering, buyer fields, and tax configuration.",
     type: "settings",
   },
   {
-    eyebrow: "2 · Request and collect",
-    title: "Collect billing details in the registration journey",
-    desc: "When the buyer requests an invoice, show the configured company, tax-ID, and billing-address fields in the same supported journey instead of chasing those details after payment.",
+    title: "Buyer requests an invoice",
+    desc: "Show the invoice option in the supported registration or checkout journey.",
     type: "buyer",
   },
   {
-    eyebrow: "3 · Complete the order",
-    title: "Keep ticket, buyer, amount, currency, and tax context together",
-    desc: "Apply the organizer-defined tax names and percentage rates in inclusive or exclusive price mode, then retain that breakdown with the paid registration or ticket order.",
+    title: "Complete payment and order",
+    desc: "Retain ticket, amount, currency, buyer, and tax context.",
     type: "order",
   },
   {
-    eyebrow: "4 · Generate and deliver",
-    title: "Create a numbered PDF that stays connected to its source order",
-    desc: "Build the available invoice PDF from the order data, include the configured organizer and buyer details, and send it through the supported invoice-delivery path.",
+    title: "Generate and deliver",
+    desc: "Create the PDF and send it through the configured order workflow.",
     type: "delivery",
   },
 ] as const;
@@ -41,18 +37,17 @@ const cards = [
       {cards.map((card, index) => (
         <article class="igw-card" style={`--card-index:${index}`}>
           <div class="igw-card__content">
-            <span class="igw-card__eyebrow">{card.eyebrow}</span>
+            <span class="igw-card__eyebrow">{String(index + 1).padStart(2, "0")}</span>
             <h3>{card.title}</h3>
             <p>{card.desc}</p>
-            <a href="/book-a-demo/">See it in a demo</a>
           </div>
           <div class="igw-card__media">
-            <div class:list={["igw-ui", `igw-ui--${card.type}`]} role="img" aria-label={`${card.title} in EventHex`}>
-              <div class="igw-ui__bar"><i></i><i></i><i></i><strong>{card.type === "settings" ? "Invoice settings" : card.type === "buyer" ? "Buyer details" : card.type === "order" ? "Order EVT-0248" : "Invoice EVT-0248"}</strong></div>
-              {card.type === "settings" && <div class="igw-ui__body igw-ui__form"><label>Document title <span>Tax Invoice</span></label><label>Invoice prefix <span>EVT-</span></label><label>Starting number <span>0248</span></label><label>Tax label <span>VAT</span></label></div>}
-              {card.type === "buyer" && <div class="igw-ui__body igw-ui__form"><label>Company name <span>Northstar Ltd</span></label><label>Tax ID <span>TRN 100•••••03</span></label><label>Billing address <span>Dubai, United Arab Emirates</span></label><div class="igw-ui__check">✓ Invoice requested</div></div>}
-              {card.type === "order" && <div class="igw-ui__body igw-ui__receipt"><div><span>Conference pass × 3</span><b>$600.00</b></div><div><span>VAT 5%</span><b>$30.00</b></div><div class="igw-ui__total"><span>Order total</span><b>$630.00</b></div><small>Tax rule supplied by organizer</small></div>}
-              {card.type === "delivery" && <div class="igw-ui__body igw-ui__delivery"><div class="igw-ui__pdf">PDF</div><strong>EVT-0248.pdf</strong><span>Northstar Ltd · 3 tickets</span><div class="igw-ui__check">✓ Ready for configured email delivery</div></div>}
+            <div class:list={["igw-ui", `igw-ui--${card.type}`]} aria-hidden="true">
+              <div class="igw-ui__bar"><i></i><i></i><i></i><strong>{card.type === "settings" ? "Invoice identity" : card.type === "buyer" ? "Buyer billing details" : card.type === "order" ? "Order connection" : "PDF delivery"}</strong></div>
+              {card.type === "settings" && <div class="igw-ui__body igw-ui__form"><label>Document title <span>Tax Invoice</span></label><label>Prefix <span>Prefix</span></label><label>Starting number <span>Starting number</span></label><label>Invoice label <span>Invoice label</span></label></div>}
+              {card.type === "buyer" && <div class="igw-ui__body igw-ui__form"><label>Company name <span>Company name</span></label><label>Tax ID <span>Tax ID</span></label><label>Billing address <span>Billing address</span></label><div class="igw-ui__check">Invoice preview</div></div>}
+              {card.type === "order" && <div class="igw-ui__body igw-ui__receipt"><div><span>Ticket and order lines</span></div><div><span>Tax breakdown</span></div><div class="igw-ui__total"><span>Order connection</span></div><small>Named tax lines</small></div>}
+              {card.type === "delivery" && <div class="igw-ui__body igw-ui__delivery"><div class="igw-ui__pdf">PDF</div><strong>Branded PDF</strong><span>Ticket and order lines</span><div class="igw-ui__check">Email delivery</div></div>}
             </div>
           </div>
         </article>

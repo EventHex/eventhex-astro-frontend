@@ -4,19 +4,16 @@ const cards = [
     eyebrow: "Attendee checkout",
     title: "Keep the payment handoff connected to the ticket order",
     description: "The configured event and gateway determine the payment path; the attendee does not choose between processors during checkout.",
-    cta: "See the checkout path",
   },
   {
     eyebrow: "Payment status",
     title: "Give operations a payment record they can act on",
-    description: "Review gateway, amount, currency, captured or pending state, failures, refund history, and buyer detail beside the order.",
-    cta: "See payment status",
+    description: "Review the payment state beside the order instead of reconciling a separate attendee list against processor emails.",
   },
   {
     eyebrow: "Approval-led payment paths",
     title: "Keep payment state aligned with registration approval",
-    description: "When a ticket flow requires review, the order carries approval and capture context so operations can see what still needs a decision.",
-    cta: "Map the approval flow",
+    description: "When the ticket flow requires review, the order can carry approval and capture context so operations can see what still needs a decision.",
   },
 ];
 ---
@@ -29,9 +26,9 @@ const cards = [
           <path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/>
           <path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/>
         </svg>
-        Order-linked payment flow
+        One connected payment lifecycle
       </span>
-      <h2>One order context from <em>checkout</em> to outcome</h2>
+      <h2>From gateway setup to <em>finance review</em></h2>
     </header>
 
     <div class="eppx-flow__cards">
@@ -41,44 +38,43 @@ const cards = [
             <span>{card.eyebrow}</span>
             <h3>{card.title}</h3>
             <p>{card.description}</p>
-            <a href="/book-a-demo/">{card.cta}</a>
           </div>
 
           <div class="eppx-flow__visual">
             {index === 0 && (
-              <div class="eppx-checkout-ui" aria-label="Illustration of an order moving through checkout">
-                <div class="eppx-ui-top"><i></i><span>Order #EH-2408</span><b>USD 240</b></div>
+              <div class="eppx-checkout-ui" aria-hidden="true">
+                <div class="eppx-ui-top"><i></i><span>Attendee checkout</span><b></b></div>
                 <div class="eppx-checkout-ui__steps">
-                  <div class="is-done"><b>01</b><span>Create the order<small>Buyer, tickets, tax, currency</small></span></div>
-                  <div class="is-active"><b>02</b><span>Gateway handoff<small>Configured provider path</small></span></div>
-                  <div><b>03</b><span>Receive the result<small>Response and webhook state</small></span></div>
-                  <div><b>04</b><span>Continue the journey<small>Confirmation and ticket delivery</small></span></div>
+                  <div class="is-done"><b>01</b><span>Create the order<small>Keep buyer, ticket, amount, currency, and tax context together.</small></span></div>
+                  <div class="is-active"><b>02</b><span>Start the gateway handoff<small>Open the supported redirect, hosted, SDK, or provider flow used by that configuration.</small></span></div>
+                  <div><b>03</b><span>Receive the result<small>Confirm payment or update the order from the provider response and webhook path.</small></span></div>
+                  <div><b>04</b><span>Continue the journey<small>Move a successful order into confirmation, ticket delivery, and invoice handling.</small></span></div>
                 </div>
               </div>
             )}
             {index === 1 && (
-              <div class="epp-status-ui" aria-label="Illustration of order-linked payment status">
-                <div class="eppx-ui-top"><i></i><span>Payment detail</span><b class="is-paid">Captured</b></div>
-                <div class="epp-status-ui__amount"><small>Amount</small><strong>₹42,500</strong><span>Razorpay</span></div>
+              <div class="epp-status-ui" aria-hidden="true">
+                <div class="eppx-ui-top"><i></i><span>Payment status</span><b class="is-paid"></b></div>
+                <div class="epp-status-ui__amount"><small>Amount and currency</small><strong></strong><span>Gateway</span></div>
                 <div class="epp-status-ui__grid">
-                  <span><small>Currency</small><b>INR</b></span>
-                  <span><small>Order</small><b>#EH-9821</b></span>
-                  <span><small>Refunded</small><b>₹5,000</b></span>
-                  <span><small>Remaining</small><b>₹37,500</b></span>
+                  <span><small>Captured or pending state</small><b></b></span>
+                  <span><small>Failure context</small><b></b></span>
+                  <span><small>Refund history</small><b></b></span>
+                  <span><small>Order detail</small><b></b></span>
                 </div>
-                <div class="epp-status-ui__history"><i></i><span><b>Refund recorded</b><small>Connected to the original payment</small></span></div>
+                <div class="epp-status-ui__history"><i></i><span><b>Refund history</b><small>See refund activity and the amount still eligible for another refund.</small></span></div>
               </div>
             )}
             {index === 2 && (
-              <div class="epp-approval-ui" aria-label="Illustration of payment authorization and registration approval states">
-                <div class="eppx-ui-top"><i></i><span>Approval workflow</span><b>1 decision</b></div>
+              <div class="epp-approval-ui" aria-hidden="true">
+                <div class="eppx-ui-top"><i></i><span>Approval-led payment paths</span><b></b></div>
                 <div class="epp-approval-ui__person">
-                  <span>AK</span><div><b>Registration submitted</b><small>Order and attendee ready for review</small></div>
+                  <span>01</span><div><b>Registration submitted</b><small>Create the attendee and order context for review.</small></div>
                 </div>
                 <div class="epp-approval-ui__state">
-                  <span><i></i><b>Authorization state</b><small>Processor result visible</small></span>
-                  <span><i></i><b>Organizer decision</b><small>Approve or reject</small></span>
-                  <span><i></i><b>Outcome message</b><small>Continue the configured path</small></span>
+                  <span><i></i><b>Payment authorization state</b><small>Keep the processor result and capture status visible to the workflow.</small></span>
+                  <span><i></i><b>Organizer decision</b><small>Approve or reject through the configured ticket process.</small></span>
+                  <span><i></i><b>Outcome message</b><small>Continue into the applicable ticket and payment communication.</small></span>
                 </div>
                 <div class="epp-approval-ui__actions"><button type="button">Reject</button><button type="button">Approve</button></div>
               </div>
