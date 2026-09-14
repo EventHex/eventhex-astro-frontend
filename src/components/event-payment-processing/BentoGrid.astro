@@ -3,62 +3,21 @@ const gateways = [
   {
     name: "Stripe",
     description: "Use the supported Stripe checkout and webhook path for the configured event account.",
-    visual: ["Checkout", "Webhook"],
   },
   {
     name: "Razorpay",
     description: "Use Razorpay paths for relevant India-first payment experiences, including supported hosted or SDK handoffs.",
-    visual: ["Hosted", "SDK"],
   },
   {
     name: "Tap",
     description: "Use Tap for supported GCC/MENA currency and payment-source flows.",
-    visual: ["GCC", "MENA"],
-  },
-  {
-    name: "Configured checkout",
-    description: "The attendee follows the supported gateway path configured for the event.",
-    visual: ["Event", "Gateway", "Order"],
   },
   {
     name: "Need another gateway?",
-    description: "Bring the provider and checkout model to the demo so the EventHex team can scope what would need to be built.",
-    visual: ["Provider", "Scope"],
+    description: "Bring the provider and required checkout model to the demo so the EventHex team can scope what would need to be built.",
   },
 ];
 ---
-
-<div class="eppx-gateway-band">
-  <section class="eppx-gateway" aria-labelledby="gateway-heading">
-    <header class="eppx-gateway__header animate-on-scroll" data-animation="fadeInUp">
-      <span>Supported payment gateways</span>
-      <h2 id="gateway-heading">
-        Choose the current gateway path that fits the <em>event market</em>
-      </h2>
-      <p>
-        EventHex has active payment flows for Stripe, Razorpay, and Tap; attendee
-        checkout follows the gateway configured for the event.
-      </p>
-    </header>
-
-    <div class="eppx-gateway__grid">
-      {gateways.map((gateway, index) => (
-        <article class="eppx-gateway__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
-          <div>
-            <span class="eppx-gateway__index">{String(index + 1).padStart(2, "0")}</span>
-            <h3>{gateway.name}</h3>
-            <p>{gateway.description}</p>
-          </div>
-          <div class="eppx-gateway__visual" aria-hidden="true">
-            {gateway.visual.map((item, itemIndex) => (
-              <span class:list={[itemIndex === 0 && "is-active"]}>{item}</span>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
-</div>
 
 <section class="eppx-account" aria-labelledby="account-heading">
   <header class="eppx-account__header">
@@ -69,31 +28,29 @@ const gateways = [
 
   <div class="eppx-account__quad">
     <article class="eppx-account__cell eppx-account__copy animate-on-scroll" data-animation="fadeInUp">
-      <span class="eppx-account__tag">Event-specific</span>
       <h3>Event-level setup</h3>
       <p>Use a supported gateway configuration for a specific event when the account or market differs.</p>
       <strong>Best for event-specific payment operations</strong>
     </article>
     <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInRight">
-      <div class="eppx-settings" aria-label="Example event gateway settings">
-        <div class="eppx-settings__top"><i></i><span>Event payment settings</span><b>•••</b></div>
-        <label>Gateway <span>Stripe</span></label>
-        <label>Event currency <span>USD</span></label>
-        <label>Secret key <span>••••••••••••</span></label>
-        <small><i></i> Credentials saved for this event</small>
+      <div class="eppx-settings" aria-hidden="true">
+        <div class="eppx-settings__top"><i></i><span></span><b></b></div>
+        <label><i></i><span></span></label>
+        <label><i></i><span></span></label>
+        <label><i></i><span></span></label>
+        <small><i></i><span></span></small>
       </div>
     </div>
 
     <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInLeft">
-      <div class="eppx-settings eppx-settings--org" aria-label="Example organization gateway settings">
-        <div class="eppx-settings__top"><i></i><span>Organization payments</span><b>•••</b></div>
-        <div class="eppx-settings__row"><span>Razorpay</span><b>Connected</b></div>
-        <div class="eppx-settings__row"><span>Tap</span><b>Connected</b></div>
-        <small><i></i> Available to supported event setups</small>
+      <div class="eppx-settings eppx-settings--org" aria-hidden="true">
+        <div class="eppx-settings__top"><i></i><span></span><b></b></div>
+        <div class="eppx-settings__row"><span></span><b></b></div>
+        <div class="eppx-settings__row"><span></span><b></b></div>
+        <small><i></i><span></span></small>
       </div>
     </div>
     <article class="eppx-account__cell eppx-account__copy animate-on-scroll" data-animation="fadeInUp">
-      <span class="eppx-account__tag">Reusable</span>
       <h3>Organization-level setup</h3>
       <p>Reuse supported payment settings where the organization model allows shared configuration.</p>
       <strong>Best for repeat event portfolios</strong>
@@ -105,129 +62,444 @@ const gateways = [
   </p>
 </section>
 
+<div class="eppx-gateway-band">
+  <header class="eppx-gateway__header animate-on-scroll" data-animation="fadeInUp">
+    <span>Supported payment gateways</span>
+    <h2 id="gateway-heading">
+      Choose the Current Gateway Path
+      <span>That Fits the Event Market</span>
+    </h2>
+    <p>
+      EventHex has active payment flows for Stripe, Razorpay, and Tap; the attendee
+      checkout follows the gateway configured for the event.
+    </p>
+  </header>
+
+  <section class="eppx-gateway" aria-labelledby="gateway-heading">
+    <div class="eppx-gateway__grid">
+      {gateways.map((gateway, index) => (
+        <article class="eppx-gateway__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          {[1, 2].includes(index) && (
+            <>
+              <span class="eppx-gateway__petal eppx-gateway__petal--top" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0A14,14 0 0,1 0,14A14,14 0 0,1 14,0Z" fill="#3b3a47"></path></svg>
+              </span>
+              <span class="eppx-gateway__petal eppx-gateway__petal--bottom" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0A14,14 0 0,1 0,14A14,14 0 0,1 14,0Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>
+              </span>
+            </>
+          )}
+          <h3>{gateway.name}</h3>
+          <p>{gateway.description}</p>
+          <div class="eppx-gateway__visual" aria-hidden="true">
+            {index === 0 && (
+              <div class="eppx-gateway__surface">
+                <span class="eppx-gateway__surface-title"></span>
+                <div class="eppx-gateway__field"><span></span><i></i></div>
+                <div class="eppx-gateway__field"><span></span><i></i></div>
+                <div class="eppx-gateway__field eppx-gateway__field--active"><span></span></div>
+              </div>
+            )}
+            {index === 1 && (
+              <div class="eppx-gateway__chips">
+                <span></span>
+                <span class="is-active"></span>
+                <span></span>
+                <span></span>
+              </div>
+            )}
+            {index === 2 && (
+              <div class="eppx-gateway__stack">
+                <div><span></span><small></small></div>
+                <div class="is-active"><span></span><small></small></div>
+                <div><span></span><small></small></div>
+              </div>
+            )}
+            {index === 3 && (
+              <div class="eppx-gateway__stack">
+                <div><span></span><small></small></div>
+                <div><span></span><small></small></div>
+                <div class="is-active"><span></span><small></small></div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</div>
+
 <style>
   .eppx-gateway-band {
+    --eppx-band-p: 0;
     position: relative;
     overflow: hidden;
-    background:
-      radial-gradient(circle at 80% 8%, rgba(111, 93, 245, 0.2), transparent 30%),
-      radial-gradient(circle at 8% 90%, rgba(74, 192, 233, 0.12), transparent 26%),
-      #080910;
-    color: #fff;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    background-color: #000;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+    --eppx-band-gap: calc((1 - var(--eppx-band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--eppx-band-gap) round calc((1 - var(--eppx-band-p)) * 28px));
+    will-change: clip-path;
   }
 
   .eppx-gateway-band::before {
     content: "";
     position: absolute;
     inset: 0;
-    opacity: 0.18;
-    background-image: radial-gradient(rgba(255,255,255,.3) .6px, transparent .6px);
-    background-size: 22px 22px;
+    z-index: 0;
     pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .eppx-gateway-band > * {
+    position: relative;
+    z-index: 1;
   }
 
   .eppx-gateway {
-    position: relative;
-    z-index: 1;
-    width: min(1140px, calc(100% - 48px));
+    max-width: 1140px;
     margin: 0 auto;
-    padding: 104px 0;
+    padding: clamp(40px, 5vw, 72px) 24px clamp(56px, 7vw, 88px);
   }
 
   .eppx-gateway__header {
-    max-width: 790px;
-    margin: 0 auto 54px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
     text-align: center;
   }
 
-  .eppx-gateway__header > span,
-  .eppx-account__header > span {
-    display: inline-block;
-    margin-bottom: 12px;
-    color: #8da2ff;
+  .eppx-gateway__header > span {
+    display: block;
+    margin-bottom: 14px;
+    color: #8ea2ff;
     font: 650 13px/1.3 var(--font-body);
     letter-spacing: .08em;
     text-transform: uppercase;
   }
 
-  .eppx-gateway__header h2,
+  .eppx-gateway__header h2 {
+    margin: 0;
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f2f0ff 26%,
+      #c9c2ff 52%,
+      #a79aff 74%,
+      #7d8dff 100%
+    );
+    background-clip: text;
+    color: transparent;
+    font: 500 clamp(2.125rem, 5vw, 3.75rem)/1.08 var(--font-heading);
+    letter-spacing: -0.04em;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .eppx-gateway__header h2 span {
+    display: block;
+  }
+
+  .eppx-gateway__header p {
+    max-width: 680px;
+    margin: 18px auto 0;
+    color: rgba(255, 255, 255, 0.62);
+    font: 400 1.0625rem/1.65 var(--font-body);
+  }
+
+  .eppx-gateway__grid {
+    --eppx-cap-gradient: linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%);
+    --eppx-cap-surface: #08080e;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    overflow: hidden;
+    border: 1px solid #3b3a47;
+    border-radius: 16px;
+  }
+
+  .eppx-gateway__card {
+    position: relative;
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 36px 32px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+  }
+
+  .eppx-gateway__card:nth-child(n + 4) {
+    grid-column: span 3;
+    border-bottom: 0;
+  }
+
+  .eppx-gateway__card:nth-child(3),
+  .eppx-gateway__card:nth-child(5) {
+    border-right: 0;
+  }
+
+  .eppx-gateway__card h3 {
+    margin: 0 0 14px;
+    color: #fff;
+    font: 700 15px/1.2 var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  .eppx-gateway__card p {
+    margin: 0;
+    max-width: 34ch;
+    color: rgba(255, 255, 255, 0.62);
+    font: 400 .9375rem/1.38 var(--font-body);
+  }
+
+  .eppx-gateway__visual {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  .eppx-gateway__visual::before {
+    content: "";
+    position: absolute;
+    bottom: -10%;
+    left: 50%;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(92, 138, 255, 0.28), rgba(124, 108, 255, 0.15) 55%, transparent 100%);
+    filter: blur(30px);
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: eppx-cap-bloom 6s ease-in-out infinite;
+  }
+
+  .eppx-gateway__visual > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .eppx-gateway__surface,
+  .eppx-gateway__stack,
+  .eppx-gateway__chips {
+    animation: eppx-cap-float 7s ease-in-out infinite;
+  }
+
+  .eppx-gateway__surface {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 290px;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--eppx-cap-surface), var(--eppx-cap-surface)) padding-box,
+      var(--eppx-cap-gradient) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+  }
+
+  .eppx-gateway__surface-title {
+    display: block;
+    width: 38%;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.55);
+    font: 12px/1.3 var(--font-body);
+  }
+
+  .eppx-gateway__field,
+  .eppx-gateway__stack > div,
+  .eppx-gateway__chips span {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .eppx-gateway__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    color: rgba(255, 255, 255, 0.86);
+    font: 13px/1.3 var(--font-body);
+  }
+
+  .eppx-gateway__field > span {
+    width: 44%;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .eppx-gateway__field i {
+    width: 34%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+    transform-origin: right center;
+    animation: eppx-cap-fill 5.5s ease-in-out infinite;
+  }
+
+  .eppx-gateway__field--active {
+    justify-content: center;
+    border-style: dashed;
+    border-color: rgba(110, 150, 255, 0.45);
+    background: var(--eppx-cap-gradient);
+    background-clip: text;
+    color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .eppx-gateway__field--active > span {
+    width: 58%;
+    background: linear-gradient(90deg, #45c7ff, #8176ff);
+  }
+
+  .eppx-gateway__field--active i {
+    display: none;
+  }
+
+  .eppx-gateway__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .eppx-gateway__chips span {
+    width: 62px;
+    height: 30px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.72);
+    font: 12.5px/1.2 var(--font-body);
+  }
+
+  .eppx-gateway__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .eppx-gateway__stack > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.86);
+    font: 13px/1.3 var(--font-body);
+  }
+
+  .eppx-gateway__stack > div > span {
+    width: 42%;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .eppx-gateway__stack > div > small {
+    width: 27%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.09);
+  }
+
+  .eppx-gateway__stack small {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11.5px;
+  }
+
+  .eppx-gateway__chips .is-active,
+  .eppx-gateway__stack .is-active {
+    border-color: transparent;
+    color: #fff;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      var(--eppx-cap-gradient) border-box;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+    animation: eppx-cap-pulse 3.2s ease-in-out infinite;
+  }
+
+  .eppx-gateway__petal {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .eppx-gateway__petal--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .eppx-gateway__petal--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  @keyframes eppx-cap-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+
+  @keyframes eppx-cap-bloom {
+    0%, 100% { opacity: .68; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes eppx-cap-pulse {
+    0%, 100% { opacity: .88; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes eppx-cap-fill {
+    0% { transform: scaleX(.25); }
+    60%, 100% { transform: scaleX(1); }
+  }
+
+  .eppx-gateway__card:nth-child(2) .eppx-gateway__chips { animation-delay: -1.4s; }
+  .eppx-gateway__card:nth-child(3) .eppx-gateway__stack { animation-delay: -2.8s; }
+  .eppx-gateway__card:nth-child(4) .eppx-gateway__stack { animation-delay: -4.2s; }
+
+  .eppx-account__header > span {
+    display: inline-block;
+    margin-bottom: 12px;
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
   .eppx-account__header h2 {
     margin: 0;
     font: 500 clamp(36px, 4.6vw, 56px)/1.05 var(--font-heading);
     letter-spacing: -.045em;
   }
 
-  .eppx-gateway__header h2 { color: #f7f7fb; }
-  .eppx-gateway__header h2 em { color: #afa3ff; font-style: normal; }
-  .eppx-gateway__header p,
   .eppx-account__header p {
     max-width: 700px;
     margin: 20px auto 0;
     font: 400 17px/1.65 var(--font-body);
-  }
-  .eppx-gateway__header p { color: rgba(255,255,255,.58); }
-
-  .eppx-gateway__grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    border-top: 1px solid #3b3a47;
-    border-left: 1px solid #3b3a47;
-  }
-
-  .eppx-gateway__card {
-    grid-column: span 2;
-    min-height: 360px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 28px;
-    padding: 34px;
-    border-right: 1px solid #3b3a47;
-    border-bottom: 1px solid #3b3a47;
-    background: rgba(9, 10, 16, .76);
-  }
-  .eppx-gateway__card:nth-child(n + 4) { grid-column: span 3; }
-
-  .eppx-gateway__index {
-    color: #777889;
-    font: 650 11px/1 var(--font-body);
-    letter-spacing: .08em;
-  }
-  .eppx-gateway__card h3 {
-    margin: 18px 0 10px;
-    color: #fff;
-    font: 500 25px/1.15 var(--font-heading);
-  }
-  .eppx-gateway__card p {
-    margin: 0;
-    color: rgba(255,255,255,.56);
-    font: 400 15px/1.65 var(--font-body);
-  }
-
-  .eppx-gateway__visual {
-    min-height: 102px;
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 18px;
-    border: 1px solid rgba(255,255,255,.09);
-    border-radius: 16px;
-    background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
-  }
-  .eppx-gateway__visual span {
-    padding: 9px 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 999px;
-    background: rgba(255,255,255,.05);
-    color: #b9bcc8;
-    font: 600 11px/1 var(--font-body);
-  }
-  .eppx-gateway__visual span.is-active {
-    border-color: rgba(141,162,255,.5);
-    background: rgba(55,93,251,.18);
-    color: #dce3ff;
   }
 
   .eppx-account {
@@ -266,14 +538,6 @@ const gateways = [
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-  }
-  .eppx-account__tag {
-    margin-bottom: 18px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    background: #eef2ff;
-    color: #375dfb;
-    font: 650 12px/1 var(--font-body);
   }
   .eppx-account__copy h3 {
     margin: 0 0 14px;
@@ -327,6 +591,19 @@ const gateways = [
     border-radius: 3px;
     background: #375dfb;
   }
+  .eppx-settings__top span {
+    width: 42%;
+    height: 8px;
+    margin-right: auto;
+    border-radius: 999px;
+    background: #dfe5f0;
+  }
+  .eppx-settings__top b {
+    width: 28px;
+    height: 8px;
+    border-radius: 999px;
+    background: #edf1f7;
+  }
   .eppx-settings label,
   .eppx-settings__row {
     margin-top: 12px;
@@ -337,6 +614,21 @@ const gateways = [
     font-size: 11px;
   }
   .eppx-settings label span { color: #202939; font-weight: 650; }
+  .eppx-settings label > i,
+  .eppx-settings__row > span {
+    width: 38%;
+    height: 7px;
+    border-radius: 999px;
+    background: #dfe5f0;
+  }
+  .eppx-settings label > span,
+  .eppx-settings__row > b {
+    width: 24%;
+    height: 7px;
+    padding: 0;
+    border-radius: 999px;
+    background: #edf1f7;
+  }
   .eppx-settings small {
     display: flex;
     align-items: center;
@@ -350,6 +642,12 @@ const gateways = [
     height: 7px;
     border-radius: 50%;
     background: #10b981;
+  }
+  .eppx-settings small span {
+    width: 48%;
+    height: 6px;
+    border-radius: 999px;
+    background: #dfe5f0;
   }
   .eppx-settings__row b {
     padding: 5px 8px;
@@ -368,21 +666,53 @@ const gateways = [
     font: 500 14px/1.6 var(--font-body);
   }
 
-  @media (max-width: 900px) {
-    .eppx-gateway__grid { grid-template-columns: repeat(2, 1fr); }
-    .eppx-gateway__card, .eppx-gateway__card:nth-child(n + 4) { grid-column: span 1; }
-    .eppx-gateway__card:last-child { grid-column: 1 / -1; }
+  @media (prefers-reduced-motion: reduce) {
+    .eppx-gateway-band {
+      clip-path: none;
+      will-change: auto;
+    }
+
+    .eppx-gateway__surface,
+    .eppx-gateway__stack,
+    .eppx-gateway__chips,
+    .eppx-gateway__visual::before,
+    .eppx-gateway__chips .is-active,
+    .eppx-gateway__stack .is-active,
+    .eppx-gateway__field i {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .eppx-gateway__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .eppx-gateway__card,
+    .eppx-gateway__card:nth-child(n + 4) {
+      grid-column: span 1;
+      min-height: 0;
+      padding: 32px 24px;
+      border-right: 0;
+      border-bottom: 1px solid #3b3a47;
+    }
+
+    .eppx-gateway__card:last-child {
+      border-bottom: 0;
+    }
+
+    .eppx-gateway__petal {
+      display: none;
+    }
+
+    .eppx-gateway__card p {
+      max-width: none;
+    }
   }
 
   @media (max-width: 767px) {
-    .eppx-gateway, .eppx-account { width: min(100% - 32px, 1140px); padding: 72px 0; }
-    .eppx-gateway__header h2, .eppx-account__header h2 { font-size: 34px; }
-    .eppx-gateway__grid { grid-template-columns: 1fr; }
-    .eppx-gateway__card, .eppx-gateway__card:nth-child(n + 4), .eppx-gateway__card:last-child {
-      grid-column: 1;
-      min-height: 300px;
-      padding: 28px;
-    }
+    .eppx-account { width: min(100% - 32px, 1140px); padding: 72px 0; }
+    .eppx-account__header h2 { font-size: 34px; }
     .eppx-account__quad { grid-template-columns: 1fr; }
     .eppx-account__cell { min-height: auto; padding: 34px 24px; border-right: 0 !important; border-top: 1px solid #e5e7eb; }
     .eppx-account__cell:first-child { border-top: 0; }
@@ -390,4 +720,63 @@ const gateways = [
     .eppx-account__copy:nth-child(4) { grid-row: 3; }
     .eppx-account__media:nth-child(3) { grid-row: 4; }
   }
+
+  @media (max-width: 560px) {
+    .eppx-gateway {
+      padding-bottom: 48px;
+    }
+  }
 </style>
+
+<script>
+  const initPaymentGatewayBand = () => {
+    const band = document.querySelector<HTMLElement>(".eppx-gateway-band");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let framePending = false;
+    let lastProgress = -1;
+
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const update = () => {
+      framePending = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      const roundedProgress = Math.round(progress * 100) / 100;
+      if (roundedProgress === lastProgress) return;
+      lastProgress = roundedProgress;
+      band.style.setProperty("--eppx-band-p", String(roundedProgress));
+    };
+
+    const queueUpdate = () => {
+      if (framePending) return;
+      framePending = true;
+      requestAnimationFrame(update);
+    };
+
+    const handleResize = () => {
+      measure();
+      lastProgress = -1;
+      queueUpdate();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", queueUpdate, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("load", handleResize);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPaymentGatewayBand, { once: true });
+  } else {
+    initPaymentGatewayBand();
+  }
+</script>

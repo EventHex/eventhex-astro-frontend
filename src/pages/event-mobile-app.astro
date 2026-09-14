@@ -37,7 +37,6 @@ const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEn
   footerCtaEyebrow="Plan the attendee home"
   footerCtaTitle="Bring your app brief and attendee journey to the demo"
   footerCtaSubtitle="Show us the brand, programme, modules, shortcuts, engagement plan, and offline-critical views you need. We’ll map them to the current EventHex app workflow and identify publication dependencies early."
-  footerCtaProofItems={["Brand + listing", "Home + modules", "Publication dependencies"]}
   footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
   footerCtaSecondaryButtonText="Contact Sales"
@@ -46,8 +45,10 @@ const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEn
   <div class="ema-page-bg">
     <HeroSection />
     <StatsSection />
-    <OrganizerUpdates />
-    <BentoGrid />
+    <div class="ema-dark-band">
+      <BentoGrid />
+      <OrganizerUpdates />
+    </div>
     <JourneySections />
     <HowItWorksSection />
     <CoordinationTools />
@@ -107,4 +108,34 @@ const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEn
     background-attachment: fixed;
   }
   .ema-page-bg > section { background-color: transparent; }
+  .ema-dark-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(135deg, #171a2b, #090a0e);
+  }
+  .ema-dark-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    opacity: .34;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+  }
+  .ema-dark-band::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    height: 70%;
+    pointer-events: none;
+    background: radial-gradient(60% 55% at 30% 100%, rgba(56,189,248,.26) 0%, transparent 72%), radial-gradient(55% 50% at 78% 78%, rgba(164,92,255,.22) 0%, transparent 74%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 78%);
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 78%);
+  }
+  .ema-dark-band > section { position: relative; background: transparent; }
+  body:has(.ema-page-bg) .footer-cta-title { font-weight: 500; }
 </style>

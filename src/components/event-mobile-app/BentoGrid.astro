@@ -23,8 +23,12 @@ const cards = [
         <div class="emab-card emab-card--sm animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
           {index !== 0 && index !== 3 && (
             <>
-              <span class="emab-card__petal emab-card__petal--top" aria-hidden="true"></span>
-              <span class="emab-card__petal emab-card__petal--bottom" aria-hidden="true"></span>
+              <span class="emab-card__petal emab-card__petal--top" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+              </span>
+              <span class="emab-card__petal emab-card__petal--bottom" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>
+              </span>
             </>
           )}
           <div class="emab-card__inner emab-card__inner--row">
@@ -242,31 +246,7 @@ const cards = [
     isolation: isolate;
     overflow: hidden;
     padding: 104px 0 88px;
-    background: linear-gradient(135deg, #171a2b, #090a0e);
-  }
-
-  .emab-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: .34;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
-  }
-
-  .emab-section::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-    height: 58%;
-    pointer-events: none;
-    background: repeating-linear-gradient(0deg, rgba(255,255,255,.055) 0 1px, transparent 1px 46px), radial-gradient(60% 55% at 30% 100%, rgba(56,189,248,.26) 0%, transparent 72%), radial-gradient(55% 50% at 78% 78%, rgba(164,92,255,.22) 0%, transparent 74%);
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 78%);
-    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.35) 34%, #000 78%);
+    background: transparent;
   }
 
   .emab {
@@ -359,6 +339,7 @@ const cards = [
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    overflow: visible;
   }
 
   .emab-card:nth-child(3),
@@ -373,12 +354,10 @@ const cards = [
     width: 28px;
     height: 28px;
     pointer-events: none;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 28px 28px;
+    line-height: 0;
   }
-  .emab-card__petal--top { top: 0; transform: translate(-50%, -50%); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='-14 -14 28 28'%3E%3Cpath d='M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z' fill='%233b3a47'/%3E%3C/svg%3E"); }
-  .emab-card__petal--bottom { bottom: 0; transform: translate(-50%, 50%); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='-14 -14 28 28'%3E%3Cpath d='M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z' fill='%233b3a47' transform='scale(1,-1)'/%3E%3C/svg%3E"); }
+  .emab-card__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .emab-card__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
 
   .emab-card__inner,
   .emab-card__inner--row,
@@ -513,6 +492,7 @@ const cards = [
   @media (max-width: 1024px) {
     .emab-section { padding: 60px 0 72px; }
     .emab-grid { grid-template-columns: repeat(2, 1fr); }
+    .emab-card__petal { display: none; }
     .emab-pos-0, .emab-pos-1, .emab-pos-2, .emab-pos-3, .emab-pos-4,
     [data-layout="b"] .emab-pos-0, [data-layout="b"] .emab-pos-1, [data-layout="b"] .emab-pos-2, [data-layout="b"] .emab-pos-3, [data-layout="b"] .emab-pos-4,
     [data-layout="c"] .emab-pos-0, [data-layout="c"] .emab-pos-1, [data-layout="c"] .emab-pos-2, [data-layout="c"] .emab-pos-3, [data-layout="c"] .emab-pos-4 { grid-column: auto; grid-row: auto; }

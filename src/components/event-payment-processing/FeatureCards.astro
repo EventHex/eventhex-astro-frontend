@@ -4,34 +4,36 @@ const cards = [
     eyebrow: "Attendee checkout",
     title: "Keep the payment handoff connected to the ticket order",
     description: "The configured event and gateway determine the payment path; the attendee does not choose between processors during checkout.",
-    cta: "See the checkout path",
   },
   {
     eyebrow: "Payment status",
     title: "Give operations a payment record they can act on",
-    description: "Review gateway, amount, currency, captured or pending state, failures, refund history, and buyer detail beside the order.",
-    cta: "See payment status",
+    description: "Review the payment state beside the order instead of reconciling a separate attendee list against processor emails.",
   },
   {
     eyebrow: "Approval-led payment paths",
     title: "Keep payment state aligned with registration approval",
-    description: "When a ticket flow requires review, the order carries approval and capture context so operations can see what still needs a decision.",
-    cta: "Map the approval flow",
+    description: "When the ticket flow requires review, the order can carry approval and capture context so operations can see what still needs a decision.",
   },
 ];
 ---
 
-<section class="eppx-flow-shell" id="payment-flow">
+<section class="eppx-flow-shell" id="payment-flow" aria-label="Event payment processing">
   <div class="eppx-flow">
     <header class="eppx-flow__header">
-      <span class="eppx-flow__eyebrow">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/>
-          <path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/>
-        </svg>
-        Order-linked payment flow
-      </span>
-      <h2>One order context from <em>checkout</em> to outcome</h2>
+      <div class="eppx-flow__eyebrow">
+        <span class="eppx-flow__eyebrow-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z" fill="#4F8CFF"></path>
+            <path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"></path>
+          </svg>
+        </span>
+        <span>Attendee checkout, payment status &amp; approval</span>
+      </div>
+      <h2 class="eppx-flow__title">
+        <span>Keep payment state connected to</span>
+        <span>the <em>ticket order</em></span>
+      </h2>
     </header>
 
     <div class="eppx-flow__cards">
@@ -41,46 +43,44 @@ const cards = [
             <span>{card.eyebrow}</span>
             <h3>{card.title}</h3>
             <p>{card.description}</p>
-            <a href="/book-a-demo/">{card.cta}</a>
           </div>
 
           <div class="eppx-flow__visual">
             {index === 0 && (
-              <div class="eppx-checkout-ui" aria-label="Illustration of an order moving through checkout">
-                <div class="eppx-ui-top"><i></i><span>Order #EH-2408</span><b>USD 240</b></div>
+              <div class="eppx-checkout-ui" aria-label="Attendee checkout">
+                <div class="eppx-ui-top"><i></i><span>Attendee checkout</span></div>
                 <div class="eppx-checkout-ui__steps">
-                  <div class="is-done"><b>01</b><span>Create the order<small>Buyer, tickets, tax, currency</small></span></div>
-                  <div class="is-active"><b>02</b><span>Gateway handoff<small>Configured provider path</small></span></div>
-                  <div><b>03</b><span>Receive the result<small>Response and webhook state</small></span></div>
-                  <div><b>04</b><span>Continue the journey<small>Confirmation and ticket delivery</small></span></div>
+                  <div class="is-done"><b>01</b><span>Create the order<small>Keep buyer, ticket, amount, currency, and tax context together.</small></span></div>
+                  <div class="is-active"><b>02</b><span>Start the gateway handoff<small>Open the supported redirect, hosted, SDK, or provider flow used by that configuration.</small></span></div>
+                  <div><b>03</b><span>Receive the result<small>Confirm payment or update the order from the provider response and webhook path.</small></span></div>
+                  <div><b>04</b><span>Continue the journey<small>Move a successful order into confirmation, ticket delivery, and invoice handling.</small></span></div>
                 </div>
               </div>
             )}
             {index === 1 && (
-              <div class="epp-status-ui" aria-label="Illustration of order-linked payment status">
-                <div class="eppx-ui-top"><i></i><span>Payment detail</span><b class="is-paid">Captured</b></div>
-                <div class="epp-status-ui__amount"><small>Amount</small><strong>₹42,500</strong><span>Razorpay</span></div>
+              <div class="epp-status-ui" aria-label="Payment status">
+                <div class="eppx-ui-top"><i></i><span>Payment status</span></div>
                 <div class="epp-status-ui__grid">
-                  <span><small>Currency</small><b>INR</b></span>
-                  <span><small>Order</small><b>#EH-9821</b></span>
-                  <span><small>Refunded</small><b>₹5,000</b></span>
-                  <span><small>Remaining</small><b>₹37,500</b></span>
+                  <span><small>Gateway</small><b>See which supported provider handled the payment.</b></span>
+                  <span><small>Amount and currency</small><b>Keep the paid value in the event's configured currency context.</b></span>
+                  <span><small>Captured or pending state</small><b>Understand whether the order is ready for the next ticketing action.</b></span>
+                  <span><small>Failure context</small><b>Keep an unsuccessful attempt separate from a completed order.</b></span>
+                  <span><small>Refund history</small><b>See refund activity and the amount still eligible for another refund.</b></span>
+                  <span><small>Order detail</small><b>Connect the payment history to its buyer and tickets.</b></span>
                 </div>
-                <div class="epp-status-ui__history"><i></i><span><b>Refund recorded</b><small>Connected to the original payment</small></span></div>
               </div>
             )}
             {index === 2 && (
-              <div class="epp-approval-ui" aria-label="Illustration of payment authorization and registration approval states">
-                <div class="eppx-ui-top"><i></i><span>Approval workflow</span><b>1 decision</b></div>
+              <div class="epp-approval-ui" aria-label="Approval-led payment paths">
+                <div class="eppx-ui-top"><i></i><span>Approval-led payment paths</span></div>
                 <div class="epp-approval-ui__person">
-                  <span>AK</span><div><b>Registration submitted</b><small>Order and attendee ready for review</small></div>
+                  <div><b>Registration submitted</b><small>Create the attendee and order context for review.</small></div>
                 </div>
                 <div class="epp-approval-ui__state">
-                  <span><i></i><b>Authorization state</b><small>Processor result visible</small></span>
-                  <span><i></i><b>Organizer decision</b><small>Approve or reject</small></span>
-                  <span><i></i><b>Outcome message</b><small>Continue the configured path</small></span>
+                  <span><i></i><b>Payment authorization state</b><small>Keep the processor result and capture status visible to the workflow.</small></span>
+                  <span><i></i><b>Organizer decision</b><small>Approve or reject through the configured ticket process.</small></span>
+                  <span><i></i><b>Outcome message</b><small>Continue into the applicable ticket and payment communication.</small></span>
                 </div>
-                <div class="epp-approval-ui__actions"><button type="button">Reject</button><button type="button">Approve</button></div>
               </div>
             )}
           </div>
@@ -92,26 +92,27 @@ const cards = [
 </section>
 
 <script>
-  const paymentFlow = document.querySelector<HTMLElement>(".eppx-flow-shell");
-  const paymentFlowHeader = paymentFlow?.querySelector<HTMLElement>(".eppx-flow__header");
-  const paymentFlowCards = paymentFlow?.querySelectorAll<HTMLElement>(".eppx-flow__card");
-  const paymentFlowLastCard = paymentFlowCards?.[paymentFlowCards.length - 1];
+  const paymentFlow = document.querySelector<HTMLElement>('.eppx-flow-shell');
+  const paymentFlowHeader = paymentFlow?.querySelector<HTMLElement>('.eppx-flow__header');
+  const paymentFlowCards = paymentFlow?.querySelectorAll<HTMLElement>('.eppx-flow__card');
+  const finalPaymentFlowCard = paymentFlowCards?.[paymentFlowCards.length - 1];
 
-  if (paymentFlowHeader && paymentFlowLastCard) {
-    let frame = 0;
-    const syncHeaderRelease = () => {
-      frame = 0;
-      const stickyTop = Number.parseFloat(getComputedStyle(paymentFlowLastCard).top) || 0;
-      const offset = Math.min(0, paymentFlowLastCard.getBoundingClientRect().top - stickyTop);
-      paymentFlowHeader.style.transform = `translateY(${offset}px)`;
+  if (paymentFlowHeader && finalPaymentFlowCard) {
+    let paymentFlowFrame = 0;
+    const syncPaymentFlowRelease = () => {
+      paymentFlowFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalPaymentFlowCard).top) || 0;
+      const releaseOffset = Math.min(0, finalPaymentFlowCard.getBoundingClientRect().top - stickyTop);
+      paymentFlowHeader.style.transform = `translateY(${releaseOffset}px)`;
     };
-    const queueHeaderRelease = () => {
-      if (frame) return;
-      frame = requestAnimationFrame(syncHeaderRelease);
+    const queuePaymentFlowRelease = () => {
+      if (paymentFlowFrame) return;
+      paymentFlowFrame = requestAnimationFrame(syncPaymentFlowRelease);
     };
-    window.addEventListener("scroll", queueHeaderRelease, { passive: true });
-    window.addEventListener("resize", queueHeaderRelease, { passive: true });
-    syncHeaderRelease();
+
+    window.addEventListener('scroll', queuePaymentFlowRelease, { passive: true });
+    window.addEventListener('resize', queuePaymentFlowRelease, { passive: true });
+    syncPaymentFlowRelease();
   }
 </script>
 
@@ -122,9 +123,20 @@ const cards = [
       linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
       radial-gradient(circle at 12% 30%, rgba(70,130,255,.28), transparent 55%),
       #000;
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: eppx-flow-mesh 30s linear infinite;
+  }
+
+  @keyframes eppx-flow-mesh {
+    0%, 100% { background-position: 0 0, 0% 0%; }
+    50% { background-position: 0 0, 8% 10%; }
   }
 
   .eppx-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: min(1140px, 100%);
     margin: 0 auto;
     padding: 4px 0 30px;
@@ -135,46 +147,74 @@ const cards = [
     top: 69px;
     z-index: 20;
     isolation: isolate;
+    display: flex;
     width: min(94%, 1050px);
-    margin: 0 auto;
-    padding: 28px 0;
+    padding: 24px 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
     text-align: center;
     will-change: transform;
   }
 
   .eppx-flow__header::before {
-    content: "";
     position: absolute;
     z-index: -1;
-    inset: -1px auto -28px 50%;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
     width: 100vw;
-    transform: translateX(-50%);
-    background: linear-gradient(180deg, rgba(13,10,44,.99), rgba(7,11,27,.98) 72%, rgba(7,11,27,0));
+    background: linear-gradient(180deg, rgba(13,10,44,.99) 0%, rgba(7,11,27,.98) 72%, rgba(7,11,27,0) 100%);
+    content: "";
     pointer-events: none;
+    transform: translateX(-50%);
   }
 
   .eppx-flow__eyebrow {
-    display: inline-flex;
+    display: flex;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    padding: 7px 15px 7px 11px;
     border: 1px solid rgba(255,255,255,.24);
     border-radius: 999px;
     background: rgba(255,255,255,.12);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 6px 16px -6px rgba(0,0,0,.35);
     color: #fff;
-    font: 500 15px/1.4 var(--font-body);
+    font: 500 15px/24px var(--font-body);
+    backdrop-filter: blur(16px);
   }
-  .eppx-flow__eyebrow svg { width: 16px; height: 16px; }
-  .eppx-flow__header h2 {
-    margin: 16px 0 0;
+
+  .eppx-flow__eyebrow-icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .eppx-flow__eyebrow-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .eppx-flow__title {
+    margin: 0;
     color: #fff;
     font: 500 46px/1.15 var(--font-heading);
-    letter-spacing: -.035em;
   }
-  .eppx-flow__header h2 em { color: #afa3ff; font-style: normal; }
+
+  .eppx-flow__title > span {
+    display: block;
+  }
+
+  .eppx-flow__title em {
+    color: #afa3ff;
+    font-style: normal;
+  }
 
   .eppx-flow__cards {
-    --stack-top: 288px;
+    --stack-top: 300px;
     position: relative;
     width: 100%;
     padding: 80px 0 50px;
@@ -184,7 +224,7 @@ const cards = [
     position: sticky;
     top: calc(var(--stack-top) + var(--card-index) * 20px);
     z-index: var(--card-index);
-    height: 500px;
+    min-height: 540px;
     margin-bottom: 60px;
     display: flex;
     overflow: hidden;
@@ -231,17 +271,6 @@ const cards = [
     color: rgba(255,255,255,.55);
     font: 400 17px/1.65 var(--font-body);
   }
-  .eppx-flow__content a {
-    margin-top: 8px;
-    padding: 12px 26px;
-    border: 1px solid rgba(255,255,255,.14);
-    border-radius: 999px;
-    background: rgba(255,255,255,.06);
-    color: #fff;
-    font: 500 15px/1.4 var(--font-body);
-    text-decoration: none;
-  }
-
   .eppx-flow__visual {
     flex: 1;
     display: grid;
@@ -304,55 +333,45 @@ const cards = [
   .eppx-checkout-ui__steps .is-active { border-color: #91a5ff; background: #f3f5ff; }
   .eppx-checkout-ui__steps .is-active > b { background: #375dfb; color: #fff; }
 
-  .epp-status-ui__amount { position: relative; margin: 16px 0; padding: 16px; border-radius: 12px; background: #f5f7ff; }
-  .epp-status-ui__amount small, .epp-status-ui__grid small { display: block; color: #8992a3; font-size: 9px; }
-  .epp-status-ui__amount strong { display: block; margin-top: 4px; color: #1d2939; font-size: 24px; }
-  .epp-status-ui__amount span { position: absolute; top: 16px; right: 16px; padding: 6px 9px; border-radius: 999px; background: #fff; color: #375dfb; font-size: 10px; font-weight: 700; }
+  .epp-status-ui__grid small { display: block; color: #375dfb; font-size: 9px; font-weight: 700; }
   .epp-status-ui__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .epp-status-ui__grid span { padding: 10px; border: 1px solid #e8edf5; border-radius: 10px; }
-  .epp-status-ui__grid b { display: block; margin-top: 4px; color: #344054; font-size: 11px; }
-  .epp-status-ui__history { display: flex; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e8edf5; }
-  .epp-status-ui__history i { width: 8px; height: 8px; margin-top: 4px; border-radius: 50%; background: #10b981; }
-  .epp-status-ui__history span { display: flex; flex-direction: column; color: #344054; font-size: 10px; }
-  .epp-status-ui__history small { margin-top: 2px; color: #8992a3; font-size: 9px; }
+  .epp-status-ui__grid b { display: block; margin-top: 4px; color: #344054; font-size: 9px; line-height: 1.35; }
 
   .epp-approval-ui__person { display: flex; gap: 12px; align-items: center; margin: 16px 0; padding: 13px; border-radius: 12px; background: #f5f7ff; }
-  .epp-approval-ui__person > span { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; background: #dfe5ff; color: #375dfb; font-size: 11px; font-weight: 750; }
   .epp-approval-ui__person div, .epp-approval-ui__state span { display: flex; flex-direction: column; }
   .epp-approval-ui__person b, .epp-approval-ui__state b { color: #344054; font-size: 11px; }
   .epp-approval-ui__person small, .epp-approval-ui__state small { margin-top: 2px; color: #8992a3; font-size: 9px; }
   .epp-approval-ui__state { display: grid; gap: 8px; }
   .epp-approval-ui__state span { position: relative; padding: 10px 10px 10px 28px; border: 1px solid #e8edf5; border-radius: 10px; }
   .epp-approval-ui__state i { position: absolute; left: 10px; top: 15px; width: 7px; height: 7px; border-radius: 50%; background: #f5b942; }
-  .epp-approval-ui__actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
-  .epp-approval-ui__actions button { padding: 8px 13px; border: 1px solid #dfe5f0; border-radius: 9px; background: #fff; color: #667085; font: 650 10px/1 var(--font-body); }
-  .epp-approval-ui__actions button:last-child { border-color: #375dfb; background: #375dfb; color: #fff; }
-
   .eppx-flow__spacer { height: 190px; }
 
   @media (max-width: 1024px) {
     .eppx-flow { padding-inline: 20px; }
-    .eppx-flow__header h2 { font-size: 40px; }
-    .eppx-flow__cards { --stack-top: 284px; }
-    .eppx-flow__card { height: 460px; }
+    .eppx-flow__header { width: 94%; }
+    .eppx-flow__title { font-size: 40px; line-height: 1; }
+    .eppx-flow__cards { --stack-top: 292px; }
     .eppx-flow__content { flex-basis: 50%; }
   }
 
   @media (max-width: 767px) {
     .eppx-flow { padding-inline: 20px; }
     .eppx-flow__header { width: 100%; }
-    .eppx-flow__header h2 { font-size: 30px; }
-    .eppx-flow__cards { --stack-top: 310px; padding-top: 70px; }
-    .eppx-flow__card { height: 610px; flex-direction: column; }
+    .eppx-flow__eyebrow { font-size: 14px; }
+    .eppx-flow__title { font-size: 30px; }
+    .eppx-flow__title > span { display: inline; }
+    .eppx-flow__cards { --stack-top: 320px; padding-top: 80px; }
+    .eppx-flow__card { min-height: 720px; flex-direction: column; }
     .eppx-flow__content { flex: 0 0 auto; padding: 22px 20px 4px; }
     .eppx-flow__content h3 { font-size: 24px; }
     .eppx-flow__content p { font-size: 14px; line-height: 1.55; }
-    .eppx-flow__content a { padding: 9px 16px; font-size: 12px; }
     .eppx-flow__visual { min-height: 292px; margin: 12px; padding: 12px; }
     .eppx-checkout-ui, .epp-status-ui, .epp-approval-ui { padding: 16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .eppx-flow__header { transform: none !important; }
+    .eppx-flow-shell { animation: none; }
   }
+
 </style>
