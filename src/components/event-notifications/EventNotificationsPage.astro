@@ -1,0 +1,5225 @@
+---
+// Event notifications feature page (EventHex Â· /event-notifications/).
+// Section patterns follow the Event Registration and Speaker Management references:
+// split hero + workflow rail + spotlight panels + choice cards + bento bands +
+// delivery journey + category grid + lifecycle cards + destination links +
+// split FAQ + dark closing CTA.
+// Copy is taken from the approved event-notifications content deck.
+
+interface Props {
+  faqs: Array<[string, string]>;
+}
+
+const { faqs } = Astro.props;
+
+const workflow = [
+  { label: "Draft", text: "Write the alert" },
+  { label: "Classify", text: "Set type and priority" },
+  { label: "Target", text: "Choose the audience" },
+  { label: "Schedule", text: "Pick the send time" },
+  { label: "Deliver", text: "Send through push" },
+  { label: "Review", text: "Check send status" },
+];
+
+const builderFields = [
+  {
+    label: "Notification type",
+    text: "Choose general, event reminder, event update, event cancelled, announcement, or another available system type.",
+  },
+  { label: "Priority", text: "Mark the message low, normal, high, or urgent." },
+  { label: "Optional image", text: "Add a valid image URL for a richer push notification." },
+  { label: "Sound", text: "Use the available default, notification, or alert sound setting." },
+];
+
+const audienceOptions = [
+  {
+    label: "Event audience",
+    text: "Send to registered event attendees with push notifications enabled. Best for event-wide updates and reminders.",
+  },
+  {
+    label: "Focused audience",
+    text: "Choose specific users or an available user segment when the alert is not for everyone. Push delivery still requires a valid device token and attendee permission.",
+  },
+];
+
+const sendMoments = [
+  {
+    label: "Scheduled notifications",
+    text: "The processor checks ready scheduled notifications and moves them through sending to sent or failed.",
+  },
+  {
+    label: "Draft control",
+    text: "Prepare the copy and audience before the notification enters the send queue.",
+  },
+  {
+    label: "Immediate send",
+    text: "Send an eligible saved notification when the event team needs to act now.",
+  },
+  { label: "Cancel before send", text: "Cancel a notification that has not already been sent." },
+];
+
+type StepImage = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+type DeliveryStep = {
+  label: string;
+  text: string;
+  art: string;
+  image: StepImage;
+};
+
+const deliverySteps: DeliveryStep[] = [
+  {
+    label: "Resolve recipients",
+    text: "Find matching users or ticket registrations with push enabled.",
+    art: "audience",
+    image: {
+      src: "/images/event-notifications/app/push-resolve-recipients.webp",
+      alt: "EventHex registration list holding the attendee records a push alert is resolved from",
+      width: 960,
+      height: 519,
+    },
+  },
+  {
+    label: "Collect active tokens",
+    text: "Use the device tokens stored for those recipients.",
+    art: "tokens",
+    image: {
+      src: "/images/event-notifications/app/push-active-devices.webp",
+      alt: "EventHex app analytics audience view showing the devices attendees open the event app on",
+      width: 936,
+      height: 623,
+    },
+  },
+  {
+    label: "Send the push",
+    text: "Pass the title, body, image, type, priority, and data to Firebase.",
+    art: "send",
+    image: {
+      src: "/images/event-notifications/app/push-send-alert.webp",
+      alt: "EventHex notification composer with a title, type, priority, target audience, and message filled in",
+      width: 668,
+      height: 486,
+    },
+  },
+  {
+    label: "Clean invalid tokens",
+    text: "Remove invalid FCM tokens returned by the delivery service.",
+    art: "cleanup",
+    image: {
+      src: "/images/event-notifications/app/push-delivery-response.webp",
+      alt: "EventHex notification log listing each recipient with its delivery status and a resend action",
+      width: 936,
+      height: 444,
+    },
+  },
+  {
+    label: "Store the result",
+    text: "Record targeted, sent, failed, delivery-rate, and status fields from the push attempt.",
+    art: "result",
+    image: {
+      src: "/images/event-notifications/app/push-job-result.webp",
+      alt: "EventHex notification log summary counting total, delivered, opened, failed, and bounced sends",
+      width: 936,
+      height: 414,
+    },
+  },
+];
+
+// Every row opens the same attendee-app Notification Settings screen, framed on
+// its own category card so each visual explains the copy beside it.
+const appControls = [
+  {
+    label: "New messages",
+    text: "Notify an attendee when a new direct message arrives.",
+    shotAlt:
+      "EventHex attendee-app notification settings with Message Notifications enabled",
+  },
+  {
+    label: "Connection requests",
+    text: "Alert an attendee to a new networking request.",
+    shotAlt:
+      "EventHex attendee-app notification settings with Connection Request Notifications enabled",
+  },
+  {
+    label: "Meeting requests",
+    text: "Send an alert when a meeting request arrives.",
+    shotAlt:
+      "EventHex attendee-app notification settings with Meeting Request Notifications enabled",
+  },
+  {
+    label: "Session reminders",
+    text: "Notify attendees before a saved or upcoming session starts.",
+    shotAlt:
+      "EventHex attendee-app notification settings with Session Reminder Notifications enabled",
+  },
+];
+
+const networkingAlerts = [
+  {
+    label: "Message notifications",
+    text: "Let attendees know a conversation has a new message.",
+    image: {
+      src: "/images/event-notifications/app/reminder-message-notifications.webp",
+      alt: "EventHex attendee-app notification settings with Message Notifications switched on",
+      width: 303,
+      height: 250,
+    },
+  },
+  {
+    label: "Connection-request notifications",
+    text: "Surface new requests without forcing attendees to keep the app open.",
+    image: {
+      src: "/images/event-notifications/app/reminder-connection-requests.webp",
+      alt: "EventHex attendee-app notification settings with Connection Request Notifications switched on",
+      width: 303,
+      height: 250,
+    },
+  },
+  {
+    label: "Meeting-request notifications",
+    text: "Alert participants when a meeting request needs attention.",
+    image: {
+      src: "/images/event-notifications/app/reminder-meeting-requests.webp",
+      alt: "EventHex attendee-app notification settings with Meeting Request Notifications switched on",
+      width: 304,
+      height: 250,
+    },
+  },
+  {
+    label: "Upcoming meeting reminders",
+    text: "The meeting lifecycle processor can send a reminder shortly before an accepted meeting.",
+    image: {
+      src: "/images/event-notifications/app/reminder-session-reminders.webp",
+      alt: "EventHex attendee-app notification settings with Session Reminder Notifications switched on",
+      width: 303,
+      height: 229,
+    },
+  },
+];
+
+const reminderChannels = [
+  {
+    channel: "email" as const,
+    eyebrow: "Email",
+    label: "Email reminder path",
+    text: "Use an event-aware subject and body with attendee and event variables. Available through the configured event-reminder service.",
+    points: [
+      "Event-aware subject and body",
+      "Attendee and event variables",
+      "Configured event-reminder service",
+    ],
+  },
+  {
+    channel: "whatsapp" as const,
+    eyebrow: "WhatsApp",
+    label: "WhatsApp reminder path",
+    text: "Use the selected WhatsApp template for a configured reminder time. Requires the corresponding WhatsApp template and channel setup.",
+    points: [
+      "Selected WhatsApp template",
+      "Configured reminder time",
+      "Template and channel setup",
+    ],
+  },
+];
+
+const lifecycle = [
+  {
+    label: "Before the event",
+    title: "Prepare the event-start reminder",
+    text: "Prepare event-start reminders and essential arrival information for registered attendees.",
+    art: "calendar",
+    visualLabel: "Reminder scheduled",
+    points: [
+      "Event-start reminder copy",
+      "Email and WhatsApp reminder paths",
+      "Scheduled send time",
+    ],
+    image: {
+      src: "/images/event-notifications/app/lifecycle-before-event.webp",
+      alt: "EventHex email campaigns view with an event-start reminder campaign already completed",
+      width: 936,
+      height: 340,
+    },
+  },
+  {
+    label: "Agenda changes",
+    title: "Push the change while it still matters",
+    text: "Push a clear update when a time, room, or session detail changes.",
+    art: "agenda",
+    visualLabel: "Update queued",
+    points: [
+      "Room and time-change alerts",
+      "Event update notification type",
+      "Urgent priority for last-minute moves",
+    ],
+    image: {
+      src: "/images/event-notifications/app/lifecycle-agenda-changes.webp",
+      alt: "EventHex agenda and sessions view where a session time, room, and stage can change",
+      width: 936,
+      height: 414,
+    },
+  },
+  {
+    label: "Networking",
+    title: "Keep attendee conversations moving",
+    text: "Surface new messages, connection requests, meeting requests, and meeting reminders.",
+    art: "network",
+    visualLabel: "App categories on",
+    points: [
+      "Message notifications",
+      "Connection and meeting requests",
+      "Upcoming meeting reminders",
+    ],
+    image: {
+      src: "/images/event-notifications/app/lifecycle-networking.webp",
+      alt: "EventHex attendee-app notification settings listing the message, connection, meeting, and session reminder categories",
+      width: 917,
+      height: 482,
+    },
+  },
+  {
+    label: "During the event",
+    title: "Send a focused operational alert",
+    text: "Send a focused announcement or urgent operational alert to the relevant audience.",
+    art: "announce",
+    visualLabel: "Announcement sent",
+    points: [
+      "Event-wide announcements",
+      "Focused audience targeting",
+      "Targeted, sent, and failed status",
+    ],
+    image: {
+      src: "/images/event-notifications/app/lifecycle-during-event.webp",
+      alt: "EventHex notification composer holding an urgent announcement message ready to send",
+      width: 668,
+      height: 288,
+    },
+  },
+];
+
+const destinations = [
+  {
+    label: "Event Marketing",
+    text: "Build planned email and WhatsApp promotion campaigns.",
+    href: "/event-marketing/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
+  },
+  {
+    label: "WhatsApp Concierge",
+    text: "Give attendees event-aware help inside a conversation.",
+    href: "/whatsapp-event-concierge/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.2 7.5L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>`,
+  },
+  {
+    label: "Event Registration",
+    text: "Configure the attendee records and confirmations that feed event operations.",
+    href: "/event-registration/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>`,
+  },
+  {
+    label: "Event Mobile App",
+    text: "Explore the attendee surface that receives push and in-app alerts.",
+    href: "/event-mobile-app/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18.5h2"/></svg>`,
+  },
+];
+---
+
+<div class="enx-page">
+  <!-- 01 Hero -->
+  <section class="enx-hero" id="hero">
+    <div class="enx-hero__grid">
+      <div class="enx-hero__copy">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeInDown"
+          >Event notification software</span
+        >
+        <h1 class="enx-hero__title animate-on-scroll" data-animation="fadeInUp">
+          Keep attendees informed before and during the event
+        </h1>
+        <p class="enx-hero__lead animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+          Create scheduled or immediate push announcements, control the audience, and configure
+          attendee-app alerts for messages, connections, meetings, and sessions. EventHex keeps each
+          notification tied to the event workflow that created it.
+        </p>
+        <ul class="enx-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 900ms">
+          <li>Scheduled push announcements</li>
+          <li>Audience controls</li>
+          <li>Attendee-app reminders</li>
+        </ul>
+        <div class="enx-hero__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1000ms">
+          <a class="enx-btn enx-btn--primary" href="/book-a-demo/"
+            >Book a Demo <span aria-hidden="true">&rarr;</span></a
+          >
+          <a class="enx-btn enx-btn--ghost" href="#workflow">See the notification workflow</a>
+        </div>
+      </div>
+
+      <div class="enx-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="enx-hero__visual-card">
+          <div class="enx-hero__visual-inner">
+            <figure class="enx-hero__shot">
+              <img
+                src="/images/event-notifications/app/notification-categories.png"
+                alt="EventHex attendee-app notification settings with switches for message, connection request, meeting request, and session reminder alerts"
+                width="1280"
+                height="720"
+                loading="eager"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </figure>
+
+            <div class="enx-hero__chip enx-hero__chip--live">
+              <span></span> Attendee app alerts
+            </div>
+            <div class="enx-hero__chip enx-hero__chip--stat">
+              <b>4</b>
+              <small>alert categories</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Workflow rail -->
+  <section class="enx-rail" id="workflow" aria-label="Draft, target, schedule, send, and review">
+    <div class="enx-rail__inner">
+      {
+        workflow.map((step) => (
+          <span class="enx-rail__item">
+            <b>{step.label}</b> {step.text}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 03 Spotlight: message builder -->
+  <section class="enx-builder" id="notification-builder" aria-labelledby="enx-builder-title">
+    <div class="enx-builder__inner">
+      <div class="enx-builder__left">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn">A focused message builder</span>
+        <h2 class="enx-builder__title animate-on-scroll" data-animation="fadeInUp" id="enx-builder-title">
+          <span class="enx-builder__title-line">Create the alert</span>
+          <span class="enx-builder__title-line">attendees need now</span>
+        </h2>
+        <p class="enx-builder__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Give each notification a clear title and message, then add the operational context the
+          delivery service needs.
+        </p>
+
+        <ul class="enx-builder__fields animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 180ms">
+          {
+            builderFields.map((item) => (
+              <li>
+                <strong>{item.label}</strong>
+                <span>{item.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="enx-builder__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 260ms">
+          <a class="enx-builder__btn enx-builder__btn--dark" href="/book-a-demo/">Book a Demo &rarr;</a>
+          <a class="enx-builder__btn enx-builder__btn--light" href="#workflow">See the workflow &rarr;</a>
+        </div>
+      </div>
+
+      <div class="enx-builder__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <figure class="enx-shot enx-shot--builder">
+          <img
+            src="/images/event-notifications/app/notification-builder.png"
+            alt="EventHex notification builder with title, notification type, priority, target audience, and message fields"
+            width="1280"
+            height="720"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>
+            Type and priority are set on the message, and the target audience selects who receives
+            it.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Spotlight: audience -->
+  <section class="enx-section enx-soft" id="audience" aria-labelledby="enx-audience-title">
+    <div class="enx-wrap">
+      <div class="enx-head enx-head--center">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn">Send to the intended audience</span>
+        <h2 class="enx-title animate-on-scroll" data-animation="fadeInUp" id="enx-audience-title">
+          Choose who should receive the notification
+        </h2>
+        <p class="enx-lead animate-on-scroll" data-animation="fadeInUp">
+          Target the alert from the attendee records available to the notification service.
+        </p>
+      </div>
+
+      <div class="enx-quad">
+        <article
+          class="enx-quad__cell enx-quad__cell--copy animate-on-scroll"
+          data-animation="fadeInUp"
+        >
+          <span class="enx-quad__index">01</span>
+          <h3 class="enx-quad__title">{audienceOptions[0].label}</h3>
+          <p class="enx-quad__text">{audienceOptions[0].text}</p>
+        </article>
+
+        <div
+          class="enx-quad__cell enx-quad__cell--media animate-on-scroll"
+          data-animation="fadeInRight"
+        >
+          <div class="enx-quad__composite">
+            <img
+              class="enx-quad__screen"
+              src="/images/appointments-meetings/app/registered-attendee-directory.png"
+              alt="EventHex registration list holding the attendee records an event-wide notification is sent to"
+              width="1263"
+              height="698"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="enx-quad__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Registered attendees
+            </span>
+            <span class="enx-quad__action">All attendees</span>
+            <img
+              class="enx-quad__cursor"
+              src="/feature-images/event-registration/cursor.svg"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+
+        <div
+          class="enx-quad__cell enx-quad__cell--media animate-on-scroll"
+          data-animation="fadeInLeft"
+        >
+          <div class="enx-quad__composite">
+            <img
+              class="enx-quad__screen"
+              src="/images/event-notifications/app/audience-targeting.png"
+              alt="EventHex notification targeting controls for all users, a role, a plan, an organisation, or specific users"
+              width="656"
+              height="369"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="enx-quad__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Segment selected
+            </span>
+            <span class="enx-quad__action">Specific users</span>
+            <img
+              class="enx-quad__cursor"
+              src="/feature-images/event-registration/cursor.svg"
+              alt=""
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+
+        <article
+          class="enx-quad__cell enx-quad__cell--copy animate-on-scroll"
+          data-animation="fadeInUp"
+        >
+          <span class="enx-quad__index">02</span>
+          <h3 class="enx-quad__title">{audienceOptions[1].label}</h3>
+          <p class="enx-quad__text">{audienceOptions[1].text}</p>
+        </article>
+
+        <span class="enx-quad__cross" aria-hidden="true">
+          <svg width="18" height="18" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3" transform="scale(1,-1)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3" transform="rotate(90)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3" transform="rotate(-90)" />
+          </svg>
+        </span>
+      </div>
+
+      <p class="enx-note animate-on-scroll" data-animation="fadeIn">
+        The broader All audience option also exists. For event operations, keep each message scoped to
+        the relevant event or explicit user set.
+      </p>
+    </div>
+  </section>
+
+  <!-- 05 Dark band bento: send moment -->
+  <section class="enx-band" id="timing" aria-labelledby="enx-timing-title">
+    <div class="enx-band__heading">
+      <span class="enx-band__pill animate-on-scroll" data-animation="fadeIn">
+        <span class="enx-band__pill-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="13" r="8" stroke="#4F8CFF" stroke-width="1.7"></circle>
+            <path
+              d="M12 9.2V13l2.7 1.9"
+              stroke="#B08BFF"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+            <path d="M9.4 3.4h5.2" stroke="#B08BFF" stroke-width="1.7" stroke-linecap="round"></path>
+          </svg>
+        </span>
+        Use the right send moment
+      </span>
+      <h2 class="enx-band__title animate-on-scroll" data-animation="fadeInUp" id="enx-timing-title">
+        Send now or prepare the update in advance
+      </h2>
+      <p class="enx-band__lead animate-on-scroll" data-animation="fadeInUp">
+        Keep the message in draft, schedule it for a future time, or send an eligible notification
+        immediately.
+      </p>
+    </div>
+
+    <div class="enx-band__grid-wrap">
+      <div class="enx-moments">
+        <article
+          class="enx-moments__cell animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay="0"
+        >
+          <h3 class="enx-moments__label">{sendMoments[0].label}</h3>
+          <p class="enx-moments__desc">{sendMoments[0].text}</p>
+          <div class="enx-moments__visual" aria-hidden="true">
+            <div class="enx-queue">
+              <div class="enx-queue__row is-on">
+                <span>Room change</span>
+                <b>Scheduled</b>
+                <small>2:15 PM</small>
+              </div>
+              <div class="enx-queue__row">
+                <span>Doors open reminder</span>
+                <b>Draft</b>
+                <small>No send time</small>
+              </div>
+              <div class="enx-queue__row">
+                <span>Keynote moved</span>
+                <b>Sent</b>
+                <small>Today, 09:05</small>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="enx-moments__cell animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay="80"
+        >
+          <span class="enx-moments__petal enx-moments__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <span class="enx-moments__petal enx-moments__petal--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+            </svg>
+          </span>
+          <h3 class="enx-moments__label">{sendMoments[1].label}</h3>
+          <p class="enx-moments__desc">{sendMoments[1].text}</p>
+          <div class="enx-moments__visual" aria-hidden="true">
+            <div class="enx-compose">
+              <span class="enx-compose__head">
+                <span>Notification draft</span>
+                <span class="enx-compose__tag">Not queued</span>
+              </span>
+              <div class="enx-compose__field">
+                <span>Title</span>
+                <i></i>
+              </div>
+              <div class="enx-compose__field">
+                <span>Audience</span>
+                <i></i>
+              </div>
+              <div class="enx-compose__field enx-compose__field--add">
+                <span>+ Add an image</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="enx-moments__cell animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay="160"
+        >
+          <h3 class="enx-moments__label">{sendMoments[2].label}</h3>
+          <p class="enx-moments__desc">{sendMoments[2].text}</p>
+          <div class="enx-moments__visual" aria-hidden="true">
+            <div class="enx-push">
+              <span class="enx-push__head">
+                <span class="enx-push__mark"></span>
+                <span>Push preview</span>
+              </span>
+              <span class="enx-push__title">Room change</span>
+              <span class="enx-push__body">
+                Product Strategy now starts at 14:30 in Hall B.
+              </span>
+              <span class="enx-push__action">Send now</span>
+            </div>
+          </div>
+        </article>
+
+        <article
+          class="enx-moments__cell animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay="240"
+        >
+          <span class="enx-moments__petal enx-moments__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <span class="enx-moments__petal enx-moments__petal--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+            </svg>
+          </span>
+          <h3 class="enx-moments__label">{sendMoments[3].label}</h3>
+          <p class="enx-moments__desc">{sendMoments[3].text}</p>
+          <div class="enx-moments__visual" aria-hidden="true">
+            <div class="enx-queue">
+              <div class="enx-queue__row is-cancelled">
+                <span>Doors open reminder</span>
+                <b class="is-cancel">Cancelled</b>
+                <small>Removed from the queue</small>
+              </div>
+              <div class="enx-queue__row">
+                <span>Keynote moved</span>
+                <b>Sent</b>
+                <small>Already delivered, kept as sent</small>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Journey: push delivery -->
+  <section class="enx-section enx-path" id="push-delivery" aria-labelledby="enx-delivery-title">
+    <div class="enx-wrap enx-path__grid">
+      <div class="enx-path__intro">
+        <span class="enx-path__eyebrow animate-on-scroll" data-animation="fadeIn">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            ><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path
+              d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg
+          >
+          Push delivery with explicit requirements
+        </span>
+        <h2 class="enx-path__title animate-on-scroll" data-animation="fadeInUp" id="enx-delivery-title">
+          Route the alert to <em>active attendee devices</em>
+        </h2>
+        <p class="enx-path__lead animate-on-scroll" data-animation="fadeInUp">
+          EventHex resolves the target records, uses active FCM tokens, and records the push send
+          result.
+        </p>
+        <a
+          class="enx-path__cta animate-on-scroll"
+          data-animation="fadeInUp"
+          href="/book-a-demo/"
+        >
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+            ><path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path></svg
+          >
+        </a>
+      </div>
+
+      <ol class="enx-path__steps">
+        {
+          deliverySteps.map((step, index) => (
+            <li class="enx-step animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+              <div class="enx-step__head">
+                <span class="enx-step__num">{String(index + 1).padStart(2, "0")}</span>
+                <div class="enx-step__copy">
+                  <h3>{step.label}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </div>
+              <div class:list={["enx-step__visual", `enx-step__visual--${step.art}`]}>
+                <img
+                  src={step.image.src}
+                  alt={step.image.alt}
+                  width={step.image.width}
+                  height={step.image.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 07 Workflow accordion: attendee-app controls -->
+  <section class="enx-section enx-appflow" id="app-controls" aria-labelledby="enx-controls-title">
+    <div class="enx-wrap">
+      <header class="enx-appflow__header">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >Per-event attendee-app controls</span
+        >
+        <h2 class="enx-appflow__title animate-on-scroll" data-animation="fadeInUp" id="enx-controls-title">
+          Choose which app moments should create alerts
+        </h2>
+        <p class="enx-appflow__lead animate-on-scroll" data-animation="fadeInUp">
+          Turn individual notification categories on or off for the attendee app at the event level.
+        </p>
+      </header>
+
+      <ol class="enx-appflow__steps">
+        {
+          appControls.map((item, index) => (
+            <li>
+              <details>
+                <summary tabindex="-1">
+                  <span class="enx-appflow__num">{String(index + 1).padStart(2, "0")}</span>
+                  <div class="enx-appflow__copy">
+                    <h3 class="enx-appflow__step-title">{item.label}</h3>
+                    <p class="enx-appflow__step-desc">{item.text}</p>
+                  </div>
+                  <button
+                    type="button"
+                    class="enx-appflow__arrow"
+                    aria-label={`Expand ${item.label}`}
+                    aria-expanded="false"
+                  >
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="m5 7.5 5 5 5-5" />
+                    </svg>
+                  </button>
+                </summary>
+                <div class="enx-appflow__visual">
+                  <div class="enx-appflow__shot">
+                    <img
+                      src="/images/event-notifications/app/notification-categories.png"
+                      alt={item.shotAlt}
+                      width="1280"
+                      height="720"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 09 Dark stacking band: networking alerts -->
+  <section
+    class="enx-stack-shell"
+    id="networking-reminders"
+    aria-labelledby="enx-networking-title"
+  >
+    <div class="enx-stack">
+      <div class="enx-stack__header">
+        <span class="enx-stack__eyebrow">
+          <span class="enx-stack__eyebrow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z"
+                fill="#4F8CFF"></path>
+              <path
+                d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z"
+                fill="#B08BFF"></path>
+            </svg>
+          </span>
+          <span class="enx-stack__subtitle">Networking alerts that follow attendee actions</span>
+        </span>
+        <h2 class="enx-stack__title" id="enx-networking-title">
+          <span class="enx-stack__title-line">Keep messages, connections, and</span>
+          <span class="enx-stack__title-line"
+            ><span class="enx-stack__highlight">meetings moving</span></span
+          >
+        </h2>
+        <p class="enx-stack__lead">
+          Use attendee-app notification categories to support the networking workflow around the
+          event.
+        </p>
+      </div>
+
+      <div class="enx-stack__cards">
+        <article class="enx-stack__card" style="--card-index: 0;">
+          <div class="enx-stack__card-content">
+            <h3 class="enx-stack__card-title">{networkingAlerts[0].label}</h3>
+            <p class="enx-stack__card-desc">{networkingAlerts[0].text}</p>
+            <a class="enx-stack__card-btn" href="/book-a-demo/">Book a Demo</a>
+          </div>
+          <div class="enx-stack__card-image enx-stack__card-image--animated">
+            <div class="enx-stack__shot">
+              <img
+                src={networkingAlerts[0].image.src}
+                alt={networkingAlerts[0].image.alt}
+                width={networkingAlerts[0].image.width}
+                height={networkingAlerts[0].image.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </article>
+
+        {
+          networkingAlerts.slice(1).map((item, index) => (
+            <article class="enx-stack__card" style={`--card-index: ${index + 1};`}>
+              <div class="enx-stack__card-content">
+                <h3 class="enx-stack__card-title">{item.label}</h3>
+                <p class="enx-stack__card-desc">{item.text}</p>
+                <a class="enx-stack__card-btn" href="/book-a-demo/">Book a Demo</a>
+              </div>
+              <div class="enx-stack__card-image enx-stack__card-image--animated">
+                <div class="enx-stack__shot">
+                  <img
+                    src={item.image.src}
+                    alt={item.image.alt}
+                    width={item.image.width}
+                    height={item.image.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </article>
+          ))
+        }
+
+        <div class="enx-stack__spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 Choice: event reminders -->
+  <section class="enx-section enx-soft" id="event-reminders" aria-labelledby="enx-event-reminders-title">
+    <div class="enx-wrap">
+      <div class="enx-head enx-head--center">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn">Event-start reminders</span>
+        <h2 class="enx-title animate-on-scroll" data-animation="fadeInUp" id="enx-event-reminders-title">
+          Use email or WhatsApp for <em>configured event reminders</em>
+        </h2>
+        <p class="enx-lead animate-on-scroll" data-animation="fadeInUp">
+          The EventHex reminder service can find event registrations and send reminder messages at
+          configured lead times.
+        </p>
+      </div>
+
+      <div class="enx-bento animate-on-scroll" data-animation="fadeInUp">
+        <span class="enx-bento__notch enx-bento__notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3"></path>
+          </svg>
+        </span>
+        <span class="enx-bento__notch enx-bento__notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path
+              d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+              fill="#e6eaf3"
+              transform="scale(1,-1)"></path>
+          </svg>
+        </span>
+
+        {
+          reminderChannels.map((channel, index) => (
+            <div class={`enx-bento__row${index % 2 === 1 ? " enx-bento__row--reverse" : ""}`}>
+              <div class="enx-bento__cell enx-bento__cell--visual">
+                <div class={`enx-bento__stage enx-bento__stage--${channel.channel}`}>
+                  {channel.channel === "email" ? (
+                    <div class="enx-reminder" aria-hidden="true">
+                      <div class="enx-reminder__head">
+                        <span class="enx-reminder__avatar">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <rect
+                              x="3"
+                              y="5.5"
+                              width="18"
+                              height="13"
+                              rx="2.6"
+                              stroke="currentColor"
+                              stroke-width="1.7"
+                            />
+                            <path
+                              d="m4.4 7.6 7.6 5.4 7.6-5.4"
+                              stroke="currentColor"
+                              stroke-width="1.7"
+                              stroke-linecap="round"
+                            />
+                          </svg>
+                        </span>
+                        <span class="enx-reminder__from">
+                          <b>Event reminder</b>
+                          <small>Sent to the registered attendee email</small>
+                        </span>
+                      </div>
+                      <p class="enx-reminder__subject">Your event starts tomorrow</p>
+                      <p class="enx-reminder__body">
+                        Hi there, your Delegate ticket is confirmed. Doors open at 09:00, so keep
+                        your QR code handy at the registration desk.
+                      </p>
+                      <div class="enx-reminder__vars">
+                        <span>Event name</span>
+                        <span>Attendee name</span>
+                        <span>Ticket type</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div class="enx-reminder enx-reminder--chat" aria-hidden="true">
+                      <div class="enx-reminder__head">
+                        <span class="enx-reminder__avatar">
+                          <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                              d="M4.5 5.5h15v11.5H9.8L5.2 20.2v-3.2H4.5z"
+                              stroke="currentColor"
+                              stroke-width="1.7"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                        </span>
+                        <span class="enx-reminder__from">
+                          <b>Event reminders</b>
+                          <small>Selected WhatsApp template</small>
+                        </span>
+                      </div>
+                      <div class="enx-reminder__thread">
+                        <p class="enx-reminder__bubble">
+                          Reminder: your event starts tomorrow at 09:00. Show this message at the
+                          registration desk.
+                          <span>09:00</span>
+                        </p>
+                      </div>
+                      <div class="enx-reminder__vars">
+                        <span>Template selected</span>
+                        <span>Reminder time set</span>
+                      </div>
+                    </div>
+                  )}
+
+                  <span class="enx-bento__pill enx-bento__pill--top">
+                    <b>{index === 0 ? "24 hours before" : "15 minutes before"}</b>
+                    <small>{index === 0 ? "Configured lead time" : "Configured reminder time"}</small>
+                  </span>
+                  <span class="enx-bento__pill enx-bento__pill--bottom">
+                    <i></i>
+                    <b>{index === 0 ? "Delivered" : "Message sent"}</b>
+                  </span>
+                </div>
+              </div>
+
+              <div class="enx-bento__cell enx-bento__cell--content">
+                <span class="enx-bento__eyebrow">{channel.eyebrow}</span>
+                <h3>{channel.label}</h3>
+                <p>{channel.text}</p>
+                <ul class="enx-bento__points">
+                  {channel.points.map((point) => <li>{point}</li>)}
+                </ul>
+              </div>
+
+              <span class="enx-bento__cross" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e6eaf3"></path>
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="#e6eaf3"
+                    transform="scale(1,-1)"></path>
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="#e6eaf3"
+                    transform="rotate(90)"></path>
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="#e6eaf3"
+                    transform="rotate(-90)"></path>
+                </svg>
+              </span>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="enx-note animate-on-scroll" data-animation="fadeIn">
+        EventHex verifies the reminder service and its reminder fields in the API. The organizer
+        configuration screen for email and WhatsApp event reminders is still being confirmed, so
+        confirm the current setup path with the EventHex team.
+      </p>
+    </div>
+  </section>
+
+  <!-- 11 Audience: lifecycle use cases -->
+  <section class="enx-section" id="use-cases" aria-labelledby="enx-usecases-title">
+    <div class="enx-wrap">
+      <div class="enx-usecases" data-enx-usecases>
+        <header class="enx-usecases__header">
+          <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn"
+            >Useful across the event lifecycle</span
+          >
+          <h2
+            class="enx-usecases__title animate-on-scroll"
+            data-animation="fadeInUp"
+            id="enx-usecases-title"
+          >
+            <span class="enx-usecases__title-line">Match each alert to an</span>
+            <span class="enx-usecases__title-line">attendee decision</span>
+          </h2>
+          <p class="enx-usecases__subtitle animate-on-scroll" data-animation="fadeInUp">
+            Use notifications for operational clarity, not as a duplicate marketing broadcast tool.
+          </p>
+        </header>
+
+        <div
+          class="enx-usecases__tabs animate-on-scroll"
+          data-animation="fadeInUp"
+          role="tablist"
+          aria-label="Event lifecycle stages"
+        >
+          {
+            lifecycle.map((item, index) => (
+              <button
+                type="button"
+                class:list={["enx-usecases__tab", index === 0 && "enx-usecases__tab--active"]}
+                id={`enx-usecase-tab-${item.art}`}
+                role="tab"
+                aria-selected={index === 0 ? "true" : "false"}
+                aria-controls={`enx-usecase-panel-${item.art}`}
+                tabindex={index === 0 ? 0 : -1}
+                data-usecase-target={item.art}
+              >
+                {item.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="enx-usecases__panels animate-on-scroll" data-animation="fadeInUp">
+          {
+            lifecycle.map((item, index) => (
+              <div
+                class:list={[
+                  "enx-usecases__panel",
+                  index === 0 && "enx-usecases__panel--active",
+                ]}
+                id={`enx-usecase-panel-${item.art}`}
+                role="tabpanel"
+                aria-labelledby={`enx-usecase-tab-${item.art}`}
+                tabindex="0"
+                data-usecase-panel={item.art}
+              >
+                <div class="enx-usecases__copy">
+                  <h3 class="enx-usecases__panel-title">{item.title}</h3>
+                  <p class="enx-usecases__panel-desc">{item.text}</p>
+                  <ul class="enx-usecases__checklist">
+                    {item.points.map((point) => (
+                      <li>
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <polyline
+                            points="20 6 9 17 4 12"
+                            stroke="currentColor"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          />
+                        </svg>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="enx-usecases__visual">
+                  <div class="enx-usecases__showcase">
+                    <div class="enx-usecases__frame">
+                      <img
+                        class="enx-usecases__shot"
+                        src={item.image.src}
+                        alt={item.image.alt}
+                        width={item.image.width}
+                        height={item.image.height}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+
+                    <span
+                      class:list={[
+                        "enx-usecases__label",
+                        `enx-usecases__label--${item.art}`,
+                      ]}
+                    >
+                      <svg viewBox="0 0 20 20" aria-hidden="true">
+                        {item.art === "calendar" && (
+                          <>
+                            <rect x="2.5" y="4" width="15" height="13" rx="2.5" />
+                            <path d="M2.5 8.5h15M7 2.5v3M13 2.5v3" />
+                          </>
+                        )}
+                        {item.art === "agenda" && (
+                          <>
+                            <rect x="4" y="2.5" width="12" height="15" rx="2.5" />
+                            <path d="M7 7h6M7 10h6M7 13h3" />
+                          </>
+                        )}
+                        {item.art === "network" && (
+                          <>
+                            <circle cx="7.5" cy="7" r="2.6" />
+                            <circle cx="14.5" cy="8" r="2" />
+                            <path d="M3 16.5c.5-3.2 2.2-4.8 4.8-4.8s4.3 1.6 4.8 4.8M13 12.6c2.1.1 3.3 1.5 3.6 3.9" />
+                          </>
+                        )}
+                        {item.art === "announce" && (
+                          <>
+                            <path d="M4 8.5h3l5-3.5v10l-5-3.5H4z" />
+                            <path d="M5.5 11.5v4M14.5 7.5c1 .6 1.6 1.5 1.6 2.5" />
+                          </>
+                        )}
+                      </svg>
+                      {item.visualLabel}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 Links: connected workflows -->
+  <section
+    class="enx-section enx-links"
+    id="connected-workflows"
+    aria-labelledby="connected-workflows-title"
+  >
+    <div class="enx-wrap">
+      <header class="enx-head enx-head--center enx-links__heading">
+        <span class="enx-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >Keep every communication job clear</span
+        >
+        <h2
+          class="enx-title enx-links__title animate-on-scroll"
+          data-animation="fadeInUp"
+          id="connected-workflows-title"
+        >
+          Move to the EventHex tool that <em>owns the next task</em>
+        </h2>
+        <p class="enx-lead animate-on-scroll" data-animation="fadeInUp">
+          Notifications handle operational alerts. Connected pages cover planned campaigns,
+          conversational help, registration, and the attendee app.
+        </p>
+      </header>
+
+      <div class="enx-links__grid">
+        <span class="enx-links__notch enx-links__notch--1" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--enx-line)"
+            ></path>
+          </svg>
+        </span>
+        <span class="enx-links__notch enx-links__notch--2" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--enx-line)"
+            ></path>
+          </svg>
+        </span>
+        <span class="enx-links__notch enx-links__notch--3" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--enx-line)"
+            ></path>
+          </svg>
+        </span>
+        {
+          destinations.map((item, index) => (
+            <article
+              class="enx-links__card animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={index * 60}
+            >
+              {index === 2 && (
+                <span class="enx-links__cross" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="-14 -14 28 28">
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--enx-line)"></path>
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--enx-line)"
+                      transform="scale(1,-1)"></path>
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--enx-line)"
+                      transform="rotate(90)"></path>
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--enx-line)"
+                      transform="rotate(-90)"></path>
+                  </svg>
+                </span>
+              )}
+              <span class="enx-links__icon" aria-hidden="true" set:html={item.icon} />
+              <h3><a href={item.href}>{item.label}</a></h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 FAQ -->
+  <section class="enx-faq" id="faq" aria-labelledby="enx-faq-title">
+    <div class="enx-faq__inner">
+      <div class="enx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="enx-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 17L17 7M17 7H8M17 7V16"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          Quick Answers
+        </span>
+        <h2 class="enx-faq__heading" id="enx-faq-title">
+          Questions about EventHex event notifications
+        </h2>
+        <p class="enx-faq__intro">
+          Answers based on the current notification, attendee-app, and reminder implementation.
+        </p>
+        <a href="/contact-en/" class="enx-faq__cta">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+
+      <div class="enx-faq__list">
+        {
+          faqs.map(([question, answer], index) => (
+            <details
+              class="enx-faq__item animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={String(index * 60)}
+              data-enx-faq-item
+            >
+              <summary class="enx-faq__question">
+                <strong>{question}</strong>
+                <span class="enx-faq__icon" aria-hidden="true" />
+              </summary>
+              <div class="enx-faq__answer">
+                <p>{answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .enx-page {
+    --enx-ink: var(--heading-dark);
+    --enx-muted: var(--subheading-gray);
+    --enx-soft: var(--surface-light);
+    --enx-line: var(--surface-card-border);
+    color: var(--enx-ink);
+  }
+
+  .enx-wrap {
+    width: min(1120px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  .enx-section {
+    padding-block: clamp(64px, 7vw, 96px);
+  }
+
+  .enx-soft {
+    background: var(--enx-soft);
+  }
+
+  /* ---------- Shared text ---------- */
+  .enx-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .enx-title {
+    margin: 16px 0 0;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--enx-ink);
+  }
+
+  .enx-title em {
+    font-style: normal;
+    background: linear-gradient(96deg, #5f6675 0%, #9aa1ae 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .enx-lead {
+    margin: 18px 0 0;
+    max-width: 620px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--enx-muted);
+  }
+
+  .enx-head--center {
+    max-width: 860px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .enx-head--center .enx-lead {
+    margin-inline: auto;
+  }
+
+  /* ---------- Buttons ---------- */
+  .enx-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition:
+      transform 0.3s,
+      box-shadow 0.3s,
+      background 0.3s,
+      border-color 0.3s;
+  }
+
+  .enx-btn--primary {
+    background: var(--enx-ink);
+    color: #fff;
+  }
+
+  .enx-btn--primary:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  .enx-btn--ghost {
+    border: 1px solid #dce4ff;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--enx-ink);
+  }
+
+  .enx-btn--ghost:hover {
+    border-color: #c5d2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  /* ---------- 01 Hero ---------- */
+  .enx-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background:
+      radial-gradient(
+        ellipse 700px 500px at -5% -10%,
+        rgba(55, 93, 251, 0.14),
+        rgba(55, 93, 251, 0.06) 40%,
+        rgba(55, 93, 251, 0) 75%
+      ),
+      radial-gradient(
+        ellipse 800px 600px at 100% 105%,
+        rgba(255, 116, 184, 0.24),
+        rgba(255, 116, 184, 0.1) 45%,
+        rgba(255, 116, 184, 0) 78%
+      ),
+      #fff;
+  }
+
+  /* Fades the bleeding hero visual into the page edge. */
+  .enx-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 2;
+    width: 220px;
+    max-width: 30vw;
+    pointer-events: none;
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0.45) 70%,
+      rgba(255, 255, 255, 0.75)
+    );
+  }
+
+  .enx-hero__grid {
+    width: auto;
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .enx-hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    text-align: left;
+  }
+
+  .enx-hero__title {
+    width: 100%;
+    margin: 0;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-family: var(--font-heading);
+    font-size: 60px;
+    font-weight: 500;
+    line-height: 66px;
+    letter-spacing: -2.1px;
+  }
+
+  .enx-hero__lead {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 24px;
+    letter-spacing: -0.25px;
+    color: var(--enx-muted);
+  }
+
+  .enx-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 0;
+    padding: 4px 0 0;
+    list-style: none;
+  }
+
+  .enx-hero__points li {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--enx-ink);
+  }
+
+  .enx-hero__points li::before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .enx-hero__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 0;
+    padding-top: 8px;
+  }
+
+  .enx-hero__actions .enx-btn {
+    min-height: 0;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 22px;
+    letter-spacing: -0.3px;
+  }
+
+  .enx-hero__actions .enx-btn--primary {
+    gap: 8px;
+  }
+
+  /* Glass card that bleeds past the grid to the page edge. */
+  .enx-hero__visual {
+    position: relative;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+  }
+
+  .enx-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    border-right: 0;
+    border-radius: 22px 0 0 22px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+      rgba(255, 255, 255, 0.34);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .enx-hero__visual-inner {
+    position: relative;
+    overflow: hidden;
+    min-height: 380px;
+    padding: 32px 0 32px 32px;
+    border-radius: 16px 0 0 16px;
+    background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff);
+  }
+
+  .enx-hero__shot {
+    width: 650px;
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    border-radius: 14px 0 0 14px;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(35, 50, 90, 0.16);
+    animation: enx-hero-float 6s ease-in-out infinite;
+  }
+
+  .enx-hero__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .enx-hero__chip {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 14px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--enx-ink);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 650;
+    line-height: 1.2;
+    box-shadow: 0 16px 40px rgba(35, 50, 90, 0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .enx-hero__chip--live {
+    left: 12px;
+    bottom: 22px;
+    animation: enx-hero-chip-float 4.5s ease-in-out infinite;
+  }
+
+  .enx-hero__chip--live span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.13);
+  }
+
+  .enx-hero__chip--stat {
+    top: 18px;
+    right: 18px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    animation: enx-hero-chip-float 5s ease-in-out -1.2s infinite;
+  }
+
+  .enx-hero__chip--stat b {
+    color: var(--brand-blue);
+    font-size: 16px;
+  }
+
+  .enx-hero__chip--stat small {
+    color: var(--enx-muted);
+    font-weight: 500;
+  }
+
+  @keyframes enx-hero-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -7px, 0);
+    }
+  }
+
+  @keyframes enx-hero-chip-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -6px, 0);
+    }
+  }
+
+  /* ---------- Product screenshots ---------- */
+  .enx-shot {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+  }
+
+  .enx-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e2e6f0;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 22px 50px rgba(30, 46, 105, 0.14);
+  }
+
+  .enx-shot figcaption {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--enx-muted);
+  }
+
+  .enx-shot--builder figcaption {
+    max-width: 44ch;
+  }
+
+  /* ---------- 02 Workflow rail ---------- */
+  .enx-rail {
+    padding: 1.5rem;
+    border-top: 1px solid var(--enx-line);
+    background:
+      radial-gradient(circle 380px at 3% 42%, rgba(175, 163, 255, 0.22), transparent 100%),
+      radial-gradient(circle 300px at 97% 36%, rgba(255, 182, 213, 0.2), transparent 100%),
+      radial-gradient(circle 340px at 94% 88%, rgba(130, 170, 255, 0.18), transparent 100%),
+      radial-gradient(circle 300px at 5% 92%, rgba(255, 224, 150, 0.16), transparent 100%),
+      #fff;
+  }
+
+  .enx-rail__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2.25rem;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  .enx-rail__item {
+    color: var(--subheading-gray);
+    font: 400 0.9375rem/1.4 var(--font-body);
+    white-space: nowrap;
+  }
+
+  .enx-rail__item b {
+    color: var(--heading-dark);
+    font-weight: 700;
+  }
+
+  /* ---------- 03 Message builder: open two-column feature ---------- */
+  .enx-builder {
+    display: flex;
+    justify-content: center;
+    padding: 32px 24px;
+    background: transparent;
+  }
+
+  .enx-builder__inner {
+    width: min(1120px, 100%);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: 36px;
+    align-items: center;
+  }
+
+  .enx-builder__left {
+    min-width: 0;
+    max-width: 560px;
+  }
+
+  .enx-builder__title {
+    margin: 14px 0 0;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .enx-builder__title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .enx-builder__copy {
+    margin: 16px 0 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #374151;
+  }
+
+  .enx-builder__fields {
+    display: grid;
+    gap: 12px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enx-builder__fields li {
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(71, 84, 103, 0.14);
+  }
+
+  .enx-builder__fields strong {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .enx-builder__fields span {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: #596579;
+  }
+
+  .enx-builder__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0 0;
+  }
+
+  .enx-builder__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .enx-builder__btn--dark {
+    background: #27272a;
+    color: #ffffff;
+  }
+
+  .enx-builder__btn--dark:hover {
+    background: #18181b;
+  }
+
+  .enx-builder__btn--light {
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
+    color: #374151;
+  }
+
+  .enx-builder__btn--light:hover {
+    background: #e5e7eb;
+  }
+
+  .enx-builder__right {
+    justify-self: end;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  /* ---------- 10 Bento: event reminders ---------- */
+  .enx-bento {
+    position: relative;
+    margin-top: 56px;
+    border: 1px solid var(--enx-line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .enx-bento__notch,
+  .enx-bento__cross {
+    position: absolute;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .enx-bento__notch--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .enx-bento__notch--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .enx-bento__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-bottom: 1px solid var(--enx-line);
+  }
+
+  .enx-bento__row:last-child {
+    border-bottom: 0;
+  }
+
+  .enx-bento__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(28px, 3.4vw, 56px);
+  }
+
+  .enx-bento__cell--visual {
+    order: 1;
+    align-items: center;
+  }
+
+  .enx-bento__cell--content {
+    order: 2;
+  }
+
+  .enx-bento__row--reverse .enx-bento__cell--visual {
+    order: 2;
+  }
+
+  .enx-bento__row--reverse .enx-bento__cell--content {
+    order: 1;
+  }
+
+  .enx-bento__row:not(.enx-bento__row--reverse) .enx-bento__cell--visual,
+  .enx-bento__row--reverse .enx-bento__cell--content {
+    border-right: 1px solid var(--enx-line);
+  }
+
+  .enx-bento__cross {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .enx-bento__row:last-child .enx-bento__cross {
+    display: none;
+  }
+
+  .enx-bento__stage {
+    position: relative;
+    width: 100%;
+    padding: 30px 18px;
+    border-radius: 20px;
+    isolation: isolate;
+  }
+
+  .enx-bento__stage--email {
+    background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 46%, #f5f6f9 100%);
+  }
+
+  .enx-bento__stage--whatsapp {
+    background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 46%, #f5f6f9 100%);
+  }
+
+  .enx-bento__eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #5b21b6;
+  }
+
+  .enx-bento__cell--content h3 {
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 2.2vw, 31px);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    color: var(--enx-ink);
+  }
+
+  .enx-bento__cell--content p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--enx-muted);
+  }
+
+  .enx-bento__points {
+    display: grid;
+    gap: 10px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enx-bento__points li {
+    position: relative;
+    padding-left: 22px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    color: #475467;
+  }
+
+  .enx-bento__points li::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--brand-blue);
+  }
+
+  /* Composed reminder surfaces inside the bento stages */
+  .enx-reminder {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    padding: 18px 18px 16px;
+    border: 1px solid #dfe4ec;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(30, 46, 105, 0.14);
+    animation: enx-reminder-breathe 7s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .enx-bento__row--reverse .enx-reminder {
+    animation-delay: -3.5s;
+  }
+
+  .enx-reminder__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .enx-reminder__avatar {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    background: var(--surface-blue-tint);
+    color: var(--brand-blue);
+  }
+
+  .enx-reminder--chat .enx-reminder__avatar {
+    background: #e2f7ea;
+    color: #128c5a;
+  }
+
+  .enx-reminder__avatar svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .enx-reminder__from {
+    display: grid;
+    gap: 1px;
+    min-width: 0;
+    line-height: 1.25;
+  }
+
+  .enx-reminder__from b {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--enx-ink);
+  }
+
+  .enx-reminder__from small {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #8b93a5;
+  }
+
+  .enx-reminder__subject {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--enx-ink);
+  }
+
+  .enx-reminder__body {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #6b7280;
+  }
+
+  .enx-reminder__thread {
+    display: grid;
+    padding: 14px 12px;
+    border-radius: 12px;
+    background: #eef6f1;
+  }
+
+  .enx-reminder__bubble {
+    position: relative;
+    margin: 0;
+    padding: 11px 13px 22px;
+    border-radius: 12px 12px 12px 4px;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(16, 44, 32, 0.09);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #374151;
+  }
+
+  .enx-reminder__bubble span {
+    position: absolute;
+    right: 12px;
+    bottom: 6px;
+    font-size: 10.5px;
+    color: #9aa3b2;
+  }
+
+  .enx-reminder__vars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 12px;
+    border-top: 1px solid #edf0f6;
+  }
+
+  .enx-reminder__vars span {
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: #f3f5fa;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  .enx-bento__pill {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 13px;
+    border: 1px solid rgba(206, 215, 232, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.18);
+    font-family: var(--font-body);
+    line-height: 1.15;
+    backdrop-filter: blur(10px);
+    animation: enx-bento-pill-float 4.8s ease-in-out infinite;
+  }
+
+  .enx-bento__pill b {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    color: var(--enx-ink);
+  }
+
+  .enx-bento__pill small {
+    display: block;
+    font-size: 10.5px;
+    white-space: nowrap;
+    color: #7b8497;
+  }
+
+  .enx-bento__pill i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #19b874;
+    box-shadow: 0 0 0 5px rgba(25, 184, 116, 0.13);
+  }
+
+  .enx-bento__pill--top {
+    top: 10px;
+    right: 2px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+
+  .enx-bento__pill--bottom {
+    bottom: 10px;
+    left: 2px;
+    animation-delay: -2.4s;
+  }
+
+  .enx-bento__cell--visual:hover .enx-reminder {
+    animation-play-state: paused;
+  }
+
+  @keyframes enx-reminder-breathe {
+    0%,
+    100% {
+      transform: translateY(3px) scale(0.99);
+    }
+    50% {
+      transform: translateY(-3px) scale(1);
+    }
+  }
+
+  @keyframes enx-bento-pill-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -9px, 0);
+    }
+  }
+
+  .enx-note {
+    max-width: 780px;
+    margin: 26px auto 0;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--body-light);
+  }
+
+  /* ---------- 04b Audience split quad ---------- */
+  .enx-quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    /* equal rows keep the divider at exactly 50%, where the petal sits */
+    grid-template-rows: 1fr 1fr;
+    max-width: 1180px;
+    margin: 34px auto 0;
+  }
+
+  .enx-quad__cross {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 3;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .enx-quad__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 280px;
+    padding: 46px 44px;
+    border-right: 1px solid #e6eaf3;
+    border-bottom: 1px solid #e6eaf3;
+  }
+
+  .enx-quad__cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .enx-quad__cell:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .enx-quad__index {
+    align-self: flex-start;
+    margin-bottom: 22px;
+    padding: 6px 11px;
+    border-radius: 9px;
+    background: var(--surface-blue-tint);
+    color: var(--brand-blue);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+  }
+
+  .enx-quad__title {
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: clamp(22px, 2.1vw, 30px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--enx-ink);
+  }
+
+  .enx-quad__text {
+    margin: 0;
+    max-width: 40ch;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.62;
+    color: var(--enx-muted);
+  }
+
+  .enx-quad__cell--media {
+    align-items: center;
+    justify-content: center;
+    min-height: 340px;
+    padding: 26px;
+    overflow: hidden;
+  }
+
+  .enx-quad__composite {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .enx-quad__screen {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+
+  .enx-quad__status,
+  .enx-quad__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 11px;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+  }
+
+  .enx-quad__status {
+    top: -14px;
+    left: -8px;
+    border: 1px solid #cfead9;
+    background: #effbf4;
+    color: #18864b;
+  }
+
+  .enx-quad__status svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .enx-quad__action {
+    right: -8px;
+    bottom: -14px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .enx-quad__cursor {
+    position: absolute;
+    right: -18px;
+    bottom: 16px;
+    z-index: 6;
+    width: 22px;
+    height: 26px;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 3px rgba(17, 24, 39, 0.25));
+  }
+
+  /* ---------- 05 Dark band bento: send moment ---------- */
+  .enx-moments {
+    --enx-moments-grad: linear-gradient(
+      135deg,
+      #38bdf8 0%,
+      #5c8aff 38%,
+      #7c6cff 70%,
+      #a45cff 100%
+    );
+    --enx-moments-surface: #08080e;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid #3b3a47;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .enx-moments__cell {
+    position: relative;
+    grid-column: span 3;
+    display: flex;
+    min-width: 0;
+    min-height: 340px;
+    flex-direction: column;
+    padding: 32px 30px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+  }
+
+  .enx-moments__cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .enx-moments__cell:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .enx-moments__petal {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    line-height: 0;
+  }
+
+  .enx-moments__petal--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .enx-moments__petal--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .enx-moments__label {
+    margin: 0 0 14px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .enx-moments__desc {
+    margin: 0;
+    max-width: 40ch;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .enx-moments__visual {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  /* soft coloured bloom behind each mock, matching the reference band */
+  .enx-moments__visual::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10%;
+    width: 80%;
+    height: 80%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+    background: radial-gradient(
+      closest-side,
+      rgba(92, 138, 255, 0.28),
+      rgba(124, 108, 255, 0.15) 55%,
+      transparent 100%
+    );
+  }
+
+  .enx-moments__visual > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- Send-moment mocks ---------- */
+  .enx-queue {
+    display: flex;
+    width: 100%;
+    max-width: 420px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .enx-queue__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px 12px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .enx-queue__row span {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .enx-queue__row b {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .enx-queue__row small {
+    grid-column: 1;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .enx-queue__row.is-on {
+    border-color: transparent;
+    color: #fff;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      var(--enx-moments-grad) border-box;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+  }
+
+  .enx-queue__row.is-on b {
+    color: #b9ccff;
+  }
+
+  .enx-queue__row.is-cancelled {
+    border-style: dashed;
+  }
+
+  .enx-queue__row.is-cancelled span {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .enx-queue__row b.is-cancel {
+    color: #ffb0b0;
+  }
+
+  .enx-compose,
+  .enx-push {
+    display: flex;
+    width: 100%;
+    max-width: 420px;
+    flex-direction: column;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--enx-moments-surface), var(--enx-moments-surface)) padding-box,
+      var(--enx-moments-grad) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+  }
+
+  .enx-compose {
+    gap: 10px;
+  }
+
+  .enx-compose__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .enx-compose__tag {
+    padding: 3px 9px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .enx-compose__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.86);
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+
+  .enx-compose__field i {
+    width: 42%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .enx-compose__field--add {
+    justify-content: center;
+    border: 1px dashed rgba(110, 150, 255, 0.45);
+    background: transparent;
+    color: #a8b6ff;
+  }
+
+  .enx-push {
+    gap: 10px;
+  }
+
+  .enx-push__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .enx-push__mark {
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    background: var(--enx-moments-grad);
+  }
+
+  .enx-push__title {
+    font-family: var(--font-heading);
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  .enx-push__body {
+    font-family: var(--font-body);
+    font-size: 13px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .enx-push__action {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      var(--enx-moments-grad) border-box;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  /* ---------- Motion on the send-moment mocks ---------- */
+  @keyframes enx-moments-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+
+  @keyframes enx-moments-bloom {
+    0%,
+    100% {
+      opacity: 0.68;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes enx-moments-fill {
+    0% {
+      transform: scaleX(0.25);
+    }
+    60%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  .enx-queue,
+  .enx-compose,
+  .enx-push {
+    animation: enx-moments-float 7s ease-in-out infinite;
+  }
+
+  .enx-moments__cell:nth-child(2) .enx-compose {
+    animation-delay: -1.8s;
+  }
+
+  .enx-moments__cell:nth-child(3) .enx-push {
+    animation-delay: -3.6s;
+  }
+
+  .enx-moments__cell:nth-child(4) .enx-queue {
+    animation-delay: -5.4s;
+  }
+
+  .enx-moments__visual::before {
+    animation: enx-moments-bloom 6s ease-in-out infinite;
+  }
+
+  .enx-compose__field i {
+    transform-origin: right center;
+    animation: enx-moments-fill 5.5s ease-in-out infinite;
+  }
+
+  .enx-compose__field:nth-of-type(2) i {
+    animation-delay: -1.8s;
+  }
+
+  /* ---------- 06 Journey: push delivery ---------- */
+  .enx-path__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: 64px;
+    align-items: start;
+  }
+
+  .enx-path__intro {
+    position: sticky;
+    top: 132px;
+  }
+
+  .enx-path__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    background: #f4f5f7;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--enx-ink);
+  }
+
+  .enx-path__eyebrow svg {
+    flex: 0 0 auto;
+    color: var(--brand-blue);
+  }
+
+  .enx-path__title {
+    margin: 0 0 20px;
+    font-family: var(--font-heading);
+    font-size: clamp(34px, 3.6vw, 46px);
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+    color: var(--enx-ink);
+  }
+
+  .enx-path__title em {
+    font-style: normal;
+    white-space: nowrap;
+    background: linear-gradient(96deg, #5f6675 0%, #9aa1ae 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .enx-path__lead {
+    margin: 0;
+    max-width: 460px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--enx-muted);
+  }
+
+  .enx-path__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .enx-path__cta:hover {
+    background: #000;
+    transform: translateY(-1px);
+  }
+
+  .enx-path__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enx-step {
+    position: sticky;
+    padding: 32px;
+    border-radius: 24px;
+    background: #f4f5f7;
+    transition: transform 0.3s ease;
+  }
+
+  .enx-step:hover {
+    transform: translateY(-4px);
+  }
+
+  .enx-step:nth-child(1) {
+    top: 84px;
+  }
+
+  .enx-step:nth-child(2) {
+    top: 104px;
+  }
+
+  .enx-step:nth-child(3) {
+    top: 124px;
+  }
+
+  .enx-step:nth-child(4) {
+    top: 144px;
+  }
+
+  .enx-step:nth-child(5) {
+    top: 164px;
+  }
+
+  .enx-step__head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+
+  .enx-step__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .enx-step__copy h3 {
+    margin: 6px 0 8px;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--enx-ink);
+  }
+
+  .enx-step__copy p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--enx-muted);
+  }
+
+  .enx-step__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.86);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .enx-step__visual--audience {
+    background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #ffffff 100%);
+  }
+
+  .enx-step__visual--tokens {
+    background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #ffffff 100%);
+  }
+
+  .enx-step__visual--send {
+    background: linear-gradient(180deg, #fff9dc 0%, #fffdf1 48%, #ffffff 100%);
+  }
+
+  .enx-step__visual--cleanup {
+    background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #ffffff 100%);
+  }
+
+  .enx-step__visual--result {
+    background: linear-gradient(180deg, #eef7ff 0%, #f7fbff 48%, #ffffff 100%);
+  }
+
+  .enx-step__visual img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 14px 30px rgba(17, 24, 39, 0.08);
+  }
+
+  /* ---------- 07 Workflow accordion: attendee-app controls ----------
+     Same grammar as Speaker Management's call-for-papers workflow: a gradient
+     heading over one hairline stack of tinted rows, each with its own number,
+     title, summary, circular toggle, and an open panel holding its own crop of
+     the attendee-app notification settings. */
+  .enx-appflow__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .enx-appflow__title {
+    max-width: 780px;
+    margin: 0 auto;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .enx-appflow__lead {
+    max-width: 620px;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--enx-muted);
+  }
+
+  .enx-appflow__steps {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enx-appflow__steps > li {
+    position: relative;
+    display: block;
+    padding: 0;
+  }
+
+  /* Each row keeps its own tint so the open gradient is built from it. */
+  .enx-appflow__steps > li:nth-child(1) {
+    --enx-appflow-tint: #fff8dc;
+    --enx-appflow-border: #f0dfa6;
+  }
+
+  .enx-appflow__steps > li:nth-child(2) {
+    --enx-appflow-tint: #edf7ff;
+    --enx-appflow-border: #d4e7f7;
+  }
+
+  .enx-appflow__steps > li:nth-child(3) {
+    --enx-appflow-tint: #f3efff;
+    --enx-appflow-border: #e2d8fa;
+  }
+
+  .enx-appflow__steps > li:nth-child(4) {
+    --enx-appflow-tint: #eefbf4;
+    --enx-appflow-border: #d4efdf;
+  }
+
+  .enx-appflow__steps details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--enx-appflow-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--enx-appflow-tint) 0%, #fff 82%);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.04);
+    transition:
+      border-radius 0.35s ease,
+      background 0.35s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .enx-appflow__steps summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.25s ease;
+  }
+
+  .enx-appflow__steps summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .enx-appflow__steps summary:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .enx-appflow__steps details:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+  }
+
+  .enx-appflow__num {
+    display: block;
+    color: #111;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.05em;
+  }
+
+  .enx-appflow__copy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .enx-appflow__steps details:not([open]) .enx-appflow__copy {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.7fr) minmax(320px, 1.3fr);
+    align-items: center;
+    gap: 36px;
+  }
+
+  .enx-appflow__step-title {
+    margin: 0;
+    color: #111;
+    font-family: var(--font-body);
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .enx-appflow__step-desc {
+    display: none;
+  }
+
+  .enx-appflow__steps details:not([open]) .enx-appflow__step-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-width: 460px;
+    margin: 0;
+    color: #5f6673;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+
+  .enx-appflow__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(17, 24, 39, 0.2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.78);
+    color: #111827;
+    cursor: pointer;
+    transition:
+      transform 0.25s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .enx-appflow__arrow:hover {
+    border-color: rgba(17, 24, 39, 0.42);
+    background: #fff;
+  }
+
+  .enx-appflow__arrow:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, 0.28);
+    outline-offset: 2px;
+  }
+
+  .enx-appflow__arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .enx-appflow__steps details[open] {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    align-items: stretch;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--enx-appflow-tint) 0%, #fff 72%);
+  }
+
+  .enx-appflow__steps details[open] summary {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    min-height: 0;
+    padding: 64px 40px 64px 28px;
+    background: transparent;
+  }
+
+  .enx-appflow__steps details[open] summary:hover {
+    padding-left: 28px;
+    background: transparent;
+  }
+
+  .enx-appflow__steps details[open] .enx-appflow__num {
+    color: #050505;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .enx-appflow__steps details[open] .enx-appflow__step-title {
+    margin-bottom: 16px;
+    color: #050505;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  .enx-appflow__steps details[open] .enx-appflow__step-desc {
+    display: block;
+    max-width: 90%;
+    margin: 0;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .enx-appflow__steps details[open] .enx-appflow__arrow {
+    top: 28px;
+    transform: rotate(180deg);
+  }
+
+  .enx-appflow__visual {
+    display: none;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .enx-appflow__steps details[open] .enx-appflow__visual {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 88px 40px 0;
+    opacity: 1;
+  }
+
+  /* One 1280x720 settings capture, framed on the category each row describes. */
+  .enx-appflow__shot {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 320 / 260;
+    overflow: hidden;
+    border: 1px solid #e6eaf1;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+  }
+
+  .enx-appflow__shot img {
+    position: absolute;
+    width: 400%;
+    max-width: none;
+    height: auto;
+  }
+
+  .enx-appflow__steps > li:nth-child(1) .enx-appflow__shot img {
+    left: -101.875%;
+    top: -28.462%;
+  }
+
+  .enx-appflow__steps > li:nth-child(2) .enx-appflow__shot img {
+    left: -199.375%;
+    top: -28.462%;
+  }
+
+  .enx-appflow__steps > li:nth-child(3) .enx-appflow__shot img {
+    left: -296.875%;
+    top: -28.462%;
+  }
+
+  .enx-appflow__steps > li:nth-child(4) .enx-appflow__shot img {
+    left: -101.875%;
+    top: -123.077%;
+  }
+
+  /* ---------- 09 Dark band: networking alerts ---------- */
+  .enx-band {
+    --band-p: 0;
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    color: #fff;
+    background-color: #000;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+
+  .enx-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .enx-band > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .enx-band__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    max-width: 1000px;
+    margin-inline: auto;
+    padding: 0 24px clamp(44px, 5vw, 64px);
+    text-align: center;
+  }
+
+  .enx-band__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px rgba(255, 255, 255, 0.16),
+      0 6px 16px -6px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: left;
+  }
+
+  .enx-band__pill-icon {
+    display: flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+  }
+
+  .enx-band__pill-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .enx-band__title {
+    margin: 0;
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f2f0ff 26%,
+      #c9c2ff 52%,
+      #a79aff 74%,
+      #7d8dff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .enx-band__lead {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .enx-band__grid-wrap {
+    max-width: 1140px;
+    margin-inline: auto;
+    padding: 0 24px clamp(56px, 7vw, 88px);
+  }
+
+  /* ---------- 09b Dark stacking band: networking alerts ----------
+     Same grammar as Speaker Management's smf-shell: near-black shell with a
+     radial wash, a glass eyebrow pill above a white title with one accent
+     phrase, and cards that stack on top of each other while scrolling. */
+  .enx-stack-shell {
+    width: 100%;
+    /* Clip the full-bleed header mask without creating a scroll container,
+       so the sticky cards keep stacking. */
+    overflow-x: clip;
+    color: #fff;
+    background-color: #000;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+  }
+
+  .enx-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 4px 0 30px;
+  }
+
+  .enx-stack__header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: min(94%, 1050px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px 0;
+    text-align: center;
+    transform: translateY(var(--enx-release-y, 0px));
+    will-change: transform;
+  }
+
+  .enx-stack__header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 10, 44, 0.99) 0%,
+      rgba(7, 11, 27, 0.98) 72%,
+      rgba(7, 11, 27, 0) 100%
+    );
+  }
+
+  .enx-stack__eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 6px 16px -6px rgba(0, 0, 0, 0.35);
+  }
+
+  .enx-stack__eyebrow-icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .enx-stack__eyebrow-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .enx-stack__subtitle {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .enx-stack__title {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .enx-stack__title-line {
+    display: block;
+  }
+
+  .enx-stack__highlight {
+    color: #afa3ff;
+  }
+
+  .enx-stack__lead {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  @media (min-width: 768px) {
+    .enx-stack__title-line {
+      white-space: nowrap;
+    }
+  }
+
+  /* Stacking cards - sticky scroll. --enx-stack-top is re-measured from the
+     sticky header at runtime so the first card never sits under it. */
+  .enx-stack__cards {
+    --enx-stack-top: 340px;
+    position: relative;
+    width: 100%;
+    padding: 40px 0 50px;
+  }
+
+  .enx-stack__card {
+    position: sticky;
+    top: calc(var(--enx-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    align-items: stretch;
+    height: 500px;
+    margin-bottom: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    background:
+      radial-gradient(
+        60% 40% at 50% 100%,
+        rgba(255, 255, 255, 0.16) 0%,
+        transparent 70%
+      ),
+      radial-gradient(
+        circle at 12% 8%,
+        rgba(90, 130, 255, 0.18) 0%,
+        transparent 40%
+      ),
+      #0a0a0f;
+    overflow: hidden;
+  }
+
+  .enx-stack__card:first-child {
+    background:
+      radial-gradient(circle at 82% 12%, rgba(109, 92, 235, 0.24), transparent 34%),
+      radial-gradient(circle at 8% 92%, rgba(66, 173, 218, 0.13), transparent 28%),
+      #090a10;
+  }
+
+  .enx-stack__card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+  }
+
+  .enx-stack__card-title {
+    margin: 0;
+    color: #e7e4fa;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .enx-stack__card-desc {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .enx-stack__card-btn {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 12px 26px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition:
+      transform 0.3s,
+      background 0.3s;
+  }
+
+  .enx-stack__card-btn:hover {
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .enx-stack__card-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 16px 16px 16px 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    background: linear-gradient(
+      160deg,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0.04)
+    );
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  .enx-stack__shot {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .enx-stack__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(6, 10, 26, 0.36);
+  }
+
+  .enx-stack__card-image--animated .enx-stack__shot {
+    animation: enx-stack-float 4s ease-in-out infinite;
+  }
+
+  @keyframes enx-stack-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .enx-stack__spacer {
+    height: 190px;
+  }
+
+  /* ---------- 12 Audience: lifecycle use cases ---------- */
+  .enx-usecases {
+    width: min(1080px, 100%);
+    margin-inline: auto;
+  }
+
+  .enx-usecases__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .enx-usecases__title {
+    margin: 16px 0;
+    max-width: 800px;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4.5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .enx-usecases__title-line {
+    display: block;
+  }
+
+  .enx-usecases__subtitle {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  .enx-usecases__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    padding: 6px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #f1f3f7;
+  }
+
+  .enx-usecases__tab {
+    padding: 8px 18px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #64748b;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .enx-usecases__tab:hover {
+    background: rgba(255, 255, 255, 0.65);
+    color: #334155;
+  }
+
+  .enx-usecases__tab--active {
+    background: #ffffff;
+    border-color: #dbe4f0;
+    color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(30, 41, 59, 0.08);
+  }
+
+  .enx-usecases__tab:focus-visible,
+  .enx-usecases__panel:focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 3px;
+  }
+
+  .enx-usecases__panel {
+    --enx-usecase-tint: #eef4ff;
+    --enx-usecase-border: #d5e2fb;
+    display: none;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: center;
+    padding: 52px 64px;
+    border: 1px solid var(--enx-usecase-border);
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--enx-usecase-tint) 0%, #ffffff 72%);
+  }
+
+  .enx-usecases__panel[data-usecase-panel="agenda"] {
+    --enx-usecase-tint: #fff2f8;
+    --enx-usecase-border: #f7d9e8;
+  }
+
+  .enx-usecases__panel[data-usecase-panel="network"] {
+    --enx-usecase-tint: #f3efff;
+    --enx-usecase-border: #e2d8fa;
+  }
+
+  .enx-usecases__panel[data-usecase-panel="announce"] {
+    --enx-usecase-tint: #eefbf4;
+    --enx-usecase-border: #d4efdf;
+  }
+
+  .enx-usecases__panel--active {
+    display: grid;
+    animation: enxUseCaseFade 0.4s ease forwards;
+  }
+
+  @keyframes enxUseCaseFade {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .enx-usecases__copy {
+    min-width: 0;
+  }
+
+  .enx-usecases__panel-title {
+    margin: 0 0 18px;
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 3.8vw, 42px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #1f2937;
+  }
+
+  .enx-usecases__panel-desc {
+    margin: 0 0 28px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #4b5563;
+  }
+
+  .enx-usecases__checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .enx-usecases__checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #6b7280;
+  }
+
+  .enx-usecases__checklist svg {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    color: #9ca3af;
+  }
+
+  .enx-usecases__visual {
+    min-width: 0;
+  }
+
+  .enx-usecases__showcase {
+    position: relative;
+    isolation: isolate;
+    padding: 48px 22px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 22px 48px rgba(31, 41, 55, 0.1);
+  }
+
+  .enx-usecases__showcase::before {
+    content: "";
+    position: absolute;
+    inset: 10% 7% -8%;
+    z-index: -1;
+    border-radius: 12px;
+    background: var(--enx-usecase-border);
+    filter: blur(22px);
+    opacity: 0.48;
+  }
+
+  .enx-usecases__frame {
+    overflow: hidden;
+    border: 1px solid #e0e4ec;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .enx-usecases__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .enx-usecases__label {
+    --enx-label-bg: #eef4ff;
+    --enx-label-border: #cddcff;
+    --enx-label-color: #3158d4;
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    border: 1px solid var(--enx-label-border);
+    border-radius: 10px;
+    background: var(--enx-label-bg);
+    box-shadow: 0 8px 22px rgba(31, 41, 55, 0.12);
+    color: var(--enx-label-color);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .enx-usecases__label--agenda {
+    --enx-label-bg: #fff2f8;
+    --enx-label-border: #f7d9e8;
+    --enx-label-color: #c2457f;
+    border-radius: 7px;
+  }
+
+  .enx-usecases__label--network {
+    --enx-label-bg: #f5f1ff;
+    --enx-label-border: #ded2ff;
+    --enx-label-color: #7351cf;
+    border-radius: 999px;
+  }
+
+  .enx-usecases__label--announce {
+    --enx-label-bg: #eefbf5;
+    --enx-label-border: #cbeedb;
+    --enx-label-color: #168a55;
+    border-radius: 10px 10px 10px 3px;
+  }
+
+  .enx-usecases__label svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- 13 Links: connected workflows ---------- */
+  .enx-links {
+    background: transparent;
+  }
+
+  .enx-links__heading {
+    max-width: 1000px;
+  }
+
+  .enx-links__title {
+    text-wrap: balance;
+  }
+
+  .enx-links__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(48px, 5vw, 68px);
+    border-top: 1px solid var(--enx-line);
+  }
+
+  .enx-links__card {
+    position: relative;
+    min-height: 250px;
+    padding: 28px;
+    border-left: 1px solid var(--enx-line);
+  }
+
+  .enx-links__card:first-of-type {
+    border-left: 0;
+  }
+
+  .enx-links__notch {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .enx-links__notch--1 {
+    left: 25%;
+  }
+
+  .enx-links__notch--2 {
+    left: 50%;
+  }
+
+  .enx-links__notch--3 {
+    left: 75%;
+  }
+
+  .enx-links__cross {
+    display: none;
+  }
+
+  .enx-links__icon {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 28px;
+    color: var(--brand-blue);
+  }
+
+  .enx-links__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .enx-links__card h3 {
+    min-height: 2.3em;
+    max-width: 230px;
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--enx-ink);
+  }
+
+  .enx-links__card h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .enx-links__card h3 a:hover {
+    color: var(--brand-blue);
+  }
+
+  .enx-links__card h3 a:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 4px;
+  }
+
+  .enx-links__card p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--enx-muted);
+  }
+
+  /* ---------- 14 FAQ ---------- */
+  .enx-faq {
+    width: 100%;
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .enx-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .enx-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .enx-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .enx-faq__heading {
+    font-family: var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 20px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
+  .enx-faq__intro {
+    margin: 0 0 28px;
+    color: var(--body-light);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .enx-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .enx-faq__cta:hover {
+    background: #000;
+    transform: translateY(-1px);
+  }
+
+  .enx-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    counter-reset: notification-faq;
+  }
+
+  .enx-faq__item {
+    counter-increment: notification-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .enx-faq__item[open] {
+    border-color: #e4e7ec;
+    background: #e4e7ec;
+  }
+
+  .enx-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .enx-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .enx-faq__question strong {
+    font-weight: 500;
+  }
+
+  .enx-faq__question strong::before {
+    content: counter(notification-faq) '. ';
+  }
+
+  .enx-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .enx-faq__icon::before,
+  .enx-faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+
+  .enx-faq__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  .enx-faq__icon::after {
+    width: 2px;
+    height: 14px;
+    transition: opacity 0.2s ease;
+  }
+
+  .enx-faq__item[open] .enx-faq__icon {
+    transform: scale(0.9);
+  }
+
+  .enx-faq__item[open] .enx-faq__icon::after {
+    opacity: 0;
+  }
+
+  .enx-faq__answer {
+    max-width: 640px;
+    padding: 0 0 24px;
+  }
+
+  .enx-faq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #000;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .enx-path__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 48px;
+    }
+
+    .enx-hero__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 460px);
+      gap: 32px;
+    }
+
+    .enx-hero__title {
+      font-size: 46px;
+      line-height: 52px;
+      letter-spacing: -1.5px;
+    }
+
+    .enx-quad {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+    }
+
+    .enx-quad__cross {
+      display: none;
+    }
+
+    .enx-quad__cell {
+      min-height: 0;
+      padding: 36px 24px;
+      border-right: 0;
+    }
+
+    .enx-quad__cell:nth-child(3) {
+      order: 4;
+      border-bottom: 0;
+    }
+
+    .enx-quad__cell:nth-child(4) {
+      order: 3;
+      border-bottom: 1px solid #e6eaf3;
+    }
+
+    .enx-quad__cell--media {
+      min-height: 0;
+      padding: 20px 24px 32px;
+    }
+
+    .enx-builder__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .enx-builder__left,
+    .enx-builder__right {
+      max-width: 560px;
+    }
+
+    .enx-builder__right {
+      justify-self: start;
+    }
+
+    .enx-faq__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .enx-faq__sidebar {
+      position: static;
+    }
+
+    .enx-faq__heading {
+      font-size: 32px;
+    }
+
+    .enx-path__intro,
+    .enx-step {
+      position: static;
+    }
+
+    .enx-links__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .enx-links__notch--1,
+    .enx-links__notch--3 {
+      display: none;
+    }
+
+    .enx-links__card:nth-of-type(odd) {
+      border-left: 0;
+    }
+
+    .enx-links__card:nth-of-type(n + 3) {
+      border-top: 1px solid var(--enx-line);
+    }
+
+    .enx-links__cross {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      display: block;
+      width: 28px;
+      height: 28px;
+      line-height: 0;
+      transform: translate(50%, -50%);
+      pointer-events: none;
+    }
+
+    .enx-title {
+      font-size: clamp(34px, 4.6vw, 48px);
+    }
+
+    .enx-stack {
+      padding: 20px 20px 30px;
+    }
+
+    .enx-stack__header {
+      width: 94%;
+    }
+
+    .enx-stack__title {
+      font-size: 40px;
+      line-height: 1.1;
+    }
+
+    .enx-stack__card {
+      height: 450px;
+    }
+
+    .enx-stack__card-content {
+      flex-basis: 50%;
+    }
+
+    .enx-stack__card-title {
+      font-size: 28px;
+    }
+
+    .enx-stack__card-desc {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .enx-hero {
+      padding: 130px 20px 48px;
+    }
+
+    .enx-hero::after {
+      display: none;
+    }
+
+    .enx-hero__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+
+    .enx-hero__copy {
+      align-items: center;
+      text-align: center;
+    }
+
+    .enx-hero__lead {
+      max-width: 520px;
+    }
+
+    .enx-hero__points {
+      justify-content: center;
+    }
+
+    .enx-hero__visual {
+      margin-right: 0;
+    }
+
+    .enx-hero__visual-card {
+      border-right: 1px solid rgba(255, 255, 255, 0.62);
+      border-radius: 22px;
+    }
+
+    .enx-hero__visual-inner {
+      border-radius: 16px;
+    }
+
+    .enx-hero__shot {
+      width: calc(100% + 18px);
+      border-radius: 14px;
+    }
+
+    .enx-appflow__steps details:not([open]) .enx-appflow__copy {
+      grid-template-columns: minmax(170px, 0.8fr) minmax(0, 1.2fr);
+      gap: 24px;
+    }
+
+    .enx-appflow__steps details[open] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .enx-appflow__steps details[open] summary {
+      padding: 48px 44px 24px 28px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__visual {
+      padding: 0 28px 32px;
+    }
+
+    .enx-moments {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .enx-moments__cell,
+    .enx-moments__cell:nth-child(2n),
+    .enx-moments__cell:nth-child(n + 3) {
+      grid-column: span 1;
+      min-height: 0;
+      padding: 28px 24px;
+      border-right: 0;
+      border-bottom: 1px solid #3b3a47;
+    }
+
+    .enx-moments__cell:last-child {
+      border-bottom: 0;
+    }
+
+    .enx-moments__petal {
+      display: none;
+    }
+
+    .enx-moments__desc {
+      max-width: none;
+    }
+
+    .enx-band__heading {
+      padding-bottom: 36px;
+    }
+
+    .enx-band__title {
+      font-size: clamp(32px, 6vw, 44px);
+    }
+
+    .enx-usecases__panel {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .enx-usecases__subtitle {
+      max-width: 700px;
+      white-space: normal;
+    }
+
+    .enx-bento__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .enx-bento__cell {
+      padding: 32px 24px;
+    }
+
+    .enx-bento__cell--visual,
+    .enx-bento__row--reverse .enx-bento__cell--visual {
+      order: 2;
+    }
+
+    .enx-bento__cell--content,
+    .enx-bento__row--reverse .enx-bento__cell--content {
+      order: 1;
+      border-right: 0;
+      border-bottom: 1px solid var(--enx-line);
+    }
+
+    .enx-bento__row:not(.enx-bento__row--reverse) .enx-bento__cell--visual {
+      border-right: 0;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .enx-wrap {
+      width: min(100% - 32px, 640px);
+    }
+
+    .enx-builder {
+      padding: 20px 16px;
+    }
+
+    .enx-builder__inner {
+      padding: 32px 24px;
+      gap: 32px;
+    }
+
+    .enx-builder__fields li {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+
+    .enx-builder__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .enx-builder__btn {
+      width: 100%;
+    }
+
+    .enx-hero {
+      margin-top: -80px;
+      padding: 112px 16px 40px;
+    }
+
+    .enx-hero__grid {
+      text-align: left;
+    }
+
+    .enx-hero__copy {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .enx-hero__lead {
+      max-width: 100%;
+    }
+
+    .enx-hero__points {
+      justify-content: flex-start;
+    }
+
+    .enx-hero__title {
+      font-size: 34px;
+      line-height: 40px;
+      letter-spacing: -0.8px;
+    }
+
+    .enx-hero__actions {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .enx-hero__actions .enx-btn {
+      width: 100%;
+    }
+
+    .enx-hero__visual-inner {
+      min-height: 0;
+      padding: 16px;
+    }
+
+    .enx-hero__chip--stat {
+      top: 8px;
+      right: 8px;
+    }
+
+    .enx-hero__chip--live {
+      left: 8px;
+      bottom: 8px;
+    }
+
+    .enx-btn {
+      width: 100%;
+    }
+
+    .enx-rail {
+      padding: 1.25rem 1rem;
+    }
+
+    .enx-rail__inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .enx-rail__item {
+      white-space: normal;
+    }
+
+    .enx-title {
+      font-size: clamp(30px, 8vw, 40px);
+    }
+
+    .enx-usecases__header {
+      margin-bottom: 24px;
+    }
+
+    .enx-usecases__title {
+      font-size: clamp(26px, 8.3vw, 38px);
+    }
+
+    .enx-usecases__title-line {
+      white-space: nowrap;
+    }
+
+    .enx-usecases__subtitle {
+      font-size: 16px;
+    }
+
+    .enx-usecases__tabs {
+      gap: 4px;
+      margin-bottom: 28px;
+      padding: 5px;
+    }
+
+    .enx-usecases__tab {
+      padding: 8px 14px;
+      font-size: 12.5px;
+    }
+
+    .enx-usecases__panel {
+      gap: 28px;
+      padding: 26px 22px;
+      border-radius: 22px;
+    }
+
+    .enx-usecases__showcase {
+      padding: 40px 14px 14px;
+      border-radius: 18px;
+    }
+
+
+
+    .enx-usecases__label {
+      top: 6px;
+      left: 6px;
+      padding: 7px 10px;
+      font-size: 10.5px;
+    }
+
+    .enx-links__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .enx-links__card,
+    .enx-links__card:nth-of-type(odd),
+    .enx-links__card:nth-of-type(n + 3) {
+      min-height: 0;
+      border-left: 0;
+      border-top: 1px solid var(--enx-line);
+    }
+
+    .enx-links__card:first-of-type {
+      border-top: 0;
+    }
+
+    .enx-links__card h3 {
+      min-height: 0;
+    }
+
+    .enx-links__cross,
+    .enx-links__notch--2 {
+      display: none;
+    }
+
+    .enx-bento__pill {
+      padding: 8px 11px;
+    }
+
+    .enx-bento__pill b {
+      font-size: 11px;
+    }
+
+    .enx-step {
+      padding: 22px;
+    }
+
+    .enx-step__visual {
+      padding: 16px;
+    }
+
+    .enx-path__title {
+      font-size: clamp(30px, 7.4vw, 38px);
+    }
+
+    .enx-faq {
+      padding: 56px 16px;
+    }
+
+    .enx-faq__heading {
+      font-size: 28px;
+    }
+
+    .enx-faq__item {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+
+    .enx-faq__question {
+      font-size: 0.9375rem;
+      padding: 18px 0;
+    }
+
+    .enx-stack {
+      padding: 16px 20px 30px;
+    }
+
+    .enx-stack__header {
+      width: 100%;
+    }
+
+    .enx-stack__title {
+      font-size: 30px;
+    }
+
+    .enx-stack__cards {
+      padding: 80px 0 40px;
+    }
+
+    .enx-stack__card {
+      flex-direction: column;
+      height: 560px;
+    }
+
+    .enx-stack__card-content {
+      flex: 0 0 50%;
+      padding: 20px 20px 0;
+    }
+
+    .enx-stack__card-title {
+      font-size: 24px;
+    }
+
+    .enx-stack__card-desc {
+      font-size: 15px;
+    }
+
+    .enx-stack__card-image {
+      margin: 12px;
+      padding: 16px;
+    }
+
+    .enx-stack__shot {
+      max-width: 320px;
+    }
+
+    .enx-appflow__header {
+      margin-bottom: 36px;
+    }
+
+    .enx-appflow__title {
+      font-size: 42px;
+    }
+
+    .enx-appflow__steps summary,
+    .enx-appflow__steps summary:hover {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      min-height: 96px;
+      padding: 18px 62px 18px 14px;
+    }
+
+    .enx-appflow__arrow {
+      top: 31px;
+      right: 16px;
+    }
+
+    .enx-appflow__num {
+      font-size: 13px;
+    }
+
+    .enx-appflow__steps details:not([open]) .enx-appflow__copy {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .enx-appflow__steps details:not([open]) .enx-appflow__step-desc {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .enx-appflow__steps details[open] summary,
+    .enx-appflow__steps details[open] summary:hover {
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      padding: 34px 62px 24px 14px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__arrow {
+      top: 24px;
+      right: 16px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__num {
+      font-size: 21px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__step-title {
+      margin-bottom: 12px;
+      font-size: 26px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__step-desc {
+      max-width: 100%;
+      font-size: 16px;
+    }
+
+    .enx-appflow__steps details[open] .enx-appflow__visual {
+      padding: 0 14px 24px;
+    }
+
+    .enx-appflow__shot {
+      max-width: 100%;
+    }
+
+  }
+
+  @media (max-width: 420px) {
+    .enx-builder__title {
+      font-size: 34px;
+    }
+
+    .enx-hero__title {
+      letter-spacing: -0.9px;
+    }
+
+    .enx-title {
+      letter-spacing: -0.02em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .enx-band {
+      clip-path: none;
+    }
+
+    .enx-stack__card-image--animated .enx-stack__shot {
+      animation: none;
+    }
+
+    .enx-stack__card-btn {
+      transition: none;
+    }
+
+    .enx-stack__card-btn:hover {
+      transform: none;
+    }
+
+    .enx-appflow__steps details,
+    .enx-appflow__steps summary,
+    .enx-appflow__arrow {
+      transition: none;
+    }
+
+    .enx-appflow__steps details:not([open]):hover {
+      transform: none;
+    }
+
+    .enx-queue,
+    .enx-compose,
+    .enx-push,
+    .enx-moments__visual::before,
+    .enx-compose__field i {
+      animation: none;
+    }
+
+    .enx-reminder,
+    .enx-bento__pill {
+      animation: none;
+      will-change: auto;
+    }
+
+    .enx-usecases__panel--active {
+      animation: none;
+    }
+
+    .enx-step:hover,
+    .enx-path__cta:hover {
+      transform: none;
+    }
+
+    .enx-links__card h3 a,
+    .enx-btn,
+    .enx-path__cta,
+    .enx-step,
+    .enx-faq__item,
+    .enx-faq__cta,
+    .enx-faq__icon,
+    .enx-faq__icon::after {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Lifecycle use-case tabs: roving focus, arrow-key navigation, gentle rotation.
+  const enxUseCases = document.querySelector<HTMLElement>("[data-enx-usecases]");
+
+  if (enxUseCases) {
+    const enxUseCaseTabs = Array.from(
+      enxUseCases.querySelectorAll<HTMLButtonElement>("[data-usecase-target]"),
+    );
+    const enxUseCasePanels = Array.from(
+      enxUseCases.querySelectorAll<HTMLElement>("[data-usecase-panel]"),
+    );
+    const enxUseCaseReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let enxUseCaseRotation: number | undefined;
+
+    const activateEnxUseCase = (tab: HTMLButtonElement) => {
+      const target = tab.dataset.usecaseTarget;
+
+      enxUseCaseTabs.forEach((item) => {
+        const isActive = item === tab;
+        item.classList.toggle("enx-usecases__tab--active", isActive);
+        item.setAttribute("aria-selected", String(isActive));
+        item.tabIndex = isActive ? 0 : -1;
+      });
+
+      enxUseCasePanels.forEach((panel) => {
+        panel.classList.toggle(
+          "enx-usecases__panel--active",
+          panel.dataset.usecasePanel === target,
+        );
+      });
+    };
+
+    const stopEnxUseCaseRotation = () => {
+      if (enxUseCaseRotation === undefined) return;
+      window.clearInterval(enxUseCaseRotation);
+      enxUseCaseRotation = undefined;
+    };
+
+    const startEnxUseCaseRotation = () => {
+      stopEnxUseCaseRotation();
+      if (enxUseCaseTabs.length < 2 || enxUseCaseReduced.matches) return;
+
+      enxUseCaseRotation = window.setInterval(() => {
+        const currentIndex = enxUseCaseTabs.findIndex(
+          (tab) => tab.getAttribute("aria-selected") === "true",
+        );
+        activateEnxUseCase(enxUseCaseTabs[(currentIndex + 1) % enxUseCaseTabs.length]);
+      }, 5000);
+    };
+
+    enxUseCaseTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        activateEnxUseCase(tab);
+        startEnxUseCaseRotation();
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        const nextTab =
+          enxUseCaseTabs[(index + offset + enxUseCaseTabs.length) % enxUseCaseTabs.length];
+        nextTab.focus();
+        activateEnxUseCase(nextTab);
+      });
+    });
+
+    enxUseCases.addEventListener("mouseenter", stopEnxUseCaseRotation);
+    enxUseCases.addEventListener("mouseleave", startEnxUseCaseRotation);
+    enxUseCases.addEventListener("focusin", stopEnxUseCaseRotation);
+    enxUseCases.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node) || !enxUseCases.contains(event.relatedTarget)) {
+        startEnxUseCaseRotation();
+      }
+    });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stopEnxUseCaseRotation();
+      else startEnxUseCaseRotation();
+    });
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", startEnxUseCaseRotation);
+    } else {
+      startEnxUseCaseRotation();
+    }
+  }
+</script>
+
+<script>
+  // Networking-alert stacking band: keeps the first card clear of the sticky
+  // header, then slides that header away once the last card sticks.
+  function initEnxStack() {
+    const shell = document.querySelector<HTMLElement>(".enx-stack-shell");
+    const header = shell?.querySelector<HTMLElement>(".enx-stack__header");
+    const cards = shell?.querySelector<HTMLElement>(".enx-stack__cards");
+    const items = shell?.querySelectorAll<HTMLElement>(".enx-stack__card");
+    const lastCard = items?.[items.length - 1];
+    if (!shell || !header || !cards || !lastCard) return;
+
+    const sizeStack = () => {
+      const stickyTop = Number.parseFloat(getComputedStyle(header).top) || 0;
+      const offset = Math.round(stickyTop + header.offsetHeight + 12);
+      cards.style.setProperty("--enx-stack-top", `${offset}px`);
+    };
+    sizeStack();
+    window.addEventListener("resize", sizeStack, { passive: true });
+    window.addEventListener("load", sizeStack);
+    document.fonts?.ready.then(sizeStack).catch(() => {});
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let queued = 0;
+    const paint = () => {
+      queued = 0;
+      const stickTop = Number.parseFloat(getComputedStyle(lastCard).top) || 0;
+      const release = Math.min(0, lastCard.getBoundingClientRect().top - stickTop);
+      header.style.setProperty("--enx-release-y", `${release}px`);
+      header.style.transform = `translateY(${release}px)`;
+    };
+    const onScroll = () => {
+      if (queued) return;
+      queued = requestAnimationFrame(paint);
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    paint();
+  }
+
+  function initEnxBand() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const bands = Array.from(document.querySelectorAll<HTMLElement>(".enx-band")).filter(
+      (band) => band.dataset.bleedReady !== "true",
+    );
+    if (bands.length === 0) return;
+
+    let viewportHeight = window.innerHeight || 1;
+    let ticking = false;
+
+    // One shared scroll listener drives every band so the page keeps a single rAF loop.
+    const state = bands.map((band) => {
+      band.dataset.bleedReady = "true";
+      return { band, bandTop: 0, lastProgress: -1 };
+    });
+
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      state.forEach((entry) => {
+        entry.bandTop = entry.band.getBoundingClientRect().top + window.scrollY;
+      });
+    };
+
+    const update = () => {
+      ticking = false;
+      state.forEach((entry) => {
+        const travelled = viewportHeight - (entry.bandTop - window.scrollY);
+        const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * 0.7)));
+        const rounded = Math.round(progress * 100) / 100;
+        if (rounded === entry.lastProgress) return;
+        entry.lastProgress = rounded;
+        entry.band.style.setProperty("--band-p", String(rounded));
+      });
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    const onResize = () => {
+      measure();
+      state.forEach((entry) => {
+        entry.lastProgress = -1;
+      });
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initEnxBand);
+  else initEnxBand();
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initEnxStack);
+  else initEnxStack();
+</script>
+
+<script>
+  // Attendee-app control rows: one category open at a time, with the circular
+  // toggle carrying the accessible expanded state.
+  document
+    .querySelectorAll<HTMLDetailsElement>(".enx-appflow__steps details")
+    .forEach((item, _, all) => {
+      const summary = item.querySelector("summary");
+      const trigger = item.querySelector<HTMLButtonElement>(".enx-appflow__arrow");
+      const label =
+        item.querySelector(".enx-appflow__step-title")?.textContent?.trim() ?? "notification category";
+
+      summary?.addEventListener("click", (event) => {
+        event.preventDefault();
+        item.open = !item.open;
+      });
+
+      item.addEventListener("toggle", () => {
+        trigger?.setAttribute("aria-expanded", String(item.open));
+        trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} ${label}`);
+        if (!item.open) return;
+        all.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+</script>
+
+<script>
+  // Height-animated FAQ with one open answer at a time, matching the Event Registration FAQ.
+  const enxFaqItems = Array.from(
+    document.querySelectorAll<HTMLDetailsElement>("[data-enx-faq-item]"),
+  );
+  const enxFaqAnimations = new WeakMap<HTMLDetailsElement, Animation[]>();
+  const enxFaqReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  const animateEnxFaq = (item: HTMLDetailsElement, shouldOpen: boolean) => {
+    const summary = item.querySelector<HTMLElement>(".enx-faq__question");
+    const answer = item.querySelector<HTMLElement>(".enx-faq__answer");
+    if (!summary || !answer) return;
+
+    const startHeight = item.getBoundingClientRect().height;
+    enxFaqAnimations.get(item)?.forEach((animation) => animation.cancel());
+
+    if (shouldOpen) item.open = true;
+    const styles = window.getComputedStyle(item);
+    const closedHeight =
+      summary.getBoundingClientRect().height +
+      parseFloat(styles.paddingTop) +
+      parseFloat(styles.paddingBottom) +
+      parseFloat(styles.borderTopWidth) +
+      parseFloat(styles.borderBottomWidth);
+    const endHeight = shouldOpen ? item.getBoundingClientRect().height : closedHeight;
+
+    item.dataset.faqExpanded = String(shouldOpen);
+
+    if (enxFaqReducedMotion.matches) {
+      item.open = shouldOpen;
+      return;
+    }
+
+    const itemAnimation = item.animate(
+      { height: [`${startHeight}px`, `${endHeight}px`] },
+      { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+    );
+    const answerAnimation = answer.animate(
+      shouldOpen
+        ? { opacity: [0, 1], transform: ["translateY(-6px)", "translateY(0)"] }
+        : { opacity: [1, 0], transform: ["translateY(0)", "translateY(-6px)"] },
+      { duration: shouldOpen ? 240 : 180, easing: "ease-out", fill: "both" },
+    );
+
+    enxFaqAnimations.set(item, [itemAnimation, answerAnimation]);
+    itemAnimation.addEventListener(
+      "finish",
+      () => {
+        item.open = shouldOpen;
+        answerAnimation.cancel();
+        enxFaqAnimations.delete(item);
+      },
+      { once: true },
+    );
+  };
+
+  enxFaqItems.forEach((item) => {
+    item.dataset.faqExpanded = String(item.open);
+    item.querySelector(".enx-faq__question")?.addEventListener("click", (event) => {
+      event.preventDefault();
+      const shouldOpen = item.dataset.faqExpanded !== "true";
+
+      if (shouldOpen) {
+        enxFaqItems.forEach((other) => {
+          if (other !== item && other.dataset.faqExpanded === "true") {
+            animateEnxFaq(other, false);
+          }
+        });
+      }
+
+      animateEnxFaq(item, shouldOpen);
+    });
+  });
+</script>
