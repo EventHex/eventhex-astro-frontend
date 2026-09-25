@@ -1,0 +1,4683 @@
+---
+// Social Advocacy (attendee advocacy software) feature page.
+// Section patterns follow the Event Registration and Speaker Management references:
+// hero + capability rail + spotlight panels + choice cards + bento bands + journey
+// track + tabbed audience suites + destination links + single-column FAQ + dark closing CTA.
+// Copy is taken from the approved attendee-advocacy content deck.
+
+interface Props {
+  faqs: Array<[string, string]>;
+}
+
+const { faqs } = Astro.props;
+
+const flowRail = [
+  { label: "Design", text: "Build the branded poster" },
+  { label: "Map", text: "Choose attendee fields" },
+  { label: "Connect", text: "Assign eligible tickets" },
+  { label: "Personalize", text: "Render attendee details" },
+  { label: "Share", text: "Download or post" },
+  { label: "Review", text: "See poster usage" },
+];
+
+const ticketRules = [
+  {
+    label: "All tickets",
+    text: "Make the poster available across eligible event registrations.",
+  },
+  {
+    label: "Selected tickets",
+    text: "Choose the ticket types that should receive this design.",
+  },
+  {
+    label: "Draft or published",
+    text: "Prepare a campaign without exposing it, then publish when it is ready.",
+  },
+  {
+    label: "Priority order",
+    text: "Control which poster is selected when more than one published design matches.",
+  },
+];
+
+const variations = [
+  {
+    label: "I'm attending",
+    text: "A registration-led announcement.",
+    points: ["Registration-led announcement", "Name, photo and company from the form"],
+    shot: "/feature-images/social-advocacy/poster-design-dark.png",
+    alt: "Advocacy poster design reading I'm attending, with the event name, the attendee photo, name and company",
+  },
+  {
+    label: "I'm speaking",
+    text: "A role-led promotional card.",
+    points: ["Role-led promotional card", "Speaker photo, name and designation"],
+    shot: "/feature-images/social-advocacy/poster-design-speaking.png",
+    alt: "Advocacy poster design reading I'm speaking at, with the event name, the speaker photo, name and designation",
+  },
+  {
+    label: "Community edition",
+    text: "A second visual treatment for the same event.",
+    points: ["Second visual treatment", "Same campaign and caption template"],
+    shot: "/feature-images/social-advocacy/poster-design-blue.png",
+    alt: "Advocacy poster design reading Join me at, with the event name, the attendee photo, name and designation",
+  },
+];
+
+const journeySteps = [
+  {
+    label: "Open the poster",
+    text: "Move from the successful registration to the assigned advocacy campaign.",
+    status: "Registration complete",
+    tone: "success",
+    action: "Open poster",
+    shot: "/feature-images/social-advocacy/advocacy-poster-publish-connected.webp",
+    shotW: 660,
+    shotH: 412,
+    shotAlt:
+      "EventHex publish and share settings with the poster connected so posters are generated automatically on registration",
+  },
+  {
+    label: "Complete the details",
+    text: "Confirm mapped text or choose the image required by the design.",
+    status: "3 fields mapped",
+    tone: "info",
+    action: "Save details",
+    shot: "/feature-images/social-advocacy/advocacy-poster-field-mapping-rows.webp",
+    shotW: 660,
+    shotH: 412,
+    shotAlt:
+      "EventHex field mapping table listing the poster fields and the registration field each one is mapped to",
+  },
+  {
+    label: "Choose a variation",
+    text: "Pick from the organizer's available poster designs.",
+    status: "Variation selected",
+    tone: "success",
+    action: "Use this design",
+    shot: "/feature-images/social-advocacy/advocacy-poster-templates.webp",
+    shotW: 932,
+    shotH: 583,
+    shotAlt:
+      "EventHex poster builder with the saved design templates listed beside the poster canvas",
+  },
+  {
+    label: "Generate and preview",
+    text: "Render the personalized artwork before taking action.",
+    status: "Preview ready",
+    tone: "success",
+    action: "Generate poster",
+    shot: "/feature-images/social-advocacy/advocacy-poster-canvas-preview.webp",
+    shotW: 980,
+    shotH: 640,
+    shotAlt:
+      "EventHex poster canvas rendering an attendee poster with the layer list and background controls beside it",
+  },
+  {
+    label: "Download or share",
+    text: "Save the image or continue through the available sharing option.",
+    status: "Saved to device",
+    tone: "success",
+    action: "Share poster",
+    shot: "/feature-images/social-advocacy/advocacy-poster-download.webp",
+    shotW: 1164,
+    shotH: 637,
+    shotAlt:
+      "EventHex attendee poster form with the personalized poster preview and the Download Poster action",
+  },
+];
+
+const shareOptions = [
+  {
+    eyebrow: "PNG or JPEG",
+    label: "Download the image",
+    text: "Save the finished poster as PNG or JPEG where the campaign flow supports the format.",
+  },
+  {
+    eyebrow: "Campaign message + link",
+    label: "Share on WhatsApp",
+    text: "Open a WhatsApp share with the campaign message and link.",
+  },
+  {
+    eyebrow: "Prepared message + URL",
+    label: "Continue to LinkedIn",
+    text: "Use the LinkedIn sharing path with the prepared message and campaign URL.",
+  },
+  {
+    eyebrow: "Native share sheet",
+    label: "Use the device share sheet",
+    text: "Share through another compatible app when native sharing is available.",
+  },
+];
+
+const roles = [
+  {
+    key: "attendees",
+    label: "Attendees",
+    text: "I'm attending announcements after registration.",
+    crop: "portrait",
+    chip: "Attendee poster",
+    shot: "/feature-images/social-advocacy/poster-design-purple.webp",
+    shotAlt: "EventHex advocacy poster reading I'm attending with the event name, attendee photo, name and designation",
+    points: [
+      "Registration-led announcements",
+      "Attendee details from the form",
+      "Download or share the image",
+    ],
+  },
+  {
+    key: "speakers",
+    label: "Speakers",
+    text: "Role-led cards that help promote a confirmed appearance.",
+    crop: "stage",
+    chip: "Speaker card",
+    shot: "/feature-images/social-advocacy/poster-design-orange.webp",
+    shotAlt: "EventHex speaker poster reading I'm speaking at with the event name, speaker photo, name and designation",
+    points: [
+      "Role-led promotional cards",
+      "Confirmed appearance details",
+      "Brand elements from your artwork",
+    ],
+  },
+  {
+    key: "exhibitors-and-sponsors",
+    label: "Exhibitors and sponsors",
+    text: "Campaign artwork mapped to the fields and tickets you configure.",
+    crop: "booth",
+    chip: "Sponsor artwork",
+    shot: "/feature-images/social-advocacy/poster-design-blue.webp",
+    shotAlt: "EventHex sponsor poster reading Join me at with the event name, exhibitor photo, name and designation",
+    points: [
+      "Fields you choose to map",
+      "Selected ticket types",
+      "Priority poster order",
+    ],
+  },
+  {
+    key: "associations-and-communities",
+    label: "Associations and communities",
+    text: "Member-ready event visuals with consistent messaging.",
+    crop: "group",
+    chip: "Member campaign",
+    shot: "/feature-images/social-advocacy/poster-design-green.webp",
+    shotAlt: "EventHex community poster reading I'm attending with the event logo, member photo, name and designation",
+    points: [
+      "Member-ready event visuals",
+      "One consistent message",
+      "Templates saved for the next edition",
+    ],
+  },
+];
+
+const destinations = [
+  {
+    label: "Event Registration",
+    text: "Collect the attendee and ticket data used by poster mapping.",
+    href: "/event-registration/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>`,
+  },
+  {
+    label: "Event Marketing",
+    text: "Run planned email and WhatsApp campaigns for broader promotion.",
+    href: "/event-marketing/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
+  },
+  {
+    label: "Event Notifications",
+    text: "Send operational and triggered attendee updates.",
+    href: "/event-notifications/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>`,
+  },
+  {
+    label: "AI Photo Gallery",
+    text: "Help attendees find and share their event photos after the event.",
+    href: "/ai-photo-gallery/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`,
+  },
+];
+---
+
+<div class="sav-page">
+  <!-- 01 Hero -->
+  <section class="sav-hero" id="hero">
+    <div class="sav-wrap sav-hero__grid">
+      <div class="sav-hero__copy">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeInDown"
+          >Attendee advocacy software</span
+        >
+        <h1 class="sav-hero__title animate-on-scroll" data-animation="fadeInUp">
+          Turn registrations into branded posts attendees want to share
+        </h1>
+        <p class="sav-hero__lead animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+          Give attendees a personalized event poster after registration. EventHex brings your design,
+          their approved registration details, a ready caption, and practical sharing options into one
+          attendee advocacy flow.
+        </p>
+        <ul class="sav-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 900ms">
+          <li>Branded poster builder</li>
+          <li>Attendee personalization</li>
+          <li>Download and share</li>
+        </ul>
+        <div class="sav-hero__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1000ms">
+          <a class="sav-btn sav-btn--primary" href="/book-a-demo/">Book a Demo</a>
+          <a class="sav-btn sav-btn--ghost" href="#workflow">See the advocacy flow</a>
+        </div>
+      </div>
+
+      <div class="sav-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="sav-visual">
+          <div class="sav-visual__chrome">
+            <span class="sav-visual__dot"></span>
+            <span class="sav-visual__dot"></span>
+            <span class="sav-visual__dot"></span>
+            <b>EventHex &middot; Advocacy posters</b>
+          </div>
+          <img
+            class="sav-visual__shot"
+            src="/feature-images/social-advocacy/advocacy-poster-builder-hero.webp"
+            width="980"
+            height="640"
+            alt="EventHex advocacy poster builder showing an I'm attending poster on the canvas with its editable layers listed alongside"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Capability rail -->
+  <section class="sav-rail" id="workflow" aria-label="Attendee advocacy flow">
+    <div class="sav-rail__inner">
+      {
+        flowRail.map((step) => (
+          <span class="sav-rail__item">
+            <b>{step.label}</b> {step.text}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 04 Flow: registration-data mapping -->
+  <section class="sav-section sav-soft" id="field-mapping" aria-labelledby="sav-map-title">
+    <div class="sav-wrap">
+      <div class="sav-map__header">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeIn">Personalization from registration data</span>
+        <h2 class="sav-map__title animate-on-scroll" data-animation="fadeInUp" id="sav-map-title">
+          <span class="sav-map__line">Decide which attendee</span>
+          <span class="sav-map__line">details appear</span>
+        </h2>
+        <p class="sav-map__subtitle animate-on-scroll" data-animation="fadeInUp">
+          <span class="sav-map__line">Map each poster element to a common registration field or a ticket-specific</span>
+          <span class="sav-map__line">answer before the campaign goes live.</span>
+        </p>
+      </div>
+
+      <div class="sav-map__quad">
+        <article class="sav-map__cell sav-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>Common attendee fields</h3>
+          <p>Use shared registration details such as name, designation, company, or profile photo.</p>
+          <span class="sav-cue">Keep the poster consistent across eligible tickets.</span>
+        </article>
+
+        <div class="sav-map__cell sav-map__cell--media animate-on-scroll" data-animation="fadeInRight">
+          <div class="sav-map__composite">
+            <img
+              class="sav-map__screen sav-map__screen--primary"
+              src="/feature-images/event-registration/single-registration-form.png"
+              width="760"
+              height="480"
+              alt="EventHex registration form collecting the shared attendee fields reused by every poster"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="sav-map__screen sav-map__screen--secondary"
+              src="/feature-images/event-registration/single-preview-settings.png"
+              width="360"
+              height="480"
+              alt="EventHex single registration preview settings for the ticket form heading and copy"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="sav-map__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Fields mapped
+            </span>
+            <span class="sav-map__action">Assign to poster</span>
+          </div>
+        </div>
+
+        <div class="sav-map__cell sav-map__cell--media animate-on-scroll" data-animation="fadeInLeft">
+          <div class="sav-map__composite sav-map__composite--ticket">
+            <img
+              class="sav-map__screen sav-map__screen--primary"
+              src="/feature-images/event-registration/checkout-attendee-details.png"
+              width="1180"
+              height="540"
+              alt="EventHex attendee details step collecting the fields tied to the selected ticket"
+              loading="lazy"
+              decoding="async"
+            />
+            <img
+              class="sav-map__screen sav-map__screen--secondary"
+              src="/feature-images/event-registration/private-ticket-settings.png"
+              width="760"
+              height="480"
+              alt="EventHex private ticket list where different ticket types keep their own registration form"
+              loading="lazy"
+              decoding="async"
+            />
+            <span class="sav-map__status">Ticket fields linked</span>
+            <span class="sav-map__action">Review mapping</span>
+          </div>
+        </div>
+
+        <article class="sav-map__cell sav-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>Ticket-specific fields</h3>
+          <p>Map a poster element to a question collected for a selected ticket.</p>
+          <span class="sav-cue">Use the information already captured in that registration path.</span>
+        </article>
+
+        <span class="sav-map__cross" aria-hidden="true"></span>
+      </div>
+
+      <p class="sav-note sav-map__note animate-on-scroll" data-animation="fadeIn">
+        The organizer controls the mapping. The attendee can complete or confirm editable fields on the
+        campaign page before generating the poster.
+      </p>
+    </div>
+  </section>
+
+  <!-- 05 Dark band: ticket eligibility -->
+  <section class="sav-band" id="ticket-rules" aria-labelledby="sav-rules-title">
+    <div class="sav-band__heading">
+      <span class="sav-band__pill animate-on-scroll" data-animation="fadeIn">
+        <span class="sav-band__pill-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5s3 1.6 5.6 2c-2.6.4-4.3 1.2-5.6 2.5s-2 2.9-2.4 5.5c-.4-2.6-1.2-4.3-2.5-5.6s-2.9-2-5.5-2.4c2.6-.4 4.3-1.2 5.5-2.5s2.1-2.4 2.5-5Z"
+              fill="#4F8CFF"></path>
+            <path
+              d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z"
+              fill="#B08BFF"></path>
+          </svg>
+        </span>
+        Control who gets each campaign
+      </span>
+      <h2 class="sav-band__title animate-on-scroll" data-animation="fadeInUp" id="sav-rules-title">
+        Connect the right poster to the right registrations
+      </h2>
+      <p class="sav-band__lead animate-on-scroll" data-animation="fadeInUp">
+        Use one advocacy design across the event or limit it to selected ticket types.
+      </p>
+    </div>
+
+    <div class="sav-band__grid-wrap">
+      <div class="sav-band__grid">
+        <article class="sav-band__cell animate-on-scroll" data-animation="fadeInUp">
+          <h3 class="sav-band__label">{ticketRules[0].label}</h3>
+          <p class="sav-band__desc">{ticketRules[0].text}</p>
+          <div class="sav-band__visual" aria-hidden="true">
+            <div class="sav-band__card">
+              <span class="sav-band__card-head">Poster assignment</span>
+              <div class="sav-band__field is-on"><span>I'm attending</span><b>All eligible tickets</b></div>
+              <div class="sav-band__field"><span>I'm speaking</span><b>Speaker pass</b></div>
+              <div class="sav-band__field"><span>Community edition</span><b>Community pass</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="sav-band__cell animate-on-scroll" data-animation="fadeInUp" data-delay="70">
+          <span class="sav-band__petal sav-band__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <span class="sav-band__petal sav-band__petal--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+            </svg>
+          </span>
+          <h3 class="sav-band__label">{ticketRules[1].label}</h3>
+          <p class="sav-band__desc">{ticketRules[1].text}</p>
+          <div class="sav-band__visual" aria-hidden="true">
+            <div class="sav-band__chips">
+              <span class="is-active">Speaker pass</span>
+              <span class="is-active">Community pass</span>
+              <span>All eligible tickets</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="sav-band__cell animate-on-scroll" data-animation="fadeInUp" data-delay="140">
+          <h3 class="sav-band__label">{ticketRules[2].label}</h3>
+          <p class="sav-band__desc">{ticketRules[2].text}</p>
+          <div class="sav-band__visual" aria-hidden="true">
+            <div class="sav-band__card">
+              <span class="sav-band__card-head">Poster status</span>
+              <div class="sav-band__field"><span>Draft</span><b>Hidden</b></div>
+              <div class="sav-band__field is-on"><span>Published</span><b>Live</b></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="sav-band__cell animate-on-scroll" data-animation="fadeInUp" data-delay="210">
+          <span class="sav-band__petal sav-band__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <span class="sav-band__petal sav-band__petal--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+            </svg>
+          </span>
+          <h3 class="sav-band__label">{ticketRules[3].label}</h3>
+          <p class="sav-band__desc">{ticketRules[3].text}</p>
+          <div class="sav-band__visual" aria-hidden="true">
+            <div class="sav-band__stack">
+              <div class="sav-band__ticket is-active"><span>I'm attending</span><small>Priority 1</small></div>
+              <div class="sav-band__ticket"><span>I'm speaking</span><small>Priority 2</small></div>
+              <div class="sav-band__ticket"><span>Community edition</span><small>Priority 3</small></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Accordion: poster variations -->
+  <section
+    class="sav-section sav-variations-section"
+    id="design-variations"
+    aria-labelledby="sav-variations-title"
+  >
+    <div class="sav-wrap sav-wrap--accordion">
+      <header class="sav-head sav-head--center">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeIn">More than one creative direction</span>
+        <h2
+          class="sav-title animate-on-scroll"
+          id="sav-variations-title"
+          data-animation="fadeInUp"
+        >
+          Offer multiple poster variations in one campaign
+        </h2>
+        <p class="sav-lead animate-on-scroll" data-animation="fadeInUp">
+          Store several designs under the same advocacy poster and let the attendee choose the version
+          they prefer.
+        </p>
+      </header>
+
+      <ol class="sav-variations">
+        {
+          variations.map((item, index) => (
+            <li>
+              <details open={index === 0}>
+                <summary tabindex="-1">
+                  <span>0{index + 1}</span>
+                  <div class="sav-variation__content">
+                    <h3 class="sav-variation__title">{item.label}</h3>
+                    <p class="sav-variation__desc">{item.text}</p>
+                    <ul class="sav-variation__points">
+                      {item.points.map((point) => (
+                        <li>
+                          <i aria-hidden="true">&#10022;</i> {point}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <button
+                    type="button"
+                    class="sav-variation__toggle"
+                    data-label={item.label}
+                    aria-label={`${index === 0 ? "Collapse" : "Expand"} ${item.label}`}
+                    aria-expanded={index === 0 ? "true" : "false"}
+                  >
+                    <svg viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="m5 7.5 5 5 5-5" />
+                    </svg>
+                  </button>
+                </summary>
+                <div class="sav-variation__visual">
+                  <img
+                    src={item.shot}
+                    width="600"
+                    height="600"
+                    alt={item.alt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </details>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 07 Journey: attendee experience -->
+  <section class="sav-section sav-soft sav-path" id="attendee-experience">
+    <div class="sav-wrap sav-path__grid">
+      <div class="sav-path__intro">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeIn">Designed for the moment after registration</span>
+        <h2 class="sav-title animate-on-scroll" data-animation="fadeInUp">
+          Give each attendee a short path from <em>confirmation to share</em>
+        </h2>
+        <p class="sav-lead animate-on-scroll" data-animation="fadeInUp">
+          The advocacy prompt can appear in the registration-success experience and open the connected
+          campaign page.
+        </p>
+        <a class="sav-path__cta animate-on-scroll" data-animation="fadeInUp" href="/book-a-demo/">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+            ><path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path></svg
+          >
+        </a>
+      </div>
+
+      <ol class="sav-path__steps">
+        {
+          journeySteps.map((step, index) => (
+            <li
+              class="sav-step animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={index * 60}
+            >
+              <div class="sav-step__head">
+                <span class="sav-step__num">{String(index + 1).padStart(2, "0")}</span>
+                <div class="sav-step__copy">
+                  <h3>{step.label}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </div>
+
+              <div class="sav-step__visual">
+                <div class="sav-step__screen" aria-hidden="true">
+                  <img
+                    src={step.shot}
+                    width={step.shotW}
+                    height={step.shotH}
+                    alt={step.shotAlt}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+
+                <span
+                  class:list={[
+                    "sav-step__status",
+                    step.tone === "info" ? "sav-step__status--info" : "sav-step__status--success",
+                  ]}
+                >
+                  <svg viewBox="0 0 20 20">
+                    <path d="m5.5 10.2 3 3 6-6" />
+                  </svg>
+                  {step.status}
+                </span>
+                <span class="sav-step__action">{step.action}</span>
+                <svg class="sav-step__cursor" viewBox="0 0 28 32">
+                  <path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z" />
+                </svg>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 08 Stack: sharing routes -->
+  <section class="sav-share-shell" id="download-share" aria-labelledby="sav-sharing-title">
+    <div class="sav-share-section">
+      <div class="sav-share-header">
+        <div class="sav-share-header-inner">
+          <span class="sav-share-eyebrow">
+            <span class="sav-share-eyebrow__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"
+                ><path
+                  d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z"
+                  fill="#4F8CFF"></path><path
+                  d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z"
+                  fill="#B08BFF"></path></svg
+              >
+            </span>
+            <span class="sav-share-eyebrow__label">Practical sharing options</span>
+          </span>
+          <h2 class="sav-share-title" id="sav-sharing-title">
+            <span class="sav-share-title-line">Let attendees take the poster</span>
+            <span class="sav-share-title-line"
+              >where their <span class="sav-share-highlight">audience</span> is</span
+            >
+          </h2>
+          <p class="sav-share-lead">
+            Generate the artwork as an image, then use the sharing route supported by the attendee's
+            device and browser.
+          </p>
+        </div>
+      </div>
+
+      <div class="sav-stack-cards">
+        {
+          shareOptions.map((item, index) => (
+            <article
+              class="sav-stack-card"
+              data-card-index={index}
+              style={`--card-index: ${index};`}
+            >
+              <div class="sav-stack-card__content">
+                <span class="sav-stack-card__eyebrow">{item.eyebrow}</span>
+                <h3 class="sav-stack-card__title">{item.label}</h3>
+                <p class="sav-stack-card__desc">{item.text}</p>
+              </div>
+              <div class="sav-stack-card__visual" aria-hidden="true">
+                {index === 0 && (
+                  <img
+                    class="sav-stack-shot"
+                    src="/feature-images/social-advocacy/advocacy-poster-download.webp"
+                    width="1164"
+                    height="637"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
+                {index === 1 && (
+                  <div class="sav-mock">
+                    <div class="sav-mock__top">
+                      <span class="sav-mock__dots">
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                      <span class="sav-mock__label">WhatsApp</span>
+                    </div>
+                    <div class="sav-mock__bubble">
+                      <img
+                        class="sav-mock__poster"
+                        src="/feature-images/social-advocacy/poster-design-speaking.png"
+                        width="600"
+                        height="600"
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <p>Amina is attending EventHex Summit. Meet the team this October.</p>
+                      <span class="sav-mock__link">eventhex.ai/poster/8f3c</span>
+                    </div>
+                  </div>
+                )}
+                {index === 2 && (
+                  <div class="sav-mock">
+                    <div class="sav-mock__top">
+                      <span class="sav-mock__dots">
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                      <span class="sav-mock__label">LinkedIn</span>
+                    </div>
+                    <div class="sav-mock__person">
+                      <span class="sav-mock__avatar">AM</span>
+                      <span class="sav-mock__meta">
+                        <b>Amina Mathew</b>
+                        <small>Attending EventHex Summit</small>
+                      </span>
+                    </div>
+                    <p class="sav-mock__copy">
+                      Heading to EventHex Summit this October. Come say hello.
+                    </p>
+                    <img
+                      class="sav-mock__poster sav-mock__poster--wide"
+                      src="/feature-images/social-advocacy/poster-design-blue.png"
+                      width="600"
+                      height="600"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+                {index === 3 && (
+                  <div class="sav-mock">
+                    <div class="sav-mock__top">
+                      <span class="sav-mock__dots">
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                      <span class="sav-mock__label">Share sheet</span>
+                    </div>
+                    <div class="sav-mock__apps">
+                      <span>
+                        <i />
+                        Messages
+                      </span>
+                      <span>
+                        <i />
+                        Mail
+                      </span>
+                      <span>
+                        <i />
+                        Copy
+                      </span>
+                      <span>
+                        <i />
+                        More
+                      </span>
+                    </div>
+                    <div class="sav-mock__rows">
+                      <span>Save to Files</span>
+                      <span>Print</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </article>
+          ))
+        }
+        <!-- Real sibling so the last card gets room to settle before releasing. -->
+        <div class="sav-stack-spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 Bento: optional share links -->
+  <section class="sav-bento" id="share-links" aria-labelledby="sav-share-title">
+    <div class="sav-bento__container">
+      <div class="sav-bento__header animate-on-scroll" data-animation="fadeInUp">
+        <span class="sav-eyebrow">Optional trackable campaign links</span>
+        <h2 class="sav-bento__title" id="sav-share-title">
+          Give the shared poster a <span class="sav-bento__gradient">campaign destination</span>
+        </h2>
+        <p class="sav-bento__subtitle">
+          When share links are enabled, EventHex can create a unique campaign URL for the rendered
+          poster and serve a social-preview page before the event.
+        </p>
+      </div>
+
+      <div class="sav-bento__grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="sav-bento__notch sav-bento__notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+          </svg>
+        </span>
+        <span class="sav-bento__notch sav-bento__notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+          </svg>
+        </span>
+
+        <!-- Row 1: link on, visual left -->
+        <div class="sav-bento__row">
+          <div class="sav-bento__cell sav-bento__visual">
+            <div class="sav-bento__stage sav-bento__stage--link" aria-hidden="true">
+              <div class="sav-bento__panel">
+                <span class="sav-bento__panel-head">Publish &amp; share settings</span>
+                <span class="sav-bento__panel-label">Campaign link</span>
+                <span class="sav-bento__panel-field is-on">eventhex.ai/poster/s/8f3c</span>
+                <span class="sav-bento__panel-row">Social-preview metadata</span>
+                <span class="sav-bento__panel-row">Destination: event page</span>
+                <span class="sav-bento__panel-row">Clicks and unique visitors</span>
+              </div>
+              <span class="sav-bento__float sav-bento__float--top">
+                <b>Link enabled</b>
+                <small>Social-preview metadata</small>
+              </span>
+              <span class="sav-bento__float sav-bento__float--bottom">
+                <i></i>
+                <b>Destination: event page</b>
+              </span>
+            </div>
+          </div>
+          <div class="sav-bento__cell sav-bento__content">
+            <h3>Share-link on</h3>
+            <p>Generate a tokenized URL, social-preview metadata, and a destination back to the event.</p>
+            <p class="sav-bento__note">
+              The link records clicks and hashed unique visitors in the share-link service.
+            </p>
+          </div>
+          <span class="sav-bento__cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        </div>
+
+        <!-- Row 2: link off, visual right -->
+        <div class="sav-bento__row sav-bento__row--reverse">
+          <div class="sav-bento__cell sav-bento__content">
+            <h3>Share-link off</h3>
+            <p>Keep the attendee flow focused on downloading and sharing the poster image.</p>
+            <p class="sav-bento__note">Use this when the campaign does not need its own link.</p>
+          </div>
+          <div class="sav-bento__cell sav-bento__visual">
+            <div class="sav-bento__stage sav-bento__stage--direct" aria-hidden="true">
+              <div class="sav-bento__panel">
+                <span class="sav-bento__panel-head">Rendered poster</span>
+                <span class="sav-bento__panel-field is-on">Amina Mathew</span>
+                <span class="sav-bento__panel-row">Product Leader</span>
+                <span class="sav-bento__panel-label">Share routes</span>
+                <span class="sav-bento__panel-row">Download image</span>
+                <span class="sav-bento__panel-row">WhatsApp</span>
+                <span class="sav-bento__panel-row">LinkedIn</span>
+                <span class="sav-bento__panel-row">Device share sheet</span>
+              </div>
+              <span class="sav-bento__float sav-bento__float--top">
+                <b>Image ready</b>
+                <small>Download or share</small>
+              </span>
+              <span class="sav-bento__float sav-bento__float--bottom">
+                <i></i>
+                <b>Share routes</b>
+              </span>
+            </div>
+          </div>
+          <span class="sav-bento__cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <p class="sav-note sav-bento__note-bottom animate-on-scroll" data-animation="fadeIn">
+        Registration attribution and channel-by-channel conversion reporting are not part of this flow,
+        because end-to-end registration attribution from the share link was not verified.
+      </p>
+    </div>
+  </section>
+
+  <!-- 10 Audience: event roles -->
+  <section class="sav-section sav-audience" id="use-cases" aria-labelledby="sav-usecases-title">
+    <div class="sav-wrap">
+      <div class="sav-head sav-head--center">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeIn">Built for the people who carry event credibility</span>
+        <h2 class="sav-title animate-on-scroll" data-animation="fadeInUp" id="sav-usecases-title">
+          Create advocacy moments around <em>real event roles</em>
+        </h2>
+        <p class="sav-lead animate-on-scroll" data-animation="fadeInUp">
+          Use the same campaign system for the audience and stakeholders that fit your event strategy.
+        </p>
+      </div>
+
+      <div class="sav-suites">
+        <div
+          class="sav-suites__tabs animate-on-scroll"
+          data-animation="fadeInUp"
+          role="tablist"
+          aria-label="Attendee advocacy use cases"
+        >
+          {
+            roles.map((role, index) => (
+              <button
+                class="sav-suites__tab"
+                type="button"
+                role="tab"
+                id={`sav-usecase-tab-${role.key}`}
+                aria-controls={`sav-usecase-panel-${role.key}`}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? 0 : -1}
+                data-target={role.key}
+              >
+                {role.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="sav-suites__box animate-on-scroll" data-animation="fadeInUp">
+          {
+            roles.map((role) => (
+              <article
+                class="sav-suites__panel"
+                id={`sav-usecase-panel-${role.key}`}
+                role="tabpanel"
+                aria-labelledby={`sav-usecase-tab-${role.key}`}
+                data-panel={role.key}
+                data-crop={role.crop}
+              >
+                <div class="sav-suites__content">
+                  <h3>{role.label}</h3>
+                  <p>{role.text}</p>
+                  <span class="sav-suites__eyebrow">Campaign focus</span>
+                  <ul class="sav-suites__focus">
+                    {role.points.map((point) => (
+                      <li>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="sav-suites__visual">
+                  <div class="sav-showcase">
+                    <img
+                      class:list={["sav-showcase__art", `sav-showcase__art--${role.crop}`]}
+                      src={role.shot}
+                      width="600"
+                      height="600"
+                      alt={role.shotAlt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span class="sav-showcase__label">
+                      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                        <path d="M10 3v8m0-8L7 6m3-3 3 3M4 13.5h12" />
+                      </svg>
+                      {role.chip}
+                    </span>
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 Links: connected workflows -->
+  <section class="sav-section sav-flow" id="connected-workflows" aria-labelledby="connected-workflows-title">
+    <div class="sav-wrap">
+      <header class="sav-head sav-head--center sav-flow__heading">
+        <span class="sav-eyebrow animate-on-scroll" data-animation="fadeIn">One feature in a connected event journey</span>
+        <h2
+          class="sav-title sav-flow__title animate-on-scroll"
+          id="connected-workflows-title"
+          data-animation="fadeInUp"
+        >
+          Connect advocacy to the workflow <em>that feeds it</em>
+        </h2>
+        <p class="sav-lead animate-on-scroll" data-animation="fadeInUp">
+          Keep each product job clear, then let evaluators move to the next relevant EventHex capability.
+        </p>
+      </header>
+
+      <div class="sav-flow__grid">
+        <span class="sav-flow__notch sav-flow__notch--1" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        <span class="sav-flow__notch sav-flow__notch--2" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        <span class="sav-flow__notch sav-flow__notch--3" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        {
+          destinations.map((item, index) => (
+            <article
+              class="sav-flow__card animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={index * 60}
+            >
+              {index === 2 && (
+                <span class="sav-flow__cross" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="-14 -14 28 28">
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="scale(1,-1)"
+                    />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="rotate(90)"
+                    />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="rotate(-90)"
+                    />
+                  </svg>
+                </span>
+              )}
+              <span class="sav-flow__icon" aria-hidden="true" set:html={item.icon} />
+              <h3><a href={item.href}>{item.label}</a></h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 FAQ -->
+  <section class="sav-faq" id="faq">
+    <div class="sav-faq__inner">
+      <div class="sav-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="sav-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M7 17L17 7M17 7H8M17 7V16"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+          Frequently asked questions
+        </span>
+        <h2 class="sav-faq__heading">Questions about EventHex attendee advocacy</h2>
+        <p class="sav-faq__intro">
+          Clear answers based on the current poster, registration, and sharing workflow.
+        </p>
+        <a href="/contact-en/" class="sav-faq__cta">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+
+      <div class="sav-faq__list">
+        {
+          faqs.map(([question, answer], index) => (
+            <details
+              class="sav-faq__item animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={String(index * 50)}
+              data-sav-faq-item
+              open={index === 0}
+            >
+              <summary class="sav-faq__question">
+                <strong>{question}</strong>
+                <span class="sav-faq__icon" aria-hidden="true" />
+              </summary>
+              <div class="sav-faq__answer">
+                <p>{answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+  .sav-page {
+    --sav-ink: var(--heading-dark);
+    --sav-muted: var(--subheading-gray);
+    --sav-soft: var(--surface-light);
+    --sav-line: var(--surface-card-border);
+    --sav-radius: 22px;
+    color: var(--sav-ink);
+    /* Same page wash as /event-registration/: near-white base with soft
+       lavender, pink, blue and amber blooms anchored to the viewport, so both
+       feature pages share one surface treatment. */
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(
+        circle 380px at 3% 34%,
+        rgba(175, 163, 255, 0.28) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 97% 30%,
+        rgba(255, 182, 213, 0.26) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 340px at 95% 75%,
+        rgba(130, 170, 255, 0.24) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 4% 78%,
+        rgba(255, 224, 150, 0.2) 0%,
+        transparent 100%
+      ),
+      #ffffff;
+    background-attachment: fixed;
+  }
+
+  .sav-wrap {
+    width: min(1120px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  .sav-section {
+    padding-block: clamp(64px, 7vw, 96px);
+  }
+
+  .sav-soft {
+    background: var(--sav-soft);
+  }
+
+  /* Band sections stay unpainted so the page wash shows through, matching
+     /event-registration/ where only cards and the dark bands carry colour.
+     The dark .sav-band and .sav-share-shell keep their own backgrounds. */
+  .sav-page > .sav-hero,
+  .sav-page > .sav-rail,
+  .sav-page > .sav-bento,
+  .sav-page > .sav-audience,
+  .sav-page > .sav-flow,
+  .sav-page > .sav-faq,
+  .sav-page > .sav-section.sav-soft {
+    background: transparent;
+  }
+
+  /* ---------- Shared text ---------- */
+  .sav-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .sav-title {
+    margin: 16px 0 0;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--sav-ink);
+  }
+
+  .sav-title em {
+    font-style: normal;
+    background: linear-gradient(96deg, #5f6675 0%, #9aa1ae 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .sav-lead {
+    margin: 18px 0 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--sav-muted);
+    max-width: 620px;
+  }
+
+  .sav-head--center {
+    text-align: center;
+    margin-inline: auto;
+    max-width: 860px;
+  }
+
+  .sav-head--center .sav-lead {
+    margin-inline: auto;
+  }
+
+  .sav-note {
+    margin: 28px auto 0;
+    max-width: 780px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--body-light);
+  }
+
+  /* ---------- Buttons ---------- */
+  .sav-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.48px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .sav-btn--primary {
+    background: var(--sav-ink);
+    color: #fff;
+  }
+
+  .sav-btn--primary:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  .sav-btn--ghost {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #dce4ff;
+    color: var(--sav-ink);
+  }
+
+  .sav-btn--ghost:hover {
+    border-color: #c5d2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  /* ---------- 01 Hero ---------- */
+  .sav-hero {
+    position: relative;
+    margin-top: -90px;
+    padding: 150px 0 clamp(56px, 6vw, 80px);
+    background:
+      radial-gradient(
+        ellipse 720px 500px at -6% -12%,
+        rgba(55, 93, 251, 0.16),
+        rgba(55, 93, 251, 0.04) 42%,
+        transparent 76%
+      ),
+      radial-gradient(
+        ellipse 760px 560px at 104% 104%,
+        rgba(255, 116, 184, 0.18),
+        rgba(255, 116, 184, 0.05) 44%,
+        transparent 78%
+      ),
+      #fff;
+  }
+
+  .sav-hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(380px, 0.98fr);
+    gap: 56px;
+    align-items: center;
+  }
+
+  .sav-hero__title {
+    margin: 18px 0 0;
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 4.4vw, 58px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1.7px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .sav-hero__lead {
+    margin: 20px 0 0;
+    max-width: 560px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--sav-muted);
+  }
+
+  .sav-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin: 26px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sav-hero__points li {
+    position: relative;
+    padding-left: 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    color: #475467;
+  }
+
+  .sav-hero__points li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .sav-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 30px;
+  }
+
+  /* ---------- Hero product visual ---------- */
+  .sav-visual {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.64);
+    border-radius: 24px;
+    padding: 14px;
+    background: linear-gradient(150deg, #ffffffd9, #f4f7ffb8);
+    box-shadow: 0 30px 70px rgba(34, 39, 47, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .sav-visual__chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px 12px;
+  }
+
+  .sav-visual__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dfe4f2;
+  }
+
+  .sav-visual__chrome b {
+    margin-left: 8px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: #8a93a6;
+  }
+
+  .sav-visual__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e6ebf7;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 12px 30px rgba(30, 46, 105, 0.1);
+  }
+
+  /* ---------- 02 / 11 Capability rails ----------
+     Mirrors the Event Marketing workflow summary strip: a hairline top border, the
+     page wash showing through, and inline "Label Description" items centred with
+     2.25rem gaps that wrap naturally. */
+  .sav-rail {
+    padding: 1.5rem;
+    border-top: 1px solid var(--sav-line);
+    background:
+      radial-gradient(circle 380px at 3% 42%, rgba(175, 163, 255, 0.22), transparent 100%),
+      radial-gradient(circle 300px at 97% 36%, rgba(255, 182, 213, 0.2), transparent 100%),
+      radial-gradient(circle 340px at 94% 88%, rgba(130, 170, 255, 0.18), transparent 100%),
+      radial-gradient(circle 300px at 5% 92%, rgba(255, 224, 150, 0.16), transparent 100%),
+      #fff;
+  }
+
+  .sav-rail__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.25rem;
+  }
+
+  .sav-rail__item {
+    color: var(--subheading-gray);
+    font: 400 0.9375rem/1.4 var(--font-body);
+    white-space: nowrap;
+  }
+
+  .sav-rail__item b {
+    color: var(--heading-dark);
+    font-weight: 700;
+  }
+
+  .sav-cue {
+    display: inline-flex;
+    margin-top: 20px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: var(--surface-blue-tint);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: #2b3f8c;
+  }
+
+  /* ---------- 04 Flow: registration-data mapping ---------- */
+  .sav-map__header {
+    max-width: 900px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .sav-map__title {
+    margin: 16px 0 12px;
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4.2vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(98deg, var(--sav-ink) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .sav-map__line {
+    display: block;
+  }
+
+  .sav-map__subtitle {
+    max-width: 690px;
+    margin-inline: auto;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--sav-muted);
+  }
+
+  .sav-map__quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: min(1120px, 100%);
+    margin: 56px auto 0;
+    column-gap: 40px;
+    row-gap: 28px;
+  }
+
+  .sav-map__cell {
+    display: flex;
+    min-width: 0;
+    min-height: 340px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 36px 24px;
+    border: 0;
+  }
+
+  .sav-map__quad > *:nth-child(2n),
+  .sav-map__quad > *:nth-child(n + 3) { border: 0; }
+
+  .sav-map__cell--copy h3 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--sav-ink);
+  }
+
+  .sav-map__cell--copy p {
+    max-width: 40ch;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--sav-muted);
+  }
+
+  .sav-map__cell--copy .sav-cue {
+    align-self: flex-start;
+  }
+
+  .sav-map__cell--media {
+    align-items: center;
+    padding: 20px 0;
+    overflow: hidden;
+  }
+
+  .sav-map__composite {
+    position: relative;
+    width: 100%;
+    height: 310px;
+  }
+
+  .sav-map__screen {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+
+  .sav-map__screen--primary {
+    top: 42px;
+    left: 20px;
+    z-index: 1;
+    width: 78%;
+    height: 68%;
+  }
+
+  .sav-map__screen--secondary {
+    right: 18px;
+    bottom: 18px;
+    z-index: 2;
+    width: 62%;
+    height: 52%;
+  }
+
+  .sav-map__composite--ticket .sav-map__screen--secondary {
+    object-position: top center;
+  }
+
+  .sav-map__status,
+  .sav-map__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+  }
+
+  .sav-map__status {
+    top: 14px;
+    left: 14px;
+    gap: 7px;
+    padding: 9px 11px;
+    border: 1px solid #cfead9;
+    background: #effbf4;
+    color: #18864b;
+  }
+
+  .sav-map__status svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sav-map__action {
+    right: 14px;
+    bottom: 14px;
+    padding: 10px 13px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .sav-map__cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--sav-soft);
+    box-shadow: inset 0 0 0 1px rgba(71, 84, 103, 0.14);
+    transform: translate(-50%, -50%);
+  }
+
+  .sav-map__cross::before,
+  .sav-map__cross::after {
+    position: absolute;
+    content: "";
+    background: rgba(71, 84, 103, 0.18);
+  }
+
+  .sav-map__cross::before {
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    width: 2px;
+  }
+
+  .sav-map__cross::after {
+    top: 10px;
+    right: 0;
+    left: 0;
+    height: 2px;
+  }
+
+  .sav-map__note {
+    max-width: 850px;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  /* Diagram cells for the share-link quad: no verified share-link screenshot exists,
+     so the composite renders a small URL -> social preview -> event diagram instead. */
+  .sav-map__screen--diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+  }
+
+  .sav-map__tag {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .sav-map__row {
+    padding: 6px 8px;
+    border: 1px solid #e8ecf5;
+    border-radius: 7px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    line-height: 1.25;
+    color: #67718a;
+  }
+
+  .sav-map__row.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+    font-weight: 600;
+  }
+
+  .sav-map__screen--poster {
+    background:
+      radial-gradient(circle 120px at 82% 10%, rgba(171, 255, 255, 0.28), transparent 70%),
+      linear-gradient(150deg, #10204a 0%, #2a3f8f 58%, #375dfb 100%);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+
+  .sav-map__screen--poster .sav-map__tag {
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .sav-map__screen--poster .sav-map__row {
+    border-color: rgba(255, 255, 255, 0.24);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+
+  /* ---------- 10 Bento: optional share links ---------- */
+  .sav-bento {
+    width: 100%;
+    padding: 80px 5%;
+    background: var(--sav-soft);
+  }
+
+  .sav-bento__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .sav-bento__header {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+
+  .sav-bento__title {
+    margin: 16px 0 0;
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--sav-ink);
+  }
+
+  .sav-bento__gradient {
+    background: linear-gradient(90deg, #555 0%, #aaa 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .sav-bento__subtitle {
+    max-width: 690px;
+    margin: 20px auto 0;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--sav-muted);
+  }
+
+  .sav-bento__grid {
+    position: relative;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .sav-bento__notch {
+    position: absolute;
+    left: 50%;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .sav-bento__notch--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .sav-bento__notch--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .sav-bento__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .sav-bento__row:last-child {
+    border-bottom: none;
+  }
+
+  .sav-bento__cell {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+  }
+
+  .sav-bento__row .sav-bento__cell:first-child {
+    border-right: 1px solid #e5e7eb;
+  }
+
+  .sav-bento__visual {
+    align-items: center;
+  }
+
+  .sav-bento__stage {
+    position: relative;
+    width: 100%;
+    padding: 32px 18px;
+    border-radius: 22px;
+    isolation: isolate;
+  }
+
+  .sav-bento__stage--link {
+    background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%);
+  }
+
+  .sav-bento__stage--direct {
+    background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%);
+  }
+
+  .sav-bento__panel {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 7px;
+    padding: 18px;
+    border: 1px solid #dfe4ec;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.14);
+    animation: sav-bento-breathe 7s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .sav-bento__row--reverse .sav-bento__panel {
+    animation-delay: -3.5s;
+  }
+
+  .sav-bento__panel-head {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .sav-bento__panel-label {
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .sav-bento__panel-field,
+  .sav-bento__panel-row {
+    padding: 9px 11px;
+    border: 1px solid #e8ecf5;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 1.3;
+    color: #67718a;
+  }
+
+  .sav-bento__panel-field.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+    font-weight: 600;
+  }
+
+  .sav-bento__float {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 14px;
+    border: 1px solid rgba(206, 215, 232, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.2);
+    color: #111827;
+    font-family: var(--font-body);
+    line-height: 1.15;
+    backdrop-filter: blur(10px);
+    animation: sav-bento-float 4.8s ease-in-out infinite;
+  }
+
+  .sav-bento__float b {
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .sav-bento__float small {
+    display: block;
+    color: #7b8497;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  .sav-bento__float i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #19b874;
+    box-shadow: 0 0 0 5px rgba(25, 184, 116, 0.13);
+  }
+
+  .sav-bento__float--top {
+    top: 12px;
+    right: 3px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .sav-bento__float--bottom {
+    bottom: 12px;
+    left: 3px;
+    animation-delay: -2.4s;
+  }
+
+  .sav-bento__visual:hover .sav-bento__panel {
+    animation-play-state: paused;
+    transform: scale(1.018);
+  }
+
+  .sav-bento__visual:hover .sav-bento__float {
+    animation-play-state: paused;
+  }
+
+  .sav-bento__content h3 {
+    margin: 0 0 1.25rem;
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: #111827;
+  }
+
+  .sav-bento__content p {
+    margin: 0 0 1rem;
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.45;
+    color: #4b5563;
+  }
+
+  .sav-bento__content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .sav-bento__content .sav-bento__note {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--body-light);
+  }
+
+  .sav-bento__cross {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+    transform: translate(-50%, 50%);
+  }
+
+  .sav-bento__row:last-child .sav-bento__cross {
+    display: none;
+  }
+
+  .sav-bento__note-bottom {
+    margin-top: 32px;
+  }
+
+  @keyframes sav-bento-breathe {
+    0%,
+    100% {
+      transform: translateY(3px) scale(0.985);
+    }
+    50% {
+      transform: translateY(-3px) scale(1);
+    }
+  }
+
+  @keyframes sav-bento-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -9px, 0);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sav-bento__row {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sav-bento__cell {
+      padding: 3rem 1.5rem;
+    }
+
+    .sav-bento__row .sav-bento__cell:first-child {
+      border-right: none;
+    }
+
+    .sav-bento__content {
+      order: 1;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .sav-bento__visual {
+      order: 2;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sav-bento {
+      padding: 56px 16px;
+    }
+
+    .sav-bento__header {
+      margin-bottom: 40px;
+    }
+
+    .sav-bento__cell {
+      padding: 2.25rem 1.25rem;
+    }
+
+    .sav-bento__content h3 {
+      font-size: 1.75rem;
+    }
+
+    .sav-bento__content p {
+      font-size: 1rem;
+    }
+
+    .sav-bento__stage {
+      padding: 26px 12px;
+    }
+
+    .sav-bento__panel {
+      padding: 14px;
+    }
+
+    .sav-bento__float {
+      padding: 9px 11px;
+    }
+
+    .sav-bento__float b {
+      font-size: 0.7rem;
+    }
+
+    .sav-bento__float small {
+      font-size: 0.6rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sav-map__cell {
+      min-height: 0;
+      padding: 36px 26px;
+    }
+
+    .sav-map__cell--media {
+      padding: 18px 20px 34px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sav-map__quad {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+    }
+
+    .sav-map__cell {
+      padding: 30px 20px;
+      border-right: 0;
+    }
+
+    .sav-map__quad > *:nth-child(n + 3) {
+      border-bottom: 1px solid rgba(71, 84, 103, 0.12);
+    }
+
+    .sav-map__cell--media {
+      padding: 16px 20px 30px;
+    }
+
+    .sav-map__cell--media:nth-child(3) {
+      order: 4;
+      border-bottom: 0;
+    }
+
+    .sav-map__cell--copy:nth-child(4) {
+      order: 3;
+    }
+
+    .sav-map__composite {
+      height: 285px;
+    }
+
+    .sav-map__screen--primary {
+      width: 82%;
+    }
+
+    .sav-map__screen--secondary {
+      width: 68%;
+    }
+
+    .sav-map__cross {
+      display: none;
+    }
+  }
+
+  /* ---------- 05 Dark band: ticket eligibility ---------- */
+  .sav-band {
+    --band-p: 0;
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    color: #fff;
+    background-color: #000;
+    /* the wash sits behind the heading and fades out downward */
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+    /* starts inset with rounded corners, opens to full bleed on scroll.
+       clip-path keeps the reveal paint-only so nothing reflows per frame */
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+
+  /* film grain */
+  .sav-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .sav-band > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .sav-band__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    max-width: 1000px;
+    margin-inline: auto;
+    padding: 0 24px clamp(44px, 5vw, 64px);
+    text-align: center;
+  }
+
+  .sav-band__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.92);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px rgba(255, 255, 255, 0.16),
+      0 6px 16px -6px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  .sav-band__pill-icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .sav-band__pill-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sav-band__title {
+    margin: 0;
+    /* one ramp across the line so the white blends into the violet */
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f2f0ff 26%,
+      #c9c2ff 52%,
+      #a79aff 74%,
+      #7d8dff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .sav-band__lead {
+    max-width: 680px;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .sav-band__grid-wrap {
+    max-width: 1140px;
+    margin-inline: auto;
+    padding: 0 24px clamp(56px, 7vw, 88px);
+  }
+
+  .sav-band__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid #3b3a47;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .sav-band__cell {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 420px;
+    flex-direction: column;
+    padding: 36px 32px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+  }
+
+  .sav-band__cell:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .sav-band__cell:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .sav-band__petal {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .sav-band__petal--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .sav-band__petal--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .sav-band__label {
+    margin: 0 0 14px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .sav-band__desc {
+    max-width: 34ch;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.38;
+  }
+
+  .sav-band__visual {
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+  /* shared surface for the mock visuals */
+  .sav-band__card,
+  .sav-band__ticket,
+  .sav-band__chips span {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .sav-band__card {
+    display: flex;
+    width: 100%;
+    max-width: 300px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .sav-band__card-head {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+
+  .sav-band__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.86);
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+
+  .sav-band__field b {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+
+  .sav-band__field.is-on {
+    border: 1px solid rgba(150, 170, 255, 0.45);
+    background: rgba(120, 140, 255, 0.16);
+    color: #fff;
+  }
+
+  .sav-band__field.is-on b {
+    color: #bcc8ff;
+  }
+
+  .sav-band__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .sav-band__chips span {
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.2;
+  }
+
+  .sav-band__chips span.is-active {
+    border-color: rgba(150, 170, 255, 0.55);
+    color: #fff;
+    background: rgba(120, 140, 255, 0.2);
+  }
+
+  .sav-band__stack {
+    display: flex;
+    width: 100%;
+    max-width: 300px;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .sav-band__ticket {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 14px;
+    color: rgba(255, 255, 255, 0.86);
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+
+  .sav-band__ticket small {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11.5px;
+  }
+
+  .sav-band__ticket.is-active {
+    border-color: rgba(150, 170, 255, 0.5);
+    background: rgba(120, 140, 255, 0.2);
+    color: #fff;
+  }
+
+  .sav-band__ticket.is-active small {
+    color: #bcc8ff;
+  }
+
+  @media (max-width: 900px) {
+    .sav-band__heading {
+      padding-bottom: 36px;
+    }
+
+    .sav-band__title {
+      font-size: clamp(32px, 6vw, 44px);
+    }
+
+    .sav-band__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sav-band__cell,
+    .sav-band__cell:nth-child(2n),
+    .sav-band__cell:nth-child(n + 3) {
+      min-height: 0;
+      padding: 30px 26px;
+      border-right: 0;
+      border-bottom: 1px solid #3b3a47;
+    }
+
+    .sav-band__cell:last-child {
+      border-bottom: 0;
+    }
+
+    .sav-band__petal {
+      display: none;
+    }
+  }
+
+  /* ---------- 09 Stack: sharing routes ---------- */
+  /* Dark band with a pinned header and a pile of sticky cards, matching the
+     workflow stack used across the EventHex feature pages. */
+  .sav-share-shell {
+    width: 100%;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: sav-share-mesh 30s linear infinite;
+  }
+
+  @keyframes sav-share-mesh {
+    0% {
+      background-position: 0 0, 0% 0%;
+    }
+    50% {
+      background-position: 0 0, 8% 10%;
+    }
+    100% {
+      background-position: 0 0, 0% 0%;
+    }
+  }
+
+  .sav-share-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 4px 0 30px;
+  }
+
+  /* Sticks below the site's own 69px navbar so the cards pile up underneath it,
+     then releases once the last card has settled. */
+  .sav-share-header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px 0;
+  }
+
+  .sav-share-header--released {
+    position: relative;
+  }
+
+  .sav-share-header-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 82%;
+    text-align: center;
+  }
+
+  .sav-share-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
+  }
+
+  .sav-share-eyebrow__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  .sav-share-eyebrow__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sav-share-eyebrow__label {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+  }
+
+  .sav-share-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 46px;
+    font-weight: 500;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .sav-share-title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .sav-share-highlight {
+    color: #afa3ff;
+  }
+
+  .sav-share-lead {
+    margin: 0;
+    max-width: 720px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* --sav-stack-top-base clears the navbar plus the pinned header, so cards pile
+     up under both instead of climbing over them. */
+  .sav-stack-cards {
+    --sav-stack-top-base: 340px;
+    --sav-stack-step: 20px;
+    position: relative;
+    width: 100%;
+    padding: 48px 0 50px;
+  }
+
+  .sav-stack-spacer {
+    height: 160px;
+  }
+
+  .sav-stack-card {
+    position: sticky;
+    top: calc(var(--sav-stack-top-base) + var(--card-index) * var(--sav-stack-step));
+    z-index: var(--card-index);
+    display: flex;
+    align-items: stretch;
+    height: 480px;
+    margin-bottom: 56px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18) 0%, transparent 40%), #0a0a0f;
+  }
+
+  .sav-stack-card:first-of-type {
+    background:
+      radial-gradient(circle at 82% 12%, rgba(109, 92, 235, 0.24), transparent 34%),
+      radial-gradient(circle at 8% 92%, rgba(66, 173, 218, 0.13), transparent 28%), #090a10;
+  }
+
+  .sav-stack-card__content {
+    display: flex;
+    flex: 0 0 45%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+  }
+
+  .sav-stack-card__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid rgba(175, 163, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.1);
+    color: #afa3ff;
+    font: 600 12px/1.2 var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .sav-stack-card__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #e7e4fa;
+  }
+
+  .sav-stack-card__desc {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .sav-stack-card__visual {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 16px 16px 0;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+  }
+
+  /* Real screenshot for the download handoff; the remaining handoffs are
+     device and third-party surfaces, so they stay as composed previews. */
+  .sav-stack-shot {
+    display: block;
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 14px;
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Decorative previews of each sharing handoff. */
+  .sav-mock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    padding: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    background: rgba(9, 10, 18, 0.72);
+    box-shadow: 0 24px 48px -24px rgba(0, 0, 0, 0.85);
+    animation: sav-mock-float 4s ease-in-out infinite;
+  }
+
+  @keyframes sav-mock-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .sav-mock__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .sav-mock__dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .sav-mock__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .sav-mock__label {
+    margin-left: auto;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .sav-mock__bubble {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid rgba(37, 211, 102, 0.28);
+    border-radius: 12px 12px 12px 4px;
+    background: rgba(37, 211, 102, 0.12);
+  }
+
+  .sav-mock__poster {
+    display: block;
+    width: 100%;
+    height: 68px;
+    border-radius: 8px;
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
+
+  .sav-mock__poster--wide {
+    height: 54px;
+  }
+
+  .sav-mock__bubble p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .sav-mock__link {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: #8ff0cf;
+  }
+
+  .sav-mock__person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sav-mock__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(150deg, #3a1140 0%, #b84bb0 100%);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .sav-mock__copy {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .sav-mock__apps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .sav-mock__apps span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 4px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    font-family: var(--font-body);
+    font-size: 9.5px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .sav-mock__apps i {
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .sav-mock__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sav-mock__rows span {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  /* Short desktop windows: pull the stack up and shrink the cards so a pinned
+     card still fits the viewport. */
+  @media (min-width: 1025px) and (max-height: 900px) {
+    .sav-share-header {
+      padding: 12px 0;
+    }
+
+    .sav-share-header-inner {
+      gap: 10px;
+    }
+
+    .sav-share-title {
+      font-size: 34px;
+    }
+
+    .sav-share-lead {
+      font-size: 15px;
+    }
+
+    .sav-stack-cards {
+      --sav-stack-top-base: 285px;
+      --sav-stack-step: 12px;
+      padding-top: 32px;
+    }
+
+    .sav-stack-card {
+      height: clamp(340px, calc(100svh - 305px), 460px);
+      margin-bottom: 36px;
+    }
+
+    .sav-stack-card__content {
+      padding: 28px;
+      gap: 12px;
+    }
+
+    .sav-stack-card__title {
+      font-size: 28px;
+    }
+
+    .sav-stack-card__desc {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .sav-stack-card__visual {
+      padding: 18px;
+    }
+
+    .sav-stack-spacer {
+      height: 120px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .sav-share-section {
+      padding: 20px 20px 30px;
+    }
+
+    .sav-share-header-inner {
+      width: 94%;
+    }
+
+    .sav-share-title {
+      font-size: 36px;
+    }
+
+    .sav-stack-cards {
+      --sav-stack-top-base: 325px;
+      padding-top: 40px;
+    }
+
+    .sav-stack-card {
+      height: clamp(340px, calc(100svh - 355px), 430px);
+    }
+
+    .sav-stack-card__content {
+      flex-basis: 50%;
+      padding: 28px;
+    }
+
+    .sav-stack-card__title {
+      font-size: 28px;
+    }
+
+    .sav-stack-card__desc {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sav-share-section {
+      padding: 16px 20px 30px;
+    }
+
+    /* The pinned header would leave no room for a full card on a phone. */
+    .sav-share-header {
+      position: static;
+      padding: 16px 0 12px;
+    }
+
+    .sav-share-header-inner {
+      width: 100%;
+      gap: 12px;
+    }
+
+    .sav-share-title {
+      font-size: 28px;
+      line-height: 1.15;
+    }
+
+    .sav-share-title-line {
+      display: inline;
+      white-space: normal;
+    }
+
+    .sav-share-lead {
+      font-size: 15px;
+    }
+
+    .sav-stack-cards {
+      --sav-stack-top-base: 84px;
+      --sav-stack-step: 10px;
+      padding-top: 20px;
+    }
+
+    .sav-stack-card {
+      flex-direction: column;
+      height: clamp(420px, calc(100svh - 180px), 540px);
+      margin-bottom: 32px;
+    }
+
+    .sav-stack-card__content {
+      flex: 0 0 auto;
+      padding: 22px 22px 0;
+      gap: 10px;
+    }
+
+    .sav-stack-card__title {
+      font-size: 24px;
+    }
+
+    .sav-stack-card__desc {
+      font-size: 15px;
+    }
+
+    .sav-stack-card__visual {
+      margin: 16px;
+      padding: 16px;
+    }
+
+    .sav-stack-spacer {
+      height: 90px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sav-share-shell,
+    .sav-mock {
+      animation: none;
+    }
+  }
+
+  /* ---------- 06 Poster variations ---------- */
+  /* Numbered accordion carried over from /speaker-management/: compact closed
+     rows with their own tint, one row open at a time, and the poster art
+     revealed beside the copy instead of a boxed three-up grid. */
+  .sav-section.sav-variations-section {
+    padding-block: clamp(88px, 9vw, 128px);
+    background: transparent;
+  }
+
+  .sav-wrap--accordion {
+    width: min(1218px, 100% - 48px);
+  }
+
+  .sav-variations-section .sav-head--center {
+    margin-bottom: clamp(48px, 5vw, 64px);
+  }
+
+  .sav-variations {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none;
+  }
+
+  .sav-variations > li {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    list-style: none;
+  }
+
+  .sav-variations details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--sav-variation-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--sav-variation-tint) 0%, #fff 82%);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.04);
+    transition: border-radius 0.35s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .sav-variations details:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+  }
+
+  .sav-variations > li:nth-child(1) {
+    --sav-variation-tint: #fff8dc;
+    --sav-variation-border: #f0dfa6;
+  }
+
+  .sav-variations > li:nth-child(2) {
+    --sav-variation-tint: #edf7ff;
+    --sav-variation-border: #d4e7f7;
+  }
+
+  .sav-variations > li:nth-child(3) {
+    --sav-variation-tint: #f3efff;
+    --sav-variation-border: #e2d8fa;
+  }
+
+  .sav-variations summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.25s ease;
+  }
+
+  .sav-variations summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .sav-variations summary:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .sav-variations summary > span {
+    display: block;
+    color: #111;
+    font: 500 15px/1.1 var(--font-heading);
+    letter-spacing: -0.05em;
+  }
+
+  .sav-variation__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sav-variations details:not([open]) .sav-variation__content {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.7fr) minmax(320px, 1.3fr);
+    align-items: center;
+    gap: 36px;
+  }
+
+  .sav-variation__title {
+    margin: 0;
+    color: #111;
+    font: 500 22px/1.2 var(--font-body);
+    letter-spacing: -0.02em;
+  }
+
+  .sav-variation__desc {
+    display: none;
+  }
+
+  .sav-variations details:not([open]) .sav-variation__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-width: 460px;
+    margin: 0;
+    color: #5f6673;
+    font: 400 14.5px/1.5 var(--font-body);
+  }
+
+  .sav-variation__points {
+    display: none;
+  }
+
+  .sav-variation__toggle {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(17, 24, 39, 0.2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.78);
+    color: #111827;
+    cursor: pointer;
+    transition: transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .sav-variation__toggle:hover {
+    border-color: rgba(17, 24, 39, 0.42);
+    background: #fff;
+  }
+
+  .sav-variation__toggle:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, 0.28);
+    outline-offset: 2px;
+  }
+
+  .sav-variation__toggle svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sav-variations details[open] {
+    display: flex;
+    align-items: stretch;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--sav-variation-tint) 0%, #fff 72%);
+  }
+
+  .sav-variations details[open] .sav-variation__toggle {
+    top: 28px;
+    transform: rotate(180deg);
+  }
+
+  .sav-variations details[open] summary {
+    flex: 0 0 55%;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    min-height: 0;
+    padding: 64px 40px 64px 28px;
+    background: transparent;
+  }
+
+  .sav-variations details[open] summary:hover {
+    background: transparent;
+  }
+
+  .sav-variations details[open] summary > span {
+    font-size: 26px;
+    line-height: 1;
+    color: #050505;
+  }
+
+  .sav-variations details[open] .sav-variation__title {
+    margin-bottom: 16px;
+    color: #050505;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .sav-variations details[open] .sav-variation__desc {
+    display: block;
+    max-width: 90%;
+    margin: 0 0 32px;
+    color: #333;
+    font: 400 17px/1.6 var(--font-body);
+  }
+
+  .sav-variations details[open] .sav-variation__points {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sav-variations details[open] .sav-variation__points li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #111;
+    font: 500 16px/1.4 var(--font-body);
+  }
+
+  .sav-variation__visual {
+    display: none;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 0 0 45%;
+    margin: 0;
+    padding: 40px 88px 40px 0;
+    opacity: 0;
+  }
+
+  .sav-variations details[open] .sav-variation__visual {
+    display: flex;
+    opacity: 1;
+  }
+
+  .sav-variation__visual img {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+  }
+
+  /* ---------- 07 Attendee path ---------- */
+  .sav-path__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .sav-path__intro {
+    position: sticky;
+    top: 132px;
+  }
+
+  .sav-path__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 15px 26px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .sav-path__cta svg {
+    flex: none;
+  }
+
+  .sav-path__cta:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  .sav-path__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sav-step {
+    position: sticky;
+    padding: 28px;
+    border: 1px solid var(--sav-line);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 44px rgba(30, 46, 105, 0.08);
+  }
+
+  /* Sticky deck: each card rests a little lower than the one before it. */
+  .sav-step:nth-child(1) {
+    top: 92px;
+  }
+
+  .sav-step:nth-child(2) {
+    top: 110px;
+  }
+
+  .sav-step:nth-child(3) {
+    top: 128px;
+  }
+
+  .sav-step:nth-child(4) {
+    top: 146px;
+  }
+
+  .sav-step:nth-child(5) {
+    top: 164px;
+  }
+
+  .sav-step__head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .sav-step__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .sav-step__copy h3 {
+    margin: 3px 0 6px;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--sav-ink);
+  }
+
+  .sav-step__copy p {
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--sav-muted);
+  }
+
+  .sav-step__visual {
+    position: relative;
+    margin-top: 22px;
+    padding: 14px;
+    border: 1px solid var(--sav-line);
+    border-radius: 20px;
+    background: var(--surface-light);
+  }
+
+  .sav-step__screen {
+    overflow: hidden;
+    aspect-ratio: 8 / 5;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+  }
+
+  .sav-step__screen img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .sav-step__status,
+  .sav-step__action {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+  }
+
+  .sav-step__status {
+    top: 0;
+    left: 0;
+    gap: 7px;
+    padding: 9px 12px;
+  }
+
+  .sav-step__status svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sav-step__status--success {
+    border: 1px solid #ccebd8;
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .sav-step__status--info {
+    border: 1px solid #d9dfff;
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .sav-step__action {
+    right: 12px;
+    bottom: 0;
+    padding: 11px 15px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .sav-step__cursor {
+    position: absolute;
+    right: 3px;
+    bottom: 27px;
+    z-index: 3;
+    width: 24px;
+    height: 28px;
+    fill: #111827;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 5px rgba(17, 24, 39, 0.25));
+    animation: savStepCursorTap 2.4s ease-in-out infinite;
+  }
+
+  @keyframes savStepCursorTap {
+    0%,
+    65%,
+    100% {
+      transform: translate(0, 0);
+    }
+    74% {
+      transform: translate(-3px, 3px) scale(0.94);
+    }
+  }
+
+  /* ---------- 12 Audience ---------- */
+  .sav-audience {
+    background: #fff;
+  }
+
+  /* Tabbed use cases: one segment per event role, one tinted panel each. */
+  .sav-suites {
+    margin-top: 44px;
+  }
+
+  .sav-suites__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    padding: 6px;
+    border: 1px solid var(--sav-line);
+    border-radius: 999px;
+    background: #f1f3f7;
+  }
+
+  .sav-suites__tab {
+    padding: 10px 18px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .sav-suites__tab:hover {
+    background: rgba(255, 255, 255, 0.7);
+    color: #334155;
+  }
+
+  .sav-suites__tab[aria-selected="true"] {
+    border-color: #dbe4f0;
+    background: #fff;
+    color: var(--brand-blue);
+    box-shadow: 0 2px 8px rgba(30, 41, 59, 0.08);
+  }
+
+  .sav-suites__tab:focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 2px;
+  }
+
+  .sav-suites__box {
+    display: grid;
+    gap: 20px;
+  }
+
+  .sav-suites__panel {
+    --sav-suite-tint: #eef2ff;
+    --sav-suite-border: #dbe4ff;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 56px;
+    padding: 48px 56px;
+    border: 1px solid var(--sav-suite-border);
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--sav-suite-tint), #fff 72%);
+    animation: sav-suite-in 0.38s ease both;
+  }
+
+  .sav-suites__panel[data-crop="stage"] {
+    --sav-suite-tint: #eefbf4;
+    --sav-suite-border: #d4efdf;
+  }
+
+  .sav-suites__panel[data-crop="booth"] {
+    --sav-suite-tint: #fdf1f8;
+    --sav-suite-border: #f5d6e6;
+  }
+
+  .sav-suites__panel[data-crop="group"] {
+    --sav-suite-tint: #f3efff;
+    --sav-suite-border: #e2d8fa;
+  }
+
+  /* Panels stay in the HTML for search and for scripts-off readers; the tab
+     script marks the box ready before it hides the inactive panels. */
+  .sav-suites__box[data-ready="true"] .sav-suites__panel {
+    display: none;
+  }
+
+  .sav-suites__box[data-ready="true"] .sav-suites__panel.is-active {
+    display: grid;
+  }
+
+  @keyframes sav-suite-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .sav-suites__content h3 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 3.8vw, 42px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--sav-ink);
+  }
+
+  .sav-suites__content > p {
+    margin: 0 0 26px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--sav-muted);
+  }
+
+  .sav-suites__eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--label-gray);
+  }
+
+  .sav-suites__focus {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sav-suites__focus li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--sav-muted);
+  }
+
+  .sav-suites__focus svg {
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sav-suites__visual {
+    min-width: 0;
+  }
+
+  .sav-showcase {
+    position: relative;
+    isolation: isolate;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 22px 48px rgba(31, 41, 55, 0.1);
+  }
+
+  .sav-showcase::before {
+    position: absolute;
+    inset: 10% 7% -8%;
+    z-index: -1;
+    border-radius: 12px;
+    background: var(--sav-suite-border);
+    filter: blur(22px);
+    opacity: 0.48;
+    content: "";
+  }
+
+  .sav-showcase__art {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    object-fit: contain;
+  }
+
+  .sav-showcase__art--portrait {
+    background: linear-gradient(150deg, #e8eeff 0%, #ffffff 100%);
+  }
+
+  .sav-showcase__art--stage {
+    background: linear-gradient(150deg, #e3f6f2 0%, #ffffff 100%);
+  }
+
+  .sav-showcase__art--booth {
+    background: linear-gradient(150deg, #fde9f3 0%, #ffffff 100%);
+  }
+
+  .sav-showcase__art--group {
+    background: linear-gradient(150deg, #f0ebff 0%, #ffffff 100%);
+  }
+
+  .sav-showcase__label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 12px;
+    border: 1px solid #cddcff;
+    border-radius: 10px;
+    background: #eef4ff;
+    box-shadow: 0 8px 22px rgba(49, 88, 212, 0.16);
+    color: #3158d4;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .sav-showcase__label svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 1024px) {
+    .sav-suites__panel {
+      grid-template-columns: 1fr;
+      gap: 38px;
+      padding: 40px 36px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sav-suites__tabs {
+      width: 100%;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      border-radius: 20px;
+      scrollbar-width: none;
+    }
+
+    .sav-suites__tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .sav-suites__tab {
+      flex: 0 0 auto;
+      padding-inline: 14px;
+      white-space: nowrap;
+    }
+
+    .sav-suites__panel {
+      gap: 32px;
+      padding: 32px 24px;
+      border-radius: 20px;
+    }
+
+    .sav-showcase {
+      padding: 14px;
+      border-radius: 18px;
+    }
+
+    .sav-showcase__label {
+      top: 5px;
+      left: 5px;
+      padding: 7px 9px;
+      font-size: 9px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sav-suites__panel {
+      animation: none;
+    }
+  }
+
+  /* ---------- 13 Connected workflows ---------- */
+  .sav-flow {
+    padding-block: clamp(40px, 4.5vw, 60px) clamp(42px, 4vw, 56px);
+    background: linear-gradient(
+      180deg,
+      rgba(245, 248, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.84) 62%,
+      #fff 100%
+    );
+  }
+
+  .sav-flow__heading {
+    max-width: 1080px;
+  }
+
+  .sav-flow__title em {
+    display: block;
+  }
+
+  .sav-flow__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(48px, 5vw, 68px);
+    border-top: 1px solid var(--sav-line);
+  }
+
+  .sav-flow__card {
+    position: relative;
+    min-height: 250px;
+    padding: 28px;
+    border-left: 1px solid var(--sav-line);
+  }
+
+  .sav-flow__card:first-of-type {
+    border-left: 0;
+  }
+
+  .sav-flow__notch {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .sav-flow__notch--1 {
+    left: 25%;
+  }
+
+  .sav-flow__notch--2 {
+    left: 50%;
+  }
+
+  .sav-flow__notch--3 {
+    left: 75%;
+  }
+
+  .sav-flow__cross {
+    display: none;
+  }
+
+  .sav-flow__icon {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 28px;
+    color: var(--brand-blue);
+  }
+
+  .sav-flow__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sav-flow__card h3 {
+    min-height: 2.3em;
+    max-width: 230px;
+    margin: 0 0 28px;
+    font-family: var(--font-heading);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--sav-ink);
+  }
+
+  .sav-flow__card h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .sav-flow__card h3 a:hover {
+    color: var(--brand-blue);
+  }
+
+  .sav-flow__card h3 a:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 4px;
+  }
+
+  .sav-flow__card p {
+    margin: 14px 0 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--body-gray);
+  }
+
+  /* ---------- 14 FAQ ---------- */
+  .sav-faq {
+    width: 100%;
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .sav-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .sav-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .sav-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .sav-faq__heading {
+    margin: 0 0 20px;
+    font-family: var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: #000;
+  }
+
+  .sav-faq__intro {
+    margin: 0 0 28px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--body-light);
+  }
+
+  .sav-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .sav-faq__cta:hover {
+    background: #000;
+    transform: translateY(-1px);
+  }
+
+  .sav-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    counter-reset: advocacy-faq;
+  }
+
+  .sav-faq__item {
+    counter-increment: advocacy-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .sav-faq__item[open] {
+    border-color: #e4e7ec;
+    background: #e4e7ec;
+  }
+
+  .sav-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    font-family: var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .sav-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .sav-faq__question strong {
+    font-weight: 500;
+  }
+
+  .sav-faq__question strong::before {
+    content: counter(advocacy-faq) ". ";
+  }
+
+  .sav-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sav-faq__icon::before,
+  .sav-faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+
+  .sav-faq__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  .sav-faq__icon::after {
+    width: 2px;
+    height: 14px;
+    transition: opacity 0.2s ease;
+  }
+
+  .sav-faq__item[open] .sav-faq__icon {
+    transform: scale(0.9);
+  }
+
+  .sav-faq__item[open] .sav-faq__icon::after {
+    opacity: 0;
+  }
+
+  .sav-faq__answer {
+    max-width: 640px;
+    padding: 0 0 24px;
+  }
+
+  .sav-faq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #000;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .sav-hero__grid,
+    .sav-path__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .sav-path__intro,
+    .sav-step {
+      position: static;
+    }
+
+    /* Stack the open accordion row so the poster sits under its copy. */
+    .sav-variations details[open] {
+      flex-direction: column;
+    }
+
+    .sav-variations details[open] summary {
+      flex: 0 0 auto;
+      padding: 40px 32px 24px;
+    }
+
+    .sav-variations details[open] .sav-variation__visual {
+      flex: 0 0 auto;
+      justify-content: center;
+      padding: 0 32px 40px;
+    }
+
+    /* Stacked band: keep the copy and the panel side by side so the
+       visual does not stretch into a wide strip. */
+    .sav-step {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .sav-step__visual {
+      margin-top: 0;
+    }
+
+    .sav-faq__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .sav-faq__sidebar {
+      position: static;
+    }
+
+    .sav-faq__heading {
+      font-size: 32px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .sav-hero {
+      margin-top: -80px;
+      padding-top: 130px;
+    }
+
+    .sav-hero__title {
+      font-size: 42px;
+      line-height: 1.12;
+      letter-spacing: -1px;
+    }
+
+    .sav-title {
+      font-size: 36px;
+    }
+
+    .sav-variations {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sav-variations__notch {
+      display: none;
+    }
+
+    .sav-variation:nth-of-type(odd) {
+      border-left: 0;
+    }
+
+    .sav-variation:nth-of-type(n + 3) {
+      border-top: 1px solid var(--sav-line);
+    }
+
+    .sav-flow__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sav-flow__notch--1,
+    .sav-flow__notch--3 {
+      display: none;
+    }
+
+    .sav-flow__card:nth-of-type(odd) {
+      border-left: 0;
+    }
+
+    .sav-flow__card:nth-of-type(n + 3) {
+      border-top: 1px solid var(--sav-line);
+    }
+
+    .sav-flow__cross {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      display: block;
+      width: 28px;
+      height: 28px;
+      line-height: 0;
+      transform: translate(50%, -50%);
+      pointer-events: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .sav-wrap {
+      width: min(100% - 32px, 640px);
+    }
+
+    .sav-hero {
+      padding-top: 118px;
+    }
+
+    .sav-hero__title {
+      font-size: 34px;
+      letter-spacing: -0.6px;
+    }
+
+    .sav-hero__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .sav-btn {
+      width: 100%;
+    }
+
+    .sav-rail__inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sav-choice {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sav-variation__points,
+    .sav-variations details:not([open]) .sav-variation__desc {
+      display: none;
+    }
+
+    .sav-variations summary {
+      grid-template-columns: 26px minmax(0, 1fr);
+      padding: 16px 68px 16px 16px;
+    }
+
+    .sav-variations details:not([open]) .sav-variation__content {
+      display: flex;
+    }
+
+    .sav-variations details[open] summary {
+      padding: 32px 24px 24px;
+    }
+
+    .sav-variations details[open] .sav-variation__title {
+      font-size: 24px;
+    }
+
+    .sav-variations details[open] .sav-variation__desc {
+      max-width: 100%;
+      font-size: 15.5px;
+    }
+
+    .sav-variations details[open] .sav-variation__visual {
+      justify-content: center;
+      padding: 0 24px 32px;
+    }
+
+    .sav-flow__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .sav-flow__card,
+    .sav-flow__card:nth-of-type(odd),
+    .sav-flow__card:nth-of-type(n + 3) {
+      min-height: 0;
+      border-left: 0;
+      border-top: 1px solid var(--sav-line);
+    }
+
+    .sav-flow__card:first-of-type {
+      border-top: 0;
+    }
+
+    .sav-flow__cross,
+    .sav-flow__notch--2 {
+      display: none;
+    }
+
+    .sav-faq {
+      padding: 56px 16px;
+    }
+
+    .sav-faq__heading {
+      font-size: 28px;
+    }
+
+    .sav-faq__item {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+
+    .sav-faq__question {
+      font-size: 0.9375rem;
+      padding: 18px 0;
+    }
+
+    .sav-step {
+      display: block;
+      padding: 22px;
+      border-radius: 20px;
+    }
+
+    .sav-step__visual {
+      margin-top: 20px;
+      padding: 12px;
+    }
+
+    .sav-step__action {
+      right: 10px;
+      font-size: 11px;
+      padding: 10px 13px;
+    }
+
+    .sav-step__cursor {
+      display: none;
+    }
+
+    .sav-path__cta {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .sav-hero__title {
+      font-size: 30px;
+    }
+
+    .sav-title {
+      font-size: 30px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sav-band {
+      clip-path: none;
+      will-change: auto;
+    }
+
+    .sav-step__cursor {
+      animation: none;
+    }
+
+    .sav-btn,
+    .sav-flow__card h3 a,
+    .sav-faq__cta,
+    .sav-faq__item,
+    .sav-faq__icon,
+    .sav-path__cta {
+      transition: none;
+    }
+
+    .sav-btn:hover,
+    .sav-faq__cta:hover,
+    .sav-path__cta:hover {
+      transform: none;
+    }
+
+    .sav-bento__panel,
+    .sav-bento__float {
+      animation: none;
+      will-change: auto;
+    }
+
+    .sav-bento__visual:hover .sav-bento__panel {
+      transform: none;
+    }
+
+    .sav-variations details:not([open]):hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  function initSavBand() {
+    const band = document.querySelector<HTMLElement>(".sav-band");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    let ticking = false;
+    let lastProgress = -1;
+
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const update = () => {
+      ticking = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * 0.7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === lastProgress) return;
+      lastProgress = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+
+    const onResize = () => {
+      measure();
+      lastProgress = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSavBand);
+  else initSavBand();
+</script>
+
+<script>
+  // Event-role use cases: segmented tabs over one tinted panel per role.
+  function initSavSuites() {
+    document.querySelectorAll<HTMLElement>(".sav-suites").forEach((suite) => {
+      const box = suite.querySelector<HTMLElement>(".sav-suites__box");
+      const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>(".sav-suites__tab"));
+      const panels = Array.from(suite.querySelectorAll<HTMLElement>(".sav-suites__panel"));
+      if (!box || box.dataset.ready === "true" || !tabs.length || !panels.length) return;
+
+      const select = (index: number) => {
+        tabs.forEach((tab, tabIndex) => {
+          const isActive = tabIndex === index;
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("is-active", panelIndex === index);
+        });
+      };
+
+      // Marking the box ready lets the stylesheet hide the inactive panels, so
+      // the markup stays readable when the script never runs.
+      box.dataset.ready = "true";
+      select(0);
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => select(index));
+        tab.addEventListener("keydown", (event) => {
+          if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+          event.preventDefault();
+          const offset = event.key === "ArrowRight" ? 1 : -1;
+          const nextIndex = (index + offset + tabs.length) % tabs.length;
+          tabs[nextIndex].focus();
+          select(nextIndex);
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSavSuites);
+  else initSavSuites();
+</script>
+
+<script>
+  // Sharing stack: release the pinned header once the last card has settled, so it
+  // scrolls away together with the pile instead of staying pinned over dead space.
+  function initSavShareStack() {
+    const header = document.querySelector<HTMLElement>(".sav-share-header");
+    const cards = document.querySelectorAll<HTMLElement>(".sav-stack-card");
+    const lastCard = cards[cards.length - 1];
+    if (!header || !lastCard || header.dataset.stackReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let released = false;
+    let ticking = false;
+
+    const release = () => {
+      const beforeTop = header.getBoundingClientRect().top;
+      header.style.position = "static";
+      const naturalTop = header.getBoundingClientRect().top;
+      header.style.position = "";
+      header.style.top = `${beforeTop - naturalTop}px`;
+      header.classList.add("sav-share-header--released");
+      released = true;
+    };
+
+    const restore = () => {
+      header.classList.remove("sav-share-header--released");
+      header.style.top = "";
+      released = false;
+    };
+
+    const update = () => {
+      ticking = false;
+      // On small screens the header is static, so there is nothing to release.
+      if (getComputedStyle(header).position !== "sticky") {
+        if (released) restore();
+        return;
+      }
+      const offset = Number.parseFloat(getComputedStyle(lastCard).top) || 0;
+      const shouldRelease = lastCard.getBoundingClientRect().top < offset - 0.5;
+      if (shouldRelease && !released) release();
+      else if (!shouldRelease && released) restore();
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    header.dataset.stackReady = "true";
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    update();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSavShareStack);
+  else initSavShareStack();
+</script>
+
+<script>
+  // FAQ accordion: one answer open at a time, animated so the row grows and
+  // shrinks instead of snapping. Reduced motion falls straight through.
+  function initSavFaq() {
+    const items = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-sav-faq-item]"));
+    if (!items.length) return;
+
+    const animations = new WeakMap<HTMLDetailsElement, Animation[]>();
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const animateItem = (item: HTMLDetailsElement, shouldOpen: boolean) => {
+      const summary = item.querySelector<HTMLElement>(".sav-faq__question");
+      const answer = item.querySelector<HTMLElement>(".sav-faq__answer");
+      if (!summary || !answer) return;
+
+      const startHeight = item.getBoundingClientRect().height;
+      animations.get(item)?.forEach((animation) => animation.cancel());
+
+      if (shouldOpen) item.open = true;
+      const styles = window.getComputedStyle(item);
+      const closedHeight =
+        summary.getBoundingClientRect().height +
+        parseFloat(styles.paddingTop) +
+        parseFloat(styles.paddingBottom) +
+        parseFloat(styles.borderTopWidth) +
+        parseFloat(styles.borderBottomWidth);
+      const endHeight = shouldOpen ? item.getBoundingClientRect().height : closedHeight;
+
+      item.dataset.faqExpanded = String(shouldOpen);
+
+      if (reducedMotion.matches) {
+        item.open = shouldOpen;
+        return;
+      }
+
+      const itemAnimation = item.animate(
+        { height: [`${startHeight}px`, `${endHeight}px`] },
+        { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      );
+      const answerAnimation = answer.animate(
+        shouldOpen
+          ? { opacity: [0, 1], transform: ["translateY(-6px)", "translateY(0)"] }
+          : { opacity: [1, 0], transform: ["translateY(0)", "translateY(-6px)"] },
+        { duration: shouldOpen ? 240 : 180, easing: "ease-out", fill: "both" },
+      );
+
+      animations.set(item, [itemAnimation, answerAnimation]);
+      itemAnimation.addEventListener(
+        "finish",
+        () => {
+          item.open = shouldOpen;
+          answerAnimation.cancel();
+          animations.delete(item);
+        },
+        { once: true },
+      );
+    };
+
+    items.forEach((item) => {
+      item.dataset.faqExpanded = String(item.open);
+      item.querySelector(".sav-faq__question")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const shouldOpen = item.dataset.faqExpanded !== "true";
+
+        if (shouldOpen) {
+          items.forEach((other) => {
+            if (other !== item && other.dataset.faqExpanded === "true") {
+              animateItem(other, false);
+            }
+          });
+        }
+
+        animateItem(item, shouldOpen);
+      });
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSavFaq);
+  else initSavFaq();
+</script>
+
+<script>
+  // Poster variations: numbered accordion rows with a single row open at a time,
+  // matching the workflow list on /speaker-management/.
+  function initSavVariations() {
+    const rows = Array.from(document.querySelectorAll<HTMLDetailsElement>(".sav-variations details"));
+    if (!rows.length) return;
+
+    rows.forEach((row) => {
+      const summary = row.querySelector("summary");
+      const toggle = row.querySelector<HTMLButtonElement>(".sav-variation__toggle");
+      const label = toggle?.dataset.label ?? "";
+
+      summary?.addEventListener("click", (event) => {
+        event.preventDefault();
+        row.open = !row.open;
+      });
+
+      row.addEventListener("toggle", () => {
+        toggle?.setAttribute("aria-expanded", String(row.open));
+        if (label) {
+          toggle?.setAttribute("aria-label", `${row.open ? "Collapse" : "Expand"} ${label}`);
+        }
+        if (!row.open) return;
+        rows.forEach((other) => {
+          if (other !== row) other.open = false;
+        });
+      });
+    });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initSavVariations);
+  else initSavVariations();
+</script>
