@@ -1,0 +1,59 @@
+---
+// Compact post-hero strip, borrowed from the Event Registration trust strip.
+// Carries the arrival workflow stages instead of vanity metrics.
+const stages = [
+  ["Assign", "Scanner access"],
+  ["Select", "Event or instance"],
+  ["Scan", "Attendee QR"],
+  ["Validate", "Eligibility"],
+  ["Sync", "Attendance state"],
+  ["Review", "Live counts"],
+];
+---
+
+<section class="ecx-rail" id="checkin-rail" aria-label="One connected arrival workflow">
+  <div class="ecx-rail__inner">
+    {stages.map(([value, label]) => (
+      <span class="ecx-rail__stat">
+        <b>{value}</b> {label}
+      </span>
+    ))}
+  </div>
+</section>
+
+<style>
+  /* Matches the compact post-hero trust strip on Event Registration. */
+  .ecx-rail {
+    border-top: 1px solid var(--surface-card-border);
+    background: #fff;
+    padding: 1.5rem;
+  }
+
+  .ecx-rail__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.9rem 2.25rem;
+  }
+
+  .ecx-rail__stat {
+    color: var(--subheading-gray);
+    font: 400 0.9375rem/1.5 var(--font-body);
+    white-space: nowrap;
+  }
+
+  .ecx-rail__stat b {
+    color: var(--heading-dark);
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .ecx-rail__inner {
+      justify-content: flex-start;
+      gap: 0.6rem 1.5rem;
+    }
+  }
+</style>

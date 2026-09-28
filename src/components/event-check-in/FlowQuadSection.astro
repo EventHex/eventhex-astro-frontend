@@ -1,0 +1,444 @@
+---
+// Team section borrowed from the Event Registration spotlight
+// ("One Form, or a Full Checkout, Your Call"): a centred title and subtitle
+// above a 2x2 hairline quad that alternates copy cells with product-evidence
+// composites, and a short centred note underneath.
+interface Option {
+  title: string;
+  description: string;
+  note: string;
+}
+
+interface Shot {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Composite {
+  primary: Shot;
+  secondary: Shot;
+  detail?: Shot;
+  status: string;
+  action: string;
+}
+
+interface Props {
+  id: string;
+  title: string;
+  subtitle: string;
+  options: Option[];
+  composites: Composite[];
+  note?: string;
+}
+
+const { id, title, subtitle, options, composites, note } = Astro.props as Props;
+const [firstOption, secondOption] = options;
+const [firstComposite, secondComposite] = composites;
+---
+
+<section class="ecx-flow" id={id} aria-labelledby={`${id}-heading`}>
+  <div class="ecx-flow__header">
+    <h2 class="ecx-flow__title animate-on-scroll" data-animation="fadeInUp" id={`${id}-heading`}>
+      {title}
+    </h2>
+    <p class="ecx-flow__subtitle animate-on-scroll" data-animation="fadeInUp">
+      {subtitle}
+    </p>
+  </div>
+
+  <div class="ecx-flow__quad">
+    <article
+      class="ecx-flow__cell ecx-flow__cell--copy animate-on-scroll"
+      data-animation="fadeInUp"
+    >
+      <h3 class="ecx-flow__cell-title">{firstOption.title}</h3>
+      <p class="ecx-flow__cell-text">{firstOption.description}</p>
+      <span class="ecx-flow__cell-note"><i></i>{firstOption.note}</span>
+    </article>
+
+    <div
+      class="ecx-flow__cell ecx-flow__cell--media animate-on-scroll"
+      data-animation="fadeInRight"
+    >
+      <div class="ecx-composite">
+        <img
+          class="ecx-composite__screen ecx-composite__screen--primary"
+          src={firstComposite.primary.src}
+          alt={firstComposite.primary.alt}
+          width={firstComposite.primary.width}
+          height={firstComposite.primary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="ecx-composite__screen ecx-composite__screen--secondary"
+          src={firstComposite.secondary.src}
+          alt={firstComposite.secondary.alt}
+          width={firstComposite.secondary.width}
+          height={firstComposite.secondary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        {firstComposite.detail && (
+          <img
+            class="ecx-composite__screen ecx-composite__screen--detail"
+            src={firstComposite.detail.src}
+            alt={firstComposite.detail.alt}
+            width={firstComposite.detail.width}
+            height={firstComposite.detail.height}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        <span class="ecx-composite__status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+          {firstComposite.status}
+        </span>
+        <span class="ecx-composite__action">{firstComposite.action}</span>
+        <img
+          class="ecx-composite__cursor"
+          src="/feature-images/event-registration/cursor.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+
+    <div
+      class="ecx-flow__cell ecx-flow__cell--media animate-on-scroll"
+      data-animation="fadeInLeft"
+    >
+      <div class="ecx-composite">
+        <img
+          class="ecx-composite__screen ecx-composite__screen--primary"
+          src={secondComposite.primary.src}
+          alt={secondComposite.primary.alt}
+          width={secondComposite.primary.width}
+          height={secondComposite.primary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="ecx-composite__screen ecx-composite__screen--secondary"
+          src={secondComposite.secondary.src}
+          alt={secondComposite.secondary.alt}
+          width={secondComposite.secondary.width}
+          height={secondComposite.secondary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        {secondComposite.detail && (
+          <img
+            class="ecx-composite__screen ecx-composite__screen--detail"
+            src={secondComposite.detail.src}
+            alt={secondComposite.detail.alt}
+            width={secondComposite.detail.width}
+            height={secondComposite.detail.height}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        <span class="ecx-composite__status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+          {secondComposite.status}
+        </span>
+        <span class="ecx-composite__action">{secondComposite.action}</span>
+        <img
+          class="ecx-composite__cursor"
+          src="/feature-images/event-registration/cursor.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+
+    <article
+      class="ecx-flow__cell ecx-flow__cell--copy animate-on-scroll"
+      data-animation="fadeInUp"
+    >
+      <h3 class="ecx-flow__cell-title">{secondOption.title}</h3>
+      <p class="ecx-flow__cell-text">{secondOption.description}</p>
+      <span class="ecx-flow__cell-note"><i></i>{secondOption.note}</span>
+    </article>
+
+    <span class="ecx-flow__cross" aria-hidden="true">
+      <svg width="18" height="18" viewBox="-14 -14 28 28">
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" />
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" />
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" />
+      </svg>
+    </span>
+  </div>
+
+  {note && <p class="ecx-flow__note">{note}</p>}
+</section>
+
+<style>
+  /* Same band and quad measurements as the Event Registration spotlight. */
+  .ecx-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 104px 24px;
+    background: #fff;
+  }
+
+  .ecx-flow__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1040px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .ecx-flow__title {
+    margin: 0 0 12px;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 4.2vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    /* same ash ramp as the Event Registration spotlight title */
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .ecx-flow__subtitle {
+    max-width: 640px;
+    margin: 0;
+    color: var(--subheading-gray, #555);
+    font: 400 18px/1.5 var(--font-body);
+  }
+
+  .ecx-flow__quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* equal rows keep the divider at exactly 50%, where the notch sits */
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    max-width: 1180px;
+    margin: 24px auto;
+  }
+
+  .ecx-flow__cross {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .ecx-flow__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 260px;
+    padding: 56px 48px;
+    border-right: 1px solid #eef0f3;
+    border-bottom: 1px solid #eef0f3;
+  }
+
+  .ecx-flow__cell:nth-child(2n) {
+    border-right: none;
+  }
+
+  .ecx-flow__cell:nth-child(n + 3) {
+    border-bottom: none;
+  }
+
+  .ecx-flow__cell--media {
+    align-items: center;
+    min-height: 360px;
+    padding: 18px 22px;
+    overflow: hidden;
+  }
+
+  .ecx-flow__cell-title {
+    margin: 0 0 16px;
+    color: var(--heading-dark, #1e1d24);
+    font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading);
+    letter-spacing: -0.03em;
+  }
+
+  .ecx-flow__cell-text {
+    max-width: 40ch;
+    margin: 0;
+    color: var(--subheading-gray, #555);
+    font: 400 16px/1.6 var(--font-body);
+  }
+
+  .ecx-flow__cell-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    color: #344054;
+    font: 650 13px/1.4 var(--font-body);
+  }
+
+  .ecx-flow__cell-note i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .ecx-composite {
+    position: relative;
+    width: 100%;
+    height: 320px;
+  }
+
+  .ecx-composite__screen {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+
+  .ecx-composite__screen--primary {
+    top: 42px;
+    left: 20px;
+    z-index: 1;
+    width: 74%;
+    height: 62%;
+  }
+
+  .ecx-composite__screen--secondary {
+    right: 18px;
+    bottom: 20px;
+    z-index: 2;
+    width: 64%;
+    height: 52%;
+  }
+
+  .ecx-composite__screen--detail {
+    left: 24px;
+    bottom: 12px;
+    z-index: 3;
+    width: 30%;
+    height: 48%;
+  }
+
+  .ecx-composite__status,
+  .ecx-composite__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+  }
+
+  .ecx-composite__status {
+    top: 14px;
+    left: 14px;
+    gap: 7px;
+    padding: 9px 11px;
+    border: 1px solid #cfead9;
+    background: #effbf4;
+    color: #18864b;
+  }
+
+  .ecx-composite__status svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-composite__action {
+    right: 14px;
+    bottom: 14px;
+    padding: 10px 13px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .ecx-composite__cursor {
+    position: absolute;
+    right: 4px;
+    bottom: 34px;
+    z-index: 6;
+    width: 22px;
+    height: 26px;
+    filter: drop-shadow(0 3px 3px rgba(17, 24, 39, 0.25));
+    pointer-events: none;
+  }
+
+  .ecx-flow__note {
+    max-width: 920px;
+    margin: 28px auto 0;
+    color: #667085;
+    font: 500 14px/1.6 var(--font-body);
+    text-align: center;
+  }
+
+  @media (max-width: 960px) {
+    .ecx-flow__cell {
+      padding: 44px 32px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .ecx-flow {
+      padding: 72px 16px;
+    }
+    .ecx-flow__quad {
+      grid-template-columns: 1fr;
+    }
+    .ecx-flow__cross {
+      display: none;
+    }
+    .ecx-flow__cell {
+      min-height: 0;
+      padding: 32px 20px;
+      border-right: none;
+      border-bottom: 1px solid #eef0f3;
+    }
+    .ecx-flow__cell:nth-child(3) {
+      order: 4;
+      border-bottom: none;
+    }
+    .ecx-flow__cell:nth-child(4) {
+      order: 3;
+      border-bottom: 1px solid #eef0f3;
+    }
+    .ecx-flow__cell--media {
+      padding: 16px 20px 32px;
+    }
+    .ecx-composite {
+      height: 285px;
+    }
+    .ecx-composite__screen--primary {
+      width: 78%;
+    }
+    .ecx-composite__screen--secondary {
+      width: 68%;
+    }
+  }
+</style>

@@ -1,19 +1,227 @@
 ---
-import SharedFaq from "../shared/FaqSection.astro";
-
+// Sticky-sidebar FAQ, borrowed from the Event Registration and Speaker
+// Management FAQ pattern. Copy mirrors the FAQPage structured data below.
 const faqs = [
-  { q: "How does QR code check-in work?", a: "Every registered attendee receives a unique QR code via email or the mobile app. At the event, staff scan the QR code with any smartphone or tablet camera. The system verifies the attendee and marks them as checked-in in under 1 second." },
-  { q: "Can multiple staff scan simultaneously?", a: "Yes. You can have 100+ devices scanning simultaneously across multiple entrances. Each device runs independently, and all data syncs to the central dashboard in real time." },
-  { q: "Does check-in work offline?", a: "Yes. Offline mode pre-caches the attendee database on each device. Scans continue normally without internet, and data syncs automatically when connectivity returns." },
-  { q: "Can I track session-level attendance?", a: "Yes. Set up scanning points at session room entrances. Each scan records which attendee attended which session — providing valuable data for speakers, sponsors, and post-event reports." },
-  { q: "What devices are supported for scanning?", a: "Any device with a camera works — iPhones, Android phones, iPads, Android tablets, and dedicated barcode/QR scanners. The web-based scanner runs in any modern browser." },
-  { q: "How do I handle duplicate scans?", a: "The system automatically detects and blocks duplicate scans. If an attendee is already checked in, the scanner shows a clear alert — preventing double-counting." },
+  {
+    q: "Is EventHex Scanner available on iOS and Android?",
+    a: "Yes. EventHex provides current App Store and Google Play links for the Scanner app. Confirm device compatibility and event access during setup.",
+  },
+  {
+    q: "Can check-in continue when the venue network drops?",
+    a: "The Scanner listing and Event Day Portal support offline-resilient workflows. Prepare event data in advance, watch pending sync state, and reconnect to update the shared record.",
+  },
+  {
+    q: "How does EventHex handle duplicate scans?",
+    a: "Attendance uniqueness is checked for the selected event, ticket, or instance. A repeat scan returns an already-marked result instead of silently adding another attendance record.",
+  },
+  {
+    q: "What is a scanning instance?",
+    a: "It is a named scan point with eligible ticket types, for example a meal, session, merchandise collection, or another entitlement, tracked separately from front-door arrival.",
+  },
+  {
+    q: "Can staff search for an attendee without a QR?",
+    a: "The Event Day Portal includes attendee search and manual attendance paths for desk operations.",
+  },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 ---
 
-<SharedFaq
-  faqs={faqs}
-  eyebrow="Need Help?"
-  title="Frequently Asked Questions"
-  description="Everything you need to know about event check-in and how it works with EventHex."
-/>
+<section class="ecx-faq" id="faq">
+  <div class="ecx-faq__inner">
+    <div class="ecx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="ecx-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        Event check-in questions
+      </span>
+      <h2>What event teams ask before doors open</h2>
+      <p>
+        Quick answers on the Scanner app, offline check-in, duplicate scans, and
+        scanning instances.
+      </p>
+    </div>
+
+    <div class="ecx-faq__list">
+      {faqs.map((faq, index) => (
+        <details
+          class="ecx-faq__item animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 50)}
+          data-ecx-faq
+          open={index === 0}
+        >
+          <summary>
+            <strong>{faq.q}</strong>
+            <span aria-hidden="true"></span>
+          </summary>
+          <div><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<script>
+  const checkinFaqs = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-ecx-faq]"));
+  checkinFaqs.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      checkinFaqs.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .ecx-faq {
+    width: 100%;
+    padding: 96px 24px;
+    background: #fff;
+  }
+
+  .ecx-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .ecx-faq__sidebar { position: sticky; top: 6rem; }
+
+  .ecx-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    color: #000;
+    font: 500 13px/1.4 var(--font-body);
+  }
+
+  .ecx-faq__sidebar h2 {
+    margin: 0 0 16px;
+    color: #000;
+    font: 500 44px/1.1 var(--font-heading);
+    letter-spacing: -1px;
+  }
+
+  .ecx-faq__sidebar p {
+    margin: 0;
+    color: var(--subheading-gray);
+    font: 400 15px/1.65 var(--font-body);
+  }
+
+  .ecx-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    counter-reset: checkin-faq;
+  }
+
+  .ecx-faq__item {
+    counter-increment: checkin-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .ecx-faq__item[open] {
+    border-color: #e4e7ec;
+    background: #e4e7ec;
+  }
+
+  .ecx-faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 0;
+    color: #000;
+    font: 500 17px/1.4 var(--font-heading);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .ecx-faq__item summary::-webkit-details-marker { display: none; }
+  .ecx-faq__item summary strong { font-weight: 500; }
+  .ecx-faq__item summary strong::before { content: counter(checkin-faq) ". "; }
+
+  .ecx-faq__item summary > span {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .ecx-faq__item summary > span::before,
+  .ecx-faq__item summary > span::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+
+  .ecx-faq__item summary > span::before { width: 14px; height: 2px; }
+
+  .ecx-faq__item summary > span::after {
+    width: 2px;
+    height: 14px;
+    transition: opacity 0.2s ease;
+  }
+
+  .ecx-faq__item[open] summary > span { transform: scale(0.9); }
+  .ecx-faq__item[open] summary > span::after { opacity: 0; }
+
+  .ecx-faq__item > div {
+    max-width: 640px;
+    padding: 0 0 24px;
+  }
+
+  .ecx-faq__item p {
+    margin: 0;
+    color: #000;
+    font: 400 15px/1.7 var(--font-body);
+  }
+
+  @media (max-width: 1024px) {
+    .ecx-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .ecx-faq__sidebar { position: static; }
+    .ecx-faq__sidebar h2 { font-size: 32px; }
+  }
+
+  @media (max-width: 767px) {
+    .ecx-faq { padding: 72px 16px; }
+    .ecx-faq__sidebar h2 { font-size: 30px; }
+    .ecx-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .ecx-faq__item summary { padding: 18px 0; font-size: 15px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-faq__item,
+    .ecx-faq__item summary > span,
+    .ecx-faq__item summary > span::after { transition: none; }
+  }
+</style>

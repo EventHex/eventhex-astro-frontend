@@ -1,0 +1,374 @@
+---
+// Two-option comparison, borrowed from the Event Registration two-flow
+// comparison (as adapted by the payment page). Renders two peer operating
+// paths around one product decision.
+interface Option {
+  title: string;
+  description: string;
+  note: string;
+  icon: "download" | "phone" | "desktop";
+}
+
+// Real product-evidence stack, copied from the Event Registration
+// `.erg-flow-composite` treatment: overlapping application screens with a
+// status pill, an action pill and the pointer cursor.
+interface Shot {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+}
+
+interface Media {
+  primary: Shot;
+  secondary: Shot;
+  detail?: Shot;
+  status: string;
+  action: string;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  options: Option[];
+  footnote?: string;
+  media?: Media;
+}
+
+const { id, eyebrow, title, lede, options, footnote, media } = Astro.props;
+
+const icons: Record<Option["icon"], string> = {
+  download:
+    '<path d="M12 3v11m0 0 4-4m-4 4-4-4"></path><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"></path>',
+  phone: '<rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M11 18h2"></path>',
+  desktop:
+    '<rect x="2" y="4" width="20" height="13" rx="2"></rect><path d="M8 21h8M12 17v4"></path>',
+};
+---
+
+<section class="ecx-choice" id={id} aria-labelledby={`${id}-heading`}>
+  <header class="ecx-choice__header">
+    <span>{eyebrow}</span>
+    <h2 id={`${id}-heading`}>{title}</h2>
+    <p>{lede}</p>
+  </header>
+
+  <div class="ecx-choice__grid">
+    {options.map((option, index) => (
+      <article
+        class="ecx-choice__card animate-on-scroll"
+        data-animation={index === 0 ? "fadeInLeft" : "fadeInRight"}
+      >
+        <span class="ecx-choice__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" set:html={icons[option.icon]}></svg>
+        </span>
+        <h3>{option.title}</h3>
+        <p>{option.description}</p>
+        <strong>
+          <i></i>
+          {option.note}
+        </strong>
+      </article>
+    ))}
+  </div>
+
+  {media && (
+    <div class="ecx-choice__media animate-on-scroll" data-animation="fadeInUp">
+      <div class="ecx-composite">
+        <img
+          class="ecx-composite__screen ecx-composite__screen--primary"
+          src={media.primary.src}
+          alt={media.primary.alt}
+          width={media.primary.width}
+          height={media.primary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        <img
+          class="ecx-composite__screen ecx-composite__screen--secondary"
+          src={media.secondary.src}
+          alt={media.secondary.alt}
+          width={media.secondary.width}
+          height={media.secondary.height}
+          loading="lazy"
+          decoding="async"
+        />
+        {media.detail && (
+          <img
+            class="ecx-composite__screen ecx-composite__screen--detail"
+            src={media.detail.src}
+            alt={media.detail.alt}
+            width={media.detail.width}
+            height={media.detail.height}
+            loading="lazy"
+            decoding="async"
+          />
+        )}
+        <span class="ecx-composite__status">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+          {media.status}
+        </span>
+        <span class="ecx-composite__action">{media.action}</span>
+        <img
+          class="ecx-composite__cursor"
+          src="/feature-images/event-registration/cursor.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+    </div>
+  )}
+
+  {footnote && <p class="ecx-choice__note">{footnote}</p>}
+</section>
+
+<style>
+  .ecx-choice {
+    width: min(1140px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 104px 0;
+  }
+
+  .ecx-choice__header {
+    max-width: 850px;
+    margin: 0 auto 42px;
+    text-align: center;
+  }
+
+  .ecx-choice__header > span {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--brand-blue);
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ecx-choice__header h2 {
+    margin: 0;
+    color: var(--heading-dark);
+    font: 500 clamp(36px, 4.6vw, 56px)/1.05 var(--font-heading);
+    letter-spacing: -0.045em;
+  }
+
+  .ecx-choice__header p {
+    max-width: 720px;
+    margin: 20px auto 0;
+    color: var(--subheading-gray);
+    font: 400 17px/1.65 var(--font-body);
+  }
+
+  .ecx-choice__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+  }
+
+  .ecx-choice__card {
+    position: relative;
+    min-height: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 54px;
+    background: #fff;
+  }
+
+  .ecx-choice__card + .ecx-choice__card {
+    border-left: 1px solid #e5e7eb;
+    background: linear-gradient(145deg, #f5f7ff, #fff);
+  }
+
+  .ecx-choice__icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    place-items: center;
+    margin-bottom: 24px;
+    border-radius: 14px;
+    background: #eef2ff;
+    color: var(--brand-blue);
+  }
+
+  .ecx-choice__icon svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-choice__card h3 {
+    margin: 0 0 14px;
+    color: var(--heading-dark);
+    font: 500 30px/1.15 var(--font-heading);
+    letter-spacing: -0.03em;
+  }
+
+  .ecx-choice__card p {
+    max-width: 440px;
+    margin: 0 0 24px;
+    color: var(--subheading-gray);
+    font: 400 16px/1.65 var(--font-body);
+  }
+
+  .ecx-choice__card strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #344054;
+    font: 650 13px/1.4 var(--font-body);
+  }
+
+  .ecx-choice__card strong i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .ecx-choice__note {
+    max-width: 800px;
+    margin: 26px auto 0;
+    padding: 14px 16px;
+    border-left: 3px solid var(--brand-blue);
+    background: #f5f7ff;
+    color: #667085;
+    font: 500 14px/1.6 var(--font-body);
+  }
+
+  /* Product-evidence stack, mirroring the Event Registration composite. */
+  .ecx-choice__media {
+    margin-top: 24px;
+    padding: 30px 34px;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #f4f7ff, #fff 62%);
+  }
+
+  .ecx-composite {
+    position: relative;
+    width: 100%;
+    height: 360px;
+  }
+
+  .ecx-composite__screen {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+
+  .ecx-composite__screen--primary {
+    top: 30px;
+    left: 16px;
+    z-index: 1;
+    width: 92%;
+    height: 30%;
+  }
+
+  .ecx-composite__screen--secondary {
+    right: 16px;
+    bottom: 20px;
+    z-index: 2;
+    width: 56%;
+    height: 46%;
+  }
+
+  .ecx-composite__screen--detail {
+    left: 24px;
+    bottom: 16px;
+    z-index: 3;
+    width: 26%;
+    height: 38%;
+  }
+
+  .ecx-composite__status,
+  .ecx-composite__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+  }
+
+  .ecx-composite__status {
+    top: 14px;
+    left: 16px;
+    gap: 7px;
+    padding: 9px 11px;
+    border: 1px solid #cfead9;
+    background: #effbf4;
+    color: #18864b;
+  }
+
+  .ecx-composite__status svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-composite__action {
+    right: 16px;
+    bottom: 16px;
+    padding: 10px 13px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .ecx-composite__cursor {
+    position: absolute;
+    right: 8px;
+    bottom: 34px;
+    z-index: 6;
+    width: 22px;
+    height: 26px;
+    filter: drop-shadow(0 3px 3px rgba(17, 24, 39, 0.25));
+    pointer-events: none;
+  }
+
+  @media (max-width: 960px) {
+    .ecx-choice__grid { grid-template-columns: 1fr; }
+    .ecx-choice__card { min-height: 300px; }
+    .ecx-choice__card + .ecx-choice__card {
+      border-top: 1px solid #e5e7eb;
+      border-left: 0;
+    }
+    .ecx-composite { height: 300px; }
+  }
+
+  @media (max-width: 767px) {
+    .ecx-choice { width: min(100% - 32px, 1140px); padding: 72px 0; }
+    .ecx-choice__header h2 { font-size: 34px; }
+    .ecx-choice__header p { font-size: 15px; }
+    .ecx-choice__card { min-height: 0; padding: 36px 24px; }
+    .ecx-choice__card h3 { font-size: 25px; }
+    .ecx-choice__card p { font-size: 15px; }
+    .ecx-choice__media { margin-top: 18px; padding: 16px; }
+    .ecx-composite { height: 200px; }
+    .ecx-composite__status,
+    .ecx-composite__action { font-size: 10px; padding: 7px 9px; }
+    .ecx-composite__cursor { display: none; }
+  }
+</style>

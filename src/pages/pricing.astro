@@ -8,7 +8,8 @@ const preview = Astro.url.searchParams.get("preview") === "1";
 const pricingLive = import.meta.env.PRICING_LIVE === "true" || preview;
 
 // Visitor country: ?country=XX test override → Cloudflare runtime geo → header
-const cfCountry = (Astro.locals as { runtime?: { cf?: { country?: string } } })?.runtime?.cf?.country;
+// Astro v6: locals.runtime.cf was removed and now throws; read request.cf instead.
+const cfCountry = (Astro.request as { cf?: { country?: string } })?.cf?.country;
 const country = (Astro.url.searchParams.get("country") || cfCountry || Astro.request.headers.get("cf-ipcountry") || "US").toUpperCase();
 
 const plans: SaasPlan[] | null = pricingLive ? await fetchPlans(country) : null;

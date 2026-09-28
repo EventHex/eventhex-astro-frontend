@@ -1,0 +1,715 @@
+---
+// Dark capability band, borrowed from the Event Registration
+// "Build the Form You Actually Need" section: a rounded black band that opens
+// to full bleed on scroll, a centred gradient heading, and a hairline ruled
+// capability grid whose cells carry a small product mock.
+//
+// The source band also closes with its own dark CTA block. That block is a
+// separate approved pattern (the check-in page already ends with one), so this
+// section uses the band and grid only.
+
+type CapVisual = "picker" | "scan" | "checks" | "result";
+
+interface Cell {
+  label: string;
+  desc: string;
+  visual: CapVisual;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  accent: string;
+  subtitle: string;
+  cells: Cell[];
+}
+
+const { id, eyebrow, title, accent, subtitle, cells } = Astro.props as Props;
+---
+
+<section class="ecx-capband" id={id} aria-labelledby={`${id}-heading`}>
+  <header class="ecx-capband__heading">
+    <span class="ecx-capband__eyebrow animate-on-scroll" data-animation="fadeIn">
+      {eyebrow}
+    </span>
+    <h2
+      class="ecx-capband__title animate-on-scroll"
+      data-animation="fadeInUp"
+      id={`${id}-heading`}
+    >
+      {title} <span class="ecx-capband__accent">{accent}</span>
+    </h2>
+    <p class="ecx-capband__subtitle animate-on-scroll" data-animation="fadeInUp">
+      {subtitle}
+    </p>
+  </header>
+
+  <div class="ecx-capgrid">
+    <div class="ecx-capgrid__grid">
+      {cells.map((cell, index) => (
+        <article
+          class="ecx-capgrid__cell animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 60)}
+        >
+          {index % 2 === 1 && (
+            <>
+              <span class="ecx-capgrid__petal ecx-capgrid__petal--top" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" />
+                </svg>
+              </span>
+              <span class="ecx-capgrid__petal ecx-capgrid__petal--bottom" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)" />
+                </svg>
+              </span>
+            </>
+          )}
+
+          <h3 class="ecx-capgrid__label">{cell.label}</h3>
+          <p class="ecx-capgrid__desc">{cell.desc}</p>
+
+          <div class="ecx-capgrid__visual">
+            {cell.visual === "picker" && (
+              <div class="ecx-capgrid__card">
+                <span class="ecx-capgrid__card-head">Scanner</span>
+                <div class="ecx-capgrid__row">
+                  <span>Event</span><i></i>
+                </div>
+                <div class="ecx-capgrid__row is-active">
+                  <span>Scan mode</span><i></i>
+                </div>
+              </div>
+            )}
+
+            {cell.visual === "scan" && (
+              <div class="ecx-capgrid__scanwrap">
+                <div class="ecx-capgrid__scan">
+                  <svg width="66" height="66" viewBox="0 0 24 24" aria-hidden="true">
+                    <g fill="currentColor">
+                      <path d="M3 3h6v6H3V3Zm2 2v2h2V5H5Z" />
+                      <path d="M15 3h6v6h-6V3Zm2 2v2h2V5h-2Z" />
+                      <path d="M3 15h6v6H3v-6Zm2 2v2h2v-2H5Z" />
+                      <path d="M15 15h2v2h-2v-2Zm4 0h2v2h-2v-2Zm-4 4h2v2h-2v-2Zm4 0h2v2h-2v-2Z" />
+                      <path d="M11 3h2v2h-2V3Zm0 4h2v4h-2V7Zm0 6h2v2h-2v-2Zm-4 0h2v2H7v-2Zm0 4h2v4H7v-4Z" />
+                    </g>
+                  </svg>
+                  <span class="ecx-capgrid__scan-corner ecx-capgrid__scan-corner--tl" aria-hidden="true"></span>
+                  <span class="ecx-capgrid__scan-corner ecx-capgrid__scan-corner--tr" aria-hidden="true"></span>
+                  <span class="ecx-capgrid__scan-corner ecx-capgrid__scan-corner--bl" aria-hidden="true"></span>
+                  <span class="ecx-capgrid__scan-corner ecx-capgrid__scan-corner--br" aria-hidden="true"></span>
+                </div>
+                <span class="ecx-capgrid__caption">Ticket or badge code</span>
+              </div>
+            )}
+
+            {cell.visual === "checks" && (
+              <div class="ecx-capgrid__chips">
+                <span>Registration</span>
+                <span class="is-active">Ticket eligibility</span>
+                <span>Scan point</span>
+                <span>Duplicate</span>
+                <span>Invalid</span>
+              </div>
+            )}
+
+            {cell.visual === "result" && (
+              <div class="ecx-capgrid__card">
+                <span class="ecx-capgrid__card-head">Scan result</span>
+                <div class="ecx-capgrid__row is-active">
+                  <span class="ecx-capgrid__row-lead">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12 4 4L19 6" />
+                    </svg>
+                    Attendance marked
+                  </span>
+                </div>
+                <div class="ecx-capgrid__row">
+                  <span class="ecx-capgrid__row-lead ecx-capgrid__row-lead--warn">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M12 8v5" />
+                      <path d="M12 16.5h.01" />
+                      <circle cx="12" cy="12" r="8.5" />
+                    </svg>
+                    Needs attention
+                  </span>
+                  <span class="ecx-capgrid__tag">Reason</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== band: rounded inset that opens to full bleed on scroll ===== */
+  .ecx-capband {
+    --band-p: 0;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    background-color: #000;
+    /* colour sits at the top, behind the heading, and fades out downward */
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+    /* paint-only open animation: no reflow per frame */
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-capband {
+      clip-path: none;
+      will-change: auto;
+    }
+  }
+
+  /* film grain */
+  .ecx-capband::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .ecx-capband > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== heading ===== */
+  .ecx-capband__heading {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
+    text-align: center;
+  }
+
+  .ecx-capband__eyebrow {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: #9fb0ff;
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ecx-capband__title {
+    margin: 0 0 0.75rem;
+    font-family: var(--font-heading);
+    font-size: clamp(2.125rem, 5vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    /* single ramp across the whole line so white blends into the violet */
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f2f0ff 26%,
+      #c9c2ff 52%,
+      #a79aff 74%,
+      #7d8dff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* let the accent span inherit the parent ramp instead of painting its own */
+  .ecx-capband__accent {
+    background: none;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .ecx-capband__subtitle {
+    max-width: 640px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.62);
+    font: 400 1.0625rem/1.65 var(--font-body);
+  }
+
+  /* ===== capability grid ===== */
+  .ecx-capgrid {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: clamp(40px, 5vw, 72px) 24px clamp(56px, 7vw, 88px);
+  }
+
+  .ecx-capgrid__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid #3b3a47;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .ecx-capgrid__cell {
+    position: relative;
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 36px 32px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+  }
+
+  .ecx-capgrid__cell:nth-child(2n) {
+    border-right: none;
+  }
+
+  .ecx-capgrid__cell:nth-child(n + 3) {
+    border-bottom: none;
+  }
+
+  .ecx-capgrid__petal {
+    position: absolute;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    line-height: 0;
+    z-index: 2;
+  }
+
+  .ecx-capgrid__petal--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .ecx-capgrid__petal--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .ecx-capgrid__label {
+    margin: 0 0 14px;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .ecx-capgrid__desc {
+    max-width: 34ch;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.38;
+  }
+
+  .ecx-capgrid__visual {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 1;
+    margin-top: 32px;
+  }
+
+  /* soft coloured bloom behind each mock */
+  .ecx-capgrid__visual::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10%;
+    width: 80%;
+    height: 80%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+    will-change: opacity;
+    background: radial-gradient(
+      closest-side,
+      rgba(92, 138, 255, 0.28),
+      rgba(124, 108, 255, 0.15) 55%,
+      transparent 100%
+    );
+  }
+
+  .ecx-capgrid__visual > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== mock surfaces ===== */
+  .ecx-capgrid__card,
+  .ecx-capgrid__row,
+  .ecx-capgrid__scan,
+  .ecx-capgrid__chips span {
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+  }
+
+  .ecx-capgrid__card {
+    --cap-surface: #08080e;
+    --cap-grad: linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 290px;
+    padding: 16px;
+    border-color: transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--cap-surface), var(--cap-surface)) padding-box,
+      var(--cap-grad) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+  }
+
+  .ecx-capgrid__card-head {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+
+  .ecx-capgrid__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.86);
+    font-family: var(--font-body);
+    font-size: 13px;
+  }
+
+  .ecx-capgrid__row i {
+    width: 42%;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .ecx-capgrid__row.is-active {
+    border-color: transparent;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%) border-box;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+  }
+
+  .ecx-capgrid__row.is-active i {
+    background: linear-gradient(90deg, #7d8dff, #afa3ff);
+  }
+
+  .ecx-capgrid__row-lead {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+  }
+
+  .ecx-capgrid__row-lead svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: #b9ccff;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-capgrid__row-lead--warn svg {
+    stroke: #ffb0b0;
+  }
+
+  .ecx-capgrid__tag {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 11.5px;
+  }
+
+  .ecx-capgrid__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .ecx-capgrid__chips span {
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: rgba(255, 255, 255, 0.72);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+  }
+
+  .ecx-capgrid__chips span.is-active {
+    border-color: transparent;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%) border-box;
+    color: #fff;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+  }
+
+  .ecx-capgrid__scanwrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ecx-capgrid__scan {
+    --cap-surface: #08080e;
+    --cap-grad: linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%);
+    position: relative;
+    display: grid;
+    width: 156px;
+    height: 156px;
+    place-items: center;
+    border-color: transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--cap-surface), var(--cap-surface)) padding-box,
+      var(--cap-grad) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+  }
+
+  .ecx-capgrid__scan svg {
+    width: 66px;
+    height: 66px;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .ecx-capgrid__scan-corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border: 0 solid rgba(185, 204, 255, 0.85);
+  }
+
+  .ecx-capgrid__scan-corner--tl {
+    top: 12px;
+    left: 12px;
+    border-top-width: 2px;
+    border-left-width: 2px;
+    border-top-left-radius: 6px;
+  }
+
+  .ecx-capgrid__scan-corner--tr {
+    top: 12px;
+    right: 12px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-top-right-radius: 6px;
+  }
+
+  .ecx-capgrid__scan-corner--bl {
+    bottom: 12px;
+    left: 12px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-bottom-left-radius: 6px;
+  }
+
+  .ecx-capgrid__scan-corner--br {
+    bottom: 12px;
+    right: 12px;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+    border-bottom-right-radius: 6px;
+  }
+
+  .ecx-capgrid__caption {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: var(--font-body);
+    font-size: 12.5px;
+  }
+
+  /* ===== subtle motion on the cell visuals ===== */
+  @keyframes ecx-cap-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+
+  @keyframes ecx-cap-bloom {
+    0%,
+    100% {
+      opacity: 0.68;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ecx-cap-pulse {
+    0%,
+    100% {
+      opacity: 0.88;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes ecx-cap-fill {
+    0% {
+      transform: scaleX(0.25);
+    }
+    60%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  .ecx-capgrid__card,
+  .ecx-capgrid__scanwrap,
+  .ecx-capgrid__chips {
+    animation: ecx-cap-float 7s ease-in-out infinite;
+  }
+
+  .ecx-capgrid__cell:nth-child(2) .ecx-capgrid__scanwrap {
+    animation-delay: -1.4s;
+  }
+
+  .ecx-capgrid__cell:nth-child(3) .ecx-capgrid__chips {
+    animation-delay: -2.8s;
+  }
+
+  .ecx-capgrid__cell:nth-child(4) .ecx-capgrid__card {
+    animation-delay: -4.2s;
+  }
+
+  .ecx-capgrid__visual::before {
+    animation: ecx-cap-bloom 6s ease-in-out infinite;
+  }
+
+  .ecx-capgrid__row.is-active,
+  .ecx-capgrid__chips span.is-active {
+    animation: ecx-cap-pulse 3.2s ease-in-out infinite;
+  }
+
+  .ecx-capgrid__row i {
+    transform-origin: right center;
+    animation: ecx-cap-fill 5.5s ease-in-out infinite;
+  }
+
+  .ecx-capgrid__row:nth-child(3) i {
+    animation-delay: -1.8s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-capgrid__card,
+    .ecx-capgrid__scanwrap,
+    .ecx-capgrid__chips,
+    .ecx-capgrid__visual::before,
+    .ecx-capgrid__row.is-active,
+    .ecx-capgrid__chips span.is-active,
+    .ecx-capgrid__row i {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .ecx-capgrid__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ecx-capgrid__cell {
+      grid-column: span 1;
+      min-height: 0;
+      padding: 32px 24px;
+      border-right: none;
+      border-bottom: 1px solid #3b3a47;
+    }
+
+    .ecx-capgrid__cell:last-child {
+      border-bottom: none;
+    }
+
+    .ecx-capgrid__petal {
+      display: none;
+    }
+
+    .ecx-capgrid__desc {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .ecx-capgrid {
+      padding-bottom: 48px;
+    }
+  }
+</style>
+
+<script>
+  // Opens the band from an inset rounded card to a full-bleed band as it
+  // travels up the viewport. Mirrors the Event Registration band behaviour:
+  // the document offset is cached so the scroll handler never reads layout.
+  function initEcxCapBandBleed() {
+    const band = document.querySelector<HTMLElement>(".ecx-capband");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    let bandTop = 0;
+    let vh = window.innerHeight || 1;
+    const measure = () => {
+      vh = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    let ticking = false;
+    let last = -1;
+    const update = () => {
+      ticking = false;
+      const travelled = vh - (bandTop - window.scrollY);
+      const p = Math.min(1, Math.max(0, travelled / (vh * 0.7)));
+      const rounded = Math.round(p * 100) / 100;
+      if (rounded === last) return;
+      last = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      last = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initEcxCapBandBleed);
+  } else {
+    initEcxCapBandBleed();
+  }
+</script>

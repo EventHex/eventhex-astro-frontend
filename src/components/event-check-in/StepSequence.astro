@@ -1,0 +1,157 @@
+---
+// Ordered workflow sequence, borrowed from the Event Registration grid section
+// (bordered cell grid with corner notches) and read as numbered steps.
+interface Step {
+  label: string;
+  text: string;
+}
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  steps: Step[];
+}
+
+const { id, eyebrow, title, lede, steps } = Astro.props;
+---
+
+<section class="ecx-steps" id={id} aria-labelledby={`${id}-heading`}>
+  <header class="ecx-steps__header">
+    <span>{eyebrow}</span>
+    <h2 id={`${id}-heading`}>{title}</h2>
+    <p>{lede}</p>
+  </header>
+
+  <div class="ecx-steps__grid">
+    <span class="ecx-steps__notch ecx-steps__notch--1" aria-hidden="true">
+      <svg width="28" height="28" viewBox="-14 -14 28 28">
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+      </svg>
+    </span>
+    <span class="ecx-steps__notch ecx-steps__notch--2" aria-hidden="true">
+      <svg width="28" height="28" viewBox="-14 -14 28 28">
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+      </svg>
+    </span>
+    {steps.map((step, index) => (
+      <article
+        class="ecx-steps__card animate-on-scroll"
+        data-animation="fadeInUp"
+        data-delay={String(index * 60)}
+      >
+        <span class="ecx-steps__num">{String(index + 1).padStart(2, "0")}</span>
+        <h3>{step.label}</h3>
+        <p>{step.text}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ecx-steps {
+    width: min(1140px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 104px 0;
+  }
+
+  .ecx-steps__header {
+    max-width: 850px;
+    margin: 0 auto 42px;
+    text-align: center;
+  }
+
+  .ecx-steps__header > span {
+    display: inline-block;
+    margin-bottom: 12px;
+    color: var(--brand-blue);
+    font: 650 13px/1.3 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .ecx-steps__header h2 {
+    margin: 0;
+    color: var(--heading-dark);
+    font: 500 clamp(36px, 4.6vw, 56px)/1.05 var(--font-heading);
+    letter-spacing: -0.045em;
+  }
+
+  .ecx-steps__header p {
+    max-width: 720px;
+    margin: 20px auto 0;
+    color: var(--subheading-gray);
+    font: 400 17px/1.65 var(--font-body);
+  }
+
+  .ecx-steps__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--surface-card-border);
+    border-left: 1px solid var(--surface-card-border);
+  }
+
+  .ecx-steps__notch {
+    position: absolute;
+    left: 50%;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .ecx-steps__notch--1 { top: 0; transform: translate(-50%, -50%); }
+  .ecx-steps__notch--2 { bottom: 0; transform: translate(-50%, 50%); }
+
+  .ecx-steps__card {
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    padding: 34px 28px;
+    border-right: 1px solid var(--surface-card-border);
+    border-bottom: 1px solid var(--surface-card-border);
+    background: #fff;
+  }
+
+  .ecx-steps__num {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    margin-bottom: 32px;
+    border: 1px solid #e0e5ed;
+    border-radius: 12px;
+    color: var(--brand-blue);
+    font: 700 13px/1 var(--font-body);
+    letter-spacing: 0.04em;
+  }
+
+  .ecx-steps__card h3 {
+    margin: 0 0 12px;
+    color: var(--heading-dark);
+    font: 500 23px/1.15 var(--font-heading);
+    letter-spacing: -0.02em;
+  }
+
+  .ecx-steps__card p {
+    margin: 0;
+    color: var(--subheading-gray);
+    font: 400 14px/1.6 var(--font-body);
+  }
+
+  @media (max-width: 960px) {
+    .ecx-steps__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 767px) {
+    .ecx-steps { width: min(100% - 32px, 1140px); padding: 72px 0; }
+    .ecx-steps__header h2 { font-size: 34px; }
+    .ecx-steps__header p { font-size: 15px; }
+    .ecx-steps__grid { grid-template-columns: 1fr; }
+    .ecx-steps__card { min-height: 0; padding: 28px 22px; }
+    .ecx-steps__num { margin-bottom: 22px; }
+  }
+</style>

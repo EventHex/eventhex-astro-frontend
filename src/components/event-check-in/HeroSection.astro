@@ -1,237 +1,246 @@
 ---
+// Split product hero, borrowed from the Event Registration / Speaker Management
+// hero pattern and adapted to the check-in page content.
 import LottiePlayer from "../LottiePlayer.astro";
 
-const trustItems = [
-  "100K+ check-ins processed",
-  "Trusted by 400+ events",
+const points = [
+  "iOS and Android Scanner",
+  "QR check-in with offline resilience",
+  "Live event, ticket, and instance counts",
 ];
 ---
 
-<section class="ecih-hero">
-  <div class="ecih-hero__shell">
-    <div class="ecih-hero__grid">
-      <div class="ecih-hero__content">
-        <div class="ecih-hero__badge animate-on-scroll" data-animation="fadeInDown">
-          <span>Event Check-In</span>
-        </div>
-
-        <h1 class="ecih-hero__title animate-on-scroll" data-animation="fadeInUp">
-          Seamless <b>Event Day</b>
-          <span><b>Check-In Operations</b></span>
-        </h1>
-
-        <p class="ecih-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
-          QR code scanning, multi-device check-in, real-time attendance tracking, on-site badge printing, and a live event-day operations dashboard — all in one system.
-        </p>
-
-        <div class="ecih-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
-          <a href="/book-a-demo/" class="ecih-hero__btn ecih-hero__btn--primary">Book a Demo</a>
-          <a href="#eci-bento" class="ecih-hero__btn ecih-hero__btn--secondary">Explore Features</a>
-        </div>
-
-        <div class="ecih-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
-          {trustItems.map((item) => <span class="ecih-hero__trust-item">{item}</span>)}
-        </div>
+<section class="ecx-hero">
+  <div class="ecx-hero__grid">
+    <div class="ecx-hero__content">
+      <span class="ecx-hero__badge animate-on-scroll" data-animation="fadeInDown">
+        Event check-in app
+      </span>
+      <h1 class="ecx-hero__title animate-on-scroll" data-animation="fadeInUp">
+        Scan arrivals. Keep attendance moving.
+      </h1>
+      <p class="ecx-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+        Give event-day teams the EventHex Scanner app on iOS or Android, validate
+        attendee QR tickets, capture check-ins through connectivity gaps, and keep
+        arrival counts visible as the venue fills.
+      </p>
+      <div class="ecx-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
+        {points.map((point) => <span>{point}</span>)}
       </div>
+      <div class="ecx-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+        <a href="/book-a-demo/" class="ecx-hero__btn">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+        <a href="#checkin-rail" class="ecx-hero__btn ecx-hero__btn--outline">
+          See the check-in workflow
+        </a>
+      </div>
+    </div>
 
-      <div class="ecih-hero__visual animate-on-scroll" data-animation="fadeInRight">
-        <LottiePlayer src="/animations/event-check-in-hero.json" class="ecih-hero__lottie" />
+    <div class="ecx-hero__visual animate-on-scroll" data-animation="fadeInRight">
+      <div class="ecx-hero__visual-card">
+        <div class="ecx-hero__visual-inner">
+          <LottiePlayer
+            src="/animations/event-check-in-hero.json"
+            class="ecx-hero__lottie"
+            eager
+          />
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<style is:global>
-  .ecih-hero {
+<style>
+  /* Matches the Event Registration hero shell: full-bleed tinted band that sits
+     under the fixed site header. */
+  .ecx-hero {
     position: relative;
     overflow: hidden;
     margin-top: -90px;
-    padding: 0 0 220px;
+    padding: 140px 24px 72px;
     background:
-      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
-      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+      radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, #74b0ff3d, #74b0ff1a 45%, #74b0ff00 78%),
+      #fff;
   }
 
-  .ecih-hero__shell {
+  .ecx-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 2;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    pointer-events: none;
+  }
+
+  .ecx-hero__grid {
     position: relative;
     z-index: 1;
-    width: 100%;
-    padding: 160px 0 0;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
-  }
-
-  .ecih-hero__grid {
-    max-width: 1280px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 0 20px 60px;
     display: grid;
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
     gap: 48px;
     align-items: center;
   }
 
-  .ecih-hero__content {
+  .ecx-hero__content {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 22px;
-  }
-
-  .ecih-hero__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .ecih-hero__title {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: 52px;
-    font-weight: 600;
-    line-height: 60px;
-    letter-spacing: -1px;
-    color: var(--heading-dark);
-  }
-
-  .ecih-hero__title span {
-    display: block;
-    color: var(--brand-blue);
-  }
-
-  .ecih-hero__desc {
-    margin: 0;
-    max-width: 580px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 28px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .ecih-hero__cta {
-    display: flex;
-    gap: 14px;
-    padding-top: 6px;
-  }
-
-  .ecih-hero__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 12px 32px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
-  }
-
-  .ecih-hero__btn--primary {
-    color: #fff;
-    background: var(--brand-blue);
-    box-shadow: 0 10px 24px rgba(55, 93, 251, 0.28);
-  }
-
-  .ecih-hero__btn--primary:hover {
-    transform: translateY(-2px);
-    background: var(--brand-blue-hover);
-    box-shadow: 0 14px 30px rgba(55, 93, 251, 0.34);
-  }
-
-  .ecih-hero__btn--secondary {
-    color: var(--heading-dark);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #dce4ff;
-  }
-
-  .ecih-hero__btn--secondary:hover {
-    transform: translateY(-2px);
-    border-color: #c5d2ff;
-    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
-  }
-
-  .ecih-hero__trust {
-    display: flex;
-    flex-wrap: wrap;
     gap: 20px;
   }
 
-  .ecih-hero__trust-item {
-    position: relative;
-    padding-left: 16px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #667085;
+  .ecx-hero__badge {
+    color: var(--brand-blue);
+    font: 500 16px/1.4 var(--font-body);
+    text-transform: uppercase;
   }
 
-  .ecih-hero__trust-item::before {
+  .ecx-hero__title {
+    width: 100%;
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(44px, 5vw, 60px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -2.1px;
+    color: transparent;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
+
+  .ecx-hero__desc {
+    width: 100%;
+    margin: 0;
+    color: var(--subheading-gray);
+    font: 400 18px/24px var(--font-body);
+    letter-spacing: -0.25px;
+  }
+
+  .ecx-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+  }
+
+  .ecx-hero__points span {
+    position: relative;
+    padding-left: 16px;
+    color: #475467;
+    font: 500 14px/20px var(--font-body);
+  }
+
+  .ecx-hero__points span::before {
     content: "";
     position: absolute;
     left: 0;
-    top: 8px;
+    top: 7px;
     width: 6px;
     height: 6px;
     border-radius: 50%;
     background: #10b981;
   }
 
-  .ecih-hero__visual {
+  .ecx-hero__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .ecx-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: var(--heading-dark);
+    color: #fff;
+    font: 650 15px/22px var(--font-body);
+    letter-spacing: -0.3px;
+    text-decoration: none;
+    transition: transform 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .ecx-hero__btn:hover {
+    transform: translateY(-2px);
+    background: #000;
+  }
+
+  .ecx-hero__btn--outline {
+    border-color: rgba(16, 24, 40, 0.22);
+    background: transparent;
+    color: var(--heading-dark);
+  }
+
+  .ecx-hero__btn--outline:hover {
+    border-color: var(--heading-dark);
+    background: transparent;
+  }
+
+  .ecx-hero__visual {
     position: relative;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+  }
+
+  .ecx-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    border-right: 0;
+    border-radius: 22px 0 0 22px;
+    background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57;
+    backdrop-filter: blur(16px);
+  }
+
+  .ecx-hero__visual-inner {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 22px;
+    border-radius: 16px 0 0 16px;
+    background: linear-gradient(135deg, #e6efff, #f2f7ff 45%, #fff);
   }
 
-  .ecih-hero__lottie {
+  .ecx-hero__lottie {
     width: 100%;
-    max-width: 520px;
-  }
-
-  @media (max-width: 1120px) {
-    .ecih-hero { padding: 0 20px 110px; }
-    .ecih-hero__shell { padding: 136px 0 0; }
-    .ecih-hero__grid { gap: 28px; padding: 0 0 40px; }
-    .ecih-hero__desc { max-width: 520px; }
-    .ecih-hero__title { font-size: 46px; line-height: 1.1em; }
+    max-width: 460px;
   }
 
   @media (max-width: 960px) {
-    .ecih-hero { padding: 0 20px 96px; }
-    .ecih-hero__shell { padding: 130px 0 0; }
-    .ecih-hero__grid { grid-template-columns: 1fr; gap: 34px; padding: 0 0 40px; }
-    .ecih-hero__content { align-items: center; text-align: center; }
-    .ecih-hero__desc { max-width: 720px; }
-    .ecih-hero__trust,
-    .ecih-hero__cta { justify-content: center; }
-    .ecih-hero__title { font-size: 42px; line-height: 1.1em; }
-    .ecih-hero__lottie { max-width: 420px; }
+    .ecx-hero__grid { grid-template-columns: 1fr; }
+    .ecx-hero__content { max-width: 720px; margin: 0 auto; align-items: center; text-align: center; }
+    .ecx-hero__points,
+    .ecx-hero__cta-row { justify-content: center; }
+    .ecx-hero__visual { width: min(680px, 100%); margin: 0 auto; }
+    .ecx-hero__visual-card,
+    .ecx-hero__visual-inner {
+      border-radius: 22px;
+      border-right: 1px solid rgba(255, 255, 255, 0.62);
+    }
   }
 
   @media (max-width: 767px) {
-    .ecih-hero { margin-top: -80px; padding: 0 20px 90px; }
-    .ecih-hero__shell { padding: 120px 0 0; }
-    .ecih-hero__grid { padding: 0 0 30px; }
-    .ecih-hero__title { font-size: 30px; line-height: 1.2em; letter-spacing: 0; }
-    .ecih-hero__desc { font-size: 15px; line-height: 1.7; }
-    .ecih-hero__badge { font-size: 16px; line-height: 1.1em; }
-    .ecih-hero__cta { width: 100%; flex-direction: column; }
-    .ecih-hero__btn { width: 100%; }
-    .ecih-hero__trust { gap: 10px; justify-content: center; }
-    .ecih-hero__lottie { max-width: 320px; }
+    .ecx-hero { margin-top: -80px; padding: 120px 20px 56px; }
+    .ecx-hero::after { display: none; }
+    .ecx-hero__grid { gap: 34px; }
+    .ecx-hero__title { font-size: 38px; line-height: 1.08; letter-spacing: -1.2px; }
+    .ecx-hero__desc { font-size: 16px; line-height: 1.6; }
+    .ecx-hero__cta-row { width: 100%; flex-direction: column; }
+    .ecx-hero__btn { width: 100%; justify-content: center; }
+    .ecx-hero__visual-inner { padding: 14px; }
+    .ecx-hero__lottie { max-width: 100%; }
   }
 </style>
-

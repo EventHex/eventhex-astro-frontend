@@ -1,0 +1,697 @@
+---
+// Sticky dark narrative stack, borrowed from the Speaker Management
+// "From setup to session recap" section (components/speaker-management/FeatureCards.astro):
+// a full-bleed dark shell, a sticky glass eyebrow + headline header that releases
+// with the last card, and sticky cards that peek 20px behind each other on scroll.
+//
+// The source cards carry real organizer screenshots. No authentic screenshot of the
+// scanner offline queue exists, so each media frame holds a restrained coded product
+// panel instead; the shell, header, card frame, proportions and motion stay the source's.
+interface SyncRow {
+  label: string;
+  meta?: string;
+  tag?: string;
+  tone?: "ok" | "warn" | "info" | "muted";
+}
+
+interface SyncStep {
+  step: string;
+  title: string;
+  desc: string;
+  panel: {
+    label: string;
+    state: string;
+    stateTone: "ok" | "warn" | "info";
+    rows: SyncRow[];
+    progress: number;
+    note: string;
+  };
+}
+
+const steps: SyncStep[] = [
+  {
+    step: "01",
+    title: "Prepare before arrival",
+    desc: "Load the event and confirm scanner access while connectivity is available.",
+    panel: {
+      label: "Scanner setup",
+      state: "Ready",
+      stateTone: "ok",
+      rows: [
+        {
+          label: "Event data",
+          meta: "Loaded while the network is available",
+          tag: "Ready",
+          tone: "ok",
+        },
+        {
+          label: "Scanner access",
+          meta: "Confirmed for this event and role",
+          tag: "Ready",
+          tone: "ok",
+        },
+        {
+          label: "Offline mode",
+          meta: "Available on the scanner device",
+          tag: "Enabled",
+          tone: "ok",
+        },
+      ],
+      progress: 100,
+      note: "Device checked before doors open",
+    },
+  },
+  {
+    step: "02",
+    title: "Capture pending work",
+    desc: "Keep the event-day interface clear about scans waiting to sync.",
+    panel: {
+      label: "Event-day queue",
+      state: "Offline",
+      stateTone: "warn",
+      rows: [
+        { label: "Delegate Pass", meta: "09:41", tag: "Synced", tone: "ok" },
+        { label: "Delegate Pass", meta: "09:44", tag: "Pending", tone: "warn" },
+        { label: "Delegate Pass", meta: "09:46", tag: "Pending", tone: "warn" },
+      ],
+      progress: 34,
+      note: "2 scans waiting to sync",
+    },
+  },
+  {
+    step: "03",
+    title: "Reconnect and sync",
+    desc: "Move queued attendance back to the shared record when the network recovers.",
+    panel: {
+      label: "Sync",
+      state: "Back online",
+      stateTone: "info",
+      rows: [
+        { label: "Delegate Pass", meta: "09:41", tag: "Synced", tone: "ok" },
+        { label: "Delegate Pass", meta: "09:44", tag: "Syncing", tone: "info" },
+        { label: "Delegate Pass", meta: "09:46", tag: "Queued", tone: "muted" },
+      ],
+      progress: 68,
+      note: "Queued scans moving to the shared record",
+    },
+  },
+  {
+    step: "04",
+    title: "Recheck the final count",
+    desc: "Review pending and synced states before closing the event-day shift.",
+    panel: {
+      label: "Event-day shift",
+      state: "Ready to close",
+      stateTone: "ok",
+      rows: [
+        { label: "Pending scans", tag: "None", tone: "ok" },
+        { label: "Synced scans", tag: "Complete", tone: "ok" },
+        { label: "Attendance", tag: "Reviewed", tone: "info" },
+      ],
+      progress: 100,
+      note: "Nothing left waiting before the shift closes",
+    },
+  },
+];
+---
+
+<section class="ecx-sync" id="offline" aria-labelledby="offline-heading">
+  <div class="ecx-sync__inner">
+    <div class="ecx-sync__header">
+      <div class="ecx-sync__eyebrow">
+        <span class="ecx-sync__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z"
+              fill="#4F8CFF"></path>
+            <path
+              d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z"
+              fill="#B08BFF"></path>
+          </svg>
+        </span>
+        <span class="ecx-sync__subtitle">Venue-ready resilience</span>
+      </div>
+      <h2 class="ecx-sync__title" id="offline-heading">
+        <span class="ecx-sync__line">Keep capturing attendance</span>
+        <span class="ecx-sync__line">
+          when the network <span class="ecx-sync__accent">drops</span>
+        </span>
+      </h2>
+      <p class="ecx-sync__lead">
+        Prepare event data before doors open, continue recording eligible check-ins
+        during an interruption, and sync pending work when connectivity returns.
+      </p>
+    </div>
+
+    <div class="ecx-sync__cards">
+      {
+        steps.map((item, index) => (
+          <article class="ecx-sync__card" data-card-index={index} style={`--card-index: ${index};`}>
+            <div class="ecx-sync__content">
+              <span class="ecx-sync__step">{item.step}</span>
+              <h3 class="ecx-sync__card-title">{item.title}</h3>
+              <p class="ecx-sync__card-desc">{item.desc}</p>
+            </div>
+
+            <div class="ecx-sync__media">
+              <div class="ecx-panel" aria-hidden="true">
+                <div class="ecx-panel__head">
+                  <span class="ecx-panel__label">{item.panel.label}</span>
+                  <span class={`ecx-panel__state ecx-panel__state--${item.panel.stateTone}`}>
+                    {item.panel.state}
+                  </span>
+                </div>
+
+                <div class="ecx-panel__rows">
+                  {item.panel.rows.map((row) => (
+                    <div class="ecx-panel__row">
+                      <span class="ecx-panel__cell">
+                        <span class="ecx-panel__key">{row.label}</span>
+                        {row.meta && <span class="ecx-panel__meta">{row.meta}</span>}
+                      </span>
+                      {row.tag && (
+                        <span class={`ecx-panel__tag ecx-panel__tag--${row.tone ?? "muted"}`}>
+                          {row.tag}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div class="ecx-panel__foot">
+                  <span class="ecx-panel__bar">
+                    <i style={`width: ${item.panel.progress}%`} />
+                  </span>
+                  <span class="ecx-panel__note">{item.panel.note}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+      <div class="ecx-sync__spacer" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const syncSection = document.querySelector<HTMLElement>(".ecx-sync");
+  const syncHeader = syncSection?.querySelector<HTMLElement>(".ecx-sync__header");
+  const syncCards = syncSection?.querySelectorAll<HTMLElement>(".ecx-sync__card");
+  const lastSyncCard = syncCards?.[syncCards.length - 1];
+
+  if (syncHeader && lastSyncCard) {
+    let frame = 0;
+    const syncRelease = () => {
+      frame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(lastSyncCard).top) || 0;
+      const releaseOffset = Math.min(0, lastSyncCard.getBoundingClientRect().top - stickyTop);
+      syncHeader.style.setProperty("--ecx-sync-release-y", `${releaseOffset}px`);
+      syncHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueRelease = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(syncRelease);
+    };
+
+    window.addEventListener("scroll", queueRelease, { passive: true });
+    window.addEventListener("resize", queueRelease, { passive: true });
+    syncRelease();
+  }
+</script>
+
+<style>
+  .ecx-sync {
+    width: 100%;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: ecx-sync-mesh 30s linear infinite;
+  }
+
+  @keyframes ecx-sync-mesh {
+    0%,
+    100% {
+      background-position: 0 0, 0% 0%;
+    }
+    50% {
+      background-position: 0 0, 8% 10%;
+    }
+  }
+
+  .ecx-sync__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 4px 0 30px;
+  }
+
+  .ecx-sync__header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: min(94%, 1050px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+    padding: 24px 0;
+    transform: translateY(var(--ecx-sync-release-y, 0px));
+    will-change: transform;
+  }
+
+  .ecx-sync__header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 10, 44, 0.99) 0%,
+      rgba(7, 11, 27, 0.98) 72%,
+      rgba(7, 11, 27, 0) 100%
+    );
+  }
+
+  .ecx-sync__eyebrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 6px 16px -6px rgba(0, 0, 0, 0.35);
+  }
+
+  .ecx-sync__icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .ecx-sync__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ecx-sync__subtitle {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: #fff;
+  }
+
+  .ecx-sync__title {
+    font-family: var(--font-heading);
+    font-size: 46px;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    line-height: 1.15;
+  }
+
+  .ecx-sync__line {
+    display: block;
+  }
+
+  .ecx-sync__accent {
+    color: #afa3ff;
+  }
+
+  .ecx-sync__lead {
+    max-width: 760px;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  @media (min-width: 768px) {
+    .ecx-sync__line {
+      white-space: nowrap;
+    }
+  }
+
+  /* Stacking cards — sticky scroll */
+  .ecx-sync__cards {
+    --ecx-stack-top: 352px;
+    width: 100%;
+    padding: 80px 0 50px;
+    position: relative;
+  }
+
+  .ecx-sync__spacer {
+    height: 190px;
+  }
+
+  .ecx-sync__card {
+    position: sticky;
+    top: calc(var(--ecx-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    align-items: stretch;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18) 0%, transparent 40%),
+      #0a0a0f;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    height: 500px;
+    margin-bottom: 60px;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .ecx-sync__content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    gap: 16px;
+  }
+
+  .ecx-sync__step {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 7px 13px;
+    border: 1px solid rgba(175, 163, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.1);
+    color: #afa3ff;
+    font: 600 12px/1.2 var(--font-body);
+    letter-spacing: 0.08em;
+  }
+
+  .ecx-sync__card-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    color: #e7e4fa;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ecx-sync__card-desc {
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .ecx-sync__media {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 16px 16px 16px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+
+  /* Coded product panel standing in for an organizer screenshot */
+  .ecx-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.6);
+    font-family: var(--font-body);
+    color: #111;
+  }
+
+  .ecx-panel__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+
+  .ecx-panel__label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .ecx-panel__state {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ecx-panel__state--ok {
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .ecx-panel__state--warn {
+    background: rgba(245, 185, 66, 0.18);
+    color: #a2680b;
+  }
+
+  .ecx-panel__state--info {
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .ecx-panel__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ecx-panel__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px dashed #e6e8ee;
+  }
+
+  .ecx-panel__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ecx-panel__key {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+  }
+
+  .ecx-panel__meta {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .ecx-panel__tag {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ecx-panel__tag--ok {
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .ecx-panel__tag--warn {
+    background: rgba(245, 185, 66, 0.18);
+    color: #a2680b;
+  }
+
+  .ecx-panel__tag--info {
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .ecx-panel__tag--muted {
+    background: #f2f3f6;
+    color: #6b7280;
+  }
+
+  .ecx-panel__foot {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 14px;
+  }
+
+  .ecx-panel__bar {
+    display: block;
+    width: 100%;
+    height: 5px;
+    border-radius: 999px;
+    background: #eceef3;
+    overflow: hidden;
+  }
+
+  .ecx-panel__bar i {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #6d5ceb, #4b65f6);
+  }
+
+  .ecx-panel__note {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6b7280;
+  }
+
+  @media (max-width: 1024px) {
+    .ecx-sync__inner {
+      padding: 20px 20px 30px;
+    }
+    .ecx-sync__header {
+      width: 94%;
+    }
+    .ecx-sync__title {
+      font-size: 40px;
+      line-height: 1.1;
+    }
+    .ecx-sync__lead {
+      font-size: 16px;
+    }
+    .ecx-sync__cards {
+      --ecx-stack-top: 332px;
+    }
+    .ecx-sync__card {
+      height: 450px;
+    }
+    .ecx-sync__content {
+      flex-basis: 50%;
+    }
+    .ecx-sync__card-title {
+      font-size: 28px;
+    }
+    .ecx-sync__card-desc {
+      font-size: 16px;
+    }
+    .ecx-panel {
+      padding: 14px;
+    }
+    .ecx-panel__label,
+    .ecx-panel__key {
+      font-size: 12px;
+    }
+    .ecx-panel__meta {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .ecx-sync__inner {
+      padding: 16px 20px 30px;
+    }
+    .ecx-sync__header {
+      width: 100%;
+    }
+    .ecx-sync__title {
+      font-size: 30px;
+    }
+    .ecx-sync__lead {
+      font-size: 15px;
+    }
+    .ecx-sync__cards {
+      /* The sticky header carries the section lead as well, so it is ~90px taller
+         here than in the source section; the stack has to clear it. */
+      --ecx-stack-top: 412px;
+      padding-top: 60px;
+      padding-bottom: 40px;
+    }
+    .ecx-sync__card {
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 32px;
+    }
+    .ecx-sync__content {
+      flex: 0 0 auto;
+      padding: 20px 20px 6px;
+    }
+    .ecx-sync__media {
+      flex: 0 0 auto;
+      margin: 10px;
+      padding: 12px;
+    }
+    .ecx-panel {
+      padding: 14px;
+    }
+    .ecx-panel__head {
+      padding-bottom: 10px;
+    }
+    .ecx-panel__row {
+      padding: 8px 0;
+    }
+    .ecx-panel__foot {
+      gap: 6px;
+      padding-top: 12px;
+    }
+    .ecx-sync__card-title {
+      font-size: 24px;
+    }
+    .ecx-sync__card-desc {
+      font-size: 15px;
+    }
+    .ecx-sync__spacer {
+      height: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-sync {
+      animation: none;
+    }
+  }
+</style>

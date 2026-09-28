@@ -1,0 +1,725 @@
+---
+// Numbered workflow accordion, borrowed from the Speaker Management
+// "From call for papers to published program" section
+// (components/speaker-management/ProgramContentSections.astro, section="cfp"):
+// a centred gradient headline over an ordered list of numbered rows that expand
+// into a plain-language point list beside a product view.
+//
+// All copy comes from the supplied content deck. The source rows carry real
+// organizer screenshots; the attendance-state screens already used further up
+// this page are not repeated here, so each product view holds a restrained coded
+// panel with the same visual language as the other mock panels on this page.
+interface Point {
+  title: string;
+  desc: string;
+}
+
+interface AttendanceStep {
+  title: string;
+  desc: string;
+  points: Point[];
+  panel: {
+    label: string;
+    state: string;
+    stateTone: "ok" | "info" | "warn";
+    rows: { label: string; meta: string; tag: string; tone: "ok" | "info" | "warn" | "muted" }[];
+    note: string;
+  };
+}
+
+const steps: AttendanceStep[] = [
+  {
+    title: "Read the arrival state",
+    desc: "Checked-in, registered, and pending state remains visible.",
+    points: [
+      {
+        title: "Checked in",
+        desc: "See accepted attendance for the selected event or scan point.",
+      },
+      {
+        title: "Registered",
+        desc: "Keep the full eligible population visible.",
+      },
+      {
+        title: "Pending",
+        desc: "Understand who has not yet checked in.",
+      },
+    ],
+    panel: {
+      label: "Attendance summary",
+      state: "Live",
+      stateTone: "info",
+      rows: [
+        { label: "Checked in", meta: "Accepted attendance", tag: "Accepted", tone: "ok" },
+        { label: "Registered", meta: "Full eligible population", tag: "Eligible", tone: "info" },
+        { label: "Pending", meta: "Not yet checked in", tag: "Pending", tone: "warn" },
+      ],
+      note: "Kept for the selected event or scan point",
+    },
+  },
+  {
+    title: "Filter the count the question asks for",
+    desc: "Review arrival by ticket or participant group, and separate entrance attendance from another scanning point.",
+    points: [
+      {
+        title: "Ticket filter",
+        desc: "Review arrival by ticket or participant group.",
+      },
+      {
+        title: "Instance filter",
+        desc: "Separate entrance attendance from a meal, session, or other scanning point.",
+      },
+    ],
+    panel: {
+      label: "Count filters",
+      state: "2 applied",
+      stateTone: "info",
+      rows: [
+        { label: "Ticket filter", meta: "Participant group", tag: "Delegate Pass", tone: "info" },
+        { label: "Instance filter", meta: "Scanning point", tag: "Instance Check-In", tone: "info" },
+      ],
+      note: "Arrival by ticket or by scanning point",
+    },
+  },
+  {
+    title: "Open the record behind the number",
+    desc: "The summary answers how many; the record answers who.",
+    points: [
+      {
+        title: "Attendance records",
+        desc: "Review the attendee, scan type, time, and related event context available to operations.",
+      },
+    ],
+    panel: {
+      label: "Attendance record",
+      state: "Reviewed",
+      stateTone: "ok",
+      rows: [
+        { label: "Attendee", meta: "Matched at scan", tag: "Record", tone: "ok" },
+        { label: "Scan type", meta: "Entrance or instance", tag: "Recorded", tone: "ok" },
+        { label: "Event context", meta: "Time and registration", tag: "Available", tone: "info" },
+      ],
+      note: "The detail behind each attendance entry",
+    },
+  },
+];
+---
+
+<section class="ecx-att" id="attendance" aria-labelledby="attendance-heading">
+  <div class="ecx-att__inner">
+    <header class="ecx-att__header">
+      <span class="ecx-att__eyebrow">Live attendance visibility</span>
+      <div class="ecx-att__heading">
+        <h2 id="attendance-heading">See who has arrived&#8212;and who is still expected</h2>
+      </div>
+      <p class="ecx-att__lead">
+        Keep arrival state connected to the same registration and ticket records used
+        before the event.
+      </p>
+    </header>
+
+    <ol class="ecx-att__steps">
+      {
+        steps.map((step, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary tabindex="-1">
+                <span class="ecx-att__num">0{index + 1}</span>
+                <div class="ecx-att__step-content">
+                  <h3 class="ecx-att__step-title">{step.title}</h3>
+                  <p class="ecx-att__step-desc">{step.desc}</p>
+                  <ul class="ecx-att__points">
+                    {step.points.map((point) => (
+                      <li>
+                        <i aria-hidden="true">&#10022;</i>
+                        <span class="ecx-att__point">
+                          <strong>{point.title}</strong>
+                          <span>{point.desc}</span>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  class="ecx-att__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true">
+                    <path d="m5 7.5 5 5 5-5" />
+                  </svg>
+                </button>
+              </summary>
+
+              <div class="ecx-att__visual">
+                <div class="ecx-att__panel" aria-hidden="true">
+                  <div class="ecx-att__panel-head">
+                    <span class="ecx-att__panel-label">{step.panel.label}</span>
+                    <span class={`ecx-att__state ecx-att__state--${step.panel.stateTone}`}>
+                      {step.panel.state}
+                    </span>
+                  </div>
+                  <div class="ecx-att__rows">
+                    {step.panel.rows.map((row) => (
+                      <div class="ecx-att__row">
+                        <span class="ecx-att__cell">
+                          <span class="ecx-att__key">{row.label}</span>
+                          <span class="ecx-att__meta">{row.meta}</span>
+                        </span>
+                        <span class={`ecx-att__tag ecx-att__tag--${row.tone}`}>{row.tag}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p class="ecx-att__note">{step.panel.note}</p>
+                </div>
+              </div>
+            </details>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>(".ecx-att__steps details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".ecx-att__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} step`);
+      if (!item.open) return;
+      all.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .ecx-att {
+    padding: clamp(110px, 12vw, 160px) 24px;
+    background: transparent;
+  }
+
+  .ecx-att__inner {
+    width: min(1218px, 100%);
+    margin: 0 auto;
+  }
+
+  .ecx-att__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 64px;
+    text-align: center;
+  }
+
+  .ecx-att__eyebrow {
+    display: block;
+    color: #7b68ee;
+    font: 700 13px/1.3 var(--font-body);
+    letter-spacing: 0.08em;
+  }
+
+  .ecx-att__heading {
+    max-width: 820px;
+    margin-inline: auto;
+  }
+
+  .ecx-att__heading h2 {
+    max-width: 780px;
+    margin: 0 auto;
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .ecx-att__lead {
+    max-width: 720px;
+    margin: 0 auto;
+    color: var(--subheading-gray);
+    font: 400 17px/1.65 var(--font-body);
+  }
+
+  /* Numbered rows */
+  .ecx-att__steps {
+    display: grid;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: 0;
+  }
+
+  .ecx-att__steps > li {
+    position: relative;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+
+  .ecx-att__steps details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--ecx-att-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, #fff 82%);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, 0.04);
+    transition:
+      border-radius 0.35s ease,
+      background 0.35s ease,
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .ecx-att__steps details:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+  }
+
+  .ecx-att__steps summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.25s ease;
+  }
+
+  .ecx-att__steps summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ecx-att__steps summary:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+
+  .ecx-att__num {
+    display: block;
+    color: #111;
+    font: 500 15px/1.1 var(--font-heading);
+    letter-spacing: -0.05em;
+  }
+
+  .ecx-att__step-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ecx-att__step-title {
+    margin: 0;
+    color: #111;
+    font: 500 22px/1.2 var(--font-body);
+    letter-spacing: -0.02em;
+  }
+
+  .ecx-att__step-desc {
+    display: none;
+  }
+
+  .ecx-att__steps details:not([open]) .ecx-att__step-content {
+    display: grid;
+    grid-template-columns: minmax(230px, 0.7fr) minmax(320px, 1.3fr);
+    align-items: center;
+    gap: 36px;
+  }
+
+  .ecx-att__steps details:not([open]) .ecx-att__step-desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-width: 460px;
+    margin: 0;
+    color: #5f6673;
+    font: 400 14.5px/1.5 var(--font-body);
+  }
+
+  .ecx-att__points {
+    display: none;
+  }
+
+  .ecx-att__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(17, 24, 39, 0.2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.78);
+    color: #111827;
+    cursor: pointer;
+    transition:
+      transform 0.25s ease,
+      background 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .ecx-att__arrow:hover {
+    border-color: rgba(17, 24, 39, 0.42);
+    background: #fff;
+  }
+
+  .ecx-att__arrow:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, 0.28);
+    outline-offset: 2px;
+  }
+
+  .ecx-att__arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* Open row */
+  .ecx-att__steps details[open] {
+    display: flex;
+    align-items: stretch;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, #fff 72%);
+    margin: 0;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__arrow {
+    top: 28px;
+    transform: rotate(180deg);
+  }
+
+  .ecx-att__steps details[open] summary {
+    flex: 0 0 55%;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    min-height: 0;
+    padding: 64px 40px 64px 28px;
+    background: transparent;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__num {
+    font-size: 26px;
+    line-height: 1;
+    color: #050505;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__step-title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    color: #050505;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__step-desc {
+    display: block;
+    max-width: 90%;
+    margin: 0 0 32px;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__points {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__points li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: #111;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__points li i {
+    font-size: 16px;
+    font-style: normal;
+  }
+
+  .ecx-att__point {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+  }
+
+  .ecx-att__point strong {
+    font-weight: 600;
+  }
+
+  .ecx-att__point span {
+    color: #5f6673;
+    font-weight: 400;
+  }
+
+  /* Per-row tints, first three from the source sequence */
+  .ecx-att__steps > li:nth-child(1) {
+    --ecx-att-tint: #fff8dc;
+    --ecx-att-border: #f0dfa6;
+  }
+  .ecx-att__steps > li:nth-child(2) {
+    --ecx-att-tint: #edf7ff;
+    --ecx-att-border: #d4e7f7;
+  }
+  .ecx-att__steps > li:nth-child(3) {
+    --ecx-att-tint: #f3efff;
+    --ecx-att-border: #e2d8fa;
+  }
+
+  /* Product view beside the open row */
+  .ecx-att__visual {
+    display: none;
+    margin: 0;
+    opacity: 0;
+  }
+
+  .ecx-att__steps details[open] .ecx-att__visual {
+    flex: 0 0 45%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 88px 40px 0;
+    opacity: 1;
+  }
+
+  .ecx-att__panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #ececf2;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+    font-family: var(--font-body);
+    color: #111;
+  }
+
+  .ecx-att__panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+
+  .ecx-att__panel-label {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .ecx-att__state {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ecx-att__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ecx-att__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px dashed #e6e8ee;
+  }
+
+  .ecx-att__cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .ecx-att__key {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .ecx-att__meta {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  .ecx-att__tag {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .ecx-att__state--ok,
+  .ecx-att__tag--ok {
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .ecx-att__state--warn,
+  .ecx-att__tag--warn {
+    background: rgba(245, 185, 66, 0.18);
+    color: #a2680b;
+  }
+
+  .ecx-att__state--info,
+  .ecx-att__tag--info {
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .ecx-att__tag--muted {
+    background: #f2f3f6;
+    color: #6b7280;
+  }
+
+  .ecx-att__note {
+    margin: 0;
+    padding-top: 12px;
+    border-top: 1px dashed #e6e8ee;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #6b7280;
+  }
+
+  @media (max-width: 960px) {
+    .ecx-att__steps details:not([open]) .ecx-att__step-content {
+      grid-template-columns: minmax(200px, 0.8fr) minmax(240px, 1.2fr);
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .ecx-att {
+      padding: 68px 20px;
+    }
+    .ecx-att__header {
+      margin-bottom: 46px;
+    }
+    .ecx-att__heading h2 {
+      font-size: 42px;
+    }
+    .ecx-att__steps summary,
+    .ecx-att__steps summary:hover {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      min-height: 96px;
+      padding: 18px 62px 18px 14px;
+    }
+    .ecx-att__arrow {
+      top: 31px;
+      right: 16px;
+    }
+    .ecx-att__num {
+      font-size: 13px;
+    }
+    .ecx-att__steps details:not([open]) .ecx-att__step-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .ecx-att__steps details:not([open]) .ecx-att__step-desc {
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .ecx-att__step-title {
+      font-size: 18px;
+    }
+    .ecx-att__steps details[open] {
+      flex-direction: column;
+    }
+    .ecx-att__steps details[open] summary,
+    .ecx-att__steps details[open] summary:hover {
+      flex: none;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      padding: 34px 62px 24px 14px;
+    }
+    .ecx-att__steps details[open] .ecx-att__arrow {
+      top: 24px;
+      right: 16px;
+    }
+    .ecx-att__steps details[open] .ecx-att__num {
+      font-size: 21px;
+    }
+    .ecx-att__steps details[open] .ecx-att__step-title {
+      font-size: 26px;
+    }
+    .ecx-att__steps details[open] .ecx-att__step-desc {
+      max-width: 100%;
+      margin-bottom: 24px;
+      font-size: 16px;
+    }
+    .ecx-att__steps details[open] .ecx-att__points li {
+      align-items: flex-start;
+      font-size: 15px;
+    }
+    .ecx-att__steps details[open] .ecx-att__visual {
+      flex: none;
+      padding: 0 24px 28px;
+      margin: 0;
+    }
+    .ecx-att__panel {
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-att__steps details,
+    .ecx-att__arrow {
+      transition: none;
+    }
+  }
+</style>

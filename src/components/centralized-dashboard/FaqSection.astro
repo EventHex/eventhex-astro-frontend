@@ -1,0 +1,105 @@
+---
+// Sticky-sidebar FAQ: Registration erg-faq pattern, renamed cdd-faq.
+const faqs = [
+  { q: "What is a centralized event dashboard?", a: "It is the organization-level control view for multiple events. EventHex uses it for portfolio visibility, attention, comparison, reuse, and navigation while each event keeps its own operating workspace." },
+  { q: "Can we compare events in different currencies?", a: "EventHex preserves event currency and groups monetary context rather than presenting unlike currencies as one total. Converted or settlement reporting requires a separate finance process." },
+  { q: "Can we clone a previous event?", a: "Yes. The selective clone flow lets you choose supported settings, content, resources, and access to reuse while the new event starts with fresh registration data." },
+  { q: "What can we compare across events?", a: "Available portfolio views include registrations, attendance, check-in rate, revenue with currency context, dates, status, and supporting audience measures. A CSV comparison export is also verified." },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+---
+
+<section class="cdd-faq">
+  <div class="cdd-faq__inner">
+    <div class="cdd-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="cdd-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 class="cdd-faq__heading">Centralized Dashboard<br />Questions, Answered.</h2>
+      <p class="cdd-faq__intro">What multi-event teams ask before moving the portfolio.</p>
+      <a href="/contact-en/" class="cdd-faq__cta">
+        Visit Help Center
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+    <div class="cdd-faq__list">
+      {faqs.map((faq, index) => (
+        <details
+          class="cdd-faq__item animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 50)}
+          data-cdd-faq-item
+          open={index === 0}
+        >
+          <summary class="cdd-faq__question">
+            <strong>{faq.q}</strong>
+            <span class="cdd-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="cdd-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-cdd-faq-item]'));
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .cdd-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .cdd-faq__inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .cdd-faq__sidebar { position: sticky; top: 6rem; }
+  .cdd-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; color: #000; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 500; }
+  .cdd-faq__heading { font-family: var(--font-heading); font-size: 44px; font-weight: 500; color: #000; margin: 0 0 20px; line-height: 1.1; letter-spacing: -1px; }
+  .cdd-faq__intro { margin: 0 0 28px; color: var(--body-light); font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+  .cdd-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font-family: var(--font-body); font-size: 0.9375rem; font-weight: 500; text-decoration: none; transition: background 0.2s ease, transform 0.2s ease; }
+  .cdd-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .cdd-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: cdd-faq; }
+  .cdd-faq__item { counter-increment: cdd-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background 0.25s ease, border-color 0.25s ease; }
+  .cdd-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .cdd-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; font-family: var(--font-heading); font-size: 1.0625rem; font-weight: 500; color: #000; cursor: pointer; list-style: none; }
+  .cdd-faq__question strong { font-weight: 500; }
+  .cdd-faq__question strong::before { content: counter(cdd-faq) '. '; }
+  .cdd-faq__question::-webkit-details-marker { display: none; }
+  .cdd-faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1); }
+  .cdd-faq__icon::before, .cdd-faq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .cdd-faq__icon::before { width: 14px; height: 2px; }
+  .cdd-faq__icon::after { width: 2px; height: 14px; transition: opacity 0.2s ease; }
+  .cdd-faq__item[open] .cdd-faq__icon { transform: scale(0.9); }
+  .cdd-faq__item[open] .cdd-faq__icon::after { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { .cdd-faq__item, .cdd-faq__icon, .cdd-faq__icon::after { transition: none; } }
+  .cdd-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .cdd-faq__answer p { font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.7; color: #000; margin: 0; }
+  @media (max-width: 1024px) {
+    .cdd-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .cdd-faq__sidebar { position: static; }
+    .cdd-faq__heading { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .cdd-faq { padding: 56px 16px; }
+    .cdd-faq__heading { font-size: 28px; }
+    .cdd-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .cdd-faq__question { font-size: 0.9375rem; padding: 18px 0; }
+  }
+</style>

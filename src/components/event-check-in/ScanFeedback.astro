@@ -1,0 +1,744 @@
+---
+// Sticky-heading evidence column, borrowed from the Event Registration
+// "Control who gets in" access-control section: a sticky left column with an
+// eyebrow pill, a gradient headline, a lead and a primary CTA, beside four
+// numbered cards that each hold a product-evidence frame.
+//
+// The source cards carry real organizer screenshots. No authentic screenshot of
+// a scanner result state exists, so each frame holds a restrained, coded result
+// mock instead - it stays visually secondary to the borrowed card structure.
+const states = [
+  {
+    tone: "ok",
+    label: "Accepted check-in",
+    desc: "Confirm the attendee and update attendance for the selected scan mode.",
+    status: "Checked in",
+    statusTone: "success",
+    headline: "Check-in accepted",
+    detail: "Attendance updated",
+    ticket: "Delegate Pass",
+    point: "Instance Check-In",
+    attendance: "Updated",
+    next: "Scan next attendee",
+  },
+  {
+    tone: "warn",
+    label: "Already scanned",
+    desc: "Show that this attendee already has attendance for the same event, ticket, or instance.",
+    status: "Duplicate",
+    statusTone: "default",
+    headline: "Already scanned",
+    detail: "Earlier arrival recorded",
+    ticket: "Delegate Pass",
+    point: "Instance Check-In",
+    attendance: "Not added",
+    next: "View record",
+  },
+  {
+    tone: "stop",
+    label: "Wrong ticket",
+    desc: "Explain when the attendee does not hold a ticket eligible for the selected instance.",
+    status: "Invalid ticket",
+    statusTone: "default",
+    headline: "Wrong ticket",
+    detail: "Not eligible for this instance",
+    ticket: "Delegate Pass",
+    point: "Unboxing Innovation: A Look Ahead",
+    attendance: "Blocked",
+    next: "Change instance",
+  },
+  {
+    tone: "info",
+    label: "Record needs attention",
+    desc: "Keep search and organizer review available for a QR that cannot be resolved as expected.",
+    status: "Needs review",
+    statusTone: "approval",
+    headline: "Needs attention",
+    detail: "Search attendee or review",
+    ticket: "Delegate Pass",
+    point: "Instance Check-In",
+    attendance: "Pending review",
+    next: "Search attendee",
+  },
+];
+---
+
+<section class="ecx-access" id="scan-feedback" aria-labelledby="scan-feedback-heading">
+  <div class="ecx-access__container">
+    <div class="ecx-access__left">
+      <div class="ecx-access__sticky animate-on-scroll" data-animation="fadeInUp">
+        <div class="ecx-access__eyebrow">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 8V5.5A2.5 2.5 0 0 1 5.5 3H8"></path>
+            <path d="M16 3h2.5A2.5 2.5 0 0 1 21 5.5V8"></path>
+            <path d="M21 16v2.5a2.5 2.5 0 0 1-2.5 2.5H16"></path>
+            <path d="M8 21H5.5A2.5 2.5 0 0 1 3 18.5V16"></path>
+            <path d="M3 12h18"></path>
+          </svg>
+          Clear scan feedback
+        </div>
+        <h2 id="scan-feedback-heading">
+          Help staff act on valid, duplicate,
+          <span class="ecx-access__accent">and ineligible scans</span>
+        </h2>
+        <p>
+          A scan result should answer what happened and what the team should do
+          next without requiring a dashboard lookup.
+        </p>
+        <a class="ecx-access__cta" href="/book-a-demo/">
+          Book a Demo
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="ecx-access__right">
+      {states.map((state, index) => (
+        <article
+          class="ecx-rcard animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 60)}
+        >
+          <div class="ecx-rcard__header">
+            <div class="ecx-rcard__number">{String(index + 1).padStart(2, "0")}</div>
+            <div class="ecx-rcard__text">
+              <h3>{state.label}</h3>
+              <p>{state.desc}</p>
+            </div>
+          </div>
+
+          <div class="ecx-rcard__visual ecx-rcard__visual--shot">
+            <div class="ecx-shot">
+              <div class={`ecx-screen ecx-screen--${state.tone}`} aria-hidden="true">
+                <div class="ecx-screen__head">
+                  <span class="ecx-screen__badge">
+                    {state.tone === "ok" && (
+                      <svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"></path></svg>
+                    )}
+                    {state.tone === "warn" && (
+                      <svg viewBox="0 0 24 24"><path d="M12 6v7m0 4h.01"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                    )}
+                    {state.tone === "stop" && (
+                      <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+                    )}
+                    {state.tone === "info" && (
+                      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+                    )}
+                  </span>
+                  <span class="ecx-screen__copy">
+                    <small>Scan result</small>
+                    <b>{state.headline}</b>
+                    <span>{state.detail}</span>
+                  </span>
+                </div>
+                <dl class="ecx-screen__list">
+                  <div class="ecx-screen__row">
+                    <dt>Ticket</dt>
+                    <dd>{state.ticket}</dd>
+                  </div>
+                  <div class="ecx-screen__row">
+                    <dt>Scan point</dt>
+                    <dd>{state.point}</dd>
+                  </div>
+                  <div class="ecx-screen__row">
+                    <dt>Attendance</dt>
+                    <dd>{state.attendance}</dd>
+                  </div>
+                </dl>
+              </div>
+
+              <span class={`ecx-shot__status ecx-shot__status--${state.statusTone}`}>
+                {state.statusTone === "success" && (
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+                )}
+                {state.statusTone === "approval" && (
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"></circle><path d="m17 17-3.2-3.2"></path></svg>
+                )}
+                {state.statusTone === "default" && (
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v6m0 3.5h.01"></path><circle cx="10" cy="10" r="7.5"></circle></svg>
+                )}
+                {state.status}
+              </span>
+
+              <span class="ecx-shot__action">{state.next}</span>
+
+              <svg class="ecx-shot__cursor" viewBox="0 0 28 32" aria-hidden="true">
+                <path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path>
+              </svg>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ===== section shell ===== */
+  .ecx-access {
+    padding: 100px 24px;
+    background: #fff;
+  }
+
+  .ecx-access__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 80px;
+    align-items: stretch;
+  }
+
+  .ecx-access__left {
+    flex: 0 0 40%;
+  }
+
+  .ecx-access__sticky {
+    position: sticky;
+    top: 120px;
+  }
+
+  .ecx-access__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    padding: 6px 12px;
+    border-radius: 99px;
+    background: #f4f5f7;
+    color: var(--heading-dark);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .ecx-access__left h2 {
+    margin-bottom: 24px;
+    color: var(--heading-dark);
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4vw, 48px);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  /* same ash ramp as the Event Registration access-control headline */
+  .ecx-access__accent {
+    background: linear-gradient(90deg, #555 0%, #aaa 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .ecx-access__left p {
+    color: var(--subheading-gray);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .ecx-access__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .ecx-access__cta:hover {
+    background: #000;
+    transform: translateY(-1px);
+  }
+
+  /* ===== numbered evidence cards ===== */
+  .ecx-access__right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .ecx-rcard {
+    position: sticky;
+    padding: 32px;
+    border-radius: 24px;
+    background: #f4f5f7;
+    transition: transform 0.3s ease;
+  }
+
+  .ecx-rcard:nth-child(1) {
+    top: 80px;
+  }
+
+  .ecx-rcard:nth-child(2) {
+    top: 100px;
+  }
+
+  .ecx-rcard:nth-child(3) {
+    top: 120px;
+  }
+
+  .ecx-rcard:nth-child(4) {
+    top: 140px;
+  }
+
+  .ecx-rcard:hover {
+    transform: translateY(-4px);
+  }
+
+  .ecx-rcard__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .ecx-rcard__number {
+    display: flex;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .ecx-rcard__text h3 {
+    margin: 0 0 8px;
+    color: var(--heading-dark);
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .ecx-rcard__text p {
+    margin: 0;
+    color: var(--subheading-gray);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .ecx-rcard__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.86);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  /* the same four tinted stages the source section uses, ordered by tone */
+  .ecx-rcard:nth-child(1) .ecx-rcard__visual {
+    background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #ffffff 100%);
+  }
+
+  .ecx-rcard:nth-child(2) .ecx-rcard__visual {
+    background: linear-gradient(180deg, #fff9dc 0%, #fffdf1 48%, #ffffff 100%);
+  }
+
+  .ecx-rcard:nth-child(3) .ecx-rcard__visual {
+    background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #ffffff 100%);
+  }
+
+  .ecx-rcard:nth-child(4) .ecx-rcard__visual {
+    background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #ffffff 100%);
+  }
+
+  .ecx-rcard__visual--shot {
+    padding: 18px;
+  }
+
+  /* ===== product-evidence frame ===== */
+  .ecx-shot {
+    position: relative;
+    width: 100%;
+    height: 280px;
+  }
+
+  /* Coded stand-in for a scanner result screen. No authentic screenshot of a
+     result state exists, so the panel holds a restrained, non-claiming mock
+     that fills the same area a real screenshot would. */
+  .ecx-screen {
+    position: absolute;
+    inset: 10px 8px 18px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.14);
+    overflow: hidden;
+  }
+
+  .ecx-screen__head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    /* upper padding leaves room for the floating status chip */
+    padding: 26px 14px 16px;
+    border-bottom: 1px solid #eceef3;
+  }
+
+  .ecx-screen--ok .ecx-screen__head {
+    border-bottom-color: #d3f0e0;
+    background: #edfbf3;
+  }
+
+  .ecx-screen--warn .ecx-screen__head {
+    border-bottom-color: #f6e3c4;
+    background: #fff5e6;
+  }
+
+  .ecx-screen--stop .ecx-screen__head {
+    border-bottom-color: #fadcd9;
+    background: #fef3f2;
+  }
+
+  .ecx-screen--info .ecx-screen__head {
+    border-bottom-color: #dbe1ff;
+    background: #f1f3ff;
+  }
+
+  .ecx-screen__badge {
+    display: grid;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 6px 14px -8px rgba(17, 24, 39, 0.45);
+  }
+
+  .ecx-screen__badge svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-screen--ok .ecx-screen__badge {
+    color: #18864b;
+  }
+
+  .ecx-screen--warn .ecx-screen__badge {
+    color: #a15c07;
+  }
+
+  .ecx-screen--stop .ecx-screen__badge {
+    color: #b42318;
+  }
+
+  .ecx-screen--info .ecx-screen__badge {
+    color: #4b65f6;
+  }
+
+  .ecx-screen__copy {
+    display: block;
+    min-width: 0;
+  }
+
+  .ecx-screen__copy small {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .ecx-screen--ok .ecx-screen__copy small {
+    color: #18864b;
+  }
+
+  .ecx-screen--warn .ecx-screen__copy small {
+    color: #a15c07;
+  }
+
+  .ecx-screen--stop .ecx-screen__copy small {
+    color: #b42318;
+  }
+
+  .ecx-screen--info .ecx-screen__copy small {
+    color: #4b65f6;
+  }
+
+  .ecx-screen__copy b {
+    display: block;
+    margin-top: 3px;
+    color: #14151a;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .ecx-screen__copy span {
+    display: block;
+    margin-top: 2px;
+    color: #5f6675;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    line-height: 1.4;
+  }
+
+  .ecx-screen__list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    /* lower padding keeps the last row clear of the floating action chip */
+    padding: 6px 14px 26px;
+  }
+
+  .ecx-screen__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e6e8ee;
+  }
+
+  .ecx-screen__row:last-child {
+    border-bottom: none;
+  }
+
+  .ecx-screen__row dt {
+    flex-shrink: 0;
+    color: #8a90a0;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .ecx-screen__row dd {
+    overflow: hidden;
+    margin: 0;
+    color: #14151a;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ecx-shot__status,
+  .ecx-shot__action {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+  }
+
+  .ecx-shot__status {
+    top: 0;
+    left: 0;
+    gap: 7px;
+    padding: 9px 12px;
+    border: 1px solid #dfe4f2;
+    background: #fff;
+    color: #253047;
+  }
+
+  .ecx-shot__status svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ecx-shot__status--success {
+    border-color: #ccebd8;
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .ecx-shot__status--approval {
+    border-color: #d9dfff;
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .ecx-shot__action {
+    right: 10px;
+    bottom: 0;
+    padding: 11px 15px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .ecx-shot__cursor {
+    position: absolute;
+    right: 2px;
+    bottom: 27px;
+    z-index: 3;
+    width: 24px;
+    height: 28px;
+    fill: #111827;
+    stroke: #fff;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 5px rgba(17, 24, 39, 0.25));
+    animation: ecx-cursor-tap 2.4s ease-in-out infinite;
+  }
+
+  @keyframes ecx-cursor-tap {
+    0%,
+    65%,
+    100% {
+      transform: translate(0, 0);
+    }
+    74% {
+      transform: translate(-3px, 3px) scale(0.94);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ecx-shot__cursor {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .ecx-access__container {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .ecx-access__left {
+      flex: none;
+      width: 100%;
+    }
+
+    .ecx-access__sticky {
+      position: static;
+    }
+
+    .ecx-rcard {
+      padding: 32px 24px;
+    }
+
+    .ecx-rcard__header {
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .ecx-rcard__visual--shot {
+      padding: 14px;
+    }
+
+    .ecx-shot {
+      height: 240px;
+    }
+
+    .ecx-shot__status,
+    .ecx-shot__action {
+      font-size: 11px;
+    }
+
+    .ecx-screen__head {
+      padding: 24px 12px 14px;
+    }
+
+    .ecx-screen__list {
+      padding: 4px 12px 24px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ecx-access {
+      padding: 72px 16px;
+    }
+
+    .ecx-access__left h2 {
+      font-size: 32px;
+    }
+
+    .ecx-access__left p {
+      font-size: 16px;
+    }
+
+    .ecx-rcard {
+      padding: 28px 20px;
+    }
+
+    .ecx-shot {
+      height: 220px;
+    }
+
+    .ecx-screen__head {
+      gap: 10px;
+      padding: 22px 12px 13px;
+    }
+
+    .ecx-screen__badge {
+      width: 32px;
+      height: 32px;
+    }
+
+    .ecx-screen__copy b {
+      font-size: 14px;
+    }
+
+    .ecx-screen__list {
+      padding: 2px 12px 22px;
+    }
+
+    .ecx-screen__row {
+      padding: 9px 0;
+    }
+  }
+</style>

@@ -1,9 +1,37 @@
 ---
 const trustItems = [
-  ["Masked credentials", "Keep stored credential values out of normal organizer responses."],
-  ["Provider checkout", "Use the active integration path for the selected gateway."],
-  ["Provider settlement", "Treat payout timing and account status as processor-specific."],
-  ["EventHex order state", "Use EventHex for the event order, ticket outcome, refund action, and finance context it records."],
+  {
+    title: "Masked credentials",
+    description: "Keep stored credential values out of normal organizer responses.",
+    image: "/feature-images/event-payment-processing/gateway-credentials.png",
+    alt: "EventHex organization Payment Gateway settings with masked Stripe API key and secret key fields and the encryption note",
+    width: 968,
+    height: 372,
+  },
+  {
+    title: "Provider checkout",
+    description: "Use the active integration path for the selected gateway.",
+    image: "/feature-images/event-payment-processing/attendee-checkout.png",
+    alt: "EventHex attendee checkout for a Platinum ticket with the registration form and Proceed to Pay step",
+    width: 1265,
+    height: 712,
+  },
+  {
+    title: "Provider settlement",
+    description: "Treat payout timing and account status as processor-specific.",
+    image: "/feature-images/event-payment-processing/payout-integrations.png",
+    alt: "EventHex organization Integrations page showing Payment Gateway, Stripe Connect, and Razorpay Route payout settings",
+    width: 968,
+    height: 450,
+  },
+  {
+    title: "EventHex order state",
+    description: "Use EventHex for the event order, ticket outcome, refund action, and finance context it records.",
+    image: "/feature-images/event-payment-processing/orders-payment-status.png",
+    alt: "EventHex Orders page with order amount, payment status, and row actions for an event",
+    width: 928,
+    height: 456,
+  },
 ];
 
 const links = [
@@ -47,8 +75,8 @@ const links = [
   </p>
 </section>
 
-<section class="eppx-trust" aria-labelledby="trust-heading">
-  <div class="eppx-trust__inner">
+<section class="eppx-truststeps" aria-labelledby="trust-heading">
+  <div class="eppx-truststeps__inner">
     <header class="eppx-section-heading">
       <span>Payment setup and trust</span>
       <h2 id="trust-heading">Keep processor responsibilities clear</h2>
@@ -57,14 +85,41 @@ const links = [
         payment provider handles its own checkout, methods, settlement, and account requirements.
       </p>
     </header>
-    <div class="eppx-trust__grid">
-      {trustItems.map(([title, description], index) => (
-        <article class="eppx-trust__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
-          <h3>{title}</h3>
-          <p>{description}</p>
-        </article>
+    <ol class="eppx-truststeps__list">
+      {trustItems.map((item, index) => (
+        <li>
+          <details open={index === 0}>
+            <summary tabindex="-1">
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div class="eppx-tstep__content">
+                <h3 class="eppx-tstep__title">{item.title}</h3>
+                <p class="eppx-tstep__desc">{item.description}</p>
+              </div>
+              <button
+                type="button"
+                class="eppx-truststeps__arrow"
+                aria-label={`${index === 0 ? "Collapse" : "Expand"} ${item.title}`}
+                aria-expanded={index === 0 ? "true" : "false"}
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true">
+                  <path d="m5 7.5 5 5 5-5" />
+                </svg>
+              </button>
+            </summary>
+            <div class="eppx-truststeps__visual">
+              <img
+                src={item.image}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </details>
+        </li>
       ))}
-    </div>
+    </ol>
   </div>
 </section>
 
@@ -76,6 +131,13 @@ const links = [
       <p>Payments sit between ticket selection and the financial documents or attendee outcomes that follow.</p>
     </header>
     <div class="eppx-links__grid">
+      {[0, 1, 2].map((n) => (
+        <div class={`eppx-notch eppx-notch--${n + 1}`} aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path>
+          </svg>
+        </div>
+      ))}
       {links.map(([href, title, description], index) => (
         <a href={href} class="eppx-links__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
           <span class="eppx-links__icon" aria-hidden="true">
@@ -88,6 +150,28 @@ const links = [
     </div>
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>(".eppx-truststeps details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".eppx-truststeps__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      const label = item.querySelector(".eppx-tstep__title")?.textContent?.trim() ?? "section";
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} ${label}`);
+      if (!item.open) return;
+      all.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
 
 <style>
   .eppx-section-heading {
@@ -165,61 +249,225 @@ const links = [
     font: 500 14px/1.6 var(--font-body);
   }
 
-  .eppx-trust {
-    padding: 104px 24px;
-    background: #f6f8fc;
+  /* Accordion step list carried over from the Speaker Management
+     "From call for papers to published program" section. */
+  .eppx-truststeps {
+    padding: clamp(100px, 11vw, 140px) 24px;
+    background: transparent;
   }
-  .eppx-trust__inner, .eppx-links__inner { max-width: 1140px; margin: 0 auto; }
-  .eppx-trust__grid {
+  .eppx-truststeps__inner { width: min(1218px, 100%); margin: 0 auto; }
+  .eppx-truststeps .eppx-section-heading { margin-bottom: 64px; }
+  .eppx-truststeps__list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid #dfe4ec;
-    border-left: 1px solid #dfe4ec;
+    gap: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
   }
-  .eppx-trust__card {
-    min-height: 280px;
-    padding: 34px 28px;
-    border-right: 1px solid #dfe4ec;
-    border-bottom: 1px solid #dfe4ec;
-    background: rgba(255,255,255,.72);
+  .eppx-truststeps__list > li { position: relative; }
+  .eppx-truststeps details {
+    --eppx-tstep-tint: #fff8dc;
+    --eppx-tstep-border: #f0dfa6;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--eppx-tstep-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--eppx-tstep-tint) 0%, #fff 82%);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, .04);
+    transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease;
   }
-  .eppx-trust__card h3 { margin: 36px 0 12px; color: var(--heading-dark); font: 500 23px/1.15 var(--font-heading); }
-  .eppx-trust__card p { margin: 0; color: var(--subheading-gray); font: 400 14px/1.6 var(--font-body); }
+  .eppx-truststeps details > summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease;
+  }
+  .eppx-truststeps details > summary::-webkit-details-marker { display: none; }
+  .eppx-truststeps details > summary:hover { background: rgba(255, 255, 255, .28); }
+  .eppx-truststeps details:not([open]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(31, 41, 55, .08);
+  }
+  .eppx-truststeps details > summary > span {
+    color: #111;
+    font: 500 15px/1.1 var(--font-heading);
+    letter-spacing: -.05em;
+  }
+  .eppx-tstep__content { display: flex; flex-direction: column; }
+  .eppx-truststeps details:not([open]) .eppx-tstep__content {
+    display: grid;
+    grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr);
+    align-items: center;
+    gap: 36px;
+  }
+  .eppx-tstep__title {
+    margin: 0;
+    color: #111;
+    font: 500 22px/1.2 var(--font-body);
+    letter-spacing: -.02em;
+  }
+  .eppx-tstep__desc { display: none; }
+  .eppx-truststeps details:not([open]) .eppx-tstep__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    max-width: 460px;
+    margin: 0;
+    color: #5f6673;
+    font: 400 14.5px/1.5 var(--font-body);
+  }
+  .eppx-truststeps__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgba(17, 24, 39, .2);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .78);
+    color: #111827;
+    cursor: pointer;
+    transition: transform .25s ease, background .2s ease, border-color .2s ease;
+  }
+  .eppx-truststeps__arrow:hover { border-color: rgba(17, 24, 39, .42); background: #fff; }
+  .eppx-truststeps__arrow:focus-visible { outline: 3px solid rgba(59, 130, 246, .28); outline-offset: 2px; }
+  .eppx-truststeps__arrow svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .eppx-truststeps details[open] .eppx-truststeps__arrow { top: 28px; transform: rotate(180deg); }
+  .eppx-truststeps details[open] {
+    display: flex;
+    align-items: stretch;
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--eppx-tstep-tint) 0%, #fff 72%);
+  }
+  .eppx-truststeps__list > li:nth-child(1) > details { --eppx-tstep-tint: #fff8dc; --eppx-tstep-border: #f0dfa6; }
+  .eppx-truststeps__list > li:nth-child(2) > details { --eppx-tstep-tint: #edf7ff; --eppx-tstep-border: #d4e7f7; }
+  .eppx-truststeps__list > li:nth-child(3) > details { --eppx-tstep-tint: #f3efff; --eppx-tstep-border: #e2d8fa; }
+  .eppx-truststeps__list > li:nth-child(4) > details { --eppx-tstep-tint: #eefbf4; --eppx-tstep-border: #d4efdf; }
+  .eppx-truststeps__list > li:nth-child(5) > details { --eppx-tstep-tint: #fff0f7; --eppx-tstep-border: #f4d6e5; }
+  .eppx-truststeps details[open] > summary {
+    flex: 0 0 55%;
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr);
+    align-items: start;
+    gap: 14px;
+    min-height: 0;
+    padding: 64px 40px 64px 28px;
+    background: transparent;
+  }
+  .eppx-truststeps details[open] > summary:hover { padding-left: 28px; background: transparent; }
+  .eppx-truststeps details[open] > summary > span { font-size: 26px; line-height: 1; color: #050505; }
+  .eppx-truststeps details[open] .eppx-tstep__title {
+    margin: 0 0 16px;
+    color: #050505;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+  }
+  .eppx-truststeps details[open] .eppx-tstep__desc {
+    display: block;
+    max-width: 90%;
+    margin: 0 0 32px;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .eppx-truststeps__visual { display: none; margin: 0; opacity: 0; }
+  .eppx-truststeps details[open] .eppx-truststeps__visual {
+    flex: 0 0 45%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 88px 40px 0;
+    opacity: 1;
+  }
+  .eppx-truststeps__visual img {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .08);
+  }
+
+  .eppx-links__inner { max-width: 1140px; margin: 0 auto; }
 
   .eppx-links { padding: 108px 24px; background: #fff; }
   .eppx-links__grid {
+    --eppx-notch-fill: #e2e8f2;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid #e5e7eb;
-    border-left: 1px solid #e5e7eb;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid #e2e8f2;
   }
+  /* Half-circle seam borrowed from the Event Registration use-grid and the
+     Speaker Management setup-grid, which share this four-column top border. */
+  .eppx-notch {
+    position: absolute;
+    top: 0;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 0;
+    z-index: 2;
+  }
+  .eppx-notch svg { display: block; }
+  .eppx-notch path { fill: var(--eppx-notch-fill, #e2e8f2); }
+  .eppx-notch--1 { left: 25%; }
+  .eppx-notch--2 { left: 50%; }
+  .eppx-notch--3 { left: 75%; }
   .eppx-links__card {
-    min-height: 330px;
+    min-height: 326px;
     display: flex;
     flex-direction: column;
-    padding: 32px;
-    border-right: 1px solid #e5e7eb;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 30px 28px;
+    border-left: 1px solid #e2e8f2;
     color: inherit;
     text-decoration: none;
-    transition: background .25s ease, transform .25s ease;
+    transition: background .25s ease;
   }
-  .eppx-links__card:hover { z-index: 1; background: #f8f9ff; transform: translateY(-4px); }
+  .eppx-links__card:first-of-type { border-left: 0; }
+  .eppx-links__card:hover { background: #f8f9ff; }
   .eppx-links__icon {
-    display: grid;
-    width: 42px;
-    height: 42px;
-    place-items: center;
-    border: 1px solid #e0e5ed;
-    border-radius: 12px;
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 34px;
     color: #375dfb;
   }
-  .eppx-links__icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; }
-  .eppx-links__card h3 { min-height: 54px; margin: 54px 0 12px; color: var(--heading-dark); font: 500 23px/1.15 var(--font-heading); }
-  .eppx-links__card p { margin: 0; color: var(--subheading-gray); font: 400 14px/1.6 var(--font-body); }
+  .eppx-links__icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 2; }
+  .eppx-links__card h3 {
+    min-height: 2.5em;
+    margin: 0 0 14px;
+    color: #27334d;
+    font: 500 21px/1.25 var(--font-heading);
+    letter-spacing: -.02em;
+  }
+  .eppx-links__card p { margin: 0; color: #68738a; font: 400 15.5px/1.45 var(--font-body); }
   @media (max-width: 960px) {
-    .eppx-trust__grid, .eppx-links__grid { grid-template-columns: repeat(2, 1fr); }
+    .eppx-links__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .eppx-notch--1, .eppx-notch--3 { display: none; }
+    .eppx-links__card:nth-of-type(odd) { border-left: 0; }
+    .eppx-links__card:nth-of-type(n + 3) { border-top: 1px solid #e2e8f2; }
   }
   @media (max-width: 767px) {
     .eppx-section-heading h2 { font-size: 34px; }
@@ -227,11 +475,46 @@ const links = [
     .eppx-manual__grid { grid-template-columns: 1fr; }
     .eppx-manual__card { min-height: 320px; padding: 36px 24px; }
     .eppx-manual__card + .eppx-manual__card { border-top: 1px solid #e5e7eb; border-left: 0; }
-    .eppx-trust, .eppx-links { padding: 72px 16px; }
-    .eppx-trust__grid, .eppx-links__grid { grid-template-columns: 1fr; }
-    .eppx-trust__card { min-height: 230px; }
-    .eppx-trust__card h3 { margin-top: 46px; }
-    .eppx-links__card { min-height: 290px; }
-    .eppx-links__card h3 { min-height: 0; margin-top: 42px; }
+    .eppx-truststeps { padding: 72px 16px; }
+    .eppx-truststeps .eppx-section-heading { margin-bottom: 40px; }
+    .eppx-truststeps details > summary,
+    .eppx-truststeps details > summary:hover {
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 10px;
+      min-height: 92px;
+      padding: 18px 62px 18px 14px;
+    }
+    .eppx-truststeps__arrow { top: 29px; right: 16px; }
+    .eppx-truststeps details:not([open]) .eppx-tstep__content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+    }
+    .eppx-tstep__title { font-size: 19px; }
+    .eppx-truststeps details:not([open]) .eppx-tstep__desc { font-size: 13px; line-height: 1.45; }
+    .eppx-truststeps details[open] { flex-direction: column; }
+    .eppx-truststeps details[open] > summary,
+    .eppx-truststeps details[open] > summary:hover {
+      flex: none;
+      grid-template-columns: 32px minmax(0, 1fr);
+      gap: 10px;
+      padding: 34px 62px 20px 14px;
+    }
+    .eppx-truststeps details[open] .eppx-truststeps__arrow { top: 22px; right: 16px; }
+    .eppx-truststeps details[open] > summary > span { font-size: 21px; }
+    .eppx-truststeps details[open] .eppx-tstep__title { font-size: 25px; margin-bottom: 12px; }
+    .eppx-truststeps details[open] .eppx-tstep__desc { max-width: 100%; margin-bottom: 22px; font-size: 15px; }
+    .eppx-truststeps details[open] .eppx-truststeps__visual { flex: none; padding: 0 20px 26px; }
+    .eppx-links { padding: 72px 16px; }
+    .eppx-links__grid { grid-template-columns: minmax(0, 1fr); }
+    .eppx-links__card {
+      min-height: 0;
+      padding: 32px 24px;
+      border-left: 0;
+    }
+    .eppx-links__card + .eppx-links__card { border-top: 1px solid #e2e8f2; }
+    .eppx-links__card h3 { min-height: 0; }
+    .eppx-notch--2 { display: none; }
   }
 </style>

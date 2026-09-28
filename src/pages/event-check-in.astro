@@ -1,71 +1,253 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
 import HeroSection from "../components/event-check-in/HeroSection.astro";
-import StatsSection from "../components/event-check-in/StatsSection.astro";
-import BentoGrid from "../components/event-check-in/BentoGrid.astro";
-import FeatureCards from "../components/event-check-in/FeatureCards.astro";
-import HowItWorksSection from "../components/event-check-in/HowItWorksSection.astro";
-import CTASection from "../components/event-check-in/CTASection.astro";
-import CoordinationTools from "../components/event-check-in/CoordinationTools.astro";
+import ArrivalRail from "../components/event-check-in/ArrivalRail.astro";
+import FlowQuadSection from "../components/event-check-in/FlowQuadSection.astro";
+import DarkCapabilityBand from "../components/event-check-in/DarkCapabilityBand.astro";
+import ScanFeedback from "../components/event-check-in/ScanFeedback.astro";
+import OfflineResilience from "../components/event-check-in/OfflineResilience.astro";
+import AttendanceVisibility from "../components/event-check-in/AttendanceVisibility.astro";
+import InstanceFlowTabs from "../components/event-check-in/InstanceFlowTabs.astro";
+import InstanceBento from "../components/event-check-in/InstanceBento.astro";
+import ConnectedWorkflow from "../components/event-check-in/ConnectedWorkflow.astro";
 import FaqSection from "../components/event-check-in/FaqSection.astro";
 
-const ogImage = "https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png";
-const title = "Event Check-In App — QR Scan & Face Recognition | EventHex";
-const description = "Event check-in app with QR scanning, face recognition, multi-device support, and offline mode. Track real-time attendance across sessions from one dashboard.";
+const title = "Event Check-In App for QR Scanning and Attendance | EventHex";
+const description =
+  "Give event-day teams the EventHex Scanner app on iOS or Android, validate attendee QR tickets, keep capturing check-ins through network drops, and watch live arrival counts.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex Event Check-In & Operations",
+  name: "EventHex Event Check-In",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, iOS, Android",
   url: "https://eventhex.ai/event-check-in/",
-  description: "QR code event check-in with multi-device scanning, offline mode, session attendance tracking, and real-time operations dashboard.",
+  description,
   creator: {
     "@type": "Organization",
     name: "EventHex",
     url: "https://eventhex.ai",
   },
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "USD",
-    description: "Free demo available",
-  },
   featureList: [
-    "QR Code Scanning",
-    "Multi-Device Support",
-    "Offline Scanning Mode",
-    "Session-Level Attendance",
-    "Real-Time Dashboard",
-    "On-Site Badge Printing",
-    "Duplicate Scan Prevention",
-    "Staff Login Portal",
-    "Attendance Reports",
+    "EventHex Scanner app for iOS and Android",
+    "Attendee QR check-in",
+    "Offline-resilient check-in with pending sync state",
+    "Duplicate scan detection for event, ticket, or instance",
+    "Ticket eligibility checks at scan time",
+    "Named scanning instances for meals, sessions, and merchandise",
+    "Live attendance counts with ticket and instance filters",
+    "Event Day Portal attendee search and manual attendance",
   ],
 };
+
+const scannerAppOptions = [
+  {
+    title: "Download for iPhone and iPad",
+    description:
+      "Install EventHex Scanner from the Apple App Store, then open the event or assigned scanning point.",
+    note: "Apple App Store",
+  },
+  {
+    title: "Download for Android",
+    description:
+      "Install EventHex Scanner from Google Play, then use the same event-day role and scanning workflow.",
+    note: "Google Play",
+  },
+];
+
+// Real EventHex portal screens captured from the organizer account, arranged in
+// the Event Registration composite treatment. Each one pairs with the store
+// option beside it in the quad.
+const scannerAppComposites = [
+  {
+    primary: {
+      src: "/feature-images/event-check-in/scanner-app-instance.png",
+      alt: "EventHex portal banner prompting the team to download the Scanner app with App Store and Play Store links, above the scanning instance page",
+      width: 761,
+      height: 400,
+    },
+    secondary: {
+      src: "/feature-images/event-check-in/instance-checkin.png",
+      alt: "EventHex instance check-in screen with scan count, filter toolbar and Name, Phone Number, Email ID, Token and Status columns",
+      width: 761,
+      height: 262,
+    },
+    detail: {
+      src: "/feature-images/event-check-in/scan-points-nav.png",
+      alt: "EventHex Instance Check-In navigation listing the named scanning points for the event",
+      width: 215,
+      height: 215,
+    },
+    status: "Scanner app ready",
+    action: "Download the app",
+  },
+  {
+    primary: {
+      src: "/feature-images/event-check-in/instance-list.png",
+      alt: "EventHex scanning instance list showing instance names, applicable tickets and edit actions",
+      width: 762,
+      height: 300,
+    },
+    secondary: {
+      src: "/feature-images/event-check-in/attendance-overview.png",
+      alt: "EventHex attendance view listing check-in totals per instance with export controls",
+      width: 761,
+      height: 215,
+    },
+    detail: {
+      src: "/feature-images/event-check-in/instance-stats.png",
+      alt: "EventHex instance scan counters showing total check-ins above the filter and search toolbar",
+      width: 215,
+      height: 215,
+    },
+    status: "Instance scans ready",
+    action: "Open scan mode",
+  },
+];
+
+const doorFlowCells = [
+  {
+    label: "Open the event",
+    desc: "Choose the event and the intended scan mode.",
+    visual: "picker" as const,
+  },
+  {
+    label: "Scan the QR",
+    desc: "Read the attendee ticket or badge code.",
+    visual: "scan" as const,
+  },
+  {
+    label: "Validate the record",
+    desc: "Check registration and ticket eligibility for that scan.",
+    visual: "checks" as const,
+  },
+  {
+    label: "Confirm the result",
+    desc: "Mark attendance or show the reason the scan needs attention.",
+    visual: "result" as const,
+  },
+];
+
+const eventDayOptions = [
+  {
+    title: "Mobile scanning",
+    description:
+      "Use the iOS or Android Scanner app for moving teams, entrances, and ticket-based scanning points.",
+    note: "Best for handheld scanning",
+  },
+  {
+    title: "Desk operations",
+    description:
+      "Use the Event Day Portal for attendee search, manual attendance, badge layout, and supported print paths.",
+    note: "Best for registration desks",
+  },
+];
+
+// Real EventHex portal screens in the Event Registration composite treatment:
+// the door-side scanning surface beside the desk-side operating views.
+const eventDayComposites = [
+  {
+    primary: {
+      src: "/feature-images/event-check-in/instance-checkin.png",
+      alt: "EventHex instance check-in screen with scan counters above the filter toolbar and Name, Phone Number, Email ID, Token and Status columns",
+      width: 761,
+      height: 262,
+    },
+    secondary: {
+      src: "/feature-images/event-check-in/scanner-app-instance.png",
+      alt: "EventHex portal banner prompting the team to download the Scanner app with App Store and Play Store links, above the scanning instance page",
+      width: 761,
+      height: 400,
+    },
+    status: "Scanner app ready",
+    action: "Open in Scanner",
+  },
+  {
+    primary: {
+      src: "/feature-images/event-check-in/attendance-overview.png",
+      alt: "EventHex attendance view listing check-in totals per instance with export controls",
+      width: 761,
+      height: 215,
+    },
+    secondary: {
+      src: "/feature-images/event-check-in/instance-list.png",
+      alt: "EventHex scanning instance list showing instance names, applicable tickets and edit actions",
+      width: 762,
+      height: 300,
+    },
+    status: "Attendance view ready",
+    action: "Open Event Day Portal",
+  },
+];
 ---
 
 <MarketingLayout
   title={title}
   description={description}
   canonical="https://eventhex.ai/event-check-in/"
-  ogImage={ogImage}
+  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/01/Instasnap.png"
+  footerCtaEyebrow="Plan the door before event day"
+  footerCtaTitle="Bring your entrance plan. See the check-in workflow around it."
+  footerCtaSubtitle="Show us the ticket groups, scanning points, staffing plan, badge needs, and venue-network risks for one event. We'll map the mobile and desk workflow in a focused demo."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/footer-cta-devices.webp"
+  footerCtaImageAlt="EventHex platform on laptop, tablet, and mobile"
+  showFooterCta={true}
 >
-  <HeroSection />
-  <StatsSection />
-  <BentoGrid />
-  <FeatureCards />
-  <HowItWorksSection />
-  <CTASection />
-  <CoordinationTools />
-  <FaqSection />
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  </Fragment>
 
-  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <div class="ecx-page">
+    <HeroSection />
+    <ArrivalRail />
+
+    <FlowQuadSection
+      id="scanner-app"
+      title="Put a purpose-built scanner on the phones your team already carries"
+      subtitle="Install the EventHex Scanner app for the event-day team and sign in with the access assigned by the organizer."
+      options={scannerAppOptions}
+      composites={scannerAppComposites}
+      note="Store availability, device compatibility, camera permissions, and cached event data should be checked before doors open."
+    />
+
+    <DarkCapabilityBand
+      id="door-flow"
+      eyebrow="Front-door check-in"
+      title="Turn one QR scan into a"
+      accent="clear staff decision"
+      subtitle="Keep the screen focused on the action the person at the entrance needs to take."
+      cells={doorFlowCells}
+    />
+
+    <ScanFeedback />
+    <OfflineResilience />
+
+    <AttendanceVisibility />
+
+    <InstanceBento id="instances" />
+
+    <InstanceFlowTabs id="instance-flow" />
+
+    <FlowQuadSection
+      id="event-day"
+      title="Use the right operating surface for the desk and the door"
+      subtitle="The mobile Scanner and the browser-based Event Day Portal support different event-day stations around the same attendance data."
+      options={eventDayOptions}
+      composites={eventDayComposites}
+      note="Badge-printing setup and printer compatibility are handled separately; this page keeps the handoff to the Event Day Portal clear."
+    />
+
+    <ConnectedWorkflow />
+    <FaqSection />
+  </div>
 </MarketingLayout>
 
-<style>
-  :global(main) {
-    background-color: #ffffff;
+<style is:global>
+  .ecx-page {
+    overflow: clip;
+    background: #fff;
   }
 </style>

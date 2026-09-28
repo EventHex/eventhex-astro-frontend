@@ -1,0 +1,124 @@
+---
+const faqs = [
+  {
+    q: "What can we brand?",
+    a: "Organization logo and color fields plus a white-label configuration path are supported. Exact coverage across organizer tools, event sites, emails, PDFs, apps, and domains should be demonstrated for your required journey.",
+  },
+  {
+    q: "Can every client have its own workspace?",
+    a: "EventHex supports organization records with scoped users and events. The allowed number of organizations, events, users, and capabilities follows the agreed plan.",
+  },
+  {
+    q: "Are custom domains supported?",
+    a: "Custom-domain entitlement and event-domain workflows exist. Availability depends on the plan, DNS setup, target surface, and verification.",
+  },
+  {
+    q: "Can we control features and usage by organization?",
+    a: "Subscription plans contain feature toggles and limits, while organization usage counters track portfolio and per-event activity used by plan enforcement and operations.",
+  },
+  {
+    q: "Can each organization use its own payment account?",
+    a: "Supported organization-level Stripe, Razorpay, or Tap credentials exist. Connected-account models also exist, but fees, routing, onboarding, and payout responsibilities require specific scoping.",
+  },
+  {
+    q: "Does EventHex guarantee total data isolation?",
+    a: "Organization identifiers and access checks scope application behavior. Review roles, permissions, region, support access, and required controls for your operating model before launch.",
+  },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+---
+
+<section class="wlf-faq">
+  <div class="wlf-faq__inner">
+    <div class="wlf-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="wlf-faq__eyebrow">Quick Answers</span>
+      <h2 class="wlf-faq__heading">White-Label<br />Questions, Answered.</h2>
+      <p class="wlf-faq__intro">Find quick answers about branding, organizations, domains, plan controls, usage, and payment setup.</p>
+      <a href="/contact-en/" class="wlf-faq__cta">
+        Talk to the team
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="wlf-faq__list">
+      {faqs.map((faq, index) => (
+        <details
+          class="wlf-faq__item animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 50)}
+          data-wl-faq-item
+          open={index === 0}
+        >
+          <summary class="wlf-faq__question">
+            <strong>{faq.q}</strong>
+            <span class="wlf-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="wlf-faq__answer"><p>{faq.a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+  <script>
+    const whiteLabelFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-wl-faq-item]"));
+    whiteLabelFaqItems.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        whiteLabelFaqItems.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  </script>
+</section>
+
+<style>
+  .wlf-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .wlf-faq__inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .wlf-faq__sidebar { position: sticky; top: 6rem; }
+  .wlf-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; color: #000; font-family: var(--font-body); font-size: .8125rem; font-weight: 500; }
+  .wlf-faq__heading { font-family: var(--font-heading); font-size: 44px; font-weight: 500; color: #000; margin: 0 0 20px; line-height: 1.1; letter-spacing: -1px; }
+  .wlf-faq__intro { margin: 0 0 28px; color: #596579; font-family: var(--font-body); font-size: 1rem; line-height: 1.6; }
+  .wlf-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font-family: var(--font-body); font-size: .9375rem; font-weight: 500; text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .wlf-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .wlf-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: white-label-faq; }
+  .wlf-faq__item { counter-increment: white-label-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .wlf-faq__item[open] { border-color: #e4e7ec; background: #e7ebf3; }
+  .wlf-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; font-family: var(--font-heading); font-size: 1.0625rem; font-weight: 500; color: #000; cursor: pointer; list-style: none; }
+  .wlf-faq__question strong { font-weight: 500; }
+  .wlf-faq__question strong::before { content: counter(white-label-faq) '. '; }
+  .wlf-faq__question::-webkit-details-marker { display: none; }
+  .wlf-faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22, 1, .36, 1); }
+  .wlf-faq__icon::before, .wlf-faq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .wlf-faq__icon::before { width: 14px; height: 2px; }
+  .wlf-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .wlf-faq__item[open] .wlf-faq__icon { transform: scale(.9); }
+  .wlf-faq__item[open] .wlf-faq__icon::after { opacity: 0; }
+  .wlf-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .wlf-faq__answer p { font-family: var(--font-body); font-size: .9375rem; line-height: 1.7; color: #000; margin: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wlf-faq__item, .wlf-faq__icon, .wlf-faq__icon::after { transition: none; }
+  }
+  @media (max-width: 1024px) {
+    .wlf-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .wlf-faq__sidebar { position: static; }
+    .wlf-faq__heading { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .wlf-faq { padding: 56px 16px; }
+    .wlf-faq__heading { font-size: 28px; }
+    .wlf-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .wlf-faq__question { font-size: .9375rem; padding: 18px 0; }
+  }
+</style>
