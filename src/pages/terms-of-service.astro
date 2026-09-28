@@ -1,23 +1,16 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import { getPageBySlug, rewriteContentUrls } from "../lib/wordpress";
+import { termsOfServiceContent } from "../lib/legal-page-content";
 
-const page = await getPageBySlug("terms-of-service");
-
-if (!page) {
-  Astro.response.status = 404;
-}
-
-const title = page ? `${page.title.rendered} | EventHex` : "Terms of Service | EventHex";
+const title = "Terms of Service | EventHex";
 const description = "EventHex Terms of Service — the terms governing your use of the EventHex platform.";
-const content = page ? rewriteContentUrls(page.content.rendered) : "";
 ---
 
 <MarketingLayout title={title} description={description}>
   <section class="legal-page">
     <div class="legal-page__inner">
-      <h1 class="legal-page__title">{page ? page.title.rendered : "Terms of Service"}</h1>
-      <div class="legal-page__content" set:html={content} />
+      <h1 class="legal-page__title">Terms of Service</h1>
+      <div class="legal-page__content" set:html={termsOfServiceContent} />
     </div>
   </section>
 

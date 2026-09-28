@@ -1,23 +1,16 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import { getPageBySlug, rewriteContentUrls } from "../lib/wordpress";
+import { privacyPolicyContent } from "../lib/legal-page-content";
 
-const page = await getPageBySlug("privacy-policy");
-
-if (!page) {
-  Astro.response.status = 404;
-}
-
-const title = page ? `${page.title.rendered} | EventHex` : "Privacy Policy | EventHex";
+const title = "Privacy Policy | EventHex";
 const description = "EventHex Privacy Policy — how we collect, use, and protect your personal data.";
-const content = page ? rewriteContentUrls(page.content.rendered) : "";
 ---
 
 <MarketingLayout title={title} description={description}>
   <section class="legal-page">
     <div class="legal-page__inner">
-      <h1 class="legal-page__title">{page ? page.title.rendered : "Privacy Policy"}</h1>
-      <div class="legal-page__content" set:html={content} />
+      <h1 class="legal-page__title">Privacy Policy</h1>
+      <div class="legal-page__content" set:html={privacyPolicyContent} />
     </div>
   </section>
 
