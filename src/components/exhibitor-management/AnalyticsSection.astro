@@ -1,0 +1,396 @@
+---
+// Analytics Section: Lead Trends & Team Contribution
+const analyticsPoints = [
+  {
+    title: "Lead pace & period trends",
+    desc: "Review captured leads across 7, 14, 30, or 90 days with daily pace, average per day, and peak hours.",
+  },
+  {
+    title: "Priority mix distribution",
+    desc: "Understand how your captured leads are distributed across High, Medium, and Low priority conversations.",
+  },
+  {
+    title: "Team member attribution",
+    desc: "Compare total leads and recent activity by booth staff to recognize top performers and balance booth shifts.",
+  },
+  {
+    title: "Organizer overview",
+    desc: "View aggregate lead counts across all booths or drill down per company from the organizer control center.",
+  },
+];
+---
+
+<section class="exh-analytics" id="analytics" aria-labelledby="exh-analytics-title">
+  <div class="exh-analytics__inner">
+    <div class="exh-analytics__left">
+      <span class="exh-analytics__eyebrow animate-on-scroll" data-animation="fadeIn">Performance you can act on</span>
+      <h2 id="exh-analytics-title" class="exh-analytics__title animate-on-scroll" data-animation="fadeInUp">
+        <span>See when leads arrived</span>
+        <span>and how the booth team contributed</span>
+      </h2>
+      <p class="exh-analytics__subtitle animate-on-scroll" data-animation="fadeInUp">
+        Use real-time lead capture velocity, priority distributions, and team-level metrics to guide immediate follow-up and measure booth ROI.
+      </p>
+
+      <ul class="exh-analytics__list animate-on-scroll" data-animation="fadeInUp">
+        {analyticsPoints.map((item) => (
+          <li>
+            <div class="exh-analytics__bullet-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div>
+              <strong>{item.title}</strong>
+              <p>{item.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="exh-analytics__right animate-on-scroll" data-animation="fadeInRight">
+      <img class="exh-app-shot exh-app-shot--analytics" src="/images/app-1.png" alt="EventHex lead analytics dashboard" loading="lazy" decoding="async" />
+      <div class="exh-chart-card">
+        <div class="exh-chart-card__head">
+          <div>
+            <strong>Leads Captured</strong>
+            <span>Future Tech Expo 2026</span>
+          </div>
+          <div class="exh-chart-card__filters">
+            <span>7d</span>
+            <span class="is-active">30d</span>
+            <span>90d</span>
+          </div>
+        </div>
+
+        <!-- Simulated Bar Chart -->
+        <div class="exh-bar-chart" aria-hidden="true">
+          <div class="exh-bar-col"><div class="exh-bar-fill" style="height: 38%;"></div><span>Day 1</span></div>
+          <div class="exh-bar-col"><div class="exh-bar-fill" style="height: 64%;"></div><span>Day 2</span></div>
+          <div class="exh-bar-col is-peak"><div class="exh-bar-fill" style="height: 94%;"></div><span>Day 3 (Peak)</span></div>
+          <div class="exh-bar-col"><div class="exh-bar-fill" style="height: 72%;"></div><span>Day 4</span></div>
+          <div class="exh-bar-col"><div class="exh-bar-fill" style="height: 52%;"></div><span>Day 5</span></div>
+        </div>
+
+        <!-- Priority Breakdown Bar -->
+        <div class="exh-priority-split">
+          <div class="exh-priority-split__top">
+            <span class="exh-priority-split__label">Priority Mix Breakdown</span>
+            <span class="exh-priority-split__count">42 Total Leads</span>
+          </div>
+          <div class="exh-priority-bar">
+            <span class="exh-priority-seg exh-priority-seg--high" style="width: 26%;"></span>
+            <span class="exh-priority-seg exh-priority-seg--med" style="width: 46%;"></span>
+            <span class="exh-priority-seg exh-priority-seg--low" style="width: 28%;"></span>
+          </div>
+          <div class="exh-priority-legend">
+            <span><i class="exh-dot exh-dot--high"></i>High 26%</span>
+            <span><i class="exh-dot exh-dot--med"></i>Medium 46%</span>
+            <span><i class="exh-dot exh-dot--low"></i>Low 28%</span>
+          </div>
+        </div>
+
+        <!-- Team Leaderboard Strip -->
+        <div class="exh-team-strip">
+          <span class="exh-team-strip__title">Booth Staff Attribution</span>
+          <div class="exh-team-list">
+            <div class="exh-team-member">
+              <b>Priya M.</b>
+              <span>18 leads (43%)</span>
+            </div>
+            <div class="exh-team-member">
+              <b>Daniel R.</b>
+              <span>15 leads (36%)</span>
+            </div>
+            <div class="exh-team-member">
+              <b>Aisha K.</b>
+              <span>9 leads (21%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exh-analytics__title span { display: block; white-space: nowrap; }
+  @media (max-width: 700px) { .exh-analytics__title span { white-space: normal; } }
+</style>
+
+<style>
+  .exh-analytics {
+    padding: clamp(72px, 8vw, 108px) 24px;
+    background: transparent;
+  }
+
+  .exh-analytics__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(40px, 6vw, 72px);
+    align-items: center;
+  }
+
+  .exh-analytics__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue, #2563eb);
+    margin-bottom: 12px;
+  }
+
+  .exh-analytics__title {
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 4.2vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #111827;
+    margin: 0 0 16px;
+  }
+
+  .exh-analytics__subtitle {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: #64748b;
+    margin: 0 0 32px;
+  }
+
+  .exh-analytics__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .exh-analytics__list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .exh-analytics__bullet-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #eff6ff;
+    color: #2563eb;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .exh-analytics__list strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 650;
+    color: #0f172a;
+    margin-bottom: 3px;
+  }
+
+  .exh-analytics__list p {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.5;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* Right Chart Card */
+  .exh-chart-card {
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .exh-chart-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .exh-chart-card__head strong {
+    display: block;
+    font-size: 16px;
+    color: #0f172a;
+  }
+
+  .exh-chart-card__head span {
+    font-size: 12px;
+    color: #64748b;
+  }
+
+  .exh-chart-card__filters {
+    display: flex;
+    gap: 4px;
+    background: #f1f5f9;
+    padding: 3px;
+    border-radius: 8px;
+  }
+
+  .exh-chart-card__filters span {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    color: #64748b;
+    cursor: default;
+  }
+
+  .exh-chart-card__filters span.is-active {
+    background: #ffffff;
+    color: #0f172a;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Bar chart */
+  .exh-bar-chart {
+    height: 150px;
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 16px 8px 8px;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .exh-bar-col {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .exh-bar-fill {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: #dbeafe;
+    transition: background 0.2s ease;
+  }
+
+  .exh-bar-col:hover .exh-bar-fill {
+    background: #93c5fd;
+  }
+
+  .exh-bar-col.is-peak .exh-bar-fill {
+    background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  }
+
+  .exh-bar-col span {
+    font-size: 10.5px;
+    color: #64748b;
+    white-space: nowrap;
+  }
+
+  /* Priority Split */
+  .exh-priority-split {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .exh-priority-split__top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+  }
+
+  .exh-priority-split__label { font-weight: 600; color: #334155; }
+  .exh-priority-split__count { color: #64748b; }
+
+  .exh-priority-bar {
+    height: 8px;
+    border-radius: 999px;
+    display: flex;
+    overflow: hidden;
+    background: #f1f5f9;
+  }
+
+  .exh-priority-seg--high { background: #ef4444; }
+  .exh-priority-seg--med { background: #f59e0b; }
+  .exh-priority-seg--low { background: #94a3b8; }
+
+  .exh-priority-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 11.5px;
+    color: #64748b;
+    margin-top: 4px;
+  }
+
+  .exh-priority-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .exh-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  .exh-dot--high { background: #ef4444; }
+  .exh-dot--med { background: #f59e0b; }
+  .exh-dot--low { background: #94a3b8; }
+
+  /* Team Strip */
+  .exh-team-strip {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid #edf2f7;
+  }
+
+  .exh-team-strip__title {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 8px;
+  }
+
+  .exh-team-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .exh-team-member b {
+    display: block;
+    font-size: 13px;
+    color: #0f172a;
+  }
+
+  .exh-team-member span {
+    display: block;
+    font-size: 11.5px;
+    color: #64748b;
+  }
+
+  @media (max-width: 900px) {
+    .exh-analytics__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+</style>

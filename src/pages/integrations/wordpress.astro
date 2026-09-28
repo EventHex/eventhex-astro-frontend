@@ -1,66 +1,622 @@
 ---
-import IntegrationLayout from "../../components/integrations/IntegrationLayout.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import IntegrationFaq from "../../components/integrations/IntegrationFaq.astro";
+import FourColumnFeatureStrip from "../../components/integrations/FourColumnFeatureStrip.astro";
 
-const data = {
-  pageTitle: "EventHex WordPress Plugin — Embed Event Registration & Ticket Sales",
-  pageDescription: "Add the EventHex WordPress plugin to embed event listings, registration forms, ticket checkout, and attendee portals into any WordPress page.",
-  canonical: "https://eventhex.ai/integrations/wordpress/",
-  badge: "WordPress Integration",
-  heroTitleLine1: "Sell Tickets & Manage Events",
-  heroTitleLine2: "Directly from Your WordPress Website",
-  heroCopy: "Add the EventHex WordPress plugin to embed event listings, registration forms, ticket checkout, and attendee portals into any WordPress page. No redirects, no iframes — native WordPress integration.",
-  accentColor: "#21759B",
-  stats: [
-    { value: "Shortcodes", label: "& Block Editor Support" },
-    { value: "1-Click", label: "Plugin Install" },
-    { value: "0%", label: "EventHex Platform Fee" },
-    { value: "Full CSS", label: "Theme Customization" },
-  ],
-  featuresHeading: "WordPress-Native Event Management",
-  featuresSubheading: "Embed event ticketing, registration, and attendee portals into any WordPress theme.",
-  features: [
-    { emoji: "📋", title: "Event Listings Block", description: "Add an event listing block or shortcode to any WordPress page. Display upcoming events with dates, venues, ticket availability, and registration buttons." },
-    { emoji: "🎫", title: "Ticket Checkout Embed", description: "Embed the full ticket checkout flow into a WordPress page. Attendees complete purchases without leaving your website." },
-    { emoji: "👤", title: "Attendee Portal", description: "Give attendees a self-service portal on your WordPress site to view tickets, update profiles, and access event resources." },
-    { emoji: "🎨", title: "Full CSS Control", description: "Every embedded element inherits your WordPress theme styles. Override with custom CSS for pixel-perfect integration with any theme." },
-    { emoji: "🔗", title: "REST API Bridge", description: "The plugin bridges EventHex REST APIs with WordPress. Event data is fetched in real time — no stale caches or sync delays." },
-    { emoji: "📊", title: "Registration Data in WP", description: "Access attendee registration data directly in the WordPress admin. Export reports, manage check-ins, and view analytics without leaving WP." },
-  ],
-  howItWorksHeading: "How It Works",
-  steps: [
-    { title: "Install Plugin", description: "Upload the EventHex plugin to your WordPress site or install from the plugin repository. Activate in one click." },
-    { title: "Connect Account", description: "Enter your EventHex API key in the plugin settings to link your WordPress site to your EventHex account." },
-    { title: "Add to Pages", description: "Use the block editor or shortcodes to embed event listings, registration forms, or ticket checkout on any page." },
-    { title: "Style to Match Theme", description: "The plugin inherits your theme styles. Add custom CSS overrides if you need pixel-perfect design control." },
-  ],
-  useCasesHeading: "Who Uses WordPress with EventHex?",
-  useCases: [
-    { emoji: "🏛️", title: "Association Websites", description: "Professional associations with existing WordPress websites that need to add event registration and member ticketing without redirecting to an external platform." },
-    { emoji: "🏢", title: "Corporate Intranets", description: "Internal WordPress sites where employees register for town halls, training sessions, and company events without leaving the intranet." },
-    { emoji: "🎤", title: "Conference Websites", description: "Dedicated conference WordPress sites that need embedded ticketing, speaker listings, and real-time schedule displays." },
-    { emoji: "📅", title: "Multi-Event Organizations", description: "Organizations running dozens of events per year that need a centralized event listing page with registration flows embedded in their main WordPress site." },
-  ],
-  ctaTitle: "Ready to Sell Tickets Directly from Your WordPress Website?",
-  ctaCopy: "Install the EventHex WordPress plugin and embed event registration on any page — zero redirects, 0% platform fees.",
-  faqs: [
-    { question: "Does the plugin replace my existing WordPress site?", answer: "No. The plugin adds EventHex functionality to your existing WordPress site. It embeds event listings, registration forms, and checkout flows into your pages without changing your site structure." },
-    { question: "Will it match my WordPress theme?", answer: "Yes. The plugin's embedded elements inherit your theme's typography, colors, and spacing. You can add custom CSS overrides for additional control." },
-    { question: "Do attendees leave my website to complete checkout?", answer: "No. The full checkout flow — ticket selection, form fields, and payment — happens on your WordPress page. Attendees never see a redirect to eventhex.ai." },
-    { question: "Does it work with WooCommerce?", answer: "The EventHex plugin operates independently of WooCommerce. You do not need WooCommerce installed. If you have WooCommerce, both can coexist without conflicts." },
-    { question: "Can I restrict event access to logged-in WordPress users?", answer: "Yes. You can configure the plugin to show event registration only to logged-in WordPress users, specific user roles, or membership levels." },
-    { question: "Does it work with page builders like Elementor?", answer: "Yes. The plugin provides both Gutenberg blocks and shortcodes. Shortcodes work inside any page builder — Elementor, Beaver Builder, Divi, and others." },
-  ],
-  jsonLd: {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "EventHex WordPress Plugin",
-    applicationCategory: "WordPressPlugin",
-    operatingSystem: "WordPress",
-    url: "https://eventhex.ai/integrations/wordpress/",
-    description: "Embed event listings, registration forms, ticket checkout, and attendee portals into any WordPress page.",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-  },
+const title = "EventHex WordPress Event Feed Integration";
+const description = "Connect WordPress to a read-only EventHex feed, import eligible upcoming events as drafts, include speakers, review connection status, and revoke access.";
+
+const feedItems = [
+  ["Event details", "Title, dates, country, presentation fields, and other formatted event content supported by the feed."],
+  ["Event domain", "Use the event’s active or default EventHex domain where available."],
+  ["Speakers", "Include registration-backed or legacy speaker data when publication settings allow it."],
+  ["Publication state", "Expose whether an event is eligible for the connected site policy."],
+];
+const feedImages = [
+  "/feature-images/wordpress/read-only-feed.png",
+  "/feature-images/wordpress/integrations-overview.png",
+  "/feature-images/wordpress/scoped-access.png",
+  "/feature-images/wordpress/developer-connection.png",
+];
+
+const statusItems = [
+  ["Connection summary", "Read organization name, region, site label, URL, import policy, and upcoming counts.", "/feature-images/wordpress/developer-connection.png"],
+  ["Event-status feed", "Read active and WordPress-publication state for the organization’s events.", "/feature-images/wordpress/integrations-overview.png"],
+  ["Pagination", "Request event and status pages with bounded page sizes.", "/feature-images/wordpress/read-only-feed.png"],
+  ["Updated since", "Request events changed after a supplied date for an incremental refresh.", "/feature-images/wordpress/scoped-access.png"],
+  ["Single event", "Fetch one upcoming event by its EventHex identifier.", "/feature-images/wordpress/developer-connection.png"],
+  ["Eligibility filter", "Request only events that meet the connection’s enabled or publication policy.", "/feature-images/wordpress/integrations-overview.png"],
+];
+
+const useCases = [
+  ["Associations", "Bring upcoming chapter or member events into the existing organization site as drafts."],
+  ["Conference portfolios", "Import event and speaker content for editorial review on a central WordPress property."],
+  ["Event agencies", "Connect an approved client site without giving the plugin organizer-level credentials."],
+  ["Corporate event hubs", "Maintain a reviewed WordPress event directory from eligible EventHex source records."],
+];
+const useCaseImages = [
+  ["/feature-images/wordpress/read-only-feed.png", "Draft feed ready", "Chapter events", "Eligible content"],
+  ["/feature-images/wordpress/integrations-overview.png", "Portfolio connected", "Central review", "Speakers included"],
+  ["/feature-images/wordpress/scoped-access.png", "Client access", "Read-only key", "Revoke anytime"],
+  ["/feature-images/wordpress/developer-connection.png", "Directory synced", "Draft first", "Editorial control"],
+];
+
+const related = [
+  ["Event Website Builder", "Build and publish a complete EventHex event site when WordPress is not the destination.", "/event-website-builder/"],
+  ["Event Registration", "Choose the EventHex form or checkout journey used by attendees.", "/event-registration/"],
+  ["Event Ticketing", "Configure ticket types, sales rules, capacity, and delivery.", "/event-ticketing/"],
+  ["Developers", "Review the broader EventHex API for a custom integration beyond this connector.", "/developers/"],
+];
+const relatedImages = [
+  "/feature-images/wordpress/integrations-overview.png",
+  "/feature-images/event-registration/single-registration-form.png",
+  "/feature-images/event-registration/single-ticket-list.png",
+  "/feature-images/wordpress/developer-connection.png",
+];
+const relatedBullets = [
+  ["EventHex-hosted event site", "Custom domain and branded pages", "Live event content"],
+  ["Custom registration forms", "Attendee checkout journey", "Confirmation workflows"],
+  ["Ticket types and capacity", "Sales and payment rules", "Digital ticket delivery"],
+  ["Custom API integrations", "Read-only connection keys", "Controlled data access"],
+];
+
+const faqs = [
+  ["What does the current WordPress connection import?", "The verified site feed provides eligible upcoming event content and speaker data. The key-only connector flow imports upcoming events, including inactive ones, as drafts."],
+  ["Can the connector publish events automatically?", "The verified flow creates WordPress drafts for local review. WordPress publication remains a separate editorial decision."],
+  ["Is the connection key read-only?", "Yes. The site integration stores read permissions for events and speakers, and a connector key cannot mint additional site keys."],
+  ["Can we revoke a connected site?", "Yes. An authorized EventHex user can revoke the key; the connected site then stops authenticating to the feed."],
+  ["Does it embed EventHex checkout inside WordPress?", "Embedded registration, checkout, attendee portal, blocks, and shortcodes were not verified in the current connector and are not promised here."],
+  ["Will imported pages automatically match our WordPress theme?", "Theme design and local rendering belong to the WordPress plugin and site implementation. The current EventHex evidence confirms the data connection, not universal theme inheritance."],
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org", "@type": "SoftwareApplication",
+  name: "EventHex WordPress Event Feed Integration", applicationCategory: "BusinessApplication",
+  operatingSystem: "WordPress", url: "https://eventhex.ai/integrations/wordpress/", description,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: ["Read-only connection key", "Upcoming event draft import", "Event and speaker feed", "Connection status", "Incremental feed queries", "Connection revocation"],
 };
+const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) };
 ---
 
-<IntegrationLayout {...data} />
+<MarketingLayout {title} {description} canonical="https://eventhex.ai/integrations/wordpress/" footerCtaTitle="Bring your WordPress event-content workflow to the demo" footerCtaSubtitle="Show us the site, event scope, speaker rules, and review process. We’ll walk through the verified key and feed path." footerCtaButtonText="Book a Demo" footerCtaHref="/book-a-demo/">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <main class="wpi-page">
+    <section class="wpi-hero">
+      <div class="wpi-shell wpi-hero__grid">
+        <div class="wpi-hero__content animate-on-scroll" data-animation="fadeInUp">
+          <span class="wpi-eyebrow">WordPress integration for event content</span>
+          <h1>Bring upcoming EventHex events into an existing WordPress site</h1>
+          <p>Generate a one-time read-only connection key, add it to the EventHex Developer Connection plugin, and import eligible upcoming events as WordPress drafts with event and speaker content from the EventHex feed.</p>
+          <div class="wpi-actions"><a class="wpi-btn" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a><a class="wpi-btn wpi-btn--ghost" href="#read-only-access">See how it works</a></div>
+          <ul class="wpi-pills" aria-label="Integration capabilities"><li>Read-only key</li><li>Upcoming-event import</li><li>Event and speaker feed</li></ul>
+        </div>
+        <div class="wpi-hero__visual animate-on-scroll" data-animation="fadeInRight">
+          <div class="wpi-connect-card">
+            <div class="wpi-app"><img src="/icons/integrations/wordpress.svg" alt="WordPress logo" width="72" height="72" /><strong>WordPress</strong><span>Draft destination</span></div>
+            <span class="wpi-line" aria-hidden="true"><i></i></span>
+            <div class="wpi-app wpi-app--eventhex"><span class="wpi-mark" aria-hidden="true">E</span><strong>EventHex</strong><span>Event source</span></div>
+            <div class="wpi-status"><i aria-hidden="true"></i><span><strong>Read-only feed connected</strong><small>Events + speakers · Draft import</small></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wpi-trust" aria-label="WordPress connector capabilities">
+      <div class="wpi-shell"><span><b>One-time</b> Connection Key</span><span><b>Read-only</b> Permissions</span><span><b>Upcoming-event</b> Drafts</span><span><b>Status &amp; Revoke</b> Control</span></div>
+    </section>
+
+    <section class="wpi-readonly" id="read-only-access">
+      <header class="wpi-readonly__header"><h2>Event content access, without organizer control</h2><p>Give WordPress only the information it needs while keeping administration and credentials inside EventHex.</p></header>
+      <div class="wpi-readonly__quad">
+        <article class="wpi-readonly__cell wpi-readonly__cell--copy"><h3>Events and speakers</h3><p>The site key exposes read permissions for eligible upcoming event and published speaker content through the protected feed.</p></article>
+        <figure class="wpi-readonly__cell wpi-readonly__cell--media"><div class="wpi-readonly__composite"><img class="wpi-readonly__screen wpi-readonly__screen--primary" src="/feature-images/wordpress/read-only-feed.png" alt="EventHex Developer Connection showing read-only API key generation" loading="lazy" /><img class="wpi-readonly__screen wpi-readonly__screen--secondary" src="/feature-images/wordpress/integrations-overview.png" alt="EventHex integrations overview" loading="lazy" /><span class="wpi-readonly__status">✓ Read-only feed</span><span class="wpi-readonly__action">Events + speakers</span></div></figure>
+        <figure class="wpi-readonly__cell wpi-readonly__cell--media"><div class="wpi-readonly__composite"><img class="wpi-readonly__screen wpi-readonly__screen--primary" src="/feature-images/wordpress/scoped-access.png" alt="EventHex connector key management with scoped and revocable access" loading="lazy" /><img class="wpi-readonly__screen wpi-readonly__screen--secondary" src="/feature-images/wordpress/developer-connection.png" alt="EventHex developer connection controls" loading="lazy" /><span class="wpi-readonly__status wpi-readonly__status--blue">✓ Scoped access</span><span class="wpi-readonly__action">Revoke anytime</span></div></figure>
+        <article class="wpi-readonly__cell wpi-readonly__cell--copy"><h3>Organizer access stays private</h3><p>A connector key cannot create more keys or operate as a general EventHex organizer credential. Access remains individually scoped and revocable.</p></article>
+        <span class="wpi-readonly__cross" aria-hidden="true">✦</span>
+      </div>
+    </section>
+
+    <section class="wpi-key-section">
+      <div class="wpi-shell wpi-key-layout">
+        <div class="wpi-key-intro">
+          <div class="wpi-key-intro__sticky">
+            <span class="wpi-key-eyebrow"><span aria-hidden="true">⌁</span> Connection key</span>
+            <h2>Control your <span>connection</span></h2>
+            <p>An authorized key manager creates the WordPress connection. EventHex shows the raw key once and stores only its hashed form.</p>
+            <a class="wpi-key-cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="wpi-key-cards">
+          <article class="wpi-key-card">
+            <div class="wpi-key-card__header"><span class="wpi-key-card__number">01</span><div><h3>Open the connection</h3><p>Open organization integrations and choose the EventHex Developer Connection.</p></div></div>
+            <figure class="wpi-key-card__visual"><img src="/feature-images/wordpress/developer-connection.png" alt="Expanded EventHex Developer Connection panel" loading="lazy" /><span class="wpi-key-card__status">Connection ready</span><span class="wpi-key-card__action">Open integration</span></figure>
+          </article>
+          <article class="wpi-key-card">
+            <div class="wpi-key-card__header"><span class="wpi-key-card__number">02</span><div><h3>Generate and copy the key</h3><p>Create a one-time read-only key and copy it immediately. The full secret is not displayed again.</p></div></div>
+            <figure class="wpi-key-card__visual"><img src="/feature-images/wordpress/integrations-overview.png" alt="EventHex organization integrations overview" loading="lazy" /><span class="wpi-key-card__status">Read-only access</span><span class="wpi-key-card__action">Generate key</span></figure>
+          </article>
+          <article class="wpi-key-card">
+            <div class="wpi-key-card__header"><span class="wpi-key-card__number">03</span><div><h3>Connect WordPress</h3><p>Paste the one-time key into the EventHex Developer Connection plugin to authenticate the read-only feed.</p></div></div>
+            <figure class="wpi-key-card__visual"><img src="/feature-images/wordpress/developer-connection.png" alt="EventHex connection status and refresh controls" loading="lazy" /><span class="wpi-key-card__status">WordPress connected</span><span class="wpi-key-card__action">Import drafts</span></figure>
+          </article>
+          <article class="wpi-key-card">
+            <div class="wpi-key-card__header"><span class="wpi-key-card__number">04</span><div><h3>Review and rotate</h3><p>Refresh the connection state, review imported drafts, and replace or revoke the key whenever access needs to change.</p></div></div>
+            <figure class="wpi-key-card__visual"><img src="/feature-images/wordpress/integrations-overview.png" alt="EventHex integrations dashboard for reviewing the WordPress connection" loading="lazy" /><span class="wpi-key-card__status">Access reviewed</span><span class="wpi-key-card__action">Refresh status</span></figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wpi-draft" aria-labelledby="wpi-draft-title">
+      <div class="wpi-draft__inner">
+        <div class="wpi-draft__copy">
+          <span class="wpi-eyebrow">Automatic draft import</span>
+          <h2 id="wpi-draft-title">Bring upcoming events into WordPress without publishing them blindly</h2>
+          <p>The key-only connection imports upcoming events—including inactive EventHex events—as WordPress drafts. Your site team keeps control of the final review and publishing decision.</p>
+          <div class="wpi-draft__actions">
+            <a class="wpi-draft__button wpi-draft__button--dark" href="/book-a-demo/">Get Started Free <span aria-hidden="true">→</span></a>
+            <a class="wpi-draft__button wpi-draft__button--light" href="/integrations/">Explore Integrations <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="wpi-draft__visual" role="img" aria-label="EventHex connection and event feed creating review-ready WordPress drafts">
+          <div class="wpi-draft__shot wpi-draft__shot--feed"><img src="/feature-images/wordpress/read-only-feed.png" alt="" loading="lazy" decoding="async" /></div>
+          <div class="wpi-draft__shot wpi-draft__shot--connection"><img src="/feature-images/wordpress/developer-connection.png" alt="" loading="lazy" decoding="async" /></div>
+          <span class="wpi-draft__status"><b aria-hidden="true">✓</b> Draft feed ready</span>
+          <span class="wpi-draft__publish">Review &amp; publish</span>
+          <span class="wpi-draft__cursor" aria-hidden="true">◆</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="wpi-section wpi-section--feed" aria-labelledby="wpi-feed-title">
+      <div class="wpi-shell wpi-feed-stack">
+        <header class="wpi-feed-stack__header">
+          <span class="wpi-feed-stack__eyebrow"><span aria-hidden="true">✦</span> Event content stays connected</span>
+          <h2 id="wpi-feed-title">Keep the WordPress copy tied to <span>EventHex event data</span></h2>
+        </header>
+        <div class="wpi-feed-stack__cards">
+          {feedItems.map(([t,d],i) => (
+            <article class="wpi-feed-stack__card" style={`--stack-index:${i};`}>
+              <div class="wpi-feed-stack__copy">
+                <span class="wpi-feed-stack__label">{String(i + 1).padStart(2,"0")} · {t}</span>
+                <h3>{t}</h3>
+                <p>{d}</p>
+                <span class="wpi-feed-stack__cue">Included in the read-only feed <span aria-hidden="true">↗</span></span>
+              </div>
+              <figure class="wpi-feed-stack__visual">
+                <div class="wpi-feed-stack__screen">
+                  <div class="wpi-feed-stack__bar" aria-hidden="true"><span><i></i><i></i><i></i></span><small>EventHex · {t}</small></div>
+                  <img src={feedImages[i]} alt={`${t} in the EventHex WordPress data feed`} loading="lazy" decoding="async" />
+                </div>
+              </figure>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="wpi-compare-section">
+      <header class="wpi-compare-header"><span class="wpi-eyebrow">Import is not publication</span><h2>Keep EventHex content flow separate from the WordPress publishing <span>decision</span></h2><p>Each platform owns a different part of the workflow.</p></header>
+      <div class="wpi-compare-quad">
+        <article class="wpi-compare-cell wpi-compare-copy"><span class="wpi-compare-label">Source</span><h3>EventHex</h3><p>Controls the source event, dates, domain, speaker visibility, and connector eligibility exposed by the feed.</p></article>
+        <div class="wpi-compare-cell wpi-compare-media"><div class="wpi-compare-composite"><img class="wpi-compare-screen wpi-compare-screen--primary" src="/feature-images/wordpress/read-only-feed.png" alt="EventHex read-only event feed" loading="lazy" /><img class="wpi-compare-screen wpi-compare-screen--secondary" src="/feature-images/wordpress/integrations-overview.png" alt="EventHex integrations overview" loading="lazy" /><span class="wpi-compare-status">✓ Source connected</span><span class="wpi-compare-action">Events + speakers</span></div></div>
+        <div class="wpi-compare-cell wpi-compare-media"><div class="wpi-compare-composite"><img class="wpi-compare-screen wpi-compare-screen--primary" src="/feature-images/wordpress/developer-connection.png" alt="WordPress developer connection" loading="lazy" /><img class="wpi-compare-screen wpi-compare-screen--secondary" src="/feature-images/wordpress/scoped-access.png" alt="Scoped WordPress access" loading="lazy" /><span class="wpi-compare-status">✓ Draft received</span><span class="wpi-compare-action">Review locally</span></div></div>
+        <article class="wpi-compare-cell wpi-compare-copy"><span class="wpi-compare-label">Destination</span><h3>WordPress</h3><p>Receives drafts and remains responsible for local review, page design, site metadata, access, and publication.</p></article>
+        <span class="wpi-compare-cross" aria-hidden="true">✦</span>
+      </div>
+      <p class="wpi-compare-note">A connected feed does not prove that every draft was reviewed, published, or kept in sync by the WordPress site.</p>
+    </section>
+
+    <FourColumnFeatureStrip heading="See the connection state without<br />exposing the secret again" items={[["Key prefix","Identify the connection by a safe display prefix."],["Last used","See whether and when the connector last used the key."],["Refresh","Reload the connection list and current state."],["Revoke","Invalidate an active key so the connected site stops authenticating."]]} />
+
+    <section class="wpi-fit-section">
+      <div class="wpi-fit-container">
+        <header class="wpi-fit-header"><span class="wpi-eyebrow">Where the connector fits</span><h2>Reuse EventHex event content on the WordPress site your organization already <span>operates</span></h2></header>
+        <div class="wpi-fit-grid">
+          <span class="wpi-fit-notch wpi-fit-notch--top" aria-hidden="true"></span>
+          <span class="wpi-fit-notch wpi-fit-notch--bottom" aria-hidden="true"></span>
+          {useCases.map(([t,d],i) => (
+            <article class:list={["wpi-fit-row", { "wpi-fit-row--reverse": i % 2 === 1 }]}> 
+              <div class="wpi-fit-cell wpi-fit-visual">
+                <div class={`wpi-fit-stage wpi-fit-stage--${i + 1}`}>
+                  <img src={useCaseImages[i][0]} alt={`${t} workflow in EventHex`} loading="lazy" />
+                  <span class="wpi-fit-float wpi-fit-float--top"><b>✓ {useCaseImages[i][1]}</b><small>{useCaseImages[i][2]}</small></span>
+                  <span class="wpi-fit-float wpi-fit-float--bottom"><i></i><b>{useCaseImages[i][3]}</b></span>
+                </div>
+              </div>
+              <div class="wpi-fit-cell wpi-fit-copy"><span class="wpi-fit-eyebrow">{String(i+1).padStart(2,"0")} · Connected</span><h3>{t}</h3><p>{d}</p></div>
+              <span class="wpi-fit-cross" aria-hidden="true"></span>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="wpi-section wpi-section--workflow"><div class="wpi-shell"><header class="wpi-heading"><h2>Give the connector enough state to update responsibly</h2></header><ol class="wpi-workflow-steps">{statusItems.map(([t,d,img],i) => <li><details open={i === 0}><summary><span>{String(i+1).padStart(2,"0")}</span><div><h3>{t}</h3><p>{d}</p></div><button type="button" class="wpi-workflow__arrow" aria-label={`${i === 0 ? "Collapse" : "Expand"} ${t}`} aria-expanded={i === 0 ? "true" : "false"}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg></button></summary><figure><img src={img} alt={`${t} shown in the EventHex connector interface`} loading="lazy" decoding="async" /></figure></details></li>)}</ol></div></section>
+
+    <script>
+      document.querySelectorAll<HTMLDetailsElement>(".wpi-workflow-steps details").forEach((item, _, all) => {
+        const summary = item.querySelector("summary");
+        const trigger = item.querySelector<HTMLButtonElement>(".wpi-workflow__arrow");
+        summary?.addEventListener("click", event => {
+          event.preventDefault();
+          item.open = !item.open;
+        });
+        item.addEventListener("toggle", () => {
+          trigger?.setAttribute("aria-expanded", String(item.open));
+          trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} workflow step`);
+          if (item.open) all.forEach(other => { if (other !== item) other.open = false; });
+        });
+      });
+    </script>
+
+    <section class="wpi-compare-section wpi-compare-section--boundary">
+      <header class="wpi-compare-header"><span class="wpi-eyebrow">Clear connector boundary</span><h2>Event content import is verified; native WordPress ticketing <span>is not</span></h2><p>See exactly what the current connection covers—and what stays outside it.</p></header>
+      <div class="wpi-compare-quad">
+        <article class="wpi-compare-cell wpi-compare-copy"><span class="wpi-compare-label">Verified connector</span><h3>Content import</h3><p>Read-only key, event and speaker feed, upcoming draft import, connection status, incremental queries, and revoke control.</p></article>
+        <div class="wpi-compare-cell wpi-compare-media"><div class="wpi-compare-composite"><img class="wpi-compare-screen wpi-compare-screen--primary" src="/feature-images/wordpress/integrations-overview.png" alt="Verified WordPress integration" loading="lazy" /><img class="wpi-compare-screen wpi-compare-screen--secondary" src="/feature-images/wordpress/read-only-feed.png" alt="Verified event content feed" loading="lazy" /><span class="wpi-compare-status">✓ Verified</span><span class="wpi-compare-action">Import drafts</span></div></div>
+        <div class="wpi-compare-cell wpi-compare-media"><div class="wpi-compare-composite wpi-compare-composite--muted"><img class="wpi-compare-screen wpi-compare-screen--primary" src="/feature-images/event-registration/checkout-select-tickets.png" alt="EventHex ticket checkout shown outside the WordPress connector" loading="lazy" /><img class="wpi-compare-screen wpi-compare-screen--secondary" src="/feature-images/event-registration/checkout-order-details.png" alt="EventHex checkout order details" loading="lazy" /><span class="wpi-compare-status wpi-compare-status--muted">Not included</span><span class="wpi-compare-action wpi-compare-action--muted">EventHex checkout</span></div></div>
+        <article class="wpi-compare-cell wpi-compare-copy"><span class="wpi-compare-label wpi-compare-label--muted">Not established</span><h3>Native ticketing</h3><p>Gutenberg blocks, shortcodes, embedded registration or checkout, attendee portal, theme inheritance, WordPress-admin attendee analytics, or WooCommerce behavior.</p></article>
+        <span class="wpi-compare-cross" aria-hidden="true">✦</span>
+      </div>
+    </section>
+
+    <section class="wpi-destination" aria-labelledby="wpi-destination-title">
+      <div class="wpi-shell">
+        <header class="wpi-destination__header"><span class="wpi-eyebrow">Connected website choices</span><h2 id="wpi-destination-title">Continue with the experience that <span>owns the next step</span></h2><p>Choose where your website, registration, ticketing, or custom integration workflow belongs.</p></header>
+        <div class="wpi-destination__showcase">
+          <div class="wpi-destination__tabs" role="tablist">
+            {related.map(([t],i) => <a class="wpi-destination__tab" href={`#wpi-panel-${i}`} role="tab">{t}</a>)}
+          </div>
+          <div class="wpi-destination__panels">
+          {related.map(([t,d,h],i) => <article class="wpi-destination__panel" id={`wpi-panel-${i}`} role="tabpanel">
+            <div class="wpi-destination__copy"><h3>{t}</h3><p>{d}</p><ul>{relatedBullets[i].map(item => <li><span aria-hidden="true">✓</span>{item}</li>)}</ul><a href={h}>Explore {t} <span aria-hidden="true">→</span></a></div>
+            <div class="wpi-destination__visual"><img src={relatedImages[i]} alt={`${t} interface in EventHex`} loading="lazy" /></div>
+          </article>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <IntegrationFaq heading="WordPress Integration<br />Questions, Answered." intro="Find quick answers about connection keys, draft imports, publication control, and site access." faqs={faqs} />
+  </main>
+</MarketingLayout>
+
+<style>
+  .wpi-page{--blue:#375dfb;--ink:#151a27;--muted:#5f6674;--line:#dfe3ea;background:#fff;color:var(--ink);overflow:hidden}.wpi-shell{width:min(1080px,calc(100% - 48px));margin:auto}.wpi-section{padding:clamp(78px,9vw,124px) 0}.wpi-section--soft{background:#fff}.wpi-section--lavender{background:#fff}.wpi-section--ink{background:#05050a;color:#fff}.wpi-eyebrow{display:inline-flex;margin-bottom:16px;color:var(--blue);font:700 11px/1 var(--font-body);letter-spacing:.08em;text-transform:uppercase}.wpi-heading{max-width:760px;margin:0 auto 52px;text-align:center}.wpi-heading h2,.wpi-split h2,.wpi-faq h2{margin:0;font:500 clamp(34px,4.2vw,52px)/1.04 var(--font-heading);letter-spacing:-.045em}.wpi-heading p,.wpi-lead{max-width:680px;color:var(--muted);font:400 16px/1.65 var(--font-body)}.wpi-heading p{margin:18px auto 0}.wpi-section--ink .wpi-heading p,.wpi-section--ink p{color:#adb5c6}.wpi-hero{position:relative;padding:clamp(74px,7vw,104px) 0 62px;background:radial-gradient(circle at 84% 17%,#dce6ff,transparent 28%),#fff}.wpi-hero__grid{display:grid;grid-template-columns:1fr .92fr;gap:70px;align-items:center}.wpi-hero h1{max-width:620px;margin:0;font:500 clamp(44px,5vw,64px)/.98 var(--font-heading);letter-spacing:-.055em}.wpi-hero__content>p{max-width:610px;margin:22px 0;color:var(--muted);font:400 16px/1.6 var(--font-body)}.wpi-actions{display:flex;gap:10px;flex-wrap:wrap}.wpi-btn{display:inline-flex;gap:12px;align-items:center;justify-content:center;padding:13px 18px;border:1px solid var(--ink);border-radius:9px;background:var(--ink);color:#fff;text-decoration:none;font:650 13px/1 var(--font-body)}.wpi-btn--ghost{background:transparent;color:var(--ink)}.wpi-pills{display:flex;flex-wrap:wrap;gap:12px;padding:0;margin:20px 0 0;list-style:none}.wpi-pills li{padding:0;border:0;background:none;color:#525a69;font:600 11px/1 var(--font-body)}.wpi-pills li:before{content:'✓';margin-right:5px;color:var(--blue)}.wpi-connect-card{position:relative;display:grid;grid-template-columns:1fr 48px 1fr;align-items:center;min-height:340px;padding:36px;border:1px solid #cfd5df;border-radius:22px;background:rgba(255,255,255,.9);box-shadow:0 20px 55px rgba(24,38,74,.15)}.wpi-app{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}.wpi-app strong{font:650 18px var(--font-heading)}.wpi-app span{color:var(--muted);font:12px var(--font-body)}.wpi-mark{display:grid;width:66px;height:66px;place-items:center;border-radius:16px;background:var(--blue);color:#fff!important;font:700 32px var(--font-heading)!important}.wpi-line{height:2px;background:#c5cad4}.wpi-line i{display:block;width:9px;height:9px;margin:-4px auto 0;border-radius:50%;background:#38b68c;box-shadow:0 0 0 6px #dff7ee}.wpi-status{position:absolute;right:30px;bottom:24px;left:30px;display:flex;gap:12px;align-items:center;padding:12px;border:1px solid #dce4e1;border-radius:12px;background:#f5fffb}.wpi-status i{width:9px;height:9px;border-radius:50%;background:#22a575}.wpi-status span{display:grid}.wpi-status strong{font:650 12px var(--font-body)}.wpi-status small{color:var(--muted);font:11px var(--font-body)}.wpi-trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:#fff}.wpi-trust .wpi-shell{display:grid;grid-template-columns:repeat(4,1fr)}.wpi-trust span{padding:18px 14px;text-align:center;color:#6a7180;font:600 11px var(--font-body)}.wpi-trust span+span{border-left:1px solid var(--line)}.wpi-rail{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.wpi-rail article{min-height:180px;padding:26px 22px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}.wpi-rail article:nth-child(3n){border-right:0}.wpi-rail article:nth-last-child(-n+3){border-bottom:0}.wpi-rail span,.wpi-card-grid>article>span,.wpi-bento>article>span,.wpi-use-grid>article>span{color:var(--blue);font:700 11px var(--font-body)}.wpi-page h3{font:600 20px/1.2 var(--font-heading)}.wpi-page article p,.wpi-links p{color:var(--muted);font:400 14px/1.6 var(--font-body)}.wpi-split{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}.wpi-checklist{padding:0;margin:0;list-style:none}.wpi-checklist li{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:16px;border:1px solid var(--line);border-radius:8px;font-family:var(--font-body)}.wpi-checklist li+li{margin-top:8px}.wpi-checklist span{color:var(--muted)}.wpi-choice{display:grid;grid-template-columns:1fr 1fr;gap:18px}.wpi-choice article{padding:32px;border:1px solid rgba(130,145,170,.25);border-radius:12px;background:linear-gradient(135deg,rgba(32,38,56,.9),rgba(17,19,30,.9))}.wpi-choice h3{font-size:26px}.wpi-tag{display:inline-flex;padding:6px 9px;border-radius:999px;background:#dce5ff;color:#2446ce;font:700 11px var(--font-body)}.wpi-tag--muted{background:#2f3542;color:#d7dbe4}.wpi-note{margin:16px 0 0;padding:14px 16px;border-left:2px solid var(--blue);background:rgba(55,93,251,.1);font:500 13px/1.6 var(--font-body)}.wpi-panel{padding:8px 18px;border:1px solid var(--line);border-radius:12px;background:#fff}.wpi-panel div{display:grid;grid-template-columns:140px 1fr;gap:20px;padding:18px 8px;border-bottom:1px solid var(--line);font-family:var(--font-body)}.wpi-panel div:last-child{border:0}.wpi-panel span{color:var(--muted)}.wpi-bento{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.wpi-bento article{min-height:210px;padding:26px;border:1px solid var(--line);border-radius:10px;background:#fff}.wpi-bento--wide{grid-column:span 2;background:linear-gradient(135deg,#fff,#fff9e7)!important}.wpi-section--workflow{background:#05050a;color:#fff}.wpi-section--workflow .wpi-heading h2{color:#fff}.wpi-card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.wpi-card-grid article{display:grid;grid-template-columns:1fr 1fr;gap:18px;min-height:250px;padding:26px;border:1px solid #2b2d3b;border-radius:12px;background:linear-gradient(135deg,#11131f,#171824)}.wpi-card-grid article p{color:#aeb3c2}.wpi-card-grid article>span,.wpi-card-grid article>h3,.wpi-card-grid article>p{grid-column:1}.wpi-card-screen{grid-column:2;grid-row:1/5;display:flex;flex-direction:column;gap:12px;padding:28px 22px;border:1px solid #303344;border-radius:9px;background:radial-gradient(circle at 70% 20%,rgba(100,104,145,.28),transparent 45%),#1b1d29}.wpi-card-screen i{display:block;height:9px;border-radius:5px;background:#303446}.wpi-card-screen i:nth-child(2){width:72%;background:#3a4262}.wpi-card-screen i:nth-child(3){height:74px;margin-top:8px;background:#242737}.wpi-control-row,.wpi-use-grid,.wpi-links{display:grid;grid-template-columns:repeat(4,1fr);gap:0}.wpi-control-row article,.wpi-use-grid article,.wpi-links a{padding:26px;border:1px solid var(--line);border-radius:0;background:#fff}.wpi-control-row article+article,.wpi-use-grid article+article,.wpi-links a+ a{border-left:0}.wpi-control-row i{display:block;width:8px;height:8px;border-radius:50%;background:#2bb285;box-shadow:0 0 0 5px #e4f8f1}.wpi-use-grid article{min-height:230px}.wpi-links a{position:relative;color:var(--ink);text-decoration:none;transition:.2s}.wpi-links a:hover{background:#f7f8fb}.wpi-links>a>span{position:absolute;top:20px;right:22px;color:var(--blue)}.wpi-faq{padding:clamp(78px,9vw,124px) 0;background:#fff}.wpi-faq__grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:80px}.wpi-faq__grid>div:first-child>p{color:var(--muted);font:15px/1.6 var(--font-body)}.wpi-faq details{border-bottom:1px solid #ccd1da}.wpi-faq summary{display:flex;justify-content:space-between;gap:20px;padding:20px 0;cursor:pointer;list-style:none;font:600 16px/1.35 var(--font-heading)}.wpi-faq summary::-webkit-details-marker{display:none}.wpi-faq summary span{color:var(--blue);font-size:22px}.wpi-faq details[open] summary span{transform:rotate(45deg)}.wpi-faq details p{max-width:680px;margin:0 0 22px;color:var(--muted);font:14px/1.65 var(--font-body)}
+  .wpi-draft{display:flex;justify-content:center;padding:48px 24px;background:#fff}.wpi-draft__inner{display:grid;width:min(1120px,100%);grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:36px;align-items:center;padding:48px}.wpi-draft__copy{min-width:0;max-width:560px}.wpi-draft__copy h2{margin:0;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font:500 clamp(36px,5vw,56px)/1.1 var(--font-heading);letter-spacing:-.03em}.wpi-draft__copy p{margin:16px 0 32px;color:#374151;font:500 15px/1.5 var(--font-body)}.wpi-draft__actions{display:flex;gap:12px;align-items:center;margin-top:4px}.wpi-draft__button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:6px;font:600 13.5px/1.4 var(--font-body);text-decoration:none;transition:.2s ease}.wpi-draft__button--dark{background:#27272a;color:#fff}.wpi-draft__button--dark:hover{background:#18181b}.wpi-draft__button--light{border:1px solid #e5e7eb;background:#f3f4f6;color:#374151}.wpi-draft__button--light:hover{background:#e5e7eb}.wpi-draft__visual{position:relative;isolation:isolate;width:100%;max-width:500px;height:clamp(320px,32vw,350px);justify-self:end;overflow:hidden;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:linear-gradient(155deg,#fff8dc 0%,#fffdf4 48%,#fff 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.55)}.wpi-draft__visual::before{position:absolute;right:6%;bottom:-24%;left:10%;z-index:-1;height:65%;border-radius:50%;background:rgba(230,232,238,.72);content:"";filter:blur(24px)}.wpi-draft__shot{position:absolute;overflow:hidden;aspect-ratio:1117/837;border:1px solid #e0e4ec;border-radius:12px;background:#fff;box-shadow:0 14px 30px rgba(17,24,39,.14)}.wpi-draft__shot img{display:block;width:100%;height:100%;object-fit:contain}.wpi-draft__shot--feed{top:30px;left:20px;z-index:1;width:77%}.wpi-draft__shot--connection{right:18px;bottom:24px;z-index:2;width:70%}.wpi-draft__status,.wpi-draft__publish{position:absolute;z-index:5;display:inline-flex;align-items:center;border-radius:11px;box-shadow:0 8px 22px rgba(42,66,158,.18);font:700 13px/1.2 var(--font-body)}.wpi-draft__status{top:16px;left:16px;gap:8px;padding:11px 15px;border:1px solid #dce4ff;background:#f0f4ff;color:#4163ed}.wpi-draft__publish{right:16px;bottom:16px;padding:12px 16px;background:#4163ed;color:#fff}.wpi-draft__cursor{position:absolute;right:23px;bottom:51px;z-index:6;color:#182033;font-size:19px;filter:drop-shadow(0 2px 3px rgba(17,24,39,.24));transform:rotate(22deg)}
+  @media(max-width:980px){.wpi-hero__grid,.wpi-split,.wpi-faq__grid{grid-template-columns:1fr}.wpi-hero__grid,.wpi-split,.wpi-faq__grid{gap:48px}.wpi-rail{grid-template-columns:repeat(3,1fr)}.wpi-rail article:nth-child(3){border-right:0}.wpi-rail article:nth-child(-n+3){border-bottom:1px solid var(--line)}.wpi-card-grid{grid-template-columns:repeat(2,1fr)}.wpi-card-grid article:nth-child(3n){border-right:1px solid var(--line)}.wpi-card-grid article:nth-child(2n){border-right:0}.wpi-card-grid article:nth-last-child(-n+3){border-bottom:1px solid var(--line)}.wpi-card-grid article:nth-last-child(-n+2){border-bottom:0}.wpi-control-row,.wpi-use-grid,.wpi-links{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:767px){.wpi-draft__inner{grid-template-columns:1fr;gap:32px}.wpi-draft__copy,.wpi-draft__visual{max-width:none}}
+  @media(max-width:620px){.wpi-shell{width:min(100% - 30px,1180px)}.wpi-section{padding:64px 0}.wpi-hero{padding:64px 0}.wpi-hero h1{font-size:45px}.wpi-hero__grid{gap:38px}.wpi-connect-card{grid-template-columns:1fr 32px 1fr;min-height:330px;padding:24px 16px}.wpi-app img,.wpi-mark{width:56px;height:56px}.wpi-mark{font-size:28px}.wpi-status{right:16px;bottom:18px;left:16px}.wpi-rail,.wpi-card-grid,.wpi-bento,.wpi-choice,.wpi-control-row,.wpi-use-grid,.wpi-links{grid-template-columns:1fr}.wpi-rail article,.wpi-rail article:nth-child(3){min-height:0;border-right:0;border-bottom:1px solid var(--line)}.wpi-rail article:last-child{border-bottom:0}.wpi-card-grid article,.wpi-card-grid article:nth-child(3n),.wpi-card-grid article:nth-child(2n),.wpi-card-grid article:nth-last-child(-n+2){min-height:0;border-right:0;border-bottom:1px solid var(--line)}.wpi-card-grid article:last-child{border-bottom:0}.wpi-bento--wide{grid-column:auto}.wpi-checklist li,.wpi-panel div{grid-template-columns:1fr;gap:6px}.wpi-use-grid article{min-height:0}.wpi-draft{padding:20px 16px}.wpi-draft__inner{gap:32px;padding:32px 24px}.wpi-draft__copy h2{font-size:28px}.wpi-draft__actions{flex-direction:column;align-items:stretch;width:100%}.wpi-draft__button{width:100%}.wpi-draft__visual{height:300px;border-radius:18px}.wpi-draft__shot--feed{top:30px;left:12px;width:80%}.wpi-draft__shot--connection{right:12px;bottom:23px;width:72%}.wpi-draft__status{top:14px;left:12px}.wpi-draft__publish{right:12px;bottom:12px}.wpi-draft__cursor{right:16px;bottom:46px}}
+  .wpi-section--product{background:linear-gradient(180deg,#fff,#f4f6fb)}
+  /* Keep decorative clipping without creating a scroll container; sticky cards can now stack against the viewport. */
+  .wpi-page{overflow:clip}
+  .wpi-section--feed{position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 0 0;background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);background-repeat:no-repeat;clip-path:inset(0 clamp(0px,1.2vw,12px) round clamp(0px,1.8vw,22px))}
+  .wpi-section--feed::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .wpi-section--feed>.wpi-shell{position:relative;z-index:1;width:min(1140px,calc(100% - 48px))}
+  .wpi-feed-heading{max-width:940px;margin-bottom:clamp(40px,5vw,72px)}
+  .wpi-feed-heading h2{background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:clamp(40px,5vw,58px);line-height:1.08;letter-spacing:-.045em}
+  .wpi-feed-grid{display:grid;grid-template-columns:repeat(6,1fr);overflow:hidden;border:1px solid #3b3a47;border-radius:16px}
+  .wpi-feed-card{position:relative;display:flex;grid-column:span 2;flex-direction:column;min-height:420px;padding:36px 32px;border-right:1px solid #3b3a47;background:transparent}
+  .wpi-feed-card:nth-child(3){border-right:0}
+  .wpi-feed-card:nth-child(4){grid-column:span 6;min-height:340px;border-top:1px solid #3b3a47;border-right:0}
+  .wpi-feed-card__number{margin-bottom:18px;color:#8ea0ff!important;font:700 11px/1 var(--font-body)!important}
+  .wpi-section--feed .wpi-feed-card h3{margin:0 0 14px;color:#fff;font:700 15px/1.2 var(--font-heading);letter-spacing:-.01em}
+  .wpi-section--feed .wpi-feed-card p{max-width:34ch;margin:0;color:rgba(255,255,255,.62);font:400 15px/1.38 var(--font-body)}
+  .wpi-feed-card__visual{position:relative;display:flex;flex:1;align-items:flex-end;justify-content:center;margin-top:32px}
+  .wpi-feed-card__visual::before{content:"";position:absolute;bottom:-10%;left:50%;width:80%;height:80%;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(92,138,255,.28),rgba(124,108,255,.15) 55%,transparent 100%);filter:blur(30px)}
+  .wpi-feed-card__screen{position:relative;z-index:1;display:flex;width:100%;max-width:290px;flex-direction:column;gap:10px;padding:16px;border:1px solid transparent;border-radius:16px;background:linear-gradient(#08080e,#08080e) padding-box,linear-gradient(135deg,#38bdf8 0%,#5c8aff 38%,#7c6cff 70%,#a45cff 100%) border-box;box-shadow:0 18px 44px -22px rgba(92,138,255,.5)}
+  .wpi-feed-card__screen span{color:rgba(255,255,255,.55);font:12px/1.2 var(--font-body)}
+  .wpi-feed-card__screen i{display:block;height:34px;border-radius:9px;background:rgba(255,255,255,.05)}
+  .wpi-feed-card__screen i::after{content:"";display:block;width:62%;height:5px;margin:15px 12px;border-radius:999px;background:rgba(255,255,255,.18)}
+  .wpi-feed-card__screen i:nth-of-type(2)::after{width:78%;background:linear-gradient(90deg,#5c8aff,#a45cff)}
+  .wpi-feed-card:nth-child(4) .wpi-feed-card__visual{align-items:center}.wpi-feed-card:nth-child(4) .wpi-feed-card__screen{max-width:460px}
+  @media(max-width:860px){.wpi-section--feed{clip-path:none}.wpi-feed-grid{grid-template-columns:1fr}.wpi-feed-card,.wpi-feed-card:nth-child(4){grid-column:span 1;min-height:0;padding:32px 24px;border-right:0;border-bottom:1px solid #3b3a47}.wpi-feed-card:nth-child(4){border-top:0;border-bottom:0}.wpi-feed-card__visual{min-height:220px}}
+  @media(prefers-reduced-motion:reduce){.wpi-section--feed{clip-path:none}}
+  .wpi-product-shot{margin:0;padding:12px;border:1px solid #d9dee8;border-radius:22px;background:#fff;box-shadow:0 28px 70px rgba(24,38,74,.13)}
+  .wpi-product-shot img{display:block;width:100%;height:auto;border-radius:14px}
+  .wpi-product-shot figcaption{padding:12px 8px 3px;color:var(--muted);font:600 11px/1.4 var(--font-body);letter-spacing:.04em;text-transform:uppercase}
+  .wpi-product-shot--detail{margin-top:52px}
+
+  .wpi-readonly{display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:clamp(72px,9vw,112px) 24px;background:#fff}
+  .wpi-readonly__header{display:flex;flex-direction:column;align-items:center;max-width:1100px;margin-bottom:24px;text-align:center}
+  .wpi-readonly__header h2{margin:0 0 12px;background:linear-gradient(98deg,#1e2330 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}
+  .wpi-readonly__header p{max-width:640px;margin:0;color:var(--muted);font:400 18px/1.5 var(--font-body)}
+  .wpi-readonly__quad{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;max-width:1180px;margin:24px auto}
+  .wpi-readonly__quad::before,.wpi-readonly__quad::after{content:"";position:absolute;z-index:0;background:#eef0f3;pointer-events:none}
+  .wpi-readonly__quad::before{top:0;bottom:0;left:50%;width:1px}.wpi-readonly__quad::after{left:0;right:0;top:50%;height:1px}
+  .wpi-readonly__cell{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;min-height:260px;padding:36px 24px;border:0}
+  .wpi-readonly__cell h3{margin:0 0 16px;color:#1e1d24;font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading);letter-spacing:-.03em}
+  .wpi-readonly__cell p{max-width:40ch;margin:0!important;color:var(--muted)!important;font:400 16px/1.6 var(--font-body)!important}
+  .wpi-readonly__cell--media{align-items:center;min-height:360px;margin:0;padding:18px 22px;overflow:hidden}
+  .wpi-readonly__composite{position:relative;width:100%;height:320px}
+  .wpi-readonly__screen{position:absolute;display:block;object-fit:cover;object-position:top left;border:1px solid rgba(209,214,226,.92);border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14)}
+  .wpi-readonly__screen--primary{top:42px;left:20px;z-index:1;width:74%;height:62%}.wpi-readonly__screen--secondary{right:18px;bottom:20px;z-index:2;width:64%;height:52%}
+  .wpi-readonly__status,.wpi-readonly__action{position:absolute;z-index:5;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px;font:700 11px/1 var(--font-body);box-shadow:0 10px 24px rgba(31,41,72,.16)}
+  .wpi-readonly__status{top:14px;left:14px;padding:9px 11px;border:1px solid #cfead9;background:#effbf4;color:#18864b}.wpi-readonly__status--blue{border-color:#d6def8;background:#f0f3ff;color:#315efb}.wpi-readonly__action{right:14px;bottom:14px;padding:10px 13px;background:#4b65f6;color:#fff}
+  .wpi-readonly__cross{position:absolute;top:50%;left:50%;z-index:6;display:grid;width:18px;height:18px;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:#fff;color:#7b68ee;font-size:10px;box-shadow:0 3px 12px rgba(31,41,72,.12)}
+  @media(max-width:768px){.wpi-readonly{padding:60px 16px}.wpi-readonly__quad{grid-template-columns:1fr;grid-template-rows:auto}.wpi-readonly__quad::before,.wpi-readonly__quad::after{display:none}.wpi-readonly__cross{display:none}.wpi-readonly__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}.wpi-readonly__cell:nth-child(3){order:4;border-bottom:0}.wpi-readonly__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}.wpi-readonly__cell--media{min-height:317px;padding:16px 20px 32px}.wpi-readonly__composite{height:285px}.wpi-readonly__screen--primary{width:78%}.wpi-readonly__screen--secondary{width:68%}}
+
+  .wpi-key-section{padding:100px 24px;background:#fff}
+  .wpi-key-layout{display:flex;width:min(1200px,100%);gap:80px;align-items:stretch}
+  .wpi-key-intro{flex:0 0 40%}
+  .wpi-key-intro__sticky{position:sticky;top:120px}
+  .wpi-key-eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;padding:7px 13px;border-radius:999px;background:#f3f4f7;color:var(--ink);font:650 13px/1 var(--font-body)}
+  .wpi-key-eyebrow span{color:var(--blue);font-size:18px}
+  .wpi-key-intro h2{margin:0 0 24px;font:500 clamp(36px,4vw,48px)/1.2 var(--font-heading);letter-spacing:-.02em;white-space:nowrap}
+  .wpi-key-intro h2 span{background:linear-gradient(90deg,#252a35,#8b8f98);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wpi-key-intro p{margin:0;color:var(--muted);font:400 18px/1.6 var(--font-body)}
+  .wpi-key-cta{display:inline-flex;align-items:center;gap:12px;margin-top:28px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;text-decoration:none;font:600 14px/1 var(--font-body);transition:transform .2s ease,background .2s ease}
+  .wpi-key-cta:hover{background:#000;transform:translateY(-1px)}
+  .wpi-key-cards{flex:1;display:flex;flex-direction:column;gap:32px}
+  .wpi-key-card{position:sticky;top:80px;overflow:hidden;padding:32px;border:0;border-radius:24px;background:#f4f5f7;box-shadow:none;transition:transform .3s ease}
+  .wpi-key-card:hover{transform:translateY(-4px)}
+  .wpi-key-card:nth-child(1){z-index:1}
+  .wpi-key-card:nth-child(2){top:100px;z-index:2;background:#f4f5f7}
+  .wpi-key-card:nth-child(3){top:120px;z-index:3;background:#f4f5f7}
+  .wpi-key-card:nth-child(4){top:140px;z-index:4;background:#f4f5f7}
+  .wpi-key-card__header{display:flex;align-items:flex-start;gap:18px}
+  .wpi-key-card__number{display:grid;flex:0 0 40px;width:40px;height:40px;place-items:center;border-radius:50%;background:#111;color:#fff;font:700 16px/1 var(--font-heading)}
+  .wpi-key-card h3{margin:3px 0 7px;font-size:21px}
+  .wpi-key-card p{margin:0!important;color:var(--muted);font:400 16px/1.55 var(--font-body)!important}
+  .wpi-key-card__visual{position:relative;display:flex;height:280px;align-items:center;justify-content:center;margin:24px 0 0;padding:24px;border:1px solid rgba(255,255,255,.86);border-radius:20px;background:linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%);box-shadow:none;overflow:hidden}
+  .wpi-key-card:nth-child(2) .wpi-key-card__visual{background:linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%)}
+  .wpi-key-card:nth-child(3) .wpi-key-card__visual{background:linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%)}
+  .wpi-key-card:nth-child(4) .wpi-key-card__visual{background:linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%)}
+  .wpi-key-card__visual img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;border-radius:12px}
+  .wpi-key-card__status,.wpi-key-card__action{position:absolute;z-index:2;display:inline-flex;align-items:center;border:1px solid rgba(215,222,233,.9);background:rgba(255,255,255,.96);box-shadow:0 8px 22px rgba(31,44,70,.12);color:#273247;font:700 12px/1 var(--font-body)}
+  .wpi-key-card__status{top:14px;left:16px;padding:11px 14px;border-radius:10px}
+  .wpi-key-card__status:before{content:'✓';margin-right:8px;color:#1fa36f}
+  .wpi-key-card__action{right:16px;bottom:14px;padding:11px 14px;border-radius:9px;color:#315efb}
+  @media(max-width:992px){.wpi-key-layout{flex-direction:column;gap:40px}.wpi-key-intro{flex:none;width:100%}.wpi-key-intro__sticky{position:static}.wpi-key-intro h2{white-space:normal}}
+  @media(max-width:600px){.wpi-key-section{padding:72px 20px}.wpi-key-layout{gap:32px}.wpi-key-cards{gap:20px;padding-bottom:0}.wpi-key-card,.wpi-key-card:nth-child(2),.wpi-key-card:nth-child(3),.wpi-key-card:nth-child(4){position:relative;top:auto;min-height:0;padding:24px 20px;border-radius:22px}.wpi-key-card__header{gap:14px}.wpi-key-card__visual{height:220px;margin:22px 0 0;padding:14px}.wpi-key-card__status{top:9px;left:9px}.wpi-key-card__action{right:9px;bottom:9px}.wpi-key-intro p{font-size:16px}}
+
+  .wpi-destination{padding:112px 0;background:radial-gradient(circle at 8% 80%,rgba(255,235,225,.5),transparent 24%),radial-gradient(circle at 92% 24%,rgba(222,230,255,.72),transparent 30%),#fff}
+  .wpi-destination__header{display:flex;flex-direction:column;align-items:center;margin-bottom:32px;text-align:center}
+  .wpi-destination__header h2{max-width:820px;margin:0;font:600 clamp(38px,4.8vw,58px)/1.08 var(--font-heading);letter-spacing:-.04em}
+  .wpi-destination__header h2 span{background:linear-gradient(90deg,#1c2330,#9aa0ab);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .wpi-destination__header p{margin:18px 0 0;color:var(--muted);font:500 17px/1.55 var(--font-body)}
+  .wpi-destination__tabs{display:flex;width:fit-content;max-width:100%;margin:0 auto 40px;padding:6px;border:1px solid #e1e6ef;border-radius:999px;background:#eef1f6}
+  .wpi-destination__tab{position:relative;padding:9px 22px;border:1px solid transparent;border-radius:999px;background:transparent;color:#60708b;cursor:pointer;font:650 13px/1 var(--font-body);text-decoration:none;transition:.2s ease}
+  .wpi-destination__tab:hover{background:rgba(255,255,255,.6)}
+  .wpi-destination__showcase:not(:has(.wpi-destination__panel:target)) .wpi-destination__tab:first-child,.wpi-destination__showcase:has(#wpi-panel-0:target) .wpi-destination__tab[href="#wpi-panel-0"],.wpi-destination__showcase:has(#wpi-panel-1:target) .wpi-destination__tab[href="#wpi-panel-1"],.wpi-destination__showcase:has(#wpi-panel-2:target) .wpi-destination__tab[href="#wpi-panel-2"],.wpi-destination__showcase:has(#wpi-panel-3:target) .wpi-destination__tab[href="#wpi-panel-3"]{border-color:#dce4f1;background:#fff;color:#3772ff;box-shadow:0 3px 10px rgba(33,48,78,.1)}
+  .wpi-destination__panel{--panel-tint:#eefaf9;display:none;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:56px;align-items:center;min-height:440px;padding:56px 64px;border:1px solid #d8ebe7;border-radius:28px;background:linear-gradient(135deg,var(--panel-tint),#fff 74%);animation:wpiPanelIn .35s ease}
+  .wpi-destination__panel:nth-child(2){--panel-tint:#eef4ff;border-color:#d9e4f5}.wpi-destination__panel:nth-child(3){--panel-tint:#fff8e4;border-color:#f0e2bc}.wpi-destination__panel:nth-child(4){--panel-tint:#f2efff;border-color:#e1daf7}
+  .wpi-destination__panels:not(:has(.wpi-destination__panel:target)) .wpi-destination__panel:first-child,.wpi-destination__panel:target{display:grid}
+  .wpi-destination__copy h3{margin:0 0 18px;font-size:clamp(34px,3.8vw,46px);font-weight:500;letter-spacing:-.035em}
+  .wpi-destination__copy>p{margin:0 0 28px!important;color:var(--muted);font-size:16px!important;line-height:1.6!important}
+  .wpi-destination__copy ul{display:grid;gap:11px;padding:0;margin:0 0 30px;list-style:none;color:#4c596d;font:600 13px/1.4 var(--font-body)}
+  .wpi-destination__copy li{display:flex;gap:10px;align-items:center}.wpi-destination__copy li span{display:grid;width:20px;height:20px;place-items:center;border-radius:50%;background:#fff;color:#3772ff;font-size:11px;box-shadow:0 2px 7px rgba(40,53,80,.1)}
+  .wpi-destination__copy>a{display:inline-flex;align-items:center;gap:12px;padding:13px 20px;border-radius:999px;background:#171a21;color:#fff;text-decoration:none;font:600 13px/1 var(--font-body)}
+  .wpi-destination__visual{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:100%;max-width:560px;margin:0 auto;overflow:hidden;padding:12px;border:1px solid rgba(162,178,201,.55);border-radius:22px;background:#fff;box-shadow:0 26px 60px rgba(38,53,83,.14)}
+  .wpi-destination__visual img{display:block;width:100%;height:auto;max-height:340px;margin:auto;object-fit:contain;object-position:center;border-radius:14px}
+  @keyframes wpiPanelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  @media(max-width:900px){.wpi-destination__tabs{overflow-x:auto;justify-content:flex-start;width:100%;border-radius:18px}.wpi-destination__tab{flex:0 0 auto}.wpi-destination__panel{grid-template-columns:1fr;padding:42px;gap:36px}}
+  @media(max-width:600px){.wpi-destination{padding:72px 0}.wpi-destination__panel{min-height:0;padding:28px 22px;border-radius:22px}.wpi-destination__header p{font-size:15px}.wpi-destination__visual{padding:8px;border-radius:16px}.wpi-destination__visual img{border-radius:10px}}
+
+  /* Speaker-management workflow treatment for the connector state section. */
+  .wpi-section--workflow{padding-block:clamp(72px,8vw,108px);background:radial-gradient(circle at 75% 4%,rgba(225,231,255,.72),transparent 30%),radial-gradient(circle at 18% 78%,rgba(255,238,228,.5),transparent 32%),#fff;color:var(--ink)}
+  .wpi-section--workflow>.wpi-shell{width:min(1080px,calc(100% - 48px))}
+  .wpi-section--workflow .wpi-heading{max-width:1100px;margin:0 auto 64px;text-align:center}
+  .wpi-section--workflow .wpi-heading h2{margin:0;background:linear-gradient(98deg,#1e2330 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}
+  .wpi-workflow-steps{display:grid;gap:14px;padding:0;margin:0;list-style:none}
+  .wpi-workflow-steps>li{--workflow-tint:#fff8dc;--workflow-border:#f0dfa6}
+  .wpi-workflow-steps>li:nth-child(2){--workflow-tint:#edf7ff;--workflow-border:#d4e7f7}.wpi-workflow-steps>li:nth-child(3){--workflow-tint:#f3efff;--workflow-border:#e2d8fa}.wpi-workflow-steps>li:nth-child(4){--workflow-tint:#eefbf4;--workflow-border:#d4efdf}.wpi-workflow-steps>li:nth-child(5){--workflow-tint:#fff0f7;--workflow-border:#f4d6e5}.wpi-workflow-steps>li:nth-child(6){--workflow-tint:#fff5e9;--workflow-border:#f1dfca}
+  .wpi-workflow-steps details{overflow:hidden;border:1px solid var(--workflow-border);border-radius:18px;background:linear-gradient(135deg,var(--workflow-tint),#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:.25s ease}
+  .wpi-workflow-steps details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}
+  .wpi-workflow-steps summary{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none}
+  .wpi-workflow-steps summary::-webkit-details-marker{display:none}.wpi-workflow-steps summary>span{color:#111;font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}.wpi-workflow-steps h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}.wpi-workflow-steps summary p{max-width:460px;margin:6px 0 0;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}
+  .wpi-workflow-steps summary>b{position:absolute;top:24px;right:28px;display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;font:500 20px/1 var(--font-body);transition:transform .25s ease}.wpi-workflow-steps details[open] summary>b{top:28px;transform:rotate(180deg)}
+  .wpi-workflow-steps details[open]{display:grid;grid-template-columns:55% 45%;border-radius:28px;background:linear-gradient(135deg,var(--workflow-tint),#fff 72%)}
+  .wpi-workflow-steps details[open] summary{align-items:start;grid-template-columns:44px minmax(0,1fr);padding:64px 40px 64px 28px}.wpi-workflow-steps details[open] summary>span{font-size:26px}.wpi-workflow-steps details[open] h3{font-family:var(--font-heading);font-size:32px;font-weight:600;line-height:1.2}.wpi-workflow-steps details[open] summary p{margin-top:16px;color:#333;font-size:17px;line-height:1.6}
+  .wpi-workflow-steps figure{display:none;margin:0}.wpi-workflow-steps details[open] figure{display:flex;align-items:center;padding:40px 72px 40px 0}.wpi-workflow-steps figure img{display:block;width:100%;max-height:270px;object-fit:contain;border-radius:12px;box-shadow:0 24px 60px rgba(0,0,0,.08)}
+  @media(max-width:760px){.wpi-section--workflow>.wpi-shell{width:min(100% - 30px,1080px)}.wpi-section--workflow .wpi-heading{margin-bottom:40px}.wpi-workflow-steps details[open]{display:block}.wpi-workflow-steps details[open] summary{padding:36px 58px 24px 22px}.wpi-workflow-steps details[open] figure{padding:0 22px 28px}.wpi-workflow-steps h3{font-size:18px}.wpi-workflow-steps details[open] h3{font-size:26px}.wpi-workflow-steps summary{padding-right:58px}.wpi-workflow-steps summary>b{right:14px}}
+
+  /* Match the speaker-management workflow accordion geometry exactly. */
+  .wpi-section--workflow{padding-block:clamp(110px,12vw,160px);background:linear-gradient(135deg,rgba(255,255,255,.2) 0%,rgba(246,248,255,.52) 52%,rgba(255,255,255,.18) 100%)}
+  .wpi-section--workflow>.wpi-shell{width:min(1218px,100%)}
+  .wpi-section--workflow .wpi-heading{max-width:820px;margin:0 auto 64px}
+  .wpi-section--workflow .wpi-heading h2{max-width:780px;margin:0 auto;font-size:clamp(40px,4vw,56px);font-weight:500;line-height:1.08;letter-spacing:-.04em}
+  .wpi-workflow-steps details{transition:border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease}
+  .wpi-workflow-steps summary:hover{background:rgba(255,255,255,.28)}
+  .wpi-workflow__arrow{position:absolute;top:24px;right:28px;display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;cursor:pointer;transition:transform .25s ease,background .2s ease,border-color .2s ease}
+  .wpi-workflow__arrow:hover{border-color:rgba(17,24,39,.42);background:#fff}
+  .wpi-workflow__arrow:focus-visible{outline:3px solid rgba(59,130,246,.28);outline-offset:2px}
+  .wpi-workflow__arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .wpi-workflow-steps details[open] .wpi-workflow__arrow{top:28px;transform:rotate(180deg)}
+  .wpi-workflow-steps details[open]{display:flex;align-items:stretch;grid-template-columns:none}
+  .wpi-workflow-steps details[open] summary{flex:0 0 55%;display:grid;grid-template-columns:44px minmax(0,1fr);align-items:start;gap:14px;padding:64px 40px 64px 28px;background:transparent;min-height:0}
+  .wpi-workflow-steps details[open] summary:hover{padding-left:28px;background:transparent}
+  .wpi-workflow-steps details[open] h3{font-family:var(--font-heading);font-size:32px;font-weight:600;line-height:1.2;margin-bottom:16px}
+  .wpi-workflow-steps details[open] summary p{max-width:90%;margin:0 0 32px;color:#333;font-size:17px;line-height:1.6}
+  .wpi-workflow-steps details[open] figure{flex:0 0 45%;display:flex;align-items:center;justify-content:flex-start;padding:40px 88px 40px 0}
+  .wpi-workflow-steps figure img{max-width:400px;height:auto;border-radius:12px;background:transparent;border:0;box-shadow:0 24px 60px rgba(0,0,0,.08)}
+  @media(max-width:760px){
+    .wpi-section--workflow>.wpi-shell{width:min(100% - 30px,1218px)}
+    .wpi-section--workflow .wpi-heading{margin-bottom:46px}
+    .wpi-workflow-steps details[open]{display:flex;flex-direction:column}
+    .wpi-workflow-steps details[open] summary,.wpi-workflow-steps details[open] summary:hover{flex:none;grid-template-columns:32px minmax(0,1fr);gap:10px;padding:34px 62px 24px 14px}
+    .wpi-workflow-steps details[open] summary p{max-width:none;margin-top:30px;font-size:22px}
+    .wpi-workflow-steps details[open] figure{flex:none;padding:0 24px 28px;margin:0}
+    .wpi-workflow__arrow{top:31px;right:16px}
+    .wpi-workflow-steps details[open] .wpi-workflow__arrow{top:24px;right:16px}
+  }
+
+  /* Mirrors the event-registration split bento treatment for connector use cases. */
+  .wpi-fit-section{padding:clamp(76px,8vw,112px) 5%;background:radial-gradient(circle at 96% 28%,rgba(229,232,255,.55),transparent 28%),radial-gradient(circle at 4% 76%,rgba(255,241,231,.55),transparent 28%),#fff}
+  .wpi-fit-container{max-width:1200px;margin:0 auto}.wpi-fit-header{margin:0 auto 60px;text-align:center}.wpi-fit-header h2{max-width:940px;margin:0 auto;background:linear-gradient(98deg,#1e2330 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font:500 clamp(32px,4vw,56px)/1.08 var(--font-heading);letter-spacing:-.04em}.wpi-fit-header h2 span{color:#8f8f8f}
+  .wpi-fit-grid{position:relative;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:rgba(255,255,255,.38)}
+  .wpi-fit-row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.wpi-fit-row:last-child{border-bottom:0}.wpi-fit-row--reverse .wpi-fit-visual{order:2}.wpi-fit-row--reverse .wpi-fit-copy{order:1}.wpi-fit-row--reverse .wpi-fit-cell:first-child{border-right:0}.wpi-fit-row--reverse .wpi-fit-copy{border-right:1px solid #e5e7eb}
+  .wpi-fit-cell{display:flex;min-width:0;min-height:480px;flex-direction:column;justify-content:center;padding:4rem}.wpi-fit-row .wpi-fit-cell:first-child{border-right:1px solid #e5e7eb}
+  .wpi-fit-visual{align-items:center}.wpi-fit-stage{position:relative;isolation:isolate;width:100%;padding:32px 18px;border-radius:22px}.wpi-fit-stage--1{background:linear-gradient(180deg,#fdefb8,#fdf7dd 45%,#f5f6f9)}.wpi-fit-stage--2{background:linear-gradient(180deg,#cdf3de,#e6f8ee 45%,#f5f6f9)}.wpi-fit-stage--3{background:linear-gradient(180deg,#dbe1fb,#eceffd 45%,#f5f6f9)}.wpi-fit-stage--4{background:linear-gradient(180deg,#fbdde4,#fdecf0 45%,#f5f6f9)}
+  .wpi-fit-stage img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top left;border:1px solid #dfe4ec;border-radius:14px;animation:wpiFitBreathe 7s ease-in-out infinite;box-shadow:0 18px 38px rgba(34,43,68,.1)}.wpi-fit-row:nth-child(even) img{animation-delay:-3.5s}
+  .wpi-fit-float{position:absolute;z-index:2;display:flex;gap:5px;padding:12px 15px;border:1px solid #dfe4ec;border-radius:14px;background:rgba(255,255,255,.96);color:#263044;box-shadow:0 12px 28px rgba(31,41,72,.16);font:650 13px/1.1 var(--font-body);animation:wpiFitFloat 5.2s ease-in-out infinite}.wpi-fit-float--top{top:12px;right:0;flex-direction:column}.wpi-fit-float--top small{color:#7a8291;font-size:11px;font-weight:500}.wpi-fit-float--bottom{bottom:12px;left:3px;align-items:center;animation-delay:-2.4s}.wpi-fit-float--bottom i{width:9px;height:9px;border-radius:50%;background:#22b782;box-shadow:0 0 0 5px #dff8ef}
+  .wpi-fit-eyebrow{display:block;margin-bottom:1rem;color:#5b21b6;font:700 14px/1 var(--font-body);letter-spacing:.05em;text-transform:uppercase}.wpi-fit-copy h3{margin:0 0 1.25rem;color:#111827;font:500 2.25rem/1.02 var(--font-heading);letter-spacing:-.03em}.wpi-fit-copy p{margin:0!important;color:#4b5563!important;font:400 1.125rem/1.45 var(--font-body)!important}
+  .wpi-fit-cross,.wpi-fit-notch{position:absolute;left:50%;z-index:3;width:28px;height:28px;transform:translate(-50%,50%);pointer-events:none}.wpi-fit-cross{bottom:0}.wpi-fit-cross:before,.wpi-fit-notch:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 0 0,transparent 13px,#e5e7eb 14px,transparent 15px),radial-gradient(circle at 100% 0,transparent 13px,#e5e7eb 14px,transparent 15px),radial-gradient(circle at 0 100%,transparent 13px,#e5e7eb 14px,transparent 15px),radial-gradient(circle at 100% 100%,transparent 13px,#e5e7eb 14px,transparent 15px)}.wpi-fit-row:last-child .wpi-fit-cross{display:none}.wpi-fit-notch--top{top:0;transform:translate(-50%,-50%)}.wpi-fit-notch--bottom{bottom:0}
+  .wpi-readonly__cross,.wpi-compare-cross{width:28px;height:28px;border-radius:0;background:transparent;color:transparent;font-size:0;box-shadow:none}
+  .wpi-readonly__cross::before,.wpi-compare-cross::before{content:"";position:absolute;inset:5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-14 -14 28 28'%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='scale(1 -1)'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='rotate(90)'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='rotate(-90)'/%3E%3C/svg%3E") center/18px 18px no-repeat}
+  .wpi-fit-cross::before,.wpi-fit-notch::before{inset:5px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-14 -14 28 28'%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='scale(1 -1)'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='rotate(90)'/%3E%3Cpath d='M-14 0A14 14 0 0 1 0 14A14 14 0 0 1 14 0Z' fill='%23e5e7eb' transform='rotate(-90)'/%3E%3C/svg%3E") center/18px 18px no-repeat}
+  @keyframes wpiFitBreathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}@keyframes wpiFitFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  @media(max-width:900px){.wpi-fit-row{display:flex;flex-direction:column}.wpi-fit-row--reverse .wpi-fit-copy,.wpi-fit-copy{order:1;border-right:0;border-bottom:1px solid #e5e7eb}.wpi-fit-row--reverse .wpi-fit-visual,.wpi-fit-visual{order:2}.wpi-fit-cell{min-height:0;padding:3rem 1.5rem}.wpi-fit-row .wpi-fit-cell:first-child{border-right:0}.wpi-fit-visual{min-height:390px}.wpi-fit-cross,.wpi-fit-notch{display:none}}
+  @media(max-width:600px){.wpi-fit-section{padding:64px 15px}.wpi-fit-header{margin-bottom:40px}.wpi-fit-header h2{font-size:35px}.wpi-fit-grid{border-radius:14px}.wpi-fit-cell{padding:38px 22px}.wpi-fit-visual{min-height:320px}.wpi-fit-stage{padding:25px 12px}.wpi-fit-copy h3{font-size:30px}.wpi-fit-copy p{font-size:16px!important}.wpi-fit-float{padding:10px 12px;font-size:11px}}
+  @media(prefers-reduced-motion:reduce){.wpi-fit-stage img,.wpi-fit-float{animation:none}}
+
+  .wpi-compare-section{display:flex;flex-direction:column;align-items:center;overflow:hidden;padding:clamp(72px,9vw,112px) 24px;background:radial-gradient(circle at 94% 22%,rgba(225,231,255,.52),transparent 27%),radial-gradient(circle at 5% 78%,rgba(255,239,229,.45),transparent 27%),#fff}.wpi-compare-section--boundary{background:radial-gradient(circle at 7% 24%,rgba(232,240,255,.6),transparent 27%),radial-gradient(circle at 94% 79%,rgba(255,236,229,.5),transparent 27%),#fff}
+  .wpi-compare-header{display:flex;max-width:1100px;flex-direction:column;align-items:center;margin-bottom:24px;text-align:center}.wpi-compare-header h2{max-width:960px;margin:0 0 14px;background:linear-gradient(98deg,#1e2330 43%,#8f8f8f 92%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}.wpi-compare-header p{max-width:640px;margin:0;color:var(--muted);font:400 18px/1.5 var(--font-body)}
+  .wpi-compare-quad{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;max-width:1180px;margin:24px auto}.wpi-compare-quad::before,.wpi-compare-quad::after{content:"";position:absolute;z-index:0;background:#e5e7eb;pointer-events:none}.wpi-compare-quad::before{top:0;bottom:0;left:50%;width:1px}.wpi-compare-quad::after{left:0;right:0;top:50%;height:1px}.wpi-compare-cell{position:relative;z-index:1;display:flex;min-height:260px;flex-direction:column;justify-content:center;padding:36px 24px;border:0}.wpi-compare-cell:nth-child(2n),.wpi-compare-cell:nth-child(n+3){border:0}
+  .wpi-compare-label{display:inline-flex;width:max-content;margin-bottom:14px;padding:7px 11px;border-radius:999px;background:#e5ebff;color:#3158d8;font:700 11px/1 var(--font-body);text-transform:uppercase}.wpi-compare-label--muted{background:#eef0f4;color:#697181}.wpi-compare-copy h3{margin:0 0 16px;color:#1e1d24;font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading);letter-spacing:-.03em}.wpi-compare-copy p{max-width:40ch;margin:0!important;color:var(--muted)!important;font:400 16px/1.6 var(--font-body)!important}
+  .wpi-compare-media{align-items:center;min-height:360px;padding:18px 22px;overflow:hidden}.wpi-compare-composite{position:relative;width:100%;height:320px}.wpi-compare-composite:before{content:"";position:absolute;inset:30px 6%;border-radius:30px;background:linear-gradient(145deg,#eaf8ef,#f6faf8);filter:saturate(.9)}.wpi-compare-section--boundary .wpi-compare-composite:before{background:linear-gradient(145deg,#e9efff,#f8f9ff)}.wpi-compare-composite--muted:before{background:linear-gradient(145deg,#fff2e9,#fff9f5)!important}
+  .wpi-compare-screen{position:absolute;display:block;object-fit:cover;object-position:top left;border:1px solid rgba(209,214,226,.92);border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14)}.wpi-compare-screen--primary{top:42px;left:20px;z-index:1;width:74%;height:62%}.wpi-compare-screen--secondary{right:18px;bottom:20px;z-index:2;width:64%;height:52%}
+  .wpi-compare-status,.wpi-compare-action{position:absolute;z-index:5;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px;font:700 11px/1 var(--font-body);box-shadow:0 10px 24px rgba(31,41,72,.16)}.wpi-compare-status{top:14px;left:14px;padding:10px 12px;border:1px solid #cfead9;background:#effbf4;color:#18864b}.wpi-compare-action{right:14px;bottom:14px;padding:11px 13px;background:#4b65f6;color:#fff}.wpi-compare-status--muted{border-color:#e2d7d0;background:#fff6f0;color:#9b6040}.wpi-compare-action--muted{background:#5e6470}
+  .wpi-compare-cross{position:absolute;top:50%;left:50%;z-index:6;display:grid;width:18px;height:18px;place-items:center;transform:translate(-50%,-50%);border-radius:50%;background:#fff;color:#7b68ee;font-size:10px;box-shadow:0 3px 12px rgba(31,41,72,.12)}.wpi-compare-note{width:min(1180px,100%);margin:4px auto 0;padding:16px 20px;border-radius:10px;background:#eef1ff;color:#343b4c;font:500 14px/1.5 var(--font-body);text-align:center}
+  @media(max-width:768px){.wpi-compare-section{padding:60px 16px}.wpi-compare-quad{grid-template-columns:1fr;grid-template-rows:auto}.wpi-compare-quad::before,.wpi-compare-quad::after{display:none}.wpi-compare-cross{display:none}.wpi-compare-cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #e5e7eb}.wpi-compare-cell:nth-child(3){order:4;border-bottom:0}.wpi-compare-cell:nth-child(4){order:3;border-bottom:1px solid #e5e7eb}.wpi-compare-media{min-height:317px;padding:16px 20px 32px}.wpi-compare-composite{height:285px}.wpi-compare-screen--primary{width:78%}.wpi-compare-screen--secondary{width:68%}.wpi-compare-header p{font-size:16px}}
+
+  /* Registration-page trust strip treatment. */
+  .wpi-trust{padding:1.5rem;border-top:1px solid #e5e7eb;border-bottom:0;background:linear-gradient(90deg,rgba(255,247,242,.42),rgba(247,246,255,.64),rgba(239,245,255,.62))}
+  .wpi-trust .wpi-shell{display:flex;width:min(1280px,100%);align-items:center;justify-content:center;flex-wrap:wrap;gap:2.25rem}
+  .wpi-trust span{padding:0;border:0!important;color:var(--muted);font:400 .9375rem/1.4 var(--font-body);text-align:center;white-space:nowrap}
+  .wpi-trust span b{color:var(--ink);font-weight:700}
+  @media(max-width:700px){.wpi-trust{padding:1.25rem 18px}.wpi-trust .wpi-shell{justify-content:flex-start;gap:12px 24px}.wpi-trust span{font-size:.875rem}}
+
+  /* Speaker-management agenda cards adapted for the WordPress feed. */
+  .wpi-section--feed{padding:clamp(72px,8vw,104px) 24px;background-color:#000;clip-path:none}
+  .wpi-section--feed>.wpi-shell{width:min(1060px,100%)}
+  .wpi-feed-heading{margin-bottom:56px}
+  .wpi-feed-grid{grid-template-columns:repeat(2,minmax(0,1fr));border-color:#2d2d36;border-radius:14px}
+  .wpi-feed-card,.wpi-feed-card:nth-child(4){grid-column:auto;min-height:470px;padding:32px 30px;border:0;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36;background:transparent}
+  .wpi-feed-card:nth-child(even){border-right:0}.wpi-feed-card:nth-last-child(-n+2){border-bottom:0}
+  .wpi-section--feed .wpi-feed-card h3{margin:0 0 14px;color:#fff;font:700 15px/1.3 var(--font-heading);letter-spacing:-.01em}
+  .wpi-section--feed .wpi-feed-card p{max-width:36ch;margin:0;color:rgba(255,255,255,.56);font:400 15px/1.5 var(--font-body)}
+  .wpi-feed-card__visual{align-items:center;margin-top:22px}
+  .wpi-feed-card__visual::before{display:none}
+  .wpi-feed-card__screen{display:block;width:100%;max-width:390px;overflow:hidden;padding:0;border:1px solid #343744;border-radius:12px;background:#090a10;box-shadow:none}
+  .wpi-feed-card__bar{display:flex;height:40px;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid #252834;color:#737784;font:500 10px/1 var(--font-body)}
+  .wpi-feed-card__bar>span{display:flex;gap:6px}.wpi-feed-card__bar i{display:block;width:8px;height:8px;border-radius:50%;background:#343741}.wpi-feed-card__bar small{font:inherit}
+  .wpi-feed-card__screen img{display:block;width:100%;height:230px;object-fit:cover;object-position:top left;opacity:.88}
+  @media(max-width:620px){.wpi-section--feed{padding:56px 16px 64px}.wpi-feed-heading{margin-bottom:40px}.wpi-feed-grid{grid-template-columns:1fr}.wpi-feed-card,.wpi-feed-card:nth-child(4){min-height:390px;padding:30px 26px;border-right:0;border-bottom:1px solid #2d2d36}.wpi-feed-card:nth-last-child(2){border-bottom:1px solid #2d2d36}.wpi-feed-card:last-child{border-bottom:0}.wpi-feed-card__screen img{height:210px}}
+
+  /* Stacked workflow cards: the WordPress feed now follows the speaker-management rhythm. */
+  .wpi-section--feed { padding: clamp(82px, 9vw, 122px) 24px 96px; background: #080a18; background-image: linear-gradient(180deg, #0c0a2c 0%, transparent 340px), radial-gradient(circle at 12% 30%, rgba(70, 130, 255, .22), transparent 58%); clip-path: none; }
+  .wpi-feed-stack { width: min(1140px, 100%); }
+  .wpi-feed-stack__header { position: sticky; top: 69px; z-index: 4; display: flex; flex-direction: column; align-items: center; text-align: center; margin: 0 auto clamp(44px, 6vw, 76px); }
+  .wpi-feed-stack__eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border: 1px solid rgba(166, 161, 255, .35); border-radius: 999px; background: rgba(144, 137, 230, .15); color: #d5d2ff; font: 600 14px/1 var(--font-body); }
+  .wpi-feed-stack__eyebrow span { color: #7ba3ff; }
+  .wpi-feed-stack__header h2 { max-width: 1000px; margin: 28px 0 0; color: #f7f8ff; font: 500 clamp(40px, 5vw, 60px)/1.05 var(--font-heading); letter-spacing: -.045em; }
+  .wpi-feed-stack__header h2 span { background: linear-gradient(95deg, #8d84ff, #bba6ff); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .wpi-feed-stack__cards { display: flex; flex-direction: column; gap: 20px; }
+  .wpi-feed-stack__cards { display: block; padding: 80px 0 50px; position: relative; }
+  .wpi-feed-stack__cards::after { content: ""; display: block; height: 190px; }
+  .wpi-feed-stack__card { position: sticky; top: calc(300px + var(--stack-index) * 20px); z-index: calc(5 + var(--stack-index)); display: grid; grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr); gap: 32px; height: 500px; margin-bottom: 60px; padding: clamp(28px, 4vw, 48px); border: 1px solid rgba(145, 151, 198, .2); border-radius: 24px; background: linear-gradient(135deg, rgba(18, 21, 40, .98), rgba(23, 25, 54, .94)); box-shadow: none; overflow: hidden; }
+  .wpi-feed-stack__card:nth-child(2) { background: linear-gradient(135deg, rgba(22, 24, 47, .98), rgba(34, 29, 65, .96)); }
+  .wpi-feed-stack__card:nth-child(3) { background: linear-gradient(135deg, rgba(20, 28, 49, .98), rgba(27, 43, 67, .95)); }
+  .wpi-feed-stack__card:nth-child(4) { background: linear-gradient(135deg, rgba(25, 23, 49, .98), rgba(44, 28, 62, .95)); }
+  .wpi-feed-stack__copy { display: flex; flex-direction: column; justify-content: center; max-width: 420px; }
+  .wpi-feed-stack__label { margin-bottom: 18px; color: #a8b6ff; font: 700 11px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .wpi-feed-stack__copy h3 { margin: 0 0 14px; color: #f5f6ff; font: 500 clamp(30px, 3.6vw, 44px)/1.08 var(--font-heading); letter-spacing: -.035em; }
+  .wpi-feed-stack__copy p { margin: 0; color: rgba(225, 229, 255, .7); font: 400 16px/1.55 var(--font-body); }
+  .wpi-feed-stack__cue { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; color: #aeb9ff; font: 600 13px/1.3 var(--font-body); }
+  .wpi-feed-stack__cue span { color: #7ba3ff; font-size: 17px; }
+  .wpi-feed-stack__visual { position: relative; display: flex; align-items: center; justify-content: center; min-height: 260px; margin: 0; border: 1px solid rgba(155, 166, 223, .16); border-radius: 20px; background: linear-gradient(145deg, rgba(71, 80, 130, .28), rgba(20, 24, 47, .7)); overflow: hidden; }
+  .wpi-feed-stack__visual::before { content: ""; position: absolute; width: 70%; height: 70%; border-radius: 50%; background: radial-gradient(circle, rgba(100, 123, 255, .34), transparent 68%); filter: blur(26px); }
+  .wpi-feed-stack__screen { position: relative; z-index: 1; width: min(86%, 470px); overflow: hidden; border: 1px solid rgba(196, 203, 255, .25); border-radius: 14px; background: #090a12; box-shadow: 0 20px 44px rgba(0,0,0,.35); }
+  .wpi-feed-stack__bar { display: flex; height: 36px; align-items: center; justify-content: space-between; padding: 0 12px; border-bottom: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.48); font: 500 10px/1 var(--font-body); }
+  .wpi-feed-stack__bar > span { display: flex; gap: 5px; }
+  .wpi-feed-stack__bar i { display: block; width: 7px; height: 7px; border-radius: 50%; background: #45495c; }
+  .wpi-feed-stack__screen img { display: block; width: 100%; height: 210px; object-fit: cover; object-position: top left; opacity: .86; }
+  @media (max-width: 767px) {
+    .wpi-section--feed { padding: 68px 16px 72px; }
+    .wpi-feed-stack__header { position: relative; top: auto; margin-bottom: 38px; }
+    .wpi-feed-stack__header h2 { margin-top: 22px; font-size: clamp(38px, 11vw, 52px); }
+    .wpi-feed-stack__cards { padding-top: 40px; }
+    .wpi-feed-stack__cards::after { height: 40px; }
+    .wpi-feed-stack__card { position: relative; top: auto; grid-template-columns: 1fr; gap: 26px; height: auto; min-height: 0; margin-bottom: 20px; padding: 28px 24px 24px; }
+    .wpi-feed-stack__visual { min-height: 220px; }
+  }
+
+  /* Match the speaker-management stacking section tokens exactly. */
+  .wpi-section--feed {
+    background-color: #000;
+    background-image: linear-gradient(180deg, #0d0a2c 0%, transparent 320px), radial-gradient(circle at 12% 30%, rgba(70, 130, 255, .28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: wpi-stack-mesh 30s linear infinite;
+  }
+  @keyframes wpi-stack-mesh { 0%, 100% { background-position: 0 0, 0% 0%; } 50% { background-position: 0 0, 8% 10%; } }
+  .wpi-feed-stack__header {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: min(94%, 1050px);
+    gap: 16px;
+    padding: 24px 0;
+    margin: 0 auto;
+  }
+  .wpi-feed-stack__header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(13, 10, 44, .99) 0%, rgba(7, 11, 27, .98) 72%, rgba(7, 11, 27, 0) 100%);
+  }
+  .wpi-feed-stack__eyebrow {
+    gap: 8px;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, .24);
+    background: rgba(255, 255, 255, .12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 6px 16px -6px rgba(0, 0, 0, .35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .wpi-feed-stack__header h2 { margin: 0; color: #fff; font-size: 46px; font-weight: 500; line-height: 1.15; letter-spacing: -1.6px; }
+  .wpi-feed-stack__header h2 span { color: #afa3ff; background: none; -webkit-text-fill-color: currentColor; }
+  .wpi-feed-stack__cards { --wpi-stack-top: 300px; padding: 80px 0 50px; }
+  .wpi-feed-stack__card {
+    top: calc(var(--wpi-stack-top) + var(--stack-index) * 20px);
+    display: flex;
+    align-items: stretch;
+    height: 500px;
+    margin-bottom: 60px;
+    padding: 0;
+    border-radius: 20px;
+    background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, .16) 0%, transparent 70%), radial-gradient(circle at 12% 8%, rgba(90, 130, 255, .18) 0%, transparent 40%), #0a0a0f;
+  }
+  .wpi-feed-stack__card:nth-child(1) { background: radial-gradient(circle at 82% 12%, rgba(109, 92, 235, .24), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66, 173, 218, .13), transparent 28%), #090a10; }
+  .wpi-feed-stack__copy { flex: 0 0 45%; max-width: none; gap: 16px; padding: 40px; }
+  .wpi-feed-stack__label { margin: 0; color: #afa3ff; }
+  .wpi-feed-stack__copy h3 { margin: 0; color: #e7e4fa; font-size: 32px; font-weight: 500; line-height: 1.2; }
+  .wpi-feed-stack__copy p { color: rgba(255, 255, 255, .55); font-size: 17px; line-height: 1.65; }
+  .wpi-feed-stack__cue { margin-top: 8px; padding: 12px 26px; align-self: flex-start; border: 1px solid rgba(255, 255, 255, .14); border-radius: 999px; background: rgba(255, 255, 255, .06); color: #fff; }
+  .wpi-feed-stack__visual { flex: 1; min-height: 0; margin: 16px 16px 16px 0; border-radius: 16px; background: linear-gradient(160deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .04)); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, .16); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .12); }
+  .wpi-feed-stack__screen { width: 90%; max-width: 470px; border-radius: 14px; }
+  .wpi-feed-stack__screen img { height: 290px; }
+  @media (max-width: 1024px) {
+    .wpi-feed-stack__cards { --wpi-stack-top: 292px; }
+    .wpi-feed-stack__card { height: 450px; }
+    .wpi-feed-stack__copy { flex-basis: 50%; }
+    .wpi-feed-stack__copy h3 { font-size: 28px; }
+    .wpi-feed-stack__copy p { font-size: 16px; }
+  }
+  @media (max-width: 767px) {
+    .wpi-feed-stack__header { position: relative; top: auto; width: 100%; padding: 16px 0 24px; }
+    .wpi-feed-stack__header h2 { font-size: 30px; letter-spacing: -.8px; }
+    .wpi-feed-stack__cards { --wpi-stack-top: 320px; padding-top: 80px; }
+    .wpi-feed-stack__card { flex-direction: column; height: 520px; }
+    .wpi-feed-stack__copy { flex: 0 0 50%; padding: 20px 20px 0; }
+    .wpi-feed-stack__visual { margin: 0 16px 16px; }
+    .wpi-feed-stack__screen img { height: 210px; }
+  }
+</style>

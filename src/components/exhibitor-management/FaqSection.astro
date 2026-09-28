@@ -1,0 +1,251 @@
+---
+// FAQ Section
+// Matching the styling of Speaker Management's FaqSection
+
+interface Props {
+  faqs: Array<[string, string]>;
+}
+
+const { faqs } = Astro.props;
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([q, a]) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+---
+
+<section class="exh-faq" id="faq" aria-labelledby="exh-faq-title">
+  <div class="exh-faq__inner">
+    <div class="exh-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="exh-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 id="exh-faq-title" class="exh-faq__heading">Exhibitor Management<br />Questions, Answered.</h2>
+      <p class="exh-faq__intro">
+        Find quick answers about exhibitor applications, portal self-service, booth staff passes, QR lead capture, and CRM handoff.
+      </p>
+      <a href="/contact-en/" class="exh-faq__cta">
+        Visit Help Center
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="exh-faq__list">
+      {faqs.map(([q, a], index) => (
+        <details
+          class="exh-faq__item animate-on-scroll"
+          data-animation="fadeInUp"
+          data-delay={String(index * 50)}
+          data-exh-faq-item
+          open={index === 0}
+        >
+          <summary class="exh-faq__question">
+            <strong>{q}</strong>
+            <span class="exh-faq__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="exh-faq__answer"><p>{a}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+
+<script>
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-exh-faq-item]'));
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .exh-faq {
+    width: 100%;
+    padding: clamp(72px, 8vw, 108px) 24px;
+    background: #ffffff;
+  }
+
+  .exh-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .exh-faq__sidebar {
+    position: sticky;
+    top: 6rem;
+  }
+
+  .exh-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    color: #0f172a;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .exh-faq__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(34px, 4vw, 44px);
+    font-weight: 500;
+    color: #0f172a;
+    margin: 0 0 20px;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
+  .exh-faq__intro {
+    margin: 0 0 28px;
+    color: #64748b;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .exh-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .exh-faq__cta:hover {
+    background: #000000;
+    transform: translateY(-1px);
+  }
+
+  .exh-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .exh-faq__item {
+    padding: 6px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #ffffff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .exh-faq__item[open] {
+    border-color: #dbe4f0;
+    background: #f8fafc;
+  }
+
+  .exh-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 0;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+
+  .exh-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .exh-faq__question strong {
+    font-family: var(--font-heading);
+    font-size: 17.5px;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .exh-faq__icon {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .exh-faq__icon::before,
+  .exh-faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 14px;
+    height: 2px;
+    background: #64748b;
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .exh-faq__icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+
+  .exh-faq__item[open] .exh-faq__icon::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0;
+  }
+
+  .exh-faq__answer {
+    padding-bottom: 22px;
+    color: #475569;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  .exh-faq__answer p {
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .exh-faq__inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .exh-faq__sidebar {
+      position: static;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .exh-faq__item {
+      padding: 4px 18px;
+      border-radius: 16px;
+    }
+    .exh-faq__question strong {
+      font-size: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+interface Props {
+  heading: string;
+  /** title, body, optional href (renders the card as a link), optional icon name */
+  items: [string, string, string?, string?][];
+  eyebrow?: string;
+  id?: string;
+}
+const { heading, items, eyebrow, id } = Astro.props;
+const icons: Record<string, string> = {
+  device: '<rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M12 18h.01"></path>',
+  bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path>',
+  globe: '<circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"></path>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect>',
+  code: '<path d="m9 8-4 4 4 4"></path><path d="m15 8 4 4-4 4"></path>',
+  hub: '<ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"></path>',
+  form: '<rect x="4" y="3" width="16" height="18" rx="2"></rect><path d="M8 8h8M8 12h8M8 16h4"></path>',
+  check: '<circle cx="12" cy="12" r="9"></circle><path d="m8.4 12.2 2.4 2.4 4.8-4.8"></path>',
+};
+// Default order so a caller that only passes [title, body] pairs keeps the original icons.
+const fallback = ["device", "bell", "globe", "grid"];
+---
+
+<section class="integration-four" {id}>
+  <div class="integration-four__inner">
+    <header class="integration-four__header">
+      {eyebrow ? <span class="integration-four__eyebrow">{eyebrow}</span> : null}
+      <h2 set:html={heading}></h2>
+    </header>
+    <div class="integration-four__grid">
+      <span class="integration-four__notch integration-four__notch--1" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>
+      <span class="integration-four__notch integration-four__notch--2" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>
+      <span class="integration-four__notch integration-four__notch--3" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>
+      {items.map(([title, body, href, icon], index) => {
+        const glyph = icons[icon ?? fallback[index % fallback.length]] ?? icons[fallback[index % fallback.length]];
+        const classes = ["integration-four__card", { "integration-four__card--first": index === 0, "integration-four__card--link": Boolean(href) }];
+        const inner = (
+          <>
+            <span class="integration-four__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" set:html={glyph}></svg></span>
+            <div><h3>{title}</h3><p>{body}</p></div>
+          </>
+        );
+        return href
+          ? <a class:list={classes} href={href}>{inner}</a>
+          : <article class:list={classes}>{inner}</article>;
+      })}
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .integration-four{box-sizing:border-box;width:100%;padding:clamp(90px,10vw,140px) 24px;background:#fff}.integration-four *{box-sizing:border-box}.integration-four__inner{width:min(1200px,100%);margin:0 auto}.integration-four__header{margin-bottom:64px;text-align:center}.integration-four__eyebrow{display:block!important;margin-bottom:16px;color:#375dfb;font:700 13px/1.3 var(--font-body);letter-spacing:.1em;text-transform:uppercase}.integration-four__header h2{max-width:960px;margin:0 auto;background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;letter-spacing:-.03em;line-height:1.1}.integration-four__grid{position:relative;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;border-top:1px solid #e8ecf2!important}.integration-four__notch{position:absolute;top:0;z-index:2;width:28px;height:28px;transform:translate(-50%,-50%);pointer-events:none;line-height:0}.integration-four__notch svg{display:block;width:28px;height:28px}.integration-four__notch--1{left:25%}.integration-four__notch--2{left:50%}.integration-four__notch--3{left:75%}.integration-four__card{display:block!important;min-height:320px!important;padding:28px!important;border:0!important;border-left:1px solid #e8ecf2!important;background:#fff!important}.integration-four__card--first{border-left:0!important}.integration-four__card--link{color:inherit!important;text-decoration:none!important;transition:background-color .2s ease}.integration-four__card--link:hover{background:#f8faff!important}.integration-four__card--link:focus-visible{outline:2px solid #375dfb!important;outline-offset:-2px}.integration-four__icon{display:inline-flex!important;width:30px!important;height:30px!important;margin-bottom:28px!important;align-items:center;justify-content:center;color:#375dfb!important}.integration-four__icon svg{display:block!important;width:100%!important;height:100%!important;stroke:#375dfb!important}.integration-four__card h3{min-height:2.3em;margin:0 0 28px;color:#22272f;font-family:var(--font-heading);font-size:21px;font-weight:500;line-height:1.15}.integration-four__card p{margin:14px 0 0;color:#525866;font-family:var(--font-body);font-size:15px;line-height:1.4}@media(max-width:992px){.integration-four__grid{grid-template-columns:1fr!important}.integration-four__notch{display:none!important}.integration-four__card{min-height:0!important;border-top:1px solid #e8ecf2!important;border-left:0!important}.integration-four__card--first{border-top:0!important}}@media(max-width:767px){.integration-four{padding:72px 16px}.integration-four__header{margin-bottom:42px}.integration-four__header h2{font-size:36px}.integration-four__card{padding:26px 12px!important}.integration-four__card h3{min-height:0;margin-bottom:14px}}
+</style>

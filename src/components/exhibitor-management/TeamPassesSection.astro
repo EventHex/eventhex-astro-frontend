@@ -1,0 +1,482 @@
+---
+// Team & Pass Allocation Section
+// Reusing the journey / access control pattern from Event Registration & Speaker Management
+
+const passSteps = [
+  {
+    num: "01",
+    title: "Add team members from the portal",
+    desc: "Exhibitor admins create booth member records directly without needing organizer intervention.",
+    image: "/images/sponsor-management/exhibitor-list-web-806.webp",
+    alt: "EventHex exhibitor records showing booth companies, team members, and assigned packages",
+  },
+  {
+    num: "02",
+    title: "Set admin and booth staff roles",
+    desc: "Separate company profile and package settings from floor staff who just need mobile lead scanning.",
+    image: "/images/sponsor-management/sponsor-packages-web-806.webp",
+    alt: "EventHex sponsor package categories used to separate exhibitor access levels",
+  },
+  {
+    num: "03",
+    title: "Track pass inventory in real time",
+    desc: "See total, available, and issued passes broken down by each included attendee ticket type.",
+    image: "/feature-images/event-registration/approval-ticket-list.png",
+    alt: "EventHex ticket list showing pass inventory and registration status",
+  },
+  {
+    num: "04",
+    title: "Complete ticket-specific questions",
+    desc: "Collect dietary requirements, designations, and custom questions configured for the allocated pass tier.",
+    image: "/feature-images/event-registration/ticket-specific-rules.png",
+    alt: "EventHex ticket-specific rules and questions configuration",
+  },
+  {
+    num: "05",
+    title: "QR access and badges",
+    desc: "Recipients receive digital tickets with QR codes ready for on-site scanning and instant badge printing.",
+    image: "/feature-images/event-check-in/badge-card.png",
+    alt: "EventHex QR badge card used for exhibitor team access and on-site scanning",
+  },
+];
+---
+
+<section class="exh-passes" id="team-passes" aria-labelledby="exh-passes-title">
+  <div class="exh-passes__inner">
+    <div class="exh-passes__head">
+      <span class="exh-passes__eyebrow animate-on-scroll" data-animation="fadeIn">The people working the booth</span>
+      <h2 id="exh-passes-title" class="exh-passes__title animate-on-scroll" data-animation="fadeInUp">
+        Add the booth team and issue the passes already allocated
+      </h2>
+      <p class="exh-passes__subtitle animate-on-scroll" data-animation="fadeInUp">
+        Keep exhibitor admins, booth staff, ticket allocations, and event badges tied to the approved company record without chasing spreadsheets.
+      </p>
+    </div>
+
+    <ol class="exh-passes__steps">
+      {passSteps.map((step, index) => (
+        <li class="exh-pass-step animate-on-scroll" data-animation="fadeInUp">
+          <details open={index === 0}>
+            <summary>
+              <span class="exh-pass-step__num">{step.num}</span>
+              <div class="exh-pass-step__content">
+                <h3>{step.title}</h3>
+                <p>{step.desc}</p>
+              </div>
+              <button type="button" class="exh-pass-step__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+              </button>
+            </summary>
+            {index === 0 && (
+              <div class="exh-passes__visual">
+        <img class="exh-pass-screenshot" src={step.image} alt={step.alt} width="806" height="696" loading="lazy" decoding="async" />
+        <div class="exh-meter-card">
+          <div class="exh-meter-card__top">
+            <span class="exh-meter-card__title">Pass Allocation Summary</span>
+            <span class="exh-pill exh-pill--green">On Schedule</span>
+          </div>
+
+          <div class="exh-meter-gauge">
+            <div class="exh-meter-circle">
+              <svg viewBox="0 0 100 100">
+                <circle class="exh-meter-bg" cx="50" cy="50" r="40"></circle>
+                <circle class="exh-meter-val" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="62.8"></circle>
+              </svg>
+              <div class="exh-meter-text">
+                <strong>6</strong>
+                <span>of 8 Issued</span>
+              </div>
+            </div>
+
+            <div class="exh-meter-legend">
+              <div class="exh-meter-legend-item">
+                <i class="exh-meter-dot exh-meter-dot--issued"></i>
+                <span>Issued passes (75%)</span>
+              </div>
+              <div class="exh-meter-legend-item">
+                <i class="exh-meter-dot exh-meter-dot--avail"></i>
+                <span>Available passes (25%)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="exh-ticket-breakdown">
+            <div class="exh-ticket-tier">
+              <div>
+                <strong>General Exhibitor Pass</strong>
+                <small>4 issued · 0 remaining</small>
+              </div>
+              <span class="exh-ticket-badge exh-ticket-badge--full">Allocated</span>
+            </div>
+            <div class="exh-ticket-tier">
+              <div>
+                <strong>VIP Keynote Access</strong>
+                <small>2 issued · 2 remaining</small>
+              </div>
+              <span class="exh-ticket-badge exh-ticket-badge--open">2 Open</span>
+            </div>
+          </div>
+
+          <div class="exh-role-chips">
+            <span class="exh-role-chip">Company Admin</span>
+            <span class="exh-role-chip">Booth Staff</span>
+            <span class="exh-role-chip">Scanner Operator</span>
+          </div>
+        </div>
+              </div>
+            )}
+            {index > 0 && (
+              <div class="exh-passes__visual">
+                <img class="exh-pass-screenshot" src={step.image} alt={step.alt} width="806" height="696" loading="lazy" decoding="async" />
+              </div>
+            )}
+          </details>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>("#team-passes .exh-pass-step details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".exh-pass-step__arrow");
+    summary?.addEventListener("click", (event) => { event.preventDefault(); item.open = !item.open; });
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} pass allocation step`);
+      if (item.open) all.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+  const firstPassStep = document.querySelector<HTMLDetailsElement>("#team-passes .exh-pass-step:first-child details");
+  if (firstPassStep) firstPassStep.open = true;
+</script>
+
+<style>
+  .exh-passes {
+    padding: clamp(110px, 12vw, 160px) 24px;
+    background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, rgba(246,248,255,.52) 52%, rgba(255,255,255,.18) 100%);
+  }
+
+  .exh-passes__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  .exh-passes__head {
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto 64px;
+  }
+
+  .exh-passes__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #7b68ee;
+    margin-bottom: 12px;
+  }
+
+  .exh-passes__title {
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 650;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+    color: transparent;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 16px;
+  }
+
+  .exh-passes__subtitle {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: #5f6673;
+    margin: 0;
+  }
+
+  .exh-passes__layout {
+    display: grid;
+    gap: 14px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  .exh-passes__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .exh-pass-step {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--exh-workflow-tint) 0%, #fff 82%);
+    border: 1px solid var(--exh-workflow-border);
+    box-shadow: 0 8px 24px rgba(31, 41, 55, .04);
+  }
+  .exh-pass-step details { overflow: hidden; }
+  .exh-pass-step summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    cursor: pointer;
+    list-style: none;
+  }
+  .exh-pass-step summary::-webkit-details-marker, .exh-pass-step summary::marker { display: none; content: ""; }
+  .exh-pass-step details:not([open]) summary { grid-template-columns: 32px minmax(0, 1fr); }
+  .exh-pass-step details:not([open]) summary .exh-pass-step__content { display: grid; grid-template-columns: minmax(230px, .7fr) minmax(320px, 1.3fr); align-items: center; gap: 36px; }
+  .exh-pass-step details:not([open]) summary .exh-pass-step__content p { display: block; }
+  .exh-pass-step details:not([open]) summary .exh-pass-step__content h3 { white-space: nowrap; }
+  .exh-pass-step details[open] { box-shadow: 0 8px 24px rgba(31, 41, 55, .04); }
+  .exh-pass-step:nth-child(1) { --exh-workflow-tint: #fff8dc; --exh-workflow-border: #f0dfa6; }
+  .exh-pass-step:nth-child(2) { --exh-workflow-tint: #edf7ff; --exh-workflow-border: #d4e7f7; }
+  .exh-pass-step:nth-child(3) { --exh-workflow-tint: #f3efff; --exh-workflow-border: #e2d8fa; }
+  .exh-pass-step:nth-child(4) { --exh-workflow-tint: #eefbf4; --exh-workflow-border: #d4efdf; }
+  .exh-pass-step:nth-child(5) { --exh-workflow-tint: #fff0f7; --exh-workflow-border: #f4d6e5; }
+  .exh-pass-step__arrow {
+    position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px;
+    border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer;
+  }
+  .exh-pass-step__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .exh-pass-step details[open] .exh-pass-step__arrow svg { transform: rotate(180deg); }
+  .exh-passes__visual { padding: 0 72px 34px; }
+  .exh-pass-step details:not([open]) .exh-passes__visual { display: none; }
+  .exh-pass-screenshot {
+    display: block;
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  }
+  .exh-passes__visual .exh-meter-card { display: none; }
+  @media (max-width: 700px) {
+    .exh-pass-step details:not([open]) summary, .exh-pass-step details:not([open]) summary .exh-pass-step__content { display: flex; }
+    .exh-pass-step details:not([open]) summary .exh-pass-step__content p { display: none; }
+    .exh-pass-step details:not([open]) summary .exh-pass-step__content h3 { white-space: normal; }
+    .exh-passes__visual { padding-inline: 20px; }
+  }
+
+  .exh-pass-step__num {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 500;
+    color: #111;
+    background: transparent;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .exh-pass-step__content h3 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-weight: 500;
+    color: #111;
+    margin: 0;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+  }
+
+  .exh-pass-step__content p {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: #5f6673;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* Right Side Meter Card */
+  .exh-meter-card {
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: rgba(255,255,255,.72);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .exh-meter-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .exh-meter-card__title {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 650;
+    color: #0f172a;
+  }
+
+  .exh-meter-gauge {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .exh-meter-circle {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+  }
+
+  .exh-meter-circle svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .exh-meter-bg {
+    fill: none;
+    stroke: #f1f5f9;
+    stroke-width: 8;
+  }
+
+  .exh-meter-val {
+    fill: none;
+    stroke: #2563eb;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s ease;
+  }
+
+  .exh-meter-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .exh-meter-text strong {
+    font-family: var(--font-heading);
+    font-size: 26px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1;
+  }
+
+  .exh-meter-text span {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .exh-meter-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .exh-meter-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #475569;
+    font-weight: 500;
+  }
+
+  .exh-meter-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .exh-meter-dot--issued { background: #2563eb; }
+  .exh-meter-dot--avail { background: #cbd5e1; }
+
+  .exh-ticket-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px solid #edf2f7;
+  }
+
+  .exh-ticket-tier {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .exh-ticket-tier strong {
+    display: block;
+    font-size: 13px;
+    color: #1e293b;
+  }
+
+  .exh-ticket-tier small {
+    display: block;
+    font-size: 11.5px;
+    color: #64748b;
+  }
+
+  .exh-ticket-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .exh-ticket-badge--full {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  .exh-ticket-badge--open {
+    background: #ecfdf5;
+    color: #059669;
+  }
+
+  .exh-role-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .exh-role-chip {
+    font-size: 12px;
+    font-weight: 500;
+    background: #f1f5f9;
+    color: #334155;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .exh-passes__layout {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+</style>

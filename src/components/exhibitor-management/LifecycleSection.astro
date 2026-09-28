@@ -1,0 +1,225 @@
+---
+// Lifecycle Rail: 6-stage clear workflow
+const lifecycle = [
+  { stage: "organizer", badge: "Organizer", num: "01", step: "Define", title: "Create exhibitor package types", desc: "Set tier pricing, booth capacity, floor-plan files, and pass allocations." },
+  { stage: "organizer", badge: "Organizer", num: "02", step: "Apply", title: "Collect company information", desc: "Custom application forms capture branding, contact info, and legal requirements." },
+  { stage: "organizer", badge: "Organizer", num: "03", step: "Review", title: "Approve or reject", desc: "One-click approval workflow sends welcome notifications or custom rejection notes." },
+  { stage: "exhibitor", badge: "Exhibitor", num: "04", step: "Onboard", title: "Open the exhibitor portal", desc: "Passwordless magic link sign-in for seamless self-service setup." },
+  { stage: "exhibitor", badge: "Exhibitor", num: "05", step: "Activate", title: "Publish profiles & products", desc: "Add booth staff, issue passes, upload brochures, and list solutions." },
+  { stage: "booth", badge: "Booth & Attendees", num: "06", step: "Capture", title: "Manage & export leads", desc: "Scan attendee badges, qualify prospects with notes, and push leads to your CRM." },
+];
+---
+
+<section class="exh-lifecycle" id="workflow" aria-labelledby="exh-lifecycle-title">
+  <div class="exh-lifecycle__shell">
+    <div class="exh-lifecycle__head">
+      <span class="exh-lifecycle__eyebrow animate-on-scroll" data-animation="fadeIn">One connected workflow</span>
+      <h2 class="exh-lifecycle__title animate-on-scroll" data-animation="fadeInUp" id="exh-lifecycle-title">
+        Move every company through a clear event lifecycle
+      </h2>
+      <p class="exh-lifecycle__subtitle animate-on-scroll" data-animation="fadeInUp">
+        Use the same unified event record from the first application through team access, attendee discovery, booth lead capture, and post-event CRM export.
+      </p>
+    </div>
+
+    <div class="exh-lifecycle__legend animate-on-scroll" data-animation="fadeIn">
+      <span class="exh-legend-item exh-legend-item--organizer"><i></i> Organizer actions</span>
+      <span class="exh-legend-item exh-legend-item--exhibitor"><i></i> Exhibitor self-service</span>
+      <span class="exh-legend-item exh-legend-item--booth"><i></i> Booth &amp; attendee interactions</span>
+    </div>
+
+    <div class="exh-lifecycle__track animate-on-scroll" data-animation="fadeInUp">
+      <div class="exh-lifecycle__grid">
+        {lifecycle.map((item) => (
+          <article class={`exh-step-card exh-step-card--${item.stage}`}>
+            <div class="exh-step-card__top">
+              <span class="exh-step-card__num">{item.num}</span>
+              <span class="exh-step-card__badge">{item.badge}</span>
+            </div>
+            <strong class="exh-step-card__action">{item.step}</strong>
+            <h3 class="exh-step-card__title">{item.title}</h3>
+            <p class="exh-step-card__desc">{item.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .exh-lifecycle {
+    padding: clamp(72px, 8vw, 108px) 24px;
+    background: transparent;
+  }
+
+  .exh-lifecycle__shell {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  .exh-lifecycle__head {
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto 32px;
+  }
+
+  .exh-lifecycle__eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--brand-blue, #2563eb);
+    margin-bottom: 12px;
+  }
+
+  .exh-lifecycle__title {
+    font-family: var(--font-heading);
+    font-size: clamp(32px, 4.2vw, 52px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: #111827;
+    margin: 0 0 16px;
+  }
+
+  .exh-lifecycle__subtitle {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .exh-lifecycle__legend {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .exh-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+  }
+
+  .exh-legend-item i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+  }
+
+  .exh-legend-item--organizer i { background: #2563eb; }
+  .exh-legend-item--exhibitor i { background: #9333ea; }
+  .exh-legend-item--booth i { background: #059669; }
+
+  .exh-lifecycle__grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+
+  .exh-step-card {
+    position: relative;
+    padding: 22px 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  }
+
+  .exh-step-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    border-color: #cbd5e1;
+  }
+
+  .exh-step-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .exh-step-card__num {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: #94a3b8;
+  }
+
+  .exh-step-card__badge {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .exh-step-card--organizer .exh-step-card__badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
+
+  .exh-step-card--exhibitor .exh-step-card__badge {
+    background: #faf5ff;
+    color: #7e22ce;
+  }
+
+  .exh-step-card--booth .exh-step-card__badge {
+    background: #ecfdf5;
+    color: #047857;
+  }
+
+  .exh-step-card__action {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+  }
+
+  .exh-step-card__title {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.25;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .exh-step-card__desc {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #64748b;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .exh-lifecycle__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .exh-lifecycle__grid {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+  }
+</style>
