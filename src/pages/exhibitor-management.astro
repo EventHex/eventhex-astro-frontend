@@ -1,130 +1,286 @@
 ---
-import FeatureV2Layout from "../components/feature-v2/FeatureV2Layout.astro";
-import { exhIllustrations as ill } from "../components/exhibitor-management/illustrations";
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import HeroSection from "../components/exhibitor-management/HeroSection.astro";
+import SetupCardsSection from "../components/exhibitor-management/SetupCardsSection.astro";
+import PortalShowcaseSection from "../components/exhibitor-management/PortalShowcaseSection.astro";
+import LeadWorkspaceDarkSection from "../components/exhibitor-management/LeadWorkspaceDarkSection.astro";
+import TeamPassesSection from "../components/exhibitor-management/TeamPassesSection.astro";
+import CTASection from "../components/exhibitor-management/CTASection.astro";
+import ProductsDiscoverySection from "../components/exhibitor-management/ProductsDiscoverySection.astro";
+import AnalyticsSection from "../components/exhibitor-management/AnalyticsSection.astro";
+import UseCasesSection from "../components/exhibitor-management/UseCasesSection.astro";
+import ConnectedWorkflowsSection from "../components/exhibitor-management/ConnectedWorkflowsSection.astro";
+import FaqSection from "../components/exhibitor-management/FaqSection.astro";
 
-const jsonLd = {
+const title = "Exhibitor Management Software & Portal | EventHex";
+const description =
+  "Manage exhibitor applications, company profiles, booth teams, allocated passes, product listings, lead capture, CRM handoff, and analytics in EventHex.";
+
+// Visible FAQ copy matching structured data schema
+const faqs: Array<[string, string]> = [
+  [
+    "What can organizers manage before approving an exhibitor?",
+    "Create exhibitor package types, configure application fields and pass allocations, review submitted companies, approve or reject them, and resend onboarding communication when needed.",
+  ],
+  [
+    "What can an approved exhibitor do in the portal?",
+    "Depending on the modules enabled for the event, the exhibitor can update its company profile, manage products and resources, add booth members, issue allocated passes, view badges and floor-plan files, read announcements and FAQs, scan leads, and review analytics.",
+  ],
+  [
+    "How does exhibitor lead capture work?",
+    "Booth staff can scan an attendee QR code from the exhibitor portal or add a lead manually. The lead stays connected to the event, exhibitor, and capturing team member.",
+  ],
+  [
+    "Can exhibitors qualify and export leads?",
+    "Yes. They can search and filter leads, set high, medium, or low priority, add a status and remarks, and export available lead data as CSV.",
+  ],
+  [
+    "Can captured leads go to a CRM?",
+    "An exhibitor-specific connection can be configured for HubSpot, Zoho CRM, Salesforce, or Pipedrive. EventHex sends captured leads on a best-effort basis, so lead capture remains available even if the CRM is unavailable.",
+  ],
+  [
+    "Does EventHex include an interactive booth-layout editor?",
+    "No. The current workflow stores booth numbers and lets organizers upload titled floor-plan files that exhibitors can view or download. A visual drag-and-drop booth inventory and selection workflow is not available.",
+  ],
+];
+
+const softwareSchema = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "EventHex — Exhibitor Management Software",
+  name: "EventHex Exhibitor Management",
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
-  description: "Exhibitor management with self-service portal, QR lead capture, product catalogs, interactive floor plans, and real-time analytics.",
+  description,
   url: "https://eventhex.ai/exhibitor-management/",
-  offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free demo available" },
+  creator: {
+    "@type": "Organization",
+    name: "EventHex",
+    url: "https://eventhex.ai",
+  },
   featureList: [
-    "Self-Service Exhibitor Portal",
-    "QR Lead Scanning",
-    "Product Catalog Management",
-    "Interactive Floor Plans",
-    "Booth Allocation",
-    "Lead Export & CRM Sync",
-    "Team Member Access",
-    "Exhibitor Packages",
+    "Ticket-backed exhibitor packages and approvals",
+    "Configurable self-service exhibitor portal",
+    "Company profiles, products, and resources",
+    "Booth team members and allocated passes",
+    "QR and manual lead capture",
+    "Lead priority, status, remarks, and CSV export",
+    "Exhibitor CRM handoff on a best-effort basis",
+    "Lead trends and booth-team analytics",
+    "Public exhibitor directory and attendee bookmarks",
   ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text },
+  })),
 };
 ---
 
-<FeatureV2Layout
-  pageTitle="Exhibitor Management Software — Self-Service Portal & Lead Capture | EventHex"
-  pageDescription="Give exhibitors their own branded portal to manage booth details, upload product catalogs, invite team members, and capture QR leads — without emailing you for every update."
+<MarketingLayout
+  {title}
+  {description}
   canonical="https://eventhex.ai/exhibitor-management/"
   ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/04/iPhone-15-Pro.png"
-  badge="Exhibitor Management Software"
-  heroTitleLine1="A Self-Service Portal Exhibitors"
-  heroTitleLine2="Actually Use"
-  heroCopy="Give exhibitors their own branded portal to manage booth details, upload product catalogs, invite team members, and capture QR leads — without emailing you for every update."
-  trustItems={["Self-Service Exhibitor Portal", "QR Lead Capture", "Interactive Floor Plans"]}
-  stats={[
-    { value: "80%", label: "Fewer Organizer Emails" },
-    { value: "3x", label: "More Leads Captured" },
-    { value: "200+", label: "Exhibitors Managed" },
-    { value: "100%", label: "Self-Service Setup" },
-  ]}
-  statsHeadline={{
-    white1: "Exhibitors run their own",
-    accent: "setup.",
-    white2: "You run",
-    accent2: "the show",
-  }}
-  bentoHeading="Everything You Need for Exhibitor Management"
-  bentoSubtitle="Exhibitors log in, fill out their booth profile, invite their team, upload their product catalog, and start scanning leads — all without a single email to you."
-  bentoTabs={[
-    {
-      tab: "Exhibitor Portal",
-      cards: [
-        { title: "Self-Service Dashboard", desc: "Exhibitors manage their own booth details, contacts, and profile from a branded portal", illustration: ill.exh1 },
-        { title: "Booth Setup Wizard", desc: "Step-by-step guided setup for booth description, logo, website, and social links", illustration: ill.exh2 },
-        { title: "Product Catalog Management", desc: "Upload and organize product listings with photos, descriptions, and pricing", illustration: ill.exh3 },
-        { title: "Team Member Invites", desc: "Exhibitors invite booth staff who all get scanner access and lead management", illustration: ill.exh4 },
-        { title: "Document Uploads", desc: "Submit booth diagrams, compliance docs, and marketing materials directly from the portal", illustration: ill.exh5 },
-      ],
-    },
-    {
-      tab: "Lead Management",
-      cards: [
-        { title: "QR Lead Scanning", desc: "Booth staff scan attendee QR codes with a phone to capture contact info instantly", illustration: ill.exh6 },
-        { title: "Manual Lead Entry", desc: "Add leads manually when QR scanning isn’t an option — form pre-fills from attendee data", illustration: ill.exh7 },
-        { title: "Lead Export & CRM Sync", desc: "Export leads as CSV or push directly to CRM tools via webhook integration", illustration: ill.exh8 },
-        { title: "Lead Qualification Notes", desc: "Add private notes, hot/warm/cold ratings, and follow-up reminders per lead", illustration: ill.exh9 },
-        { title: "Registration-Based Leads", desc: "Match attendee registration data with leads for enriched profiles and segmentation", illustration: ill.exh10 },
-      ],
-    },
-    {
-      tab: "Floor Plans & Logistics",
-      cards: [
-        { title: "Interactive Floor Plans", desc: "Upload venue maps and assign booths visually with clickable booth allocation", illustration: ill.exh11 },
-        { title: "Booth Allocation", desc: "Assign and reassign booth numbers, sizes, and zones from the organizer dashboard", illustration: ill.exh12 },
-        { title: "Category Management", desc: "Group exhibitors by industry, product category, or sponsorship tier for filtering", illustration: ill.exh13 },
-        { title: "Exhibitor Packages", desc: "Offer Standard, Premium, and Custom packages with different booth sizes and benefits", illustration: ill.exh14 },
-        { title: "FAQ Management", desc: "Publish exhibitor FAQs and on-site guidelines directly in the exhibitor portal", illustration: ill.exh15 },
-      ],
-    },
-  ]}
-  stackingHeading="Exhibitor Management Features"
-  stackingHighlight="That Save Hours"
-  stackingCards={[
-    {
-      title: "Self-Service Setup That Saves You Hours",
-      desc: "Exhibitors log in to their own branded portal and handle everything themselves — booth descriptions, team invites, product uploads, and document submissions. No chasing emails.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/iPhone-15-Pro.png",
-      alt: "Self-service exhibitor portal with booth setup wizard",
-    },
-    {
-      title: "Exhibitors Scan Leads. You Export the Data.",
-      desc: "Every booth gets a QR scanner — attendees scan in, their contact details flow to the exhibitor's lead list, and organizers can see aggregated lead counts across all booths.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2026/01/Screenshot-2026-01-03-at-8.35.11-PM.png",
-      alt: "QR lead scanning at exhibition booth",
-    },
-    {
-      title: "Visual Booth Allocation. Interactive Maps.",
-      desc: "Upload your venue floor plan, assign booths visually, and publish an interactive map on your event website — attendees find exhibitors, exhibitors know exactly where to set up.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Mac-Studio.png",
-      alt: "Interactive exhibition floor plan with booth assignments",
-    },
-  ]}
-  howItWorksHeading="How Exhibitor Management Works"
-  steps={[
-    { title: "Set Up Exhibitor Packages", desc: "Define Standard, Premium, and Custom packages with booth sizes and included features. Assign exhibitors to packages." },
-    { title: "Invite Exhibitors", desc: "Send each exhibitor a login link to their personal portal. They set up their own profile, team, and content." },
-    { title: "Manage Booth Allocations", desc: "Assign booths using the interactive floor plan. Exhibitors see their booth number and location in the portal." },
-    { title: "Go Live & Capture Leads", desc: "On event day, booth staff scan attendee QR codes to capture leads. All data flows to the organizer dashboard in real time." },
-  ]}
-  ctaTitle="Ready to Give Exhibitors a Portal They'll Love?"
-  ctaCopy="See how EventHex turns exhibitor chaos into a smooth, self-service experience that saves your team hours and boosts exhibitor satisfaction."
-  whyHeading="Why Organizers Choose EventHex for Exhibitors"
-  whyCards={[
-    { title: "Self-Service Portal", desc: "Exhibitors set up everything themselves — no chasing emails" },
-    { title: "QR Lead Capture", desc: "Phone-based scanning, instant export, and lead qualification" },
-    { title: "Floor Plans", desc: "Visual booth allocation with interactive public maps" },
-    { title: "Product Catalogs", desc: "Exhibitors upload and manage their own product listings" },
-    { title: "Lead Export", desc: "One-click CSV export or direct CRM sync for all booth leads" },
-  ]}
-  faqs={[
-    { q: "What is the exhibitor portal?", a: "The exhibitor portal is a branded, self-service web app where exhibitors manage their own booth profile, invite team members, upload product catalogs, and capture leads — without needing to contact the organizer." },
-    { q: "How do exhibitors manage their own booth?", a: "Each exhibitor receives a login link to their personal portal. They fill in booth description, upload logos and product catalogs, invite staff, and submit required documents through a guided setup wizard." },
-    { q: "Can exhibitors scan leads?", a: "Yes. Booth staff use their smartphones to scan attendee QR codes. Contact details are captured instantly and added to the exhibitor's lead list. Leads can be qualified with notes and exported as CSV at any time." },
-    { q: "How does floor plan management work?", a: "Upload your venue floor plan image and assign booths visually by clicking on booth areas. Exhibitors see their booth location in the portal, and an interactive public map can be embedded on your event website." },
-    { q: "Can exhibitors upload their product catalogs?", a: "Yes. Each exhibitor portal includes a product catalog section where they can add products with photos, descriptions, pricing, and tags. The catalog is visible to attendees on the event website and app." },
-  ]}
-  jsonLd={jsonLd}
-/>
+  ogType="website"
+  footerCtaEyebrow="Start with one exhibitor"
+  footerCtaTitle="Ready to run your exhibitor workflow in EventHex?"
+  footerCtaSubtitle="Bring packages, applications, portal setup, company profiles, and booth-lead capture into one connected workflow."
+  footerCtaProofItems={[]}
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/speaker-management/cta-illustration.svg"
+  footerCtaImageAlt="Exhibitor management workflow and portal in EventHex"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <div class="exm-page-bg">
+    <HeroSection />
+    <section class="exm-workflow-summary" aria-label="Exhibitor workflow summary">
+      <div><strong>Define</strong><span>Create exhibitor package types</span></div>
+      <div><strong>Apply</strong><span>Collect company information</span></div>
+      <div><strong>Review</strong><span>Approve or reject</span></div>
+      <div><strong>Onboard</strong><span>Open the exhibitor portal</span></div>
+      <div><strong>Activate</strong><span>Publish profiles and products</span></div>
+      <div><strong>Capture</strong><span>Manage and export leads</span></div>
+    </section>
+    <SetupCardsSection />
+    <PortalShowcaseSection />
+    <LeadWorkspaceDarkSection />
+    <TeamPassesSection />
+    <CTASection />
+    <ProductsDiscoverySection />
+    <AnalyticsSection />
+    <UseCasesSection />
+    <ConnectedWorkflowsSection />
+    <FaqSection {faqs} />
+  </div>
+</MarketingLayout>
+
+<script>
+  // Ensure visible elements unhide cleanly on initial render and scrolling
+  document.addEventListener('DOMContentLoaded', () => {
+    const reveals = document.querySelectorAll<HTMLElement>('.animate-on-scroll');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const anim = el.dataset.animation || 'fadeIn';
+          const delay = parseInt(el.dataset.delay || '0', 10);
+          setTimeout(() => {
+            el.classList.add('is-visible');
+            el.style.animationName = anim;
+            el.style.opacity = '1';
+          }, delay);
+          observer.unobserve(el);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '50px 0px 50px 0px' });
+
+    reveals.forEach((el) => observer.observe(el));
+  });
+</script>
+
+<style is:global>
+  .exm-page-bg {
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(
+        circle 380px at 3% 34%,
+        rgba(175, 163, 255, 0.28) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 97% 30%,
+        rgba(255, 182, 213, 0.26) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 340px at 95% 75%,
+        rgba(130, 170, 255, 0.24) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 4% 78%,
+        rgba(255, 224, 150, 0.2) 0%,
+        transparent 100%
+      ),
+      #ffffff !important;
+    background-attachment: fixed !important;
+  }
+
+  .exm-page-bg > section,
+  .exm-page-bg > div > section {
+    background: transparent !important;
+  }
+
+  .exm-page-bg > .exh-lead-dark {
+    background-color: #0b0f19 !important;
+    background-image:
+      radial-gradient(120% 45% at 50% 0%, rgba(55, 93, 251, 0.22) 0%, rgba(124, 108, 255, 0.1) 45%, transparent 75%),
+      radial-gradient(ellipse 600px 400px at 85% 90%, rgba(16, 185, 129, 0.08), transparent 70%) !important;
+  }
+
+  .exm-page-bg > .exh-suites {
+    background: #ffffff !important;
+  }
+
+  .exm-page-bg > .exh-faq {
+    background: #ffffff !important;
+  }
+
+  .exm-workflow-summary {
+    display: flex;
+    justify-content: center;
+    gap: clamp(20px, 4vw, 58px);
+    flex-wrap: wrap;
+    padding: 24px 28px;
+    border-top: 1px solid #edf1f7;
+    border-bottom: 1px solid #edf1f7;
+    background: linear-gradient(100deg, rgba(255,248,239,.8), rgba(247,250,255,.9));
+  }
+  .exm-workflow-summary div { display:flex; gap:5px; align-items:baseline; color:#64748b; font: 14px/1.4 var(--font-body); }
+  .exm-workflow-summary strong { color:#1f2937; font-weight:700; }
+  @media (max-width: 700px) { .exm-workflow-summary { justify-content:flex-start; gap:12px 24px; } .exm-workflow-summary div { flex: 1 1 42%; } }
+
+  /* Typography consistency matching Event Registration & Speaker Management */
+  .exm-page-bg h1,
+  .exm-page-bg h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+    color: #111827;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .exm-page-bg .exh-lead-dark__header h2,
+  .exm-page-bg .exh-discovery__title {
+    color: #fff;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .exm-page-bg .exh-hero__title,
+  .exm-page-bg .exh-portal__title,
+  .exm-page-bg .exh-passes__title,
+  .exm-page-bg .exh-analytics__title,
+  .exm-page-bg .exh-suites__title {
+    font-size: clamp(40px, 5vw, 62px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.045em;
+  }
+  .exm-page-bg .exh-portal__title { font-size: clamp(40px, 4.6vw, 56px); }
+  .exm-page-bg .exh-cta__title {
+    color: #fff !important;
+    background: none !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+
+  /* Spacing normalization */
+  .exm-page-bg .exh-trust-strip {
+    margin-bottom: 20px;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-on-scroll {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+    }
+  }
+</style>
