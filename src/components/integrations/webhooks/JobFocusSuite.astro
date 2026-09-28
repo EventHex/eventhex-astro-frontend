@@ -1,0 +1,598 @@
+---
+// Tabbed "job focus" suite section.
+// Structure and visual grammar mirror the speaker-management agent suites
+// (see components/speaker-management/DeckSections.astro -> .smd-agent-suites),
+// with webhook-specific copy and a content-matched preview per tab.
+
+interface JobFocusTab {
+  id: string;
+  label: string;
+  title: string;
+  description: string;
+  checklist: string[];
+  cue: string;
+  linkLabel: string;
+  linkHref: string;
+  tint: string;
+  border: string;
+  visualLabel: string;
+  image?: string;
+  imageAlt?: string;
+}
+
+const tabs: JobFocusTab[] = [
+  {
+    id: "integration-page",
+    label: "This integration page",
+    title: "Outbound delivery,<br />end to end",
+    description:
+      "Trigger types, endpoint configuration, payload mapping, authentication, signature, logs, retries, and the current Zapier hook/actions.",
+    checklist: [
+      "Six verified event trigger types",
+      "Configurable method, headers, and endpoint auth",
+      "Mapped JSON payload with an optional HMAC-SHA256 signature",
+      "Execution logs and automatic retry backoff",
+    ],
+    cue: "Event-driven delivery",
+    linkLabel: "See the webhook flow",
+    linkHref: "#trigger-types",
+    tint: "#edf7ff",
+    border: "#d4e7f7",
+    visualLabel: "Event-driven delivery",
+  },
+  {
+    id: "developers",
+    label: "Developers",
+    title: "The wider API<br />surface",
+    description:
+      "The wider EventHex API surface, authentication, data resources, SDK examples, and custom application architecture.",
+    checklist: [
+      "Programmatic access beyond event triggers",
+      "Authentication and data resources",
+      "Connector URL and API key management",
+      "SDK examples for custom applications",
+    ],
+    cue: "Platform API",
+    linkLabel: "Explore Developers",
+    linkHref: "/developers/",
+    tint: "#f3efff",
+    border: "#e2d8fa",
+    visualLabel: "Platform API",
+    image: "/feature-images/webhooks/developer-connectors.png",
+    imageAlt:
+      "EventHex Admin Console showing the developer connector URL and API key setup",
+  },
+];
+---
+
+<section class="whjf" aria-labelledby="whjf-title">
+  <div class="whjf__inner">
+    <header class="whjf__header">
+      <h2 id="whjf-title" class="whjf__title animate-on-scroll" data-animation="fadeInUp">
+        <span class="whjf__title-line">Outbound event triggers here;</span>
+        <span class="whjf__title-line">the broader API on Developers</span>
+      </h2>
+      <p class="whjf__subtitle animate-on-scroll" data-animation="fadeInUp">
+        Keep this page focused on event-driven delivery, and move to Developers when the wider
+        EventHex API surface is the better fit.
+      </p>
+    </header>
+
+    <div
+      class="whjf__tabs animate-on-scroll"
+      data-animation="fadeInUp"
+      role="tablist"
+      aria-label="Webhook and Developers scope"
+    >
+      {tabs.map((tab, index) => (
+        <button
+          class={`whjf__tab ${index === 0 ? "whjf__tab--active" : ""}`}
+          type="button"
+          role="tab"
+          id={`whjf-tab-${tab.id}`}
+          aria-selected={index === 0 ? "true" : "false"}
+          aria-controls={`whjf-panel-${tab.id}`}
+          tabindex={index === 0 ? 0 : -1}
+          data-target={tab.id}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+
+    <div class="whjf__box animate-on-scroll" data-animation="fadeInUp">
+      {tabs.map((tab, index) => (
+        <div
+          class={`whjf__panel ${index === 0 ? "whjf__panel--active" : ""}`}
+          id={`whjf-panel-${tab.id}`}
+          role="tabpanel"
+          aria-labelledby={`whjf-tab-${tab.id}`}
+          data-panel={tab.id}
+          style={`--panel-tint:${tab.tint};--panel-border:${tab.border};`}
+        >
+          <div class="whjf__left">
+            <h3 class="whjf__panel-title" set:html={tab.title} />
+            <p class="whjf__panel-desc">{tab.description}</p>
+
+            <ul class="whjf__checklist">
+              {tab.checklist.map((item) => (
+                <li>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div class="whjf__footer">
+              <span class="whjf__cue">{tab.cue}</span>
+              <a class="whjf__link" href={tab.linkHref}>
+                {tab.linkLabel}
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="whjf__right">
+            <div class="whjf__showcase">
+              {tab.image ? (
+                <img
+                  class="whjf__shot"
+                  src={tab.image}
+                  alt={tab.imageAlt ?? ""}
+                  width="910"
+                  height="698"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div
+                  class="whjf__window"
+                  role="img"
+                  aria-label="Webhook trigger configuration with a delivered request"
+                >
+                  <div class="whjf__chrome"><i></i><i></i><i></i><b>Webhook trigger</b></div>
+                  <div class="whjf__body">
+                    <small>OUTBOUND TRIGGER</small>
+                    <strong>Post-registration</strong>
+                    <div class="whjf__row"><span>Event</span>Tech Summit 2026</div>
+                    <div class="whjf__row"><span>Method</span>POST</div>
+                    <div class="whjf__row"><span>Payload</span>6 mapped fields</div>
+                    <div class="whjf__row"><span>Signature</span>HMAC-SHA256</div>
+                    <div class="whjf__log"><i></i>Delivered 200 OK<em>1.2s</em></div>
+                  </div>
+                </div>
+              )}
+              <span class="whjf__visual-label">{tab.visualLabel}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const suite = document.querySelector(".whjf");
+    if (!suite) return;
+
+    const tabs = Array.from(suite.querySelectorAll(".whjf__tab"));
+    const panels = Array.from(suite.querySelectorAll(".whjf__panel"));
+    let rotationId;
+
+    const activateTab = (tab) => {
+      const targetId = tab.getAttribute("data-target");
+
+      tabs.forEach((item) => {
+        const isTarget = item === tab;
+        item.classList.toggle("whjf__tab--active", isTarget);
+        item.setAttribute("aria-selected", isTarget ? "true" : "false");
+        item.setAttribute("tabindex", isTarget ? "0" : "-1");
+      });
+
+      panels.forEach((panel) => {
+        panel.classList.toggle(
+          "whjf__panel--active",
+          panel.getAttribute("data-panel") === targetId
+        );
+      });
+    };
+
+    const stopRotation = () => {
+      if (rotationId === undefined) return;
+      window.clearInterval(rotationId);
+      rotationId = undefined;
+    };
+
+    const startRotation = () => {
+      stopRotation();
+      if (tabs.length < 2) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      rotationId = window.setInterval(() => {
+        const currentIndex = tabs.findIndex(
+          (tab) => tab.getAttribute("aria-selected") === "true"
+        );
+        activateTab(tabs[(currentIndex + 1) % tabs.length]);
+      }, 5000);
+    };
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activateTab(tab);
+        startRotation();
+      });
+
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const step = event.key === "ArrowRight" ? 1 : -1;
+        const next = tabs[(tabs.indexOf(tab) + step + tabs.length) % tabs.length];
+        activateTab(next);
+        next.focus();
+        startRotation();
+      });
+    });
+
+    suite.addEventListener("mouseenter", stopRotation);
+    suite.addEventListener("mouseleave", startRotation);
+    suite.addEventListener("focusin", stopRotation);
+    suite.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node) || !suite.contains(event.relatedTarget)) {
+        startRotation();
+      }
+    });
+
+    startRotation();
+  });
+</script>
+
+<style>
+  .whjf {
+    padding: clamp(72px, 7vw, 104px) 24px;
+    background: transparent;
+  }
+  .whjf__inner {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+  }
+
+  .whjf__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 32px;
+    text-align: center;
+  }
+  .whjf__title {
+    max-width: 900px;
+    margin: 0;
+    color: transparent;
+    font-family: var(--font-heading);
+    font-size: clamp(34px, 4.4vw, 54px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.035em;
+    background: linear-gradient(98deg, var(--wh-ink) 43%, #8f8f8f 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .whjf__title-line {
+    display: block;
+  }
+  .whjf__subtitle {
+    max-width: 700px;
+    margin: 16px 0 0;
+    color: #6b7280;
+    font: 500 17px/1.5 var(--font-body);
+  }
+
+  .whjf__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    padding: 6px;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #f1f3f7;
+  }
+  .whjf__tab {
+    padding: 8px 18px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font: 600 13.5px/1.4 var(--font-body);
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .whjf__tab:hover {
+    background: rgba(255, 255, 255, .65);
+    color: #334155;
+  }
+  .whjf__tab:focus-visible {
+    outline: 2px solid var(--wh-blue);
+    outline-offset: 2px;
+  }
+  .whjf__tab--active {
+    border-color: #dbe4f0;
+    background: #fff;
+    color: #3b82f6;
+    box-shadow: 0 2px 8px rgba(30, 41, 59, .08);
+  }
+
+  .whjf__box {
+    background: transparent;
+  }
+  .whjf__panel {
+    --panel-tint: #edf7ff;
+    --panel-border: #d4e7f7;
+    display: none;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: center;
+    padding: 52px 64px;
+    border: 1px solid var(--panel-border);
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--panel-tint) 0%, #fff 72%);
+  }
+  .whjf__panel--active {
+    display: grid;
+    animation: whjf-panel-fade .4s ease forwards;
+  }
+  @keyframes whjf-panel-fade {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .whjf__panel-title {
+    margin: 0 0 16px;
+    color: #1f2937;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 3.6vw, 40px);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -.03em;
+  }
+  .whjf__panel-desc {
+    margin: 0 0 28px;
+    color: #4b5563;
+    font: 500 16px/1.6 var(--font-body);
+  }
+
+  .whjf__checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .whjf__checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #6b7280;
+    font: 500 14.5px/1.45 var(--font-body);
+  }
+  .whjf__checklist li svg {
+    flex-shrink: 0;
+    margin-top: 3px;
+    stroke: var(--wh-blue);
+  }
+
+  .whjf__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 18px;
+    margin-top: 32px;
+  }
+  .whjf__cue {
+    padding: 7px 11px;
+    border-radius: 99px;
+    background: #edf1ff;
+    color: var(--wh-blue);
+    font: 650 12px/1.3 var(--font-body);
+  }
+  .whjf__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--wh-ink);
+    font: 650 14px/1.3 var(--font-body);
+    text-decoration: none;
+  }
+  .whjf__link svg {
+    transition: transform .2s ease;
+  }
+  .whjf__link:hover svg {
+    transform: translateX(3px);
+  }
+
+  .whjf__right {
+    min-width: 0;
+  }
+  .whjf__showcase {
+    position: relative;
+    isolation: isolate;
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, .58);
+    box-shadow: 0 22px 48px rgba(31, 41, 55, .1);
+  }
+  .whjf__showcase::before {
+    content: "";
+    position: absolute;
+    inset: 12% 8% -8%;
+    z-index: -1;
+    border-radius: 12px;
+    background: var(--panel-border);
+    filter: blur(22px);
+    opacity: .48;
+  }
+
+  .whjf__visual-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 12px;
+    border: 1px solid #cddcff;
+    border-radius: 10px;
+    background: #eef4ff;
+    box-shadow: 0 8px 22px rgba(49, 88, 212, .16);
+    color: #3158d4;
+    font: 700 11px/1.2 var(--font-body);
+  }
+
+  .whjf__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 28px;
+    aspect-ratio: 910 / 698;
+    object-fit: contain;
+    border: 1px solid #e0e4ec;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .whjf__window {
+    margin-top: 28px;
+    overflow: hidden;
+    border: 1px solid #dfe5f1;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, .12);
+  }
+  .whjf__chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 11px 13px;
+    border-bottom: 1px solid #edf0f5;
+    color: #747b88;
+    font: 600 11px var(--font-body);
+  }
+  .whjf__chrome i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #d8dde7;
+  }
+  .whjf__chrome b {
+    margin-left: 8px;
+  }
+  .whjf__body {
+    padding: 18px 16px;
+  }
+  .whjf__body small {
+    display: block;
+    color: #7b8494;
+    font: 700 9px var(--font-body);
+    letter-spacing: .1em;
+  }
+  .whjf__body strong {
+    display: block;
+    margin: 9px 0 12px;
+    color: #111827;
+    font: 650 16px var(--font-heading);
+  }
+  .whjf__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-top: 1px solid #edf0f5;
+    color: #303743;
+    font: 600 12px var(--font-body);
+  }
+  .whjf__row span {
+    min-width: 74px;
+    color: #7b8494;
+    font: 700 9px var(--font-body);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .whjf__log {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 14px;
+    padding: 11px 12px;
+    border: 1px solid #d9f0e3;
+    border-radius: 10px;
+    background: #f2fcf7;
+    color: #178a55;
+    font: 650 11.5px var(--font-body);
+  }
+  .whjf__log i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #19b874;
+    box-shadow: 0 0 0 5px rgba(25, 184, 116, .13);
+  }
+  .whjf__log em {
+    margin-left: auto;
+    color: #7b8494;
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .whjf__panel {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 44px 40px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .whjf {
+      padding: 64px 18px;
+    }
+    .whjf__panel {
+      padding: 30px 22px;
+      border-radius: 20px;
+    }
+    .whjf__title-line {
+      display: inline;
+    }
+    .whjf__title-line + .whjf__title-line::before {
+      content: " ";
+    }
+    .whjf__tabs {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .whjf__tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .whjf__tab {
+      flex-shrink: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whjf__panel--active {
+      animation: none;
+    }
+    .whjf__link svg {
+      transition: none;
+    }
+  }
+  .whjf__window{background:#f7f9ff url('/images/webhooks/eventhex-event-workspace-web-960.webp') center/cover no-repeat}.whjf__window>*{visibility:hidden}
+</style>

@@ -1,0 +1,58 @@
+---
+interface Props {
+  heading: string;
+  intro: string;
+  faqs: [string, string][];
+  ctaText?: string;
+  ctaHref?: string;
+  id?: string;
+}
+
+const {
+  heading,
+  intro,
+  faqs,
+  ctaText = "Visit Help Center",
+  ctaHref = "/contact-en/",
+  id = "faq",
+} = Astro.props;
+---
+
+<section class="integration-faq" {id}>
+  <div class="integration-faq__inner">
+    <div class="integration-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+      <span class="integration-faq__eyebrow">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        Quick Answers
+      </span>
+      <h2 class="integration-faq__heading" set:html={heading}></h2>
+      <p class="integration-faq__intro">{intro}</p>
+      <a href={ctaHref} class="integration-faq__cta">
+        {ctaText}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </a>
+    </div>
+
+    <div class="integration-faq__list">
+      {faqs.map(([question, answer], index) => (
+        <details class="integration-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-integration-faq-item open={index === 0}>
+          <summary class="integration-faq__question"><strong>{question}</strong><span class="integration-faq__icon" aria-hidden="true"></span></summary>
+          <div class="integration-faq__answer"><p>{answer}</p></div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.integration-faq').forEach((section) => {
+    const items = Array.from(section.querySelectorAll<HTMLDetailsElement>('[data-integration-faq-item]'));
+    items.forEach((item) => item.addEventListener('toggle', () => {
+      if (item.open) items.forEach((other) => { if (other !== item) other.open = false; });
+    }));
+  });
+</script>
+
+<style is:global>
+  .integration-faq{box-sizing:border-box;width:100%;padding:80px 24px;background:#fff}.integration-faq *{box-sizing:border-box}.integration-faq__inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:360px minmax(0,1fr);gap:64px;align-items:start}.integration-faq__sidebar{position:sticky;top:6rem}.integration-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;margin-bottom:20px;color:#000;font-family:var(--font-body);font-size:.8125rem;font-weight:500}.integration-faq__heading{font-family:'Creato Display',var(--font-heading);font-size:44px;font-weight:500;color:#000;margin:0 0 20px;line-height:1.1;letter-spacing:-1px}.integration-faq__intro{margin:0 0 28px;color:var(--body-light);font-family:var(--font-body);font-size:1rem;line-height:1.6}.integration-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font-family:var(--font-body);font-size:.9375rem;font-weight:500;text-decoration:none;transition:background .2s ease,transform .2s ease}.integration-faq__cta:hover{background:#000;transform:translateY(-1px)}.integration-faq__list{display:flex;min-width:0;flex-direction:column;gap:16px;counter-reset:integration-faq}.integration-faq__item{counter-increment:integration-faq;padding:4px 28px;overflow:hidden;border:1px solid #e4e7ec!important;border-radius:20px;background:#fff;transition:background .25s ease,border-color .25s ease}.integration-faq__item[open]{border-color:#e4e7ec;background:#e4e7ec}.integration-faq__question{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;font-family:'Creato Display',var(--font-heading);font-size:1.0625rem;font-weight:500;color:#000;cursor:pointer;list-style:none}.integration-faq__question strong{font-weight:500}.integration-faq__question strong:before{content:counter(integration-faq) '. '}.integration-faq__question::-webkit-details-marker{display:none}.integration-faq__icon{position:relative;flex-shrink:0;width:18px;height:18px;transition:transform .28s cubic-bezier(.22,1,.36,1)}.integration-faq__icon:before,.integration-faq__icon:after{content:'';position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.integration-faq__icon:before{width:14px;height:2px}.integration-faq__icon:after{width:2px;height:14px;transition:opacity .2s ease}.integration-faq__item[open] .integration-faq__icon{transform:scale(.9)}.integration-faq__item[open] .integration-faq__icon:after{opacity:0}.integration-faq__answer{max-width:640px;padding:0 0 24px}.integration-faq__answer p{font-family:var(--font-body);font-size:.9375rem;line-height:1.7;color:#000;margin:0}@media(prefers-reduced-motion:reduce){.integration-faq__item,.integration-faq__icon,.integration-faq__icon:after{transition:none}}@media(max-width:1024px){.integration-faq__inner{grid-template-columns:1fr;gap:40px}.integration-faq__sidebar{position:static}.integration-faq__heading{font-size:32px}}@media(max-width:767px){.integration-faq{padding:56px 16px}.integration-faq__heading{font-size:28px}.integration-faq__item{padding:4px 20px;border-radius:16px}.integration-faq__question{font-size:.9375rem;padding:18px 0}}
+</style>

@@ -1,0 +1,552 @@
+---
+// Use-case stacking section — mirrors the speaker-management stacking tokens:
+// dark mesh band, sticky glass header, sticky stacking cards, glass screen panel.
+interface UseCase {
+  title: string;
+  desc: string;
+  cue: string;
+  screen: {
+    method: string;
+    endpoint: string;
+    rows: [string, string][];
+    status: string;
+    ok: boolean;
+  };
+}
+
+const useCases: UseCase[] = [
+  {
+    title: "Registration handoff",
+    desc: "Send selected attendee and event fields to an operations or data workflow.",
+    cue: "Included in the post-registration payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/registration",
+      rows: [
+        ["Event", "Post-registration"],
+        ["Payload", "email · ticket · event_id"],
+        ["Delivery", "200 OK · 342 ms"],
+      ],
+      status: "Delivered",
+      ok: true,
+    },
+  },
+  {
+    title: "Order completion",
+    desc: "Notify a finance or fulfilment process after the supported order event.",
+    cue: "Included in the order-completed payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/orders",
+      rows: [
+        ["Event", "Order completed"],
+        ["Payload", "order_id · amount · currency"],
+        ["Delivery", "200 OK · 418 ms"],
+      ],
+      status: "Delivered",
+      ok: true,
+    },
+  },
+  {
+    title: "Check-in signal",
+    desc: "React to an attendee check-in in another authorized system.",
+    cue: "Included in the checked-in payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/check-in",
+      rows: [
+        ["Event", "Attendee checked in"],
+        ["Payload", "attendee_id · gate · event_id"],
+        ["Delivery", "200 OK · 286 ms"],
+      ],
+      status: "Delivered",
+      ok: true,
+    },
+  },
+  {
+    title: "Lead routing",
+    desc: "Send captured lead fields to the destination chosen for exhibitor follow-up.",
+    cue: "Included in the lead-captured payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/leads",
+      rows: [
+        ["Event", "Lead captured"],
+        ["Payload", "email · booth · owner"],
+        ["Delivery", "200 OK · 305 ms"],
+      ],
+      status: "Delivered",
+      ok: true,
+    },
+  },
+  {
+    title: "Form workflow",
+    desc: "Move a supported form submission into the next operational step.",
+    cue: "Included in the form-submitted payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/forms",
+      rows: [
+        ["Event", "Form submitted"],
+        ["Payload", "form_id · answers · event_id"],
+        ["Delivery", "200 OK · 371 ms"],
+      ],
+      status: "Delivered",
+      ok: true,
+    },
+  },
+  {
+    title: "Failure alert",
+    desc: "Notify a monitoring or support workflow when registration fails.",
+    cue: "Included in the failed-registration payload",
+    screen: {
+      method: "POST",
+      endpoint: "/hooks/registration-failed",
+      rows: [
+        ["Event", "Registration failed"],
+        ["Payload", "error · ticket · event_id"],
+        ["Delivery", "Retry scheduled · 5 min"],
+      ],
+      status: "Retrying",
+      ok: false,
+    },
+  },
+];
+const useCaseImages = [
+  ["/images/live-polling-qa/app/registrations-overview.png", "EventHex registrations overview for a post-registration workflow"],
+  ["/feature-images/event-registration/checkout-order-details.png", "EventHex order details screen for completed-order routing"],
+  ["/images/event-gamification/app/events-overview-live.png", "EventHex live event overview for attendee check-in context"],
+  ["/images/sponsor-management/public-exhibitor-directory.png", "EventHex exhibitor directory with captured lead context"],
+  ["/images/badge-certificate-designer/app/registration-form-builder.png", "EventHex registration form builder for submitted form workflows"],
+  ["/feature-images/webhooks/platform-analytics.png", "EventHex platform analytics showing a failed registration signal"],
+];
+---
+
+<section class="whu-shell" aria-labelledby="whu-title">
+  <div class="whu-section">
+    <header class="whu-header">
+      <span class="whu-eyebrow">
+        <span class="whu-eyebrow-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"></path><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"></path></svg>
+        </span>
+        <span class="whu-subtitle">What teams can connect</span>
+      </span>
+      <h2 class="whu-title" id="whu-title">
+        Build from verified triggers, then choose the <span class="whu-highlight">destination</span> your workflow owns
+      </h2>
+    </header>
+
+    <div class="whu-cards">
+      {
+        useCases.map((item, i) => (
+          <article class="whu-card" style={`--stack-index:${i};`}>
+            <div class="whu-card-copy">
+              <span class="whu-card-label">{String(i + 1).padStart(2, "0")} · {item.title}</span>
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+              <span class="whu-card-cue">
+                {item.cue} <span aria-hidden="true">↗</span>
+              </span>
+            </div>
+            <figure class="whu-card-visual" role="img" aria-label={`Webhook trigger preview for ${item.title.toLowerCase()}`}>
+              <div class="whu-screen">
+                <img class="whu-card-image" src={useCaseImages[i][0]} alt={useCaseImages[i][1]} width="960" height="516" loading="lazy" decoding="async" />
+                <div class="whu-screen-bar" aria-hidden="true">
+                  <span><i></i><i></i><i></i></span>
+                  <small>EventHex · {item.title}</small>
+                </div>
+                <div class="whu-screen-body">
+                  <div class="whu-screen-endpoint">
+                    <em>{item.screen.method}</em>
+                    <b>{item.screen.endpoint}</b>
+                  </div>
+                  <ul class="whu-screen-rows">
+                    {item.screen.rows.map(([k, v], rowIndex) => (
+                      <li>
+                        <small>{k}</small>
+                        <b class:list={{ "whu-screen-value--ok": item.screen.ok && rowIndex === 2, "whu-screen-value--wait": !item.screen.ok && rowIndex === 2 }}>
+                          {v}
+                        </b>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <span class:list={["whu-screen-status", { "whu-screen-status--wait": !item.screen.ok }]}>
+                <b aria-hidden="true">{item.screen.ok ? "✓" : "⟳"}</b> {item.screen.status}
+              </span>
+              <span class="whu-screen-action">View execution log</span>
+            </figure>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  /* Sticky stacking cards need an ancestor that does not create a scroll container.
+     `overflow: hidden` on the page wrapper would pin them in place, so clip
+     horizontally without trapping the vertical axis. */
+  .wh-page.wh-page {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  .whu-shell {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: whu-mesh 30s linear infinite;
+  }
+  .whu-shell *,
+  .whu-shell *::before,
+  .whu-shell *::after {
+    box-sizing: border-box;
+  }
+  @keyframes whu-mesh {
+    0%, 100% { background-position: 0 0, 0% 0%; }
+    50% { background-position: 0 0, 8% 10%; }
+  }
+
+  .whu-section {
+    display: flex;
+    flex-direction: column;
+    width: min(1140px, 100%);
+    margin: 0 auto;
+    padding: 4px 0 30px;
+  }
+
+  .whu-header {
+    position: sticky;
+    top: 80px;
+    z-index: 20;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: min(94%, 1050px);
+    margin: 0 auto;
+    padding: 24px 0;
+    text-align: center;
+  }
+  .whu-header::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(13, 10, 44, 0.99) 0%,
+      rgba(7, 11, 27, 0.98) 72%,
+      rgba(7, 11, 27, 0) 100%
+    );
+  }
+  .whu-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .whu-eyebrow-icon { display: flex; width: 16px; height: 16px; }
+  .whu-eyebrow-icon svg { width: 100%; height: 100%; }
+  .whu-subtitle {
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .whu-title {
+    max-width: 1000px;
+    margin: 0;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 46px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.035em;
+  }
+  .whu-highlight { color: #afa3ff; }
+
+  .whu-cards {
+    --whu-stack-top: 300px;
+    position: relative;
+    padding: 80px 0 50px;
+  }
+  .whu-cards::after {
+    content: "";
+    display: block;
+    height: 190px;
+  }
+  .whu-card {
+    position: sticky;
+    top: calc(var(--whu-stack-top) + var(--stack-index) * 20px);
+    z-index: calc(5 + var(--stack-index));
+    display: flex;
+    align-items: stretch;
+    height: 500px;
+    margin-bottom: 60px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.16) 0%, transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18) 0%, transparent 40%),
+      #0a0a0f;
+  }
+  .whu-card:first-child {
+    background:
+      radial-gradient(circle at 82% 12%, rgba(109, 92, 235, 0.24), transparent 34%),
+      radial-gradient(circle at 8% 92%, rgba(66, 173, 218, 0.13), transparent 28%),
+      #090a10;
+  }
+  .whu-card-copy {
+    display: flex;
+    flex: 0 0 45%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+  }
+  .whu-card-label {
+    margin: 0;
+    color: #afa3ff;
+    font: 700 11px/1 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .whu-card-copy h3 {
+    margin: 0;
+    color: #e7e4fa;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .whu-card-copy p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.55);
+    font: 400 17px/1.65 var(--font-body);
+  }
+  .whu-card-cue {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    margin-top: 8px;
+    color: #aeb9ff;
+    font: 600 13px/1.3 var(--font-body);
+  }
+  .whu-card-cue span { color: #7ba3ff; font-size: 17px; }
+
+  .whu-card-visual {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    margin: 16px 16px 16px 0;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    overflow: hidden;
+  }
+  .whu-card-visual::before {
+    content: "";
+    position: absolute;
+    width: 72%;
+    height: 72%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(100, 123, 255, 0.32), transparent 68%);
+    filter: blur(26px);
+  }
+
+  .whu-screen {
+    position: relative;
+    z-index: 1;
+    width: min(88%, 470px);
+    overflow: hidden;
+    border: 1px solid rgba(196, 203, 255, 0.25);
+    border-radius: 14px;
+    background: #090a12;
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35);
+  }
+  .whu-screen-bar {
+    display: flex;
+    height: 36px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.48);
+    font: 500 10px/1 var(--font-body);
+  }
+  .whu-screen-bar > span { display: flex; gap: 5px; }
+  .whu-screen-bar i {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #45495c;
+  }
+  .whu-screen-body { padding: 18px 16px 20px; }
+  .whu-screen-endpoint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .whu-screen-endpoint em {
+    padding: 4px 7px;
+    border-radius: 6px;
+    background: rgba(122, 156, 255, 0.18);
+    color: #9db4ff;
+    font: 700 9px/1 var(--font-body);
+    font-style: normal;
+    letter-spacing: 0.06em;
+  }
+  .whu-screen-endpoint b {
+    overflow: hidden;
+    color: rgba(255, 255, 255, 0.82);
+    font: 500 11px/1.2 var(--font-body);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .whu-screen-rows {
+    display: grid;
+    gap: 10px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .whu-screen-rows li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .whu-screen-rows li:last-child { padding-bottom: 0; border-bottom: 0; }
+  .whu-screen-rows small {
+    color: rgba(255, 255, 255, 0.42);
+    font: 600 9px/1 var(--font-body);
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  .whu-screen-rows b {
+    color: rgba(255, 255, 255, 0.86);
+    font: 500 11px/1.3 var(--font-body);
+    text-align: right;
+  }
+  .whu-screen-value--ok { color: #6ce0a2; }
+  .whu-screen-value--wait { color: #f0c27a; }
+
+  .whu-screen-status,
+  .whu-screen-action {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    font: 600 11px/1 var(--font-body);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .whu-screen-status {
+    top: 14px;
+    right: 14px;
+    padding: 8px 12px;
+    background: rgba(21, 46, 38, 0.72);
+    border-color: rgba(108, 224, 162, 0.34);
+    color: #8fe8b8;
+  }
+  .whu-screen-status--wait {
+    background: rgba(52, 41, 20, 0.72);
+    border-color: rgba(240, 194, 122, 0.34);
+    color: #f0c27a;
+  }
+  .whu-screen-action {
+    right: 18px;
+    bottom: 18px;
+    padding: 9px 14px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    animation: whu-float 5s ease-in-out infinite;
+  }
+  @keyframes whu-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @media (max-width: 1024px) {
+    .whu-cards { --whu-stack-top: 292px; }
+    .whu-card { height: 450px; }
+    .whu-card-copy { flex-basis: 50%; padding: 32px; }
+    .whu-card-copy h3 { font-size: 28px; }
+    .whu-card-copy p { font-size: 16px; }
+  }
+
+  @media (max-width: 767px) {
+    .whu-section { padding: 16px 20px 30px; }
+    .whu-header {
+      position: relative;
+      top: auto;
+      width: 100%;
+      padding: 16px 0 24px;
+    }
+    .whu-title { font-size: 30px; letter-spacing: -0.02em; }
+    .whu-cards { --whu-stack-top: 320px; padding: 40px 0 40px; }
+    .whu-cards::after { height: 40px; }
+    .whu-card {
+      position: relative;
+      top: auto;
+      flex-direction: column;
+      height: auto;
+      margin-bottom: 20px;
+    }
+    .whu-card-copy { flex: 0 0 auto; padding: 26px 22px 0; }
+    /* Stacked layout hugs the screen, so inset it to keep the floating pills clear. */
+    .whu-card-visual { margin: 18px 16px 16px; min-height: 0; padding: 46px 0; }
+    .whu-screen { width: min(92%, 420px); }
+    .whu-screen-status { top: 12px; right: 12px; }
+    .whu-screen-action { right: 14px; bottom: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .whu-shell,
+    .whu-screen-action {
+      animation: none;
+    }
+  }
+  .whu-card-image{display:block;width:100%;height:100%;min-height:220px;object-fit:cover;object-position:top;border-radius:14px}.whu-screen:has(.whu-card-image) .whu-screen-bar,.whu-screen:has(.whu-card-image) .whu-screen-body,.whu-screen:has(.whu-card-image)+.whu-screen-status,.whu-screen:has(.whu-card-image)+.whu-screen-status+.whu-screen-action{display:none}.whu-card-visual:has(.whu-card-image){padding:0;overflow:hidden;background:#fff}
+</style>

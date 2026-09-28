@@ -1,0 +1,41 @@
+---
+import Header from "./Header.astro";
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  items?: string[][];
+  image?: string;
+  alt?: string;
+  reverse?: boolean;
+}
+const { eyebrow, title, description, items = [], image, alt = "", reverse = false } = Astro.props;
+---
+<div class:list={["wh-wrap", "wh-spotlight", { "wh-spotlight--reverse": reverse }]}>
+  <Header {eyebrow} {title} {description} />
+  {image ? (
+    <figure class="wh-screenshot animate-on-scroll" data-animation="fadeInRight">
+      <img src={image} alt={alt || title} loading="lazy" width="910" height="688" />
+    </figure>
+  ) : (
+    <div class="wh-panel animate-on-scroll" data-animation="fadeInRight">
+      {items.map(([label, copy]) => <div><b>{label}</b><span>{copy}</span></div>)}
+    </div>
+  )}
+</div>
+
+<style is:global>
+  .wh-spotlight--reverse .wh-head { order: 2; }
+  .wh-screenshot {
+    margin: 0;
+    overflow: hidden;
+    border: 1px solid var(--wh-line);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 55px rgba(28, 39, 65, 0.12);
+  }
+  .wh-screenshot img { display: block; width: 100%; height: auto; }
+  @media (max-width: 900px) {
+    .wh-spotlight--reverse .wh-head { order: initial; }
+  }
+</style>
