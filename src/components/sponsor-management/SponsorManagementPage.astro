@@ -1,0 +1,5324 @@
+---
+// Sponsor Management feature page.
+// Section patterns reuse the Event Registration and Speaker Management design language
+// (documented in the EventHex pattern library): split hero + workflow rail + spotlight
+// panels + flow quads + bento bands + operations grid + journey track + audience cards +
+// destination links + single-column FAQ. The layout's dark footer CTA closes the page.
+// Copy comes from the approved sponsor-management content deck; the package-sales,
+// cross-channel-placement, and ROI claims the deck removed are intentionally absent.
+
+interface Props {
+  faqs: Array<[string, string]>;
+}
+
+const { faqs } = Astro.props;
+
+const flowRail = [
+  { label: "Add", text: "Create the profile" },
+  { label: "Categorize", text: "Assign the group" },
+  { label: "Order", text: "Set presentation order" },
+  { label: "Publish", text: "Use a sponsor section" },
+  { label: "Discover", text: "Help attendees browse" },
+  { label: "Update", text: "Keep details current" },
+];
+
+const recordFields = [
+  {
+    label: "Brand identity",
+    text: "Store the sponsor name and required logo.",
+  },
+  {
+    label: "Contact details",
+    text: "Keep the email and phone details the team needs.",
+  },
+  {
+    label: "Website and category",
+    text: "Publish the right destination, description, and group.",
+  },
+];
+
+const categoryGroups = [
+  {
+    label: "Custom category names",
+    text: "Use Platinum, Gold, Community Partner, Media Partner, or the structure your event already sells.",
+  },
+  {
+    label: "Category descriptions",
+    text: "Add context when a tier or partner group needs explanation.",
+  },
+  {
+    label: "Ordered groups",
+    text: "Use the category order field to define presentation sequence.",
+  },
+  {
+    label: "Profile assignment",
+    text: "Attach each sponsor or partner to the right category.",
+  },
+];
+
+// Section 06 renders as a bento band: one bordered grid of alternating visual/content rows.
+// Each operation keeps its original label and description; the stage mockup, pills, and
+// eyebrow describe that same operation without introducing new product claims.
+const recordOperations = [
+  {
+    index: "01",
+    eyebrow: "Search",
+    label: "Search profiles",
+    text: "Find sponsors by name, description, or email.",
+    tint: "sky",
+    kind: "search",
+    alt: "EventHex sponsor list filtered by a search term, with matching sponsor rows and their categories",
+    pillTop: "3 matches",
+    pillTopMeta: "Name, email, description",
+    pillBottom: "Acme Cloud",
+  },
+  {
+    index: "02",
+    eyebrow: "Edit",
+    label: "Edit details",
+    text: "Update brand, contact, website, description, category, and logo fields.",
+    tint: "violet",
+    kind: "edit",
+    alt: "EventHex sponsor profile form with brand, contact, website, category, and logo fields",
+    pillTop: "Profile saved",
+    pillTopMeta: "Brand, contact, logo",
+    pillBottom: "Acme Cloud",
+  },
+  {
+    index: "03",
+    eyebrow: "Order",
+    label: "Reorder sponsors",
+    text: "Save a position for each sponsor when presentation order matters.",
+    tint: "mint",
+    kind: "order",
+    alt: "EventHex sponsor list showing a saved presentation position for each sponsor",
+    pillTop: "Order saved",
+    pillTopMeta: "Positions 01 to 03",
+    pillBottom: "Presentation order",
+  },
+  {
+    index: "04",
+    eyebrow: "Cleanup",
+    label: "Remove old records",
+    text: "Delete a sponsor and refresh event counts when a relationship no longer belongs to the event.",
+    tint: "rose",
+    kind: "remove",
+    alt: "An EventHex sponsor record being deleted while the event sponsor count refreshes",
+    pillTop: "Record removed",
+    pillTopMeta: "Event counts refreshed",
+    pillBottom: "12 to 11 sponsors",
+  },
+  {
+    index: "05",
+    eyebrow: "History",
+    label: "Activity records",
+    text: "Create, update, reorder, and delete operations write activity-log entries.",
+    tint: "amber",
+    kind: "log",
+    alt: "EventHex activity log listing create, update, reorder, and delete entries for sponsors",
+    pillTop: "Logged",
+    pillTopMeta: "Create, update, delete",
+    pillBottom: "Activity history",
+  },
+];
+
+const designControls = [
+  {
+    label: "Layout",
+    text: "Use grid, wall, cards, rows, marquee, tier-grid, or supported custom composition.",
+  },
+  {
+    label: "Logo treatment",
+    text: "Present logos in color or a monochrome treatment.",
+  },
+  {
+    label: "Surface style",
+    text: "Use bare, surface, or outline card fills where supported.",
+  },
+  {
+    label: "Columns and spacing",
+    text: "Choose three to six columns and an appropriate gap for the logo set.",
+  },
+  {
+    label: "Names and category titles",
+    text: "Show or hide supporting labels based on the selected website configuration.",
+  },
+];
+
+const directorySteps = [
+  {
+    label: "Open Sponsors",
+    text: "Attendees enter the dedicated sponsor page from the event website.",
+    status: "Directory linked",
+    tone: "info",
+    action: "Open Sponsors",
+    tag: "Event website menu",
+    rows: [
+      { text: "Home" },
+      { text: "Agenda" },
+      { text: "Speakers" },
+      { text: "Sponsors", on: true },
+    ],
+    tiles: 0,
+  },
+  {
+    label: "Read the event context",
+    text: "Use the configured sponsors heading and subtitle.",
+    status: "Heading applied",
+    tone: "success",
+    action: "Event context",
+    tag: "Directory heading",
+    rows: [{ text: "Meet our partners", on: true }, { text: "Future Tech Forum sponsors and partners" }],
+    tiles: 0,
+  },
+  {
+    label: "Browse categories",
+    text: "Move through sponsor groups in their saved order.",
+    status: "4 categories",
+    tone: "success",
+    action: "Category order",
+    tag: "Category groups",
+    rows: [
+      { text: "01 &middot; Platinum" },
+      { text: "02 &middot; Gold", on: true },
+      { text: "03 &middot; Community Partner" },
+      { text: "04 &middot; Media Partner" },
+    ],
+    tiles: 0,
+  },
+  {
+    label: "Recognize each brand",
+    text: "Show the sponsor logo and name in a responsive card grid.",
+    status: "Cards rendered",
+    tone: "success",
+    action: "Sponsor cards",
+    tag: "Sponsor cards",
+    rows: [],
+    tiles: 6,
+  },
+  {
+    label: "Return to the event",
+    text: "Keep the sponsor directory inside the same event website and theme.",
+    status: "Same theme",
+    tone: "success",
+    action: "Back to event",
+    tag: "Directory page",
+    rows: [{ text: "Theme variables inherited", on: true }, { text: "Back to Future Tech Forum" }],
+    tiles: 0,
+  },
+];
+
+const responsiveRules = [
+  {
+    label: "Logo-first cards",
+    text: "Contain each uploaded logo inside a consistent visual area.",
+  },
+  {
+    label: "Responsive columns",
+    text: "Move from larger desktop grids to fewer columns on smaller screens.",
+  },
+  {
+    label: "Optional names",
+    text: "Pair the logo with the sponsor name when the selected treatment uses it.",
+  },
+  {
+    label: "Event theme",
+    text: "Use the website's theme variables rather than a separate sponsor microsite style.",
+  },
+];
+
+const discoveryActions = [
+  {
+    label: "List sponsors",
+    text: "Answer a general request for the event's sponsors.",
+  },
+  {
+    label: "Search by company",
+    text: "Look up a specific sponsor or partner by name.",
+  },
+  {
+    label: "Search by topic",
+    text: "Use available company, product, or industry context for a focused result.",
+  },
+  {
+    label: "Stay grounded",
+    text: "Return stored event entities instead of inventing sponsor details.",
+  },
+];
+
+const eventModels = [
+  {
+    key: "exhibitions",
+    label: "Exhibitions",
+    text: "Group presenting partners and sponsors separately from the exhibitor directory.",
+    tint: "sky",
+    chip: "Partner groups",
+    alt: "EventHex sponsor categories keeping presenting partners in their own group, separate from the exhibitor directory",
+    points: [
+      "Presenting partners kept separate",
+      "Exhibitor directory stays its own list",
+      "Categories in a saved order",
+    ],
+    rows: [
+      { label: "Presenting partners", value: "Own group", meta: "Separate from the exhibitor directory" },
+      { label: "Sponsor categories", value: "Ordered", meta: "Saved presentation order" },
+      { label: "Website section", value: "Grouped by category", meta: "Rendered on the event website" },
+    ],
+  },
+  {
+    key: "conferences",
+    label: "Conferences",
+    text: "Show tiered sponsors near the agenda, speakers, and registration journey.",
+    tint: "mint",
+    chip: "Tiered sponsors",
+    alt: "EventHex tiered sponsor categories ordered as Platinum, Gold, and Silver, each showing a logo, name, and description",
+    points: [
+      "Tiered sponsor groups",
+      "Logo, name, and description shown",
+      "Placed near the agenda and registration",
+    ],
+    rows: [
+      { label: "Tier groups", value: "Platinum, Gold, Silver", meta: "Custom category names" },
+      { label: "Record details", value: "Logo, name, description", meta: "Shown inside the tier" },
+      { label: "Placement", value: "Near agenda and registration", meta: "Same website theme" },
+    ],
+  },
+  {
+    key: "associations",
+    label: "Associations",
+    text: "Present annual partners and event-specific sponsors with clear category labels.",
+    tint: "violet",
+    chip: "Category labels",
+    alt: "EventHex category labels separating annual association partners from event-specific sponsors",
+    points: [
+      "Annual partners and event sponsors",
+      "Custom category names",
+      "Labels shown on each card",
+    ],
+    rows: [
+      { label: "Annual partners", value: "One category", meta: "Recurring relationship" },
+      { label: "Event sponsors", value: "Another category", meta: "Event-specific records" },
+      { label: "Category labels", value: "On every card", meta: "Clear grouping for attendees" },
+    ],
+  },
+  {
+    key: "corporate",
+    label: "Corporate and technology events",
+    text: "Use a concise partner wall or dedicated sponsor page that fits the brand system.",
+    tint: "rose",
+    chip: "Partner wall",
+    alt: "EventHex partner wall sponsor layout using the event website theme in a responsive card grid",
+    points: [
+      "Partner wall or dedicated page",
+      "Colors and type from the website theme",
+      "Responsive column layout",
+    ],
+    rows: [
+      { label: "Layout", value: "Partner wall", meta: "Or a dedicated sponsor page" },
+      { label: "Treatment", value: "Event website theme", meta: "Same colors and typography" },
+      { label: "Columns", value: "Responsive grid", meta: "Adapts to the page width" },
+    ],
+  },
+];
+
+const destinations = [
+  {
+    label: "Event Website Builder",
+    text: "Design the sponsor section and dedicated event pages.",
+    href: "/event-website-builder/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="M3 9h18M7 13h6"/></svg>`,
+  },
+  {
+    label: "Exhibitor Management",
+    text: "Manage exhibitor companies, booth teams, lead capture, and floor-plan workflows.",
+    href: "/exhibitor-management/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-6 9 6v11H3z"/><path d="M9 20v-6h6v6"/></svg>`,
+  },
+  {
+    label: "Event Marketing",
+    text: "Build planned campaigns that may acknowledge event partners.",
+    href: "/event-marketing/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>`,
+  },
+  {
+    label: "WhatsApp Concierge",
+    text: "Help attendees discover stored sponsors inside an event-aware conversation.",
+    href: "/whatsapp-event-concierge/",
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-12.3 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>`,
+  },
+];
+---
+
+<div class="spm-page">
+  <!-- 01 Hero -->
+  <section class="spm-hero" id="hero">
+    <div class="spm-hero__shell">
+      <div class="spm-hero__grid">
+      <div class="spm-hero__copy">
+        <span class="spm-hero__badge animate-on-scroll" data-animation="fadeInDown">
+          <span class="spm-hero__badge-dot"></span>
+          <span>Event sponsor management software</span>
+        </span>
+        <h1 class="spm-hero__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="spm-hero__title-line">Organize sponsor</span>
+          <span class="spm-hero__title-line">profiles and present</span>
+          <span class="spm-hero__title-line">every partner clearly</span>
+        </h1>
+        <p class="spm-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+          Keep sponsor and partner details attached to the event, group them into ordered
+          categories, and publish branded sponsor sections across your EventHex event website.
+        </p>
+        <ul class="spm-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms">
+          <li class="spm-hero__point">Sponsor and partner profiles</li>
+          <li class="spm-hero__point">Ordered categories</li>
+          <li class="spm-hero__point">Website-ready logos</li>
+        </ul>
+        <div class="spm-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+          <a href="/book-a-demo/" class="spm-hero__btn spm-hero__btn--primary">Book a Demo</a>
+          <a href="#workflow" class="spm-hero__btn spm-hero__btn--secondary">See the sponsor workflow</a>
+        </div>
+      </div>
+
+      <div class="spm-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="spm-hero__visual-card">
+          <div class="spm-hero__visual-inner">
+            <img
+              class="spm-hero__analytics-shot"
+              src="/images/sponsor-management/sponsor-packages-web-806.webp"
+              alt="EventHex sponsor package workspace showing the event's sponsor category and package configuration"
+              width="806"
+              height="696"
+              loading="eager"
+              decoding="async"
+            />
+            <div
+              class="spm-board spm-board--fallback"
+              role="img"
+              aria-label="EventHex sponsor workspace for the Future Tech Forum with four sponsor categories and eighteen partner records, a Platinum partner and a Gold partner, a tiered sponsor section on the event website, and a public sponsor directory"
+            >
+              <div class="spm-board__chrome" aria-hidden="true">
+                <span class="spm-board__dot"></span>
+                <span class="spm-board__dot"></span>
+                <span class="spm-board__dot"></span>
+                <b>EventHex &middot; Sponsors</b>
+              </div>
+
+              <div class="spm-board__rows" aria-hidden="true">
+                <div class="spm-board__row spm-board__row--head">
+                  <b class="spm-board__label">Event workspace</b>
+                  <span class="spm-board__value">Future Tech Forum</span>
+                  <small class="spm-board__meta">4 categories &middot; 18 partner records</small>
+                </div>
+
+                <div class="spm-board__row">
+                  <b class="spm-board__label">Platinum</b>
+                  <span class="spm-board__value">Northstar Labs</span>
+                  <small class="spm-board__meta">Logo &middot; website &middot; description</small>
+                </div>
+
+                <div class="spm-board__row">
+                  <b class="spm-board__label">Gold</b>
+                  <span class="spm-board__value">Orbit Systems</span>
+                  <small class="spm-board__meta">Category order 02</small>
+                </div>
+
+                <div class="spm-board__pair">
+                  <div class="spm-board__row">
+                    <b class="spm-board__label">Website</b>
+                    <span class="spm-board__value">Tiered sponsor section</span>
+                    <small class="spm-board__meta">Color logos &middot; 4 columns</small>
+                  </div>
+                  <div class="spm-board__row">
+                    <b class="spm-board__label">Directory</b>
+                    <span class="spm-board__value">Meet our partners</span>
+                    <small class="spm-board__meta">Responsive public page</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Capability rail -->
+  <section class="spm-rail" id="workflow" aria-label="Sponsor management workflow">
+    <div class="spm-rail__inner">
+      {
+        flowRail.map((step) => (
+          <span class="spm-rail__item">
+            <b>{step.label}</b> {step.text}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 03 Spotlight: the sponsor record -->
+  <section class="spm-section" id="profiles" aria-labelledby="spm-profiles-title">
+    <div class="spm-wrap spm-spot__grid">
+      <div class="spm-head">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn">A useful sponsor record</span>
+        <h2 class="spm-title animate-on-scroll" data-animation="fadeInUp" id="spm-profiles-title">
+          Keep the details your event team and <em>attendees need</em>
+        </h2>
+        <p class="spm-lead animate-on-scroll" data-animation="fadeInUp">
+          Create a sponsor or partner profile with the core identity and contact information tied to the
+          event.
+        </p>
+      </div>
+
+      <div class="spm-panel animate-on-scroll" data-animation="fadeInRight">
+        <div class="spm-shot">
+          <img
+            class="spm-profile-shot"
+            src="/images/sponsor-management/exhibitor-list-web-806.webp"
+            alt="EventHex exhibitor and sponsor records with company, package, team member, lead, and booth details"
+            width="806"
+            height="696"
+            loading="lazy"
+            decoding="async"
+          />
+          <div
+            class="spm-editor"
+            role="img"
+            aria-label="EventHex sponsor profile form with brand identity, logo, website, and category fields beside a compact public sponsor card preview"
+          >
+            <div class="spm-editor__form" aria-hidden="true">
+              <span class="spm-editor__field is-on">Brand name<b>Northstar Labs</b></span>
+              <span class="spm-editor__field">Logo<b>northstar-labs.svg</b></span>
+              <span class="spm-editor__field">Website<b>northstarlabs.com</b></span>
+              <span class="spm-editor__field">Category<b>Platinum</b></span>
+            </div>
+            <div class="spm-editor__card" aria-hidden="true">
+              <span class="spm-editor__logo"></span>
+              <b>Northstar Labs</b>
+              <small>Platinum partner</small>
+            </div>
+          </div>
+        </div>
+        <ul class="spm-list">
+          {
+            recordFields.map((item) => (
+              <li>
+                <strong>{item.label}</strong>
+                <span>{item.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Flow quad: profile draft and review -->
+  <section class="spm-section spm-soft" id="profile-draft" aria-labelledby="spm-draft-title">
+    <div class="spm-wrap">
+      <div class="spm-map__header">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >A faster starting point for profile setup</span
+        >
+        <h2 class="spm-map__title animate-on-scroll" data-animation="fadeInUp" id="spm-draft-title">
+          <span class="spm-map__line">Start from known company information,</span>
+          <span class="spm-map__line">then review the record</span>
+        </h2>
+        <p class="spm-map__subtitle animate-on-scroll" data-animation="fadeInUp">
+          <span class="spm-map__line">The sponsor form includes a LinkedIn company-profile lookup that can map</span>
+          <span class="spm-map__line">returned company details into the EventHex fields.</span>
+        </p>
+      </div>
+
+      <div class="spm-map__quad">
+        <article class="spm-map__cell spm-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>Generate a draft</h3>
+          <p>
+            Use a company profile URL to request available title, website, description, email, and social
+            details. Treat returned data as a starting point.
+          </p>
+          <span class="spm-cue">Returned values are a draft, not a saved record.</span>
+        </article>
+
+        <div
+          class="spm-map__cell spm-map__cell--media animate-on-scroll"
+          data-animation="fadeInRight"
+          aria-hidden="true"
+        >
+          <img class="spm-source-shot" src="/images/sponsor-management/exhibitor-list-web-806.webp" alt="EventHex exhibitor and sponsor records table showing company names, packages, team members, leads, and booth numbers" width="806" height="696" loading="lazy" decoding="async" />
+          <div class="spm-map__composite">
+            <div class="spm-map__screen spm-map__screen--primary">
+              <span class="spm-map__tag">Company profile lookup</span>
+              <span class="spm-map__row is-on">linkedin.com/company/northstar-labs</span>
+              <span class="spm-map__row">Title and website</span>
+              <span class="spm-map__row">Description</span>
+              <span class="spm-map__row">Email and social details</span>
+            </div>
+            <div class="spm-map__screen spm-map__screen--secondary">
+              <span class="spm-map__tag">Draft result</span>
+              <span class="spm-map__row">Northstar Labs</span>
+              <span class="spm-map__row">Ready to review</span>
+            </div>
+            <span class="spm-map__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Details requested
+            </span>
+            <span class="spm-map__action">Fetch details</span>
+          </div>
+        </div>
+
+        <div
+          class="spm-map__cell spm-map__cell--media animate-on-scroll"
+          data-animation="fadeInLeft"
+          aria-hidden="true"
+        >
+          <div class="spm-map__composite">
+            <div class="spm-map__screen spm-map__screen--primary">
+              <span class="spm-map__tag">Review before saving</span>
+              <span class="spm-map__row">Brand name and logo</span>
+              <span class="spm-map__row">Contact details</span>
+              <span class="spm-map__row is-on">Category and description</span>
+            </div>
+            <div class="spm-map__screen spm-map__screen--secondary">
+              <span class="spm-map__tag">Organizer step</span>
+              <span class="spm-map__row">Confirm each field</span>
+            </div>
+            <span class="spm-map__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Reviewed
+            </span>
+            <span class="spm-map__action">Save sponsor</span>
+          </div>
+        </div>
+
+        <article class="spm-map__cell spm-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>Review before use</h3>
+          <p>
+            Confirm the brand name, contact details, description, category, and logo before saving.
+            Organizer review remains the approval step.
+          </p>
+          <span class="spm-cue">Nothing publishes without an organizer confirming it.</span>
+        </article>
+
+        <span class="spm-map__cross" aria-hidden="true"></span>
+      </div>
+
+      <p class="spm-note spm-map__note animate-on-scroll" data-animation="fadeIn">
+        This is profile assistance, not automated sponsorship sales, package fulfillment, or ROI analysis.
+      </p>
+    </div>
+  </section>
+
+  <!-- 05 Dark band: sponsor categories -->
+  <section class="spm-catband" id="categories" aria-labelledby="spm-categories-title">
+    <div class="spm-catband__head">
+      <span class="spm-catband__eyebrow animate-on-scroll" data-animation="fadeInDown"
+        >Categories that match your event</span
+      >
+      <h2 class="spm-catband__title animate-on-scroll" data-animation="fadeInUp" id="spm-categories-title">
+        Group sponsors in the structure your audience understands
+      </h2>
+      <p class="spm-catband__lead animate-on-scroll" data-animation="fadeInUp">
+        Create category names and descriptions, then control the order in which those groups appear.
+      </p>
+    </div>
+
+    <div class="spm-catband__grid">
+      <div class="spm-catgrid">
+        <article class="spm-catgrid__cell animate-on-scroll" data-animation="fadeInUp" data-delay="0">
+          <h3 class="spm-catgrid__label">{categoryGroups[0].label}</h3>
+          <p class="spm-catgrid__desc">{categoryGroups[0].text}</p>
+          <div class="spm-catgrid__visual" aria-hidden="true">
+            <div class="spm-catgrid__card">
+              <span class="spm-catgrid__card-head">Sponsor categories</span>
+              <div class="spm-catgrid__row is-on">
+                <span class="spm-catgrid__num">01</span><b>Platinum</b><small>2 partners</small>
+              </div>
+              <div class="spm-catgrid__row">
+                <span class="spm-catgrid__num">02</span><b>Gold</b><small>5 partners</small>
+              </div>
+              <div class="spm-catgrid__row">
+                <span class="spm-catgrid__num">03</span><b>Community Partner</b><small>6 partners</small>
+              </div>
+              <div class="spm-catgrid__row">
+                <span class="spm-catgrid__num">04</span><b>Media Partner</b><small>5 partners</small>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="spm-catgrid__cell animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <span class="spm-catgrid__petal spm-catgrid__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <h3 class="spm-catgrid__label">{categoryGroups[1].label}</h3>
+          <p class="spm-catgrid__desc">{categoryGroups[1].text}</p>
+          <div class="spm-catgrid__visual" aria-hidden="true">
+            <div class="spm-catgrid__card">
+              <span class="spm-catgrid__card-head">Category description</span>
+              <div class="spm-catgrid__row is-on"><b>Platinum</b><small>Headline partner</small></div>
+              <div class="spm-catgrid__lines">
+                <i></i>
+                <i></i>
+                <i></i>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="spm-catgrid__cell animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <h3 class="spm-catgrid__label">{categoryGroups[2].label}</h3>
+          <p class="spm-catgrid__desc">{categoryGroups[2].text}</p>
+          <div class="spm-catgrid__visual" aria-hidden="true">
+            <div class="spm-catgrid__card">
+              <span class="spm-catgrid__card-head">Presentation order</span>
+              <div class="spm-catgrid__row">
+                <span class="spm-catgrid__num">01</span><b>Platinum</b><span class="spm-catgrid__grip"></span>
+              </div>
+              <div class="spm-catgrid__row is-on">
+                <span class="spm-catgrid__num">02</span><b>Gold</b><span class="spm-catgrid__grip"></span>
+              </div>
+              <div class="spm-catgrid__row">
+                <span class="spm-catgrid__num">03</span><b>Community Partner</b
+                ><span class="spm-catgrid__grip"></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="spm-catgrid__cell animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <span class="spm-catgrid__petal spm-catgrid__petal--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path>
+            </svg>
+          </span>
+          <span class="spm-catgrid__petal spm-catgrid__petal--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path>
+            </svg>
+          </span>
+          <h3 class="spm-catgrid__label">{categoryGroups[3].label}</h3>
+          <p class="spm-catgrid__desc">{categoryGroups[3].text}</p>
+          <div class="spm-catgrid__visual" aria-hidden="true">
+            <div class="spm-catgrid__card">
+              <span class="spm-catgrid__card-head">Assigned category</span>
+              <div class="spm-catgrid__row"><b>Acme Cloud</b><span class="spm-catgrid__chip">Platinum</span></div>
+              <div class="spm-catgrid__row"><b>Northwind Labs</b><span class="spm-catgrid__chip">Gold</span></div>
+              <div class="spm-catgrid__row is-on">
+                <b>Orbit Media</b><span class="spm-catgrid__chip">Media Partner</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Bento rows: sponsor-list operations -->
+  <section class="spm-section spm-soft" id="record-operations" aria-labelledby="spm-ops-title">
+    <div class="spm-wrap">
+      <div class="spm-head spm-head--center">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn">Sponsor-list operations</span>
+        <h2 class="spm-title animate-on-scroll" data-animation="fadeInUp" id="spm-ops-title">
+          Keep the event's sponsor list <em>usable as it changes</em>
+        </h2>
+        <p class="spm-lead animate-on-scroll" data-animation="fadeInUp">
+          The sponsor service supports the everyday record operations an event team needs.
+        </p>
+      </div>
+
+      <div class="spm-opsb animate-on-scroll" data-animation="fadeInUp">
+        <span class="spm-opsb__notch spm-opsb__notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        <span class="spm-opsb__notch spm-opsb__notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path
+              d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+              fill="var(--surface-card-border)"
+              transform="scale(1,-1)"
+            />
+          </svg>
+        </span>
+
+        {
+          recordOperations.map((item, index) => (
+            <div class={`spm-opsb__row${index % 2 === 1 ? " spm-opsb__row--reverse" : ""}`}>
+              <div class="spm-opsb__cell spm-opsb__cell--visual">
+                <div class="spm-opsb__stage" data-tint={item.tint}>
+                  <img class="spm-source-shot spm-source-shot--ops" src="/images/sponsor-management/exhibitor-list-web-806.webp" alt="EventHex exhibitor and sponsor records table used for sponsor-list operations" width="806" height="696" loading="lazy" decoding="async" />
+                  <div class="spm-opsb__shot" role="img" aria-label={item.alt}>
+                    <div class="spm-opsb__chrome" aria-hidden="true">
+                      <span class="spm-opsb__chrome-dots">
+                        <i />
+                        <i />
+                        <i />
+                      </span>
+                      <span class="spm-opsb__chrome-title">{item.label}</span>
+                    </div>
+
+                    <div class="spm-opsb__body" aria-hidden="true">
+                      {item.kind === "search" && (
+                        <>
+                          <div class="spm-opsb__search">
+                            <svg viewBox="0 0 24 24">
+                              <circle cx="11" cy="11" r="7" />
+                              <path d="m20 20-3.6-3.6" />
+                            </svg>
+                            <span>acme</span>
+                          </div>
+                          <div class="spm-opsb__recs">
+                            <div class="spm-opsb__rec is-on">
+                              <b>Acme Cloud</b>
+                              <span class="spm-opsb__chip">Platinum</span>
+                            </div>
+                            <div class="spm-opsb__rec">
+                              <b>Acme Labs</b>
+                              <span class="spm-opsb__chip">Gold</span>
+                            </div>
+                            <div class="spm-opsb__rec">
+                              <b>Acme Events</b>
+                              <span class="spm-opsb__chip">Media Partner</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      {item.kind === "edit" && (
+                        <div class="spm-opsb__form">
+                          <span class="spm-opsb__field">
+                            <i>Brand name</i>
+                            <b>Acme Cloud</b>
+                          </span>
+                          <span class="spm-opsb__field">
+                            <i>Website</i>
+                            <b>acmecloud.com</b>
+                          </span>
+                          <span class="spm-opsb__field is-on">
+                            <i>Category</i>
+                            <b>Platinum</b>
+                          </span>
+                          <span class="spm-opsb__field">
+                            <i>Logo</i>
+                            <b>acme-logo.svg</b>
+                          </span>
+                        </div>
+                      )}
+
+                      {item.kind === "order" && (
+                        <div class="spm-opsb__recs">
+                          <div class="spm-opsb__rec is-on">
+                            <span class="spm-opsb__num">01</span>
+                            <b>Acme Cloud</b>
+                            <span class="spm-opsb__grip" />
+                          </div>
+                          <div class="spm-opsb__rec">
+                            <span class="spm-opsb__num">02</span>
+                            <b>Northwind Labs</b>
+                            <span class="spm-opsb__grip" />
+                          </div>
+                          <div class="spm-opsb__rec">
+                            <span class="spm-opsb__num">03</span>
+                            <b>Orbit Media</b>
+                            <span class="spm-opsb__grip" />
+                          </div>
+                        </div>
+                      )}
+
+                      {item.kind === "remove" && (
+                        <div class="spm-opsb__panel">
+                          <span class="spm-opsb__panel-head">Delete sponsor</span>
+                          <div class="spm-opsb__rec is-danger">
+                            <b>Acme Events</b>
+                            <span class="spm-opsb__chip">Community</span>
+                          </div>
+                          <div class="spm-opsb__counts">
+                            <span>Sponsors</span>
+                            <b>12</b>
+                            <svg viewBox="0 0 24 24">
+                              <path d="M5 12h14" />
+                              <path d="m13 6 6 6-6 6" />
+                            </svg>
+                            <b class="is-next">11</b>
+                          </div>
+                        </div>
+                      )}
+
+                      {item.kind === "log" && (
+                        <div class="spm-opsb__log">
+                          <div class="spm-opsb__log-row">
+                            <span class="spm-opsb__dot is-create" />
+                            <b>Created</b>
+                            <small>Acme Cloud</small>
+                          </div>
+                          <div class="spm-opsb__log-row">
+                            <span class="spm-opsb__dot is-update" />
+                            <b>Updated</b>
+                            <small>Platinum category</small>
+                          </div>
+                          <div class="spm-opsb__log-row">
+                            <span class="spm-opsb__dot is-order" />
+                            <b>Reordered</b>
+                            <small>Position 2 to 1</small>
+                          </div>
+                          <div class="spm-opsb__log-row">
+                            <span class="spm-opsb__dot is-delete" />
+                            <b>Deleted</b>
+                            <small>Old partner record</small>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <span class="spm-opsb__pill spm-opsb__pill--top">
+                    <b>
+                      <svg class="spm-opsb__pill-check" viewBox="0 0 24 24" aria-hidden="true">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      {item.pillTop}
+                    </b>
+                    <small>{item.pillTopMeta}</small>
+                  </span>
+                  <span class="spm-opsb__pill spm-opsb__pill--bottom">
+                    <i />
+                    <b>{item.pillBottom}</b>
+                  </span>
+                </div>
+              </div>
+
+              <div class="spm-opsb__cell spm-opsb__cell--content">
+                <span class="spm-opsb__eyebrow">
+                  <i>{item.index}</i>
+                  {item.eyebrow}
+                </span>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+              </div>
+
+              <span class="spm-opsb__cross" aria-hidden="true">
+                <svg width="28" height="28" viewBox="-14 -14 28 28">
+                  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="var(--surface-card-border)"
+                    transform="scale(1,-1)"
+                  />
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="var(--surface-card-border)"
+                    transform="rotate(90)"
+                  />
+                  <path
+                    d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                    fill="var(--surface-card-border)"
+                    transform="rotate(-90)"
+                  />
+                </svg>
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Flow quad: live sponsor data on the website -->
+  <section class="spm-section" id="website-section" aria-labelledby="spm-website-title">
+    <div class="spm-wrap">
+      <div class="spm-map__header">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >Live sponsor data on the event website</span
+        >
+        <h2 class="spm-map__title animate-on-scroll" data-animation="fadeInUp" id="spm-website-title">
+          <span class="spm-map__line">Turn sponsor records into</span>
+          <span class="spm-map__line">a public sponsor section</span>
+        </h2>
+        <p class="spm-map__subtitle animate-on-scroll" data-animation="fadeInUp">
+          <span class="spm-map__line">Add a sponsors module to the event website and let the renderer use the</span>
+          <span class="spm-map__line">event's current category and logo data.</span>
+        </p>
+      </div>
+
+      <div class="spm-map__quad">
+        <article class="spm-map__cell spm-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>Grouped by category</h3>
+          <p>
+            Use a tier-grid treatment when category structure should lead the presentation. Useful for
+            tiered sponsorship programs.
+          </p>
+          <span class="spm-cue">Category order carries into the website section.</span>
+        </article>
+
+        <div
+          class="spm-map__cell spm-map__cell--media animate-on-scroll"
+          data-animation="fadeInRight"
+          aria-hidden="true"
+        >
+          <img
+            class="spm-website-shot"
+            src="/images/sponsor-management/sponsor-packages-web-806.webp"
+            alt="EventHex sponsor package categories configured for a public sponsor section"
+            width="806"
+            height="696"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="spm-map__composite">
+            <div class="spm-map__screen spm-map__screen--primary">
+              <span class="spm-map__tag">Tier grid</span>
+              <span class="spm-map__row is-on">Platinum</span>
+              <span class="spm-map__row">Gold</span>
+              <span class="spm-map__row">Community Partner</span>
+            </div>
+            <div class="spm-map__screen spm-map__screen--secondary">
+              <span class="spm-map__tag">Section heading</span>
+              <span class="spm-map__row">Meet our partners</span>
+            </div>
+            <span class="spm-map__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Category order applied
+            </span>
+            <span class="spm-map__action">Website preview</span>
+          </div>
+        </div>
+
+        <div
+          class="spm-map__cell spm-map__cell--media animate-on-scroll"
+          data-animation="fadeInLeft"
+          aria-hidden="true"
+        >
+          <img
+            class="spm-website-shot"
+            src="/images/sponsor-management/exhibitor-list-web-806.webp"
+            alt="EventHex exhibitor and sponsor records used to populate a public sponsor section"
+            width="806"
+            height="696"
+            loading="lazy"
+            decoding="async"
+          />
+          <div class="spm-map__composite">
+            <div class="spm-map__screen spm-map__screen--primary">
+              <span class="spm-map__tag">One visual collection</span>
+              <span class="spm-map__row">Logo wall</span>
+              <span class="spm-map__row is-on">Cards and rows</span>
+              <span class="spm-map__row">Marquee</span>
+            </div>
+            <div class="spm-map__screen spm-map__screen--secondary">
+              <span class="spm-map__tag">Logo treatment</span>
+              <span class="spm-map__row">Color or monochrome</span>
+            </div>
+            <span class="spm-map__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Reads as one set
+            </span>
+            <span class="spm-map__action">Choose layout</span>
+          </div>
+        </div>
+
+        <article class="spm-map__cell spm-map__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3>One visual logo collection</h3>
+          <p>
+            Use a logo wall, cards, rows, or marquee-style presentation when the brands should read as one
+            set. Useful for partner collections and compact layouts.
+          </p>
+          <span class="spm-cue">Useful for partner collections and compact layouts.</span>
+        </article>
+
+        <span class="spm-map__cross" aria-hidden="true"></span>
+      </div>
+
+      <p class="spm-note spm-map__note animate-on-scroll" data-animation="fadeIn">
+        The website section reads live sponsor data. Updating the sponsor record or category keeps the source
+        of truth inside EventHex.
+      </p>
+    </div>
+  </section>
+
+  <!-- 09 Journey: the attendee sponsor directory -->
+  <section class="spm-section spm-path" id="sponsor-directory" aria-labelledby="spm-directory-title">
+    <div class="spm-wrap spm-path__grid">
+      <div class="spm-path__intro">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >A dedicated place for attendees to browse</span
+        >
+        <h2 class="spm-title animate-on-scroll" data-animation="fadeInUp" id="spm-directory-title">
+          Give every sponsor category <em>room to be seen</em>
+        </h2>
+        <p class="spm-lead animate-on-scroll" data-animation="fadeInUp">
+          The event website can include a sponsor directory page with an event heading and category-grouped
+          sponsor cards.
+        </p>
+        <a class="spm-path__cta animate-on-scroll" data-animation="fadeInUp" href="/book-a-demo/">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+            ><path
+              d="M5 12h14M13 6l6 6-6 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"></path></svg
+          >
+        </a>
+      </div>
+
+      <ol class="spm-path__steps">
+        {
+          directorySteps.map((step, index) => (
+            <li class="spm-step animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+              <div class="spm-step__head">
+                <span class="spm-step__num">{String(index + 1).padStart(2, "0")}</span>
+                <div class="spm-step__copy">
+                  <h3>{step.label}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </div>
+
+              <div class="spm-step__visual">
+                <img class="spm-source-shot spm-source-shot--directory" src="/images/sponsor-management/public-exhibitor-directory-web-791.webp" alt="Public EventHex event website showing the featured exhibitor and sponsor directory section" width="791" height="9673" loading="lazy" decoding="async" />
+                <div class="spm-step__screen" aria-hidden="true">
+                  <span class="spm-step__tag">{step.tag}</span>
+                  {step.tiles > 0 ? (
+                    <div class="spm-step__tiles">
+                      {Array.from({ length: step.tiles }).map(() => (
+                        <span class="spm-step__tile" />
+                      ))}
+                    </div>
+                  ) : (
+                    <div class="spm-step__rows">
+                      {step.rows.map((row) => (
+                        <span class:list={["spm-step__row", row.on ? "is-on" : ""]}>{row.text}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <span
+                  class:list={[
+                    "spm-step__status",
+                    step.tone === "info" ? "spm-step__status--info" : "spm-step__status--success",
+                  ]}
+                >
+                  <svg viewBox="0 0 20 20">
+                    <path d="m5.5 10.2 3 3 6-6" />
+                  </svg>
+                  {step.status}
+                </span>
+                <span class="spm-step__action">{step.action}</span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- 10 Dark shell: responsive sponsor visibility -->
+  <section class="spm-shell" id="responsive-visibility" aria-labelledby="spm-visibility-title">
+    <div class="spm-shell__inner">
+      <div class="spm-shell__head animate-on-scroll" data-animation="fadeInUp">
+        <span class="spm-shell__eyebrow">
+          <span class="spm-shell__eyebrow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>
+          </span>
+          <span class="spm-shell__eyebrow-text">Visibility that adapts to the page</span>
+        </span>
+        <h2 class="spm-shell__title" id="spm-visibility-title">
+          <span class="spm-shell__title-line">Keep sponsor logos legible</span>
+          <span class="spm-shell__title-line">across <span class="spm-shell__highlight">screen sizes</span></span>
+        </h2>
+        <p class="spm-shell__lead">
+          Use responsive grids and image containment so each logo stays recognizable without distorting the
+          asset.
+        </p>
+      </div>
+
+      <div class="spm-shell__cards">
+        {
+          responsiveRules.map((item, index) => (
+            <article
+              class="spm-shell__card animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={index * 80}
+              data-card-index={index}
+              style={`--card-index: ${index};`}
+            >
+              <div class="spm-shell__card-content">
+                <span class="spm-shell__card-index" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3>{item.label}</h3>
+                <p>{item.text}</p>
+                <a href="/book-a-demo/" class="spm-shell__card-btn">Explore More</a>
+              </div>
+              <div class="spm-shell__visual" aria-hidden="true">
+                <img class="spm-source-shot spm-source-shot--responsive" src="/images/sponsor-management/public-exhibitor-directory-web-791.webp" alt="Public EventHex exhibitor directory used to demonstrate responsive sponsor visibility" width="791" height="9673" loading="lazy" decoding="async" />
+                <div class="spm-shell__mock">
+                  <span /><span /><span /><span /><span /><span />
+                </div>
+                <div class="spm-shell__visual-caption">Sponsor directory preview</div>
+              </div>
+            </article>
+          ))
+        }
+        <div class="spm-shell__stack-spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const sponsorVisibilitySection = document.querySelector<HTMLElement>('#responsive-visibility');
+    const sponsorVisibilityHeader = sponsorVisibilitySection?.querySelector<HTMLElement>('.spm-shell__head');
+    const sponsorVisibilityCards = sponsorVisibilitySection?.querySelectorAll<HTMLElement>('.spm-shell__card');
+    const sponsorVisibilityFinalCard = sponsorVisibilityCards?.[sponsorVisibilityCards.length - 1];
+
+    if (sponsorVisibilityHeader && sponsorVisibilityFinalCard) {
+      let sponsorVisibilityFrame = 0;
+      const syncSponsorVisibilityRelease = () => {
+        sponsorVisibilityFrame = 0;
+        const stickyTop = Number.parseFloat(getComputedStyle(sponsorVisibilityFinalCard).top) || 0;
+        const releaseOffset = Math.min(0, sponsorVisibilityFinalCard.getBoundingClientRect().top - stickyTop);
+        sponsorVisibilityHeader.style.setProperty('--spm-shell-release-y', `${releaseOffset}px`);
+      };
+      const queueSponsorVisibilityRelease = () => {
+        if (sponsorVisibilityFrame) return;
+        sponsorVisibilityFrame = requestAnimationFrame(syncSponsorVisibilityRelease);
+      };
+
+      window.addEventListener('scroll', queueSponsorVisibilityRelease, { passive: true });
+      window.addEventListener('resize', queueSponsorVisibilityRelease, { passive: true });
+      syncSponsorVisibilityRelease();
+    }
+  </script>
+
+  <!-- 12 Audience: sponsor-led event models -->
+  <section class="spm-section" id="use-cases" aria-labelledby="spm-usecases-title">
+    <div class="spm-wrap">
+      <div class="spm-head spm-head--center">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >Useful across sponsor-led event models</span
+        >
+        <h2 class="spm-title animate-on-scroll" data-animation="fadeInUp" id="spm-usecases-title">
+          Present the hierarchy <em>your sponsor program already uses</em>
+        </h2>
+        <p class="spm-lead animate-on-scroll" data-animation="fadeInUp">
+          Use the same profile, category, and website mechanisms across different event formats.
+        </p>
+      </div>
+
+      <div class="spm-suites">
+        <div
+          class="spm-suites__tabs animate-on-scroll"
+          data-animation="fadeInUp"
+          role="tablist"
+          aria-label="Sponsor-led event models"
+        >
+          {
+            eventModels.map((model, index) => (
+              <button
+                class="spm-suites__tab"
+                type="button"
+                role="tab"
+                id={`spm-usecase-tab-${model.key}`}
+                aria-controls={`spm-usecase-panel-${model.key}`}
+                aria-selected={index === 0 ? "true" : "false"}
+                tabindex={index === 0 ? 0 : -1}
+                data-target={model.key}
+              >
+                {model.label}
+              </button>
+            ))
+          }
+        </div>
+
+        <div class="spm-suites__box animate-on-scroll" data-animation="fadeInUp">
+          {
+            eventModels.map((model) => (
+              <article
+                class="spm-suites__panel"
+                id={`spm-usecase-panel-${model.key}`}
+                role="tabpanel"
+                aria-labelledby={`spm-usecase-tab-${model.key}`}
+                data-panel={model.key}
+                data-tint={model.tint}
+              >
+                <div class="spm-suites__content">
+                  <h3>{model.label}</h3>
+                  <p>{model.text}</p>
+                  <span class="spm-suites__eyebrow">Sponsor focus</span>
+                  <ul class="spm-suites__focus">
+                    {model.points.map((point) => (
+                      <li>
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div class="spm-suites__visual">
+                  <img class="spm-source-shot spm-source-shot--models" src="/images/sponsor-management/sponsor-packages-web-806.webp" alt="EventHex sponsor package categories used across sponsor-led event models" width="806" height="696" loading="lazy" decoding="async" />
+                  <div class="spm-showcase">
+                    <div class="spm-board spm-board--compact" role="img" aria-label={model.alt}>
+                      <div class="spm-board__chrome" aria-hidden="true">
+                        <span class="spm-showcase__label">
+                          <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                            <path d="M3 5.5h14v9H3zM3 7l7 4.5L17 7" />
+                          </svg>
+                          {model.chip}
+                        </span>
+                      </div>
+                      <div class="spm-board__rows" aria-hidden="true">
+                        {model.rows.map((row) => (
+                          <div class="spm-board__row">
+                            <b class="spm-board__label">{row.label}</b>
+                            <span class="spm-board__value">{row.value}</span>
+                            <small class="spm-board__meta">{row.meta}</small>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 Links: connected workflows -->
+  <section class="spm-section spm-flow" id="connected-workflows" aria-labelledby="spm-connected-title">
+    <div class="spm-wrap">
+      <header class="spm-head spm-head--center spm-flow__heading">
+        <span class="spm-eyebrow animate-on-scroll" data-animation="fadeIn"
+          >Keep sponsor and exhibitor jobs separate</span
+        >
+        <h2
+          class="spm-title spm-flow__title animate-on-scroll"
+          id="spm-connected-title"
+          data-animation="fadeInUp"
+        >
+          Connect sponsor visibility to <em>the rest of the event</em>
+        </h2>
+        <p class="spm-lead animate-on-scroll" data-animation="fadeInUp">
+          Sponsor Management owns profiles, categories, ordering, and website presentation. Related pages
+          handle the surrounding jobs.
+        </p>
+      </header>
+
+      <div class="spm-flow__grid">
+        <span class="spm-flow__notch spm-flow__notch--1" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        <span class="spm-flow__notch spm-flow__notch--2" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        <span class="spm-flow__notch spm-flow__notch--3" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+          </svg>
+        </span>
+        {
+          destinations.map((item, index) => (
+            <article class="spm-flow__card animate-on-scroll" data-animation="fadeInUp" data-delay={index * 60}>
+              {index === 2 && (
+                <span class="spm-flow__cross" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="-14 -14 28 28">
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="scale(1,-1)"
+                    />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="rotate(90)"
+                    />
+                    <path
+                      d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"
+                      fill="var(--surface-card-border)"
+                      transform="rotate(-90)"
+                    />
+                  </svg>
+                </span>
+              )}
+              <span class="spm-flow__icon" aria-hidden="true" set:html={item.icon} />
+              <h3><a href={item.href}>{item.label}</a></h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 FAQ -->
+  <section class="spm-faq" id="faq">
+    <div class="spm-faq__inner">
+      <div class="spm-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="spm-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2 class="spm-faq__heading">
+          Sponsor Management<br />Questions, Answered.
+        </h2>
+        <p class="spm-faq__intro">
+          Find quick answers about sponsor profiles, category tiers, website sections, and the public
+          sponsor directory.
+        </p>
+        <a href="/contact-en/" class="spm-faq__cta">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+
+      <div class="spm-faq__list">
+        {
+          faqs.map(([question, answer], index) => (
+            <details
+              class="spm-faq__item animate-on-scroll"
+              data-animation="fadeInUp"
+              data-delay={String(index * 50)}
+              data-spm-faq-item
+              open={index === 0}
+            >
+              <summary class="spm-faq__question">
+                <strong>{question}</strong>
+                <span class="spm-faq__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="spm-faq__answer">
+                <p>{answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .spm-page {
+    --spm-ink: var(--heading-dark);
+    --spm-muted: var(--subheading-gray);
+    --spm-soft: var(--surface-light);
+    --spm-line: var(--surface-card-border);
+    color: var(--spm-ink);
+    /* Same fixed layered marketing wash the Speaker Management page uses. */
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(
+        circle 380px at 3% 34%,
+        rgba(175, 163, 255, 0.28) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 97% 30%,
+        rgba(255, 182, 213, 0.26) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 340px at 95% 75%,
+        rgba(130, 170, 255, 0.24) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 4% 78%,
+        rgba(255, 224, 150, 0.2) 0%,
+        transparent 100%
+      ),
+      #ffffff;
+    background-attachment: fixed;
+  }
+
+  /* The wash carries the page, so the light bands sit on it directly. */
+  .spm-page > section {
+    background: transparent !important;
+  }
+  .spm-page > .spm-catband {
+    background-color: #000 !important;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    ) !important;
+  }
+  .spm-page > .spm-shell {
+    background-color: #000 !important;
+  }
+  .spm-page > .spm-faq {
+    background: #fff !important;
+  }
+
+  .spm-wrap {
+    width: min(1120px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  .spm-section {
+    padding-block: clamp(64px, 7vw, 96px);
+  }
+
+  .spm-soft {
+    background: var(--spm-soft);
+  }
+
+  /* ---------- Shared text ---------- */
+  .spm-eyebrow {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .spm-title {
+    margin: 16px 0 0;
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--spm-ink);
+  }
+
+  .spm-title em {
+    font-style: normal;
+    background: linear-gradient(96deg, #5f6675 0%, #9aa1ae 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  .spm-lead {
+    margin: 18px 0 0;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: var(--spm-muted);
+    max-width: 620px;
+  }
+
+  .spm-head--center {
+    text-align: center;
+    margin-inline: auto;
+    max-width: 860px;
+  }
+
+  .spm-head--center .spm-lead {
+    margin-inline: auto;
+  }
+
+  .spm-note {
+    margin: 28px auto 0;
+    max-width: 780px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--body-light);
+  }
+
+  /* ---------- Buttons ---------- */
+  .spm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.48px;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .spm-btn--primary {
+    background: var(--spm-ink);
+    color: #fff;
+  }
+
+  .spm-btn--primary:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  .spm-btn--ghost {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #dce4ff;
+    color: var(--spm-ink);
+  }
+
+  .spm-btn--ghost:hover {
+    border-color: #c5d2ff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  /* ---------- 01 Hero ---------- */
+  /* Split hero matching the Speaker Management hero: copy on the left, a glass
+     frame that bleeds off the right viewport edge on the right. */
+  .spm-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background: transparent;
+  }
+
+  .spm-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .spm-hero__shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    background: none;
+  }
+
+  .spm-hero__grid {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .spm-hero__copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    text-align: left;
+  }
+
+  .spm-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--brand-blue);
+    text-transform: uppercase;
+  }
+
+  .spm-hero__badge-dot {
+    display: none;
+  }
+
+  .spm-hero__title {
+    margin: 0;
+    width: 100%;
+    max-width: 620px;
+    font-family: var(--font-heading);
+    font-size: 52px;
+    font-weight: 500;
+    line-height: 58px;
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .spm-hero__title-line {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .spm-hero__desc {
+    margin: 0;
+    width: 100%;
+    max-width: 560px;
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.25px;
+    color: var(--subheading-gray);
+  }
+
+  .spm-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spm-hero__point {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    padding: 0 0 0 16px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #475467;
+  }
+
+  .spm-hero__point::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+  }
+
+  .spm-hero__cta {
+    display: flex;
+    gap: 14px;
+    padding-top: 6px;
+  }
+
+  .spm-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px 32px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: -0.48px;
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+  }
+
+  .spm-hero__btn--primary {
+    color: #fff;
+    background: var(--heading-dark);
+    box-shadow: none;
+  }
+
+  .spm-hero__btn--primary:hover {
+    transform: translateY(-2px);
+    background: #000;
+  }
+
+  .spm-hero__btn--secondary {
+    color: var(--heading-dark);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #dce4ff;
+  }
+
+  .spm-hero__btn--secondary:hover {
+    transform: translateY(-2px);
+    border-color: #c5d2ff;
+    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
+  }
+
+  .spm-hero__visual {
+    position: relative;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+    z-index: 3;
+  }
+
+  .spm-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border-radius: 22px 0 0 22px;
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    border-right: none;
+    background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .spm-hero__visual-inner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 460px;
+    padding: 28px;
+    border-radius: 16px 0 0 16px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .spm-hero__analytics-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1298 / 697;
+    object-fit: cover;
+    object-position: left top;
+    border: 1px solid rgba(31, 41, 55, 0.12);
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(31, 41, 55, 0.16);
+  }
+
+  .spm-board--fallback {
+    display: none;
+  }
+
+  /* ---------- Hero composed sponsor workspace ---------- */
+  .spm-board {
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    animation: spmHeroFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes spmHeroFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+
+  .spm-board__chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px 14px;
+  }
+
+  .spm-board__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #dfe4f2;
+  }
+
+  .spm-board__chrome b {
+    margin-left: 8px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: #8a93a6;
+  }
+
+  .spm-board__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .spm-board__row {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 14px 16px;
+    border: 1px solid #e6ebf7;
+    border-radius: 14px;
+    background: #f7f9ff;
+  }
+
+  .spm-board__row--head {
+    border-color: #cfdcff;
+    background: #eef3ff;
+  }
+
+  .spm-board__label {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8a93a6;
+  }
+
+  .spm-board__value {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--spm-ink);
+  }
+
+  .spm-board__meta {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: #7b8497;
+  }
+
+  .spm-board__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  /* ---------- 02 Capability rail ---------- */
+  .spm-rail {
+    padding: 1.5rem;
+    border-top: 1px solid var(--spm-line);
+    background:
+      radial-gradient(circle 380px at 3% 42%, rgba(175, 163, 255, 0.22), transparent 100%),
+      radial-gradient(circle 300px at 97% 36%, rgba(255, 182, 213, 0.2), transparent 100%),
+      radial-gradient(circle 340px at 94% 88%, rgba(130, 170, 255, 0.18), transparent 100%),
+      radial-gradient(circle 300px at 5% 92%, rgba(255, 224, 150, 0.16), transparent 100%),
+      #fff;
+  }
+
+  .spm-rail__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2.25rem;
+  }
+
+  .spm-rail__item {
+    color: var(--subheading-gray);
+    font: 400 0.9375rem/1.4 var(--font-body);
+    white-space: nowrap;
+  }
+
+  .spm-rail__item b {
+    color: var(--heading-dark);
+    font-weight: 700;
+  }
+
+  /* ---------- 03 / 08 / 11 Spotlight ---------- */
+  .spm-spot__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: center;
+  }
+
+  .spm-panel {
+    padding: 32px;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #fff0f2, #f3f6ff);
+  }
+
+  .spm-list {
+    margin: 24px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spm-list li {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(71, 84, 103, 0.14);
+  }
+
+  .spm-list li:first-child {
+    padding-top: 0;
+  }
+
+  .spm-list li:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+
+  .spm-list strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--spm-ink);
+  }
+
+  .spm-list span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--spm-muted);
+  }
+
+  .spm-shot {
+    overflow: hidden;
+    padding: 18px;
+    border: 1px solid #e6ebf7;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(30, 46, 105, 0.12);
+  }
+
+  .spm-profile-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  #profile-draft {
+    display: none !important;
+  }
+
+  .spm-shot .spm-editor {
+    display: none;
+  }
+
+  .spm-cue {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: 20px;
+    padding: 7px 11px;
+    border-radius: 999px;
+    background: var(--surface-blue-tint);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: #2b3f8c;
+  }
+
+  /* Profile editor mock */
+  .spm-editor {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+  }
+
+  .spm-editor__form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .spm-editor__field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 13px;
+    border: 1px solid #e8ecf5;
+    border-radius: 10px;
+    background: #f9fbff;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: #67718a;
+  }
+
+  .spm-editor__field b {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #3c4759;
+  }
+
+  .spm-editor__field.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+  }
+
+  .spm-editor__field.is-on b {
+    color: #2b4ed4;
+  }
+
+  .spm-editor__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 14px;
+    border: 1px solid #e2e7f3;
+    border-radius: 14px;
+    background: linear-gradient(150deg, #ffffff, #f4f7ff);
+    text-align: center;
+    box-shadow: 0 12px 26px rgba(30, 46, 105, 0.08);
+  }
+
+  .spm-editor__logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    background: linear-gradient(140deg, #375dfb, #9f81ff);
+    opacity: 0.85;
+  }
+
+  .spm-editor__card b {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--spm-ink);
+  }
+
+  .spm-editor__card small {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #7b8497;
+  }
+
+  /* Website controls mock */
+  .spm-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .spm-controls__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .spm-controls__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 13px;
+    border: 1px solid #e8ecf5;
+    border-radius: 10px;
+    background: #f9fbff;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: #67718a;
+  }
+
+  .spm-controls__row b {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: #3c4759;
+  }
+
+  .spm-controls__row.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+  }
+
+  .spm-controls__row.is-on b {
+    color: #2b4ed4;
+  }
+
+  .spm-controls__wall,
+  .spm-bento__wall {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .spm-controls__wall span,
+  .spm-bento__wall span {
+    height: 42px;
+    border: 1px solid #e6ebf7;
+    border-radius: 10px;
+    background: linear-gradient(150deg, #f2f5fd, #ffffff);
+  }
+
+  /* Event Connect chat mock */
+  .spm-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border: 1px solid #e2e7f3;
+    border-radius: 14px;
+    background: linear-gradient(160deg, #f7f9ff, #ffffff);
+  }
+
+  .spm-chat__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spm-chat__dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .spm-chat__dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d5dced;
+  }
+
+  .spm-chat__top b {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a93a6;
+  }
+
+  .spm-chat__ask {
+    align-self: flex-end;
+    max-width: 82%;
+    margin: 0;
+    padding: 10px 13px;
+    border-radius: 12px 12px 4px 12px;
+    background: #375dfb;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+
+  .spm-chat__reply {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 88%;
+  }
+
+  .spm-chat__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 11px;
+    border: 1px solid #e6ebf7;
+    border-radius: 10px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: #67718a;
+  }
+
+  .spm-chat__row b {
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .spm-chat__row.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+  }
+
+  .spm-chat__row.is-on b {
+    color: #2b4ed4;
+  }
+
+  .spm-chat__reply small {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: #98a1b4;
+  }
+
+  /* ---------- 04 / 07 Flow quad ---------- */
+  .spm-map__header {
+    max-width: 900px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .spm-map__title {
+    margin: 16px 0 12px;
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4.2vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(98deg, var(--spm-ink) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .spm-map__line {
+    display: block;
+  }
+
+  .spm-map__subtitle {
+    max-width: 690px;
+    margin-inline: auto;
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--spm-muted);
+  }
+
+  .spm-map__quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: min(1120px, 100%);
+    margin-inline: auto;
+    margin-top: 48px;
+    column-gap: 40px;
+    row-gap: 28px;
+  }
+
+  .spm-map__cell {
+    display: flex;
+    min-width: 0;
+    min-height: 360px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 24px;
+    border: 0;
+  }
+
+  .spm-map__quad > *:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .spm-map__quad > *:nth-child(n + 3) {
+    border-bottom: 0;
+  }
+
+  .spm-map__cell--copy h3 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--spm-ink);
+  }
+
+  .spm-map__cell--copy p {
+    max-width: 40ch;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--spm-muted);
+  }
+
+  .spm-map__cell--media {
+    align-items: center;
+    min-height: 390px;
+    padding: 26px 30px;
+    overflow: hidden;
+    border: 1px solid rgba(209, 214, 226, 0.72);
+    border-radius: 24px;
+    background: linear-gradient(145deg, #fff0f2, #f3f6ff);
+  }
+
+  .spm-map__composite {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  .spm-map__screen {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+
+  .spm-map__screen--primary {
+    top: 42px;
+    left: 20px;
+    z-index: 1;
+    width: 78%;
+    height: 68%;
+  }
+
+  .spm-map__screen--secondary {
+    right: 18px;
+    bottom: 18px;
+    z-index: 2;
+    width: 62%;
+    height: 52%;
+  }
+
+  .spm-map__status,
+  .spm-map__action {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 10px;
+    white-space: nowrap;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
+  }
+
+  .spm-map__status {
+    top: 14px;
+    left: 14px;
+    gap: 7px;
+    padding: 9px 11px;
+    border: 1px solid #cfead9;
+    background: #effbf4;
+    color: #18864b;
+  }
+
+  .spm-map__status svg {
+    width: 15px;
+    height: 15px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.25;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spm-map__action {
+    right: 14px;
+    bottom: 14px;
+    padding: 10px 13px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  .spm-map__cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--spm-soft);
+    box-shadow: inset 0 0 0 1px rgba(71, 84, 103, 0.14);
+    transform: translate(-50%, -50%);
+  }
+
+  .spm-map__cross::before,
+  .spm-map__cross::after {
+    position: absolute;
+    content: "";
+    background: rgba(71, 84, 103, 0.18);
+  }
+
+  .spm-map__cross::before {
+    top: 0;
+    bottom: 0;
+    left: 10px;
+    width: 2px;
+  }
+
+  .spm-map__cross::after {
+    top: 10px;
+    right: 0;
+    left: 0;
+    height: 2px;
+  }
+
+  .spm-map__note {
+    max-width: 850px;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  .spm-map__tag {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .spm-map__row {
+    padding: 6px 8px;
+    border: 1px solid #e8ecf5;
+    border-radius: 7px;
+    font-family: var(--font-body);
+    font-size: 10.5px;
+    line-height: 1.25;
+    color: #67718a;
+  }
+
+  .spm-map__row.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+    font-weight: 600;
+  }
+
+  /* ---------- 10 Dark shell: responsive sponsor visibility ----------
+     Mirrors the Speaker Management "workflow" shell: black surface, mesh
+     gradient, film grain, pill eyebrow and a highlighted title word. */
+  .spm-shell {
+    position: relative;
+    width: 100%;
+    padding-block: 4px 30px;
+    background-color: #000;
+    background-image:
+      linear-gradient(180deg, #0d0a2c 0%, transparent 320px),
+      radial-gradient(circle at 12% 30%, rgba(70, 130, 255, 0.28) 0%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%, 120% 120%;
+    animation: spmShellMesh 30s linear infinite;
+  }
+
+  @keyframes spmShellMesh {
+    0%,
+    100% {
+      background-position: 0 0, 0% 0%;
+    }
+    50% {
+      background-position: 0 0, 8% 10%;
+    }
+  }
+
+  .spm-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .spm-shell__inner {
+    position: relative;
+    z-index: 1;
+    width: min(1140px, 100% - 48px);
+    margin-inline: auto;
+  }
+
+  .spm-shell__head {
+    position: sticky;
+    top: 69px;
+    z-index: 20;
+    isolation: isolate;
+    width: min(94%, 1050px);
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+    padding: 24px 0;
+    transform: translateY(var(--spm-shell-release-y, 0px));
+    will-change: transform;
+  }
+
+  .spm-shell__head::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -1px;
+    bottom: -28px;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(13,10,44,.99) 0%, rgba(7,11,27,.98) 72%, rgba(7,11,27,0) 100%);
+  }
+
+  .spm-shell__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    padding: 6px 16px 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px -6px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .spm-shell__eyebrow-icon {
+    display: flex;
+    width: 16px;
+    height: 16px;
+  }
+
+  .spm-shell__eyebrow-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .spm-shell__eyebrow-text {
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #fff;
+  }
+
+  .spm-shell__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 46px;
+    font-weight: 500;
+    line-height: 1.15;
+    color: #fff;
+  }
+
+  .spm-shell__title-line {
+    display: block;
+  }
+
+  .spm-shell__highlight {
+    color: #afa3ff;
+  }
+
+  .spm-shell__lead {
+    margin: 0;
+    max-width: 660px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .spm-shell__cards {
+    --spm-shell-stack-top: 300px;
+    width: 100%;
+    padding: 80px 0 50px;
+    position: relative;
+  }
+
+  .spm-shell__card {
+    position: sticky;
+    top: calc(var(--spm-shell-stack-top) + var(--card-index) * 20px);
+    z-index: var(--card-index);
+    display: flex;
+    align-items: stretch;
+    min-width: 0;
+    height: 500px;
+    margin-bottom: 60px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 255, 255, 0.14) 0%, transparent 70%),
+      radial-gradient(circle at 12% 8%, rgba(90, 130, 255, 0.18) 0%, transparent 40%), #0a0a0f;
+  }
+
+  .spm-shell__stack-spacer {
+    height: 190px;
+  }
+
+  .spm-shell__card:first-child {
+    background:
+      radial-gradient(circle at 82% 12%, rgba(109, 92, 235, 0.24), transparent 34%),
+      radial-gradient(circle at 8% 92%, rgba(66, 173, 218, 0.13), transparent 28%),
+      #090a10;
+  }
+
+  .spm-shell__card-content {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    padding: 40px;
+  }
+
+  .spm-shell__card-index {
+    align-self: flex-start;
+    padding: 6px 12px;
+    border: 1px solid rgba(175, 163, 255, 0.28);
+    border-radius: 999px;
+    background: rgba(175, 163, 255, 0.1);
+    color: #afa3ff;
+    font: 600 12px/1.2 var(--font-body);
+    letter-spacing: 0.02em;
+  }
+
+  .spm-shell__card h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #e7e4fa;
+  }
+
+  .spm-shell__card p {
+    margin: 0;
+    max-width: 44ch;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .spm-shell__card-btn {
+    align-self: flex-start;
+    margin-top: 8px;
+    padding: 12px 26px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(255,255,255,.06);
+    text-decoration: none;
+    font: 500 15px/1 var(--font-body);
+  }
+
+  .spm-shell__visual {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+    margin: 16px 16px 16px 0;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 16px;
+    background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+  }
+
+  .spm-shell__visual-caption {
+    color: rgba(255,255,255,.55);
+    font: 500 13px/1.3 var(--font-body);
+    text-align: center;
+  }
+
+  .spm-shell__mock {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    padding-top: 0;
+  }
+
+  .spm-shell__mock span {
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    background: linear-gradient(150deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
+  }
+
+  @media (min-width: 768px) {
+    .spm-shell__title-line {
+      white-space: nowrap;
+    }
+  }
+
+  /* ---------- 05 Dark band: sponsor categories ---------- */
+  @property --spm-cat-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  .spm-catband {
+    --band-p: 0;
+    --cat-grad: linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%);
+    --cat-surface: #08080e;
+    --cat-line: #3b3a47;
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    background-color: #000;
+    /* colour sits at the top, behind the heading, and fades out downward */
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      transparent 72%
+    );
+    background-repeat: no-repeat;
+    /* starts inset with rounded corners and opens to full bleed on scroll.
+       clip-path instead of margin/border-radius: paint-only, no reflow per frame */
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+
+  /* film grain over the flat black */
+  .spm-catband::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+
+  .spm-catband > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .spm-catband__head {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 24px 8px;
+    text-align: center;
+  }
+
+  .spm-catband__eyebrow {
+    position: relative;
+    z-index: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    margin-bottom: 14px;
+    padding: 7px 16px 7px 34px;
+    border: 1px solid #eef0f3;
+    border-radius: 999px;
+    background: #fff;
+    color: #14151a;
+    box-shadow: 0 5px 18px rgba(25, 40, 78, 0.045);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .spm-catband__eyebrow::before {
+    content: "\2726";
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    color: #4f8cff;
+    font-size: 14px;
+    transform: translateY(-50%);
+    transform-origin: center;
+    animation: spm-cat-star 2s ease-in-out infinite;
+  }
+
+  .spm-catband__eyebrow::after {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    z-index: -1;
+    padding: 1.5px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--spm-cat-angle),
+      transparent 0deg,
+      transparent 270deg,
+      #4f8cff 315deg,
+      #b08bff 340deg,
+      #4f8cff 355deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: spm-cat-spin 3s linear infinite;
+  }
+
+  .spm-catband__title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(2.125rem, 5vw, 3.75rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+    /* a single ramp across the line so the white blends into the violet */
+    background: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #f2f0ff 26%,
+      #c9c2ff 52%,
+      #a79aff 74%,
+      #7d8dff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .spm-catband__lead {
+    margin: 16px auto 0;
+    max-width: 620px;
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.62;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .spm-catband__grid {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: clamp(40px, 5vw, 72px) 24px clamp(56px, 7vw, 88px);
+  }
+
+  .spm-catgrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--cat-line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .spm-catgrid__cell {
+    position: relative;
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    padding: 36px 32px;
+    border-right: 1px solid var(--cat-line);
+    border-bottom: 1px solid var(--cat-line);
+  }
+
+  .spm-catgrid__cell:nth-child(2n) {
+    border-right: none;
+  }
+
+  .spm-catgrid__cell:nth-child(n + 3) {
+    border-bottom: none;
+  }
+
+  .spm-catgrid__petal {
+    position: absolute;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    pointer-events: none;
+    line-height: 0;
+    z-index: 2;
+  }
+
+  .spm-catgrid__petal--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .spm-catgrid__petal--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .spm-catgrid__label {
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #fff;
+  }
+
+  .spm-catgrid__desc {
+    margin: 0;
+    max-width: 34ch;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.38;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .spm-catgrid__visual {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 1;
+    margin-top: 32px;
+  }
+
+  /* soft coloured bloom behind each mock */
+  .spm-catgrid__visual::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10%;
+    width: 80%;
+    height: 80%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    filter: blur(30px);
+    pointer-events: none;
+    will-change: opacity;
+    background: radial-gradient(
+      closest-side,
+      rgba(92, 138, 255, 0.28),
+      rgba(124, 108, 255, 0.15) 55%,
+      transparent 100%
+    );
+    animation: spm-cat-bloom 6s ease-in-out infinite;
+  }
+
+  .spm-catgrid__visual > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* gradient hairline border via padding-box / border-box clipping */
+  .spm-catgrid__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 306px;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--cat-surface), var(--cat-surface)) padding-box,
+      var(--cat-grad) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+    animation: spm-cat-float 7s ease-in-out infinite;
+  }
+
+  .spm-catgrid__card-head {
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .spm-catgrid__row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.86);
+  }
+
+  .spm-catgrid__row b {
+    font-weight: 500;
+  }
+
+  .spm-catgrid__row small {
+    margin-left: auto;
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .spm-catgrid__num {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .spm-catgrid__row.is-on {
+    color: #fff;
+    background:
+      linear-gradient(135deg, #0d1a30 0%, #131938 58%, #1b1740 100%) padding-box,
+      var(--cat-grad) border-box;
+    box-shadow: 0 10px 26px -14px rgba(92, 138, 255, 0.6);
+    animation: spm-cat-pulse 3.2s ease-in-out infinite;
+  }
+
+  .spm-catgrid__row.is-on .spm-catgrid__num,
+  .spm-catgrid__row.is-on small {
+    color: #b9ccff;
+  }
+
+  .spm-catgrid__chip {
+    margin-left: auto;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(120, 140, 255, 0.16);
+    font-size: 11px;
+    color: #c9d4ff;
+  }
+
+  .spm-catgrid__grip {
+    margin-left: auto;
+    width: 8px;
+    height: 14px;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1.4px, transparent 1.5px);
+    background-size: 8px 7px;
+  }
+
+  .spm-catgrid__lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 2px 2px 0;
+  }
+
+  .spm-catgrid__lines i {
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    transform-origin: left center;
+    animation: spm-cat-fill 5.5s ease-in-out infinite;
+  }
+
+  .spm-catgrid__lines i:nth-child(1) {
+    width: 92%;
+  }
+
+  .spm-catgrid__lines i:nth-child(2) {
+    width: 74%;
+    animation-delay: -1.8s;
+  }
+
+  .spm-catgrid__lines i:nth-child(3) {
+    width: 58%;
+    animation-delay: -3.6s;
+  }
+
+  /* stagger the float so the four mocks never move in lockstep */
+  .spm-catgrid__cell:nth-child(2) .spm-catgrid__card {
+    animation-delay: -1.4s;
+  }
+
+  .spm-catgrid__cell:nth-child(3) .spm-catgrid__card {
+    animation-delay: -2.8s;
+  }
+
+  .spm-catgrid__cell:nth-child(4) .spm-catgrid__card {
+    animation-delay: -4.2s;
+  }
+
+  @keyframes spm-cat-spin {
+    to {
+      --spm-cat-angle: 360deg;
+    }
+  }
+
+  @keyframes spm-cat-star {
+    0%,
+    100% {
+      transform: translateY(-50%) scale(1) rotate(0);
+    }
+    50% {
+      transform: translateY(-50%) scale(1.22) rotate(10deg);
+    }
+  }
+
+  @keyframes spm-cat-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-7px);
+    }
+  }
+
+  @keyframes spm-cat-bloom {
+    0%,
+    100% {
+      opacity: 0.68;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes spm-cat-pulse {
+    0%,
+    100% {
+      opacity: 0.88;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes spm-cat-fill {
+    0% {
+      transform: scaleX(0.25);
+    }
+    60%,
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  /* ---------- 06 Bento band: record operations ---------- */
+  /* One bordered grid of alternating visual/content rows, matching the Event Registration
+     confirmation bento: pastel stage, product mockup, floating pills, notch and cross frame. */
+  .spm-opsb {
+    --spm-opsb-divider: rgba(71, 84, 103, 0.12);
+    position: relative;
+    margin-top: 52px;
+    border: 1px solid var(--spm-line);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .spm-opsb__notch {
+    position: absolute;
+    left: 50%;
+    z-index: 3;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .spm-opsb__notch--top {
+    top: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .spm-opsb__notch--bottom {
+    bottom: 0;
+    transform: translate(-50%, 50%);
+  }
+
+  .spm-opsb__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--spm-opsb-divider);
+  }
+
+  .spm-opsb__row:last-child {
+    border-bottom: 0;
+  }
+
+  .spm-opsb__row::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--spm-opsb-divider);
+    content: "";
+  }
+
+  .spm-opsb__cell {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+  }
+
+  .spm-opsb__cell--visual {
+    order: 0;
+    align-items: center;
+  }
+
+  .spm-opsb__cell--content {
+    order: 1;
+  }
+
+  .spm-opsb__row--reverse .spm-opsb__cell--visual {
+    order: 2;
+  }
+
+  .spm-opsb__row--reverse .spm-opsb__cell--content {
+    order: 1;
+  }
+
+  .spm-opsb__cross {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 3;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, 50%);
+    line-height: 0;
+    pointer-events: none;
+  }
+
+  .spm-opsb__row:last-child .spm-opsb__cross {
+    display: none;
+  }
+
+  /* Pastel stages, same family as the Event Registration bento */
+  .spm-opsb__stage {
+    position: relative;
+    width: 100%;
+    padding: 30px 18px;
+    border-radius: 22px;
+    isolation: isolate;
+  }
+
+  .spm-opsb__stage[data-tint="sky"] {
+    background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%);
+  }
+
+  .spm-opsb__stage[data-tint="violet"] {
+    background: linear-gradient(180deg, #e2dafb 0%, #efeafd 45%, #f5f6f9 100%);
+  }
+
+  .spm-opsb__stage[data-tint="mint"] {
+    background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%);
+  }
+
+  .spm-opsb__stage[data-tint="rose"] {
+    background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%);
+  }
+
+  .spm-opsb__stage[data-tint="amber"] {
+    background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%);
+  }
+
+  .spm-opsb__shot {
+    display: flex;
+    min-height: 232px;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border: 1px solid #dfe4ec;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 18px 40px rgba(30, 46, 105, 0.13);
+    animation: spm-opsb-breathe 7s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  .spm-opsb__row--reverse .spm-opsb__shot {
+    animation-delay: -3.5s;
+  }
+
+  .spm-opsb__cell--visual:hover .spm-opsb__shot {
+    animation-play-state: paused;
+    transform: scale(1.018);
+  }
+
+  .spm-opsb__chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eef1f7;
+  }
+
+  .spm-opsb__chrome-dots {
+    display: inline-flex;
+    gap: 4px;
+  }
+
+  .spm-opsb__chrome-dots i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d7dce6;
+  }
+
+  .spm-opsb__chrome-title {
+    overflow: hidden;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7484;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .spm-opsb__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .spm-opsb__search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #e4e8f0;
+    border-radius: 9px;
+    background: #f7f9fc;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #4b5563;
+  }
+
+  .spm-opsb__search svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: #98a1b4;
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .spm-opsb__recs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .spm-opsb__rec {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border: 1px solid #eef1f7;
+    border-radius: 9px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: #2a3040;
+  }
+
+  .spm-opsb__rec b {
+    font-weight: 600;
+  }
+
+  .spm-opsb__rec.is-on {
+    border-color: #c9d4ff;
+    background: #f5f7ff;
+    box-shadow: 0 10px 22px -14px rgba(55, 93, 251, 0.6);
+  }
+
+  .spm-opsb__rec.is-danger {
+    border-color: #f6d5dd;
+    background: #fff7f9;
+  }
+
+  .spm-opsb__chip {
+    margin-left: auto;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #eef2ff;
+    font-size: 10.5px;
+    color: #4b5bb8;
+  }
+
+  .spm-opsb__rec.is-danger .spm-opsb__chip {
+    background: #fdeef2;
+    color: #b8566f;
+  }
+
+  .spm-opsb__num {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #98a1b4;
+  }
+
+  .spm-opsb__grip {
+    margin-left: auto;
+    width: 8px;
+    height: 14px;
+    background-image: radial-gradient(circle, rgba(71, 84, 103, 0.38) 1.4px, transparent 1.5px);
+    background-size: 8px 7px;
+  }
+
+  .spm-opsb__form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .spm-opsb__field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 5px;
+    padding: 9px 10px;
+    border: 1px solid #eef1f7;
+    border-radius: 9px;
+    background: #fff;
+    font-family: var(--font-body);
+  }
+
+  .spm-opsb__field i {
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .spm-opsb__field b {
+    overflow: hidden;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #2a3040;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .spm-opsb__field.is-on {
+    border-color: #d3c9f7;
+    background: #f8f6ff;
+  }
+
+  .spm-opsb__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .spm-opsb__panel-head {
+    font-family: var(--font-body);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .spm-opsb__counts {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border: 1px dashed #e4e8f0;
+    border-radius: 9px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #6b7484;
+  }
+
+  .spm-opsb__counts span {
+    margin-right: auto;
+  }
+
+  .spm-opsb__counts b {
+    font-weight: 600;
+    color: #2a3040;
+  }
+
+  .spm-opsb__counts b.is-next {
+    color: #b8566f;
+  }
+
+  .spm-opsb__counts svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: #98a1b4;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spm-opsb__log {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .spm-opsb__log-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px solid #eef1f7;
+    border-radius: 9px;
+    background: #fff;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #2a3040;
+  }
+
+  .spm-opsb__log-row b {
+    font-weight: 600;
+  }
+
+  .spm-opsb__log-row small {
+    margin-left: auto;
+    overflow: hidden;
+    font-size: 10.5px;
+    color: #98a1b4;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .spm-opsb__dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #c3cad7;
+  }
+
+  .spm-opsb__dot.is-create {
+    background: #35b57f;
+  }
+
+  .spm-opsb__dot.is-update {
+    background: #4b65f6;
+  }
+
+  .spm-opsb__dot.is-order {
+    background: #a889ff;
+  }
+
+  .spm-opsb__dot.is-delete {
+    background: #e2567a;
+  }
+
+  .spm-opsb__pill {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 11px 14px;
+    border: 1px solid rgba(206, 215, 232, 0.9);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    color: #111827;
+    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.2);
+    font-family: var(--font-body);
+    line-height: 1.15;
+    backdrop-filter: blur(10px);
+    animation: spm-opsb-pill-float 4.8s ease-in-out infinite;
+  }
+
+  .spm-opsb__pill b {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .spm-opsb__pill small {
+    display: block;
+    color: #7b8497;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  .spm-opsb__pill i {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #19b874;
+    box-shadow: 0 0 0 5px rgba(25, 184, 116, 0.13);
+  }
+
+  .spm-opsb__pill-check {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: #19b874;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spm-opsb__pill--top {
+    top: 12px;
+    right: 3px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .spm-opsb__pill--bottom {
+    bottom: 12px;
+    left: 3px;
+    animation-delay: -2.4s;
+  }
+
+  .spm-opsb__row--reverse .spm-opsb__pill--top {
+    animation-delay: -1.2s;
+  }
+
+  .spm-opsb__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--brand-blue);
+  }
+
+  .spm-opsb__eyebrow i {
+    padding: 3px 7px;
+    border: 1px solid var(--surface-blue-tint);
+    border-radius: 6px;
+    background: rgba(55, 93, 251, 0.07);
+    font-style: normal;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  .spm-opsb__cell--content h3 {
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: 2.25rem;
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.025em;
+    color: var(--spm-ink);
+  }
+
+  .spm-opsb__cell--content p {
+    max-width: 42ch;
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.62;
+    color: var(--spm-muted);
+  }
+
+  @keyframes spm-opsb-breathe {
+    0%,
+    100% {
+      transform: translateY(3px) scale(0.985);
+    }
+    50% {
+      transform: translateY(-3px) scale(1);
+    }
+  }
+
+  @keyframes spm-opsb-pill-float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -9px, 0);
+    }
+  }
+
+  /* ---------- 09 Journey: sponsor directory ---------- */
+  .spm-path__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+    gap: 72px;
+    align-items: start;
+  }
+
+  .spm-path__intro {
+    position: sticky;
+    top: 132px;
+  }
+
+  .spm-path__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 15px 26px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .spm-path__cta svg {
+    flex: none;
+  }
+
+  .spm-path__cta:hover {
+    background: #000;
+    transform: translateY(-2px);
+  }
+
+  .spm-path__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spm-step {
+    position: sticky;
+    padding: 28px;
+    border: 1px solid var(--spm-line);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 20px 44px rgba(30, 46, 105, 0.08);
+  }
+
+  .spm-step:nth-child(1) {
+    top: 92px;
+  }
+
+  .spm-step:nth-child(2) {
+    top: 110px;
+  }
+
+  .spm-step:nth-child(3) {
+    top: 128px;
+  }
+
+  .spm-step:nth-child(4) {
+    top: 146px;
+  }
+
+  .spm-step:nth-child(5) {
+    top: 164px;
+  }
+
+  .spm-step__head {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  .spm-step__num {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #111;
+    color: #fff;
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .spm-step__copy h3 {
+    margin: 3px 0 6px;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--spm-ink);
+  }
+
+  .spm-step__copy p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--spm-muted);
+  }
+
+  .spm-step__visual {
+    position: relative;
+    margin-top: 22px;
+    padding: 14px;
+    border: 1px solid var(--spm-line);
+    border-radius: 20px;
+    background: var(--surface-light);
+  }
+
+  .spm-step__screen {
+    display: flex;
+    min-height: 190px;
+    flex-direction: column;
+    gap: 8px;
+    /* Top padding clears the absolutely positioned status pill so the two never overlap. */
+    padding: 46px 16px 16px;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+  }
+
+  .spm-step__tag {
+    font-family: var(--font-body);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #98a1b4;
+  }
+
+  .spm-step__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .spm-step__row {
+    padding: 8px 10px;
+    border: 1px solid #e8ecf5;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    color: #67718a;
+  }
+
+  .spm-step__row.is-on {
+    border-color: #bcd0ff;
+    background: #eef3ff;
+    color: #2b4ed4;
+    font-weight: 600;
+  }
+
+  .spm-step__tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: auto;
+  }
+
+  .spm-step__tile {
+    height: 46px;
+    border: 1px solid #e8ecf5;
+    border-radius: 10px;
+    background: linear-gradient(150deg, #f2f5fd, #ffffff);
+  }
+
+  .spm-step__status,
+  .spm-step__action {
+    position: absolute;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, 0.16);
+  }
+
+  .spm-step__status {
+    top: 0;
+    left: 0;
+    gap: 7px;
+    padding: 9px 12px;
+  }
+
+  .spm-step__status svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spm-step__status--success {
+    border: 1px solid #ccebd8;
+    background: #edfbf3;
+    color: #18864b;
+  }
+
+  .spm-step__status--info {
+    border: 1px solid #d9dfff;
+    background: #f1f3ff;
+    color: #4b65f6;
+  }
+
+  .spm-step__action {
+    right: 12px;
+    bottom: 0;
+    padding: 11px 15px;
+    background: #4b65f6;
+    color: #fff;
+  }
+
+  /* ---------- 12 Audience: sponsor-led event models ---------- */
+  .spm-suites {
+    margin-top: 44px;
+  }
+
+  .spm-suites__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0 auto 40px;
+    padding: 6px;
+    border: 1px solid var(--spm-line);
+    border-radius: 999px;
+    background: #f1f3f7;
+  }
+
+  .spm-suites__tab {
+    padding: 10px 18px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .spm-suites__tab:hover {
+    background: rgba(255, 255, 255, 0.7);
+    color: #334155;
+  }
+
+  .spm-suites__tab[aria-selected="true"] {
+    border-color: #dbe4f0;
+    background: #fff;
+    color: var(--brand-blue);
+    box-shadow: 0 2px 8px rgba(30, 41, 59, 0.08);
+  }
+
+  .spm-suites__tab:focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 2px;
+  }
+
+  .spm-suites__box {
+    display: grid;
+    gap: 20px;
+  }
+
+  .spm-suites__panel {
+    --spm-suite-tint: #edf7ff;
+    --spm-suite-border: #d4e7f7;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 56px;
+    padding: 48px 56px;
+    border: 1px solid var(--spm-suite-border);
+    border-radius: 28px;
+    background: linear-gradient(135deg, var(--spm-suite-tint), #fff 72%);
+    animation: spm-suite-in 0.38s ease both;
+  }
+
+  .spm-suites__panel[data-tint="mint"] {
+    --spm-suite-tint: #eefbf4;
+    --spm-suite-border: #d4efdf;
+  }
+
+  .spm-suites__panel[data-tint="violet"] {
+    --spm-suite-tint: #f3efff;
+    --spm-suite-border: #e2d8fa;
+  }
+
+  .spm-suites__panel[data-tint="rose"] {
+    --spm-suite-tint: #fdf1f8;
+    --spm-suite-border: #f5d6e6;
+  }
+
+  /* Panels stay in the markup for search and for scripts-off readers; the tab
+     script marks the box ready before the stylesheet hides the inactive panels. */
+  .spm-suites__box[data-ready="true"] .spm-suites__panel {
+    display: none;
+  }
+
+  .spm-suites__box[data-ready="true"] .spm-suites__panel.is-active {
+    display: grid;
+  }
+
+  @keyframes spm-suite-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .spm-suites__content h3 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 3.8vw, 42px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--spm-ink);
+  }
+
+  .spm-suites__content > p {
+    margin: 0 0 26px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--spm-muted);
+  }
+
+  .spm-suites__eyebrow {
+    display: block;
+    margin-bottom: 14px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--label-gray);
+  }
+
+  .spm-suites__focus {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spm-suites__focus li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--spm-muted);
+  }
+
+  .spm-suites__focus svg {
+    flex: 0 0 14px;
+    width: 14px;
+    height: 14px;
+    margin-top: 2px;
+    fill: none;
+    stroke: #9ca3af;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .spm-suites__visual {
+    min-width: 0;
+  }
+
+  .spm-showcase {
+    position: relative;
+    isolation: isolate;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 22px 48px rgba(31, 41, 55, 0.1);
+  }
+
+  .spm-showcase::before {
+    position: absolute;
+    inset: 10% 7% -8%;
+    z-index: -1;
+    border-radius: 12px;
+    background: var(--spm-suite-border);
+    filter: blur(22px);
+    opacity: 0.48;
+    content: "";
+  }
+
+  /* Compact screen inside the showcase frame: the hero board's chrome and row
+     grammar at a size that fits one panel column. */
+  .spm-board--compact {
+    padding: 12px;
+    border: 1px solid #e2e8f6;
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .spm-board--compact .spm-board__chrome {
+    padding: 2px 4px 12px;
+  }
+
+  .spm-board--compact .spm-board__rows {
+    gap: 8px;
+  }
+
+  .spm-board--compact .spm-board__row {
+    gap: 2px;
+    padding: 11px 13px;
+    border-radius: 12px;
+  }
+
+  .spm-board--compact .spm-board__value {
+    font-size: 15px;
+  }
+
+  .spm-board--compact .spm-board__meta {
+    font-size: 12px;
+  }
+
+  .spm-showcase__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 12px;
+    border: 1px solid #cddcff;
+    border-radius: 10px;
+    background: #eef4ff;
+    box-shadow: 0 8px 22px rgba(49, 88, 212, 0.16);
+    color: #3158d4;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .spm-showcase__label svg {
+    width: 13px;
+    height: 13px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ---------- 13 Links: connected workflows ---------- */
+  .spm-flow {
+    padding-block: clamp(40px, 4.5vw, 60px) clamp(42px, 4vw, 56px);
+    background: linear-gradient(
+      180deg,
+      rgba(245, 248, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.84) 62%,
+      #fff 100%
+    );
+  }
+
+  .spm-flow__heading {
+    max-width: 1080px;
+  }
+
+  .spm-flow__title em {
+    display: block;
+  }
+
+  .spm-flow__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(48px, 5vw, 68px);
+    border-top: 1px solid var(--spm-line);
+  }
+
+  .spm-flow__card {
+    position: relative;
+    min-height: 250px;
+    padding: 28px;
+    border-left: 1px solid var(--spm-line);
+  }
+
+  .spm-flow__card:first-of-type {
+    border-left: 0;
+  }
+
+  .spm-flow__notch {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    line-height: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .spm-flow__notch--1 {
+    left: 25%;
+  }
+
+  .spm-flow__notch--2 {
+    left: 50%;
+  }
+
+  .spm-flow__notch--3 {
+    left: 75%;
+  }
+
+  .spm-flow__cross {
+    display: none;
+  }
+
+  .spm-flow__icon {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 28px;
+    color: var(--brand-blue);
+  }
+
+  .spm-flow__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .spm-flow__card h3 {
+    min-height: 2.3em;
+    max-width: 230px;
+    margin: 0 0 14px;
+    font-family: var(--font-heading);
+    font-size: 21px;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--spm-ink);
+  }
+
+  .spm-flow__card h3 a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .spm-flow__card h3 a:hover {
+    color: var(--brand-blue);
+  }
+
+  .spm-flow__card h3 a:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 4px;
+  }
+
+  .spm-flow__card p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--body-gray);
+  }
+
+  /* ---------- 14 FAQ ---------- */
+  .spm-faq {
+    width: 100%;
+    padding: 80px 24px;
+    background: #fff;
+  }
+
+  .spm-faq__inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .spm-faq__sidebar { position: sticky; top: 6rem; }
+
+  .spm-faq__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e4e7ec;
+    border-radius: 999px;
+    margin-bottom: 20px;
+    color: #000;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .spm-faq__heading {
+    margin: 0 0 20px;
+    color: #000;
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 44px;
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
+  .spm-faq__intro {
+    margin: 0 0 28px;
+    color: var(--body-light);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .spm-faq__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    background: #171a21;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .spm-faq__cta:hover { background: #000; transform: translateY(-1px); }
+
+  .spm-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    counter-reset: sponsor-faq;
+  }
+
+  .spm-faq__item {
+    counter-increment: sponsor-faq;
+    padding: 4px 28px;
+    overflow: hidden;
+    border: 1px solid #e4e7ec;
+    border-radius: 20px;
+    background: #fff;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .spm-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+
+  .spm-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 16px 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .spm-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .spm-faq__question strong {
+    font-family: 'Creato Display', var(--font-heading);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: #000;
+  }
+
+  .spm-faq__question strong::before { content: counter(sponsor-faq) '. '; }
+
+  .spm-faq__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .spm-faq__icon::before,
+  .spm-faq__icon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: #000;
+    transform: translate(-50%, -50%);
+  }
+
+  .spm-faq__icon::before {
+    width: 14px;
+    height: 2px;
+  }
+
+  .spm-faq__icon::after {
+    width: 2px;
+    height: 14px;
+    transition: opacity 0.2s ease;
+  }
+
+  .spm-faq__item[open] .spm-faq__icon {
+    transform: scale(0.9);
+  }
+
+  .spm-faq__item[open] .spm-faq__icon::after {
+    opacity: 0;
+  }
+
+  .spm-faq__answer {
+    max-width: 640px;
+    padding: 0 0 24px;
+  }
+
+  .spm-faq__answer p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #000;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spm-faq__item, .spm-faq__icon, .spm-faq__icon::after, .spm-faq__cta { transition: none; }
+  }
+
+  /* ---------- Responsive ---------- */
+  .spm-source-shot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 180px;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid rgba(119, 137, 176, 0.2);
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(38, 57, 92, 0.14);
+  }
+
+  .spm-map__cell--media > .spm-source-shot {
+    position: absolute;
+    inset: 18px;
+    width: calc(100% - 36px);
+    height: calc(100% - 36px);
+    opacity: 0.82;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .spm-opsb__stage { position: relative; }
+  .spm-source-shot--ops {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 360px;
+    object-fit: contain;
+    opacity: 1;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .spm-opsb__shot,
+  .spm-opsb__pill {
+    display: none;
+  }
+
+  .spm-step__visual,
+  .spm-shell__visual,
+  .spm-suites__visual { position: relative; overflow: hidden; }
+  .spm-source-shot--directory,
+  .spm-source-shot--responsive,
+  .spm-source-shot--models {
+    position: absolute;
+    inset: 12px;
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    opacity: 0.82;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Use the captured product image as the only visual in each event-model card. */
+  .spm-suites__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .spm-suites__visual .spm-showcase {
+    display: none;
+  }
+  .spm-suites__visual .spm-source-shot--models {
+    position: relative;
+    inset: auto;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: contain;
+    opacity: 1;
+    z-index: 1;
+    border-radius: 18px;
+  }
+
+  /* Registration-style spotlight treatment for the live website section. */
+  #website-section {
+    background: transparent;
+    padding: clamp(72px, 9vw, 112px) 24px;
+    overflow: hidden;
+  }
+  #website-section .spm-map__header {
+    max-width: 1100px;
+    margin: 0 auto 42px;
+    padding: 0;
+    text-align: center;
+  }
+  #website-section .spm-eyebrow {
+    color: #3564ff;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  #website-section .spm-map__title {
+    max-width: 700px;
+    margin: 0 auto 12px;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-size: clamp(28px, 4.2vw, 48px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+  }
+  #website-section .spm-map__subtitle {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--subheading-gray);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  #website-section .spm-map__quad {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+    background: transparent;
+  }
+  #website-section .spm-map__cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 260px;
+    padding: 36px 24px;
+    border: 0;
+  }
+  #website-section .spm-map__cell--media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+    padding: 18px 22px;
+    overflow: hidden;
+    background: transparent;
+  }
+  #website-section .spm-map__composite {
+    display: none;
+  }
+  #website-section .spm-website-shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: contain;
+    border: 1px solid rgba(209, 214, 226, 0.92);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+  }
+  @media (max-width: 767px) {
+    #website-section {
+      padding: 56px 20px 64px;
+    }
+    #website-section .spm-map__quad {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .spm-shell__section { padding: 20px 20px 30px; }
+    .spm-shell__cards { --spm-shell-stack-top: 292px; }
+    .spm-shell__card { height: 450px; }
+    .spm-shell__card-content { flex-basis: 50%; }
+    .spm-shell__card h3 { font-size: 28px; }
+    .spm-shell__card p { font-size: 16px; }
+    .spm-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .spm-faq__sidebar { position: static; }
+    .spm-faq__heading { font-size: 32px; }
+    .spm-hero__grid,
+    .spm-spot__grid,
+    .spm-path__grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 40px;
+    }
+
+    .spm-hero {
+      padding: 130px 20px 48px;
+    }
+
+    .spm-hero::after {
+      display: none;
+    }
+
+    .spm-hero__grid {
+      gap: 34px;
+    }
+
+    .spm-hero__copy {
+      align-items: center;
+      text-align: center;
+    }
+
+    .spm-hero__title {
+      max-width: 760px;
+      font-size: 42px;
+      line-height: 1.1em;
+      letter-spacing: -1px;
+    }
+
+    .spm-hero__desc {
+      max-width: 720px;
+    }
+
+    .spm-hero__points,
+    .spm-hero__cta {
+      justify-content: center;
+    }
+
+    .spm-hero__visual {
+      width: min(760px, 100%);
+      margin: 0 auto;
+    }
+
+    .spm-hero__visual-card {
+      border-radius: 22px;
+      border-right: 1px solid rgba(255, 255, 255, 0.62);
+    }
+
+    .spm-hero__visual-inner {
+      border-radius: 16px;
+    }
+
+    .spm-path__intro,
+    .spm-step {
+      position: static;
+    }
+
+    .spm-step {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    .spm-step__visual {
+      margin-top: 0;
+    }
+
+    .spm-opsb__cell {
+      padding: 3rem 2.25rem;
+    }
+
+    .spm-opsb__cell--content h3 {
+      font-size: 1.9rem;
+    }
+
+    .spm-suites__panel {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 38px;
+      padding: 40px 36px;
+    }
+
+    .spm-flow__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .spm-flow__notch--1,
+    .spm-flow__notch--3 {
+      display: none;
+    }
+
+    .spm-flow__card:nth-of-type(odd) {
+      border-left: 0;
+    }
+
+    .spm-flow__card:nth-of-type(n + 3) {
+      border-top: 1px solid var(--spm-line);
+    }
+
+    .spm-flow__cross {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 2;
+      display: block;
+      width: 28px;
+      height: 28px;
+      line-height: 0;
+      transform: translate(50%, -50%);
+      pointer-events: none;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .spm-faq { padding: 56px 16px; }
+    .spm-faq__heading { font-size: 28px; }
+    .spm-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .spm-faq__question { font-size: 0.9375rem; padding: 18px 0; }
+  }
+
+  @media (max-width: 900px) {
+    .spm-hero {
+      margin-top: -80px;
+      padding-top: 130px;
+    }
+
+    .spm-hero__title {
+      font-size: 42px;
+      line-height: 1.12;
+      letter-spacing: -1px;
+    }
+
+    .spm-title {
+      font-size: 36px;
+    }
+
+    .spm-shell__title {
+      font-size: 40px;
+    }
+
+    .spm-shell__cards {
+      padding-top: 48px;
+    }
+
+    .spm-map__cell {
+      min-height: 0;
+      padding: 36px 26px;
+    }
+
+    .spm-map__cell--media {
+      padding: 18px 20px 34px;
+    }
+
+    .spm-catband__title {
+      font-size: 34px;
+      letter-spacing: -0.03em;
+    }
+
+    .spm-catgrid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .spm-catgrid__cell {
+      grid-column: span 1;
+      min-height: 0;
+      padding: 32px 24px;
+      border-right: none;
+      border-bottom: 1px solid var(--cat-line);
+    }
+
+    .spm-catgrid__cell:last-child {
+      border-bottom: none;
+    }
+
+    .spm-catgrid__petal {
+      display: none;
+    }
+
+    .spm-catgrid__desc {
+      max-width: none;
+    }
+
+    /* Bento band stacks here, matching the Event Registration bento breakpoint */
+    .spm-opsb {
+      margin-top: 40px;
+    }
+
+    .spm-opsb__row {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .spm-opsb__row::after {
+      display: none;
+    }
+
+    .spm-opsb__row .spm-opsb__cell--content {
+      order: 1;
+      border-bottom: 1px solid var(--spm-opsb-divider);
+    }
+
+    .spm-opsb__row .spm-opsb__cell--visual {
+      order: 2;
+    }
+
+    .spm-opsb__cell {
+      padding: 2.5rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .spm-wrap {
+      width: min(100% - 32px, 640px);
+    }
+
+    .spm-hero {
+      margin-top: -80px;
+      padding: 120px 18px 44px;
+    }
+
+    .spm-hero__title {
+      font-size: 38px;
+      line-height: 1.2em;
+      letter-spacing: 0;
+    }
+
+    .spm-hero__desc {
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .spm-hero__badge {
+      font-size: 14px;
+      line-height: 1.1em;
+    }
+
+    .spm-hero__cta {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .spm-hero__btn {
+      width: 100%;
+    }
+
+    .spm-hero__visual-card {
+      padding: 10px;
+      border-radius: 18px;
+    }
+
+    .spm-hero__visual-inner {
+      min-height: 0;
+      padding: 18px;
+      border-radius: 14px;
+    }
+
+    .spm-shell__inner {
+      width: min(100% - 32px, 640px);
+    }
+
+    .spm-shell__title {
+      font-size: 30px;
+    }
+
+    .spm-shell__card {
+      position: sticky;
+      top: calc(320px + var(--card-index) * 20px);
+      height: 520px;
+      flex-direction: column;
+      margin-bottom: 60px;
+    }
+
+    .spm-shell__card-content {
+      flex-basis: auto;
+      padding: 26px 22px 18px;
+    }
+
+    .spm-shell__visual {
+      margin: 0 16px 16px;
+      min-height: 180px;
+    }
+
+    .spm-shell__stack-spacer { height: 120px; }
+
+    .spm-btn {
+      width: 100%;
+    }
+
+    .spm-rail__inner {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .spm-rail__item {
+      white-space: normal;
+    }
+
+    .spm-board__pair,
+    .spm-editor,
+    .spm-controls__wall {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .spm-map__quad {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: none;
+    }
+
+    .spm-map__cell {
+      padding: 30px 20px;
+      border-right: 0;
+    }
+
+    .spm-map__quad > *:nth-child(n + 3) {
+      border-bottom: 1px solid rgba(71, 84, 103, 0.12);
+    }
+
+    .spm-map__cell--media {
+      padding: 16px 20px 30px;
+    }
+
+    .spm-map__cell--media:nth-child(3) {
+      order: 4;
+      border-bottom: 0;
+    }
+
+    .spm-map__cell--copy:nth-child(4) {
+      order: 3;
+    }
+
+    .spm-map__composite {
+      height: 285px;
+    }
+
+    .spm-map__cross {
+      display: none;
+    }
+
+    .spm-opsb__cell--content h3 {
+      font-size: 1.6rem;
+    }
+
+    .spm-opsb__eyebrow {
+      margin-bottom: 12px;
+    }
+
+    .spm-opsb__shot {
+      min-height: 210px;
+    }
+
+    .spm-suites__tabs {
+      width: 100%;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      overflow-x: auto;
+      border-radius: 20px;
+      scrollbar-width: none;
+    }
+
+    .spm-suites__tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .spm-suites__tab {
+      flex: 0 0 auto;
+      padding-inline: 14px;
+      white-space: nowrap;
+    }
+
+    .spm-suites__panel {
+      gap: 30px;
+      padding: 32px 24px;
+      border-radius: 20px;
+    }
+
+    .spm-suites__content h3 {
+      font-size: 26px;
+    }
+
+    .spm-showcase {
+      padding: 14px;
+      border-radius: 18px;
+    }
+
+    .spm-showcase__label {
+      padding: 7px 9px;
+      font-size: 9.5px;
+    }
+
+    .spm-step {
+      display: block;
+      padding: 22px;
+      border-radius: 20px;
+    }
+
+    .spm-step__visual {
+      margin-top: 20px;
+      padding: 12px;
+    }
+
+    .spm-step__action {
+      right: 10px;
+      padding: 10px 13px;
+      font-size: 11px;
+    }
+
+    .spm-path__cta {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .spm-flow__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .spm-flow__card,
+    .spm-flow__card:nth-of-type(odd),
+    .spm-flow__card:nth-of-type(n + 3) {
+      min-height: 0;
+      border-left: 0;
+      border-top: 1px solid var(--spm-line);
+    }
+
+    .spm-flow__card:first-of-type {
+      border-top: 0;
+    }
+
+    .spm-flow__cross,
+    .spm-flow__notch--2 {
+      display: none;
+    }
+
+    .spm-panel {
+      padding: 24px;
+    }
+
+    .spm-shot {
+      padding: 14px;
+    }
+
+    .spm-faq__question strong {
+      font-size: 16.5px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .spm-hero__title {
+      font-size: 33px;
+      line-height: 1.15em;
+    }
+
+    .spm-title {
+      font-size: 30px;
+    }
+
+    .spm-map__title {
+      font-size: 26px;
+    }
+
+    .spm-opsb__pill {
+      padding: 9px 11px;
+    }
+
+    .spm-opsb__pill b {
+      font-size: 0.72rem;
+    }
+
+    .spm-opsb__pill small {
+      font-size: 0.6rem;
+    }
+
+    .spm-opsb__cell--content h3 {
+      font-size: 1.45rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .spm-btn,
+    .spm-flow__card h3 a,
+    .spm-faq__icon,
+    .spm-path__cta {
+      transition: none;
+    }
+
+    .spm-btn:hover,
+    .spm-path__cta:hover {
+      transform: none;
+    }
+
+    .spm-catband {
+      clip-path: none;
+      will-change: auto;
+    }
+
+    .spm-shell,
+    .spm-board {
+      animation: none;
+    }
+
+    .spm-catgrid__card,
+    .spm-catgrid__visual::before,
+    .spm-catgrid__row.is-on,
+    .spm-catgrid__lines i,
+    .spm-catband__eyebrow::before,
+    .spm-catband__eyebrow::after,
+    .spm-suites__panel {
+      animation: none;
+    }
+
+    .spm-opsb__shot,
+    .spm-opsb__pill {
+      animation: none;
+      will-change: auto;
+    }
+
+    .spm-opsb__cell--visual:hover .spm-opsb__shot {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // The sponsor categories band mirrors the Event Registration capabilities band: it
+  // starts inset with rounded corners and opens to full bleed as it travels up the
+  // viewport. Writing one custom property keeps the whole reveal paint-only.
+  function initSponsorCategoryBandBleed() {
+    const band = document.querySelector<HTMLElement>(".spm-catband");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    // cache the band's document offset so the scroll handler never reads layout
+    let bandTop = 0;
+    let vh = window.innerHeight || 1;
+    const measure = () => {
+      vh = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    let ticking = false;
+    let last = -1;
+    const update = () => {
+      ticking = false;
+      // 0 while the band's top sits at the viewport bottom, 1 once it has
+      // travelled 70% of a viewport upward
+      const travelled = vh - (bandTop - window.scrollY);
+      const p = Math.min(1, Math.max(0, travelled / (vh * 0.7)));
+      const rounded = Math.round(p * 100) / 100;
+      if (rounded === last) return;
+      last = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      last = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+  }
+
+  initSponsorCategoryBandBleed();
+
+  // One click leaves exactly one FAQ row open, matching the Event Registration and
+  // Speaker Management references.
+  const sponsorFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-spm-faq-item]"));
+  sponsorFaqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      sponsorFaqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<script>
+  // Sponsor-led event models: segmented tabs over one tinted panel per model.
+  function initSponsorEventSuites() {
+    document.querySelectorAll<HTMLElement>(".spm-suites").forEach((suite) => {
+      const box = suite.querySelector<HTMLElement>(".spm-suites__box");
+      const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>(".spm-suites__tab"));
+      const panels = Array.from(suite.querySelectorAll<HTMLElement>(".spm-suites__panel"));
+      if (!box || box.dataset.ready === "true" || !tabs.length || !panels.length) return;
+
+      const select = (index: number) => {
+        tabs.forEach((tab, tabIndex) => {
+          const isActive = tabIndex === index;
+          tab.setAttribute("aria-selected", isActive ? "true" : "false");
+          tab.tabIndex = isActive ? 0 : -1;
+        });
+        panels.forEach((panel, panelIndex) => {
+          panel.classList.toggle("is-active", panelIndex === index);
+        });
+      };
+
+      // Marking the box ready lets the stylesheet hide the inactive panels, so the
+      // markup stays readable when the script never runs.
+      box.dataset.ready = "true";
+      select(0);
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener("click", () => select(index));
+        tab.addEventListener("keydown", (event) => {
+          if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+          event.preventDefault();
+          const offset = event.key === "ArrowRight" ? 1 : -1;
+          const nextIndex = (index + offset + tabs.length) % tabs.length;
+          tabs[nextIndex].focus();
+          select(nextIndex);
+        });
+      });
+    });
+  }
+
+  initSponsorEventSuites();
+</script>
