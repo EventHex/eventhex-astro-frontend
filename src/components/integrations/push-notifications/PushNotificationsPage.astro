@@ -1,0 +1,1015 @@
+---
+import MarketingLayout from "../../../layouts/MarketingLayout.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  faqs: [string, string][];
+  faqSchema: Record<string, unknown>;
+  softwareSchema: Record<string, unknown>;
+}
+
+const { title, description, canonical, faqs, faqSchema, softwareSchema } = Astro.props;
+
+const lifecycle = [
+  ["01", "Configure", "Service account"], ["02", "Register", "Device token"], ["03", "Respect", "User preference"],
+  ["04", "Target", "One or many tokens"], ["05", "Send", "FCM payload"], ["06", "Review", "Success or failure"],
+];
+const scopes = [
+  ["Event", "Associate the service-account configuration with a specific event.", "Event scope"],
+  ["Organization", "Associate a configuration with the franchise or organization.", "Portfolio scope"],
+  ["Global", "Maintain a platform-level configuration where the environment uses it.", "Platform scope"],
+];
+const credentials = [
+  ["Project identity", "Project ID, configuration name, optional bundle ID, and active state."],
+  ["Service account", "Private key ID, private key, client email, and client ID."],
+  ["Google endpoints", "Authentication, token, certificate, and optional database URLs."],
+  ["Safe responses", "Return masked or omitted secret values when the configuration is read back."],
+];
+const credentialIcons = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"></rect><path d="M12 18h.01"></path></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 7v5c0 4.6 3.4 7.8 8 9 4.6-1.2 8-4.4 8-9V7l-8-4Z"></path><path d="m9 12 2 2 4-4"></path></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>',
+];
+const tokenSteps = [
+  ["App obtains a token", "The attendee app receives the FCM token for the device."],
+  ["EventHex registers it", "Store the token with device type, active state, and last-used time."],
+  ["Refresh or reuse", "Update the existing record when the same token is registered again."],
+  ["Unregister when needed", "Remove a token when the app or attendee signs out of the delivery path."],
+];
+const deliverySteps = [
+  { title: "Notification", desc: "Send a title, body, and an optional absolute image URL.", image: "/images/event-notifications/app/push-active-devices.webp", alt: "Active attendee devices ready to receive a push notification" },
+  { title: "Data payload", desc: "Attach supported navigation and event data alongside the visible message.", image: "/images/event-notifications/app/push-resolve-recipients.webp", alt: "EventHex resolving recipients for a supported push payload" },
+  { title: "Android", desc: "Use the configured high-priority channel and default sound payload.", image: "/images/event-notifications/app/push-job-result.webp", alt: "Android push job result in EventHex" },
+  { title: "Apple devices", desc: "Use the APNs payload with sound and badge values.", image: "/images/event-notifications/app/push-delivery-response.webp", alt: "Apple push delivery response in EventHex" },
+];
+const messageTypes = [
+  ["User notification", "Open the notification area with the supported navigation payload."],
+  ["General announcement", "Send a title and body as an app announcement."],
+  ["New message", "Notify a user that a supported in-app message is waiting."],
+  ["Reminder", "Use the applicable event workflow to create the notification content."],
+  ["One or many attendees", "Send to active tokens stored for one user, one registration, or selected attendees."],
+];
+const buyerScenarios = [
+  ["Conferences", "Support app announcements and attendee messages where the event app is deployed."],
+  ["Exhibitions", "Reach selected registered users through their active app tokens."],
+  ["Corporate events", "Use organization or event configuration according to the branded-app environment."],
+  ["Event agencies", "Validate each client app's Firebase project, credentials, bundle, and token lifecycle before launch."],
+];
+const useCaseTabs = [
+  { id: "conference", label: "Conferences", title: "Keep attendee delivery on track", description: "Support app announcements and attendee messages where the event app is deployed.", checklist: ["Active device tokens", "Supported notification payloads", "Per-token delivery results"], image: "/images/event-notifications/app/push-active-devices.webp", imageAlt: "Active attendee devices ready for push delivery", visualLabel: "Active devices ready" },
+  { id: "exhibition", label: "Exhibitions", title: "Reach the right registered users", description: "Reach selected registered users through their active app tokens without losing delivery addressability.", checklist: ["Target one attendee or many", "Respect push preferences", "Reuse refreshed device tokens"], image: "/images/event-notifications/app/push-resolve-recipients.webp", imageAlt: "EventHex resolving selected recipients for push delivery", visualLabel: "Recipients resolved" },
+  { id: "corporate", label: "Corporate events", title: "Match delivery to the app model", description: "Use organization or event configuration according to the branded-app environment.", checklist: ["Event or organization scope", "iOS and Android payloads", "Safe configuration responses"], image: "/images/event-notifications/app/push-job-result.webp", imageAlt: "EventHex push job result for a branded event app", visualLabel: "Delivery job complete" },
+  { id: "agency", label: "Event agencies", title: "Validate every client app before launch", description: "Validate each client app's Firebase project, credentials, bundle, and token lifecycle before launch.", checklist: ["Firebase project identity", "Credential and bundle checks", "Invalid-token cleanup"], image: "/images/event-notifications/app/push-delivery-response.webp", imageAlt: "EventHex delivery response showing per-token push results", visualLabel: "Response reviewed" }
+];
+const links = [
+  ["Event Notifications", "Plan and operate attendee messages across the available channels.", "/event-notifications/"],
+  ["Event Mobile App", "Give attendees the app experience that receives supported mobile notifications.", "/event-mobile-app/"],
+  ["Event Gamification", "Connect engagement and reward moments to the attendee experience.", "/event-gamification/"],
+  ["WhatsApp Integration", "Configure the account and approved templates behind WhatsApp delivery.", "/integrations/whatsapp/"],
+];
+---
+
+<MarketingLayout
+  title={title}
+  description={description}
+  canonical={canonical}
+  showFooterCta={true}
+  footerCtaEyebrow="Trusted Event Platform"
+  footerCtaTitle="Bring your Firebase and event-app setup to the demo"
+  footerCtaSubtitle="Show us the app build, Firebase project, configuration scope, device platforms, notification purposes, and consent model. We’ll map the supported EventHex token and delivery workflow with you."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageAlt="EventHex event platform on laptop, tablet, and mobile"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  </Fragment>
+
+  <main class="pni-page">
+    <section class="pni-hero" aria-labelledby="pni-hero-title">
+      <div class="pni-hero__copy">
+        <span class="pni-eyebrow">Firebase integration for event apps</span>
+        <h1 id="pni-hero-title">Connect Firebase push delivery to the attendee app experience</h1>
+        <p>Store the service-account configuration used by your EventHex environment, register attendee device tokens, respect push preferences, and send supported notification payloads to iOS and Android devices.</p>
+        <div class="pni-actions"><a class="pni-button pni-button--dark" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a><a class="pni-button pni-button--outline" href="#lifecycle">See the delivery path</a></div>
+        <div class="pni-proof"><span>Event, organization, or global config</span><span>Active device tokens</span><span>iOS and Android payloads</span></div>
+      </div>
+      <figure class="pni-hero__visual">
+        <img src="/images/event-notifications/app/push-platform-notifications.webp" alt="EventHex Platform Notifications screen showing notification cards and delivery management controls" width="1298" height="697" loading="eager" decoding="async" />
+        <figcaption>Platform notifications for the attendee app</figcaption>
+      </figure>
+    </section>
+
+    <section class="pni-rail" id="lifecycle" aria-label="From Firebase credentials to token result"><div class="pni-rail__inner">{lifecycle.map(([, label, detail]) => <span class="pni-rail__item"><b>{label}</b> {detail}</span>)}</div></section>
+
+    <section class="pni-section pni-section--choice pni-scope-section" id="configuration">
+      <div class="pni-heading pni-scope-heading">
+        <h2>Store Firebase credentials where the deployment model needs them</h2>
+      </div>
+      <div class="pni-scope-bento">
+        {scopes.map(([name, text, cue], i) => (
+          <article class:list={["pni-scope-row", i % 2 === 1 && "pni-scope-row--reverse"]}>
+              <div class:list={["pni-scope-cell", "pni-scope-visual", `pni-scope-visual--${i + 1}`]} role="img" aria-label={`${name} Firebase configuration scope visual`}>
+              <div class="pni-scope-stage">
+                <img class="pni-section-app-shot" src={`/images/event-notifications/app/${["push-active-devices.webp", "push-resolve-recipients.webp", "push-job-result.webp"][i]}`} alt={`EventHex Firebase ${name.toLowerCase()} configuration interface`} width="1298" height="697" loading="lazy" decoding="async" />
+                <span class="pni-scope-float pni-scope-float--top"><b>{i === 0 ? "Event ready" : i === 1 ? "Org linked" : "Global active"}</b><small>Firebase scope</small></span>
+                <span class="pni-scope-float pni-scope-float--bottom"><i></i><b>{cue}</b></span>
+              </div>
+            </div>
+            <div class="pni-scope-cell pni-scope-content">
+              <span class="pni-index">0{i + 1}</span>
+              <span class="pni-scope-eyebrow">{cue}</span>
+              <h3>{name}</h3>
+              <p>{text}</p>
+            </div>
+            {i < scopes.length - 1 && <span class="pni-scope-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="pni-credential-feature" id="credentials">
+      <div class="pni-credential-feature__inner">
+        <header class="pni-credential-feature__header">
+          <h2>Use the service-account data required by Firebase Admin</h2>
+        </header>
+        <div class="pni-credential-feature__grid">
+          {[25, 50, 75].map((left) => (
+            <span class="pni-credential-feature__notch" style={`left: ${left}%`} aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+            </span>
+          ))}
+          {credentials.map(([label, text], index) => (
+            <article class="pni-credential-feature__card">
+              <span class="pni-credential-feature__icon" set:html={credentialIcons[index]}></span>
+              <div class="pni-credential-feature__content">
+                <h3>{label}</h3>
+                <p>{text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pni-section pni-token-redesign" id="tokens">
+      <div class="pni-token-redesign__container">
+        <div class="pni-token-redesign__left">
+          <div class="pni-token-redesign__sticky">
+            <span class="pni-token-redesign__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Attendee device registration</span>
+            <h2>Keep the current device token attached to the right attendee</h2>
+            <p>Show the mobile-to-API mechanism without losing the device state that makes delivery addressable.</p>
+            <a class="pni-token-redesign__cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="pni-token-redesign__right">
+          {tokenSteps.map(([title, text], i) => (
+            <article class="pni-token-card">
+              <div class="pni-token-card__header">
+                <span class="pni-token-card__number">0{i + 1}</span>
+                <div class="pni-token-card__text"><h3>{title}</h3><p>{text}</p></div>
+              </div>
+              <div class:list={["pni-token-card__visual", `pni-token-card__visual--${i + 1}`]}>
+                <div class="pni-token-product-shot">
+                  <img src={`/images/event-notifications/app/${["push-active-devices.webp", "push-resolve-recipients.webp", "push-job-result.webp", "push-delivery-response.webp"][i]}`} alt={`${title} in the EventHex attendee notification workflow`} loading="lazy" />
+                  <span class:list={["pni-token-product-shot__status", i === 0 || i === 2 || i === 3 ? "pni-token-product-shot__status--success" : ""]}><span aria-hidden="true">✓</span>{["Token received", "Attendee linked", "Token refreshed", "Ready to deliver"][i]}</span>
+                  <span class="pni-token-product-shot__action">{["Register token", "Attach attendee", "Refresh record", "Deliver safely"][i]}</span>
+                  <svg class="pni-token-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pni-preference-spotlight" id="preference">
+      <div class="pni-preference-spotlight__header">
+        <span class="pni-eyebrow">Respect the attendee setting</span>
+        <h2>Send only when push notifications are enabled for the user</h2>
+        <p>The attendee still controls operating-system permission; the EventHex preference is one gate in the delivery path.</p>
+      </div>
+      <div class="pni-preference-quad">
+        <article class="pni-preference-quad__cell pni-preference-quad__cell--copy">
+          <h3>Push enabled</h3>
+          <p>When the attendee has enabled push notifications, the device remains eligible for supported delivery.</p>
+        </article>
+        <div class="pni-preference-quad__cell pni-preference-quad__cell--media pni-preference-quad__cell--media-left">
+          <div class="pni-preference-composite" role="img" aria-label="Push enabled preference state">
+            <div class="pni-preference-screen pni-preference-screen--primary"><img class="pni-section-app-shot" src="/images/event-notifications/app/push-platform-notifications.webp" alt="EventHex notification management screen showing active delivery controls" width="1298" height="697" loading="lazy" decoding="async" /><b>ON · Eligible</b></div>
+            <span class="pni-preference-status">✓ Eligible to deliver</span>
+            <span class="pni-preference-action">Use active token</span>
+          </div>
+        </div>
+        <div class="pni-preference-quad__cell pni-preference-quad__cell--media pni-preference-quad__cell--media-right">
+          <div class="pni-preference-composite" role="img" aria-label="Push disabled preference state">
+            <div class="pni-preference-screen pni-preference-screen--secondary"><img class="pni-section-app-shot" src="/images/event-notifications/app/push-platform-notifications.webp" alt="EventHex notification management screen used to respect attendee push preferences" width="1298" height="697" loading="lazy" decoding="async" /><b>OFF · Skip delivery</b></div>
+            <span class="pni-preference-status">✓ Gate applied</span>
+            <span class="pni-preference-action">Skip delivery</span>
+          </div>
+        </div>
+        <article class="pni-preference-quad__cell pni-preference-quad__cell--copy pni-preference-quad__cell--copy-last">
+          <h3>Push disabled</h3>
+          <p>When the attendee turns push off, respect that preference before the provider send path runs.</p>
+        </article>
+        <span class="pni-preference-quad__cross" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path></svg></span>
+      </div>
+    </section>
+
+    <section class="pni-delivery-workflow" id="delivery">
+      <div class="pni-delivery-workflow__inner">
+        <header class="pni-delivery-workflow__header">
+          <h2>Format the supported push for Android and iOS delivery paths</h2>
+        </header>
+        <ol class="pni-delivery-steps">
+          {deliverySteps.map((step, index) => (
+            <li>
+              <details open={index === 0}>
+                <summary tabindex="-1">
+                  <span>0{index + 1}</span>
+                  <div class="pni-delivery-step__content">
+                    <h3 class="pni-delivery-step__title">{step.title}</h3>
+                    <p class="pni-delivery-step__desc">{step.desc}</p>
+                  </div>
+                  <button type="button" class="pni-delivery-workflow__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                  </button>
+                </summary>
+                <div class="pni-delivery-workflow__visual"><img src={step.image} alt={step.alt} loading="lazy" decoding="async" /></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="pni-agenda-section" id="message-types">
+      <div class="pni-agenda-section__inner">
+        <header class="pni-agenda-section__header">
+          <span class="pni-eyebrow">Where push can support the app</span>
+          <h2>Use the delivery layer for supported in-app notification purposes</h2>
+        </header>
+        <div class="pni-agenda-grid">
+          {messageTypes.map(([title, text], index) => (
+            <article class="pni-agenda-card">
+              {[1, 2, 4].includes(index) && <><span class="pni-agenda-petal pni-agenda-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36"></path></svg></span><span class="pni-agenda-petal pni-agenda-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36" transform="scale(1,-1)"></path></svg></span></>}
+              <div class="pni-agenda-card__text"><h3>{title}</h3><p>{text}</p></div>
+              <div class="pni-agenda-visual" aria-hidden="true">
+                <div class:list={["pni-agenda-product", index > 2 && "pni-agenda-product--wide"]}>
+                  <div class="pni-agenda-product__bar"><span><i></i><i></i><i></i></span><small>{["Notification", "Payload data", "Delivery modes", "Reminder", "Audience targeting"][index]}</small></div>
+                  <div class="pni-agenda-product__tabs"><span class="is-active">{["Inbox", "Data", "Android", "Event", "Recipients"][index]}</span><span>{["Open", "Route", "Apple", "Push", "Tokens"][index]}</span></div>
+                  <div class:list={["pni-agenda-product__body", `pni-agenda-product__body--${index + 1}`]}>
+                    {index === 0 && <><div><time>NOW</time><span><strong>Session room changed</strong><small>Track B · starts in 10 min</small></span></div><div class="is-accent"><time>NEW</time><span><strong>Message delivered</strong><small>Attendee inbox ready</small></span></div><div><time>OK</time><span><strong>Event reminder</strong><small>Delivered to active token</small></span></div></>}
+                    {index === 1 && <><div><i></i><strong>title · body</strong><small>navigation data</small></div><div class="is-child"><i></i><strong>event_id</strong><small>supported route</small></div><div class="is-child"><i></i><strong>session_id</strong><small>attendee context</small></div></>}
+                    {index === 2 && <><span><i></i><i></i></span><span><i></i><i></i></span><span><i></i><i></i></span></>}
+                    {index === 3 && <><div><i>10:00</i><span><strong>Doors open</strong><small>Reminder queued</small></span><b>Ready</b></div><div><i>14:30</i><span><strong>Closing session</strong><small>Reminder queued</small></span><b>Ready</b></div></>}
+                    {index === 4 && <><div><i>MC</i><span><strong>One attendee</strong><small>active token</small></span><b>ON</b></div><div><i>42</i><span><strong>Selected attendees</strong><small>active tokens</small></span><b>ON</b></div><div><i>+</i><span><strong>Refresh recipients</strong><small>reuse token records</small></span></div></>}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="pni-case-suites" id="use-cases" aria-labelledby="pni-case-title">
+      <div class="pni-case-suites__inner">
+        <header class="pni-case__header"><span class="pni-eyebrow">Where mobile delivery matters</span><h2 id="pni-case-title" class="pni-case__title"><span>Fit push infrastructure to the app</span><span>and event operating model</span></h2></header>
+        <div class="pni-case__tabs" role="tablist">
+          {useCaseTabs.map((tab, index) => <button class:list={['pni-case__tab', index === 0 && 'pni-case__tab--active']} role="tab" aria-selected={index === 0 ? 'true' : 'false'} aria-controls={`pni-case-panel-${tab.id}`} id={`pni-case-tab-${tab.id}`} data-target={tab.id}>{tab.label}</button>)}
+        </div>
+        <div class="pni-case__box">
+          {useCaseTabs.map((tab, index) => <div class:list={['pni-case__panel', index === 0 && 'pni-case__panel--active']} id={`pni-case-panel-${tab.id}`} role="tabpanel" aria-labelledby={`pni-case-tab-${tab.id}`} data-panel={tab.id}>
+            <div class="pni-case__left"><h3>{tab.title}</h3><p>{tab.description}</p><span class="pni-case__label">SUPPORTED PATH</span><ul>{tab.checklist.map(item => <li><span aria-hidden="true">✓</span>{item}</li>)}</ul></div>
+            <div class="pni-case__right"><div class="pni-case__showcase"><img src={tab.image} alt={tab.imageAlt} loading="lazy" decoding="async" /><span class="pni-case__visual-label">{tab.visualLabel}</span></div></div>
+          </div>)}
+        </div>
+      </div>
+    </section>
+
+    <section class="pni-flow-section" id="boundary">
+      <div class="pni-flow-header"><span class="pni-eyebrow">Delivery infrastructure, not campaign strategy</span><h2 class="pni-flow-title">Keep Firebase setup separate from notification orchestration</h2></div>
+      <div class="pni-flow-quad">
+        <article class="pni-flow-quad__cell"><h3 class="pni-flow-quad__title">This integration page</h3><p class="pni-flow-quad__text">Firebase configuration, device tokens, preference checks, payload transport, and provider send results.</p></article>
+        <div class="pni-flow-quad__cell pni-flow-quad__cell--media"><div class="pni-flow-composite"><img class="pni-flow-composite__screen pni-flow-composite__screen--primary" src="/images/event-notifications/app/push-active-devices.webp" alt="Active attendee devices configured for push delivery" loading="lazy" /><img class="pni-flow-composite__screen pni-flow-composite__screen--secondary" src="/images/event-notifications/app/push-resolve-recipients.webp" alt="Recipients resolved for a push notification" loading="lazy" /><span class="pni-flow-composite__status">✓ Delivery path ready</span><span class="pni-flow-composite__action">Review tokens</span></div></div>
+        <div class="pni-flow-quad__cell pni-flow-quad__cell--media"><div class="pni-flow-composite"><img class="pni-flow-composite__screen pni-flow-composite__screen--primary" src="/images/event-notifications/app/push-job-result.webp" alt="Push job result for an event notification" loading="lazy" /><img class="pni-flow-composite__screen pni-flow-composite__screen--secondary" src="/images/event-notifications/app/push-delivery-response.webp" alt="Per-token delivery response from Firebase" loading="lazy" /><span class="pni-flow-composite__status">✓ Results recorded</span><span class="pni-flow-composite__action">View response</span></div></div>
+        <article class="pni-flow-quad__cell"><h3 class="pni-flow-quad__title">Event Notifications</h3><p class="pni-flow-quad__text">Message planning, audience rules, timing, templates, channel choice, and operational reporting.</p></article>
+        <span class="pni-flow-quad__cross" aria-hidden="true">×</span>
+      </div>
+      <p class="pni-note">Do not promise scheduling, rich action buttons, frequency capping, or open/click analytics here unless their organizer surfaces are separately verified.</p>
+    </section>
+
+    <section class="pni-section pni-section--links" id="connected-workflow"><header class="pni-heading"><span class="pni-eyebrow">Connected attendee communication</span><h2>Continue into the feature that owns the experience</h2></header><div class="pni-links">{links.map(([title, text, href]) => <a href={href}><span class="pni-index">→</span><h3>{title}</h3><p>{text}</p><b>Learn more <span aria-hidden="true">↗</span></b></a>)}</div></section>
+
+    <section class="pni-faq" id="faq"><div class="pni-faq__inner"><header class="pni-faq__intro"><span class="pni-faq__badge"><span aria-hidden="true">↗</span> Quick Answers</span><h2>Push Integration Questions, Answered.</h2><p>Find clear answers about Firebase credentials, device tokens, preferences, delivery scope, and supported notification paths.</p><a class="pni-faq__cta" href="/contact/">Talk to our team <span aria-hidden="true">→</span></a></header><div class="pni-faq__list">{faqs.map(([question, answer], i) => <details open={i === 0}><summary><span>{i + 1}. {question}</span><span class="pni-faq__icon" aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div></div></section>
+
+  </main>
+
+  <script>
+    const caseSuite = document.querySelector('.pni-case-suites');
+    if (caseSuite) {
+      const caseTabs = Array.from(caseSuite.querySelectorAll('.pni-case__tab'));
+      const casePanels = Array.from(caseSuite.querySelectorAll('.pni-case__panel'));
+      const activateCase = (tab) => {
+        const target = tab.getAttribute('data-target');
+        caseTabs.forEach((item) => { item.classList.toggle('pni-case__tab--active', item === tab); item.setAttribute('aria-selected', item === tab ? 'true' : 'false'); });
+        casePanels.forEach((panel) => panel.classList.toggle('pni-case__panel--active', panel.getAttribute('data-panel') === target));
+      };
+      caseTabs.forEach((tab) => tab.addEventListener('click', () => activateCase(tab)));
+    }
+    const faqItems = document.querySelectorAll('.pni-faq details');
+    faqItems.forEach((item) => item.addEventListener('toggle', () => { if (item.open) faqItems.forEach((other) => { if (other !== item) other.removeAttribute('open'); }); }));
+    const deliverySteps = document.querySelectorAll('.pni-delivery-steps details');
+    deliverySteps.forEach((item) => {
+      const summary = item.querySelector('summary');
+      const trigger = item.querySelector('.pni-delivery-workflow__arrow');
+      summary?.addEventListener('click', (event) => { event.preventDefault(); item.open = !item.open; });
+      item.addEventListener('toggle', () => {
+        trigger?.setAttribute('aria-expanded', String(item.open));
+        if (!item.open) return;
+        deliverySteps.forEach((other) => { if (other !== item) other.removeAttribute('open'); });
+      });
+    });
+  </script>
+</MarketingLayout>
+
+<style is:global>
+  .pni-page{--pni-ink:#22272f;--pni-muted:#596579;--pni-blue:#375dfb;--pni-line:#e6eaf1;--pni-surface:#f6f8ff;background:radial-gradient(circle 420px at 4% 16%,rgba(175,163,255,.24),transparent 72%),radial-gradient(circle 360px at 96% 30%,rgba(255,182,213,.24),transparent 72%),radial-gradient(circle 420px at 95% 78%,rgba(130,170,255,.2),transparent 72%),#fff;color:var(--pni-ink);overflow:hidden}.pni-hero{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(380px,.98fr);gap:56px;align-items:center;max-width:1180px;margin:0 auto;padding:150px 24px 88px}.pni-hero__copy{max-width:620px}.pni-eyebrow{display:block;margin-bottom:16px;color:var(--pni-blue);font:700 13px/1.3 var(--font-body);letter-spacing:.1em;text-transform:uppercase}.pni-hero h1,.pni-heading h2,.pni-cta h2{margin:0;font:500 clamp(40px,4.4vw,60px)/1.1 var(--font-heading);letter-spacing:-1.7px;background:linear-gradient(98deg,var(--pni-ink) 43%,#8f8f8f 92%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.pni-hero p,.pni-heading>p{margin:22px 0 0;color:var(--pni-muted);font:400 17px/1.62 var(--font-body);max-width:620px}.pni-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.pni-button{display:inline-flex;align-items:center;gap:9px;min-height:48px;padding:12px 24px;border-radius:10px;text-decoration:none;font:600 15px/1 var(--font-body);transition:.2s}.pni-button:hover{transform:translateY(-2px)}.pni-button--dark{background:var(--pni-ink);color:#fff}.pni-button--outline{border:1px solid #d7deec;color:var(--pni-ink);background:#fff}.pni-button--light{background:#fff;color:#111827}.pni-proof{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.pni-proof span{padding:8px 11px;border:1px solid #e2e7f1;border-radius:999px;background:rgba(255,255,255,.7);color:#596579;font:600 12px/1.2 var(--font-body)}.pni-hero__visual{position:relative;min-height:420px;border-radius:28px;padding:28px;background:linear-gradient(145deg,#eaf2ff,#fff5fa);box-shadow:0 28px 60px rgba(31,41,72,.12)}.pni-console{position:absolute;inset:48px 42px 68px 20px;border:1px solid #dfe5f1;border-radius:18px;background:#fff;box-shadow:0 18px 36px rgba(31,41,72,.15);overflow:hidden}.pni-console__bar{display:flex;align-items:center;gap:6px;padding:14px 16px;border-bottom:1px solid #edf0f5;color:#7b8494;font:600 11px var(--font-body)}.pni-console__bar i{width:8px;height:8px;border-radius:50%;background:#d9deea}.pni-console__bar b{margin-left:8px}.pni-console__row{display:grid;grid-template-columns:1fr 1.4fr auto;gap:12px;align-items:center;padding:22px 18px;border-bottom:1px solid #edf0f5}.pni-console__row small{color:#8690a0;font:700 9px var(--font-body);letter-spacing:.1em}.pni-console__row strong{font:600 14px var(--font-body)}.pni-console__row em{color:#6c7788;font:500 11px var(--font-body);font-style:normal}.pni-console__row--accent{background:#f6f8ff}.pni-console__row--accent em,.pni-ok{color:#18864b!important}.pni-phone{position:absolute;right:4px;bottom:24px;width:170px;padding:18px 14px 16px;border:6px solid #212936;border-radius:24px;background:linear-gradient(145deg,#fff,#eef3ff);box-shadow:0 20px 35px rgba(31,41,72,.2);display:flex;flex-direction:column;gap:8px}.pni-phone span{color:#375dfb;font:700 11px var(--font-body)}.pni-phone strong{font:500 16px/1.2 var(--font-heading)}.pni-phone small{color:#697487;font:400 11px/1.4 var(--font-body)}.pni-phone b{color:#18864b;font:700 10px var(--font-body)}
+  .pni-rail{border-top:1px solid var(--pni-line);padding:1.5rem;background:rgba(248,250,255,.65)}.pni-rail__inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2.25rem}.pni-rail__item{color:var(--pni-muted);font:400 .9375rem/1.4 var(--font-body);white-space:nowrap}.pni-rail__item b{color:var(--pni-ink);font-weight:700}
+  .pni-section{padding:88px 24px}.pni-section--tint{background:rgba(246,248,255,.58)}.pni-heading{max-width:840px;margin:0 auto 42px;text-align:center}.pni-heading--left{margin-left:0;text-align:left}.pni-heading--left>p{margin-left:0}.pni-scope-grid,.pni-card-grid{max-width:1180px;margin:auto;display:grid;gap:16px}.pni-scope-grid{grid-template-columns:repeat(3,1fr)}.pni-scope-card,.pni-card-grid article{padding:28px;border:1px solid var(--pni-line);border-radius:22px;background:#fff;min-height:210px}.pni-scope-card--1{background:linear-gradient(145deg,#eef3ff,#fff)}.pni-scope-card--2{background:linear-gradient(145deg,#effcf8,#fff)}.pni-scope-card--3{background:linear-gradient(145deg,#fff2f8,#fff)}.pni-index{display:inline-flex;align-items:center;justify-content:center;color:#8a94a6;font:700 11px var(--font-body);letter-spacing:.1em}.pni-scope-card h3,.pni-card-grid h3,.pni-boundary h3,.pni-links h3{margin:34px 0 10px;font:500 22px/1.2 var(--font-heading)}.pni-scope-card p,.pni-card-grid p,.pni-boundary p,.pni-links p{margin:0;color:var(--pni-muted);font:400 15px/1.6 var(--font-body)}.pni-scope-card>b{display:inline-block;margin-top:28px;padding:7px 10px;border-radius:999px;background:#eef2ff;color:var(--pni-blue);font:700 11px var(--font-body)}.pni-split{max-width:1180px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}.pni-split--reverse>.pni-heading{order:2}.pni-credential-card,.pni-toggle-card{border:1px solid #e2e7f1;border-radius:24px;background:#fff;box-shadow:0 20px 50px rgba(31,41,72,.09);padding:24px}.pni-card-label{display:flex;justify-content:space-between;color:#7b8494;font:700 10px var(--font-body);letter-spacing:.1em}.pni-card-label span{color:#18864b}.pni-field{padding:18px 0;border-bottom:1px solid #edf0f5}.pni-field:last-child{border:0}.pni-field span{display:block;color:#7b8494;font:700 10px var(--font-body);letter-spacing:.08em}.pni-field strong{display:block;margin-top:7px;color:#293241;font:500 15px var(--font-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pni-token-flow{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.pni-token-flow article{position:relative;padding:28px;border-radius:20px;background:#fff;border:1px solid var(--pni-line)}.pni-flow-num{display:block;color:var(--pni-blue);font:800 12px var(--font-body)}.pni-token-flow h3{margin:38px 0 10px;font:500 20px var(--font-heading)}.pni-token-flow p{margin:0;color:var(--pni-muted);font:400 14px/1.6 var(--font-body)}.pni-token-flow article>i{position:absolute;right:-11px;top:50%;z-index:2;color:#a2acc0;font:700 18px var(--font-body)}.pni-toggle-card{padding:18px}.pni-toggle-row{display:flex;align-items:center;gap:12px;padding:20px 16px;border-bottom:1px solid #edf0f5;color:#596579;font:600 14px var(--font-body)}.pni-toggle-row:last-child{border:0}.pni-toggle-row b{margin-left:auto;color:#7b8494;font-size:12px}.pni-toggle-row i{width:37px;padding:6px 0;border-radius:99px;text-align:center;background:#f0f2f5;color:#8d95a2;font:800 10px var(--font-body);font-style:normal}.pni-toggle-row--on{color:#1e293b}.pni-toggle-row--on b{color:#18864b}.pni-toggle-row--on i{background:#dff7ea;color:#18864b}.pni-payload{max-width:1180px;margin:auto;display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:16px;align-items:center}.pni-device-card,.pni-payload-card{min-height:190px;padding:28px;border:1px solid var(--pni-line);border-radius:22px;background:#fff;display:flex;flex-direction:column;justify-content:center;gap:10px}.pni-device-card--android{background:linear-gradient(145deg,#ecfff7,#fff)}.pni-device-card--apple{background:linear-gradient(145deg,#eff3ff,#fff)}.pni-device-card b,.pni-payload-card small{color:#7b8494;font:700 10px var(--font-body);letter-spacing:.1em}.pni-device-card strong,.pni-payload-card strong{font:500 21px var(--font-heading)}.pni-device-card span,.pni-payload-card p{margin:0;color:var(--pni-muted);font:400 14px/1.5 var(--font-body)}.pni-payload-card{background:#19254b;color:#fff;text-align:center}.pni-payload-card small{color:#b8c5ee}.pni-payload-card p{color:#cbd3ec}.pni-inline-detail{max-width:1180px;margin:12px auto 0;padding:12px 18px;border-bottom:1px solid var(--pni-line);display:flex;gap:16px}.pni-inline-detail b{min-width:140px;font:700 13px var(--font-body)}.pni-inline-detail span{color:var(--pni-muted);font:400 13px var(--font-body)}.pni-card-grid--six{grid-template-columns:repeat(3,1fr)}.pni-card-grid--four{grid-template-columns:repeat(4,1fr)}.pni-card-grid article{min-height:180px}.pni-card-grid article h3{margin-top:28px;font-size:19px}.pni-boundary{max-width:1000px;margin:auto;display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--pni-line);border-radius:24px;overflow:hidden}.pni-boundary article{padding:34px;background:#fff}.pni-boundary article+article{border-left:1px solid var(--pni-line);background:#effcf8}.pni-boundary h3{margin-top:20px}.pni-boundary__tag{color:var(--pni-blue);font:700 11px var(--font-body);letter-spacing:.1em}.pni-note{max-width:800px;margin:22px auto 0;text-align:center;color:#7b8494;font:400 13px/1.6 var(--font-body)}.pni-section--links{background:rgba(246,248,255,.55)}.pni-links{max-width:1180px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.pni-links a{display:flex;flex-direction:column;min-height:220px;padding:26px;border:1px solid var(--pni-line);border-radius:22px;background:#fff;color:var(--pni-ink);text-decoration:none;transition:.2s}.pni-links a:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(31,41,72,.1)}.pni-links h3{margin-top:30px}.pni-links p{font-size:14px}.pni-links b{margin-top:auto;color:var(--pni-blue);font:700 13px var(--font-body)}.pni-links b span{font-size:16px}.pni-faq{padding:88px 24px;background:#fff}.pni-faq__inner{max-width:1180px;margin:auto;display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:80px}.pni-faq__list{border-top:1px solid var(--pni-line)}.pni-faq details{border-bottom:1px solid var(--pni-line)}.pni-faq summary{display:flex;justify-content:space-between;gap:20px;padding:21px 0;cursor:pointer;list-style:none;font:500 17px/1.4 var(--font-body)}.pni-faq summary::-webkit-details-marker{display:none}.pni-faq summary span{color:var(--pni-blue);font-size:24px}.pni-faq details[open] summary span{transform:rotate(45deg)}.pni-faq details p{margin:0;padding:0 0 22px;color:var(--pni-muted);font:400 15px/1.65 var(--font-body)}.pni-cta{padding:24px 24px 80px}.pni-cta__inner{max-width:1180px;margin:auto;padding:76px 28px;border-radius:28px;text-align:center;background:linear-gradient(115deg,#05060c 0%,#1a1450 42%,#375dfb 70%,#4fd6e0 112%);color:#fff}.pni-cta .pni-eyebrow{color:#cbd6ff}.pni-cta h2{max-width:800px;margin:0 auto;color:#fff;background:none;-webkit-text-fill-color:#fff}.pni-cta p{max-width:720px;margin:18px auto 28px;color:rgba(255,255,255,.78);font:400 17px/1.6 var(--font-body)}
+  @media(max-width:1024px){.pni-hero{grid-template-columns:1fr;padding-top:120px}.pni-hero__copy{max-width:720px;margin:auto;text-align:center}.pni-hero__copy .pni-eyebrow{text-align:center}.pni-actions,.pni-proof{justify-content:center}.pni-hero__visual{max-width:720px;width:100%;margin:auto}.pni-card-grid--four{grid-template-columns:repeat(2,1fr)}.pni-links{grid-template-columns:repeat(2,1fr)}.pni-faq__inner{gap:40px}}
+  @media(max-width:767px){.pni-hero{display:block;padding:112px 18px 56px}.pni-hero h1,.pni-heading h2,.pni-cta h2{font-size:34px;line-height:1.12;letter-spacing:-.8px}.pni-hero p{font-size:16px}.pni-hero__visual{min-height:350px;margin-top:34px;padding:16px}.pni-console{inset:30px 18px 72px 8px}.pni-console__row{grid-template-columns:1fr;gap:5px;padding:15px}.pni-console__row em{font-size:10px}.pni-phone{right:0;bottom:14px;width:145px}.pni-rail{padding:1.5rem 1.125rem}.pni-rail__inner{align-items:flex-start;flex-direction:column;gap:12px}.pni-rail__item{white-space:normal}.pni-section{padding:60px 18px}.pni-heading{margin-bottom:30px}.pni-heading--left{text-align:left}.pni-scope-grid,.pni-token-flow,.pni-card-grid--six,.pni-card-grid--four,.pni-payload,.pni-links{grid-template-columns:1fr}.pni-split,.pni-faq__inner{grid-template-columns:1fr;gap:32px}.pni-split--reverse>.pni-heading{order:0}.pni-token-flow article>i{display:none}.pni-payload{gap:12px}.pni-inline-detail{display:block}.pni-inline-detail b{display:block;margin-bottom:5px}.pni-boundary{grid-template-columns:1fr}.pni-boundary article+article{border-left:0;border-top:1px solid var(--pni-line)}.pni-faq{padding:60px 18px}.pni-cta{padding:16px 18px 60px}.pni-cta__inner{padding:56px 20px}.pni-actions{flex-direction:column;align-items:stretch}.pni-button{justify-content:center}.pni-proof{justify-content:flex-start}.pni-proof span{font-size:11px}}
+  /* Match the Event Registration FAQ pattern: intro copy beside rounded answer cards. */
+  .pni-faq{padding:96px 24px;background:linear-gradient(135deg,#f8f9ff 0%,#f0f3ff 55%,#fff9f4 100%)}
+  .pni-faq__inner{gap:70px;align-items:start}
+  .pni-faq__intro{padding:8px 0}
+  .pni-faq__badge{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border:1px solid #dce3f2;border-radius:999px;background:rgba(255,255,255,.58);color:#202735;font:600 13px/1 var(--font-body)}
+  .pni-faq__badge span{font-size:15px}
+  .pni-faq__intro h2{margin:28px 0 0;font:500 clamp(38px,4vw,54px)/1.08 var(--font-heading);letter-spacing:-1.6px;color:#111827}
+  .pni-faq__intro p{max-width:390px;margin:22px 0 0;color:#64718a;font:400 16px/1.6 var(--font-body)}
+  .pni-faq__cta{display:inline-flex;align-items:center;gap:16px;margin-top:28px;padding:14px 20px;border-radius:999px;background:#19202b;color:#fff;text-decoration:none;font:600 14px/1 var(--font-body);transition:.2s}
+  .pni-faq__cta:hover{transform:translateY(-2px);background:#10151e}
+  .pni-faq__cta span{color:#6f8cff;font-size:20px;line-height:.7}
+  .pni-faq__list{display:flex;flex-direction:column;gap:16px;border-top:0}
+  .pni-faq details{border:1px solid #dfe5f0;border-radius:20px;background:rgba(255,255,255,.7);overflow:hidden}
+  .pni-faq details[open]{background:#dfe5f1;border-color:#dfe5f1}
+  .pni-faq summary{align-items:center;padding:23px 26px;color:#131a27;font:600 16px/1.4 var(--font-body)}
+  .pni-faq summary span:first-child{color:inherit;font-size:inherit}
+  .pni-faq .pni-faq__icon{flex:0 0 auto;color:#151b27;font-size:25px;font-weight:400;line-height:1;transition:transform .2s}
+  .pni-faq details[open] .pni-faq__icon{transform:rotate(45deg)}
+  .pni-faq details p{padding:0 26px 24px;color:#202a3b}
+  @media(max-width:767px){.pni-faq__intro h2{font-size:38px}.pni-faq summary{padding:20px 18px;font-size:15px}.pni-faq details p{padding:0 18px 20px;font-size:14px}}
+  @media(prefers-reduced-motion:reduce){.pni-button,.pni-links a,.pni-faq__cta{transition:none}}
+  /* Connected workflow follows the transparent four-column use-case pattern. */
+  .pni-section--links{padding:clamp(40px,4.5vw,60px) 24px clamp(82px,9vw,116px);background:transparent}
+  .pni-section--links .pni-heading{max-width:none;margin:0;padding:0 24px clamp(20px,2.4vw,32px)}
+  .pni-section--links .pni-heading h2{max-width:none;margin:0 auto;font-size:clamp(2.45rem,4.6vw,4rem);font-weight:500}
+  .pni-links{position:relative;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--pni-line)}
+  .pni-links a{position:relative;min-height:300px;padding:28px;border:0;border-left:1px solid var(--pni-line);border-radius:0;background:transparent;box-shadow:none;text-decoration:none;transition:transform .2s ease,background .2s ease}
+  .pni-links a:first-of-type{border-left:0}.pni-links a:hover{transform:translateY(-3px);background:rgba(255,255,255,.32);box-shadow:none}
+  .pni-links a::before{content:"";display:block;width:30px;height:30px;margin-bottom:28px;color:var(--pni-blue);background:currentColor;mask:center/contain no-repeat;-webkit-mask:center/contain no-repeat}
+  .pni-links a:nth-of-type(1)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2M8 16h2m4 0h2'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(2)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='7' y='2' width='10' height='20' rx='2'/%3E%3Cpath d='M10 5h4M11 19h2'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(3)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(4)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='7' width='18' height='13' rx='2'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2'/%3E%3C/svg%3E")}
+  .pni-links .pni-index,.pni-links a b{display:none}
+  .pni-links h3{max-width:230px;margin:0 0 28px;min-height:2.3em;font:500 21px/1.15 var(--font-heading);color:var(--pni-ink)}
+  .pni-links p{margin:14px 0 0;font:400 15px/1.4 var(--font-body);color:var(--pni-muted)}
+  .pni-use-notch{position:absolute;top:0;width:28px;height:28px;transform:translate(-50%,-50%);pointer-events:none;line-height:0;z-index:2}.pni-use-notch--1{left:25%}.pni-use-notch--2{left:50%}.pni-use-notch--3{left:75%}
+  @media(max-width:900px){.pni-links{grid-template-columns:repeat(2,1fr)}.pni-use-notch--1,.pni-use-notch--3{display:none}.pni-links a:nth-of-type(odd){border-left:0}.pni-links a:nth-of-type(n+3){border-top:1px solid var(--pni-line)}}
+  @media(max-width:767px){.pni-section--links{padding-inline:16px}.pni-links{grid-template-columns:1fr}.pni-links a{min-height:0;border-left:0;border-top:1px solid var(--pni-line)}.pni-links a:first-of-type{border-top:0}.pni-links h3{min-height:0}.pni-use-notch--2{display:none}}
+  .pni-scope-section{padding-top:80px;padding-bottom:88px}.pni-scope-heading{margin-bottom:60px}.pni-scope-heading h2{max-width:900px;margin-inline:auto}
+  .pni-scope-bento{position:relative;max-width:1200px;margin:0 auto;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden}.pni-scope-row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.pni-scope-row:last-child{border-bottom:none}.pni-scope-cell{min-height:292px;padding:3.75rem;display:flex;flex-direction:column;justify-content:center}.pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-cell:first-child,.pni-scope-row--reverse .pni-scope-cell:first-child{border-right:1px solid #e5e7eb}.pni-scope-visual{align-items:center}.pni-scope-stage{position:relative;width:100%;padding:0 0 26px;border-radius:22px;overflow:hidden;box-shadow:0 18px 36px rgba(31,41,72,.11)}.pni-scope-visual--1 .pni-scope-stage{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 46%,#f5f6f9 100%)}.pni-scope-visual--2 .pni-scope-stage{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 46%,#f5f6f9 100%)}.pni-scope-visual--3 .pni-scope-stage{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 46%,#f5f6f9 100%)}.pni-scope-stage__chrome{display:flex;align-items:center;gap:6px;padding:14px 16px;background:rgba(255,255,255,.7);border-bottom:1px solid rgba(223,228,236,.9);color:#7b8494;font:600 11px var(--font-body)}.pni-scope-stage__chrome i{width:8px;height:8px;border-radius:50%;background:#cfd6e3}.pni-scope-stage__chrome b{margin-left:8px}.pni-scope-stage__body{margin:28px 24px 0;padding:22px 20px;border:1px solid #dfe4ec;border-radius:14px;background:rgba(255,255,255,.94);box-shadow:0 14px 28px rgba(30,45,88,.12)}.pni-scope-stage__body span{display:block;color:#8690a0;font:700 9px var(--font-body);letter-spacing:.1em}.pni-scope-stage__body strong{display:block;margin-top:9px;color:#293241;font:500 24px/1.1 var(--font-heading)}.pni-scope-stage__body small{display:block;margin-top:10px;color:#687487;font:500 12px var(--font-body)}.pni-scope-stage__status{display:flex;align-items:center;gap:8px;position:absolute;right:18px;bottom:14px;padding:9px 11px;border:1px solid rgba(206,215,232,.9);border-radius:10px;background:rgba(255,255,255,.96);color:#18864b;box-shadow:0 10px 24px rgba(31,41,72,.14);font:700 11px var(--font-body)}.pni-scope-stage__status i{width:8px;height:8px;border-radius:50%;background:#19b874;box-shadow:0 0 0 4px rgba(25,184,116,.13)}.pni-scope-content{background:transparent}.pni-scope-eyebrow{display:block;margin-top:12px;color:#5b21b6;font:600 12px var(--font-body);letter-spacing:.08em;text-transform:uppercase}.pni-scope-content h3{margin:14px 0;color:#111827;font:500 clamp(30px,3vw,42px)/1.05 var(--font-heading);letter-spacing:-.02em}.pni-scope-content p{max-width:420px;margin:0;color:#4b5563;font:400 17px/1.5 var(--font-body)}.pni-scope-cross{position:absolute;bottom:0;left:50%;width:28px;height:28px;transform:translate(-50%,50%);pointer-events:none;line-height:0;z-index:2}.pni-scope-row--reverse .pni-scope-visual{order:2}.pni-scope-row--reverse .pni-scope-content{order:1}@media(max-width:900px){.pni-scope-row{display:flex;flex-direction:column}.pni-scope-row--reverse .pni-scope-visual,.pni-scope-row--reverse .pni-scope-content{order:initial}.pni-scope-cell{min-height:0;padding:3rem 1.5rem}.pni-scope-row .pni-scope-cell:first-child{border-right:none}.pni-scope-content{border-bottom:1px solid #e5e7eb}.pni-scope-visual{order:2}.pni-scope-cross{display:none}}@media(max-width:767px){.pni-scope-section{padding-top:60px;padding-bottom:60px}.pni-scope-heading{margin-bottom:30px}.pni-scope-stage__body{margin-inline:16px}.pni-scope-content h3{font-size:32px}.pni-scope-content p{font-size:16px}}
+  /* Final cascade for the connected-workflow use-case treatment. */
+  .pni-section--links{padding:clamp(40px,4.5vw,60px) 24px clamp(82px,9vw,116px);background:transparent}
+  .pni-section--links .pni-heading{max-width:none;margin:0;padding:0 24px clamp(20px,2.4vw,32px)}
+  .pni-section--links .pni-heading h2{max-width:none;margin:0 auto;font-size:clamp(2.45rem,4.6vw,4rem);font-weight:500}
+  .pni-links{position:relative;max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--pni-line)}
+  .pni-links a{position:relative;min-height:300px;padding:28px;border:0;border-left:1px solid var(--pni-line);border-radius:0;background:transparent;box-shadow:none;text-decoration:none;transition:transform .2s ease,background .2s ease}
+  .pni-links a:first-of-type{border-left:0}.pni-links a:hover{transform:translateY(-3px);background:rgba(255,255,255,.32);box-shadow:none}
+  .pni-links a::before{content:"";display:block;width:30px;height:30px;margin-bottom:28px;color:var(--pni-blue);background:currentColor;mask:center/contain no-repeat;-webkit-mask:center/contain no-repeat}
+  .pni-links a:nth-of-type(1)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Cpath d='M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2M8 16h2m4 0h2'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(2)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='7' y='2' width='10' height='20' rx='2'/%3E%3Cpath d='M10 5h4M11 19h2'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(3)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8'/%3E%3C/svg%3E")}
+  .pni-links a:nth-of-type(4)::before{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2'%3E%3Crect x='3' y='7' width='18' height='13' rx='2'/%3E%3Cpath d='M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M10 12v2h4v-2'/%3E%3C/svg%3E")}
+  .pni-links .pni-index,.pni-links a b{display:none}.pni-links h3{max-width:230px;margin:0 0 28px;min-height:2.3em;font:500 21px/1.15 var(--font-heading);color:var(--pni-ink)}.pni-links p{margin:14px 0 0;font:400 15px/1.4 var(--font-body);color:var(--pni-muted)}
+  @media(max-width:900px){.pni-links{grid-template-columns:repeat(2,1fr)}.pni-links a:nth-of-type(odd){border-left:0}.pni-links a:nth-of-type(n+3){border-top:1px solid var(--pni-line)}}
+  @media(max-width:767px){.pni-section--links{padding-inline:16px}.pni-links{grid-template-columns:1fr}.pni-links a{min-height:0;border-left:0;border-top:1px solid var(--pni-line)}.pni-links a:first-of-type{border-top:0}.pni-links h3{min-height:0}}
+  /* Keep the open question readable; only the plus icon becomes a close icon. */
+  .pni-faq details[open] summary span:first-child{transform:none;color:inherit}
+  .pni-faq details[open] .pni-faq__icon{transform:rotate(45deg)}
+  /* Token registration uses the split spotlight composition from Access Control. */
+  .pni-section#tokens{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:70px;align-items:center;padding:96px 24px;background:linear-gradient(135deg,#f8f9ff 0%,#f0f3ff 55%,#fff9f4 100%)}
+  .pni-section#tokens>.pni-heading{max-width:470px;margin:0;text-align:left}
+  .pni-section#tokens>.pni-heading h2{font-size:clamp(38px,4vw,54px);line-height:1.08;letter-spacing:-1.6px}
+  .pni-section#tokens>.pni-heading>p{max-width:430px}
+  .pni-section#tokens .pni-token-flow{position:relative;max-width:none;margin:0;padding:42px 32px 28px;display:grid;grid-template-columns:1fr;gap:12px;border-radius:24px;background:#e8edf5;box-shadow:0 20px 46px rgba(31,41,72,.08)}
+  .pni-section#tokens .pni-token-flow::before{content:"DEVICE TOKEN LIFECYCLE";position:absolute;top:20px;left:32px;color:#69758b;font:700 10px var(--font-body);letter-spacing:.12em}
+  .pni-section#tokens .pni-token-flow article{min-height:0;padding:20px 22px;border:1px solid rgba(214,221,234,.9);border-radius:16px;background:rgba(255,255,255,.74);box-shadow:0 6px 18px rgba(31,41,72,.04)}
+  .pni-section#tokens .pni-token-flow article>i{display:none}
+  .pni-section#tokens .pni-token-flow h3{margin:8px 0 6px;font-size:19px}
+  .pni-section#tokens .pni-token-flow p{font-size:14px;line-height:1.5}
+  .pni-section#tokens .pni-flow-num{display:inline-flex;color:var(--pni-blue);font-size:11px}
+  @media(max-width:1024px){.pni-section#tokens{grid-template-columns:1fr;gap:40px}.pni-section#tokens>.pni-heading{max-width:720px;margin:0 auto;text-align:center}.pni-section#tokens>.pni-heading>p{margin-inline:auto}.pni-section#tokens .pni-token-flow{max-width:720px;width:100%;margin:0 auto}}
+  @media(max-width:767px){.pni-section#tokens{display:block;padding:60px 18px}.pni-section#tokens>.pni-heading{text-align:left;margin-bottom:30px}.pni-section#tokens .pni-token-flow{padding:40px 16px 16px}.pni-section#tokens .pni-token-flow::before{left:16px}}
+
+  /* Message purposes use the same dark capability-band language as Event Registration. */
+  .pni-dark-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    margin-inline: 0;
+    border-radius: 0;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, .13) 0%, rgba(124, 108, 255, .055) 45%, transparent 72%);
+  }
+  .pni-dark-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    opacity: .24;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+  .pni-dark-band > * { position: relative; z-index: 1; }
+  .pni-dark-band .pni-section { padding: clamp(64px, 7vw, 88px) 24px clamp(68px, 8vw, 96px); }
+  .pni-dark-band__heading { max-width: 940px; margin-bottom: clamp(40px, 5vw, 56px); }
+  .pni-dark-band__heading .pni-eyebrow { color: #7f9cff; }
+  .pni-dark-band__heading h2 {
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .pni-dark-band .pni-card-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    max-width: 1180px;
+    border: 1px solid #2d2d36;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .pni-dark-band .pni-card-grid article {
+    position: relative;
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 360px;
+    padding: 32px 30px;
+    border: 0;
+    border-right: 1px solid #2d2d36;
+    border-bottom: 1px solid #2d2d36;
+    border-radius: 0;
+    background: transparent;
+  }
+  .pni-dark-band .pni-card-grid article:nth-child(3n) { border-right: 0; }
+  .pni-dark-band .pni-card-grid article:nth-child(n + 4) { border-bottom: 0; }
+  .pni-dark-band .pni-index { color: #8d99b7; }
+  .pni-dark-band .pni-card-grid article h3 {
+    margin: 28px 0 10px;
+    color: #fff;
+    font: 700 15px/1.3 var(--font-body);
+  }
+  .pni-dark-band .pni-card-grid article p {
+    color: rgba(255,255,255,.62);
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 36ch;
+  }
+  .pni-message-visual {
+    position: relative;
+    display: block;
+    min-height: 118px;
+    margin-top: auto;
+    padding: 42px 12px 12px;
+    overflow: hidden;
+    border: 1px solid rgba(109, 125, 180, .42);
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(34, 39, 58, .92), rgba(15, 18, 31, .96));
+    box-shadow: 0 12px 24px rgba(0,0,0,.2);
+  }
+  .pni-message-visual::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 26px;
+    border-bottom: 1px solid rgba(139, 150, 190, .16);
+    background: radial-gradient(circle at 13px 13px, #68708a 0 3px, transparent 3.5px), radial-gradient(circle at 25px 13px, #4b536a 0 3px, transparent 3.5px), radial-gradient(circle at 37px 13px, #3d455c 0 3px, transparent 3.5px);
+  }
+  .pni-message-visual::after {
+    content: "";
+    position: absolute;
+    top: 32px;
+    left: 12px;
+    width: 34%;
+    height: 4px;
+    border-radius: 99px;
+    background: rgba(121, 145, 255, .42);
+  }
+  .pni-message-visual span,
+  .pni-message-visual i,
+  .pni-message-visual b {
+    display: block;
+    position: absolute;
+    left: 12px;
+    height: 7px;
+    border-radius: 999px;
+    background: rgba(157, 178, 255, .42);
+  }
+  .pni-message-visual span { top: 56px; width: 74%; }
+  .pni-message-visual i { top: 75px; width: 52%; background: rgba(112, 225, 218, .7); }
+  .pni-message-visual b { top: 94px; width: 64%; background: rgba(255,255,255,.16); }
+  .pni-dark-band .pni-card-grid article:nth-child(2) .pni-message-visual i,
+  .pni-dark-band .pni-card-grid article:nth-child(5) .pni-message-visual i { background: rgba(201, 157, 255, .76); }
+  @media (max-width: 900px) {
+    .pni-dark-band .pni-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pni-dark-band .pni-card-grid article { grid-column: span 1; }
+    .pni-dark-band .pni-card-grid article:nth-child(3n) { border-right: 1px solid #2d2d36; }
+    .pni-dark-band .pni-card-grid article:nth-child(2n) { border-right: 0; }
+    .pni-dark-band .pni-card-grid article:nth-child(n + 5) { border-bottom: 0; }
+    .pni-dark-band .pni-card-grid article:nth-child(4) { border-bottom: 1px solid #2d2d36; }
+  }
+  @media (max-width: 767px) {
+    .pni-dark-band .pni-section { padding-inline: 16px; }
+    .pni-dark-band .pni-card-grid { grid-template-columns: 1fr; }
+    .pni-dark-band .pni-card-grid article,
+    .pni-dark-band .pni-card-grid article:nth-child(2n),
+    .pni-dark-band .pni-card-grid article:nth-child(3n) { min-height: 0; border-right: 0; border-bottom: 1px solid #2d2d36; }
+    .pni-dark-band .pni-card-grid article:last-child { border-bottom: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pni-dark-band { scroll-behavior: auto; } }
+
+  /* Attendee token lifecycle follows the Event Registration access-control stack. */
+  .pni-token-redesign { padding: 100px 24px; background: #fff; }
+  .pni-token-redesign__container { max-width: 1200px; margin: 0 auto; display: flex; gap: 80px; align-items: stretch; }
+  .pni-token-redesign__left { flex: 0 0 40%; }
+  .pni-token-redesign__sticky { position: sticky; top: 120px; }
+  .pni-token-redesign__eyebrow { display: inline-flex; align-items: center; gap: 8px; background: #f4f5f7; padding: 6px 12px; border-radius: 99px; font: 600 13px/1.3 var(--font-body); color: var(--pni-ink); margin-bottom: 24px; }
+  .pni-token-redesign__sticky h2 { margin: 0 0 24px; font: 500 clamp(36px, 4vw, 48px)/1.2 var(--font-heading); letter-spacing: -.02em; color: var(--pni-ink); }
+  .pni-token-redesign__sticky p { margin: 0; font: 400 18px/1.6 var(--font-body); color: var(--pni-muted); }
+  .pni-token-redesign__right { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+  .pni-token-card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .pni-token-card:nth-child(2) { top: 100px; }.pni-token-card:nth-child(3) { top: 120px; }.pni-token-card:nth-child(4) { top: 140px; }
+  .pni-token-card:hover { transform: translateY(-4px); }
+  .pni-token-card__header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .pni-token-card__number { width: 40px; height: 40px; border-radius: 50%; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font: 700 16px var(--font-heading); }
+  .pni-token-card__text h3 { margin: 0 0 8px; color: var(--pni-ink); font: 700 20px/1.2 var(--font-heading); }
+  .pni-token-card__text p { margin: 0; color: var(--pni-muted); font: 400 16px/1.6 var(--font-body); }
+  .pni-token-card__visual { padding: 18px; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; overflow: hidden; }
+  .pni-token-card__visual--1 { background: linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%); }
+  .pni-token-card__visual--2 { background: linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%); }
+  .pni-token-card__visual--3 { background: linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%); }
+  .pni-token-card__visual--4 { background: linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%); }
+  .pni-token-visual { position: relative; width: 100%; min-height: 280px; padding-bottom: 26px; border-radius: 14px; overflow: hidden; background: linear-gradient(145deg,#f8fbff,#fff); box-shadow: 0 16px 34px rgba(17,24,39,.12); }
+  .pni-token-visual__chrome { display: flex; align-items: center; gap: 6px; padding: 14px 16px; border-bottom: 1px solid #edf0f5; background: rgba(255,255,255,.76); color: #7b8494; font: 600 11px var(--font-body); }
+  .pni-token-visual__chrome i { width: 8px; height: 8px; border-radius: 50%; background: #cfd6e3; }.pni-token-visual__chrome b { margin-left: 8px; }
+  .pni-token-visual__body { margin: 38px 24px 0; padding: 22px 20px; border: 1px solid #dfe4ec; border-radius: 14px; background: rgba(255,255,255,.94); box-shadow: 0 14px 28px rgba(30,45,88,.12); }
+  .pni-token-visual__body span { display: block; color: #8690a0; font: 700 9px var(--font-body); letter-spacing: .1em; }.pni-token-visual__body strong { display: block; margin-top: 9px; color: #293241; font: 500 24px/1.1 var(--font-heading); }.pni-token-visual__body small { display: block; margin-top: 10px; color: #687487; font: 500 12px var(--font-body); }
+  .pni-token-visual__status { position: absolute; right: 18px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 11px; border: 1px solid #ccebd8; border-radius: 10px; background: #edfbf3; color: #18864b; box-shadow: 0 10px 24px rgba(31,41,72,.14); font: 700 11px var(--font-body); }.pni-token-visual__status i { width: 8px; height: 8px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 4px rgba(25,184,116,.13); }
+  @media (max-width: 992px) { .pni-token-redesign__container { flex-direction: column; gap: 40px; }.pni-token-redesign__left { width: 100%; }.pni-token-redesign__sticky { position: static; }.pni-token-card { padding: 32px 24px; } }
+  @media (max-width: 767px) { .pni-token-redesign { padding: 60px 18px; }.pni-token-card__header { flex-direction: column; gap: 16px; }.pni-token-card__visual { padding: 14px; }.pni-token-visual { min-height: 240px; }.pni-token-visual__body { margin-inline: 16px; }.pni-token-visual__body strong { font-size: 21px; } }
+  @media (prefers-reduced-motion: reduce) { .pni-token-card { transition: none; } }
+  .pni-token-redesign__eyebrow svg { flex: 0 0 auto; }
+  .pni-token-redesign__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; text-decoration: none; font: 500 .9375rem/1 var(--font-body); transition: background .2s ease, transform .2s ease; }
+  .pni-token-redesign__cta:hover { background: #000; transform: translateY(-1px); }
+  .pni-token-card__visual { padding: 18px; }
+  .pni-token-product-shot { position: relative; width: 100%; height: 280px; }
+  .pni-token-product-shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .pni-token-product-shot__status, .pni-token-product-shot__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; font: 700 12px/1 var(--font-body); border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); }
+  .pni-token-product-shot__status { top: 0; left: 0; gap: 7px; padding: 9px 12px; border: 1px solid #dfe4f2; background: #fff; color: #253047; }
+  .pni-token-product-shot__status--success { border-color: #ccebd8; background: #edfbf3; color: #18864b; }
+  .pni-token-product-shot__status > span { font-size: 16px; line-height: 0; }
+  .pni-token-product-shot__action { right: 10px; bottom: 0; padding: 11px 15px; background: #4b65f6; color: #fff; }
+  .pni-token-product-shot__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: pni-token-cursor-tap 2.4s ease-in-out infinite; }
+  @keyframes pni-token-cursor-tap { 0%,65%,100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+  @media (max-width: 992px) { .pni-token-redesign__cta { margin-top: 20px; }.pni-token-card__visual { padding: 14px; }.pni-token-product-shot { height: 240px; }.pni-token-product-shot__status,.pni-token-product-shot__action { font-size: 11px; } }
+  @media (max-width: 767px) { .pni-token-redesign__sticky h2 { font-size: 38px; }.pni-token-product-shot { height: 240px; } }
+  @media (prefers-reduced-motion: reduce) { .pni-token-product-shot__cursor { animation: none; } }
+  /* The legacy token-flow grid must not constrain the access-control redesign wrapper. */
+  .pni-section#tokens.pni-token-redesign { display: block; grid-template-columns: none; }
+
+  .pni-case-suites { padding: 112px 24px; background: #fff; }
+  .pni-case-suites__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .pni-case__header { text-align: center; margin-bottom: 32px; display: flex; flex-direction: column; align-items: center; }
+  .pni-case__header .pni-eyebrow { margin-bottom: 16px; }
+  .pni-case__title { max-width: 800px; margin: 0 0 16px; font: 700 clamp(36px, 4.5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background: linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pni-case__title span { display: block; }
+  .pni-case__tabs { display: flex; justify-content: center; gap: 4px; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; background: #f1f3f7; border: 1px solid #e5e7eb; border-radius: 999px; flex-wrap: wrap; }
+  .pni-case__tab { background: transparent; border: 1px solid transparent; padding: 8px 18px; border-radius: 999px; color: #64748b; cursor: pointer; transition: all .2s ease; font: 600 13.5px var(--font-body); }
+  .pni-case__tab:hover { background: rgba(255,255,255,.65); color: #334155; }.pni-case__tab--active { background: #fff !important; color: #3b82f6 !important; border-color: #dbe4f0 !important; box-shadow: 0 2px 8px rgba(30,41,59,.08); }
+  .pni-case__panel { --pni-case-tint:#fff8dc; --pni-case-border:#f0dfa6; display: none; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 64px; align-items: center; padding: 52px 64px; border: 1px solid var(--pni-case-border); border-radius: 28px; background: linear-gradient(135deg,var(--pni-case-tint) 0%,#fff 72%); animation: pni-case-fade .4s ease forwards; }
+  .pni-case__panel:nth-child(2) { --pni-case-tint:#edf7ff; --pni-case-border:#d4e7f7; }.pni-case__panel:nth-child(3) { --pni-case-tint:#f3efff; --pni-case-border:#e2d8fa; }.pni-case__panel:nth-child(4) { --pni-case-tint:#eefbf4; --pni-case-border:#d4efdf; }.pni-case__panel--active { display: grid; }
+  @keyframes pni-case-fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .pni-case__left h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading); letter-spacing: -.03em; }.pni-case__left p { margin: 0 0 32px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }.pni-case__label { display: block; margin-bottom: 18px; color: #9ca3af; font: 700 11px var(--font-body); letter-spacing: .12em; }.pni-case__left ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }.pni-case__left li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }.pni-case__left li span { color: #4b65f6; font-weight: 700; }.pni-case__right { min-width: 0; }.pni-case__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }.pni-case__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--pni-case-border); filter: blur(22px); opacity: .48; }.pni-case__showcase img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1117 / 837; object-fit: contain; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }.pni-case__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; padding: 9px 12px; border: 1px solid #cddcff; border-radius: 10px; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); color: #3158d4; font: 700 11px/1.2 var(--font-body); }
+  @media (max-width: 900px) { .pni-case__panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }.pni-case__header .pni-eyebrow { margin-bottom: 16px; } }
+  @media (max-width: 620px) { .pni-case-suites { padding: 72px 20px; }.pni-case__title { font-size: clamp(26px,8.3vw,38px); }.pni-case__tabs { width: 100%; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; border-radius: 20px; scrollbar-width: none; }.pni-case__tabs::-webkit-scrollbar { display: none; }.pni-case__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; }.pni-case__panel { padding: 32px 24px; border-radius: 20px; } }
+  @media (prefers-reduced-motion: reduce) { .pni-case__panel { animation: none; } }
+  .pni-flow-section { padding: clamp(72px,9vw,112px) 24px; background: transparent; display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+  .pni-flow-header { text-align: center; max-width: 1100px; margin-bottom: 42px; display: flex; flex-direction: column; align-items: center; }.pni-flow-header .pni-eyebrow { margin-bottom: 16px; }
+  .pni-flow-title { margin: 0; font: 500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg,var(--pni-ink) 43.06%,#8f8f8f 91.81%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pni-flow-quad { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 100%; max-width: 1180px; margin: 0 auto; }
+  .pni-flow-quad__cross { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; transform: translate(-50%,-50%); z-index: 3; display: grid; place-items: center; border-radius: 50%; background: #fff; color: #aab3c2; font: 500 18px/1 var(--font-body); }
+  .pni-flow-quad__cell { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 36px 74px; }.pni-flow-quad__title { margin: 0 0 16px; color: var(--pni-ink); font: 700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading); letter-spacing: -.03em; }.pni-flow-quad__text { max-width: 40ch; margin: 0; color: var(--pni-muted); font: 400 16px/1.6 var(--font-body); }
+  .pni-flow-quad__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }.pni-flow-composite { position: relative; width: 100%; height: 320px; overflow: visible; }.pni-flow-composite__screen { position: absolute; display: block; object-fit: cover; object-position: top left; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); }.pni-flow-composite__screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; }.pni-flow-composite__screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; }.pni-flow-composite__status,.pni-flow-composite__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }.pni-flow-composite__status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }.pni-flow-composite__action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  @media (max-width: 768px) { .pni-flow-quad { grid-template-columns: 1fr; grid-template-rows: auto; }.pni-flow-quad__cross { display: none; }.pni-flow-quad__cell { min-height: 0; padding: 32px 20px; }.pni-flow-quad__cell--media { min-height: 360px; padding: 18px 20px 32px; }.pni-flow-quad__cell:nth-child(3) { order: 4; }.pni-flow-quad__cell:nth-child(4) { order: 3; }.pni-flow-composite { height: 285px; } }
+  @media (prefers-reduced-motion: reduce) { .pni-flow-section { scroll-behavior: auto; } }
+  /* Reference treatment for the connection-inputs spotlight. */
+  #credentials.pni-section--tint { background: linear-gradient(135deg, rgba(243,247,255,.94), rgba(250,251,255,.72)); }
+  #credentials .pni-credential-card { background: rgba(255,255,255,.96); }
+  #credentials .pni-field { min-height: 72px; }
+  .pni-credential-feature { padding: clamp(90px, 10vw, 140px) 24px; background: linear-gradient(180deg, #f8faff 0%, #fff 78%); }
+  .pni-credential-feature__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .pni-credential-feature__header { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .pni-credential-feature__header h2 { margin: 0; font-family: var(--font-heading); font-size: clamp(36px, 5vw, 56px); font-weight: 500; letter-spacing: -.03em; line-height: 1.1; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .pni-credential-feature__grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .pni-credential-feature__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border-left: 1px solid var(--surface-card-border, #e8ecf2); }
+  .pni-credential-feature__card:first-child { border-left: 0; }
+  .pni-credential-feature__notch { position: absolute; top: 0; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; z-index: 2; }
+  .pni-credential-feature__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .pni-credential-feature__icon svg { width: 100%; height: 100%; }
+  .pni-credential-feature__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font-family: var(--font-heading); font-size: 21px; font-weight: 600; line-height: 1.25; }
+  .pni-credential-feature__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+  @media (max-width: 992px) {
+    .pni-credential-feature__grid { grid-template-columns: 1fr; }
+    .pni-credential-feature__card { min-height: 0; border-left: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+    .pni-credential-feature__card:first-child { border-top: 0; }
+    .pni-credential-feature__notch { display: none; }
+  }
+  @media (max-width: 620px) { .pni-credential-feature { padding: 60px 20px; } }
+  .pni-delivery-workflow { padding-block: clamp(110px, 12vw, 160px); padding-inline: 24px; background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, rgba(246,248,255,.52) 52%, rgba(255,255,255,.18) 100%); }
+  .pni-delivery-workflow__inner { width: min(1218px, 100%); margin: 0 auto; }
+  .pni-delivery-workflow__header { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; margin-bottom: 64px; text-align: center; }
+  .pni-delivery-workflow__header h2 { max-width: 780px; margin: 0 auto; font-family: var(--font-heading); font-size: clamp(40px, 5vw, 62px); font-weight: 650; line-height: 1.08; letter-spacing: -.045em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .pni-delivery-steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .pni-delivery-steps li { position: relative; display: block; padding: 0; }
+  .pni-delivery-steps details { position: relative; overflow: hidden; border: 1px solid var(--pni-delivery-border, #d4e7f7); border-radius: 18px; background: linear-gradient(135deg, var(--pni-delivery-tint, #edf7ff) 0%, #fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease; }
+  .pni-delivery-steps li:nth-child(1) { --pni-delivery-tint: #fff8dc; --pni-delivery-border: #f0dfa6; }
+  .pni-delivery-steps li:nth-child(2) { --pni-delivery-tint: #edf7ff; --pni-delivery-border: #d4e7f7; }
+  .pni-delivery-steps li:nth-child(3) { --pni-delivery-tint: #f3efff; --pni-delivery-border: #e2d8fa; }
+  .pni-delivery-steps li:nth-child(4) { --pni-delivery-tint: #eefbf4; --pni-delivery-border: #d4efdf; }
+  .pni-delivery-steps summary { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .pni-delivery-steps summary::-webkit-details-marker { display: none; }
+  .pni-delivery-steps summary:hover { background: rgba(255,255,255,.28); }
+  .pni-delivery-steps summary > span { display: block; color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .pni-delivery-step__content { display: flex; flex-direction: column; }
+  .pni-delivery-steps details:not([open]) .pni-delivery-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .pni-delivery-step__title { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .pni-delivery-step__desc { display: none; }
+  .pni-delivery-steps details:not([open]) .pni-delivery-step__desc { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; max-width: 460px; margin: 0; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .pni-delivery-workflow__arrow { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer; transition: transform .25s ease, background .2s ease, border-color .2s ease; }
+  .pni-delivery-workflow__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .pni-delivery-workflow__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .pni-delivery-steps details[open] { display: flex; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg, var(--pni-delivery-tint) 0%, #fff 72%); }
+  .pni-delivery-steps details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; background: transparent; }
+  .pni-delivery-steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .pni-delivery-steps details[open] summary > span { font-size: 26px; line-height: 1; }
+  .pni-delivery-steps details[open] .pni-delivery-step__title { margin-bottom: 16px; color: #050505; font-family: var(--font-heading); font-size: 32px; font-weight: 600; line-height: 1.2; }
+  .pni-delivery-steps details[open] .pni-delivery-step__desc { display: block; max-width: 90%; margin: 0; color: #333; font-size: 17px; line-height: 1.6; }
+  .pni-delivery-steps details[open] .pni-delivery-workflow__arrow { top: 28px; transform: rotate(180deg); }
+  .pni-delivery-workflow__visual { display: none; margin: 0; }
+  .pni-delivery-steps details[open] .pni-delivery-workflow__visual { flex: 0 0 45%; display: flex; align-items: center; justify-content: flex-start; padding: 40px 88px 40px 0; }
+  .pni-delivery-workflow__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border-radius: 12px; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+  @media (max-width: 767px) {
+    .pni-delivery-workflow { padding-block: 72px; padding-inline: 18px; }
+    .pni-delivery-workflow__header { margin-bottom: 46px; }
+    .pni-delivery-workflow__header h2 { font-size: 42px; }
+    .pni-delivery-steps summary, .pni-delivery-steps summary:hover { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    .pni-delivery-workflow__arrow { top: 31px; right: 16px; }
+    .pni-delivery-steps summary > span { font-size: 13px; }
+    .pni-delivery-steps details:not([open]) .pni-delivery-step__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .pni-delivery-steps details:not([open]) .pni-delivery-step__desc { font-size: 13px; line-height: 1.4; }
+    .pni-delivery-steps details[open] { flex-direction: column; }
+    .pni-delivery-steps details[open] summary, .pni-delivery-steps details[open] summary:hover { grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 62px 24px 14px; }
+    .pni-delivery-steps details[open] summary > span { font-size: 21px; }
+    .pni-delivery-steps details[open] .pni-delivery-workflow__arrow { top: 24px; right: 16px; }
+    .pni-delivery-steps details[open] .pni-delivery-workflow__visual { flex: none; padding: 0 24px 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pni-delivery-workflow *, .pni-delivery-workflow *::before, .pni-delivery-workflow *::after { transition: none !important; } }
+  .pni-preference-spotlight { padding: clamp(72px, 9vw, 112px) 24px; background: #fff; overflow: hidden; display: flex; flex-direction: column; align-items: center; }
+  .pni-preference-spotlight__header { text-align: center; max-width: 1100px; margin-bottom: 42px; display: flex; flex-direction: column; align-items: center; }
+  .pni-preference-spotlight__header .pni-eyebrow { margin-bottom: 16px; }
+  .pni-preference-spotlight__header h2 { margin: 0 0 12px; font: 500 clamp(28px, 4.2vw, 48px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg, var(--pni-ink) 43.06%, #8f8f8f 91.81%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .pni-preference-spotlight__header p { max-width: 640px; margin: 0; color: var(--pni-muted); font: 400 18px/1.5 var(--font-body); }
+  .pni-preference-quad { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 100%; max-width: 1180px; margin: 0 auto; }
+  .pni-preference-quad__cell { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 36px 24px; }
+  .pni-preference-quad__cell--copy { border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .pni-preference-quad__cell--copy-last { border-right: 0; border-bottom: 0; }
+  .pni-preference-quad__cell--copy h3 { margin: 0 0 16px; color: var(--heading-dark, #1e1d24); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .pni-preference-quad__cell--copy p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font: 400 16px/1.6 var(--font-body); }
+  .pni-preference-quad__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; border-bottom: 1px solid #eef0f3; }
+  .pni-preference-quad__cell--media-right { border-right: 0; }
+  .pni-preference-composite { position: relative; width: 100%; height: 320px; overflow: visible; }
+  .pni-preference-screen { position: absolute; display: flex; flex-direction: column; gap: 12px; justify-content: center; padding: 28px; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); }
+  .pni-preference-screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; background: linear-gradient(145deg, #f2fffa, #fff); }
+  .pni-preference-screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; background: linear-gradient(145deg, #f1f4ff, #fff); }
+  .pni-preference-screen span { color: #7b8494; font: 700 10px var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .pni-preference-screen strong { color: #293241; font: 500 21px var(--font-heading); }
+  .pni-preference-screen b { align-self: flex-start; padding: 7px 10px; border-radius: 999px; background: #dff7ea; color: #18864b; font: 800 10px var(--font-body); }
+  .pni-preference-screen--secondary b { background: #f0f2f5; color: #8d95a2; }
+  .pni-preference-status, .pni-preference-action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .pni-preference-status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .pni-preference-action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .pni-preference-quad__cross { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; z-index: 3; }
+  @media (max-width: 768px) {
+    .pni-preference-spotlight { padding: 60px 16px; }
+    .pni-preference-quad { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .pni-preference-quad__cross { display: none; }
+    .pni-preference-quad__cell--copy, .pni-preference-quad__cell--media { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .pni-preference-quad__cell--media { min-height: 360px; padding: 18px 20px 32px; }
+    .pni-preference-quad__cell--copy-last { order: 3; border-bottom: 1px solid #eef0f3; }
+    .pni-preference-quad__cell--media-right { order: 4; border-bottom: 0; }
+    .pni-preference-composite { height: 285px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .pni-preference-spotlight * { transition: none !important; } }
+  .pni-agenda-section { position: relative; isolation: isolate; overflow: hidden; padding: clamp(64px, 7vw, 88px) 24px clamp(68px, 8vw, 96px); background-color: #000; background-image: radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.13) 0%, rgba(124,108,255,.055) 45%, transparent 72%); color: #fff; }
+  .pni-agenda-section__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .pni-agenda-section__header { max-width: 940px; margin: 0 auto clamp(40px, 5vw, 56px); text-align: center; }
+  .pni-agenda-section__header .pni-eyebrow { color: #8fa8ff; }
+  .pni-agenda-section__header h2 { margin: 0; color: #fff; font: 500 clamp(42px, 5.4vw, 60px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .pni-agenda-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); overflow: hidden; border: 1px solid #2d2d36; border-radius: 14px; }
+  .pni-agenda-card { position: relative; grid-column: span 2; display: flex; flex-direction: column; min-height: 430px; padding: 32px 30px; border-right: 1px solid #2d2d36; border-bottom: 1px solid #2d2d36; background: transparent; }
+  .pni-agenda-card:nth-child(n+4) { grid-column: span 3; border-bottom: 0; }
+  .pni-agenda-card:nth-child(3), .pni-agenda-card:nth-child(5) { border-right: 0; }
+  .pni-agenda-petal { position: absolute; left: 0; width: 22px; height: 22px; z-index: 2; pointer-events: none; line-height: 0; }
+  .pni-agenda-petal--top { top: 0; transform: translate(-50%, -50%); }.pni-agenda-petal--bottom { bottom: 0; transform: translate(-50%, 50%); }.pni-agenda-petal svg { width: 22px; height: 22px; }
+  .pni-agenda-card__text h3 { margin: 0 0 14px; color: #fff; font: 700 15px/1.3 var(--font-body); letter-spacing: -.01em; }.pni-agenda-card__text p { max-width: 36ch; margin: 0; color: rgba(255,255,255,.56); font: 400 15px/1.5 var(--font-body); }
+  .pni-agenda-visual { position: relative; display: flex; align-items: center; justify-content: center; flex: 1; margin-top: 22px; }
+  .pni-agenda-product { position: relative; width: 100%; max-width: 310px; height: 220px; overflow: hidden; border: 1px solid rgba(255,255,255,.15); border-radius: 14px 14px 0 0; background: linear-gradient(145deg,#111218,#090a0e 65%); box-shadow: 0 18px 42px rgba(0,0,0,.22); color: rgba(255,255,255,.78); font-family: var(--font-body); }
+  .pni-agenda-product--wide { max-width: 430px; }.pni-agenda-product::before { content: ""; position: absolute; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg,#38bdf8,#7c6cff 55%,#d85aa8); }
+  .pni-agenda-product__bar { display: flex; align-items: center; justify-content: space-between; height: 34px; padding: 0 13px; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); }.pni-agenda-product__bar > span { display: flex; gap: 5px; }.pni-agenda-product__bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.13); }.pni-agenda-product__bar small { color: rgba(255,255,255,.42); font-size: 9px; }
+  .pni-agenda-product__tabs { display: flex; gap: 5px; padding: 9px 11px 8px; border-bottom: 1px solid rgba(255,255,255,.07); }.pni-agenda-product__tabs span { padding: 5px 9px; border: 1px solid transparent; border-radius: 6px; color: rgba(255,255,255,.38); font-size: 8px; }.pni-agenda-product__tabs span.is-active { border-color: rgba(125,141,255,.28); background: rgba(125,141,255,.1); color: #c5ccff; }
+  .pni-agenda-product__body { padding: 7px 11px; }.pni-agenda-product__body > div { display: grid; grid-template-columns: 40px 1fr; align-items: center; gap: 9px; min-height: 42px; padding: 5px 7px; border-bottom: 1px solid rgba(255,255,255,.065); }.pni-agenda-product__body > div.is-accent { border: 1px solid rgba(125,141,255,.22); border-radius: 7px; background: linear-gradient(90deg,rgba(92,138,255,.1),rgba(164,92,255,.06)); }.pni-agenda-product__body time,.pni-agenda-product__body > div > i { color: #a8b6ff; font-size: 9px; font-style: normal; }.pni-agenda-product__body span { display: flex; flex-direction: column; gap: 3px; }.pni-agenda-product__body strong { font-size: 9px; font-weight: 500; }.pni-agenda-product__body small { color: rgba(255,255,255,.34); font-size: 7.5px; }.pni-agenda-product__body b { padding: 4px 7px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; color: rgba(255,255,255,.45); font-size: 7px; font-weight: 500; }
+  .pni-agenda-product__body--2 > div { grid-template-columns: 10px 1fr; min-height: 31px; }.pni-agenda-product__body--2 > div > i { width: 8px; height: 8px; border: 1px solid #7d8dff; border-radius: 50%; }.pni-agenda-product__body--2 > div.is-child { padding-left: 24px; }.pni-agenda-product__body--2 > div.is-child::before { content: ""; position: absolute; margin-left: -20px; width: 15px; height: 22px; border-left: 1px solid rgba(255,255,255,.13); border-bottom: 1px solid rgba(255,255,255,.13); border-radius: 0 0 0 5px; }.pni-agenda-product__body--3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; height: 142px; padding: 9px 11px 12px; }.pni-agenda-product__body--3 > span { display: flex; flex-direction: column; gap: 7px; padding: 6px; border: 1px solid rgba(255,255,255,.07); border-radius: 7px; background: rgba(255,255,255,.018); }.pni-agenda-product__body--3 i { display: block; height: 45px; border: 1px solid rgba(92,138,255,.25); border-radius: 5px; background: rgba(92,138,255,.09); }.pni-agenda-product__body--3 span:nth-child(2) i { border-color: rgba(164,92,255,.25); background: rgba(164,92,255,.09); }.pni-agenda-product__body--3 span:nth-child(3) i { border-color: rgba(56,189,248,.22); background: rgba(56,189,248,.07); }
+  @media (max-width: 960px) { .pni-agenda-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }.pni-agenda-card, .pni-agenda-card:nth-child(n+4) { grid-column: auto; min-height: 280px; border-right: 1px solid #2d2d36; border-bottom: 1px solid #2d2d36; }.pni-agenda-card:nth-child(even) { border-right: 0; }.pni-agenda-card:last-child { grid-column: 1 / -1; border-right: 0; border-bottom: 0; } }
+  @media (max-width: 620px) { .pni-agenda-section { padding: 60px 18px; }.pni-agenda-section__header h2 { font-size: 40px; }.pni-agenda-grid { grid-template-columns: 1fr; }.pni-agenda-card, .pni-agenda-card:nth-child(n+4), .pni-agenda-card:last-child { grid-column: auto; min-height: 250px; padding: 30px 26px; border-right: 0; border-bottom: 1px solid #2d2d36; }.pni-agenda-card:last-child { border-bottom: 0; }.pni-agenda-petal { display: none; } }
+  /* Real authenticated app capture in the hero, matching the reference split layout. */
+  .pni-hero__visual { position: relative; min-height: 0; margin: 0; padding: 14px; border: 1px solid rgba(222,228,241,.9); border-radius: 28px; background: linear-gradient(145deg,#edf3ff,#fff4fa); box-shadow: 0 28px 60px rgba(31,41,72,.12); }
+  .pni-hero__visual img { display: block; width: 100%; height: auto; aspect-ratio: 1298 / 697; object-fit: cover; border: 1px solid #dfe5f1; border-radius: 18px; box-shadow: 0 18px 36px rgba(31,41,72,.15); }
+  .pni-hero__visual figcaption { margin: 11px 4px 0; color: #697487; font: 600 11px/1.3 var(--font-body); letter-spacing: .03em; text-transform: uppercase; }
+  @media(max-width:767px) { .pni-hero__visual { margin-top: 34px; padding: 9px; border-radius: 22px; }.pni-hero__visual img { border-radius: 14px; }.pni-hero__visual figcaption { margin: 9px 2px 0; font-size: 10px; } }
+  .pni-scope-stage { padding: 0; background: #f5f7fb; }
+  .pni-scope-stage .pni-section-app-shot { display: block; width: 100%; height: 220px; object-fit: cover; object-position: center top; }
+  .pni-preference-screen { overflow: hidden; padding: 0; }
+  .pni-preference-screen .pni-section-app-shot { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; object-position: center top; opacity: .95; }
+  .pni-preference-screen b { position: absolute; left: 18px; bottom: 14px; z-index: 2; }
+
+  /* Speaker Management dark bento treatment. */
+  .pni-page .pni-agenda-section {
+    background-color: #000;
+    background-image:
+      radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.22) 0%, rgba(124,108,255,.1) 45%, transparent 72%),
+      radial-gradient(80% 55% at 50% 100%, rgba(49,214,226,.08), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 5px);
+  }
+  .pni-page .pni-agenda-section__header h2 {
+    font-weight: 500;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 34%, #c9c2ff 58%, #a79aff 78%, #7d8dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .pni-page .pni-agenda-grid { border-color: rgba(255,255,255,.16); border-radius: 14px; }
+  .pni-page .pni-agenda-card { border-color: rgba(255,255,255,.14); }
+  .pni-page .pni-agenda-product { box-shadow: 0 18px 42px rgba(0,0,0,.3); }
+  @media (prefers-reduced-motion: reduce) { .pni-page .pni-agenda-section * { animation: none !important; transition: none !important; } }
+
+  /* Keep all annotated feature headings on the Speaker Management type system. */
+  .pni-page #delivery .pni-delivery-workflow__header h2,
+  .pni-page #configuration .pni-scope-heading h2,
+  .pni-page #use-cases .pni-case__title {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.03em;
+    background: linear-gradient(98deg, #22272f 43%, #8f8f8f 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .pni-page #delivery .pni-delivery-workflow__header h2 { max-width: 780px; }
+  .pni-page #configuration .pni-scope-heading h2 { max-width: 900px; }
+  .pni-page #use-cases .pni-case__title { max-width: 800px; margin-bottom: 16px; }
+  @media (max-width: 767px) {
+    .pni-page #delivery .pni-delivery-workflow__header h2,
+    .pni-page #configuration .pni-scope-heading h2,
+    .pni-page #use-cases .pni-case__title { font-size: 42px; line-height: 1.08; letter-spacing: -.03em; }
+  }
+
+  /* Token lifecycle: match Event Registration's Access Control feature section. */
+  .pni-page #tokens.pni-token-redesign {
+    padding: clamp(88px, 9vw, 124px) 24px;
+    background: linear-gradient(135deg, #eef3ff 0%, #f6f8ff 54%, #fff9f4 100%);
+  }
+  .pni-page #tokens .pni-token-redesign__container { max-width: 1200px; gap: 80px; }
+  .pni-page #tokens .pni-token-redesign__left { flex: 0 0 43%; }
+  .pni-page #tokens .pni-token-redesign__sticky h2 {
+    max-width: 560px;
+    margin: 0 0 24px;
+    font-family: var(--font-heading);
+    font-size: clamp(40px, 4.6vw, 56px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -.03em;
+    background: linear-gradient(98deg, #22272f 43%, #8f8f8f 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .pni-page #tokens .pni-token-redesign__sticky p { max-width: 510px; color: #596b86; }
+  .pni-page #tokens .pni-token-card { border-radius: 24px; background: rgba(244,245,247,.9); box-shadow: none; }
+  /* Sticky stacking needs the page wrapper to remain outside a scroll-clipping box. */
+  .pni-page { overflow: clip; }
+  .pni-page #tokens .pni-token-card { position: sticky; align-self: flex-start; }
+  .pni-page #tokens .pni-token-card:nth-child(1) { top: 80px; z-index: 1; }
+  .pni-page #tokens .pni-token-card:nth-child(2) { top: 100px; z-index: 2; }
+  .pni-page #tokens .pni-token-card:nth-child(3) { top: 120px; z-index: 3; }
+  .pni-page #tokens .pni-token-card:nth-child(4) { top: 140px; z-index: 4; }
+  .pni-page #tokens .pni-token-card__text h3 { font-weight: 600; }
+  .pni-page #tokens .pni-token-card__visual { border-color: rgba(255,255,255,.9); border-radius: 20px; box-shadow: 0 10px 26px rgba(31,41,72,.04); }
+  @media (max-width: 992px) {
+    .pni-page #tokens.pni-token-redesign { padding-block: 80px; }
+    .pni-page #tokens .pni-token-redesign__left { flex-basis: auto; }
+  }
+  @media (max-width: 767px) {
+    .pni-page #tokens.pni-token-redesign { padding: 60px 18px; }
+    .pni-page #tokens .pni-token-redesign__sticky h2 { font-size: 42px; }
+  }
+
+  /* FAQ: exact Event Registration FAQ geometry and accordion treatment. */
+  .pni-page #faq.pni-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .pni-page #faq .pni-faq__inner { max-width: 1140px; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .pni-page #faq .pni-faq__intro { position: sticky; top: 6rem; padding: 0; }
+  .pni-page #faq .pni-faq__badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; background: transparent; color: #000; font: 500 .8125rem var(--font-body); }
+  .pni-page #faq .pni-faq__intro h2 { margin: 0 0 20px; font-family: 'Creato Display', var(--font-heading); font-size: 44px; font-weight: 500; line-height: 1.1; letter-spacing: -1px; color: #000; background: none; -webkit-text-fill-color: #000; }
+  .pni-page #faq .pni-faq__intro p { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .pni-page #faq .pni-faq__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 0; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); }
+  .pni-page #faq .pni-faq__list { display: flex; flex-direction: column; gap: 16px; border-top: 0; }
+  .pni-page #faq details { padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .pni-page #faq details[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .pni-page #faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font-family: 'Creato Display', var(--font-heading); font-size: 1.0625rem; font-weight: 500; line-height: 1.4; }
+  .pni-page #faq summary span:first-child { color: #000; font-size: inherit; }
+  .pni-page #faq .pni-faq__icon { color: #000; font-size: 0; }
+  .pni-page #faq .pni-faq__icon::before, .pni-page #faq .pni-faq__icon::after { background: #000; }
+  .pni-page #faq details p { max-width: 640px; margin: 0; padding: 0 0 24px; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+  @media (max-width: 1024px) {
+    .pni-page #faq .pni-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .pni-page #faq .pni-faq__intro { position: static; }
+    .pni-page #faq .pni-faq__intro h2 { font-size: 32px; }
+  }
+  @media (max-width: 767px) {
+    .pni-page #faq.pni-faq { padding: 56px 16px; }
+    .pni-page #faq .pni-faq__intro h2 { font-size: 28px; }
+    .pni-page #faq details { padding: 4px 20px; border-radius: 16px; }
+    .pni-page #faq summary { padding: 18px 0; font-size: .9375rem; }
+  }
+
+  /* Spotlight grid dividers: the fine rules and center junction are part of the reference design. */
+  .pni-page #configuration .pni-scope-bento { border-color: #dfe4ec; }
+  .pni-page #configuration .pni-scope-row { border-bottom-color: #dfe4ec; }
+  .pni-page #configuration .pni-scope-row .pni-scope-cell:first-child { border-right: 1px solid #dfe4ec; }
+  .pni-page #configuration .pni-scope-cross { filter: drop-shadow(0 0 0 #dfe4ec); }
+  .pni-page #preference .pni-preference-quad { border-top: 1px solid #eef0f3; border-left: 1px solid #eef0f3; }
+  .pni-page #preference .pni-preference-quad__cell { border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .pni-page #preference .pni-preference-quad__cell--copy-last,
+  .pni-page #preference .pni-preference-quad__cell--media-right { border-right: 0; }
+  .pni-page #preference .pni-preference-quad__cross { background: #fff; border-radius: 50%; }
+  .pni-page #boundary .pni-flow-quad { border-top: 1px solid #eef0f3; border-left: 1px solid #eef0f3; }
+  .pni-page #boundary .pni-flow-quad__cell { border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .pni-page #boundary .pni-flow-quad__cell:nth-child(2),
+  .pni-page #boundary .pni-flow-quad__cell:nth-child(4) { border-right: 0; }
+  .pni-page #boundary .pni-flow-quad__cell:nth-child(3),
+  .pni-page #boundary .pni-flow-quad__cell:nth-child(4) { border-bottom: 0; }
+  .pni-page #boundary .pni-flow-quad__cross { box-shadow: 0 0 0 1px #eef0f3; }
+  .pni-page #boundary .pni-flow-quad { position: relative; overflow: visible; }
+  .pni-page #boundary .pni-flow-quad::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    z-index: 2;
+    background: #dfe4ec;
+    pointer-events: none;
+  }
+  .pni-page #boundary .pni-flow-quad::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 1px;
+    z-index: 2;
+    background: #dfe4ec;
+    pointer-events: none;
+  }
+  .pni-page #boundary { position: relative; }
+  .pni-page #boundary::after {
+    content: "";
+    position: absolute;
+    top: clamp(300px, 20vw, 360px);
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: #e5e7eb;
+    pointer-events: none;
+  }
+  .pni-page #boundary .pni-flow-quad__cross { background: #fff; }
+  /* Configuration spotlight: open two-column composition used by Event Registration. */
+  .pni-page #configuration .pni-scope-bento {
+    position: relative;
+    max-width: 1180px;
+    border: 0;
+    border-radius: 0;
+    overflow: visible;
+  }
+  .pni-page #configuration .pni-scope-bento::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: #eef0f3;
+    pointer-events: none;
+  }
+  .pni-page #configuration .pni-scope-row {
+    min-height: 360px;
+    border-bottom: 1px solid #eef0f3;
+  }
+  .pni-page #configuration .pni-scope-row:last-child { border-bottom: 0; }
+  .pni-page #configuration .pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-visual,
+  .pni-page #configuration .pni-scope-row--reverse .pni-scope-visual { order: 2; }
+  .pni-page #configuration .pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-content,
+  .pni-page #configuration .pni-scope-row--reverse .pni-scope-content { order: 1; }
+  .pni-page #configuration .pni-scope-cell { min-height: 360px; padding: 48px 64px; }
+  .pni-page #configuration .pni-scope-content { align-items: flex-start; }
+  .pni-page #configuration .pni-scope-content h3 { margin-top: 14px; font-size: clamp(32px, 3.4vw, 44px); }
+  .pni-page #configuration .pni-scope-stage { max-width: 520px; }
+  .pni-page #configuration .pni-scope-cross { background: #fff; }
+  @media (max-width: 768px) {
+    .pni-page #configuration .pni-scope-bento::before { display: none; }
+    .pni-page #configuration .pni-scope-row { min-height: 0; }
+    .pni-page #configuration .pni-scope-cell { min-height: 0; padding: 32px 20px; }
+    .pni-page #configuration .pni-scope-row .pni-scope-visual,
+    .pni-page #configuration .pni-scope-row .pni-scope-content { order: initial; }
+    .pni-page #configuration .pni-scope-row .pni-scope-cell:first-child { border-right: 0; }
+    .pni-page #preference .pni-preference-quad,
+    .pni-page #boundary .pni-flow-quad { border: 0; }
+    .pni-page #boundary .pni-flow-quad::before,
+    .pni-page #boundary .pni-flow-quad::after { display: none; }
+    .pni-page #boundary::after { display: none; }
+    .pni-page #preference .pni-preference-quad__cell,
+    .pni-page #boundary .pni-flow-quad__cell { border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .pni-page #preference .pni-preference-quad__cell--media-right,
+    .pni-page #boundary .pni-flow-quad__cell:last-child { border-bottom: 0; }
+  }
+  /* Configuration scope: match the Event Registration bento composition. */
+  .pni-page #configuration.pni-scope-section { padding: 80px 5%; background: transparent; }
+  .pni-page #configuration .pni-scope-heading { text-align: center; margin: 0 auto 60px; }
+  .pni-page #configuration .pni-scope-heading h2 { max-width: 900px; margin: 0 auto; }
+  .pni-page #configuration .pni-scope-bento { position: relative; max-width: 1200px; margin: 0 auto; border: 1px solid #e5e7eb; border-radius: 16px; overflow: hidden; background: transparent; }
+  .pni-page #configuration .pni-scope-bento::before { display: none; }
+  .pni-page #configuration .pni-scope-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; min-height: 0; border-bottom: 1px solid #e5e7eb; }
+  .pni-page #configuration .pni-scope-row:last-child { border-bottom: 0; }
+  .pni-page #configuration .pni-scope-cell { min-height: 360px; padding: 4rem; display: flex; flex-direction: column; justify-content: center; }
+  .pni-page #configuration .pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-cell:first-child, .pni-page #configuration .pni-scope-row.pni-scope-row--reverse .pni-scope-cell:first-child { border-right: 1px solid #e5e7eb; }
+  .pni-page #configuration .pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-visual { order: 1; }
+  .pni-page #configuration .pni-scope-row:not(.pni-scope-row--reverse) .pni-scope-content { order: 2; }
+  .pni-page #configuration .pni-scope-row.pni-scope-row--reverse .pni-scope-content { order: 1; }
+  .pni-page #configuration .pni-scope-row.pni-scope-row--reverse .pni-scope-visual { order: 2; }
+  .pni-page #configuration .pni-scope-content { align-items: flex-start; background: transparent; }
+  .pni-page #configuration .pni-scope-content h3 { margin: 0 0 1.25rem; font-family: var(--font-heading); font-size: 2.25rem; font-weight: 500; line-height: 1.02; letter-spacing: -.02em; color: #111827; }
+  .pni-page #configuration .pni-scope-content p { margin: 0; font-size: 1.125rem; color: #4b5563; line-height: 1.45; }
+  .pni-page #configuration .pni-scope-visual { align-items: center; background: transparent; }
+  .pni-page #configuration .pni-scope-stage { position: relative; width: 100%; max-width: none; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .pni-page #configuration .pni-scope-visual--1 .pni-scope-stage { background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%); }
+  .pni-page #configuration .pni-scope-visual--2 .pni-scope-stage { background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%); }
+  .pni-page #configuration .pni-scope-visual--3 .pni-scope-stage { background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%); }
+  .pni-page #configuration .pni-section-app-shot { display: block; width: 100%; border: 1px solid #dfe4ec; border-radius: 14px; }
+  .pni-page #configuration .pni-scope-float { position: absolute; z-index: 2; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; background: rgba(255,255,255,.96); color: #111827; box-shadow: 0 14px 34px rgba(30,45,88,.2); font-family: var(--font-body); line-height: 1.15; }
+  .pni-page #configuration .pni-scope-float b { font-size: .78rem; font-weight: 700; white-space: nowrap; }
+  .pni-page #configuration .pni-scope-float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .pni-page #configuration .pni-scope-float i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .pni-page #configuration .pni-scope-float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .pni-page #configuration .pni-scope-float--bottom { bottom: 12px; left: 3px; }
+  .pni-page #configuration .pni-scope-cross { position: absolute; bottom: 0; left: 50%; width: 28px; height: 28px; transform: translate(-50%, 50%); pointer-events: none; line-height: 0; z-index: 2; background: transparent; }
+  @media (max-width: 900px) { .pni-page #configuration .pni-scope-row { display: flex; flex-direction: column; } .pni-page #configuration .pni-scope-cell { padding: 3rem 1.5rem; min-height: 0; } .pni-page #configuration .pni-scope-row .pni-scope-cell:first-child { border-right: none; } .pni-page #configuration .pni-scope-content { order: 1 !important; border-bottom: 1px solid #e5e7eb; } .pni-page #configuration .pni-scope-visual { order: 2 !important; } }
+  @media (max-width: 767px) { .pni-page #configuration.pni-scope-section { padding: 60px 16px; } .pni-page #configuration .pni-scope-heading { margin-bottom: 40px; } }
+  /* Final reference overrides: one-pixel spotlight rules, no boxed bento chrome. */
+  .pni-page #configuration .pni-scope-bento { border: 0; border-radius: 0; overflow: visible; }
+  .pni-page #configuration .pni-scope-bento::before { display: block; background: #eef0f3; }
+  .pni-page #configuration .pni-scope-row .pni-scope-cell:first-child { border-right: 0; }
+  .pni-page #configuration .pni-scope-row { border-bottom-color: #eef0f3; }
+  .pni-page #boundary .pni-flow-quad::before,
+  .pni-page #boundary .pni-flow-quad::after { background: #eef0f3; }
+  .pni-page #boundary .pni-flow-quad__cell { border: 0; }
+</style>
