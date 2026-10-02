@@ -1,0 +1,1162 @@
+---
+const lifecycle = [
+  { label: "Configure", detail: "Credentials" },
+  { label: "Price", detail: "Event currency" },
+  { label: "Provider handoff", detail: "" },
+  { label: "Confirm", detail: "Payment result" },
+  { label: "Deliver", detail: "Ticket outcome" },
+  { label: "Review", detail: "Refund and finance" },
+];
+
+const heroScreens = [
+  { src: "/images/razorpay-platform-analytics-overview.png", alt: "EventHex Platform Analytics overview with event, registration, and check-in trends", width: 790, height: 492 },
+  { src: "/images/razorpay-platform-analytics-reference.png", alt: "EventHex Platform Analytics dashboard for a Razorpay-connected event", width: 1262, height: 697 },
+  { src: "/images/razorpay-platform-analytics-usage.png", alt: "EventHex Platform Analytics feature usage and plan distribution", width: 1262, height: 697 },
+];
+
+const setupSteps = [
+  { title: "Choose the gateway", copy: "Select Razorpay in the supported payment settings." },
+  { title: "Add credentials", copy: "Add the supported key ID and secret; saved secrets remain masked in normal organizer responses." },
+  { title: "Confirm event currency", copy: "Confirm the event currency and merchant-account setup before publishing the paid flow." },
+  { title: "Test the paid journey", copy: "Run the event's own checkout and confirmation path before launch." },
+];
+
+const paymentStates = [
+  { title: "Gateway", copy: "Identify Razorpay as the order's payment path.", href: "#razorpay-setup", image: "/images/razorpay-platform-analytics-reference.png", alt: "EventHex Platform Analytics overview for the connected Razorpay gateway", width: 1262, height: 697 },
+  { title: "Amount and currency", copy: "Keep the value beside the event order.", href: "#razorpay-finance", image: "/images/razorpay-platform-analytics-order-context.png", alt: "EventHex Platform Analytics metrics kept with the event order amount and currency context", width: 790, height: 492 },
+  { title: "Captured or pending", copy: "Separate completed payment from a state that still needs attention.", href: "#razorpay-operations", image: "/images/razorpay-platform-analytics-organizations.png", alt: "EventHex Platform Analytics organization status view for captured or pending payment follow-up", width: 1262, height: 697 },
+  { title: "Failure context", copy: "Keep an unsuccessful attempt distinct from a successful order.", href: "#razorpay-boundary", image: "/images/razorpay-platform-analytics-payment-result.png", alt: "EventHex Platform Analytics usage and subscription status context for a payment result", width: 1262, height: 697 },
+  { title: "Refund history", copy: "See returned value and the remaining refundable amount.", href: "#razorpay-refunds", image: "/images/razorpay-platform-analytics-usage.png", alt: "EventHex Platform Analytics usage and plan distribution supporting refund history review", width: 1262, height: 697 },
+  { title: "Buyer and tickets", copy: "Trace the payment back to the registration it belongs to.", href: "#razorpay-commerce", image: "/images/razorpay-platform-analytics-ticket-continuation.png", alt: "EventHex Platform Analytics registration and check-in trends for buyer and ticket context", width: 1262, height: 697 },
+];
+
+const useCases = [
+  { title: "India conferences", copy: "Connect Razorpay to the paid ticket journey used by local attendees.", image: "/images/razorpay-platform-analytics-overview.png", alt: "EventHex Platform Analytics overview for an India conference ticket journey", width: 790, height: 492 },
+  { title: "Professional associations", copy: "Keep member-event purchases and refund history tied to each order.", image: "/images/razorpay-platform-analytics-organizations.png", alt: "EventHex Platform Analytics organizations view for professional association events", width: 1262, height: 697 },
+  { title: "Training and workshops", copy: "Use paid checkout without exporting registrations to reconcile them manually.", image: "/images/razorpay-platform-analytics-usage.png", alt: "EventHex Platform Analytics feature usage view for training and workshop registrations", width: 1262, height: 697 },
+  { title: "Trade shows", copy: "Route supported visitor or delegate ticket payments through the configured account.", image: "/images/razorpay-platform-analytics-reference.png", alt: "EventHex Platform Analytics dashboard for a trade show payment portfolio", width: 1262, height: 697 },
+];
+
+const adjacentFeatures = [
+  { title: "Event Payment Processing", copy: "Compare the supported gateway paths and event-level finance workflow.", href: "/event-payment-processing/", image: "/images/razorpay-platform-analytics-reference.png", alt: "EventHex Platform Analytics dashboard for event payment processing", width: 1262, height: 697, tone: "blue" },
+  { title: "Event Ticketing", copy: "Configure ticket price, capacity, sale windows, approvals, and discounts.", href: "/event-ticketing/", image: "/images/razorpay-platform-analytics-ticket-continuation.png", alt: "EventHex Platform Analytics registration and check-in view for event ticketing", width: 1262, height: 697, tone: "violet" },
+  { title: "Event Registration", copy: "Choose the form or checkout journey that creates the order.", href: "/event-registration/", image: "/images/razorpay-platform-analytics-overview.png", alt: "EventHex Platform Analytics overview for event registration outcomes", width: 790, height: 492, tone: "mint" },
+  { title: "Invoicing and tax", copy: "Collect billing details and create an order-linked invoice with configured tax lines.", href: "/invoicing-gst/", image: "/images/razorpay-platform-analytics-usage.png", alt: "EventHex Platform Analytics usage view supporting invoicing and tax context", width: 1262, height: 697, tone: "gold" },
+];
+
+const faqs = [
+  { q: "Can we use our existing Razorpay account?", a: "Yes, EventHex supports Razorpay credentials at event or organization level. Confirm which model fits your account structure during setup." },
+  { q: "Does the checkout support UPI, cards, net banking, and wallets?", a: "Razorpay may expose methods enabled for the merchant and checkout. Validate the exact methods in the target account rather than treating the integration page as a universal list." },
+  { q: "Can organizers issue refunds?", a: "Authorized organizers can request full or partial refunds through the supported Razorpay path, up to the remaining refundable amount." },
+  { q: "Does this page guarantee GST-compliant invoices?", a: "No. EventHex can record configured tax lines and generate order-linked invoices, but tax treatment must be set for the organization and jurisdiction." },
+  { q: "How does payment confirmation reach EventHex?", a: "The active Razorpay confirmation and webhook paths update the event order so the ticket workflow can continue." },
+];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+---
+
+<main class="rpx-page">
+  <section class="rpx-hero">
+    <div class="rpx-hero__grid">
+      <div class="rpx-hero__content">
+        <span class="rpx-eyebrow animate-on-scroll" data-animation="fadeInDown">Razorpay integration for events</span>
+        <h1 class="animate-on-scroll" data-animation="fadeInUp">Connect Razorpay to your event ticket checkout</h1>
+        <p class="rpx-lead animate-on-scroll" data-animation="fadeInUp">Use a supported Razorpay account for paid registration, keep the Razorpay handoff tied to the EventHex order, and manage payment and refund state from the event workflow.</p>
+        <div class="rpx-hero__actions animate-on-scroll" data-animation="fadeInUp">
+          <a class="rpx-button rpx-button--primary" href="/book-a-demo/">
+            Book a Demo
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+          <a class="rpx-button rpx-button--secondary" href="#razorpay-flow">See the Razorpay flow</a>
+        </div>
+        <ul class="rpx-proof animate-on-scroll" data-animation="fadeInUp">
+          <li>Razorpay account</li>
+          <li>Order-linked status</li>
+          <li>Full or partial refunds</li>
+        </ul>
+      </div>
+
+      <div class="rpx-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="rpx-hero__visual-card">
+          <div class="rpx-hero__visual-inner">
+            <div class="rpx-hero__visual-stage" aria-label="Animated EventHex Platform Analytics screenshots">
+              {heroScreens.map((shot, index) => (
+                <figure class={`rpx-hero__shot rpx-hero__shot--${index + 1}`}>
+                  <img
+                    src={shot.src}
+                    alt={shot.alt}
+                    width={shot.width}
+                    height={shot.height}
+                    loading={index === 0 ? "eager" : "lazy"}
+                    fetchpriority={index === 0 ? "high" : "auto"}
+                    decoding="async"
+                  />
+                </figure>
+              ))}
+              <span class="rpx-hero__visual-badge">Platform analytics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rpx-lifecycle" id="razorpay-flow" aria-label="What happens after Razorpay is selected">
+    <ol class="rpx-lifecycle__inner">
+      {lifecycle.map((item, index) => (
+        <li class="rpx-lifecycle__stat animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+          <b>{item.label}</b>{item.detail && <span>{item.detail}</span>}
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="rpx-scope">
+    <header class="rpx-scope__header animate-on-scroll" data-animation="fadeInUp">
+      <span>Connection scope</span>
+      <h2>Use Razorpay at the level that matches your event portfolio</h2>
+      <p>EventHex can resolve a supported Razorpay configuration from the event or the organization before checkout begins.</p>
+    </header>
+
+    <div class="rpx-scope__quad">
+      <article class="rpx-scope__cell rpx-scope__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Event-level connection</h3>
+        <p>Use Razorpay credentials for one event when its account, market, or commercial setup differs.</p>
+      </article>
+
+      <div class="rpx-scope__cell rpx-scope__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="rpx-scope__visual rpx-scope__visual--event">
+          <img src="/images/razorpay-platform-analytics-overview.png" alt="EventHex Platform Analytics event overview for a specific event" width="790" height="492" loading="lazy" decoding="async" />
+          <span>Specific event</span>
+        </div>
+      </div>
+
+      <div class="rpx-scope__cell rpx-scope__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="rpx-scope__visual rpx-scope__visual--organization">
+          <img src="/images/razorpay-platform-analytics-organizations.png" alt="EventHex Platform Analytics organizations and top events view for a repeat portfolio" width="1262" height="697" loading="lazy" decoding="async" />
+          <span>Repeat portfolio</span>
+        </div>
+      </div>
+
+      <article class="rpx-scope__cell rpx-scope__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Organization-level connection</h3>
+        <p>Reuse the organization's supported Razorpay configuration across events that select Organization Payment.</p>
+      </article>
+
+      <span class="rpx-scope__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)"></path>
+        </svg>
+      </span>
+    </div>
+
+    <p class="rpx-note">Public and secret keys are write-only or masked after save; exact account requirements remain provider-specific.</p>
+  </section>
+
+  <section id="razorpay-setup" class="rpx-section rpx-setup">
+    <div class="rpx-shell">
+      <header class="rpx-section-heading animate-on-scroll" data-animation="fadeInUp"><span class="rpx-setup__eyebrow"><i aria-hidden="true"></i>Organizer setup</span><h2>Connect the account before tickets go on sale</h2></header>
+      <div class="rpx-setup__grid">
+        {["1", "2", "3"].map((notch) => (
+          <span class={`rpx-setup__notch rpx-setup__notch--${notch}`} aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+            </svg>
+          </span>
+        ))}
+        {setupSteps.map((step, index) => (
+          <article class="animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 70)}>
+            <div class="rpx-setup__icon" aria-hidden="true">
+              {index === 0 && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18"></path><path d="M7 15h2"></path>
+                </svg>
+              )}
+              {index === 1 && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="8" cy="15" r="4"></circle><path d="M11 12l8-8"></path><path d="M15 4l2 2"></path><path d="M17 6l2 2"></path>
+                </svg>
+              )}
+              {index === 2 && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"></path><path d="M12 6v12"></path>
+                </svg>
+              )}
+              {index === 3 && (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path>
+                </svg>
+              )}
+            </div>
+            <div class="rpx-setup__content"><h3>{step.title}</h3><p>{step.copy}</p></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rpx-section rpx-handoff">
+    <div class="rpx-shell">
+      <header class="rpx-section-heading animate-on-scroll" data-animation="fadeInUp">
+        <span>Paid attendee journey</span><h2>Keep Razorpay connected to the ticket order</h2>
+        <p>The event configuration determines the gateway; the buyer continues through the Razorpay path tied to that order.</p>
+      </header>
+      <div class="rpx-handoff__grid animate-on-scroll" data-animation="fadeInUp">
+        <article class="rpx-handoff__order"><span>Order context</span><h3>Keep buyer, ticket, amount, currency, and recorded tax context together.</h3><div class="rpx-order-flow" aria-hidden="true"><i>Order</i><b>→</b><i>Razorpay</i><b>→</b><i>Result</i></div><div class="rpx-handoff__visual rpx-handoff__visual--order"><div class="rpx-handoff__frame"><div class="rpx-handoff__frame-bar"><span><i></i><i></i><i></i></span><small>Order metrics</small></div><img src="/images/razorpay-platform-analytics-order-context.png" alt="EventHex Platform Analytics event and registration metrics for the connected order" width="790" height="492" loading="lazy" /></div></div></article>
+        <article><span>Provider handoff</span><p>EventHex creates the Razorpay order and uses the applicable SDK or hosted handoff for the event configuration.</p><div class="rpx-handoff__visual"><div class="rpx-handoff__frame"><div class="rpx-handoff__frame-bar"><span><i></i><i></i><i></i></span><small>Provider handoff</small></div><img src="/images/razorpay-platform-analytics-provider-handoff.png" alt="EventHex Platform Analytics organizations and top events context for the provider handoff" width="1262" height="697" loading="lazy" /></div></div></article>
+        <article><span>Confirmation</span><p>Confirmation and webhook paths update the EventHex order with the provider result.</p><div class="rpx-handoff__visual"><div class="rpx-handoff__frame"><div class="rpx-handoff__frame-bar"><span><i></i><i></i><i></i></span><small>Payment result</small></div><img src="/images/razorpay-platform-analytics-payment-result.png" alt="EventHex Platform Analytics feature usage and plan distribution after confirmation" width="1262" height="697" loading="lazy" /></div></div><span class="rpx-handoff__cross" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M0,-14 C3,-8 7,-3 14,0 C7,3 3,8 0,14 C-3,8 -7,3 -14,0 C-7,-3 -3,-8 0,-14 Z" fill="#2d2d36"></path>
+          </svg>
+        </span></article>
+        <article><span>Ticket continuation</span><p>Use the confirmed order for registration outcome, ticket delivery, and invoice handling.</p><div class="rpx-handoff__visual rpx-handoff__visual--ticket"><div class="rpx-handoff__frame"><div class="rpx-handoff__frame-bar"><span><i></i><i></i><i></i></span><small>Ticket outcome</small></div><img src="/images/razorpay-platform-analytics-ticket-continuation.png" alt="EventHex Platform Analytics dashboard used to continue the ticket outcome workflow" width="1262" height="697" loading="lazy" /></div></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="rpx-section rpx-market">
+    <div class="rpx-shell rpx-market__grid">
+      <div class="rpx-market__copy">
+        <div class="rpx-market__sticky animate-on-scroll" data-animation="fadeInUp"><span class="rpx-eyebrow">India-first payment path</span><h2>Give India-based events a native Razorpay route</h2><p>Razorpay is the current India-relevant provider path in EventHex. The exact UPI, card, net-banking, or wallet options shown to attendees remain determined by the Razorpay account and checkout configuration.</p></div>
+      </div>
+      <div class="rpx-market__list">
+        <article class="animate-on-scroll" data-animation="fadeInUp">
+          <div class="rpx-market__header"><span>01</span><div><h3>INR ticket sales</h3><p>Use the event currency and Razorpay configuration selected for the order.</p></div></div>
+          <div class="rpx-market__visual rpx-market__visual--conference"><img src="/images/razorpay-platform-analytics-overview.png" alt="EventHex Platform Analytics overview for India conference ticket sales" width="790" height="492" loading="lazy" /><svg class="rpx-market__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div>
+        </article>
+        <article class="animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="rpx-market__header"><span>02</span><div><h3>Corporate and association buyers</h3><p>Keep payment status linked to attendee and invoice data for operational follow-up.</p></div></div>
+          <div class="rpx-market__visual rpx-market__visual--agency"><img src="/images/razorpay-platform-analytics-organizations.png" alt="EventHex Platform Analytics organizations view for corporate and association event buyers" width="1262" height="697" loading="lazy" /><svg class="rpx-market__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div>
+        </article>
+        <article class="animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="rpx-market__header"><span>03</span><div><h3>Payment-method expectations</h3><p>Validate the methods enabled in the merchant account before naming them in event copy.</p></div></div>
+          <div class="rpx-market__visual rpx-market__visual--buyers"><img src="/images/razorpay-platform-analytics-usage.png" alt="EventHex Platform Analytics usage view for validating payment-method expectations" width="1262" height="697" loading="lazy" /><svg class="rpx-market__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+<section id="razorpay-operations" class="rpx-section rpx-operations">
+    <div class="rpx-shell">
+      <header class="rpx-section-heading animate-on-scroll" data-animation="fadeInUp">
+        <span class="rpx-ops-eyebrow">
+          <span class="rpx-ops-eyebrow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>
+          </span>
+          <span>Operations after checkout</span>
+        </span>
+        <h2>Give the event team a payment record it can act on</h2>
+      </header>
+      <div class="rpx-state-grid">
+        {paymentStates.map((item, index) => (
+          <article class:list={["rpx-state-row", { "rpx-state-row--reverse": index % 2 === 1 }]} style={`--card-index: ${index};`}>
+            <div class="rpx-state-cell rpx-state-visual"><div class="rpx-state-shot"><img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" /></div></div>
+            <div class="rpx-state-cell rpx-state-content"><h3>{item.title}</h3><p>{item.copy}</p><a class="rpx-state-explore" href={item.href}>Explore More <span aria-hidden="true">↗</span></a></div>
+            <span class="rpx-state-cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+              </svg>
+            </span>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="razorpay-refunds" class="rpx-section rpx-refunds">
+    <div class="rpx-shell">
+      <header class="rpx-refunds__heading animate-on-scroll" data-animation="fadeInUp"><span>Organizer-managed refunds</span><h2>Handle a Razorpay refund from the order context</h2><p>Authorized organizers can request a full or partial refund through the supported provider path.</p></header>
+      <div class="rpx-refunds__grid">
+        <span class="rpx-refunds__petal rpx-refunds__petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+        <span class="rpx-refunds__petal rpx-refunds__petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+        <span class="rpx-refunds__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="rotate(-90)"></path></svg></span>
+        <article class="rpx-refund-row animate-on-scroll" data-animation="fadeInUp" data-delay="0"><div class="rpx-refund-cell rpx-refund-cell--visual"><div class="rpx-refund-shot-stage rpx-refund-shot-stage--full"><img src="/images/stripe-analytics-overview.png" alt="EventHex Revenue Analytics overview for a full refund order context" width="1262" height="697" loading="lazy" decoding="async" /><span class="rpx-refund-float rpx-refund-float--top"><b>Refund eligible</b><small>Order balance verified</small></span><span class="rpx-refund-float rpx-refund-float--bottom"><i></i><b>Full amount</b></span></div></div><div class="rpx-refund-cell rpx-refund-cell--content"><span class="rpx-refund-eyebrow">Full refund</span><h3>Return the remaining eligible paid amount</h3><p>Issue the full refund from the connected order context while keeping the original payment and its event record together.</p></div></article>
+        <article class="rpx-refund-row rpx-refund-row--reverse animate-on-scroll" data-animation="fadeInUp" data-delay="60"><div class="rpx-refund-cell rpx-refund-cell--content"><span class="rpx-refund-eyebrow">Partial refund</span><h3>Return only the amount the buyer needs</h3><p>Enter a smaller amount when only part of the order should be returned.</p></div><div class="rpx-refund-cell rpx-refund-cell--visual"><div class="rpx-refund-shot-stage rpx-refund-shot-stage--partial"><img src="/images/revenue-analytics-source.jpg" alt="EventHex Revenue Analytics showing a partial refund amount" width="1262" height="697" loading="lazy" decoding="async" /><span class="rpx-refund-float rpx-refund-float--top"><b>Partial amount</b><small>Enter a smaller value</small></span><span class="rpx-refund-float rpx-refund-float--bottom"><i></i><b>Refund queued</b></span></div></div></article>
+        <article class="rpx-refund-row animate-on-scroll" data-animation="fadeInUp" data-delay="120"><div class="rpx-refund-cell rpx-refund-cell--visual"><div class="rpx-refund-shot-stage rpx-refund-shot-stage--guard"><img src="/images/platform-analytics-dashboard.jpg" alt="EventHex Platform Analytics balance and payment context" width="1262" height="697" loading="lazy" decoding="async" /><span class="rpx-refund-float rpx-refund-float--top"><b>Balance guard</b><small>Remaining refundable total</small></span><span class="rpx-refund-float rpx-refund-float--bottom"><i></i><b>Within limit</b></span></div></div><div class="rpx-refund-cell rpx-refund-cell--content"><span class="rpx-refund-eyebrow">Balance guard</span><h3>Protect the paid total before issuing a refund</h3><p>Prevent requests above the paid total minus earlier refunds so the event team stays within the refundable balance.</p></div></article>
+        <article class="rpx-refund-row rpx-refund-row--reverse rpx-refund-row--last animate-on-scroll" data-animation="fadeInUp" data-delay="180"><div class="rpx-refund-cell rpx-refund-cell--content"><span class="rpx-refund-eyebrow">Recorded outcome</span><h3>Keep the result beside the original payment</h3><p>Record the refund outcome against the event payment so finance and operations can trace what changed.</p></div><div class="rpx-refund-cell rpx-refund-cell--visual"><div class="rpx-refund-shot-stage rpx-refund-shot-stage--record"><img src="/images/stripe-payment-dashboard.png" alt="EventHex payment records after a refund outcome" width="1262" height="697" loading="lazy" decoding="async" /><span class="rpx-refund-float rpx-refund-float--top"><b>Recorded outcome</b><small>Linked to the order</small></span><span class="rpx-refund-float rpx-refund-float--bottom"><i></i><b>Payment updated</b></span></div></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="razorpay-finance" class="rpx-section rpx-finance">
+    <div class="rpx-shell">
+      <header class="rpx-finance__heading">
+        <span class="rpx-eyebrow">Connected finance context</span>
+        <h2>Move from one Razorpay order to the event-level picture</h2>
+        <p>EventHex keeps the provider and order state available to the Finance view, where teams can review gross, refunds, recorded fees, tax, and estimated net payout by the available filters.</p>
+      </header>
+      <div class="rpx-finance__grid">
+        {["1", "2"].map((notch) => (
+          <span class={`rpx-finance__notch rpx-finance__notch--${notch}`} aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)"></path>
+            </svg>
+          </span>
+        ))}
+        <article>
+          <div class="rpx-finance__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l3 3v15H6z"></path><path d="M15 3v4h4"></path><path d="M9 12h6M9 16h4"></path></svg>
+          </div>
+          <div class="rpx-finance__content"><h3>Order detail</h3><p>Investigate one buyer or refund.</p></div>
+        </article>
+        <article>
+          <div class="rpx-finance__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg>
+          </div>
+          <div class="rpx-finance__content"><h3>Event summary</h3><p>Review the selected event across orders.</p></div>
+        </article>
+        <article>
+          <div class="rpx-finance__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 10h18M7 15h3"></path></svg>
+          </div>
+          <div class="rpx-finance__content"><h3>Processor record</h3><p>Use Razorpay as the source for account settlement and provider-specific charges.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="razorpay-cases" class="rpx-section rpx-cases">
+    <div class="rpx-shell">
+      <header class="rpx-cases__heading">
+        <span class="rpx-eyebrow">Where this connection fits</span>
+        <h2>Use Razorpay without rebuilding the event workflow</h2>
+      </header>
+      <ol class="rpx-case-steps">
+        {useCases.map((item, index) => (
+          <li>
+            <details data-rpx-case open={index === 0}>
+              <summary tabindex="-1">
+                <span>0{index + 1}</span>
+                <div class="rpx-case-step__content">
+                  <h3>{item.title}</h3>
+                  <p class="rpx-case-step__desc">{item.copy}</p>
+                </div>
+                <button
+                  type="button"
+                  class="rpx-case-step__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${item.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                </button>
+              </summary>
+              <div class="rpx-case-step__visual">
+                <img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="razorpay-boundary" class="rpx-section rpx-boundary">
+    <div class="rpx-shell">
+      <header class="rpx-boundary__heading"><span>Clear operating boundary</span><h2>Know what EventHex manages and what stays with Razorpay</h2></header>
+      <div class="rpx-boundary__grid">
+        <article>
+          <span class="rpx-boundary__label">EventHex</span>
+          <h3>Event operations</h3>
+          <p>Gateway configuration, event order, registration outcome, refund action, and the finance context EventHex records.</p>
+          <div class="rpx-boundary__visual rpx-boundary__visual--event">
+            <img src="/images/razorpay-platform-analytics-reference.png" alt="EventHex Platform Analytics dashboard for event operations and recorded order context" width="1262" height="697" loading="lazy" decoding="async" />
+            <span class="rpx-boundary__visual-badge">Event operations</span>
+          </div>
+        </article>
+        <article>
+          <span class="rpx-boundary__petal rpx-boundary__petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+          <span class="rpx-boundary__petal rpx-boundary__petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+          <span class="rpx-boundary__label">Razorpay</span>
+          <h3>Processor account</h3>
+          <p>Razorpay account status, hosted payment experience, available methods, processing charges, disputes, and settlement schedule.</p>
+          <div class="rpx-boundary__visual rpx-boundary__visual--razorpay">
+            <img src="/images/razorpay-platform-analytics-usage.png" alt="EventHex Platform Analytics usage and subscription view representing processor-account context" width="1262" height="697" loading="lazy" decoding="async" />
+            <span class="rpx-boundary__visual-badge">Processor account</span>
+          </div>
+        </article>
+      </div>
+      <p class="rpx-boundary__note">GST invoice configuration belongs to EventHex invoicing/tax settings; Razorpay integration alone does not guarantee tax compliance.</p>
+    </div>
+  </section>
+
+  <section id="razorpay-commerce" class="rpx-section rpx-commerce">
+    <div class="rpx-shell">
+      <header class="rpx-commerce__heading"><span>Connected event commerce</span><h2>Continue into the page that owns the next decision</h2></header>
+      <div class="rpx-commerce__tabs" role="tablist" aria-label="Connected event commerce features">
+        {adjacentFeatures.map((item, index) => (
+          <button type="button" class:list={[{ "is-active": index === 0 }]} role="tab" aria-selected={index === 0 ? "true" : "false"} aria-controls={`rpx-commerce-panel-${index}`} id={`rpx-commerce-tab-${index}`} data-commerce-tab={index}>{item.title}</button>
+        ))}
+      </div>
+      <div class="rpx-commerce__panels">
+        {adjacentFeatures.map((item, index) => (
+          <article class:list={["rpx-commerce__panel", `rpx-commerce__panel--${item.tone}`, { "is-active": index === 0 }]} id={`rpx-commerce-panel-${index}`} role="tabpanel" aria-labelledby={`rpx-commerce-tab-${index}`} data-commerce-panel={index} hidden={index !== 0}>
+            <div class="rpx-commerce__panel-copy">
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
+              <a href={item.href}>Explore {item.title} <span aria-hidden="true">↗</span></a>
+            </div>
+            <div class="rpx-commerce__panel-visual"><img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" /></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="razorpay-faq" class="rpx-section rpx-faq">
+    <div class="rpx-shell rpx-faq__grid">
+      <div class="rpx-faq__intro animate-on-scroll" data-animation="fadeInLeft">
+        <span class="rpx-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2>What teams ask before connecting Razorpay</h2>
+        <a class="rpx-faq__cta" href="/contact-en/">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+      <div class="rpx-faq__list">
+        {faqs.map((faq, index) => (
+          <details class="animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-rpx-faq open={index === 0}><summary><strong>{faq.q}</strong><span aria-hidden="true"></span></summary><p>{faq.a}</p></details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} is:inline />
+
+<script>
+  const razorpayFaqs = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-rpx-faq]"));
+  razorpayFaqs.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      razorpayFaqs.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const operationsSection = document.querySelector<HTMLElement>("#razorpay-operations");
+  const operationsHeader = operationsSection?.querySelector<HTMLElement>(".rpx-section-heading");
+  const operationCards = operationsSection?.querySelectorAll<HTMLElement>(".rpx-state-row");
+  const finalOperationCard = operationCards?.[operationCards.length - 1];
+
+  if (operationsHeader && finalOperationCard) {
+    let operationsFrame = 0;
+    let stackFrame = 0;
+    const syncOperationsRelease = () => {
+      operationsFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(finalOperationCard).top) || 0;
+      const releaseOffset = Math.min(0, finalOperationCard.getBoundingClientRect().top - stickyTop);
+      operationsHeader.style.setProperty("--rpx-ops-release-y", `${releaseOffset}px`);
+      operationsHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const syncOperationsStack = () => {
+      stackFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(operationCards[0]).top) || 0;
+      operationCards.forEach((card) => {
+        const distance = card.getBoundingClientRect().top - stickyTop;
+        const progress = Math.max(0, Math.min(1, 1 - distance / 180));
+        card.style.setProperty("--stack-progress", progress.toFixed(3));
+      });
+    };
+    const queueOperationsRelease = () => {
+      if (operationsFrame) return;
+      operationsFrame = requestAnimationFrame(syncOperationsRelease);
+    };
+    const queueOperationsStack = () => {
+      if (stackFrame) return;
+      stackFrame = requestAnimationFrame(syncOperationsStack);
+    };
+
+    window.addEventListener("scroll", queueOperationsRelease, { passive: true });
+    window.addEventListener("resize", queueOperationsRelease, { passive: true });
+    window.addEventListener("scroll", queueOperationsStack, { passive: true });
+    window.addEventListener("resize", queueOperationsStack, { passive: true });
+    syncOperationsRelease();
+    syncOperationsStack();
+  }
+
+  const commerceTabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-commerce-tab]"));
+  const commercePanels = Array.from(document.querySelectorAll<HTMLElement>("[data-commerce-panel]"));
+  const commerceSection = document.querySelector<HTMLElement>("#razorpay-commerce");
+  let commerceRotationId: number | undefined;
+
+  const activateCommerceTab = (tab: HTMLButtonElement) => {
+    const activeIndex = tab.dataset.commerceTab;
+    commerceTabs.forEach((item) => {
+      const isActive = item === tab;
+      item.classList.toggle("is-active", isActive);
+      item.setAttribute("aria-selected", String(isActive));
+    });
+    commercePanels.forEach((panel) => {
+      const isActive = panel.dataset.commercePanel === activeIndex;
+      panel.hidden = !isActive;
+      panel.classList.toggle("is-active", isActive);
+    });
+  };
+
+  const stopCommerceRotation = () => {
+    if (commerceRotationId === undefined) return;
+    window.clearInterval(commerceRotationId);
+    commerceRotationId = undefined;
+  };
+
+  const startCommerceRotation = () => {
+    stopCommerceRotation();
+    if (commerceTabs.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    commerceRotationId = window.setInterval(() => {
+      const currentIndex = commerceTabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+      activateCommerceTab(commerceTabs[(currentIndex + 1) % commerceTabs.length]);
+    }, 4000);
+  };
+
+  commerceTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      activateCommerceTab(tab);
+      startCommerceRotation();
+    });
+  });
+
+  commerceSection?.addEventListener("mouseenter", stopCommerceRotation);
+  commerceSection?.addEventListener("mouseleave", startCommerceRotation);
+  commerceSection?.addEventListener("focusin", stopCommerceRotation);
+  commerceSection?.addEventListener("focusout", (event) => {
+    if (!(event.relatedTarget instanceof Node) || !commerceSection.contains(event.relatedTarget)) {
+      startCommerceRotation();
+    }
+  });
+  document.addEventListener("visibilitychange", () => {
+    document.hidden ? stopCommerceRotation() : startCommerceRotation();
+  });
+  startCommerceRotation();
+
+  const scopeSection = document.querySelector<HTMLElement>(".rpx-scope");
+  const setupSection = document.querySelector<HTMLElement>("#razorpay-setup");
+  if (scopeSection && setupSection) {
+    scopeSection.parentElement?.insertBefore(setupSection, scopeSection);
+  }
+
+  const refundSection = document.querySelector<HTMLElement>("#razorpay-refunds");
+  if (operationsSection && refundSection) {
+    operationsSection.parentElement?.insertBefore(refundSection, operationsSection);
+  }
+
+  const casesSection = document.querySelector<HTMLElement>("#razorpay-cases");
+  if (casesSection && commerceSection && casesSection.parentElement === commerceSection.parentElement) {
+    const sectionMarker = document.createComment("rpx-section-order");
+    casesSection.replaceWith(sectionMarker);
+    commerceSection.replaceWith(casesSection);
+    sectionMarker.replaceWith(commerceSection);
+  }
+
+  const caseSteps = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-rpx-case]"));
+  caseSteps.forEach((item) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".rpx-case-step__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} case study`);
+      if (!item.open) return;
+      caseSteps.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .rpx-page{--rpx-ink:#202631;--rpx-muted:#667085;--rpx-line:#e3e8f0;--rpx-blue:var(--brand-blue,#375dfb);color:var(--rpx-ink);font-family:var(--font-body);overflow:clip}
+  .rpx-shell{width:min(1140px,calc(100% - 48px));margin:0 auto}.rpx-section{padding:112px 0}
+  .rpx-eyebrow,.rpx-section-heading>span{display:inline-block;color:var(--rpx-blue);font-size:14px;font-weight:600;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+  .rpx-section-heading{max-width:820px;margin:0 auto 56px;text-align:center}
+  .rpx-section-heading h2,.rpx-market h2,.rpx-finance h2,.rpx-faq h2{margin:16px 0 0;color:var(--rpx-ink);font-family:var(--font-heading);font-size:clamp(38px,4.6vw,58px);font-weight:500;line-height:1.05;letter-spacing:-.045em}
+  .rpx-section-heading>p,.rpx-market__copy>p,.rpx-finance__copy>p{max-width:720px;margin:20px auto 0;color:var(--rpx-muted);font-size:17px;line-height:1.65}
+  .rpx-hero{position:relative;overflow:hidden;margin-top:-90px;padding:140px 24px 64px;background:radial-gradient(ellipse 700px 500px at -5% -10%,#375dfb24,#375dfb0f 40%,#375dfb00 75%),radial-gradient(ellipse 800px 600px at 100% 105%,#ff74b83d,#ff74b81a 45%,#ff74b800 78%),#fff}
+  .rpx-hero:after{content:"";position:absolute;top:0;right:0;bottom:0;width:220px;max-width:30vw;background:linear-gradient(to right,#fff0,#ffffff73 70%,#ffffffbf);pointer-events:none;z-index:2}
+  .rpx-hero__grid{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:minmax(260px,542px) minmax(0,490px);gap:48px;align-items:center}.rpx-hero__content{display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+  .rpx-hero .rpx-eyebrow{font-size:16px;font-weight:500;line-height:normal;letter-spacing:normal}
+  .rpx-hero h1{width:100%;margin:0;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;font-family:var(--font-heading);font-size:60px;font-weight:500;line-height:66px;letter-spacing:-2.1px}
+  .rpx-lead{width:100%;margin:0;color:var(--rpx-muted);font-size:18px;line-height:24px;letter-spacing:-.25px}.rpx-hero__actions{display:flex;align-items:center;gap:16px;padding-top:8px;flex-wrap:wrap}
+  .rpx-button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:12px 26px;border:1px solid transparent;border-radius:10px;font-size:15px;font-weight:600;line-height:1.5;text-decoration:none;transition:transform .2s ease,background .2s ease,border-color .2s ease}.rpx-button:hover{transform:translateY(-2px)}.rpx-button--primary{background:var(--rpx-blue);color:#fff}.rpx-button--primary:hover{background:var(--brand-blue-hover,#1c46d4)}.rpx-button--secondary{border-color:#d9e0ec;background:rgba(255,255,255,.75);color:var(--rpx-ink)}
+  .rpx-hero .rpx-button{gap:6px;padding:12px 20px;border-radius:12px;font-weight:650;line-height:22px;letter-spacing:-.3px;transition:transform .3s,background .3s}.rpx-hero .rpx-button--primary{background:var(--rpx-ink);color:#fff}.rpx-hero .rpx-button--primary:hover{background:#000}.rpx-hero .rpx-button--secondary{border-color:rgba(16,24,40,.22);background:transparent}.rpx-hero .rpx-button--secondary:hover{border-color:var(--rpx-ink);background:transparent}
+  .rpx-proof{display:flex;flex-wrap:wrap;gap:18px;margin:0;padding:4px 0 0;list-style:none;color:var(--rpx-ink);font-size:16px;font-weight:400}.rpx-proof li{position:relative;padding-left:16px}.rpx-proof li:before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:#10b981}
+  .rpx-hero__visual{position:relative;margin-right:calc(-1 * (max(0px,(100vw - 1128px) / 2) + 24px))}.rpx-hero__visual-card{position:relative;padding:14px;border:1px solid rgba(255,255,255,.62);border-right:0;border-radius:22px 0 0 22px;background:linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}.rpx-hero__visual-inner{position:relative;overflow:hidden;padding:32px;border-radius:16px 0 0 16px;background:linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.rpx-hero__visual-inner img{display:block;width:100%;height:auto;border:1px solid rgba(32,38,49,.08);border-radius:12px 0 0 12px;background:#fff;box-shadow:0 18px 46px rgba(53,67,112,.14)}
+  .rpx-hero__visual-stage{position:relative;min-height:300px;aspect-ratio:1262 / 697}.rpx-hero__shot{position:absolute;inset:0;display:grid;place-items:center;margin:0;opacity:0;transform:translateY(8px) scale(.985);animation:rpx-hero-shot-cycle 15s ease-in-out infinite;will-change:opacity,transform}.rpx-hero__shot--1{animation-delay:0s}.rpx-hero__shot--2{animation-delay:-5s}.rpx-hero__shot--3{animation-delay:-10s}.rpx-hero__visual-stage .rpx-hero__shot img{width:100%;height:100%;object-fit:contain;border-radius:12px 0 0 12px}.rpx-hero__visual-badge{position:absolute;right:18px;bottom:16px;z-index:4;padding:8px 12px;border:1px solid rgba(255,255,255,.84);border-radius:999px;background:rgba(255,255,255,.82);box-shadow:0 12px 26px rgba(53,67,112,.16);color:#25304b;font-size:12px;font-weight:700;letter-spacing:.01em;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  @keyframes rpx-hero-shot-cycle{0%,25%{opacity:1;transform:translateY(0) scale(1)}33%,92%{opacity:0;transform:translateY(-7px) scale(1.015)}100%{opacity:1;transform:translateY(0) scale(1)}}
+  @media(prefers-reduced-motion:reduce){.rpx-hero__shot{animation:none;opacity:0;transform:none}.rpx-hero__shot--1{opacity:1}.rpx-hero__visual-badge{transition:none}}
+  .rpx-lifecycle{border-top:1px solid var(--surface-card-border);padding:1.5rem;background:#fff}.rpx-lifecycle__inner{max-width:1280px;margin:0 auto;padding:0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2.25rem;list-style:none}.rpx-lifecycle__stat{font-family:var(--font-body);font-size:.9375rem;font-weight:400;color:var(--rpx-muted);white-space:nowrap}.rpx-lifecycle__stat b{color:var(--rpx-ink);font-weight:700}.rpx-lifecycle__stat span{margin-left:.25em}
+  .rpx-scope{display:flex;overflow:hidden;flex-direction:column;align-items:center;padding:clamp(72px,9vw,112px) 24px;background:radial-gradient(circle 380px at 3% 34%,rgba(175,163,255,.22),transparent 100%),radial-gradient(circle 300px at 97% 30%,rgba(255,182,213,.2),transparent 100%),radial-gradient(circle 340px at 95% 75%,rgba(130,170,255,.2),transparent 100%),radial-gradient(circle 300px at 4% 78%,rgba(255,224,150,.16),transparent 100%),#fff}.rpx-scope__header{display:flex;max-width:1100px;align-items:center;flex-direction:column;margin-bottom:24px;text-align:center}.rpx-scope__header>span{margin-bottom:14px;color:var(--rpx-blue);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}.rpx-scope__header h2{margin:0 0 12px;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;font-family:var(--font-heading);font-size:clamp(28px,4.2vw,48px);font-weight:500;line-height:1.1;letter-spacing:-.04em}.rpx-scope__header p{max-width:640px;margin:0;color:var(--rpx-muted);font-size:18px;line-height:1.5}.rpx-scope__quad{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;max-width:1180px;margin:24px auto}.rpx-scope__cross{position:absolute;left:50%;top:50%;z-index:1;width:18px;height:18px;transform:translate(-50%,-50%);line-height:0;pointer-events:none}.rpx-scope__cell{display:flex;min-height:260px;flex-direction:column;justify-content:center;padding:56px 48px;border-right:1px solid #eef0f3;border-bottom:1px solid #eef0f3}.rpx-scope__cell:nth-child(2n){border-right:0}.rpx-scope__cell:nth-child(n+3){border-bottom:0}.rpx-scope__cell h3{margin:0 0 16px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:clamp(24px,2.6vw,32px);font-weight:700;line-height:1.1;letter-spacing:-.03em}.rpx-scope__cell p{max-width:40ch;margin:0;color:var(--rpx-muted);font-size:16px;line-height:1.6}.rpx-scope__cell--media{align-items:center;min-height:360px;padding:18px 22px;overflow:hidden}.rpx-scope__visual{position:relative;width:100%;height:320px;overflow:hidden;border:1px solid rgba(209,214,226,.92);border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14)}.rpx-scope__visual img{position:absolute;display:block;max-width:none;height:100%;object-fit:cover;background:#fff}.rpx-scope__visual--event img{right:0;width:165%;object-position:right center}.rpx-scope__visual--organization img{left:0;width:145%;object-position:left top}.rpx-scope__visual>span{position:absolute;top:14px;left:14px;z-index:2;padding:9px 11px;border:1px solid #cfead9;border-radius:10px;background:#effbf4;color:#18864b;font-size:11px;font-weight:700;line-height:1;box-shadow:0 10px 24px rgba(31,41,72,.16)}.rpx-note{max-width:920px;margin:28px auto 0;padding:0;border:0;background:transparent;color:var(--rpx-muted);font-size:15px;line-height:1.5;text-align:center}
+  .rpx-setup{padding:140px 24px 120px;background:#fff}.rpx-setup .rpx-shell{max-width:1200px}.rpx-setup .rpx-section-heading{max-width:900px;margin:0 auto 64px;text-align:center}.rpx-setup .rpx-section-heading>span{display:block;margin-bottom:18px}.rpx-setup .rpx-section-heading h2{margin:0;background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}.rpx-setup__grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--surface-card-border)}.rpx-setup__grid article{position:relative;display:block;min-height:300px;padding:28px;border:0;border-left:1px solid var(--surface-card-border);border-radius:0;background:transparent;box-shadow:none}.rpx-setup__grid article:first-of-type{border-left:0}.rpx-setup__notch{position:absolute;top:0;z-index:2;width:28px;height:28px;transform:translate(-50%,-50%);line-height:0;pointer-events:none}.rpx-setup__notch--1{left:25%}.rpx-setup__notch--2{left:50%}.rpx-setup__notch--3{left:75%}.rpx-setup__icon{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;margin-bottom:28px;color:var(--rpx-blue)}.rpx-setup__icon svg{width:100%;height:100%}.rpx-setup__content h3{max-width:230px;min-height:2.5em;margin:0 0 28px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.25}.rpx-setup__content p{margin:14px 0 0;color:var(--rpx-muted);font-family:var(--font-body);font-size:15px;line-height:1.4}
+  .rpx-handoff{background:linear-gradient(135deg,#f8faff,#f4f1ff)}.rpx-handoff__grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;border:1px solid var(--rpx-line);border-radius:22px;overflow:hidden;background:#fff}.rpx-handoff__grid article{min-height:210px;padding:30px;border-top:1px solid var(--rpx-line);border-left:1px solid var(--rpx-line)}.rpx-handoff__grid article>span{color:var(--rpx-blue);font-size:13px;font-weight:600}.rpx-handoff__grid article>p{margin:48px 0 0;color:var(--rpx-muted);font-size:14px;line-height:1.65}.rpx-handoff__order{grid-row:span 2;min-height:420px!important;border-top:0!important;border-left:0!important;background:#10182b;color:#fff}.rpx-handoff__order h3{margin:48px 0 0;font:500 30px/1.18 var(--font-heading)}.rpx-handoff__grid article:nth-child(2),.rpx-handoff__grid article:nth-child(3){border-top:0}.rpx-order-flow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:64px}.rpx-order-flow i{padding:10px 13px;border:1px solid rgba(255,255,255,.16);border-radius:8px;color:rgba(255,255,255,.8);font-size:11px;font-style:normal}.rpx-order-flow b{color:#91a4ff}
+  .rpx-market{background:#fff}.rpx-market__grid,.rpx-finance__grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:86px;align-items:center}.rpx-market h2,.rpx-finance h2{margin-top:18px}.rpx-market__copy>p,.rpx-finance__copy>p{margin-inline:0}.rpx-market__list{border-top:1px solid var(--rpx-line)}.rpx-market__list article{display:grid;grid-template-columns:190px 1fr;gap:26px;padding:27px 0;border-bottom:1px solid var(--rpx-line)}.rpx-market__list span{font:500 17px var(--font-heading)}.rpx-market__list p{margin:0;color:var(--rpx-muted);font-size:14px;line-height:1.6}
+  .rpx-operations{background:#f7f8fb}.rpx-state-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--rpx-line);border-radius:22px;overflow:hidden;background:var(--rpx-line);gap:1px}.rpx-state-grid article{min-height:245px;padding:30px;background:#fff}.rpx-state-grid article>span{color:var(--rpx-blue);font-size:12px;font-weight:700}.rpx-state-grid h3{margin:42px 0 14px;font:500 23px/1.2 var(--font-heading)}.rpx-state-grid p{margin:0;color:var(--rpx-muted);font-size:14px;line-height:1.6}
+  .rpx-refunds{background:#101625;color:#fff}.rpx-refunds__grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:28px}.rpx-refund-panel{display:flex;min-height:420px;flex-direction:column;padding:34px;border:1px solid rgba(255,255,255,.15);border-radius:22px;background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(255,255,255,.04))}.rpx-refund-panel>span{color:rgba(255,255,255,.6);font-size:13px}.rpx-refund-panel>strong{margin:28px 0;font:500 48px var(--font-heading)}.rpx-refund-panel>div{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.65);font-size:12px}.rpx-refund-panel i{width:8px;height:8px;border-radius:50%;background:#10b981}.rpx-refund-panel button{margin-top:auto;padding:14px 18px;border:0;border-radius:10px;background:var(--rpx-blue);color:#fff;font:600 14px var(--font-body);text-align:left}.rpx-refund-list{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(255,255,255,.14);border-radius:22px;overflow:hidden}.rpx-refund-list article{min-height:210px;padding:30px;border-top:1px solid rgba(255,255,255,.14);border-left:1px solid rgba(255,255,255,.14)}.rpx-refund-list article:nth-child(-n+2){border-top:0}.rpx-refund-list article:nth-child(odd){border-left:0}.rpx-refund-list span{color:#aab8ff;font-size:13px;font-weight:600}.rpx-refund-list p{margin:52px 0 0;color:rgba(255,255,255,.64);font-size:14px;line-height:1.6}
+  .rpx-refund-panel>i{display:block;width:100%;height:74px;margin:0 0 18px;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:rgba(255,255,255,.06)}.rpx-refund-panel>i:nth-child(2){width:72%}.rpx-refund-panel>i:nth-child(3){width:44%}.rpx-refund-panel>b{display:block;width:100%;height:48px;margin-top:auto;border-radius:10px;background:var(--rpx-blue)}
+  .rpx-finance{background:linear-gradient(135deg,#fff,#f3f6ff)}.rpx-finance__layers{display:grid;gap:14px}.rpx-finance__layers article{padding:28px 30px;border:1px solid var(--rpx-line);border-radius:16px;background:rgba(255,255,255,.8)}.rpx-finance__layers article:nth-child(2){margin-left:38px}.rpx-finance__layers article:nth-child(3){margin-left:76px}.rpx-finance__layers span{color:var(--rpx-blue);font:500 18px var(--font-heading)}.rpx-finance__layers p{margin:9px 0 0;color:var(--rpx-muted);font-size:14px;line-height:1.55}
+  .rpx-cases{background:#fff}.rpx-case-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rpx-line);border-bottom:1px solid var(--rpx-line)}.rpx-case-grid article{min-height:280px;padding:30px 24px;border-left:1px solid var(--rpx-line)}.rpx-case-grid article:first-child{border-left:0}.rpx-case-grid article>span{color:var(--rpx-blue);font-size:12px;font-weight:700}.rpx-case-grid h3{margin:50px 0 14px;font:500 22px/1.2 var(--font-heading)}.rpx-case-grid p{margin:0;color:var(--rpx-muted);font-size:14px;line-height:1.6}
+  .rpx-boundary{background:#101625;color:#fff}.rpx-boundary__grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(255,255,255,.15);border-radius:22px;overflow:hidden}.rpx-boundary__grid article{min-height:300px;padding:38px}.rpx-boundary__grid article+article{border-left:1px solid rgba(255,255,255,.15)}.rpx-boundary__grid article>span{color:#aab8ff;font-size:13px;font-weight:600}.rpx-boundary__grid h3{margin:42px 0 14px;font:500 28px var(--font-heading)}.rpx-boundary__grid p{margin:0;color:rgba(255,255,255,.64);font-size:15px;line-height:1.65}.rpx-boundary__note{margin:20px 0 0;color:rgba(255,255,255,.64);font-size:13px;text-align:center}
+  .rpx-commerce{background:#f7f8fb}.rpx-link-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rpx-line);border-bottom:1px solid var(--rpx-line)}.rpx-link-grid a{min-height:270px;padding:28px 24px;border-left:1px solid var(--rpx-line);color:inherit;text-decoration:none;transition:background .2s ease,transform .2s ease}.rpx-link-grid a:first-child{border-left:0}.rpx-link-grid a:hover{background:#fff;transform:translateY(-3px)}.rpx-link-grid a>span{color:var(--rpx-blue);font-size:20px}.rpx-link-grid h3{margin:44px 0 14px;font:500 21px/1.2 var(--font-heading)}.rpx-link-grid p{margin:0;color:var(--rpx-muted);font-size:14px;line-height:1.6}
+  .rpx-faq{width:100%;padding:80px 24px;background:#fff}.rpx-faq .rpx-shell{width:100%;max-width:1140px}.rpx-faq__grid{display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start}.rpx-faq__intro{position:sticky;top:96px}.rpx-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;color:#000;font-family:var(--font-body);font-size:.8125rem;font-weight:500;line-height:1}.rpx-faq h2{margin:0 0 28px;color:#000;font-family:var(--font-heading);font-size:44px;font-weight:500;line-height:1.1;letter-spacing:-1px}.rpx-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font-family:var(--font-body);font-size:.9375rem;font-weight:500;line-height:1.5;text-decoration:none;transition:background .2s ease,transform .2s ease}.rpx-faq__cta:hover{background:#000;transform:translateY(-1px)}.rpx-faq__list{display:flex;flex-direction:column;gap:16px;counter-reset:rpx-faq}.rpx-faq details{counter-increment:rpx-faq;padding:4px 28px;overflow:hidden;border:1px solid #e4e7ec;border-radius:20px;background:#fff;transition:background .25s ease,border-color .25s ease}.rpx-faq details[open]{border-color:#e4e7ec;background:#e4e7ec}.rpx-faq summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;color:#000;cursor:pointer;list-style:none}.rpx-faq summary::-webkit-details-marker{display:none}.rpx-faq summary strong{font:500 1.0625rem/1.4 var(--font-heading)}.rpx-faq summary strong:before{content:counter(rpx-faq) ". "}.rpx-faq summary span{position:relative;width:18px;height:18px;flex:0 0 18px;transition:transform .28s cubic-bezier(.22,1,.36,1)}.rpx-faq summary span:before,.rpx-faq summary span:after{content:"";position:absolute;top:50%;left:50%;width:14px;height:2px;background:#000;transform:translate(-50%,-50%)}.rpx-faq summary span:after{width:2px;height:14px;transition:opacity .2s ease}.rpx-faq details[open] summary span{transform:scale(.9)}.rpx-faq details[open] summary span:after{opacity:0}.rpx-faq details>p{max-width:640px;margin:0;padding:0 0 24px;color:#000;font-family:var(--font-body);font-size:.9375rem;line-height:1.7}
+  @media(max-width:1000px){.rpx-hero__grid,.rpx-market__grid,.rpx-finance__grid,.rpx-faq__grid{grid-template-columns:1fr}.rpx-hero__content{align-items:center;text-align:center}.rpx-hero__visual{width:min(680px,100%);margin:0 auto}.rpx-proof{justify-content:center}.rpx-lifecycle__rail{grid-template-columns:repeat(3,1fr)}.rpx-lifecycle__rail li:nth-child(4){border-left:0}.rpx-setup__grid,.rpx-case-grid,.rpx-link-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rpx-setup__grid article:nth-child(3),.rpx-case-grid article:nth-child(3),.rpx-link-grid a:nth-child(3){border-left:0}.rpx-setup__grid article:nth-child(n+3),.rpx-case-grid article:nth-child(n+3),.rpx-link-grid a:nth-child(n+3){border-top:1px solid var(--rpx-line)}.rpx-market__grid,.rpx-finance__grid{gap:50px}.rpx-faq__intro{position:static}}
+  @media(max-width:760px){.rpx-shell{width:calc(100% - 32px)}.rpx-section{padding:76px 0}.rpx-section-heading{margin-bottom:38px}.rpx-section-heading h2,.rpx-market h2,.rpx-finance h2{font-size:36px}.rpx-hero{margin-top:-80px;padding:126px 0 68px}.rpx-hero__grid{grid-template-columns:minmax(0,1fr);gap:44px}.rpx-hero h1{font-size:40px}.rpx-lead{font-size:16px}.rpx-hero__actions{width:100%;flex-direction:column}.rpx-button{width:100%}.rpx-order-card{padding:12px;border-radius:18px}.rpx-order-card__top,.rpx-order-card__title{align-items:flex-start;flex-direction:column}.rpx-order-card__title b{max-width:none;text-align:left}.rpx-order-card__grid{grid-template-columns:1fr}.rpx-order-card__grid>div{min-height:104px;border-left:0}.rpx-lifecycle{padding:72px 0}.rpx-lifecycle__rail{grid-template-columns:1fr}.rpx-lifecycle__rail li,.rpx-lifecycle__rail li:nth-child(4){min-height:0;padding:22px 0;border-top:1px solid rgba(255,255,255,.14);border-left:0}.rpx-lifecycle__rail li:first-child{border-top:0}.rpx-lifecycle__rail h3{margin:12px 0 8px}.rpx-choice,.rpx-setup__grid,.rpx-handoff__grid,.rpx-state-grid,.rpx-refunds__grid,.rpx-refund-list,.rpx-case-grid,.rpx-boundary__grid,.rpx-link-grid{grid-template-columns:1fr}.rpx-choice article{min-height:0;padding:30px 24px}.rpx-choice article+article{border-top:1px solid var(--rpx-line);border-left:0}.rpx-choice h3{margin:30px 0 22px}.rpx-setup__grid article,.rpx-setup__grid article:nth-child(3),.rpx-case-grid article,.rpx-case-grid article:nth-child(3),.rpx-link-grid a,.rpx-link-grid a:nth-child(3){min-height:0;padding:28px 22px;border-top:1px solid var(--rpx-line);border-left:0}.rpx-setup__grid article:first-child,.rpx-case-grid article:first-child,.rpx-link-grid a:first-child{border-top:0}.rpx-setup__grid small{margin-top:28px}.rpx-handoff__grid article,.rpx-handoff__grid article:nth-child(2),.rpx-handoff__grid article:nth-child(3){min-height:0;padding:28px 24px;border-top:1px solid var(--rpx-line);border-left:0}.rpx-handoff__order{grid-row:auto;min-height:340px!important;border-top:0!important}.rpx-handoff__grid article>p{margin-top:28px}.rpx-order-flow{margin-top:50px}.rpx-market__list article{grid-template-columns:1fr;gap:10px}.rpx-state-grid article{min-height:0}.rpx-refund-panel{min-height:360px}.rpx-refund-list article{min-height:0;border-top:1px solid rgba(255,255,255,.14)!important;border-left:0}.rpx-refund-list article:first-child{border-top:0!important}.rpx-refund-list p{margin-top:28px}.rpx-finance__layers article:nth-child(2),.rpx-finance__layers article:nth-child(3){margin-left:0}.rpx-case-grid h3,.rpx-link-grid h3{margin-top:30px}.rpx-boundary__grid article{min-height:0;padding:30px 24px}.rpx-boundary__grid article+article{border-top:1px solid rgba(255,255,255,.15);border-left:0}.rpx-faq h2{font-size:36px}.rpx-faq__grid{gap:38px}.rpx-faq details{padding:4px 20px}}
+  @media(max-width:1120px){.rpx-hero__grid{grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:32px}.rpx-hero h1{font-size:46px;line-height:52px;letter-spacing:-1.5px}}
+  @media(max-width:1000px){.rpx-hero{padding:130px 20px 48px}.rpx-hero:after{display:none}.rpx-hero__grid{grid-template-columns:1fr;gap:32px;text-align:center}.rpx-hero__content{align-items:center}.rpx-hero__actions,.rpx-proof{justify-content:center}.rpx-hero__visual{margin-right:0}.rpx-hero__visual-card{border-right:1px solid rgba(255,255,255,.62);border-radius:22px}.rpx-hero__visual-inner,.rpx-hero__visual-inner img{border-radius:16px}}
+  @media(max-width:760px){.rpx-hero{margin-top:-80px;padding:112px 16px 40px}.rpx-hero__grid{gap:32px;text-align:left}.rpx-hero__content{align-items:flex-start;text-align:left}.rpx-hero h1{font-size:34px;line-height:40px;letter-spacing:-.8px}.rpx-lead{font-size:18px;line-height:24px}.rpx-hero__actions{align-items:stretch;justify-content:flex-start}.rpx-proof{justify-content:flex-start}.rpx-hero__visual-inner{padding:32px}}
+  @media(max-width:760px){.rpx-lifecycle{padding:1.5rem}.rpx-lifecycle__inner{justify-content:center;text-align:center}}
+  @media(max-width:768px){.rpx-scope{padding:60px 16px}.rpx-scope__quad{grid-template-columns:1fr;grid-template-rows:auto}.rpx-scope__cross{display:none}.rpx-scope__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}.rpx-scope__cell:nth-child(3){order:4;border-bottom:0}.rpx-scope__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}.rpx-scope__cell--media{min-height:0;padding:16px 20px 32px}.rpx-scope__visual{height:285px}}
+  @media(max-width:1000px){.rpx-setup__grid{grid-template-columns:1fr}.rpx-setup__notch{display:none}.rpx-setup__grid article,.rpx-setup__grid article:nth-child(3){min-height:0;border-top:1px solid var(--surface-card-border);border-left:0}.rpx-setup__grid article:first-of-type{border-top:0}}
+  @media(max-width:760px){.rpx-setup{padding:76px 16px}.rpx-setup .rpx-section-heading{margin-bottom:52px}.rpx-setup__grid article,.rpx-setup__grid article:nth-child(3){padding:28px 22px;border-top-color:var(--surface-card-border)}.rpx-setup__grid article:first-of-type{border-top:0}}
+  @media(prefers-reduced-motion:reduce){.rpx-button,.rpx-link-grid a,.rpx-faq summary span:after{transition:none}}
+  .rpx-handoff{position:relative;overflow:hidden;padding:96px 24px clamp(68px,8vw,96px);background:#000 radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22),rgba(124,108,255,.1) 45%,transparent 100%);color:#fff}
+  .rpx-handoff::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.16;background-image:radial-gradient(rgba(255,255,255,.25) .5px,transparent .5px);background-size:4px 4px}
+  .rpx-handoff>*{position:relative;z-index:1}
+  .rpx-handoff .rpx-shell{max-width:1140px}
+  .rpx-handoff .rpx-section-heading{max-width:900px;margin:0 auto 56px;text-align:center}
+  .rpx-handoff .rpx-section-heading>span{color:#a79aff}
+  .rpx-handoff .rpx-section-heading h2{margin:14px 0 18px;background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}
+  .rpx-handoff .rpx-section-heading p{max-width:720px;margin:0 auto;color:rgba(255,255,255,.62);font-size:17px;line-height:1.65}
+  .rpx-handoff__grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden;border:1px solid #3b3a47;border-radius:16px;background:transparent}
+  .rpx-handoff__grid article,.rpx-handoff__grid article:nth-child(2),.rpx-handoff__grid article:nth-child(3){display:flex;min-height:360px;flex-direction:column;padding:32px 30px;border:0;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36;background:transparent;color:#fff}
+  .rpx-handoff__grid article:nth-child(2),.rpx-handoff__grid article:nth-child(4){border-right:0}
+  .rpx-handoff__grid article:nth-child(3),.rpx-handoff__grid article:nth-child(4){border-bottom:0}
+  .rpx-handoff__grid article>span{color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .rpx-handoff__grid article>p{max-width:40ch;margin:14px 0 0;color:rgba(255,255,255,.62);font-size:15px;line-height:1.38}
+  .rpx-handoff__order{grid-row:auto;min-height:360px!important;border-top:0!important;border-left:0!important;background:transparent!important}
+  .rpx-handoff__order h3{max-width:440px;margin:24px 0 0;color:#fff;font:500 28px/1.18 var(--font-heading)}
+  .rpx-order-flow{margin-top:auto}
+  .rpx-handoff__visual{position:relative;display:flex;align-items:flex-end;justify-content:center;width:100%;min-height:112px;margin-top:auto;padding-top:24px;overflow:visible}
+  .rpx-handoff__frame{position:relative;width:min(100%,310px);padding:25px 10px 10px;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:12px;background:#090a0f;box-shadow:0 18px 34px rgba(0,0,0,.3)}
+  .rpx-handoff__frame-bar{position:absolute;top:0;right:0;left:0;display:flex;height:25px;align-items:center;justify-content:space-between;padding:0 10px;border-bottom:1px solid rgba(255,255,255,.1);background:#10111a;color:rgba(255,255,255,.42);font-size:9px}
+  .rpx-handoff__frame-bar>span{display:flex;gap:4px}.rpx-handoff__frame-bar i{display:block;width:6px;height:6px;border-radius:50%;background:#2d3342}.rpx-handoff__frame-bar i:first-child{background:#56658f}.rpx-handoff__frame-bar small{font-size:9px;letter-spacing:.03em}
+  .rpx-handoff__frame img{display:block;width:100%;height:auto;border:1px solid rgba(255,255,255,.13);border-radius:8px;background:#10111a;box-shadow:none;filter:invert(.93) hue-rotate(180deg) saturate(.72) contrast(1.08);object-fit:cover}
+  .rpx-handoff__visual--order .rpx-handoff__frame,.rpx-handoff__visual--ticket .rpx-handoff__frame{width:min(100%,410px)}
+  .rpx-handoff__grid article:nth-child(3){position:relative}
+  .rpx-handoff__cross{position:absolute;left:100%;top:0;z-index:4;width:28px;height:28px;transform:translate(-50%,-50%);line-height:0;pointer-events:none}
+  .rpx-handoff__cross svg{display:block;width:28px;height:28px}
+  @media(max-width:760px){
+    .rpx-handoff{padding:76px 16px 68px}
+    .rpx-handoff .rpx-section-heading{margin-bottom:44px}
+    .rpx-handoff__grid{grid-template-columns:1fr}
+    .rpx-handoff__cross{display:none}
+    .rpx-handoff__grid article,.rpx-handoff__grid article:nth-child(2),.rpx-handoff__grid article:nth-child(3),.rpx-handoff__grid article:nth-child(4){min-height:260px;padding:30px 24px;border:0;border-bottom:1px solid #3b3a47}
+    .rpx-handoff__grid article:nth-child(4){border-bottom:0}
+    .rpx-handoff__order{min-height:320px!important}
+    .rpx-handoff__order h3{font-size:25px}
+    .rpx-handoff__visual{min-height:100px;padding-top:28px}.rpx-handoff__frame{width:100%}.rpx-handoff__visual--order .rpx-handoff__frame,.rpx-handoff__visual--ticket .rpx-handoff__frame{width:100%}
+  }
+  .rpx-market{padding:100px 24px;background:#fff}
+  .rpx-market .rpx-shell{max-width:1200px}
+  .rpx-market__grid{display:flex;gap:80px;align-items:stretch}
+  .rpx-market__copy{flex:0 0 40%}
+  .rpx-market__sticky{position:sticky;top:120px}
+  .rpx-market .rpx-eyebrow{margin-bottom:24px}
+  .rpx-market h2{margin:0 0 24px;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,4vw,48px);font-weight:500;line-height:1.2;letter-spacing:-.02em}
+  .rpx-market__copy p{margin:0;color:var(--rpx-muted);font-size:18px;line-height:1.6}
+  .rpx-market__list{display:flex;flex:1;flex-direction:column;gap:32px;border:0}
+  .rpx-market__list article{position:sticky;top:80px;display:block;min-height:0;padding:32px;border:0;border-radius:24px;background:#f4f5f7;transition:transform .3s ease}
+  .rpx-market__list article:nth-child(2){top:100px}
+  .rpx-market__list article:nth-child(3){top:120px}
+  .rpx-market__list article:hover{transform:translateY(-4px)}
+  .rpx-market__header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}
+  .rpx-market__header>span{display:flex;width:40px;height:40px;flex:0 0 40px;align-items:center;justify-content:center;border-radius:50%;background:#111;color:#fff;font-family:var(--font-heading);font-size:16px;font-weight:700}
+  .rpx-market__header h3{margin:0 0 8px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:20px;font-weight:700}
+  .rpx-market__header p{margin:0;color:var(--rpx-muted);font-size:16px;line-height:1.6}
+  .rpx-market__visual{position:relative;display:flex;min-height:328px;align-items:center;justify-content:center;overflow:hidden;padding:24px;border:1px solid rgba(255,255,255,.86);border-radius:20px}
+  .rpx-market__list article:nth-child(1) .rpx-market__visual{background:linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%)}
+  .rpx-market__list article:nth-child(2) .rpx-market__visual{background:linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%)}
+  .rpx-market__list article:nth-child(3) .rpx-market__visual{background:linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%)}
+  .rpx-market__visual img{display:block;width:118%;max-width:none;height:280px;border:1px solid #e2e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 34px rgba(17,24,39,.14);object-fit:cover}
+  .rpx-market__visual--conference img{object-position:78% 58%}
+  .rpx-market__visual--agency img{object-position:16% 18%}
+  .rpx-market__visual--buyers img{object-position:52% 78%}
+  .rpx-market__cursor{position:absolute;right:18px;bottom:18px;z-index:2;width:24px;height:28px;fill:#111827;stroke:#fff;stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 4px 5px rgba(17,24,39,.25));animation:rpx-market-cursor-tap 2.4s ease-in-out infinite}
+  @keyframes rpx-market-cursor-tap{0%,100%,55%{transform:translate(0,0)}70%{transform:translate(-9px,-7px)}78%{transform:translate(-9px,-7px) scale(.88)}}
+  @media(max-width:992px){.rpx-market__grid{flex-direction:column;gap:40px}.rpx-market__copy{width:100%;flex:none}.rpx-market__sticky,.rpx-market__list article,.rpx-market__list article:nth-child(2),.rpx-market__list article:nth-child(3){position:static}.rpx-market__header{flex-direction:column}}
+  @media(max-width:560px){.rpx-market{padding:76px 16px}.rpx-market__list article{padding:24px}.rpx-market__visual{min-height:260px;padding:18px}.rpx-market__visual img{height:224px}}
+  @media(prefers-reduced-motion:reduce){.rpx-market__cursor{animation:none}}
+  .rpx-operations{padding:80px 5%;background:#fff}
+  .rpx-operations .rpx-shell{max-width:1200px}
+  .rpx-operations .rpx-section-heading{max-width:920px;margin:0 auto 60px;text-align:center}
+  .rpx-operations .rpx-section-heading h2{margin:14px 0 0;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(32px,4vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}
+  .rpx-state-grid{position:relative;display:block;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent}
+  .rpx-state-row{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:430px;border:0;border-bottom:1px solid #e5e7eb;background:transparent}
+  .rpx-state-row:last-child{border-bottom:0}
+  .rpx-state-grid .rpx-state-row{display:grid;min-height:430px;padding:0;background:transparent}
+  .rpx-state-cell{display:flex;flex-direction:column;justify-content:center;padding:64px}
+  .rpx-state-row .rpx-state-cell:first-child{border-right:1px solid #e5e7eb}
+  .rpx-state-row--reverse .rpx-state-visual{order:2}
+  .rpx-state-row--reverse .rpx-state-content{order:1}
+  .rpx-state-row--reverse .rpx-state-cell:first-child{border-right:0}
+  .rpx-state-row--reverse .rpx-state-content{border-right:1px solid #e5e7eb}
+  .rpx-state-content>span{display:block;margin-bottom:16px;color:#5b21b6;font-size:14px;font-weight:600;letter-spacing:.05em}
+  .rpx-state-content h3{margin:0 0 18px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:36px;font-weight:500;line-height:1.15}
+  .rpx-state-content p{margin:0;color:var(--rpx-muted);font-size:17px;line-height:1.6}
+  .rpx-state-visual{align-items:center}
+  .rpx-state-shot{position:relative;width:100%;overflow:hidden;padding:32px 18px;border-radius:22px;isolation:isolate}
+  .rpx-state-shot img{display:block;width:116%;max-width:none;height:280px;margin-left:-8%;border:1px solid #dfe4ec;border-radius:14px;background:#fff;object-fit:cover;animation:rpx-state-breathe 7s ease-in-out infinite;will-change:transform}
+  .rpx-state-row:nth-child(1) .rpx-state-shot,.rpx-state-row:nth-child(5) .rpx-state-shot{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%)}
+  .rpx-state-row:nth-child(2) .rpx-state-shot,.rpx-state-row:nth-child(6) .rpx-state-shot{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}
+  .rpx-state-row:nth-child(3) .rpx-state-shot{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%)}
+  .rpx-state-row:nth-child(4) .rpx-state-shot{background:linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%)}
+  .rpx-state-row:nth-child(1) img{object-position:10% 18%}
+  .rpx-state-row:nth-child(2) img{object-position:50% 18%}
+  .rpx-state-row:nth-child(3) img{object-position:88% 28%}
+  .rpx-state-row:nth-child(4) img{object-position:18% 75%}
+  .rpx-state-row:nth-child(5) img{object-position:52% 75%}
+  .rpx-state-row:nth-child(6) img{object-position:86% 72%}
+  .rpx-state-row:nth-child(even) .rpx-state-shot img{animation-delay:-3.5s}
+  .rpx-state-cross{position:absolute;bottom:0;left:50%;z-index:2;width:28px;height:28px;transform:translate(-50%,50%);line-height:0;pointer-events:none}
+  .rpx-state-row:last-child .rpx-state-cross{display:none}
+  .rpx-operations{padding:80px 5%;background:#fff}
+  .rpx-operations .rpx-shell{max-width:1200px;width:100%}
+  .rpx-operations .rpx-section-heading{margin-bottom:60px;text-align:center}
+  .rpx-operations .rpx-section-heading h2{background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+  .rpx-state-grid{display:block;gap:0}
+  .rpx-state-row:nth-child(1) img{object-position:80% 58%}
+  .rpx-state-row:nth-child(2) img{object-position:12% 18%}
+  .rpx-state-row:nth-child(3) img{object-position:54% 72%}
+  .rpx-state-row:nth-child(4) img{object-position:92% 26%}
+  .rpx-state-row:nth-child(5) img{object-position:28% 86%}
+  .rpx-state-row:nth-child(6) img{object-position:68% 42%}
+  .rpx-state-cross{position:absolute;bottom:0;left:50%;z-index:2;width:28px;height:28px;transform:translate(-50%,50%);line-height:0;pointer-events:none}
+  .rpx-state-row:last-child .rpx-state-cross{display:none}
+  @keyframes rpx-state-breathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}
+  @media(max-width:900px){
+    .rpx-operations{padding:76px 16px}
+    .rpx-state-grid .rpx-state-row{display:flex;min-height:0;flex-direction:column}
+    .rpx-state-cell{padding:48px 24px}
+    .rpx-state-row .rpx-state-cell:first-child{border-right:0}
+    .rpx-state-content,.rpx-state-row--reverse .rpx-state-content{order:1!important;border-right:0;border-bottom:1px solid #e5e7eb}
+    .rpx-state-visual{order:2!important}
+    .rpx-state-content h3{font-size:32px}
+    .rpx-state-shot{padding:24px 14px}
+    .rpx-state-shot img{height:240px}
+    .rpx-state-cross{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){.rpx-state-shot img{animation:none;will-change:auto}}
+  /* Operations follows the approved Speaker Management stacked-workflow pattern. */
+  .rpx-operations{position:relative;isolation:isolate;overflow:visible;padding:4px 24px 30px;background-color:#000;background-image:linear-gradient(180deg,#0d0a2c 0%,transparent 320px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28) 0%,transparent 55%);background-repeat:no-repeat;background-size:100% 100%,120% 120%;animation:rpx-ops-mesh-move 30s linear infinite;color:#fff}
+  .rpx-operations::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.2;background-image:radial-gradient(rgba(255,255,255,.22) .5px,transparent .5px);background-size:4px 4px}
+  @keyframes rpx-ops-mesh-move{0%,100%{background-position:0 0,0% 0%}50%{background-position:0 0,8% 10%}}
+  .rpx-operations .rpx-shell{width:min(1140px,100%);max-width:1140px}
+  .rpx-operations .rpx-section-heading{position:sticky;top:69px;z-index:20;isolation:isolate;width:min(94%,1050px);max-width:1050px;margin:0 auto;transform:translateY(var(--rpx-ops-release-y,0px));padding:clamp(56px,7vw,88px) 0 clamp(72px,8vw,104px);text-align:center;will-change:transform}
+  .rpx-operations .rpx-section-heading::before{content:"";position:absolute;top:-1px;bottom:-28px;left:50%;z-index:-1;width:100vw;transform:translateX(-50%);pointer-events:none;background:linear-gradient(180deg,rgba(13,10,44,.99) 0%,rgba(7,11,27,.98) 72%,rgba(7,11,27,0) 100%)}
+  .rpx-operations .rpx-section-heading>span.rpx-ops-eyebrow{display:flex;width:fit-content;align-items:center;justify-content:center;gap:8px;margin:0 auto;padding:6px 16px 6px 12px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35);color:#fff;font-family:var(--font-body);font-size:15px;font-weight:500;line-height:24px;letter-spacing:0;text-transform:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  .rpx-ops-eyebrow-icon{display:flex;width:16px;height:16px;flex:0 0 16px}.rpx-ops-eyebrow-icon svg{display:block;width:100%;height:100%}
+  .rpx-operations .rpx-section-heading h2{margin:24px 0 0;background:linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(42px,5.4vw,60px);font-weight:500;line-height:1.1;letter-spacing:-.04em}
+  .rpx-state-grid{position:relative;display:block;width:100%;overflow:visible;padding:80px 0 50px;border:0;border-radius:0;background:transparent}
+  .rpx-state-grid::after{content:"";display:block;height:190px}
+  .rpx-state-row,.rpx-state-grid .rpx-state-row{position:sticky;top:calc(300px + var(--card-index) * 20px);z-index:var(--card-index);display:flex;align-items:stretch;width:100%;height:500px;min-height:500px;margin-bottom:60px;padding:0;border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16) 0%,transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18) 0%,transparent 40%),#0a0a0f;box-shadow:none;transform:translateY(calc((1 - var(--stack-progress,0)) * 28px)) scale(calc(1 - (1 - var(--stack-progress,0)) * .018));transform-origin:center top;will-change:transform}
+  .rpx-state-row:nth-child(1){background:radial-gradient(circle at 82% 12%,rgba(109,92,235,.24),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.13),transparent 28%),#090a10}
+  .rpx-state-row:nth-child(2){background:radial-gradient(circle at 82% 12%,rgba(70,180,150,.2),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.12),transparent 28%),#090a10}
+  .rpx-state-row:nth-child(3){background:radial-gradient(circle at 82% 12%,rgba(91,120,255,.22),transparent 34%),radial-gradient(circle at 8% 92%,rgba(121,104,230,.14),transparent 28%),#090a10}
+  .rpx-state-row:nth-child(4){background:radial-gradient(circle at 82% 12%,rgba(236,118,155,.2),transparent 34%),radial-gradient(circle at 8% 92%,rgba(121,104,230,.12),transparent 28%),#090a10}
+  .rpx-state-row:nth-child(5){background:radial-gradient(circle at 82% 12%,rgba(244,192,85,.22),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.12),transparent 28%),#090a10}
+  .rpx-state-row:nth-child(6){background:radial-gradient(circle at 82% 12%,rgba(124,108,255,.24),transparent 34%),radial-gradient(circle at 8% 92%,rgba(39,209,127,.1),transparent 28%),#090a10}
+  .rpx-state-cell,.rpx-state-row .rpx-state-cell{display:flex;flex-direction:column;justify-content:center;padding:40px;border:0!important;background:transparent;color:#fff}
+  .rpx-state-content{flex:0 0 45%;align-items:flex-start;gap:16px;order:1!important}
+  .rpx-state-row--reverse .rpx-state-content{order:1!important}
+  .rpx-state-content>span{display:block;margin:0;color:#a79aff;font-size:12px;font-weight:600;letter-spacing:.08em}
+  .rpx-state-content h3{margin:0;color:#e7e4fa;font-family:var(--font-heading);font-size:32px;font-weight:500;line-height:1.2;letter-spacing:-.02em}
+  .rpx-state-content p{max-width:40ch;margin:0;color:rgba(255,255,255,.55);font-size:17px;line-height:1.65}
+  .rpx-state-explore{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:12px 18px;border:1px solid rgba(255,255,255,.2);border-radius:999px;color:#fff;background:rgba(255,255,255,.06);font:600 14px/1.2 var(--font-body);text-decoration:none;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+  .rpx-state-explore span{font-size:18px;line-height:1;transition:transform .2s ease}
+  .rpx-state-explore:hover{background:rgba(255,255,255,.12);border-color:rgba(167,154,255,.65);transform:translateY(-1px)}
+  .rpx-state-explore:hover span{transform:translate(3px,-3px)}
+  .rpx-state-visual,.rpx-state-row--reverse .rpx-state-visual{flex:1;order:2!important;align-items:stretch;justify-content:center;min-width:0;margin:16px 16px 16px 0;padding:20px;border:1px solid rgba(255,255,255,.16)!important;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+  .rpx-state-row--reverse .rpx-state-visual{order:2!important;margin:16px 0 16px 16px}
+  .rpx-state-shot{display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:0;padding:0;overflow:hidden;border:0;border-radius:12px;background:transparent}
+  .rpx-state-shot img{display:block;width:100%;height:100%;max-width:none;margin:0;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:#fff;box-shadow:0 18px 34px rgba(0,0,0,.24);object-fit:contain;animation:rpx-state-breathe 4s ease-in-out infinite;will-change:transform}
+  .rpx-state-row:nth-child(even) .rpx-state-shot img{animation-delay:-2s}
+  .rpx-state-cross{display:none}
+  @media(max-width:760px){
+    .rpx-operations{padding:4px 16px 30px}
+    .rpx-operations .rpx-section-heading{top:61px;width:100%;padding:52px 0 64px}
+    .rpx-operations .rpx-section-heading h2{font-size:clamp(38px,12vw,48px)}
+    .rpx-state-grid{padding:80px 0 40px}
+    .rpx-state-row,.rpx-state-grid .rpx-state-row{top:calc(292px + var(--card-index) * 16px);height:560px;min-height:560px;flex-direction:column;margin-bottom:48px}
+    .rpx-state-cell,.rpx-state-row .rpx-state-cell{padding:30px 24px}
+    .rpx-state-content,.rpx-state-row--reverse .rpx-state-content{flex:0 0 45%;order:1!important}
+    .rpx-state-visual,.rpx-state-row--reverse .rpx-state-visual{flex:1;order:2!important;min-height:0;margin:0 16px 16px;padding:16px}
+    .rpx-state-content h3{font-size:28px}
+    .rpx-state-content p{font-size:16px}
+    .rpx-state-grid::after{height:120px}
+  }
+  @media(prefers-reduced-motion:reduce){.rpx-operations{animation:none}.rpx-state-shot img{animation:none;will-change:auto}}
+  .rpx-finance{padding:120px 24px;background:#fff}
+  .rpx-finance .rpx-shell{width:min(1200px,100%);max-width:1200px}
+  .rpx-finance__heading{max-width:920px;margin:0 auto 64px;text-align:center}
+  .rpx-finance__heading .rpx-eyebrow{margin-bottom:18px}
+  .rpx-finance .rpx-finance__heading h2{margin:0;background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}
+  .rpx-finance__heading p{max-width:760px;margin:20px auto 0;color:var(--rpx-muted);font-size:18px;line-height:1.5}
+  .rpx-finance .rpx-finance__grid{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:stretch;border-top:1px solid var(--surface-card-border)}
+  .rpx-finance__grid article{position:relative;display:block;min-height:300px;padding:28px;border:0;border-left:1px solid var(--surface-card-border);border-radius:0;background:transparent;box-shadow:none}
+  .rpx-finance__grid article:first-of-type{border-left:0}
+  .rpx-finance__notch{position:absolute;top:0;z-index:2;width:28px;height:28px;transform:translate(-50%,-50%);line-height:0;pointer-events:none}
+  .rpx-finance__notch--1{left:33.3333%}
+  .rpx-finance__notch--2{left:66.6667%}
+  .rpx-finance__icon{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;margin-bottom:28px;color:var(--rpx-blue)}
+  .rpx-finance__icon svg{width:100%;height:100%}
+  .rpx-finance__content h3{max-width:230px;min-height:2.5em;margin:0 0 28px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:21px;font-weight:600;line-height:1.25}
+  .rpx-finance__content p{margin:14px 0 0;color:var(--rpx-muted);font-family:var(--font-body);font-size:15px;line-height:1.4}
+  @media(max-width:992px){
+    .rpx-finance .rpx-finance__grid{grid-template-columns:1fr;gap:0}
+    .rpx-finance__notch{display:none}
+    .rpx-finance__grid article{min-height:0;border-top:1px solid var(--surface-card-border);border-left:0}
+    .rpx-finance__grid article:first-of-type{border-top:0}
+  }
+  @media(max-width:760px){
+    .rpx-finance{padding:76px 16px}
+    .rpx-finance__heading{margin-bottom:52px}
+    .rpx-finance .rpx-finance__heading h2{font-size:36px}
+    .rpx-finance__heading p{font-size:16px}
+    .rpx-finance__grid article{padding:28px 22px}
+  }
+  .rpx-cases{overflow:hidden;padding:clamp(72px,9vw,112px) 24px;background:#fff}
+  .rpx-cases .rpx-shell{width:min(1180px,100%);max-width:1180px}
+  .rpx-cases__heading{display:flex;max-width:1100px;align-items:center;flex-direction:column;margin:0 auto 48px;text-align:center}
+  .rpx-cases__heading .rpx-eyebrow{margin-bottom:14px}
+  .rpx-cases__heading h2{max-width:820px;margin:0;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(28px,4.2vw,48px);font-weight:500;line-height:1.1;letter-spacing:-.04em}
+  .rpx-case-flow{width:100%;margin:24px auto 0}
+  .rpx-case-pair{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #eef0f3}
+  .rpx-case-pair:last-child{border-bottom:0}
+  .rpx-case-flow__cell{display:flex;min-height:360px;flex-direction:column;justify-content:center;padding:56px 48px;border-right:1px solid #eef0f3}
+  .rpx-case-pair:nth-child(even) .rpx-case-flow__cell--copy{order:2;border-right:0}
+  .rpx-case-pair:nth-child(even) .rpx-case-flow__cell--media{order:1;border-right:1px solid #eef0f3}
+  .rpx-case-pair:nth-child(odd) .rpx-case-flow__cell--media{border-right:0}
+  .rpx-case-flow__cell--copy>span{margin-bottom:20px;color:var(--rpx-blue);font-size:12px;font-weight:700}
+  .rpx-case-flow__cell--copy h3{margin:0 0 16px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:clamp(24px,2.6vw,32px);font-weight:700;line-height:1.1;letter-spacing:-.03em}
+  .rpx-case-flow__cell--copy p{max-width:40ch;margin:0;color:var(--rpx-muted);font-size:16px;line-height:1.6}
+  .rpx-case-flow__cell--media{align-items:center;padding:18px 22px;overflow:hidden}
+  .rpx-case-shot{position:relative;width:100%;height:320px;overflow:visible}
+  .rpx-case-shot img{position:absolute;top:34px;left:5%;display:block;width:90%;height:252px;border:1px solid rgba(209,214,226,.92);border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14);object-fit:cover}
+  .rpx-case-flow__cell--media-1 img{object-position:50% 18%}
+  .rpx-case-flow__cell--media-2 img{object-position:50% 12%}
+  .rpx-case-flow__cell--media-3 img{object-position:50% 72%}
+  .rpx-case-flow__cell--media-4 img{object-position:8% 22%}
+  .rpx-case-flow__cross{position:absolute;bottom:0;left:50%;z-index:2;width:18px;height:18px;transform:translate(-50%,50%);line-height:0;pointer-events:none}
+  .rpx-case-flow__cross svg{display:block}
+  @media(max-width:768px){
+    .rpx-cases{padding:60px 16px}
+    .rpx-cases__heading{margin-bottom:32px}
+    .rpx-case-pair{grid-template-columns:1fr}
+    .rpx-case-flow__cross{display:none}
+    .rpx-case-pair .rpx-case-flow__cell--copy,.rpx-case-pair:nth-child(even) .rpx-case-flow__cell--copy{order:1;min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}
+    .rpx-case-pair .rpx-case-flow__cell--media,.rpx-case-pair:nth-child(even) .rpx-case-flow__cell--media{order:2;min-height:0;padding:16px 20px 32px;border-right:0}
+    .rpx-case-shot{height:285px}
+    .rpx-case-shot img{top:24px;left:2%;width:96%;height:235px}
+  }
+  /* Match Speaker Management's interactive call-for-papers accordion. */
+  .rpx-case-steps{display:grid;gap:14px;width:100%;margin:24px auto 0;padding:0;list-style:none}
+  .rpx-case-steps>li{position:relative;display:block;padding:0}
+  .rpx-case-steps details{position:relative;overflow:hidden;border:1px solid var(--rpx-case-border);border-radius:18px;background:linear-gradient(135deg,var(--rpx-case-tint) 0%,#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease}
+  .rpx-case-steps summary{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none;transition:background .25s ease}
+  .rpx-case-steps summary::-webkit-details-marker{display:none}
+  .rpx-case-steps summary:hover{background:rgba(255,255,255,.28)}
+  .rpx-case-steps details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}
+  .rpx-case-steps summary>span{display:block;width:auto;height:auto;margin:0;border-radius:0;background:transparent;color:#111;font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}
+  .rpx-case-step__content{display:flex;flex-direction:column}
+  .rpx-case-steps details:not([open]) .rpx-case-step__content{display:grid;grid-template-columns:minmax(230px,.7fr) minmax(320px,1.3fr);align-items:center;gap:36px}
+  .rpx-case-step__content h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}
+  .rpx-case-step__desc{display:none}
+  .rpx-case-steps details:not([open]) .rpx-case-step__desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-width:460px;margin:0;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}
+  .rpx-case-step__arrow{position:absolute;top:24px;right:28px;display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;cursor:pointer;transition:transform .25s ease,background .2s ease,border-color .2s ease}
+  .rpx-case-step__arrow:hover{border-color:rgba(17,24,39,.42);background:#fff}
+  .rpx-case-step__arrow:focus-visible{outline:3px solid rgba(59,130,246,.28);outline-offset:2px}
+  .rpx-case-step__arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .rpx-case-steps details[open] .rpx-case-step__arrow{top:28px;transform:rotate(180deg)}
+  .rpx-case-steps>li:nth-child(1){--rpx-case-tint:#fff8dc;--rpx-case-border:#f0dfa6}
+  .rpx-case-steps>li:nth-child(2){--rpx-case-tint:#edf7ff;--rpx-case-border:#d4e7f7}
+  .rpx-case-steps>li:nth-child(3){--rpx-case-tint:#f3efff;--rpx-case-border:#e2d8fa}
+  .rpx-case-steps>li:nth-child(4){--rpx-case-tint:#eefbf4;--rpx-case-border:#d4efdf}
+  .rpx-case-steps details[open]{display:flex;align-items:stretch;border-radius:28px;background:linear-gradient(135deg,var(--rpx-case-tint) 0%,#fff 72%);margin:0}
+  .rpx-case-steps details[open] summary{flex:0 0 55%;display:grid;grid-template-columns:44px minmax(0,1fr);align-items:start;gap:14px;padding:64px 40px 64px 28px;background:transparent;min-height:0}
+  .rpx-case-steps details[open] summary:hover{padding-left:28px;background:transparent}
+  .rpx-case-steps details[open] summary>span{font-size:26px;line-height:1;color:#050505}
+  .rpx-case-steps details[open] .rpx-case-step__content h3{font-family:var(--font-heading);font-size:32px;font-weight:600;line-height:1.2;margin-bottom:16px;color:#050505}
+  .rpx-case-steps details[open] .rpx-case-step__desc{display:block;font-size:17px;line-height:1.6;color:#333;margin:0;max-width:90%}
+  .rpx-case-step__visual{display:none;margin:0;opacity:0}
+  .rpx-case-steps details[open] .rpx-case-step__visual{flex:0 0 45%;display:flex;align-items:center;justify-content:flex-start;padding:40px 56px 40px 0;opacity:1;overflow:visible}
+  .rpx-case-step__visual img{display:block;width:100%;max-width:430px;height:300px;object-fit:cover;border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14)}
+  .rpx-case-steps>li:nth-child(1) .rpx-case-step__visual img{object-position:50% 18%}
+  .rpx-case-steps>li:nth-child(2) .rpx-case-step__visual img{object-position:50% 12%}
+  .rpx-case-steps>li:nth-child(3) .rpx-case-step__visual img{object-position:50% 72%}
+  .rpx-case-steps>li:nth-child(4) .rpx-case-step__visual img{object-position:8% 22%}
+  @media(max-width:768px){
+    .rpx-case-steps details[open]{display:block}
+    .rpx-case-steps details[open] summary{display:grid;padding:36px 56px 36px 20px}
+    .rpx-case-steps details[open] summary>span{font-size:22px}
+    .rpx-case-steps details[open] .rpx-case-step__content h3{font-size:28px}
+    .rpx-case-steps details:not([open]) .rpx-case-step__content{grid-template-columns:1fr;gap:8px}
+    .rpx-case-steps details[open] .rpx-case-step__visual{display:block;padding:0 20px 28px}
+    .rpx-case-step__visual img{width:100%;max-width:none;height:240px}
+  }
+  .rpx-boundary{position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 24px clamp(56px,7vw,88px);background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);color:#fff}
+  .rpx-boundary::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.16;background-image:radial-gradient(rgba(255,255,255,.28) .5px,transparent .5px);background-size:4px 4px}
+  .rpx-boundary>.rpx-shell{position:relative;z-index:1;width:min(1140px,100%);max-width:1140px}
+  .rpx-boundary__heading{max-width:980px;margin:0 auto clamp(40px,5vw,64px);text-align:center}
+  .rpx-boundary__heading>span{display:block;margin-bottom:18px;color:#a79aff;font-size:14px;font-weight:600;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+  .rpx-boundary__heading h2{margin:0;background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}
+  .rpx-boundary .rpx-boundary__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:hidden;border:1px solid #3b3a47;border-radius:16px;background:transparent}
+  .rpx-boundary__grid article,.rpx-boundary__grid article+article{position:relative;display:flex;min-height:360px;flex-direction:column;padding:36px 32px;border:0;border-right:1px solid #3b3a47;background:transparent}
+  .rpx-boundary__grid article:last-child{border-right:0}
+  .rpx-boundary__grid article>.rpx-boundary__label{color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .rpx-boundary__grid h3{margin:56px 0 14px;color:#fff;font-family:var(--font-heading);font-size:28px;font-weight:500;line-height:1.2}
+  .rpx-boundary__grid p{max-width:48ch;margin:0;color:rgba(255,255,255,.62);font-size:15px;line-height:1.6}
+  .rpx-boundary__visual{--boundary-grad:linear-gradient(135deg,#38bdf8 0%,#5c8aff 38%,#7c6cff 70%,#a45cff 100%);position:relative;display:flex;width:min(100%,420px);align-self:center;align-items:flex-end;min-height:190px;margin-top:28px;padding:12px;overflow:hidden;border:1px solid transparent;border-radius:16px;background:linear-gradient(#08080e,#08080e) padding-box,var(--boundary-grad) border-box;box-shadow:0 18px 44px -22px rgba(92,138,255,.55);animation:rpx-boundary-float 7s ease-in-out infinite}
+  .rpx-boundary__visual::before{content:"";position:absolute;inset:auto 8% -42% 8%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(92,138,255,.3),rgba(124,108,255,.12) 55%,transparent 100%);filter:blur(20px);pointer-events:none;animation:rpx-boundary-bloom 6s ease-in-out infinite}
+  .rpx-boundary__visual--razorpay{animation-delay:-3.5s}
+  /* Match the Speaker Management agenda cards: the product capture sits in a dark
+     navy surface with light UI details instead of reading as a white dashboard. */
+  .rpx-boundary__visual img{position:relative;z-index:1;display:block;width:100%;height:164px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:#090a0f;object-fit:cover;object-position:center top;box-shadow:0 12px 28px rgba(0,0,0,.35);filter:invert(.9) hue-rotate(180deg) saturate(.7) contrast(1.1) brightness(.82);transition:transform .45s ease,filter .45s ease}
+  .rpx-boundary__visual:hover img{transform:scale(1.025);filter:invert(.9) hue-rotate(180deg) saturate(.78) contrast(1.12) brightness(.86)}
+  .rpx-boundary__visual-badge{position:absolute;top:20px;right:20px;z-index:2;padding:8px 10px;border:1px solid rgba(207,225,255,.8);border-radius:9px;background:rgba(8,16,36,.8);box-shadow:0 10px 22px rgba(0,0,0,.28);color:#dbe8ff;font-size:11px;font-weight:700;line-height:1;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  @keyframes rpx-boundary-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes rpx-boundary-bloom{0%,100%{opacity:.68}50%{opacity:1}}
+  @media(prefers-reduced-motion:reduce){.rpx-boundary__visual,.rpx-boundary__visual::before{animation:none}}
+  .rpx-boundary__petal{position:absolute;left:0;z-index:2;width:28px;height:28px;line-height:0;pointer-events:none}
+  .rpx-boundary__petal--top{top:0;transform:translate(-50%,-50%)}
+  .rpx-boundary__petal--bottom{bottom:0;transform:translate(-50%,50%)}
+  .rpx-boundary__note{margin:20px 0 0;color:rgba(255,255,255,.62);font-size:13px;text-align:center}
+  @media(max-width:860px){
+    .rpx-boundary{padding:76px 16px 64px}
+    .rpx-boundary__heading{margin-bottom:44px}
+    .rpx-boundary .rpx-boundary__grid{grid-template-columns:1fr}
+    .rpx-boundary__grid article,.rpx-boundary__grid article+article{min-height:0;padding:32px 24px;border-right:0;border-bottom:1px solid #3b3a47}
+    .rpx-boundary__grid article:last-child{border-bottom:0}
+    .rpx-boundary__grid h3{margin-top:34px}
+    .rpx-boundary__visual{width:100%;min-height:190px}
+    .rpx-boundary__visual img{height:164px}
+    .rpx-boundary__petal{display:none}
+  }
+  .rpx-commerce{overflow:hidden;padding:clamp(40px,4.5vw,60px) 24px clamp(82px,9vw,116px);background:radial-gradient(circle 360px at 98% 70%,rgba(91,132,255,.14),transparent 100%),radial-gradient(circle 300px at 4% 72%,rgba(255,220,165,.1),transparent 100%),#fff}
+  .rpx-commerce .rpx-shell{width:min(1180px,100%);max-width:1180px}
+  .rpx-commerce__heading{max-width:none;margin:0;padding:0 24px clamp(40px,4vw,56px);text-align:center}
+  .rpx-commerce__heading>span{display:block;margin-bottom:16px;color:var(--rpx-blue);font-size:14px;font-weight:600;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+  .rpx-commerce__heading h2{max-width:960px;margin:0 auto;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(39px,4.6vw,64px);font-weight:500;line-height:1.08;letter-spacing:-.04em}
+  .rpx-commerce__grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--surface-card-border)}
+  .rpx-commerce__grid>a{position:relative;display:block;min-height:300px;padding:28px;border:0;border-left:1px solid var(--surface-card-border);border-radius:0;background:transparent;color:inherit;text-decoration:none;box-shadow:none}
+  .rpx-commerce__grid>a:first-of-type{border-left:0}
+  .rpx-commerce__notch{position:absolute;top:0;z-index:2;width:28px;height:28px;transform:translate(-50%,-50%);line-height:0;pointer-events:none}
+  .rpx-commerce__notch--1{left:25%}
+  .rpx-commerce__notch--2{left:50%}
+  .rpx-commerce__notch--3{left:75%}
+  .rpx-commerce__icon{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;margin-bottom:28px;color:var(--rpx-blue)}
+  .rpx-commerce__icon svg{width:100%;height:100%}
+  .rpx-commerce__grid h3{max-width:230px;min-height:2.3em;margin:0 0 28px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:21px;font-weight:500;line-height:1.15}
+  .rpx-commerce__grid p{margin:14px 0 0;color:var(--rpx-muted);font-size:15px;line-height:1.4}
+  @media(max-width:900px){
+    .rpx-commerce__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .rpx-commerce__notch--1,.rpx-commerce__notch--3{display:none}
+    .rpx-commerce__grid>a:nth-of-type(odd){border-left:0}
+    .rpx-commerce__grid>a:nth-of-type(n+3){border-top:1px solid var(--surface-card-border)}
+  }
+  @media(max-width:600px){
+    .rpx-commerce{padding:62px 16px 82px}
+    .rpx-commerce__heading{padding:0 0 42px}
+    .rpx-commerce__heading h2{font-size:36px}
+    .rpx-commerce__grid{grid-template-columns:1fr}
+    .rpx-commerce__notch{display:none}
+    .rpx-commerce__grid>a,.rpx-commerce__grid>a:nth-of-type(odd){min-height:0;padding:24px 20px;border-top:1px solid var(--surface-card-border);border-left:0}
+    .rpx-commerce__grid>a:first-of-type{border-top:0}
+    .rpx-commerce__grid h3{min-height:0}
+  }
+  /* Connected Event Commerce uses the tabbed, color-backed showcase pattern. */
+  .rpx-commerce{overflow:hidden;padding:clamp(72px,8vw,104px) 24px clamp(88px,10vw,128px);background:radial-gradient(circle 380px at 6% 74%,rgba(255,220,165,.2),transparent 100%),radial-gradient(circle 420px at 96% 68%,rgba(101,130,255,.2),transparent 100%),#f8faff}
+  .rpx-commerce .rpx-shell{width:min(1140px,100%);max-width:1140px}
+  .rpx-commerce__heading{max-width:980px;margin:0 auto 36px;padding:0;text-align:center}
+  .rpx-commerce__heading>span{display:block;margin-bottom:16px;color:var(--rpx-blue);font-size:14px;font-weight:600;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+  .rpx-commerce__heading h2{max-width:960px;margin:0 auto;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(39px,4.8vw,62px);font-weight:500;line-height:1.08;letter-spacing:-.04em}
+  .rpx-commerce__tabs{display:flex;width:min(840px,100%);align-items:center;justify-content:space-between;gap:6px;margin:0 auto 36px;padding:5px;border:1px solid rgba(31,41,72,.06);border-radius:999px;background:rgba(224,230,243,.86);box-shadow:inset 0 1px 2px rgba(31,41,72,.04)}
+  .rpx-commerce__tabs button{flex:1;min-width:0;padding:12px 14px;border:0;border-radius:999px;background:transparent;color:#68768e;font:600 13px/1.2 var(--font-body);cursor:pointer;transition:color .25s ease,background .25s ease,box-shadow .25s ease}
+  .rpx-commerce__tabs button:hover{color:var(--rpx-blue)}
+  .rpx-commerce__tabs button.is-active{background:#fff;color:var(--rpx-blue);box-shadow:0 5px 16px rgba(31,41,72,.12)}
+  .rpx-commerce__panels{position:relative;width:100%;min-height:440px}
+  .rpx-commerce__panel{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);min-height:440px;overflow:hidden;border:1px solid rgba(117,137,187,.24);border-radius:24px;background:#eaf1ff;box-shadow:0 24px 60px rgba(62,84,140,.12);animation:rpx-commerce-panel-in .45s ease both}
+  .rpx-commerce__panel[hidden]{display:none !important}
+  @keyframes rpx-commerce-panel-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .rpx-commerce__panel--violet{background:linear-gradient(135deg,#f0ecff 0%,#e8e9ff 52%,#fff 100%)}
+  .rpx-commerce__panel--mint{background:linear-gradient(135deg,#e8f9f1 0%,#ecf8ff 52%,#fff 100%)}
+  .rpx-commerce__panel--gold{background:linear-gradient(135deg,#fff3c9 0%,#fff7e5 50%,#fff 100%)}
+  .rpx-commerce__panel-copy{display:flex;align-items:flex-start;flex-direction:column;justify-content:center;padding:56px 44px}
+  .rpx-commerce__panel-copy h3{max-width:420px;margin:0 0 18px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:clamp(28px,3.2vw,42px);font-weight:600;line-height:1.1;letter-spacing:-.03em}
+  .rpx-commerce__panel-copy p{max-width:42ch;margin:0;color:var(--rpx-muted);font-size:17px;line-height:1.6}
+  .rpx-commerce__panel-copy a{display:inline-flex;align-items:center;gap:8px;margin-top:28px;color:var(--rpx-blue);font:600 14px/1.2 var(--font-body);text-decoration:none}
+  .rpx-commerce__panel-copy a span{font-size:18px;transition:transform .25s ease}
+  .rpx-commerce__panel-copy a:hover span{transform:translate(3px,-3px)}
+  .rpx-commerce__panel-visual{display:flex;align-items:center;justify-content:center;min-width:0;margin:22px 22px 22px 0;padding:22px;overflow:hidden;border:1px solid rgba(255,255,255,.72);border-radius:20px;background:rgba(255,255,255,.5);box-shadow:0 15px 38px rgba(60,80,130,.12)}
+  .rpx-commerce__panel-visual img{display:block;width:100%;height:100%;max-height:390px;border:1px solid rgba(211,218,232,.95);border-radius:14px;background:#fff;box-shadow:0 18px 36px rgba(31,41,72,.14);object-fit:contain;animation:rpx-commerce-image-float 5s ease-in-out infinite}
+  @keyframes rpx-commerce-image-float{0%,100%{transform:translateY(3px)}50%{transform:translateY(-5px)}}
+  @media(max-width:760px){
+    .rpx-commerce{padding:68px 16px 92px}
+    .rpx-commerce__heading{margin-bottom:28px}
+    .rpx-commerce__heading h2{font-size:38px}
+    .rpx-commerce__tabs{align-items:stretch;flex-wrap:wrap;justify-content:center;border-radius:20px}
+    .rpx-commerce__tabs button{flex:1 1 calc(50% - 6px);padding:11px 8px;font-size:12px}
+    .rpx-commerce__panels{min-height:0}
+    .rpx-commerce__panel{grid-template-columns:1fr;min-height:0;border-radius:20px}
+    .rpx-commerce__panel-copy{padding:34px 26px 26px}
+    .rpx-commerce__panel-copy h3{font-size:30px}
+    .rpx-commerce__panel-copy p{font-size:16px}
+    .rpx-commerce__panel-visual{min-height:250px;margin:0 16px 16px;padding:16px}
+  }
+  @media(prefers-reduced-motion:reduce){.rpx-commerce__panel,.rpx-commerce__panel-visual img{animation:none}.rpx-commerce__panel-copy a span{transition:none}}
+  .rpx-refunds{position:relative;overflow:hidden;padding:clamp(64px,8vw,96px) 24px;background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);background-repeat:no-repeat;color:#fff}
+  .rpx-refunds::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .rpx-refunds>.rpx-shell{position:relative;z-index:1;width:min(1140px,100%);max-width:1140px}
+  .rpx-refunds__heading{max-width:960px;margin:0 auto 56px;text-align:center}
+  .rpx-refunds__heading>span{display:block;margin-bottom:16px;color:#a79aff;font-size:14px;font-weight:600;line-height:1.4;letter-spacing:.06em;text-transform:uppercase}
+  .rpx-refunds__heading h2{margin:0;background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-family:var(--font-heading);font-size:clamp(36px,5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em}
+  .rpx-refunds__heading p{max-width:720px;margin:18px auto 0;color:rgba(255,255,255,.62);font-size:17px;line-height:1.65}
+  .rpx-refunds .rpx-refunds__grid{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;overflow:hidden;border:1px solid #3b3a47;border-radius:16px;background:transparent}
+  .rpx-refunds__grid article{position:relative;display:flex;min-height:320px;flex-direction:column;padding:36px 32px;border:0;border-right:1px solid #3b3a47;border-bottom:1px solid #3b3a47;background:transparent}
+  .rpx-refunds__grid article:nth-of-type(even){border-right:0}
+  .rpx-refunds__grid article:nth-of-type(n+3){border-bottom:0}
+  .rpx-refunds__grid h3{margin:0;color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+  .rpx-refunds__grid article>p{max-width:40ch;margin:14px 0 24px;color:rgba(255,255,255,.62);font-size:15px;line-height:1.38}
+  .rpx-refunds__petal,.rpx-refunds__cross{position:absolute;left:50%;z-index:3;width:28px;height:28px;line-height:0;pointer-events:none}
+  .rpx-refunds__petal--top{top:0;transform:translate(-50%,-50%)}
+  .rpx-refunds__petal--bottom{bottom:0;transform:translate(-50%,50%)}
+  .rpx-refunds__cross{top:50%;transform:translate(-50%,-50%)}
+  .rpx-refund-visual{position:relative;display:grid;height:128px;gap:10px;margin-top:auto;padding:18px;overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:14px;background:rgba(255,255,255,.035)}
+  .rpx-refund-visual i,.rpx-refund-visual b{display:block;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.075)}
+  .rpx-refund-visual i{height:20px}.rpx-refund-visual i:nth-child(2){width:68%}.rpx-refund-visual b{height:34px;border-color:transparent;background:#3755fb}
+  .rpx-refund-visual--partial i:first-child{width:46%}.rpx-refund-visual--partial b{width:62%}
+  .rpx-refund-visual--guard i{width:70%}.rpx-refund-visual--guard i:nth-child(2){width:48%}.rpx-refund-visual--guard b{position:absolute;top:25px;right:24px;width:54px;height:54px;border:2px solid #a79aff;border-radius:50%;background:radial-gradient(circle at center,#a79aff 0 5px,transparent 6px)}
+  .rpx-refund-visual--record i:first-child{width:88%}.rpx-refund-visual--record i:nth-child(2){width:58%}.rpx-refund-visual--record b{position:absolute;right:24px;bottom:23px;width:12px;height:12px;border-radius:50%;background:#27d17f;box-shadow:0 0 0 6px rgba(39,209,127,.12)}
+  @media(max-width:760px){
+    .rpx-refunds{padding:76px 16px}
+    .rpx-refunds__heading{margin-bottom:44px}
+    .rpx-refunds__heading h2{font-size:36px}
+    .rpx-refunds__heading p{font-size:16px}
+    .rpx-refunds .rpx-refunds__grid{grid-template-columns:1fr}
+    .rpx-refunds__petal,.rpx-refunds__cross{display:none}
+    .rpx-refunds__grid article,.rpx-refunds__grid article:nth-of-type(even),.rpx-refunds__grid article:nth-of-type(n+3){min-height:280px;padding:30px 24px;border-right:0;border-bottom:1px solid #3b3a47}
+    .rpx-refunds__grid article:last-of-type{border-bottom:0}
+  }
+  /* Platform Analytics screenshots with the layered feature-card treatment used on Event Registration. */
+  .rpx-refund-visual{height:220px;margin-top:auto;padding:14px;overflow:visible;border:0;border-radius:16px;background:transparent}
+  .rpx-refund-shot-stage{position:relative;width:100%;height:100%;padding:12px;border:1px solid rgba(255,255,255,.15);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.045));box-shadow:inset 0 1px 0 rgba(255,255,255,.12);isolation:isolate}
+  .rpx-refund-shot-stage::before{content:"";position:absolute;inset:10px;border-radius:11px;background:linear-gradient(180deg,rgba(106,125,255,.18),transparent 55%);pointer-events:none;z-index:-1}
+  .rpx-refund-shot-stage img{display:block;width:100%;height:100%;border:1px solid rgba(255,255,255,.18);border-radius:10px;background:#fff;box-shadow:0 14px 30px rgba(0,0,0,.28);object-fit:cover;animation:rpx-refund-shot-breathe 7s ease-in-out infinite}
+  .rpx-refund-visual--partial .rpx-refund-shot-stage img{object-position:50% 42%}
+  .rpx-refund-visual--guard .rpx-refund-shot-stage img{object-position:50% 54%}
+  .rpx-refund-visual--record .rpx-refund-shot-stage img{object-position:50% 58%}
+  .rpx-refund-float{position:absolute;z-index:2;display:flex;align-items:flex-start;flex-direction:column;gap:3px;padding:9px 11px;border:1px solid rgba(206,215,232,.82);border-radius:10px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 12px 26px rgba(0,0,0,.26);font-family:var(--font-body);line-height:1.15;animation:rpx-refund-float 4.8s ease-in-out infinite;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .rpx-refund-float b{display:block;height:auto;border:0;border-radius:0;background:transparent;font-size:.7rem;font-weight:700;white-space:nowrap}
+  .rpx-refund-float small{display:block;color:#7b8497;font-size:.58rem;white-space:nowrap}
+  .rpx-refund-float i{width:8px;height:8px;margin-bottom:2px;border:0;border-radius:50%;background:#19b874;box-shadow:0 0 0 4px rgba(25,184,116,.13)}
+  .rpx-refund-float--top{top:-8px;right:-9px}
+  .rpx-refund-float--bottom{bottom:-8px;left:-9px;align-items:center;flex-direction:row;gap:7px;animation-delay:-2.4s}
+  @keyframes rpx-refund-shot-breathe{0%,100%{transform:translateY(2px) scale(.99)}50%{transform:translateY(-2px) scale(1)}}
+  @keyframes rpx-refund-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
+  @media(prefers-reduced-motion:reduce){.rpx-refund-shot-stage img,.rpx-refund-float{animation:none}}
+  @media(max-width:760px){.rpx-refund-visual{height:230px;padding:12px}.rpx-refund-float--top{right:-4px}.rpx-refund-float--bottom{left:-4px}}
+  @media(max-width:1024px){
+    .rpx-faq__grid{grid-template-columns:1fr;gap:40px}
+    .rpx-faq__intro{position:static}
+    .rpx-faq h2{font-size:32px}
+  }
+  @media(max-width:767px){
+    .rpx-faq{padding:56px 16px}
+    .rpx-faq h2{font-size:28px}
+    .rpx-faq details{padding:4px 20px;border-radius:16px}
+    .rpx-faq summary{padding:18px 0}
+    .rpx-faq summary strong{font-size:.9375rem}
+  }
+  /* Refunds bento: reuse Event Registration's alternating visual/content rows. */
+  .rpx-refunds{padding:80px 5%;background:transparent;color:var(--rpx-ink)}
+  .rpx-refunds>.rpx-shell{width:min(1200px,100%);max-width:1200px}
+  .rpx-refunds__heading{max-width:100%;margin:0 auto 60px;text-align:center}
+  .rpx-refunds__heading>span{display:none}
+  .rpx-refunds__heading h2{margin:0;font-family:var(--font-heading);font-size:clamp(32px,4vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.03em;background:linear-gradient(98deg,var(--rpx-ink) 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+  .rpx-refunds__heading p{max-width:720px;margin:18px auto 0;color:var(--rpx-muted);font-size:17px;line-height:1.65}
+  .rpx-refunds .rpx-refunds__grid{position:relative;display:block;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent}
+  .rpx-refunds .rpx-refunds__grid article.rpx-refund-row{display:grid}
+  .rpx-refunds__petal,.rpx-refunds__cross{display:none}
+  .rpx-refund-row{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:0!important;padding:0!important;border:0!important;border-bottom:1px solid #e5e7eb!important;background:transparent!important}
+  .rpx-refund-row--last{border-bottom:0!important}
+  .rpx-refund-cell{display:flex;min-width:0;flex-direction:column;justify-content:center;padding:4rem}
+  .rpx-refund-cell--visual{align-items:center;border-right:1px solid #e5e7eb}
+  .rpx-refund-row--reverse .rpx-refund-cell--visual{order:2;border-right:0}
+  .rpx-refund-row--reverse .rpx-refund-cell--content{order:1;border-right:1px solid #e5e7eb}
+  .rpx-refund-cell--content{background:transparent}
+  .rpx-refund-eyebrow{margin-bottom:1rem;color:#5b21b6;font-size:.875rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  .rpx-refund-cell h3{margin:0 0 18px;color:var(--rpx-ink);font-family:var(--font-heading);font-size:clamp(25px,2.6vw,36px);font-weight:500;line-height:1.15;letter-spacing:-.025em}
+  .rpx-refund-cell p{margin:0;color:var(--rpx-muted);font-size:16px;line-height:1.65}
+  .rpx-refund-shot-stage{position:relative;width:100%;height:auto;margin:0;padding:32px 18px;border:0;border-radius:22px;background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%);box-shadow:none;isolation:isolate}
+  .rpx-refund-shot-stage--partial{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}
+  .rpx-refund-shot-stage--guard{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%)}
+  .rpx-refund-shot-stage--record{background:linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%)}
+  .rpx-refund-shot-stage::before{display:none}
+  .rpx-refund-shot-stage img{display:block;width:100%;height:auto;border:1px solid #dfe4ec;border-radius:14px;background:#fff;box-shadow:none;object-fit:cover;animation:rpx-refund-shot-breathe 7s ease-in-out infinite;will-change:transform}
+  .rpx-refund-float{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 14px 34px rgba(30,45,88,.2);font-family:var(--font-body);line-height:1.15;animation:rpx-refund-float 4.8s ease-in-out infinite;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .rpx-refund-float b{font-size:.78rem;font-weight:700;white-space:nowrap}
+  .rpx-refund-float small{display:block;color:#7b8497;font-size:.65rem;white-space:nowrap}
+  .rpx-refund-float i{width:9px;height:9px;border:0;border-radius:50%;background:#19b874;box-shadow:0 0 0 5px rgba(25,184,116,.13)}
+  .rpx-refund-float--top{top:12px;right:3px;align-items:flex-start;flex-direction:column;gap:3px}
+  .rpx-refund-float--bottom{bottom:12px;left:3px;animation-delay:-2.4s}
+  .rpx-refund-row:nth-of-type(odd) .rpx-refund-shot-stage img{animation-delay:-3.5s}
+  @media(max-width:900px){
+    .rpx-refunds .rpx-refunds__grid article.rpx-refund-row,.rpx-refund-row--reverse{display:flex;flex-direction:column}
+    .rpx-refund-cell,.rpx-refund-row--reverse .rpx-refund-cell{padding:3rem 1.5rem;border-right:0}
+    .rpx-refund-row .rpx-refund-cell:first-child{border-right:0}
+    .rpx-refund-cell--content,.rpx-refund-row--reverse .rpx-refund-cell--content{order:1;border-right:0;border-bottom:1px solid #e5e7eb}
+    .rpx-refund-cell--visual,.rpx-refund-row--reverse .rpx-refund-cell--visual{order:2;border-right:0}
+  }
+  @media(max-width:760px){
+    .rpx-refunds{padding:76px 16px}
+    .rpx-refunds__heading{margin-bottom:44px}
+    .rpx-refunds__heading h2{font-size:36px}
+    .rpx-refunds__heading p{font-size:16px}
+    .rpx-refund-shot-stage{padding:28px 14px}
+  }
+  @media(prefers-reduced-motion:reduce){.rpx-refund-shot-stage img,.rpx-refund-float{animation:none;will-change:auto}}
+
+  /* Organizer setup follows the compact feature-card pattern from the supplied reference. */
+  .rpx-setup{background:linear-gradient(180deg,#f8faff 0%,#fff 100%)}
+  .rpx-setup .rpx-section-heading{max-width:760px;margin-bottom:52px}
+  .rpx-setup .rpx-section-heading>span.rpx-setup__eyebrow{display:inline-flex;align-items:center;gap:7px;margin-bottom:16px;color:var(--rpx-ink);font-size:14px;font-weight:600;letter-spacing:.01em;text-transform:none}
+  .rpx-setup__eyebrow i{display:block;width:7px;height:7px;border-radius:50%;background:var(--rpx-blue);box-shadow:0 0 0 4px rgba(55,93,251,.1)}
+  .rpx-setup .rpx-section-heading h2{font-size:clamp(34px,4vw,48px);line-height:1.08;letter-spacing:-.04em}
+  .rpx-setup__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;border-top:0}
+  .rpx-setup__notch{display:none}
+  .rpx-setup__grid article{display:flex;min-height:0;align-items:flex-start;gap:16px;padding:24px;border:1px solid var(--rpx-line);border-radius:18px;background:rgba(255,255,255,.88);box-shadow:0 8px 24px rgba(46,67,125,.05)}
+  .rpx-setup__grid article:first-of-type{border-left:1px solid var(--rpx-line)}
+  .rpx-setup__icon{position:relative;width:42px;height:42px;flex:0 0 42px;margin:0;padding:10px;overflow:hidden;border:1px solid rgba(255,255,255,.84);border-radius:12px;background:linear-gradient(145deg,rgba(255,255,255,.78),rgba(213,225,255,.5));color:var(--rpx-blue);box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -5px 12px rgba(55,93,251,.08),0 10px 24px rgba(55,93,251,.17);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+  .rpx-setup__icon::after{content:"";position:absolute;top:-55%;left:-35%;width:95%;height:95%;border-radius:50%;background:rgba(255,255,255,.62);filter:blur(8px);pointer-events:none}
+  .rpx-setup__content{min-width:0;padding-top:1px}
+  .rpx-setup__content h3{max-width:none;min-height:0;margin:0 0 8px;font-size:18px;line-height:1.25;letter-spacing:-.015em}
+  .rpx-setup__content p{margin:0;font-size:14px;line-height:1.5}
+  @media(max-width:760px){
+    .rpx-setup{padding:76px 16px}
+    .rpx-setup .rpx-section-heading{margin-bottom:40px}
+    .rpx-setup__grid{grid-template-columns:1fr;gap:14px}
+    .rpx-setup__grid article{padding:22px 20px}
+  }
+</style>
