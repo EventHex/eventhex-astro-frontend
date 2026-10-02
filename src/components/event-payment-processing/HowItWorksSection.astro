@@ -196,25 +196,26 @@
         </svg>
       </span>
 
+      <!-- Row 1: visual left, content right -->
       <div class="eppx-finv__row">
         <div class="eppx-finv__cell eppx-finv__visual">
           <div class="eppx-shot-stage eppx-shot-stage--warm eppx-finv__stage">
             <img
               class="eppx-shot eppx-finv__shot"
-              src="/feature-images/event-payment-processing/gateway-fee-estimates.png"
-              alt="EventHex Gateway Fee Estimates with Stripe fee percentage, fixed fee, tax on fees, and platform fee override"
-              width="920"
-              height="198"
+              src="/feature-images/event-payment-processing/finance-breakdown.png"
+              alt="EventHex event Finance view breakdown by gateway and by order status with order counts and amounts per gateway, platform fee, tax, and net payout"
+              width="906"
+              height="372"
               loading="lazy"
               decoding="async"
             />
             <span class="eppx-shot-float eppx-shot-float--tr eppx-finv__float eppx-finv__float--top">
-              <b>✓ Fees and tax kept separate</b>
-              <small>Gateway, platform, tax</small>
+              <b>By gateway and status</b>
+              <small>Orders grouped</small>
             </span>
             <span class="eppx-shot-float eppx-shot-float--bl eppx-finv__float">
               <i></i>
-              <b>Estimated net payout</b>
+              <b>Provider context kept</b>
             </span>
           </div>
         </div>
@@ -225,12 +226,41 @@
           <p>
             Use the event-level finance view to move from individual orders to an operational summary for the finance team.
           </p>
+        </div>
+
+        <span class="eppx-finv__cross" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+          </svg>
+        </span>
+      </div>
+
+      <!-- Row 2: content left, visual right -->
+      <div class="eppx-finv__row eppx-finv__row--reverse">
+        <div class="eppx-finv__cell eppx-finv__content">
           <ul class="eppx-finv__measures">
             <li><b>Gross collected</b><span>Review captured value for the selected event context.</span></li>
             <li><b>Refunded</b><span>See returned amounts without treating gross sales as retained revenue.</span></li>
             <li><b>Fees and tax</b><span>Keep estimated gateway fees, platform-fee context, and recorded tax visible as separate fields.</span></li>
             <li><b>Estimated net payout</b><span>Review the calculated event view by currency, status, gateway, and provider before comparing it with processor records.</span></li>
           </ul>
+        </div>
+
+        <div class="eppx-finv__cell eppx-finv__visual">
+          <div class="eppx-shot-stage eppx-shot-stage--mint eppx-finv__stage">
+            <img
+              class="eppx-shot eppx-finv__shot"
+              src="/feature-images/event-payment-processing/finance-summary.png"
+              alt="EventHex event Finance view totals for gross collected, refunded, estimated fees and charges, and estimated net payout, with the applied gateway rates"
+              width="906"
+              height="166"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -655,12 +685,25 @@
   }
   .eppx-finv__notch--top { top: 0; transform: translate(-50%, -50%); }
   .eppx-finv__notch--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .eppx-finv__cross {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    z-index: 2;
+    width: 28px;
+    height: 28px;
+    transform: translate(-50%, 50%);
+    pointer-events: none;
+    line-height: 0;
+  }
+  .eppx-finv__row:last-child .eppx-finv__cross { display: none; }
 
   .eppx-finv__row {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+  .eppx-finv__row + .eppx-finv__row { border-top: 1px solid #e5e7eb; }
   .eppx-finv__cell {
     display: flex;
     flex-direction: column;
@@ -698,14 +741,17 @@
   .eppx-finv__measures {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px 28px;
-    margin: 1.875rem 0 0;
+    gap: 16px;
+    margin: 0;
     padding: 0;
     list-style: none;
   }
   .eppx-finv__measures li {
-    padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
+    padding: 20px 20px 22px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(31, 41, 55, .04);
   }
   .eppx-finv__measures b {
     display: block;
@@ -808,7 +854,7 @@
     .eppx-finv__content h3 { font-size: 1.75rem; }
     .eppx-finv__content > p { font-size: 1rem; }
     .eppx-finv__measures { grid-template-columns: 1fr; }
-    /* the fee panel is a short strip, so give the floating pills room above and below it */
-    .eppx-finv__stage { padding: 58px 12px; }
+    /* the summary strip is short, so give its floating pills room above and below it */
+    .eppx-finv__stage { padding: 34px 12px; }
   }
 </style>
