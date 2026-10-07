@@ -1,65 +1,1191 @@
 ---
-import IntegrationLayout from "../../components/integrations/IntegrationLayout.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
 
-const data = {
-  pageTitle: "EventHex WhatsApp Integration — Event Notifications & Campaigns",
-  pageDescription: "Send ticket confirmations, event reminders, session alerts, and campaigns via WhatsApp Business API. 98% open rates for your event messages.",
-  canonical: "https://eventhex.ai/integrations/whatsapp/",
-  badge: "WhatsApp Integration",
-  heroTitleLine1: "Reach Every Attendee via",
-  heroTitleLine2: "WhatsApp — Open Rates Above 95%",
-  heroCopy: "Send ticket confirmations, event reminders, session alerts, and post-event messages via WhatsApp Business API. Reach attendees on the app they check most.",
-  accentColor: "#25D366",
-  stats: [
-    { value: "98%", label: "Open Rate" },
-    { value: "Real-Time", label: "Message Delivery" },
-    { value: "2B+", label: "Global WhatsApp Users" },
-    { value: "Multi-Language", label: "Template Support" },
-  ],
-  featuresHeading: "WhatsApp Messaging for Every Event Touchpoint",
-  featuresSubheading: "From registration to post-event follow-up — reach attendees where they actually read.",
-  features: [
-    { emoji: "✅", title: "Registration Confirmations", description: "Send instant WhatsApp confirmations when an attendee registers. Include event details, venue info, and a link to their digital ticket." },
-    { emoji: "⏰", title: "Event Reminders", description: "Schedule automated reminders 24 hours, 2 hours, and 30 minutes before the event. Reduce no-shows with timely nudges." },
-    { emoji: "📢", title: "Broadcast Campaigns", description: "Send announcements, schedule changes, and promotional messages to all attendees or targeted segments via WhatsApp broadcasts." },
-    { emoji: "🎫", title: "Ticket QR Delivery", description: "Deliver ticket QR codes directly via WhatsApp. Attendees save the message and show the QR at check-in — no email digging required." },
-    { emoji: "💬", title: "Session Feedback", description: "Send post-session feedback forms via WhatsApp. Higher response rates than email surveys — attendees reply in the same chat thread." },
-    { emoji: "🤖", title: "WhatsApp Bot", description: "Enable an automated chatbot that answers attendee questions about schedule, venue, speakers, and tickets — 24/7, in multiple languages." },
-  ],
-  howItWorksHeading: "How It Works",
-  steps: [
-    { title: "Connect WhatsApp Business", description: "Link your WhatsApp Business API account to EventHex. We support official Meta Business API partners." },
-    { title: "Choose Templates", description: "Select from pre-approved message templates or submit custom templates for Meta approval." },
-    { title: "Configure Triggers", description: "Set up automatic triggers — registration, payment, reminder, check-in, or session start." },
-    { title: "Monitor Delivery", description: "Track delivery rates, read receipts, and reply metrics in your EventHex dashboard." },
-  ],
-  useCasesHeading: "Who Uses WhatsApp with EventHex?",
-  useCases: [
-    { emoji: "🌍", title: "MENA & South Asia Events", description: "In regions where WhatsApp is the dominant messaging app, event communications have 98%+ open rates compared to 20-30% for email." },
-    { emoji: "🚨", title: "Last-Minute Communication", description: "Venue changes, speaker cancellations, schedule updates — WhatsApp ensures critical messages reach attendees instantly, not buried in inboxes." },
-    { emoji: "🏢", title: "Exhibitor Follow-Up", description: "Send exhibitor booth assignments, setup instructions, and lead reports via WhatsApp for immediate visibility and response." },
-    { emoji: "🤝", title: "Sponsor Messages", description: "Deliver sponsor messages, promotional codes, and partner offers via WhatsApp with higher engagement than traditional channels." },
-  ],
-  ctaTitle: "Reach Your Attendees Where They Actually Read",
-  ctaCopy: "Connect WhatsApp Business API and start sending event notifications with 98% open rates.",
-  faqs: [
-    { question: "Do attendees need to download anything?", answer: "No. If an attendee has WhatsApp installed (which 2B+ users do), they receive messages directly. No additional app or download is required." },
-    { question: "Do I need a WhatsApp Business API account?", answer: "Yes. EventHex connects to the official WhatsApp Business API through Meta-approved partners. A regular WhatsApp account is not sufficient for automated messaging." },
-    { question: "Can attendees opt out of WhatsApp messages?", answer: "Yes. Every message includes an opt-out option. EventHex respects opt-out preferences and stops sending messages to attendees who unsubscribe." },
-    { question: "Are there per-message charges?", answer: "WhatsApp Business API has per-conversation charges set by Meta, which vary by country. EventHex does not add any markup — you pay Meta's standard rates." },
-    { question: "Can I personalize WhatsApp messages?", answer: "Yes. Messages can include the attendee's name, ticket type, event name, session details, and custom fields. Templates support dynamic variables." },
-  ],
-  jsonLd: {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "EventHex WhatsApp Integration",
-    applicationCategory: "BusinessApplication",
-    operatingSystem: "Web",
-    url: "https://eventhex.ai/integrations/whatsapp/",
-    description: "Send event notifications and campaigns via WhatsApp Business API with 98% open rates.",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+const title = "WhatsApp Integration for Event Messages | EventHex";
+const description =
+  "Connect an event or organization WhatsApp account, use approved templates, map attendee and event fields, and keep marketing sends on an official tenant-owned account.";
+const canonical = "https://eventhex.ai/integrations/whatsapp/";
+
+const accountRoutes = [
+  {
+    title: "Platform WhatsApp",
+    label: "Platform-managed",
+    copy: "Use the centrally managed EventHex route for supported transactional purposes when that setup applies.",
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing platform-level event messaging context",
+    status: "Platform route",
+    action: "View platform route",
+    tone: "blue",
   },
+  {
+    title: "Organization WhatsApp",
+    label: "Portfolio-level",
+    copy: "Reuse the organization's configured WhatsApp account across eligible events.",
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing organization-level event messaging context",
+    status: "Organization route",
+    action: "Review organization route",
+    tone: "violet",
+  },
+  {
+    title: "Custom event WhatsApp",
+    label: "Event-level",
+    copy: "Use event-specific provider credentials and template overrides when the event owns its setup.",
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing event-level configuration context",
+    status: "Event route",
+    action: "Review event route",
+    tone: "mint",
+  },
+];
+const providerFields = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v5"></path><path d="M5.5 7.5h13"></path><rect x="3" y="7.5" width="18" height="12" rx="2"></rect><path d="M7 12h.01M12 12h.01M17 12h.01M7 16h10"></path></svg>`,
+    title: "Provider",
+    copy: "Choose the supported provider used by the account.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2"></rect><path d="M10 5h4"></path><path d="M11 18.5h2"></path></svg>`,
+    title: "Account or phone ID",
+    copy: "Identify the sending account or device according to that provider.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="15.5" r="4.5"></circle><path d="m12 12 8.5-8.5"></path><path d="m17 5 2 2"></path><path d="m15 7 2 2"></path></svg>`,
+    title: "Access credential",
+    copy: "Store the provider token or API key used for delivery.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"></circle><circle cx="18" cy="18" r="2.5"></circle><path d="M8 6h5a5 5 0 0 1 5 5v4.5"></path><path d="M16 18h-3a5 5 0 0 1-5-5V9"></path></svg>`,
+    title: "Fallback",
+    copy: "Use only where the configured provider path supports it and the organizer has enabled it.",
+  },
+];
+const templateSuites = [
+  {
+    id: "authentication",
+    label: "Authentication",
+    title: "Verify the right person at the right moment",
+    description: "OTP and checkout verification templates help the configured account support an intentional event journey.",
+    checklist: ["OTP templates", "Checkout verification", "Purpose-specific preview"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    imageAlt: "EventHex Platform Analytics dashboard used as a visual reference for WhatsApp authentication message setup",
+    visualLabel: "Authentication purpose",
+  },
+  {
+    id: "registration",
+    label: "Registration",
+    title: "Keep registration outcomes clear",
+    description: "Use the registry's success, pending, approval, rejection, and related status message purposes for attendee updates.",
+    checklist: ["Success and pending status", "Approval and rejection status", "Related registration messages"],
+    image: "/images/_tmp-analytics-reference.png",
+    imageAlt: "EventHex Platform Analytics dashboard used as a visual reference for WhatsApp registration status templates",
+    visualLabel: "Registration status",
+  },
+  {
+    id: "delivery",
+    label: "Tickets and certificates",
+    title: "Deliver the event document or media",
+    description: "Represent text, image, document, and certificate delivery purposes in the connected template registry.",
+    checklist: ["Text delivery purpose", "Image and document delivery", "Certificate delivery purpose"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    imageAlt: "EventHex Platform Analytics dashboard used as a visual reference for WhatsApp ticket and certificate delivery templates",
+    visualLabel: "Delivery purpose",
+  },
+  {
+    id: "exhibitors",
+    label: "Exhibitors and media",
+    title: "Cover exhibitor and media workflows",
+    description: "Keep exhibitor, booth-member, InstaSnap, InstaRecap, campaign, and system purposes visible in one template library.",
+    checklist: ["Exhibitor and booth-member messages", "InstaSnap and InstaRecap purposes", "Campaign and system purposes"],
+    image: "/images/_tmp-analytics-reference.png",
+    imageAlt: "EventHex Platform Analytics dashboard used as a visual reference for WhatsApp exhibitor and media templates",
+    visualLabel: "Workflow purpose",
+  },
+];
+const overrideSteps = [
+  ["Choose the message purpose", "Open the template used for that registration, ticket, exhibitor, or campaign moment."],
+  ["Enter the approved template name", "Use the exact Meta-approved name for the connected account."],
+  ["Add variables in order", "Create the numbered placeholders expected by the template."],
+  ["Map each variable", "Connect each position to the supported EventHex field, then save the override."],
+];
+const overrideVisuals = [
+  {
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard used as a visual reference for choosing a WhatsApp message purpose",
+    status: "Purpose selected",
+    action: "Choose purpose",
+    tone: "blue",
+  },
+  {
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard used as a visual reference for entering an approved WhatsApp template name",
+    status: "Approved name",
+    action: "Enter template name",
+    tone: "mint",
+  },
+  {
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard used as a visual reference for ordering WhatsApp template variables",
+    status: "Variables ordered",
+    action: "Add variables",
+    tone: "violet",
+  },
+  {
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard used as a visual reference for saving a WhatsApp template override",
+    status: "Override saved",
+    action: "Save override",
+    tone: "rose",
+  },
+];
+const moments = [
+  ["01", "Verify", "Send supported OTP or checkout verification messages."],
+  ["02", "Confirm", "Notify attendees about registration outcomes."],
+  ["03", "Deliver", "Send supported ticket, badge, or certificate media."],
+  ["04", "Coordinate", "Notify exhibitors and booth members through their configured templates."],
+  ["05", "Promote", "Use an approved organization-owned account for campaign messages."],
+  ["06", "Support AI media", "Use the relevant InstaSnap or InstaRecap notification purpose."],
+];
+const messagePurposeSteps = [
+  {
+    title: "Verify the right person",
+    desc: "Send supported OTP and checkout verification messages through the configured WhatsApp route.",
+    bullets: ["OTP verification templates", "Checkout verification", "Purpose-specific message preview"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing event and registration activity for WhatsApp verification",
+  },
+  {
+    title: "Confirm registration outcomes",
+    desc: "Keep attendees informed about registration success, pending review, approval, or rejection.",
+    bullets: ["Success and pending status", "Approval and rejection status", "Attendee outcome notifications"],
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing registration and check-in trends for WhatsApp outcome messages",
+  },
+  {
+    title: "Deliver tickets and certificates",
+    desc: "Use the connected template registry for supported ticket, badge, certificate, and event media delivery.",
+    bullets: ["Ticket and badge delivery", "Certificate messages", "Text, image, and document media"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing event delivery context for WhatsApp tickets and certificates",
+  },
+  {
+    title: "Coordinate exhibitors and booths",
+    desc: "Notify exhibitors and booth members through the message purposes configured for the event.",
+    bullets: ["Exhibitor notifications", "Booth-member updates", "Configured event templates"],
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing event operations for WhatsApp exhibitor and booth messages",
+  },
+  {
+    title: "Promote from the right account",
+    desc: "Keep campaign messages on an approved organization-owned official WhatsApp account.",
+    bullets: ["Organization-owned identity", "Approved campaign templates", "Separate marketing route"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing organization-level activity for WhatsApp campaign messages",
+  },
+  {
+    title: "Support AI media notifications",
+    desc: "Represent the relevant InstaSnap and InstaRecap notification purposes in the connected template setup.",
+    bullets: ["InstaSnap notifications", "InstaRecap notifications", "Media delivery purpose"],
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing event activity for WhatsApp AI media notifications",
+  },
+];
+const scenarios = [
+  ["01", "Event agencies", "Separate client-owned accounts and approved templates where the event requires them."],
+  ["02", "Associations", "Reuse organization-level routing for a repeat event programme."],
+  ["03", "Exhibitions", "Coordinate exhibitor and booth-member message purposes alongside attendee delivery."],
+  ["04", "Conferences", "Connect verification, registration status, ticket, and reminder journeys to the chosen account."],
+];
+const scenarioCards = [
+  {
+    eyebrow: "Event agencies",
+    title: "Keep each client event on the right account",
+    desc: "Separate client-owned accounts and approved templates where the event requires them.",
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing event-level activity for agency-managed WhatsApp routes",
+  },
+  {
+    eyebrow: "Associations",
+    title: "Reuse organization-level routing",
+    desc: "Reuse organization-level routing for a repeat event programme and its connected message purposes.",
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing organization-level event activity for WhatsApp routing",
+  },
+  {
+    eyebrow: "Exhibitions",
+    title: "Coordinate exhibitor and booth messages",
+    desc: "Coordinate exhibitor and booth-member message purposes alongside attendee delivery.",
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex Platform Analytics dashboard showing event operations for exhibitor WhatsApp messages",
+  },
+  {
+    eyebrow: "Conferences",
+    title: "Connect the full conference journey",
+    desc: "Connect verification, registration status, ticket, and reminder journeys to the chosen account.",
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex Platform Analytics dashboard showing registration and check-in trends for conference WhatsApp journeys",
+  },
+];
+const trustStats = [
+  ["3", "Account routes"],
+  ["Approved", "Template controls"],
+  ["Event-level", "Overrides"],
+  ["Separate", "Campaign identity"],
+];
+const links = [
+  { heading: "WhatsApp Event Concierge", copy: "Give attendees event-aware answers, forms, tickets, reminders, networking, and human help.", href: "/whatsapp-event-concierge/", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-4 2 1.6-4.2A7.5 7.5 0 1 1 20 11.5Z"></path><path d="M8 11h.01M12 11h.01M16 11h.01"></path></svg>` },
+  { heading: "Event Marketing", copy: "Build and schedule campaigns from EventHex audience data.", href: "/event-marketing/", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-6-6 18-3.5-8.5L3 11Z"></path><path d="M11.5 14.5 21 5"></path></svg>` },
+  { heading: "Event Notifications", copy: "Orchestrate operational messages and delivery status across channels.", href: "/event-notifications/", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>` },
+  { heading: "Event Registration", copy: "Create the attendee journey that triggers verification and outcome messages.", href: "/event-registration/", icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path><path d="m9 15 2 2 4-4"></path></svg>` },
+];
+const faqs = [
+  ["Can an event use its own WhatsApp Business account?", "Yes. EventHex supports organization-level or event-specific account configuration where the required provider credentials are available."],
+  ["Can we use the platform number for marketing campaigns?", "No. The verified campaign path requires a tenant-owned official Meta Cloud API account so one organization's marketing does not use the shared platform identity."],
+  ["Can we customize the templates?", "Custom-account events can enter their Meta-approved template names and map numbered variables to supported EventHex fields."],
+  ["Which event messages are represented?", "The current registry covers authentication, registration, tickets, certificates, exhibitors, media products, campaigns, and system purposes."],
+  ["What affects message delivery?", "Delivery depends on the connected account, approved template, recipient eligibility and consent, provider availability, and the destination device or network."],
+  ["Is this the WhatsApp concierge product?", "No. This page explains the account and template connection. The concierge page owns attendee conversations and event-aware assistance."],
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex WhatsApp Integration",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: canonical,
+  description,
+  featureList: [
+    "Platform, organization, and event-specific WhatsApp account routing",
+    "Provider credential configuration",
+    "Meta-approved template preview and variable mapping",
+    "Transactional and campaign account boundaries",
+  ],
+};
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })),
 };
 ---
 
-<IntegrationLayout {...data} />
+<MarketingLayout
+  {title}
+  {description}
+  {canonical}
+  footerCtaEyebrow="Map the sending setup"
+  footerCtaTitle="Bring your WhatsApp account and templates to the demo"
+  footerCtaSubtitle="Show us who owns the number, the provider and credentials available, the message purposes you need, and any Meta-approved templates already in place. We’ll map the supported EventHex connection and its boundaries."
+  footerCtaProofItems={["Account routing", "Approved templates", "Provider credentials"]}
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/speaker-management/cta-illustration.svg"
+  footerCtaImageAlt="EventHex WhatsApp account and template setup workflow"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <div class="wix-page">
+    <section class="wix-hero"><div class="wix-shell wix-hero__grid">
+      <div class="wix-hero__content animate-on-scroll" data-animation="fadeInUp">
+        <span class="wix-kicker">WhatsApp integration for events</span>
+        <h1>Connect the WhatsApp account behind your event messages</h1>
+        <p class="wix-lead">Choose the configured sending route, use approved templates for the messages your event needs, and keep marketing sends on an organization-owned official account.</p>
+        <div class="wix-actions"><a class="wix-button wix-button--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a><a class="wix-button wix-button--quiet" href="#wix-routing">See account routing</a></div>
+        <div class="wix-proof" aria-label="WhatsApp integration capabilities"><span>Account routing</span><span>Template controls</span><span>Transactional and campaign separation</span></div>
+      </div>
+      <div class="wix-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="wix-hero__visual-card">
+          <div class="wix-hero__visual-inner">
+            <span class="wix-hero__blue-panel" aria-hidden="true"></span>
+            <img class="wix-hero__image" src="/images/razorpay-platform-analytics-organizations.png" width="1262" height="697" loading="eager" alt="EventHex Platform Analytics organizations view showing organization-owned account routes and event activity" />
+            <span class="wix-hero__float wix-hero__float--route" aria-hidden="true"><b>Account route</b><small>Organization</small></span>
+            <span class="wix-hero__float wix-hero__float--template" aria-hidden="true"><b>Template</b><small>Approved</small></span>
+          </div>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="wix-trust" aria-label="WhatsApp integration setup coverage"><div class="wix-trust__inner"><span class="wix-trust__label">WhatsApp setup coverage</span>{trustStats.map(([value, label]) => <span class="wix-trust__stat"><b>{value}</b> {label}</span>)}</div></section>
+
+    <section id="wix-routing" class="wix-routing-spotlight" aria-labelledby="wix-routing-title">
+      <div class="wix-routing-spotlight__header">
+        <span class="wix-kicker">WhatsApp account routing choices</span>
+        <h2 id="wix-routing-title">Match the WhatsApp setup to who owns the number</h2>
+        <p>The available route depends on organization and event configuration; one option is not presented as universally best.</p>
+      </div>
+      <div class="wix-routing-spotlight__grid">
+        {accountRoutes.map((route, i) => <Fragment>
+          {i % 2 === 0 ? <article class="wix-routing-spotlight__cell wix-routing-spotlight__cell--copy">
+            <div class="wix-routing-spotlight__copy"><span class="wix-routing-spotlight__icon" aria-hidden="true">{i === 0 ? "◎" : "↗"}</span><h3>{route.title}</h3><p>{route.copy}</p><b>{route.label}</b></div>
+          </article> : <div class="wix-routing-spotlight__cell wix-routing-spotlight__cell--media"><div class={`wix-routing-spotlight__visual wix-routing-spotlight__visual--${route.tone}`}><img src={route.image} alt={route.alt} width="1262" height="697" loading="lazy" decoding="async" /><span class="wix-routing-spotlight__status">✓ {route.status}</span><span class="wix-routing-spotlight__action">{route.action}</span></div></div>}
+          {i % 2 === 0 ? <div class="wix-routing-spotlight__cell wix-routing-spotlight__cell--media"><div class={`wix-routing-spotlight__visual wix-routing-spotlight__visual--${route.tone}`}><img src={route.image} alt={route.alt} width="1262" height="697" loading="lazy" decoding="async" /><span class="wix-routing-spotlight__status">✓ {route.status}</span><span class="wix-routing-spotlight__action">{route.action}</span></div></div> : <article class="wix-routing-spotlight__cell wix-routing-spotlight__cell--copy"><div class="wix-routing-spotlight__copy"><span class="wix-routing-spotlight__icon" aria-hidden="true">{i === 1 ? "◌" : "✦"}</span><h3>{route.title}</h3><p>{route.copy}</p><b>{route.label}</b></div></article>}
+        </Fragment>)}
+        <span class="wix-routing-spotlight__cross wix-routing-spotlight__cross--one" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="scale(1,-1)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(90)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(-90)"/></svg></span>
+        <span class="wix-routing-spotlight__cross wix-routing-spotlight__cross--two" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="scale(1,-1)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(90)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(-90)"/></svg></span>
+      </div>
+    </section>
+
+    <section id="wix-provider" class="wix-provider-reference" aria-labelledby="wix-provider-title">
+      <div class="wix-provider-reference__head">
+        <span class="wix-kicker">Provider credential panel</span>
+        <h2 id="wix-provider-title">Route each message through the provider configured for the event</h2>
+        <p>EventHex resolves the selected event or organization account before dispatch. Provider fields vary, and saved access tokens remain a credential—not customer-facing copy.</p>
+      </div>
+      <div class="wix-provider-reference__grid" aria-label="Connection credentials">
+        {providerFields.map((field, index) => <Fragment>
+          {index > 0 && <span class="wix-provider-reference__notch" style={`left: ${(index / providerFields.length) * 100}%`} aria-hidden="true"><svg width="26" height="26" viewBox="-13 -13 26 26"><path d="M-13,0 A13,13 0 0,1 0,13 A13,13 0 0,1 13,0 Z" fill="#e8ecf2"></path></svg></span>}
+          <article class="wix-provider-reference__card">
+            <span class="wix-provider-reference__icon" set:html={field.icon} aria-hidden="true"></span>
+            <h3>{field.title}</h3>
+            <p>{field.copy}</p>
+          </article>
+        </Fragment>)}
+      </div>
+    </section>
+
+    <section id="wix-boundary-spotlight" class="wix-boundary-spotlight"><div class="wix-boundary-spotlight__header"><span class="wix-kicker">Transactional / marketing account boundary</span><h2>Keep campaigns on an organization-owned official WhatsApp account</h2><p>Separate operational event delivery from the organization-owned identity required for campaign sends.</p></div><div class="wix-boundary-flow"><article class="wix-boundary-flow__cell wix-boundary-flow__cell--copy"><h3>Transactional event messages</h3><p>Use the event's configured route for supported OTP, registration, ticket, certificate, exhibitor, and system messages.</p></article><div class="wix-boundary-flow__cell wix-boundary-flow__cell--media"><div class="wix-boundary-composite"><img class="wix-boundary-composite__screen" src="/images/platform-analytics-dashboard.jpg" alt="EventHex Platform Analytics dashboard showing the operational event messaging route" width="1262" height="697" loading="lazy" decoding="async" /><span class="wix-boundary-composite__status">✓ Transactional route</span><span class="wix-boundary-composite__action">Event messages</span></div></div><div class="wix-boundary-flow__cell wix-boundary-flow__cell--media"><div class="wix-boundary-composite wix-boundary-composite--violet"><img class="wix-boundary-composite__screen" src="/images/_tmp-analytics-reference.png" alt="EventHex Platform Analytics dashboard showing an organization-owned campaign identity" width="1262" height="697" loading="lazy" decoding="async" /><span class="wix-boundary-composite__status">✓ Organization-owned</span><span class="wix-boundary-composite__action">Campaigns only</span></div></div><article class="wix-boundary-flow__cell wix-boundary-flow__cell--copy"><h3>Marketing campaigns</h3><p>Use a tenant-owned official Meta Cloud API account with complete credentials before campaign sending is considered ready.</p></article><span class="wix-boundary-flow__cross" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="scale(1,-1)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(90)"/><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--wix-line)" transform="rotate(-90)"/></svg></span></div><p class="wix-boundary-spotlight__note">Unofficial provider routes are deliberately blocked for marketing campaigns; the platform number is not used for a tenant's marketing send.</p></section>
+
+    <section id="wix-template-library" class="wix-template-suites" aria-labelledby="wix-template-title">
+      <div class="wix-template-suites__inner">
+        <header class="wix-template__header">
+          <h2 id="wix-template-title" class="wix-template__title">
+            <span class="wix-template__title-line">Cover the event moments that</span>
+            <span class="wix-template__title-line">need a structured WhatsApp message</span>
+          </h2>
+          <p class="wix-template__subtitle">The organizer workspace groups templates by purpose and lets teams preview the default message and variables before use.</p>
+        </header>
+
+        <div class="wix-template__tabs" role="tablist" aria-label="WhatsApp template purposes">
+          {templateSuites.map((tab, index) => (
+            <button
+              class:list={["wix-template__tab", { "wix-template__tab--active": index === 0 }]}
+              type="button"
+              role="tab"
+              aria-selected={index === 0 ? "true" : "false"}
+              aria-controls={`wix-template-panel-${tab.id}`}
+              id={`wix-template-tab-${tab.id}`}
+              data-target={tab.id}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="wix-template__box">
+          {templateSuites.map((tab, index) => (
+            <div
+              class:list={["wix-template__panel", { "wix-template__panel--active": index === 0 }]}
+              id={`wix-template-panel-${tab.id}`}
+              role="tabpanel"
+              aria-labelledby={`wix-template-tab-${tab.id}`}
+              data-panel={tab.id}
+              tabindex="0"
+            >
+              <div class="wix-template__left">
+                <span class="wix-template__eyebrow">Approved message purpose</span>
+                <h3 class="wix-template__panel-title">{tab.title}</h3>
+                <p class="wix-template__panel-desc">{tab.description}</p>
+                <ul class="wix-template__checklist">
+                  {tab.checklist.map((item) => (
+                    <li>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <span class={`wix-template__purpose wix-template__purpose--${tab.id}`}><span aria-hidden="true">↗</span> {tab.label}</span>
+              </div>
+
+              <div class="wix-template__right">
+                <div class="wix-template__showcase">
+                  <img src={tab.image} alt={tab.imageAlt} width="1262" height="697" loading="lazy" decoding="async" />
+                  <span class:list={["wix-template__visual-label", `wix-template__visual-label--${tab.id}`]}>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6.5h12M4 10h8M4 13.5h6"></path><rect x="2.5" y="3" width="15" height="14" rx="2"></rect></svg>
+                    {tab.visualLabel}
+                  </span>
+                  <span class="wix-template__showcase-action">Preview template <span aria-hidden="true">↗</span></span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const suite = document.querySelector<HTMLElement>('.wix-template-suites');
+        if (!suite) return;
+
+        const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>('.wix-template__tab'));
+        const panels = Array.from(suite.querySelectorAll<HTMLElement>('.wix-template__panel'));
+        let rotationId: number | undefined;
+
+        const activateTab = (tab: HTMLButtonElement) => {
+          const targetId = tab.getAttribute('data-target');
+          tabs.forEach((item) => {
+            const active = item === tab;
+            item.classList.toggle('wix-template__tab--active', active);
+            item.setAttribute('aria-selected', String(active));
+          });
+          panels.forEach((panel) => panel.classList.toggle('wix-template__panel--active', panel.getAttribute('data-panel') === targetId));
+        };
+
+        const stopRotation = () => {
+          if (rotationId === undefined) return;
+          window.clearInterval(rotationId);
+          rotationId = undefined;
+        };
+
+        const startRotation = () => {
+          stopRotation();
+          if (tabs.length < 2 || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          rotationId = window.setInterval(() => {
+            const currentIndex = tabs.findIndex((tab) => tab.getAttribute('aria-selected') === 'true');
+            activateTab(tabs[(currentIndex + 1) % tabs.length]);
+          }, 4200);
+        };
+
+        tabs.forEach((tab) => tab.addEventListener('click', () => {
+          activateTab(tab);
+          startRotation();
+        }));
+        suite.addEventListener('mouseenter', stopRotation);
+        suite.addEventListener('mouseleave', startRotation);
+        suite.addEventListener('focusin', stopRotation);
+        suite.addEventListener('focusout', (event) => {
+          if (!suite.contains(event.relatedTarget as Node | null)) startRotation();
+        });
+        startRotation();
+      });
+    </script>
+
+    <section id="wix-template-workflow" class="wix-template-workflow" aria-labelledby="wix-template-workflow-title">
+      <div class="wix-template-workflow__container">
+        <div class="wix-template-workflow__left">
+          <div class="wix-template-workflow__sticky animate-on-scroll" data-animation="fadeInUp">
+            <div class="wix-template-workflow__eyebrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M3 12h18"></path></svg>
+              Template override workflow
+            </div>
+            <h2 id="wix-template-workflow-title">Map your Meta-approved template <span>to EventHex data</span></h2>
+            <p>Review the purpose, approved name, numbered variables, and supported EventHex fields before saving an override.</p>
+            <a class="wix-template-workflow__cta" href="/book-a-demo/">Book a Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+          </div>
+        </div>
+
+        <div class="wix-template-workflow__right">
+          {overrideSteps.map(([heading, copy], i) => {
+            const visual = overrideVisuals[i];
+            return (
+              <article class={`wix-template-workflow__card wix-template-workflow__card--${visual.tone} animate-on-scroll`} data-animation="fadeInUp" data-delay={i * 60} style={`--template-card-index: ${i};`}>
+                <div class="wix-template-workflow__card-header">
+                  <div class="wix-template-workflow__number">0{i + 1}</div>
+                  <div class="wix-template-workflow__card-copy"><h3>{heading}</h3><p>{copy}</p></div>
+                </div>
+                <div class="wix-template-workflow__visual">
+                  <div class="wix-template-workflow__product-shot">
+                    <img src={visual.image} alt={visual.alt} width="1262" height="697" loading="lazy" decoding="async" />
+                    <span class="wix-template-workflow__status">✓ {visual.status}</span>
+                    <span class="wix-template-workflow__action">{visual.action}</span>
+                    <svg class="wix-template-workflow__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <section class="wix-section wix-preview-section wix-preview-ai" aria-labelledby="wix-preview-title">
+      <div class="wix-preview-ai__inner">
+        <div class="wix-preview-ai__left">
+          <span class="wix-kicker wix-preview-ai__eyebrow animate-on-scroll" data-animation="fadeInUp">WhatsApp phone preview</span>
+          <h2 id="wix-preview-title" class="wix-preview-ai__title animate-on-scroll" data-animation="fadeInUp">
+            <span>See the message structure</span>
+            <span>before the event sends it</span>
+          </h2>
+          <p class="wix-preview-ai__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+            Use the preview to confirm the purpose, approved template name, variables, and media requirement before a WhatsApp message is sent. For a custom account, review the mapped fields as a separate setup step.
+          </p>
+          <div class="wix-preview-ai__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+            <a href="/book-a-demo/" class="wix-preview-ai__btn wix-preview-ai__btn--dark">Book a Demo &rarr;</a>
+            <a href="#wix-template-workflow" class="wix-preview-ai__btn wix-preview-ai__btn--light">Review Template &rarr;</a>
+          </div>
+        </div>
+
+        <div class="wix-preview-ai__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+          <div class="wix-preview-ai__showcase" aria-label="EventHex Platform Analytics screenshots used to review WhatsApp message structure">
+            <div class="wix-preview-ai__shot wix-preview-ai__shot--overview">
+              <img src="/images/platform-analytics-dashboard.jpg" alt="EventHex Platform Analytics dashboard showing event creation, registration, and check-in trends" width="1262" height="697" loading="lazy" decoding="async" />
+            </div>
+            <div class="wix-preview-ai__shot wix-preview-ai__shot--detail">
+              <img src="/images/_tmp-analytics-reference.png" alt="EventHex Platform Analytics dashboard showing a second registration and delivery view for WhatsApp review" width="1262" height="697" loading="lazy" decoding="async" />
+            </div>
+            <span class="wix-preview-ai__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Message structure ready</span>
+            <span class="wix-preview-ai__publish">Review &amp; send</span>
+            <svg class="wix-preview-ai__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wix-message-workflow" aria-labelledby="wix-message-workflow-title">
+      <div class="wix-message-workflow__inner">
+        <header class="wix-message-workflow__header">
+          <h2 id="wix-message-workflow-title">Use one account layer across multiple event workflows</h2>
+        </header>
+        <ol class="wix-message-workflow__steps">
+          {messagePurposeSteps.map((step, index) => (
+            <li>
+              <details open={index === 0}>
+                <summary tabindex="-1">
+                  <span>0{index + 1}</span>
+                  <div class="wix-message-step__content">
+                    <h3 class="wix-message-step__title">{step.title}</h3>
+                    <p class="wix-message-step__desc">{step.desc}</p>
+                    <ul class="wix-message-step__bullets">
+                      {step.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}
+                    </ul>
+                  </div>
+                  <button type="button" class="wix-message-workflow__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                  </button>
+                </summary>
+                <div class="wix-message-workflow__visual"><img src={step.image} alt={step.alt} width="1262" height="697" loading="lazy" decoding="async" /></div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <script>
+      document.querySelectorAll<HTMLDetailsElement>(".wix-message-workflow details").forEach((item, _, all) => {
+        const summary = item.querySelector("summary");
+        const trigger = item.querySelector<HTMLButtonElement>(".wix-message-workflow__arrow");
+
+        summary?.addEventListener("click", (event) => {
+          event.preventDefault();
+          item.open = !item.open;
+        });
+
+        item.addEventListener("toggle", () => {
+          trigger?.setAttribute("aria-expanded", String(item.open));
+          trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} message purpose`);
+          if (!item.open) return;
+          all.forEach((other) => {
+            if (other !== item) other.open = false;
+          });
+        });
+      });
+    </script>
+    <section class="wix-scenario-stack" aria-labelledby="wix-scenario-stack-title">
+      <div class="wix-scenario-stack__section">
+        <header class="wix-scenario-stack__header">
+          <span class="wix-scenario-stack__eyebrow"><span aria-hidden="true">✦</span> Priority buyer scenarios</span>
+          <h2 id="wix-scenario-stack-title"><span>Fit the WhatsApp connection to the</span><span>event operating model</span></h2>
+        </header>
+        <div class="wix-scenario-stack__cards">
+          {scenarioCards.map((card, index) => (
+            <article class="wix-scenario-stack__card" style={`--scenario-index: ${index};`}>
+              <div class="wix-scenario-stack__card-content">
+                <span class="wix-scenario-stack__card-eyebrow">{card.eyebrow}</span>
+                <h3>{card.title}</h3>
+                <p>{card.desc}</p>
+                <a href="/book-a-demo/" class="wix-scenario-stack__card-btn">Explore More <span aria-hidden="true">→</span></a>
+              </div>
+              <div class="wix-scenario-stack__card-image">
+                <img src={card.image} alt={card.alt} width="1262" height="697" loading="lazy" decoding="async" />
+              </div>
+            </article>
+          ))}
+          <div class="wix-scenario-stack__spacer" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const scenarioSection = document.querySelector<HTMLElement>('.wix-scenario-stack');
+      const scenarioHeader = scenarioSection?.querySelector<HTMLElement>('.wix-scenario-stack__header');
+      const scenarioCards = scenarioSection?.querySelectorAll<HTMLElement>('.wix-scenario-stack__card');
+      const finalScenarioCard = scenarioCards?.[scenarioCards.length - 1];
+
+      if (scenarioHeader && finalScenarioCard) {
+        let scenarioFrame = 0;
+        const syncScenarioRelease = () => {
+          scenarioFrame = 0;
+          const stickyTop = Number.parseFloat(getComputedStyle(finalScenarioCard).top) || 0;
+          const releaseOffset = Math.min(0, finalScenarioCard.getBoundingClientRect().top - stickyTop);
+          scenarioHeader.style.transform = `translateY(${releaseOffset}px)`;
+        };
+        const queueScenarioRelease = () => {
+          if (scenarioFrame) return;
+          scenarioFrame = requestAnimationFrame(syncScenarioRelease);
+        };
+        window.addEventListener('scroll', queueScenarioRelease, { passive: true });
+        window.addEventListener('resize', queueScenarioRelease);
+        syncScenarioRelease();
+      }
+    </script>
+    <section class="wix-boundary-bento" aria-labelledby="wix-boundary-bento-title">
+      <div class="wix-boundary-bento__container">
+        <header class="wix-boundary-bento__header">
+          <h2 id="wix-boundary-bento-title">Connection infrastructure here; attendee experiences on their <span>own pages</span></h2>
+        </header>
+        <div class="wix-boundary-bento__grid">
+          <span class="wix-boundary-bento__notch wix-boundary-bento__notch--top" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+          </span>
+          <span class="wix-boundary-bento__notch wix-boundary-bento__notch--bottom" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+          </span>
+          <div class="wix-boundary-bento__row">
+            <div class="wix-boundary-bento__cell wix-boundary-bento__visual">
+              <div class="wix-boundary-bento__shot-stage wix-boundary-bento__shot-stage--blue">
+                <img src="/images/platform-analytics-dashboard.jpg" alt="EventHex Platform Analytics dashboard showing account routing and event messaging context" width="1262" height="697" loading="lazy" decoding="async" />
+                <span class="wix-boundary-bento__float wix-boundary-bento__float--top"><b>Platform context</b><small>Account routes</small></span>
+                <span class="wix-boundary-bento__float wix-boundary-bento__float--bottom"><i></i><b>Sending boundary</b></span>
+              </div>
+            </div>
+            <div class="wix-boundary-bento__cell wix-boundary-bento__content">
+              <span class="wix-boundary-bento__eyebrow">Infrastructure</span>
+              <h3>Connection infrastructure here</h3>
+              <p>Keep account routing, provider credentials, approved templates, variable mapping, and sending-readiness boundaries in this integration page.</p>
+              <p>Use the configured WhatsApp route for the supported event message purposes without repeating the full attendee product experience here.</p>
+            </div>
+            <span class="wix-boundary-bento__cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg>
+            </span>
+          </div>
+          <div class="wix-boundary-bento__row wix-boundary-bento__row--reverse">
+            <div class="wix-boundary-bento__cell wix-boundary-bento__content">
+              <span class="wix-boundary-bento__eyebrow">Experience</span>
+              <h3>Attendee experiences on their own pages</h3>
+              <p>Link people to the feature page that owns the attendee or organizer task instead of duplicating its capability grid here.</p>
+              <p>Connected pages cover concierge conversations, campaigns, notifications, registration, ticket delivery, and photo or recap experiences.</p>
+            </div>
+            <div class="wix-boundary-bento__cell wix-boundary-bento__visual">
+              <div class="wix-boundary-bento__shot-stage wix-boundary-bento__shot-stage--mint">
+                <img src="/images/_tmp-analytics-reference.png" alt="EventHex Platform Analytics dashboard showing connected event experience activity" width="1262" height="697" loading="lazy" decoding="async" />
+                <span class="wix-boundary-bento__float wix-boundary-bento__float--top"><b>Feature linked</b><small>Event experience</small></span>
+                <span class="wix-boundary-bento__float wix-boundary-bento__float--bottom"><i></i><b>Attendee journey</b></span>
+              </div>
+            </div>
+            <span class="wix-boundary-bento__cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="wix-links-section" class="wix-section wix-links-section"><div class="wix-links-shell"><div class="wix-links-head"><span class="wix-kicker">Adjacent feature links</span><h2><span>Continue into the page that owns the attendee or organizer</span><span>task</span></h2></div><div class="wix-links-grid">{links.slice(0, -1).map((_, index) => <span class="wix-links-notch" style={`left: ${((index + 1) / links.length) * 100}%`} aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>)}{links.map((link, index) => <a href={link.href} class:list={["wix-link-card", { "wix-link-card--first": index === 0 }]}><span class="wix-link-card__icon" set:html={link.icon} aria-hidden="true"></span><div class="wix-link-card__content"><h3>{link.heading}</h3><p>{link.copy}</p></div><span class="wix-link-card__arrow" aria-hidden="true">→</span></a>)}</div></div></section>
+    <section id="wix-faq" class="wix-section wix-faq"><div class="wix-faq-shell"><div class="wix-faq-sidebar"><span class="wix-faq-eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quick Answers</span><h2>What teams ask before connecting WhatsApp</h2><p>Clear answers for account owners, event operators, and teams reviewing their approved templates.</p><a class="wix-faq-cta" href="/contact-en/">Visit Help Center <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a></div><div class="wix-faq-list">{faqs.map(([question, answer], index) => <details class="wix-faq-item" data-wix-faq-item open={index === 0}><summary class="wix-faq-question"><strong>{question}</strong><span class="wix-faq-icon" aria-hidden="true"></span></summary><div class="wix-faq-answer"><p>{answer}</p></div></details>)}</div></div></section>
+    <script>
+      const whatsappFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>('[data-wix-faq-item]'));
+      whatsappFaqItems.forEach((item) => item.addEventListener('toggle', () => {
+        if (!item.open) return;
+        whatsappFaqItems.forEach((other) => { if (other !== item) other.open = false; });
+      }));
+    </script>
+  </div>
+</MarketingLayout>
+
+<style>
+  .wix-page { --wix-ink: #162033; --wix-muted: #617087; --wix-blue: #375dfb; --wix-cyan: #abffff; --wix-line: #e5eaf2; --wix-tint: #f6f8fc; color: var(--wix-ink); background: #fff; overflow-x: clip; }
+  .wix-shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+  .wix-hero { padding: 92px 0 108px; background: radial-gradient(circle at 77% 16%, rgba(171,255,255,.34), transparent 30%), linear-gradient(135deg,#f6f8ff 0%,#fff 55%,#f2f6ff 100%); }
+  .wix-hero__grid, .wix-two-col { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: clamp(44px,8vw,112px); align-items: center; }
+  .wix-hero__content { max-width: 590px; } .wix-kicker { display: inline-block; color: var(--wix-blue); font-size: .74rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+  .wix-hero h1 { max-width: 680px; margin: 18px 0 22px; font-size: clamp(2.7rem,5.2vw,5rem); line-height: .99; letter-spacing: -.065em; font-weight: 700; }
+  .wix-lead { max-width: 590px; margin: 0; color: var(--wix-muted); font-size: 1.1rem; line-height: 1.7; } .wix-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .wix-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 11px; font-weight: 750; text-decoration: none; transition: transform .2s ease, background .2s ease, border-color .2s ease; } .wix-button:hover { transform: translateY(-2px); } .wix-button--primary { color: #fff; background: var(--wix-blue); box-shadow: 0 11px 26px rgba(55,93,251,.2); } .wix-button--quiet, .wix-button--outline { color: var(--wix-ink); border-color: var(--wix-line); background: rgba(255,255,255,.72); } .wix-button--light { color: var(--wix-ink); background: #fff; }
+  .wix-proof { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; } .wix-proof span { padding: 7px 10px; border-radius: 999px; background: #eaf0ff; color: #3d4d70; font-size: .73rem; font-weight: 700; }
+  .wix-hero__visual { position: relative; min-height: 430px; display: grid; place-items: center; } .wix-workspace-card { position: relative; z-index: 1; width: min(100%, 520px); border: 1px solid rgba(93,113,163,.24); border-radius: 22px; background: rgba(255,255,255,.93); box-shadow: 0 28px 70px rgba(51,74,127,.16); transform: rotate(1.5deg); overflow: hidden; }
+  .wix-window-bar { display: flex; align-items: center; gap: 7px; padding: 14px 17px; border-bottom: 1px solid var(--wix-line); color: #7a879d; font-size: .69rem; } .wix-window-bar span { width: 8px; height: 8px; border-radius: 50%; background: #d0d8e8; } .wix-window-bar b { margin-left: auto; font-size: .71rem; font-weight: 700; } .wix-window-body { padding: 24px; } .wix-window-heading { display: flex; justify-content: space-between; align-items: end; margin-bottom: 23px; } .wix-window-heading span { color: #8c98ac; font-size: .62rem; letter-spacing: .12em; font-weight: 800; } .wix-window-heading strong { font-size: 1.15rem; }
+  .wix-message-status { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 13px; border-radius: 12px; background: #f0fbf7; color: #1b7259; font-size: .84rem; font-weight: 750; } .wix-message-status small { width: 100%; padding-left: 18px; color: #5e8e80; font-size: .7rem; font-weight: 600; } .wix-status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #1ab77b; box-shadow: 0 0 0 4px rgba(26,183,123,.12); }
+  .wix-routing-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 11px; margin-top: 15px; } .wix-routing-grid > div { padding: 15px; border: 1px solid var(--wix-line); border-radius: 12px; background: #fbfcfe; } .wix-routing-grid small { display: block; margin-bottom: 7px; color: #8c98ac; font-size: .59rem; letter-spacing: .12em; font-weight: 800; } .wix-routing-grid b { display: block; font-size: .92rem; } .wix-routing-grid em { display: block; margin-top: 3px; color: var(--wix-muted); font-size: .7rem; font-style: normal; }
+  .wix-progress { height: 7px; margin-top: 25px; border-radius: 999px; background: #e9edf5; overflow: hidden; } .wix-progress span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg,var(--wix-blue),#69c9ff); } .wix-progress-label { display:flex; justify-content: space-between; margin-top: 8px; color: #8592a7; font-size: .67rem; } .wix-progress-label b { color: var(--wix-blue); }
+  .wix-orb { position: absolute; border-radius: 50%; filter: blur(1px); } .wix-orb--one { width: 190px; height: 190px; top: 14px; right: 4%; background: rgba(171,255,255,.35); } .wix-orb--two { width: 125px; height: 125px; bottom: 8%; left: 3%; background: rgba(55,93,251,.12); }
+  .wix-section { padding: clamp(78px,9vw,130px) 0; } .wix-section--tint { background: var(--wix-tint); } .wix-section--dark { background: #111b36; color: #fff; } .wix-section-head { max-width: 700px; margin-bottom: 44px; } .wix-section-head--center { max-width: 760px; margin-right: auto; margin-left: auto; text-align: center; } .wix-section-head h2, .wix-sticky-copy h2, .wix-copy-block h2, .wix-boundary-section h2, .wix-faq h2 { margin: 12px 0 16px; font-size: clamp(2rem,4vw,3.55rem); line-height: 1.03; letter-spacing: -.055em; } .wix-section-head p, .wix-sticky-copy p, .wix-copy-block p { color: var(--wix-muted); font-size: 1rem; line-height: 1.7; } .wix-section--dark .wix-section-head p, .wix-section--dark .wix-copy-block p { color: #bdc8dc; }
+  .wix-two-col--reverse > :first-child { order: 2; } .wix-two-col--reverse > :last-child { order: 1; } .wix-sticky-copy { align-self: start; position: sticky; top: 100px; } .wix-card-stack { display: grid; gap: 15px; } .wix-choice-card { padding: 25px 27px; border: 1px solid var(--wix-line); border-radius: 18px; background: #fff; box-shadow: 0 11px 28px rgba(36,55,93,.055); } .wix-choice-card__top { display: flex; justify-content: space-between; align-items: center; color: var(--wix-blue); } .wix-choice-card__top span { font-size: .7rem; font-weight: 800; } .wix-choice-card__top small { padding: 5px 9px; border-radius: 999px; background: #edf1ff; font-size: .66rem; font-weight: 800; } .wix-choice-card h3 { margin: 18px 0 7px; font-size: 1.18rem; } .wix-choice-card p { margin: 0; color: var(--wix-muted); line-height: 1.65; font-size: .9rem; }
+  .wix-provider-ui { padding: 21px; border: 1px solid #dce3ef; border-radius: 20px; background: #fff; box-shadow: 0 22px 52px rgba(36,55,93,.1); }
+  .wix-ui-title { display: flex; justify-content: space-between; padding-bottom: 18px; border-bottom: 1px solid var(--wix-line); }
+  .wix-ui-title span { color: #8290a8; font-size: .75rem; font-weight: 700; }
+  .wix-ui-title b { font-size: .82rem; }
+  .wix-provider-grid { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 20px; }
+  .wix-provider-card { position: relative; min-height: 166px; padding: 20px 17px; border: 1px solid #e8ecf2; border-radius: 14px; background: radial-gradient(circle at 92% 8%, rgba(55,93,251,.08), transparent 36%), #f7f8fb; }
+  .wix-provider-card__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 20px; color: var(--wix-blue); }
+  .wix-provider-card__icon svg { width: 100%; height: 100%; }
+  .wix-provider-card b, .wix-provider-card small { display: block; }
+  .wix-provider-card b { color: var(--wix-ink); font-size: .84rem; line-height: 1.25; }
+  .wix-provider-card small { margin-top: 8px; color: var(--wix-muted); font-size: .7rem; line-height: 1.45; }
+  .wix-provider-notch { position: absolute; z-index: 2; width: 22px; height: 22px; line-height: 0; pointer-events: none; }
+  .wix-provider-notch--top { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  .wix-provider-notch--middle { top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(90deg); }
+  .wix-provider-reference { padding: clamp(78px, 9vw, 130px) 0; background: #fff; }
+  .wix-provider-reference__head { width: min(760px, calc(100% - 48px)); margin: 0 auto 58px; text-align: center; }
+  .wix-provider-reference__head h2 { margin: 14px 0 16px; color: var(--wix-ink); font: 500 clamp(2.25rem, 4.8vw, 3.8rem)/1.05 var(--font-heading); letter-spacing: -.055em; }
+  .wix-provider-reference__head p { max-width: 680px; margin: 0 auto; color: var(--wix-muted); font: 1rem/1.7 var(--font-body); }
+  .wix-provider-reference__grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: min(1200px, calc(100% - 48px)); margin: 0 auto; border-top: 1px solid #e8ecf2; }
+  .wix-provider-reference__notch { position: absolute; top: 0; z-index: 2; width: 26px; height: 26px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; }
+  .wix-provider-reference__card { min-height: 250px; padding: 28px 26px 34px; border-left: 1px solid #e8ecf2; background: #fff; }
+  .wix-provider-reference__card:first-of-type { border-left: 0; }
+  .wix-provider-reference__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 26px; color: var(--wix-blue); }
+  .wix-provider-reference__icon svg { width: 100%; height: 100%; }
+  .wix-provider-reference__card h3 { margin: 0 0 20px; color: var(--wix-ink); font: 600 1.2rem/1.25 var(--font-heading); }
+  .wix-provider-reference__card p { margin: 0; color: var(--wix-muted); font: .94rem/1.55 var(--font-body); }
+  .wix-ui-footer { display:flex; align-items:center; gap: 8px; margin-top: 17px; color: #66758c; font-size: .7rem; }
+  .wix-boundary { background: #fbfcff; } .wix-boundary-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 15px; } .wix-boundary-card { padding: 28px; border: 1px solid var(--wix-line); border-radius: 17px; background: #fff; } .wix-boundary-card--accent { border-color: #b9c8ff; background: #edf1ff; } .wix-boundary-card__label { color: var(--wix-blue); font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; } .wix-boundary-card h3 { margin: 18px 0 8px; font-size: 1.15rem; } .wix-boundary-card p { margin: 0; color: var(--wix-muted); line-height: 1.65; font-size: .88rem; } .wix-note { margin: 34px 0 0; padding: 16px 18px; border-left: 3px solid var(--wix-blue); color: #4e5d74; background: #eef3ff; font-size: .82rem; }
+  .wix-preview-section { background: linear-gradient(135deg, #eef4ff 0%, #fff 58%, #f7f9ff 100%); }
+  .wix-preview-ai { padding: 48px 24px; display: flex; justify-content: center; }
+  .wix-preview-ai__inner { width: min(1120px, 100%); padding: 48px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 36px; align-items: center; }
+  .wix-preview-ai__left { min-width: 0; max-width: 560px; }
+  .wix-preview-ai__eyebrow { margin-bottom: 16px; }
+  .wix-preview-ai__title { display: flex; flex-direction: column; gap: 0; margin: 0; color: #1d273b; font: 500 clamp(32px, 3.5vw, 42px)/1.1 var(--font-heading); letter-spacing: -.02em; }
+  .wix-preview-ai__title span:last-child { color: #9aa3b2; font-weight: 500; }
+  .wix-preview-ai__copy { max-width: 560px; margin: 16px 0 32px; color: #374151; font: 500 15px/1.5 var(--font-body); }
+  .wix-preview-ai__actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+  .wix-preview-ai__btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 6px; font: 600 13.5px/1.2 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .wix-preview-ai__btn:hover { transform: translateY(-2px); }
+  .wix-preview-ai__btn--dark { color: #fff; background: #27272a; }
+  .wix-preview-ai__btn--dark:hover { background: #18181b; }
+  .wix-preview-ai__btn--light { color: #374151; border: 1px solid #e5e7eb; background: #f3f4f6; }
+  .wix-preview-ai__btn--light:hover { background: #e5e7eb; }
+  .wix-preview-ai__right { width: 100%; max-width: 500px; justify-self: end; }
+  .wix-preview-ai__showcase { position: relative; isolation: isolate; width: 100%; height: clamp(320px, 32vw, 350px); overflow: hidden; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: linear-gradient(155deg, #fff8dc 0%, #fffdf4 48%, #fff 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+  .wix-preview-ai__showcase::before { content: ""; position: absolute; inset: auto 6% -24% 10%; z-index: -1; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); filter: blur(24px); }
+  .wix-preview-ai__shot { position: absolute; overflow: hidden; aspect-ratio: 1262 / 697; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }
+  .wix-preview-ai__shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .wix-preview-ai__shot--overview { top: 30px; left: 20px; width: 77%; z-index: 1; }
+  .wix-preview-ai__shot--detail { right: 18px; bottom: 24px; width: 70%; z-index: 2; }
+  .wix-preview-ai__status, .wix-preview-ai__publish { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; box-shadow: 0 8px 22px rgba(42,66,158,.18); font: 700 13px/1 var(--font-body); }
+  .wix-preview-ai__status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; color: #4163ed; background: #f0f4ff; }
+  .wix-preview-ai__status svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  .wix-preview-ai__publish { right: 16px; bottom: 16px; padding: 12px 16px; color: #fff; background: #4163ed; }
+  .wix-preview-ai__cursor { position: absolute; right: 20px; bottom: 50px; z-index: 6; width: 23px; height: 27px; fill: #182033; stroke: #fff; stroke-width: 1.2; filter: drop-shadow(0 2px 3px rgba(17,24,39,.24)); animation: wix-preview-ai-cursor-tap 2.4s ease-in-out infinite; }
+  @keyframes wix-preview-ai-cursor-tap { 0%,65%,100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+  @media (max-width: 900px) { .wix-preview-ai__inner { grid-template-columns: 1fr; gap: 32px; } .wix-preview-ai__left, .wix-preview-ai__right { max-width: none; } }
+  @media (max-width: 620px) { .wix-preview-ai { padding: 12px 16px; } .wix-preview-ai__inner { padding: 32px 24px; grid-template-columns: 1fr; gap: 32px; } .wix-preview-ai__title { font-size: 28px; } .wix-preview-ai__actions { flex-direction: column; width: 100%; align-items: stretch; } .wix-preview-ai__btn { width: 100%; } .wix-preview-ai__showcase { height: 300px; border-radius: 18px; } .wix-preview-ai__shot--overview { top: 30px; left: 12px; width: 80%; } .wix-preview-ai__shot--detail { right: 12px; bottom: 23px; width: 72%; } .wix-preview-ai__status { top: 14px; left: 12px; } .wix-preview-ai__publish { right: 12px; bottom: 12px; } .wix-preview-ai__cursor { right: 15px; bottom: 46px; } .wix-preview-ai__copy { font-size: 16px; } }
+  .wix-mini-list { display: grid; gap: 11px; margin-top: 25px; } .wix-mini-list span { padding: 12px 14px; border: 1px solid var(--wix-line); border-radius: 11px; background: #fff; color: var(--wix-muted); font-size: .82rem; } .wix-mini-list b { color: var(--wix-ink); }
+  .wix-message-workflow { padding: clamp(92px, 10vw, 144px) 24px; background: #eef4ff; }
+  .wix-message-workflow__inner { width: min(1218px, 100%); margin: 0 auto; }
+  .wix-message-workflow__header { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; margin-bottom: 64px; text-align: center; }
+  .wix-message-workflow__header h2 { max-width: 780px; margin: 0 auto; color: transparent; font: 500 clamp(40px, 5vw, 62px)/1.08 var(--font-heading); letter-spacing: -.02em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; background-clip: text; }
+  .wix-message-workflow__steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .wix-message-workflow__steps > li { position: relative; display: block; padding: 0; }
+  .wix-message-workflow__steps details { position: relative; overflow: hidden; border: 1px solid var(--wix-message-border); border-radius: 18px; background: linear-gradient(135deg, var(--wix-message-tint) 0%, #fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease; }
+  .wix-message-workflow__steps > li:nth-child(1) { --wix-message-tint: #fff8dc; --wix-message-border: #f0dfa6; }
+  .wix-message-workflow__steps > li:nth-child(2) { --wix-message-tint: #edf7ff; --wix-message-border: #d4e7f7; }
+  .wix-message-workflow__steps > li:nth-child(3) { --wix-message-tint: #f3efff; --wix-message-border: #e2d8fa; }
+  .wix-message-workflow__steps > li:nth-child(4) { --wix-message-tint: #eefbf4; --wix-message-border: #d4efdf; }
+  .wix-message-workflow__steps > li:nth-child(5) { --wix-message-tint: #fff0f7; --wix-message-border: #f4d6e5; }
+  .wix-message-workflow__steps > li:nth-child(6) { --wix-message-tint: #f1f4ff; --wix-message-border: #d6defb; }
+  .wix-message-workflow__steps details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .wix-message-workflow__steps summary { display: grid; grid-template-columns: 32px minmax(0,1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .wix-message-workflow__steps summary::-webkit-details-marker { display: none; }
+  .wix-message-workflow__steps summary:hover { background: rgba(255,255,255,.28); }
+  .wix-message-workflow__steps summary > span { display: block; color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .wix-message-step__content { display: flex; flex-direction: column; }
+  .wix-message-workflow__steps details:not([open]) .wix-message-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .wix-message-step__title { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .wix-message-step__desc { display: none; }
+  .wix-message-workflow__steps details:not([open]) .wix-message-step__desc { display: -webkit-box; max-width: 460px; margin: 0; overflow: hidden; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+  .wix-message-step__bullets { display: none; }
+  .wix-message-workflow__arrow { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; color: #111827; background: rgba(255,255,255,.78); cursor: pointer; transition: transform .25s ease, background .2s ease, border-color .2s ease; }
+  .wix-message-workflow__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .wix-message-workflow__arrow:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .wix-message-workflow__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .wix-message-workflow__steps details[open] .wix-message-workflow__arrow { top: 28px; transform: rotate(180deg); }
+  .wix-message-workflow__steps details[open] { display: flex; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg, var(--wix-message-tint) 0%, #fff 72%); }
+  .wix-message-workflow__steps details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0,1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; background: transparent; }
+  .wix-message-workflow__steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .wix-message-workflow__steps details[open] summary > span { color: #050505; font-size: 26px; line-height: 1; }
+  .wix-message-workflow__steps details[open] .wix-message-step__title { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .wix-message-workflow__steps details[open] .wix-message-step__desc { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 17px/1.6 var(--font-body); }
+  .wix-message-workflow__steps details[open] .wix-message-step__bullets { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .wix-message-workflow__steps details[open] .wix-message-step__bullets li { display: flex; align-items: center; gap: 14px; padding: 0; color: #111; font: 500 16px/1.4 var(--font-body); }
+  .wix-message-step__bullets li i { font-size: 16px; font-style: normal; }
+  .wix-message-workflow__visual { display: none; margin: 0; opacity: 0; }
+  .wix-message-workflow__steps details[open] .wix-message-workflow__visual { flex: 0 0 45%; display: flex; align-items: center; justify-content: flex-start; max-height: none; padding: 40px 88px 40px 0; overflow: visible; opacity: 1; }
+  .wix-message-workflow__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+  .wix-number-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; } .wix-number-grid article { min-height: 180px; padding: 23px; border: 1px solid var(--wix-line); border-radius: 17px; background: #fff; } .wix-number-grid span, .wix-scenario-grid article > span { color: var(--wix-blue); font-size: .7rem; font-weight: 800; } .wix-number-grid h3 { margin: 31px 0 7px; font-size: 1rem; } .wix-number-grid p, .wix-scenario-grid p { margin: 0; color: var(--wix-muted); line-height: 1.6; font-size: .84rem; }
+  .wix-scenario-stack { width: 100%; color: #fff; background-color: #000; background-image: linear-gradient(180deg,#0d0a2c 0%,transparent 320px), radial-gradient(circle at 12% 30%,rgba(70,130,255,.28) 0%,transparent 55%); background-repeat: no-repeat; background-size: 100% 100%,120% 120%; animation: wix-scenario-mesh-move 30s linear infinite; }
+  @keyframes wix-scenario-mesh-move { 0%,100% { background-position: 0 0,0% 0%; } 50% { background-position: 0 0,8% 10%; } }
+  .wix-scenario-stack__section { display: flex; flex-direction: column; align-items: center; width: min(1140px,100%); margin: 0 auto; padding: 4px 0 30px; }
+  .wix-scenario-stack__header { position: sticky; top: 69px; z-index: 20; isolation: isolate; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; width: min(94%,1050px); padding: 24px 0; text-align: center; transform: translateY(0); will-change: transform; }
+  .wix-scenario-stack__header::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -28px; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; background: linear-gradient(180deg,rgba(13,10,44,.99) 0%,rgba(7,11,27,.98) 72%,rgba(7,11,27,0) 100%); }
+  .wix-scenario-stack__eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px 6px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; color: #fff; background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35); backdrop-filter: blur(16px); font: 600 15px/1.2 var(--font-body); }
+  .wix-scenario-stack__eyebrow span { color: #4f8cff; }
+  .wix-scenario-stack__header h2 { display: flex; flex-direction: column; margin: 0; color: #fff; font: 500 clamp(38px,5vw,56px)/1.15 var(--font-heading); letter-spacing: -.04em; }
+  .wix-scenario-stack__header h2 span:last-child { color: #afa3ff; }
+  .wix-scenario-stack__cards { --wix-scenario-stack-top: 300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .wix-scenario-stack__spacer { height: 190px; }
+  .wix-scenario-stack__card { position: sticky; top: calc(var(--wix-scenario-stack-top) + var(--scenario-index) * 20px); z-index: var(--scenario-index); display: flex; align-items: stretch; height: 500px; margin-bottom: 60px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; background: radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16) 0%,transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18) 0%,transparent 40%),#0a0a0f; box-shadow: none; transition: transform .3s ease,box-shadow .3s ease; }
+  .wix-scenario-stack__card:first-child { background: radial-gradient(circle at 82% 12%,rgba(109,92,235,.24),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.13),transparent 28%),#090a10; }
+  .wix-scenario-stack__card-content { flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .wix-scenario-stack__card-eyebrow { display: inline-flex; align-self: flex-start; padding: 7px 13px; border: 1px solid rgba(175,163,255,.28); border-radius: 999px; color: #afa3ff; background: rgba(175,163,255,.1); font: 600 12px/1.2 var(--font-body); letter-spacing: .02em; }
+  .wix-scenario-stack__card h3 { margin: 0; color: #e7e4fa; font: 500 32px/1.2 var(--font-heading); }
+  .wix-scenario-stack__card p { margin: 0; color: rgba(255,255,255,.55); font: 17px/1.65 var(--font-body); }
+  .wix-scenario-stack__card-btn { display: inline-flex; align-items: center; align-self: flex-start; gap: 8px; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: #fff; background: rgba(255,255,255,.06); font: 500 15px/1 var(--font-body); text-decoration: none; transition: transform .3s,background .3s; }
+  .wix-scenario-stack__card-btn:hover { transform: scale(1.05); background: rgba(255,255,255,.1); }
+  .wix-scenario-stack__card-image { flex: 1; display: flex; align-items: center; justify-content: center; margin: 16px 16px 16px 0; padding: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04)); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(24px); }
+  .wix-scenario-stack__card-image img { width: 100%; height: 100%; object-fit: contain; image-rendering: high-quality; transform: translateZ(0); animation: wix-scenario-float 4s ease-in-out infinite; }
+  @keyframes wix-scenario-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .wix-scenario-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 15px; } .wix-scenario-grid article { padding: 24px; border-radius: 17px; background: linear-gradient(145deg,#f6f8ff,#fff); border: 1px solid var(--wix-line); } .wix-scenario-grid h3 { margin: 28px 0 8px; font-size: 1rem; }
+  /* Event Registration bento pattern, adapted to the integration boundary. */
+  .wix-boundary-bento { padding: 80px 24px; background: transparent; }
+  .wix-boundary-bento__container { width: min(1200px, 100%); margin: 0 auto; }
+  .wix-boundary-bento__header { margin: 0 auto 60px; text-align: center; }
+  .wix-boundary-bento__header h2 { max-width: 1040px; margin: 0 auto; color: var(--wix-ink); font: 500 clamp(32px, 4vw, 56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .wix-boundary-bento__header h2 span { color: #8f8f8f; }
+  .wix-boundary-bento__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .wix-boundary-bento__notch { position: absolute; left: 50%; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .wix-boundary-bento__notch--top { top: 0; transform: translate(-50%, -50%); }
+  .wix-boundary-bento__notch--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .wix-boundary-bento__row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .wix-boundary-bento__row:last-child { border-bottom: none; }
+  .wix-boundary-bento__cell { display: flex; flex-direction: column; justify-content: center; padding: 4rem; }
+  .wix-boundary-bento__row:not(.wix-boundary-bento__row--reverse) .wix-boundary-bento__cell:first-child,
+  .wix-boundary-bento__row.wix-boundary-bento__row--reverse .wix-boundary-bento__cell:first-child { border-right: 1px solid #e5e7eb; }
+  .wix-boundary-bento__visual { align-items: center; }
+  .wix-boundary-bento__shot-stage { position: relative; width: 100%; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .wix-boundary-bento__shot-stage--blue { background: linear-gradient(180deg, #dbe6ff 0%, #edf2ff 45%, #f5f6f9 100%); }
+  .wix-boundary-bento__shot-stage--mint { background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%); }
+  .wix-boundary-bento__shot-stage img { display: block; width: 100%; height: auto; border: 1px solid #dfe4ec; border-radius: 14px; animation: wix-boundary-bento-breathe 7s ease-in-out infinite; will-change: transform; }
+  .wix-boundary-bento__row:nth-child(even) .wix-boundary-bento__shot-stage img { animation-delay: -3.5s; }
+  .wix-boundary-bento__float { position: absolute; z-index: 2; display: flex; align-items: flex-start; flex-direction: column; gap: 3px; padding: 11px 14px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; background: rgba(255,255,255,.96); color: #111827; box-shadow: 0 14px 34px rgba(30,45,88,.2); font-family: var(--font-body); line-height: 1.15; animation: wix-boundary-bento-float 4.8s ease-in-out infinite; backdrop-filter: blur(10px); }
+  .wix-boundary-bento__float b { font-size: 12px; font-weight: 700; }
+  .wix-boundary-bento__float small { color: #687b9a; font-size: 10px; }
+  .wix-boundary-bento__float i { width: 8px; height: 8px; margin-bottom: 2px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .wix-boundary-bento__float--top { top: 12px; right: 3px; }
+  .wix-boundary-bento__float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .wix-boundary-bento__eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font: 600 .875rem/1.2 var(--font-body); letter-spacing: .05em; text-transform: uppercase; }
+  .wix-boundary-bento__content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .wix-boundary-bento__content p { margin: 0 0 1rem; color: #4b5563; font: 1.125rem/1.45 var(--font-body); }
+  .wix-boundary-bento__content p:last-child { margin-bottom: 0; }
+  .wix-boundary-bento__cross { position: absolute; bottom: 0; left: 50%; z-index: 2; width: 28px; height: 28px; transform: translate(-50%, 50%); pointer-events: none; line-height: 0; }
+  .wix-boundary-bento__row:last-child .wix-boundary-bento__cross { display: none; }
+  @keyframes wix-boundary-bento-breathe { 0%,100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes wix-boundary-bento-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-9px,0); } }
+  @media (max-width: 900px) {
+    .wix-boundary-bento__row { display: flex; flex-direction: column; }
+    .wix-boundary-bento__cell { padding: 3rem 1.5rem; }
+    .wix-boundary-bento__row .wix-boundary-bento__cell:first-child { border-right: 0; }
+    .wix-boundary-bento__content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .wix-boundary-bento__visual { order: 2; }
+  }
+  @media (max-width: 620px) {
+    .wix-boundary-bento { padding: 64px 16px; }
+    .wix-boundary-bento__header { margin-bottom: 36px; }
+    .wix-boundary-bento__header h2 { font-size: 34px; }
+    .wix-boundary-bento__content h3 { font-size: 2rem; }
+    .wix-boundary-bento__content p { font-size: 1rem; }
+  }
+  .wix-links-section { background: #fff; } .wix-links-shell { width: min(1200px, calc(100% - 48px)); margin: 0 auto; } .wix-links-head { max-width: 920px; margin: 0 auto 64px; text-align: center; } .wix-links-head .wix-kicker { margin-bottom: 16px; } .wix-links-head h2 { margin: 0; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); -webkit-background-clip: text; background-clip: text; color: transparent; } .wix-links-head h2 span { display: block; } .wix-links-grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid #e8ecf2; } .wix-links-notch { position: absolute; top: 0; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; z-index: 2; } .wix-link-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 320px; padding: 28px 26px 34px; border-left: 1px solid #e8ecf2; color: inherit; background: #fff; text-decoration: none; transition: background .2s ease, transform .2s ease; } .wix-link-card--first { border-left: 0; } .wix-link-card:hover { background: #f8faff; transform: translateY(-3px); } .wix-link-card__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 28px; color: var(--wix-blue); } .wix-link-card__icon svg { width: 100%; height: 100%; } .wix-link-card__content { flex: 1; } .wix-link-card h3 { min-height: 2.5em; margin: 0 0 24px; color: var(--wix-ink); font: 600 21px/1.25 var(--font-heading); } .wix-link-card p { margin: 0; color: var(--wix-muted); font: 15px/1.5 var(--font-body); } .wix-link-card__arrow { display: inline-flex; align-items: center; justify-content: center; align-self: flex-start; margin-top: 22px; color: var(--wix-blue); font-size: 1.35rem; transition: transform .2s ease; } .wix-link-card:hover .wix-link-card__arrow { transform: translateX(4px); }
+  .wix-faq { background: #f1f5ff; } .wix-faq-shell { width: min(1140px, calc(100% - 48px)); margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; } .wix-faq-sidebar { position: sticky; top: 6rem; } .wix-faq-eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #dbe3f0; border-radius: 999px; margin-bottom: 20px; color: var(--wix-ink); background: rgba(255,255,255,.56); font: 500 .8125rem/1.2 var(--font-body); } .wix-faq-sidebar h2 { margin: 0 0 20px; color: var(--wix-ink); font: 500 44px/1.1 'Creato Display', var(--font-heading); letter-spacing: -1px; } .wix-faq-sidebar p { margin: 0 0 28px; color: #687b9a; font: 1rem/1.6 var(--font-body); } .wix-faq-cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1.2 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; } .wix-faq-cta:hover { background: #000; transform: translateY(-1px); } .wix-faq-list { display: flex; flex-direction: column; gap: 16px; counter-reset: wix-faq; } .wix-faq-item { counter-increment: wix-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #dce5f2; border-radius: 20px; background: rgba(255,255,255,.42); transition: background .25s ease, border-color .25s ease; } .wix-faq-item[open] { border-color: #dce3ee; background: #dfe6f1; } .wix-faq-question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: var(--wix-ink); font: 500 1.0625rem/1.3 'Creato Display', var(--font-heading); cursor: pointer; list-style: none; } .wix-faq-question strong { font-weight: 500; } .wix-faq-question strong::before { content: counter(wix-faq) '. '; } .wix-faq-question::-webkit-details-marker { display: none; } .wix-faq-icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); } .wix-faq-icon::before, .wix-faq-icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: var(--wix-ink); transform: translate(-50%,-50%); } .wix-faq-icon::before { width: 14px; height: 2px; } .wix-faq-icon::after { width: 2px; height: 14px; transition: opacity .2s ease; } .wix-faq-item[open] .wix-faq-icon { transform: scale(.9); } .wix-faq-item[open] .wix-faq-icon::after { opacity: 0; } .wix-faq-answer { max-width: 640px; padding: 0 0 24px; } .wix-faq-answer p { margin: 0; color: var(--wix-ink); font: .9375rem/1.7 var(--font-body); }
+  .wix-final-cta { padding: 104px 0 124px; color: #fff; text-align: center; background: radial-gradient(circle at 50% 0%,rgba(171,255,255,.23),transparent 32%), linear-gradient(135deg,#172d61,#14786f); } .wix-final-cta .wix-kicker { color: var(--wix-cyan); } .wix-final-cta h2 { max-width: 760px; margin: 15px auto 16px; font-size: clamp(2.3rem,4.7vw,4.3rem); line-height: 1.02; letter-spacing: -.06em; } .wix-final-cta p { max-width: 720px; margin: 0 auto 30px; color: #dce8f5; line-height: 1.7; }
+  /* Event Registration spotlight pattern, adapted to WhatsApp account routes. */
+  .wix-routing-spotlight { padding: clamp(72px, 9vw, 112px) 24px; background: #fff; overflow: hidden; }
+  .wix-routing-spotlight__header { display: flex; flex-direction: column; align-items: center; max-width: 1100px; margin: 0 auto 24px; text-align: center; }
+  .wix-routing-spotlight__header h2 { max-width: 820px; margin: 0 0 12px; scroll-margin-top: 96px; font: 500 clamp(2rem, 4.2vw, 3rem)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg, var(--wix-ink) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .wix-routing-spotlight__header p { max-width: 650px; margin: 0; color: var(--wix-muted); font: 1.05rem/1.55 var(--font-body); }
+  .wix-routing-spotlight__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, minmax(330px, 1fr)); width: 100%; max-width: 1180px; margin: 24px auto; }
+  .wix-routing-spotlight__cell { display: flex; flex-direction: column; justify-content: center; min-height: 330px; padding: 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .wix-routing-spotlight__cell:nth-child(2n) { border-right: 0; }
+  .wix-routing-spotlight__cell:nth-child(n+5) { border-bottom: 0; }
+  .wix-routing-spotlight__copy { max-width: 40ch; }
+  .wix-routing-spotlight__icon { display: grid; place-items: center; width: 38px; height: 38px; margin-bottom: 20px; border-radius: 11px; color: var(--wix-blue); background: #eef2ff; font-size: 20px; }
+  .wix-routing-spotlight__copy h3 { margin: 0 0 16px; color: var(--wix-ink); font: 700 clamp(1.5rem, 2.6vw, 2rem)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .wix-routing-spotlight__copy p { margin: 0 0 18px; color: var(--wix-muted); font: 16px/1.6 var(--font-body); }
+  .wix-routing-spotlight__copy b { display: inline-flex; padding: 6px 8px; border-radius: 999px; color: #475467; background: #f2f4f7; font: 600 10px var(--font-body); white-space: nowrap; }
+  .wix-routing-spotlight__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }
+  .wix-routing-spotlight__visual { position: relative; width: 100%; max-width: 500px; padding: 22px 18px 15px; }
+  .wix-routing-spotlight__visual::before { content: ""; position: absolute; inset: 22px 5px 5px 30px; border: 1px solid #dce4fb; border-radius: 18px; background: #f3f5ff; transform: none; box-shadow: 0 12px 26px rgba(31,41,72,.07); }
+  .wix-routing-spotlight__visual--violet::before { background: #fff4f8; border-color: #f1dfe8; transform: none; }
+  .wix-routing-spotlight__visual--mint::before { background: #effbf4; border-color: #d4eee0; transform: none; }
+  .wix-routing-spotlight__visual img { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 1262/697; object-fit: cover; object-position: top left; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); transform: none; }
+  .wix-routing-spotlight__visual--violet img { transform: none; }
+  .wix-routing-spotlight__visual--mint img { object-position: 52% top; transform: none; }
+  .wix-routing-spotlight__status, .wix-routing-spotlight__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .wix-routing-spotlight__status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .wix-routing-spotlight__visual--violet .wix-routing-spotlight__status { border-color: #d9dfff; background: #f1f3ff; color: #4b65f6; }
+  .wix-routing-spotlight__visual--mint .wix-routing-spotlight__status { border-color: #cfead9; background: #effbf4; color: #18864b; }
+  .wix-routing-spotlight__action { right: 14px; bottom: 14px; padding: 10px 13px; color: #fff; background: #4b65f6; }
+  .wix-routing-spotlight__visual--violet .wix-routing-spotlight__action { background: #171a21; }
+  .wix-routing-spotlight__visual--mint .wix-routing-spotlight__action { background: #18864b; }
+  .wix-routing-spotlight__cross { position: absolute; left: 50%; z-index: 2; width: 18px; height: 18px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; }
+  .wix-routing-spotlight__cross--one { top: 33.333%; }
+  .wix-routing-spotlight__cross--two { top: 66.666%; }
+
+  /* Event Registration spotlight pattern, adapted to the transactional/marketing boundary. */
+  .wix-boundary-spotlight { padding: clamp(72px, 9vw, 112px) 24px; background: #fff; overflow: hidden; }
+  .wix-boundary-spotlight__header { display: flex; flex-direction: column; align-items: center; max-width: 1100px; margin: 0 auto 24px; text-align: center; }
+  .wix-boundary-spotlight__header h2 { max-width: 820px; margin: 0 0 12px; scroll-margin-top: 96px; font: 500 clamp(2rem, 4.2vw, 3rem)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg, var(--wix-ink) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .wix-boundary-spotlight__header p { max-width: 650px; margin: 0; color: var(--wix-muted); font: 1.05rem/1.55 var(--font-body); }
+  .wix-boundary-flow { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(2, minmax(330px, 1fr)); width: 100%; max-width: 1180px; margin: 24px auto; }
+  .wix-boundary-flow__cell { display: flex; flex-direction: column; justify-content: center; min-height: 330px; padding: 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .wix-boundary-flow__cell:nth-child(2n) { border-right: 0; }
+  .wix-boundary-flow__cell:nth-child(n+3) { border-bottom: 0; }
+  .wix-boundary-flow__cell--copy h3 { margin: 0 0 16px; color: var(--wix-ink); font: 700 clamp(1.5rem, 2.6vw, 2rem)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .wix-boundary-flow__cell--copy p { max-width: 40ch; margin: 0; color: var(--wix-muted); font: 16px/1.6 var(--font-body); }
+  .wix-boundary-flow__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }
+  .wix-boundary-composite { position: relative; width: 100%; max-width: 500px; padding: 22px 18px 15px; }
+  .wix-boundary-composite::before { content: ""; position: absolute; inset: 22px 5px 5px 30px; border: 1px solid #dce4fb; border-radius: 18px; background: #f3f5ff; transform: none; box-shadow: 0 12px 26px rgba(31,41,72,.07); }
+  .wix-boundary-composite--violet::before { background: #fff4f8; border-color: #f1dfe8; transform: none; }
+  .wix-boundary-composite__screen { position: relative; z-index: 1; display: block; width: 100%; aspect-ratio: 1262/697; object-fit: cover; object-position: top left; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); transform: none; }
+  .wix-boundary-composite--violet .wix-boundary-composite__screen { transform: none; }
+  .wix-boundary-composite__status, .wix-boundary-composite__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .wix-boundary-composite__status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .wix-boundary-composite--violet .wix-boundary-composite__status { border-color: #f1dfe8; background: #fff4f8; color: #8d5272; }
+  .wix-boundary-composite__action { right: 14px; bottom: 14px; padding: 10px 13px; color: #fff; background: #4b65f6; }
+  .wix-boundary-composite--violet .wix-boundary-composite__action { background: #171a21; }
+  .wix-boundary-flow__cross { position: absolute; left: 50%; top: 50%; z-index: 2; width: 18px; height: 18px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; }
+  .wix-boundary-spotlight__note { max-width: 920px; margin: 28px auto 0; color: var(--wix-muted); font: .82rem/1.6 var(--font-body); text-align: center; }
+
+  /* Speaker Management trust-strip pattern, adapted to verified WhatsApp setup coverage. */
+  .wix-trust { border-top: 1px solid #e8edf5; border-bottom: 1px solid #e8edf5; background: rgba(247,249,253,.78); }
+  .wix-trust__inner { width: min(1120px, calc(100% - 40px)); min-height: 78px; margin: 0 auto; display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 36px; }
+  .wix-trust__label, .wix-trust__stat { font-family: var(--font-body); font-size: 14px; line-height: 1.4; color: #596579; text-align: center; white-space: nowrap; }
+  .wix-trust__label { color: #7f8898; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .wix-trust__stat b { color: #22272f; font-weight: 750; }
+
+  /* Hero follows the approved Event Registration composition: split copy, black/outline CTAs, proof points, and an animated product image card. */
+  .wix-hero { position: relative; overflow: hidden; margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .wix-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; width: 220px; max-width: 30vw; background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf); pointer-events: none; z-index: 2; }
+  .wix-hero__grid { position: relative; z-index: 1; max-width: 1080px; grid-template-columns: minmax(260px,542px) minmax(0,490px); gap: 48px; }
+  .wix-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; max-width: none; }
+  .wix-hero .wix-kicker { font-size: 16px; font-weight: 500; letter-spacing: normal; }
+  .wix-hero h1 { width: 100%; max-width: none; margin: 0; font-size: 60px; font-weight: 500; line-height: 66px; letter-spacing: -2.1px; background: linear-gradient(98deg, var(--wix-ink) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .wix-hero .wix-lead { width: 100%; max-width: none; font-size: 18px; line-height: 24px; letter-spacing: -.25px; }
+  .wix-hero .wix-actions { align-items: center; gap: 16px; padding-top: 8px; margin-top: 0; }
+  .wix-hero .wix-button { min-height: 0; padding: 12px 20px; border-radius: 12px; font-size: 15px; font-weight: 650; letter-spacing: -.3px; line-height: 22px; }
+  .wix-hero .wix-button--primary { color: #fff; background: var(--wix-ink); border-color: transparent; box-shadow: none; }
+  .wix-hero .wix-button--primary:hover { background: #000; }
+  .wix-hero .wix-button--quiet { color: var(--wix-ink); background: transparent; border-color: rgba(16,24,40,.22); }
+  .wix-hero .wix-button--quiet:hover { border-color: var(--wix-ink); }
+  .wix-hero .wix-proof { gap: 18px; padding-top: 4px; margin-top: 0; }
+  .wix-hero .wix-proof span { position: relative; padding: 0 0 0 16px; border-radius: 0; background: none; color: var(--wix-ink); font-size: 16px; font-weight: 400; }
+  .wix-hero .wix-proof span::before { content: ""; position: absolute; left: 0; top: 9px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .wix-hero__visual { position: relative; min-height: 0; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); display: block; }
+  .wix-hero__visual-card { position: relative; padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: none; border-radius: 22px 0 0 22px; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; box-shadow: 0 22px 50px rgba(49,77,137,.10); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .wix-hero__visual-inner { position: relative; padding: 24px; border-radius: 16px 0 0 16px; overflow: visible; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+  .wix-hero__blue-panel { position: absolute; right: 9%; bottom: -24px; left: 9%; height: 92px; border-radius: 10px; background: linear-gradient(115deg, rgba(55,93,251,.70), rgba(91,186,255,.34) 58%, rgba(171,255,255,.22)); box-shadow: 0 24px 36px rgba(55,93,251,.18); transform: skewX(-7deg); z-index: 0; }
+  .wix-hero__image { position: relative; z-index: 1; display: block; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 18px 42px rgba(36,57,99,.16); animation: wixHeroImageFloat 6s ease-in-out infinite; }
+  .wix-hero__float { position: absolute; z-index: 2; display: grid; gap: 3px; min-width: 114px; padding: 11px 13px; border: 1px solid rgba(213,222,239,.96); border-radius: 12px; background: rgba(255,255,255,.94); box-shadow: 0 14px 30px rgba(46,68,111,.14); animation: wixHeroFloat 5.5s ease-in-out infinite; }
+  .wix-hero__float b { color: var(--wix-ink); font-size: .72rem; } .wix-hero__float small { color: var(--wix-blue); font-size: .67rem; font-weight: 700; } .wix-hero__float--route { top: 36%; left: -28px; } .wix-hero__float--template { right: -18px; bottom: 17%; animation-delay: -2.2s; }
+  @keyframes wixHeroImageFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } } @keyframes wixHeroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  @media (max-width: 1000px) { .wix-scenario-grid { grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 960px) { .wix-hero { padding: 130px 20px 48px; } .wix-hero::after { display: none; } .wix-hero__grid { grid-template-columns: 1fr; gap: 32px; text-align: center; } .wix-hero__content { align-items: center; } .wix-hero .wix-lead { max-width: 520px; } .wix-hero .wix-actions, .wix-hero .wix-proof { justify-content: center; } .wix-hero__visual { margin-right: 0; } .wix-hero__visual-card { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; } .wix-hero__visual-inner { border-radius: 16px; } }
+  @media (max-width: 1024px) { .wix-trust__inner { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 28px; padding: 22px 0; } .wix-trust__label { grid-column: 1 / -1; } }
+  @media (max-width: 760px) { .wix-shell { width: min(100% - 32px, 680px); } .wix-hero { margin-top: -80px; padding: 112px 16px 40px; } .wix-hero__grid, .wix-two-col { grid-template-columns: 1fr; gap: 34px; text-align: left; } .wix-hero__content { align-items: flex-start; } .wix-hero .wix-lead { max-width: 100%; font-size: 1rem; } .wix-hero h1 { font-size: 34px; line-height: 40px; letter-spacing: -.8px; } .wix-hero .wix-actions { width: 100%; flex-direction: column; align-items: stretch; justify-content: flex-start; } .wix-hero .wix-button { width: 100%; justify-content: center; } .wix-hero .wix-proof { justify-content: flex-start; } .wix-hero__visual { width: calc(100% + 8px); margin-left: -4px; } .wix-hero__visual-inner { padding: 16px; } .wix-hero__float { min-width: 98px; padding: 9px 10px; } .wix-hero__float--route { left: -12px; } .wix-hero__float--template { right: -10px; } .wix-trust__inner { width: min(100% - 32px, 1240px); } .wix-trust__label, .wix-trust__stat { white-space: normal; } .wix-section { padding: 72px 0; } .wix-sticky-copy { position: static; } .wix-provider-grid, .wix-boundary-grid, .wix-number-grid, .wix-scenario-grid, .wix-links-grid, .wix-boundary-columns { grid-template-columns: 1fr; } .wix-provider-notch { display: none; } .wix-provider-card { min-height: 0; } .wix-section-head h2, .wix-sticky-copy h2, .wix-copy-block h2, .wix-boundary-section h2, .wix-faq h2 { font-size: 2.35rem; } .wix-final-cta { padding: 82px 0 94px; } .wix-final-cta h2 { font-size: 2.55rem; } }
+  @media (max-width: 768px) {
+    .wix-routing-spotlight { scroll-margin-top: 92px; padding: 60px 16px; }
+    .wix-routing-spotlight__header { align-items: flex-start; margin-bottom: 30px; text-align: left; }
+    .wix-routing-spotlight__header h2 { font-size: 36px; }
+    .wix-routing-spotlight__grid { grid-template-columns: 1fr; grid-template-rows: none; margin-top: 12px; }
+    .wix-routing-spotlight__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .wix-routing-spotlight__cell:nth-child(n) { border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .wix-routing-spotlight__cell--media { padding: 16px 20px 32px; }
+    .wix-routing-spotlight__cell:nth-last-of-type(-n+2) { border-bottom: 0; }
+    .wix-routing-spotlight__cross { display: none; }
+    .wix-boundary-spotlight { scroll-margin-top: 92px; padding: 60px 16px; }
+    .wix-boundary-spotlight__header { align-items: flex-start; margin-bottom: 30px; text-align: left; }
+    .wix-boundary-spotlight__header h2 { font-size: 36px; }
+    .wix-boundary-flow { grid-template-columns: 1fr; grid-template-rows: none; margin-top: 12px; }
+    .wix-boundary-flow__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .wix-boundary-flow__cell:nth-child(n) { border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .wix-boundary-flow__cell--media { padding: 16px 20px 32px; }
+    .wix-boundary-flow__cell:nth-last-of-type(-n+2) { border-bottom: 0; }
+    .wix-boundary-flow__cross { display: none; }
+  }
+  /* Speaker Management agent-suites pattern, adapted to verified WhatsApp template purposes. */
+  .wix-template-suites { padding: 112px 24px; background: #fff; }
+  .wix-template-suites__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .wix-template__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .wix-template__title { max-width: 850px; margin: 0 0 16px; font: 500 clamp(36px, 4.5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg, var(--wix-ink) 43.06%, #8f8f8f 91.81%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .wix-template__title-line { display: block; }
+  .wix-template__subtitle { max-width: 840px; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); }
+  .wix-template__tabs { display: flex; justify-content: center; gap: 4px; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; flex-wrap: wrap; }
+  .wix-template__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; color: #64748b; background: transparent; cursor: pointer; font: 600 13.5px/1.3 var(--font-body); transition: background .2s ease, color .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .wix-template__tab:hover { color: #334155; background: rgba(255,255,255,.65); }
+  .wix-template__tab--active { color: #3b82f6 !important; border-color: #dbe4f0; background: #fff !important; box-shadow: 0 2px 8px rgba(30,41,59,.08); }
+  .wix-template__box { padding: 0; }
+  .wix-template__panel { --wix-template-tint: #fff8dc; --wix-template-border: #f0dfa6; display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; padding: 52px 64px; border: 1px solid var(--wix-template-border); border-radius: 28px; background: linear-gradient(135deg, var(--wix-template-tint) 0%, #fff 72%); animation: wixTemplateFadeIn .4s ease forwards; }
+  .wix-template__panel:nth-child(2) { --wix-template-tint: #edf7ff; --wix-template-border: #d4e7f7; }
+  .wix-template__panel:nth-child(3) { --wix-template-tint: #f3efff; --wix-template-border: #e2d8fa; }
+  .wix-template__panel:nth-child(4) { --wix-template-tint: #eefbf4; --wix-template-border: #d4efdf; }
+  .wix-template__panel--active { display: grid; }
+  .wix-template__left { min-width: 0; }
+  .wix-template__eyebrow { display: inline-flex; margin-bottom: 18px; color: #64748b; font: 700 10px/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .wix-template__panel-title { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .wix-template__panel-desc { margin: 0 0 30px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .wix-template__checklist { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .wix-template__checklist li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .wix-template__checklist li svg { flex-shrink: 0; margin-top: 2px; stroke: #9ca3af; }
+  .wix-template__purpose { display: inline-flex; align-items: center; gap: 7px; margin-top: 28px; padding: 8px 11px; border: 1px solid #dbe4f0; border-radius: 999px; color: #3158d4; background: rgba(255,255,255,.72); box-shadow: 0 8px 20px rgba(49,88,212,.08); font: 700 11px/1.2 var(--font-body); }
+  .wix-template__purpose--registration { color: #168a55; border-color: #cbeedb; }
+  .wix-template__purpose--delivery { color: #7351cf; border-color: #ded2ff; }
+  .wix-template__purpose--exhibitors { color: #9a6b12; border-color: #f2dfad; }
+  .wix-template__right { min-width: 0; }
+  .wix-template__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .wix-template__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--wix-template-border); filter: blur(22px); opacity: .48; }
+  .wix-template__showcase > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1262 / 697; object-fit: cover; object-position: top left; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); }
+  .wix-template__visual-label { --wix-label-bg: #eef4ff; --wix-label-border: #cddcff; --wix-label-color: #3158d4; position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid var(--wix-label-border); border-radius: 10px; color: var(--wix-label-color); background: var(--wix-label-bg); box-shadow: 0 8px 22px rgba(49,88,212,.16); font: 700 11px/1.2 var(--font-body); }
+  .wix-template__visual-label--registration { --wix-label-bg: #eefbf5; --wix-label-border: #cbeedb; --wix-label-color: #168a55; border-radius: 999px; }
+  .wix-template__visual-label--delivery { --wix-label-bg: #f5f1ff; --wix-label-border: #ded2ff; --wix-label-color: #7351cf; border-radius: 7px; }
+  .wix-template__visual-label--exhibitors { --wix-label-bg: #fff8e8; --wix-label-border: #f2dfad; --wix-label-color: #9a6b12; border-radius: 10px 10px 10px 3px; }
+  .wix-template__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .wix-template__showcase-action { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 10px 13px; border-radius: 10px; color: #fff; background: #4b65f6; box-shadow: 0 10px 24px rgba(31,41,72,.16); font: 700 11px/1 var(--font-body); }
+  .wix-template__panel:nth-child(2) .wix-template__showcase-action { background: #18864b; }
+  .wix-template__panel:nth-child(3) .wix-template__showcase-action { background: #7351cf; }
+  .wix-template__panel:nth-child(4) .wix-template__showcase-action { color: #4a3510; background: #f2dfad; }
+  @keyframes wixTemplateFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 900px) {
+    .wix-template__panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+    .wix-template__subtitle { max-width: 700px; }
+  }
+  @media (max-width: 620px) {
+    .wix-template-suites { padding: 72px 20px; }
+    .wix-template__title { font-size: clamp(26px, 8.3vw, 38px); }
+    .wix-template__title-line { white-space: nowrap; }
+    .wix-template__subtitle { font-size: 16px; }
+    .wix-template__tabs { width: 100%; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; border-radius: 20px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .wix-template__tabs::-webkit-scrollbar { display: none; }
+    .wix-template__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .wix-template__panel { padding: 32px 24px; border-radius: 20px; }
+    .wix-template__showcase { padding: 14px; border-radius: 18px; }
+    .wix-template__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .wix-template__showcase-action { right: 8px; bottom: 8px; padding: 8px 10px; font-size: 10px; }
+  }
+  /* Event Registration Access Control stacked-card pattern, adapted to the WhatsApp override workflow. */
+  .wix-template-workflow { padding: 100px 24px; background: #fff; }
+  .wix-template-workflow__container { max-width: 1200px; margin: 0 auto; display: flex; gap: 80px; align-items: stretch; }
+  .wix-template-workflow__left { flex: 0 0 40%; align-self: stretch; }
+  .wix-template-workflow__sticky { position: sticky; top: 120px; height: max-content; }
+  .wix-template-workflow__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 12px; border-radius: 99px; color: var(--wix-ink); background: #f4f5f7; font: 600 13px/1.2 var(--font-body); }
+  .wix-template-workflow__left h2 { margin: 0 0 24px; color: var(--wix-ink); font: 500 clamp(36px, 4vw, 48px)/1.2 var(--font-heading); letter-spacing: -.02em; }
+  .wix-template-workflow__left h2 span { background: linear-gradient(98deg, var(--wix-ink) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .wix-template-workflow__left > .wix-template-workflow__sticky > p { margin: 0; color: var(--wix-muted); font: 18px/1.6 var(--font-body); }
+  .wix-template-workflow__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .wix-template-workflow__cta:hover { background: #000; transform: translateY(-1px); }
+  .wix-template-workflow__right { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+  .wix-template-workflow__card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .wix-template-workflow__card:nth-child(1) { top: 80px; }
+  .wix-template-workflow__card:nth-child(2) { top: 100px; }
+  .wix-template-workflow__card:nth-child(3) { top: 120px; }
+  .wix-template-workflow__card:nth-child(4) { top: 140px; }
+  .wix-template-workflow__card:hover { transform: translateY(-4px); }
+  .wix-template-workflow__card-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .wix-template-workflow__number { display: flex; flex: 0 0 40px; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; background: #111; font: 700 16px/1 var(--font-heading); }
+  .wix-template-workflow__card-copy h3 { margin: 0 0 8px; color: var(--wix-ink); font: 700 20px/1.2 var(--font-heading); }
+  .wix-template-workflow__card-copy p { margin: 0; color: var(--wix-muted); font: 16px/1.6 var(--font-body); }
+  .wix-template-workflow__visual { display: flex; align-items: center; justify-content: center; padding: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .wix-template-workflow__card--blue .wix-template-workflow__visual { background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #fff 100%); }
+  .wix-template-workflow__card--mint .wix-template-workflow__visual { background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #fff 100%); }
+  .wix-template-workflow__card--violet .wix-template-workflow__visual { background: linear-gradient(180deg, #f3efff 0%, #faf8ff 48%, #fff 100%); }
+  .wix-template-workflow__card--rose .wix-template-workflow__visual { background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #fff 100%); }
+  .wix-template-workflow__product-shot { position: relative; width: 100%; height: 280px; }
+  .wix-template-workflow__product-shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .wix-template-workflow__card--mint .wix-template-workflow__product-shot > img { object-position: 50% 58%; }
+  .wix-template-workflow__card--violet .wix-template-workflow__product-shot > img { object-position: 50% 28%; }
+  .wix-template-workflow__card--rose .wix-template-workflow__product-shot > img { object-position: 50% 20%; }
+  .wix-template-workflow__status, .wix-template-workflow__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); font: 700 12px/1 var(--font-body); }
+  .wix-template-workflow__status { top: 0; left: 0; padding: 9px 12px; border: 1px solid #dfe4f2; color: #253047; background: #fff; }
+  .wix-template-workflow__card--mint .wix-template-workflow__status { border-color: #ccebd8; color: #18864b; background: #edfbf3; }
+  .wix-template-workflow__card--violet .wix-template-workflow__status { border-color: #ded2ff; color: #7351cf; background: #f5f1ff; }
+  .wix-template-workflow__card--rose .wix-template-workflow__status { border-color: #f2dfad; color: #9a6b12; background: #fff8e8; }
+  .wix-template-workflow__action { right: 10px; bottom: 0; padding: 11px 15px; color: #fff; background: #4b65f6; }
+  .wix-template-workflow__card--mint .wix-template-workflow__action { background: #18864b; }
+  .wix-template-workflow__card--violet .wix-template-workflow__action { background: #7351cf; }
+  .wix-template-workflow__card--rose .wix-template-workflow__action { color: #4a3510; background: #f2dfad; }
+  .wix-template-workflow__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: wix-template-workflow-cursor-tap 2.4s ease-in-out infinite; }
+  @keyframes wix-template-workflow-cursor-tap { 0%,65%,100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+  @media (max-width: 992px) {
+    .wix-template-workflow__container { flex-direction: column; gap: 40px; }
+    .wix-template-workflow__left { flex: none; width: 100%; }
+    .wix-template-workflow__sticky { position: static; }
+    .wix-template-workflow__card { padding: 32px 24px; }
+    .wix-template-workflow__card-header { flex-direction: column; gap: 16px; }
+    .wix-template-workflow__visual { padding: 14px; }
+    .wix-template-workflow__product-shot { height: 240px; }
+    .wix-template-workflow__status, .wix-template-workflow__action { font-size: 11px; }
+  }
+  @media (max-width: 620px) {
+    .wix-template-workflow { padding: 72px 20px; }
+    .wix-template-workflow__left h2 { font-size: 36px; }
+    .wix-template-workflow__left > .wix-template-workflow__sticky > p { font-size: 16px; }
+    .wix-template-workflow__card { top: 72px !important; padding: 24px 18px; border-radius: 20px; }
+    .wix-template-workflow__product-shot { height: 210px; }
+  }
+  @media (max-width: 900px) {
+    .wix-message-workflow__steps details[open] { flex-direction: column; }
+    .wix-message-workflow__steps details[open] summary { flex: none; }
+    .wix-message-workflow__steps details[open] .wix-message-workflow__visual { flex: none; padding: 0 40px 40px; }
+    .wix-message-workflow__visual img { max-width: 100%; }
+  }
+  @media (max-width: 620px) {
+    .wix-message-workflow { padding: 76px 20px; }
+    .wix-message-workflow__header { align-items: center; margin-bottom: 46px; text-align: center; }
+    .wix-message-workflow__header h2 { font-size: 42px; }
+    .wix-message-workflow__steps summary,
+    .wix-message-workflow__steps summary:hover { grid-template-columns: 26px minmax(0,1fr); gap: 10px; min-height: 96px; padding: 18px 62px 18px 14px; }
+    .wix-message-workflow__arrow { top: 31px; right: 16px; }
+    .wix-message-workflow__steps summary > span { font-size: 13px; }
+    .wix-message-workflow__steps details:not([open]) .wix-message-step__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .wix-message-workflow__steps details:not([open]) .wix-message-step__desc { font-size: 13px; line-height: 1.4; }
+    .wix-message-workflow__steps details[open] summary,
+    .wix-message-workflow__steps details[open] summary:hover { grid-template-columns: 32px minmax(0,1fr); gap: 10px; padding: 34px 62px 24px 14px; }
+    .wix-message-workflow__steps details[open] .wix-message-workflow__arrow { top: 24px; right: 16px; }
+    .wix-message-workflow__steps details[open] summary > span { font-size: 21px; }
+    .wix-message-workflow__steps details[open] .wix-message-step__title { font-size: 26px; }
+    .wix-message-workflow__steps details[open] .wix-message-step__desc { margin-top: 30px; font-size: 17px; }
+    .wix-message-workflow__steps details[open] .wix-message-workflow__visual { padding: 0 24px 28px; }
+  }
+  @media (max-width: 1024px) {
+    .wix-scenario-stack__section { padding-inline: 20px; }
+    .wix-scenario-stack__header { width: 94%; }
+    .wix-scenario-stack__cards { --wix-scenario-stack-top: 292px; }
+    .wix-scenario-stack__card { height: 450px; }
+    .wix-scenario-stack__card-content { flex-basis: 50%; }
+    .wix-scenario-stack__card h3 { font-size: 28px; }
+    .wix-scenario-stack__card p { font-size: 16px; }
+  }
+  @media (max-width: 767px) {
+    .wix-scenario-stack__section { padding: 16px 20px 30px; }
+    .wix-scenario-stack__header { width: 100%; }
+    .wix-scenario-stack__header h2 { font-size: 30px; }
+    .wix-scenario-stack__cards { --wix-scenario-stack-top: 320px; padding-top: 80px; padding-bottom: 40px; }
+    .wix-scenario-stack__card { flex-direction: column; height: 520px; }
+    .wix-scenario-stack__card-content { flex: 0 0 50%; padding: 20px 20px 0; }
+    .wix-scenario-stack__card-image { margin: 12px; padding: 16px; }
+    .wix-scenario-stack__card h3 { font-size: 24px; }
+    .wix-scenario-stack__card p { font-size: 15px; }
+  }
+  @media (max-width: 760px) {
+    .wix-links-shell { width: min(100% - 32px, 680px); }
+    .wix-links-head { margin-bottom: 36px; text-align: left; }
+    .wix-links-head h2 { font-size: 2.35rem; }
+    .wix-links-grid { grid-template-columns: 1fr; }
+    .wix-links-notch { display: none; }
+    .wix-link-card, .wix-link-card--first { min-height: 0; padding: 28px 0; border-left: 0; border-bottom: 1px solid #e8ecf2; }
+    .wix-link-card:last-child { border-bottom: 0; }
+    .wix-faq-shell { width: min(100% - 32px, 680px); grid-template-columns: 1fr; gap: 40px; }
+    .wix-faq-sidebar { position: static; }
+    .wix-faq-sidebar h2 { font-size: 32px; }
+    .wix-faq-item { padding: 4px 20px; border-radius: 16px; }
+    .wix-faq-question { padding: 18px 0; font-size: .9375rem; }
+    .wix-provider-reference { padding: 72px 0; }
+    .wix-provider-reference__head { width: min(100% - 32px, 680px); margin-bottom: 36px; text-align: left; }
+    .wix-provider-reference__head h2 { font-size: 2.35rem; }
+    .wix-provider-reference__head p { font-size: .95rem; }
+    .wix-provider-reference__grid { width: min(100% - 32px, 680px); grid-template-columns: 1fr; }
+    .wix-provider-reference__notch { display: none; }
+    .wix-provider-reference__card, .wix-provider-reference__card:first-of-type { min-height: 0; padding: 28px 0; border-left: 0; border-bottom: 1px solid #e8ecf2; }
+    .wix-provider-reference__card:last-child { border-bottom: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .wix-button:hover, .wix-link-card:hover, .wix-hero__image, .wix-hero__float, .wix-faq-cta:hover { animation: none; transform: none; } .wix-faq-item, .wix-faq-icon, .wix-faq-icon::after { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .wix-template__panel, .wix-template-workflow__cursor, .wix-preview-ai__cursor, .wix-scenario-stack, .wix-scenario-stack__card-image img { animation: none; } }
+</style>

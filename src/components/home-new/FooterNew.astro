@@ -15,6 +15,7 @@ interface Props {
   ctaHref?: string;
   ctaImageSrc?: string;
   ctaImageAlt?: string;
+  ctaImageLoading?: "lazy" | "eager";
   ctaProofItems?: string[];
   useLinkIcon?: boolean;
   zoomImage?: boolean;
@@ -30,6 +31,7 @@ const {
   ctaHref = "/book-a-demo/",
   ctaImageSrc = "/feature-images/footer-cta-devices.webp",
   ctaImageAlt = "EventHex platform on laptop, tablet, and mobile",
+  ctaImageLoading = "lazy",
   ctaProofItems = [],
   useLinkIcon = false,
   zoomImage = false,
@@ -70,7 +72,7 @@ const currentYear = new Date().getFullYear();
 <footer class="site-footer">
   <!-- CTA Banner -->
   {showCta && (
-    <section class="footer-cta-wrapper">
+    <section id="footer-cta" class="footer-cta-wrapper">
       <div class:list={["footer-cta-banner", spaceContent && "footer-cta-banner--compact"]}>
         <div class="cta-glow" aria-hidden="true"></div>
         <div class:list={["cta-left", spaceContent && "cta-left--spaced"]}>
@@ -103,7 +105,7 @@ const currentYear = new Date().getFullYear();
             src={ctaImageSrc}
             alt={ctaImageAlt}
             class:list={["cta-devices-img", zoomImage && "cta-devices-img--zoomed"]}
-            loading="lazy"
+            loading={ctaImageLoading}
           />
         </div>
       </div>
@@ -180,8 +182,11 @@ const currentYear = new Date().getFullYear();
 
   /* CTA Banner — fintech-app reference layout */
   .footer-cta-wrapper {
-    max-width: 1280px;
+    width: 100%;
+    max-width: 1376px;
     margin: 0 auto;
+    padding: 0 48px;
+    box-sizing: border-box;
     position: relative;
     z-index: 1;
   }
