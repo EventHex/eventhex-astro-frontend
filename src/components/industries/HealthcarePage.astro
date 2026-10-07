@@ -1,0 +1,1365 @@
+---
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+
+interface Props {
+  faqs: [string, string][];
+}
+
+const { faqs } = Astro.props;
+
+const operatingStages = [
+  ["Open", "Call for submissions"],
+  ["Review", "Assignments + rubric"],
+  ["Decide", "Accepted work"],
+  ["Programme", "Sessions + speakers"],
+  ["Register", "Delegate data"],
+  ["Deliver", "Badges + check-in"],
+];
+
+const attendeeJourney = [
+  ["Submit", "Give authors a structured route into the review workflow."],
+  ["Review", "Assign reviewers and use the configured scoring rubric."],
+  ["Publish", "Turn accepted work into programme content."],
+  ["Register", "Collect delegate details through the selected event flow."],
+  ["Arrive", "Validate event access and keep attendance current."],
+  ["Follow up", "Use supported notifications, certificates, and analytics with their exact boundaries."],
+];
+
+const attendeeJourneyCards = attendeeJourney.map(([title, desc], index) => {
+  const visuals = [
+    { image: "/feature-images/call-for-papers/submission-portal-card.svg", width: 657, height: 479 },
+    { image: "/feature-images/call-for-papers/peer-review-card.svg", width: 603, height: 574 },
+    { image: "/feature-images/speaker-management/session-timeline-v2.svg", width: 701, height: 729 },
+    { image: "/feature-images/event-registration/registration-to-checkin.png", width: 762, height: 696 },
+    { image: "/feature-images/event-check-in/scan-engine-visual.svg", width: 578, height: 476 },
+    { image: "/feature-images/speaker-management/instarecap-v2.svg", width: 603, height: 746 },
+  ];
+
+  return {
+    title,
+    desc,
+    ...visuals[index],
+    alt: `EventHex healthcare attendee journey: ${title}`,
+    animated: true,
+    ...(index === 0 ? { eyebrow: "One connected attendee journey" } : {}),
+  };
+});
+
+const eventDaySteps = [
+  ["Delegate arrival", "Scan event QR codes and distinguish valid, duplicate, or ineligible attempts."],
+  ["Badge workflow", "Use the badge design and print workflow for the event."],
+  ["Programme discovery", "Keep sessions, speakers, and attendee agenda access together."],
+  ["Attendance review", "Use live attendance context and the analytics surfaces."],
+];
+
+const useCases = [
+  {
+    id: "medical-congresses",
+    label: "Medical congresses",
+    title: "Move abstracts into the medical programme",
+    description: "Connect abstract review, accepted sessions, delegate registration, and event day.",
+    checklist: ["Structured abstract review", "Accepted work moved into sessions", "Programme ready for delegates"],
+    visualLabel: "Programme connected",
+  },
+  {
+    id: "healthcare-conferences",
+    label: "Healthcare conferences",
+    title: "Coordinate every track in one workspace",
+    description: "Build multi-track education and networking while accreditation remains in the responsible system.",
+    checklist: ["Multi-track programme planning", "Speaker and room coordination", "Attendance context for follow-up"],
+    visualLabel: "Attendance visible",
+  },
+  {
+    id: "pharma-summits",
+    label: "Pharma summits",
+    title: "Configure access before delegates arrive",
+    description: "Use configured access, programme, communications, and onsite operations.",
+    checklist: ["Configured delegate access", "Targeted event communications", "Badge workflow prepared onsite"],
+    visualLabel: "Badge workflow ready",
+  },
+  {
+    id: "health-technology-expos",
+    label: "Health-technology expos",
+    title: "Keep expo arrival moving",
+    description: "Add exhibitors, passes, leads, sessions, and attendee discovery.",
+    checklist: ["Exhibitor and attendee passes", "Session and showcase discovery", "QR arrival validation"],
+    visualLabel: "Delegate access verified",
+  },
+];
+
+const connectedFeatures = [
+  ["Call for Papers", "Run submissions and review.", "/call-for-papers/"],
+  ["Session Management", "Build the scientific programme.", "/session-management/"],
+  ["Event Registration", "Configure delegate intake.", "/event-registration/"],
+  ["Event Check-In", "Operate delegate arrival.", "/event-check-in/"],
+];
+
+const connectedFeatureIcons = [
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="14" y2="17"></line></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 14h3v3H8z"></path></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3M14 18v3"></path></svg>`,
+];
+---
+
+<main class="hcx-page">
+  <section id="hero" class="hcx-hero">
+    <div class="hcx-wrap hcx-hero__grid">
+      <div class="hcx-hero__copy">
+        <p class="hcx-eyebrow animate-on-scroll" data-animation="fadeInDown">Event management software for healthcare conferences</p>
+        <h1 class="hcx-hero__title animate-on-scroll" data-animation="fadeInUp">Build a medical conference workflow around abstracts, programme, and delegates</h1>
+        <p class="hcx-hero__lead animate-on-scroll" data-animation="fadeInUp">
+          Move medical congresses, healthcare conferences, pharma summits, and health-technology expos from submissions to programme, registration, badges, arrival, and reporting—with each operational step connected to its EventHex feature.
+        </p>
+        <ul class="hcx-hero__points animate-on-scroll" data-animation="fadeInUp" aria-label="Healthcare event workflow priorities">
+          <li>Submission and review</li>
+          <li>Multi-track programme</li>
+          <li>Delegate operations</li>
+        </ul>
+        <div class="hcx-actions animate-on-scroll" data-animation="fadeInUp">
+          <a class="hcx-btn hcx-btn--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          <a class="hcx-btn hcx-btn--secondary" href="#operating-map">See the operating model</a>
+        </div>
+      </div>
+
+      <div class="hcx-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="hcx-hero__image">
+          <div class="hcx-hero__image-inner">
+            <img class="hcx-hero__screenshot" src="/images/industries/healthcare/app/healthcare-event-analytics-web-890.webp" alt="EventHex event analytics with registrations, sessions, speakers, exhibitors, and programme activity" width="890" height="600" loading="eager" decoding="async" fetchpriority="high" />
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="hcx-rail" aria-label="One connected event path: see the operating sequence before choosing modules">
+    <div class="hcx-rail__inner">
+      {operatingStages.map(([label, copy]) => <span class="hcx-rail__item"><b>{label}</b> {copy}</span>)}
+    </div>
+  </section>
+
+  <section id="event-model" class="hcx-model" aria-labelledby="hcx-model-title">
+    <header class="hcx-model__header animate-on-scroll" data-animation="fadeInUp">
+      <h2 id="hcx-model-title">Start with the operating shape that fits the event</h2>
+      <p>Choose the path that matches how your healthcare event needs to run.</p>
+    </header>
+
+    <div class="hcx-model__quad">
+      <article class="hcx-model__cell hcx-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Programme-led event</h3>
+        <p>Build submissions, speakers, sessions, registration, and the attendee agenda around one programme.</p>
+      </article>
+
+      <div class="hcx-model__cell hcx-model__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="hcx-model-workspace">
+          <img class="hcx-model-image" src="/images/industries/healthcare/app/programme-sessions-web-960.webp" alt="EventHex programme workspace with scheduled sessions, speakers, and engagement tools" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <div class="hcx-model__cell hcx-model__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="hcx-model-workspace hcx-model-workspace--showcase">
+          <img class="hcx-model-image" src="/images/industries/healthcare/app/registration-ticket-web-960.webp" alt="EventHex registration workspace showing an active delegate ticket and registration count" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <article class="hcx-model__cell hcx-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Community or showcase event</h3>
+        <p>Lead with registration, the event website, communication, arrival, and attendee participation.</p>
+      </article>
+
+      <span class="hcx-model__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg>
+      </span>
+    </div>
+  </section>
+
+  <section id="core-workflow" class="hcx-programme-band">
+    <header class="hcx-programme-band__heading animate-on-scroll" data-animation="fadeInUp">
+      <p class="hcx-programme-band__eyebrow">Programme operations</p>
+      <h2>Move from content intake to a <span>programme people can attend</span></h2>
+      <p class="hcx-programme-band__intro">Connect the content, people, and access decisions that usually end up in separate files.</p>
+    </header>
+
+    <div class="hcx-programme-grid">
+      <article class="hcx-programme-card animate-on-scroll" data-animation="fadeInUp">
+        <h3>Call for Papers</h3>
+        <p>Collect submissions, assign reviewers, score with a rubric, and record decisions.</p>
+        <div class="hcx-programme-card__visual" aria-hidden="true">
+          <div class="hcx-programme-card__panel">
+            <span class="hcx-programme-card__panel-label">Submission review</span>
+            <div class="hcx-programme-card__steps">
+              <span><i>01</i>Submission<b>Received</b></span>
+              <span class="is-active"><i>02</i>Review<b>In progress</b></span>
+              <span><i>03</i>Decision<b>Pending</b></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="hcx-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:60ms">
+        <span class="hcx-programme-card__petal hcx-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Programme handoff</h3>
+        <p>Push accepted work into the event programme and coordinate sessions and speakers.</p>
+        <div class="hcx-programme-card__visual" aria-hidden="true">
+          <div class="hcx-programme-card__handoff">
+            <span><small>Accepted work</small><b>12 submissions</b></span>
+            <i>→</i>
+            <span class="is-active"><small>Programme</small><b>Build sessions</b></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="hcx-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:120ms">
+        <span class="hcx-programme-card__petal hcx-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Delegate registration</h3>
+        <p>Collect configured attendee and ticket-specific fields with approvals where needed.</p>
+        <div class="hcx-programme-card__visual" aria-hidden="true">
+          <div class="hcx-programme-card__panel">
+            <span class="hcx-programme-card__panel-label">Delegate details</span>
+            <div class="hcx-programme-card__fields">
+              <span>Name<i></i></span>
+              <span>Ticket type<i></i></span>
+              <span class="is-active">Approval required<b>On</b></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="hcx-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:180ms">
+        <span class="hcx-programme-card__petal hcx-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Onsite operations</h3>
+        <p>Connect badge design, QR arrival validation, live attendance, and event reporting.</p>
+        <div class="hcx-programme-card__visual" aria-hidden="true">
+          <div class="hcx-programme-card__onsite">
+            <span><small>Badge</small><b>Ready to print</b></span>
+            <span class="is-active"><small>QR check-in</small><b>Live</b></span>
+            <span><small>Attendance</small><b>842 arrived</b></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="operating-view" class="hcx-role-template" aria-labelledby="operating-view-title">
+    <div class="hcx-role-template__shell">
+      <header class="hcx-role-template__heading animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="operating-view-title">Give the event team one operating view</h2>
+        <p class="hcx-role-template__sr-only">Team coordination. Give each team a clear job while keeping the attendee and event record connected.</p>
+      </header>
+
+      <div class="hcx-role-template__grid">
+        <span class="hcx-role-template__notch hcx-role-template__notch--one" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+        <span class="hcx-role-template__notch hcx-role-template__notch--two" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+        <span class="hcx-role-template__notch hcx-role-template__notch--three" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+
+        <article class="hcx-role-template__card hcx-role-template__card--first animate-on-scroll" data-animation="fadeInUp">
+          <div class="hcx-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="hcx-role-template__content"><h3>Event owner</h3><p>Sets the event, audience, access, programme, and reporting decisions.</p></div>
+        </article>
+
+        <article class="hcx-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+          <div class="hcx-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div class="hcx-role-template__content"><h3>Specialist teams</h3><p>Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.</p></div>
+        </article>
+
+        <article class="hcx-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="200">
+          <div class="hcx-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          </div>
+          <div class="hcx-role-template__content"><h3>Connected event record</h3><p>Keeps attendee actions and team decisions tied to the same event workspace.</p></div>
+        </article>
+
+        <article class="hcx-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="300">
+          <div class="hcx-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 16 4-5 4 3 5-7"></path></svg>
+          </div>
+          <div class="hcx-role-template__content"><h3>Event leadership</h3><p>Reviews event and portfolio signals for the next operating decision.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div id="attendee-journey" class="hcx-attendee-journey">
+    <FeatureCards
+      cards={attendeeJourneyCards}
+      subtitle="Audience experience"
+      titleLineOne="Connect the"
+      titleLineTwo="attendees actually move through"
+      highlight="moments"
+    />
+  </div>
+
+  <section id="event-day" class="hcx-event-day">
+    <div class="hcx-event-day__container">
+      <div class="hcx-event-day__left">
+        <div class="hcx-event-day__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="hcx-event-day__eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"></path>
+            </svg>
+            During the event
+          </div>
+          <h2>Keep event-day actions tied to the <span>same event record</span></h2>
+          <p>Run arrival, badges, programme access, and attendance from one connected event workspace.</p>
+          <a class="hcx-event-day__cta" href="/book-a-demo/">
+            Book a Demo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hcx-event-day__right">
+        <article class="hcx-event-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="hcx-event-card__header">
+            <div class="hcx-event-card__number">01</div>
+            <div class="hcx-event-card__text"><h3>{eventDaySteps[0][0]}</h3><p>{eventDaySteps[0][1]}</p></div>
+          </div>
+          <div class="hcx-event-card__visual hcx-event-card__visual--1">
+            <div class="hcx-event-product-shot">
+              <img src="/images/industries/healthcare/delegate-qr-arrival.webp" alt="EventHex QR scanner and attendee check-in status for delegate arrival" width="512" height="422" loading="lazy" decoding="async" />
+              <span class="hcx-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>QR validated</span>
+              <span class="hcx-event-product-shot__action">Check in delegate</span>
+              <svg class="hcx-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="hcx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="hcx-event-card__header">
+            <div class="hcx-event-card__number">02</div>
+            <div class="hcx-event-card__text"><h3>{eventDaySteps[1][0]}</h3><p>{eventDaySteps[1][1]}</p></div>
+          </div>
+          <div class="hcx-event-card__visual hcx-event-card__visual--2">
+            <div class="hcx-event-product-shot">
+              <img src="/images/industries/healthcare/badge-workflow.webp" alt="EventHex printable event badges with attendee details and QR codes" width="615" height="512" loading="lazy" decoding="async" />
+              <span class="hcx-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Badge ready</span>
+              <span class="hcx-event-product-shot__action">Print badge</span>
+              <svg class="hcx-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="hcx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="hcx-event-card__header">
+            <div class="hcx-event-card__number">03</div>
+            <div class="hcx-event-card__text"><h3>{eventDaySteps[2][0]}</h3><p>{eventDaySteps[2][1]}</p></div>
+          </div>
+          <div class="hcx-event-card__visual hcx-event-card__visual--3">
+            <div class="hcx-event-product-shot">
+              <img src="/images/industries/healthcare/programme-discovery.webp" alt="EventHex attendee programme with sessions, times, and booking options" width="640" height="480" loading="lazy" decoding="async" />
+              <span class="hcx-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Programme live</span>
+              <span class="hcx-event-product-shot__action">View agenda</span>
+              <svg class="hcx-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="hcx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="hcx-event-card__header">
+            <div class="hcx-event-card__number">04</div>
+            <div class="hcx-event-card__text"><h3>{eventDaySteps[3][0]}</h3><p>{eventDaySteps[3][1]}</p></div>
+          </div>
+          <div class="hcx-event-card__visual hcx-event-card__visual--4">
+            <div class="hcx-event-product-shot">
+              <img src="/images/industries/healthcare/attendance-review.webp" alt="EventHex attendance workspace with check-in and no-show metrics" width="640" height="353" loading="lazy" decoding="async" />
+              <span class="hcx-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Attendance current</span>
+              <span class="hcx-event-product-shot__action">Review attendance</span>
+              <svg class="hcx-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="configuration" class="hcx-model hcx-model--scope" aria-labelledby="hcx-scope-title">
+    <header class="hcx-model__header animate-on-scroll" data-animation="fadeInUp">
+      <h2 id="hcx-scope-title">Keep EventHex responsibility separate from specialist requirements</h2>
+      <p>Confirm every specialist obligation before implementation and record how it will be handled.</p>
+    </header>
+
+    <div class="hcx-model__quad">
+      <article class="hcx-model__cell hcx-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>EventHex workflow</h3>
+        <p>Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p>
+      </article>
+
+      <div class="hcx-model__cell hcx-model__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="hcx-model-workspace">
+          <img class="hcx-model-image" src="/images/industries/healthcare/app/event-modules-web-960.webp" alt="EventHex event configuration with programme, exhibitor, gallery, recap, and attendee modules" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <div class="hcx-model__cell hcx-model__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="hcx-model-workspace hcx-model-workspace--showcase">
+          <img class="hcx-model-image" src="/images/industries/healthcare/app/ticket-requirements-web-960.webp" alt="EventHex ticket requirements with form, approval, policy, delivery, and badge controls" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <article class="hcx-model__cell hcx-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Your specialist requirements</h3>
+        <p>Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p>
+      </article>
+
+      <span class="hcx-model__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg>
+      </span>
+    </div>
+  </section>
+
+  <section id="use-cases" class="hcx-suites" aria-labelledby="hcx-suites-title" data-hcx-suites>
+    <div class="hcx-suites__inner">
+      <header class="hcx-suites__header">
+        <h2 id="hcx-suites-title" class="hcx-suites__title animate-on-scroll" data-animation="fadeInUp">
+          <span>Configure EventHex around</span>
+          <span>the event you are running</span>
+        </h2>
+        <p class="hcx-suites__subtitle animate-on-scroll" data-animation="fadeInUp">
+          Connect programme, delegate, access, and event-day work in one configured workspace.
+        </p>
+      </header>
+
+      <div class="hcx-suites__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Healthcare event formats">
+        {useCases.map((useCase, index) => (
+          <button
+            type="button"
+            class:list={["hcx-suites__tab", { "is-active": index === 0 }]}
+            id={`hcx-tab-${useCase.id}`}
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`hcx-panel-${useCase.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            data-hcx-suite-tab={useCase.id}
+          >
+            {useCase.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="hcx-suites__panels animate-on-scroll" data-animation="fadeInUp">
+        {useCases.map((useCase, index) => (
+          <article
+            class:list={["hcx-suites__panel", { "is-active": index === 0 }]}
+            id={`hcx-panel-${useCase.id}`}
+            role="tabpanel"
+            aria-labelledby={`hcx-tab-${useCase.id}`}
+            tabindex="0"
+            data-hcx-suite-panel={useCase.id}
+          >
+            <div class="hcx-suites__copy">
+              <h3>{useCase.title}</h3>
+              <p>{useCase.description}</p>
+              <span class="hcx-suites__connects">CONNECTS</span>
+              <ul>
+                {useCase.checklist.map((item) => (
+                  <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="hcx-suites__visual">
+              <div class="hcx-suites__showcase">
+                {useCase.id === "medical-congresses" && <img src="/images/industries/healthcare/programme-discovery.webp" alt="EventHex healthcare programme with sessions ready for delegate discovery" width="640" height="480" loading="lazy" decoding="async" />}
+                {useCase.id === "healthcare-conferences" && <img src="/images/industries/healthcare/attendance-review.webp" alt="EventHex attendance overview for a healthcare conference" width="640" height="353" loading="lazy" decoding="async" />}
+                {useCase.id === "pharma-summits" && <img src="/images/industries/healthcare/badge-workflow.webp" alt="EventHex badge workflow prepared for a healthcare summit" width="615" height="512" loading="lazy" decoding="async" />}
+                {useCase.id === "health-technology-expos" && <img src="/images/industries/healthcare/delegate-qr-arrival.webp" alt="EventHex QR arrival validation for a healthcare technology expo" width="512" height="422" loading="lazy" decoding="async" />}
+                <span class="hcx-suites__visual-label">
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7"></circle><path d="m6.5 10 2.2 2.2 4.8-4.8"></path></svg>
+                  {useCase.visualLabel}
+                </span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connected-features" class="hcx-connected">
+    <div class="hcx-connected__inner">
+      <header class="hcx-connected__header animate-on-scroll" data-animation="fadeInUp">
+        <h2>Open the page that owns<br />each mechanism</h2>
+      </header>
+      <div class="hcx-connected__grid">
+        {connectedFeatures.slice(0, -1).map((_, index) => (
+          <span class="hcx-connected__notch" style={`left: ${((index + 1) / connectedFeatures.length) * 100}%`} aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+          </span>
+        ))}
+        {connectedFeatures.map(([title, copy, href], index) => (
+          <a class:list={["hcx-connected__card", { "hcx-connected__card--first": index === 0 }]} href={href}>
+            <span class="hcx-connected__icon" set:html={connectedFeatureIcons[index]} />
+            <div class="hcx-connected__content"><h3>{title}</h3><p>{copy}</p></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="demo-fit" class="hcx-demo-section" aria-labelledby="hcx-demo-title">
+    <div class="hcx-demo">
+      <div class="hcx-demo__left">
+        <h2 id="hcx-demo-title" class="hcx-demo__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="hcx-demo__title-line">Bring one real event</span>
+          <span class="hcx-demo__title-line">workflow to the demo</span>
+        </h2>
+        <p class="hcx-demo__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.
+        </p>
+        <div class="hcx-demo__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <a class="hcx-demo__btn hcx-demo__btn--dark" href="/book-a-demo/">Book a Demo →</a>
+          <a class="hcx-demo__btn hcx-demo__btn--light" href="#operating-map">Explore workflow →</a>
+        </div>
+      </div>
+
+      <div class="hcx-demo__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="hcx-demo__showcase" role="img" aria-label="EventHex private-ticket access and ticket settings configured for a healthcare event">
+          <div class="hcx-demo__shot hcx-demo__shot--list">
+            <img src="/images/industries/healthcare/private-ticket-settings.webp" alt="" aria-hidden="true" width="760" height="480" loading="lazy" decoding="async" />
+          </div>
+          <div class="hcx-demo__shot hcx-demo__shot--settings">
+            <img src="/images/industries/healthcare/ticket-specific-rules.webp" alt="" aria-hidden="true" width="800" height="620" loading="lazy" decoding="async" />
+          </div>
+          <span class="hcx-demo__status">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+            Configuration ready
+          </span>
+          <span class="hcx-demo__review">Review in demo</span>
+          <svg class="hcx-demo__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+        </div>
+        <ol class="hcx-demo__sr-only">
+          <li>Start with the event format. Choose the smallest workflow that matches this event.</li>
+          <li>Add only the modules you need. Use the connected feature pages to understand each mechanism.</li>
+          <li>Review the setup in the demo. Bring market, event, audience, access, communication, and onsite requirements.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="hcx-faq">
+    <div class="hcx-faq__inner">
+      <div class="hcx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="hcx-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2 class="hcx-faq__heading">Review the questions<br />that shape the setup</h2>
+        <p class="hcx-faq__intro">Clear answers about the supported workflow—and where specialist systems remain responsible.</p>
+        <a class="hcx-faq__cta" href="/contact-en/">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+      <div class="hcx-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="hcx-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-hcx-faq open={index === 0}>
+            <summary class="hcx-faq__question"><strong>{question}</strong><span class="hcx-faq__icon" aria-hidden="true"></span></summary>
+            <div class="hcx-faq__answer"><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<style>
+  .hcx-page {
+    --hcx-ink: var(--heading-dark, #22272f);
+    --hcx-copy: var(--subheading-gray, #475467);
+    --hcx-line: var(--surface-card-border, #e8ecf2);
+    overflow: clip;
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(
+        circle 380px at 3% 34%,
+        rgba(175, 163, 255, 0.28) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 97% 30%,
+        rgba(255, 182, 213, 0.26) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 340px at 95% 75%,
+        rgba(130, 170, 255, 0.24) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 4% 78%,
+        rgba(255, 224, 150, 0.2) 0%,
+        transparent 100%
+      ),
+      #ffffff;
+    background-attachment: fixed;
+    color: var(--hcx-ink);
+  }
+  .hcx-hero,
+  .hcx-rail,
+  .hcx-model,
+  .hcx-role-template,
+  .hcx-event-day,
+  .hcx-suites,
+  .hcx-connected,
+  .hcx-demo-section,
+  .hcx-faq { background: transparent !important; }
+  .hcx-wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+  .hcx-section { padding: clamp(72px, 8vw, 108px) 0; }
+  .hcx-section--light { background: var(--surface-light, #f5f8ff); }
+  :global(#attendee-journey .smf-shell) {
+    background-color: #000 !important;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, .22) 0%,
+      rgba(124, 108, 255, .1) 45%,
+      transparent 72%
+    ) !important;
+  }
+  :global(#attendee-journey .smf-title) {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -.03em;
+  }
+  .hcx-eyebrow { margin: 0 0 16px; color: var(--brand-blue, #375dfb); font: 700 .8125rem/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .hcx-heading { max-width: 720px; }
+  .hcx-heading--center { margin-inline: auto; text-align: center; }
+  .hcx-heading h2 { margin: 0; color: var(--hcx-ink); font: 500 clamp(36px, 4vw, 56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .hcx-heading > p:last-child { max-width: 650px; margin: 20px 0 0; color: var(--hcx-copy); font: 400 17px/1.62 var(--font-body); }
+  .hcx-heading--center > p:last-child { margin-inline: auto; }
+  .hcx-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .hcx-btn { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; padding: 12px 28px; border: 1px solid transparent; border-radius: 10px; font: 600 15px/1 var(--font-body); text-decoration: none; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+  .hcx-btn:hover { transform: translateY(-2px); }
+  .hcx-btn:focus-visible, .hcx-connected__card:focus-visible, .hcx-faq summary:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .hcx-btn--primary { background: var(--hcx-ink); color: #fff; }
+  .hcx-btn--primary:hover { background: #000; }
+  .hcx-btn--secondary { border-color: #dce4ff; background: rgba(255,255,255,.92); color: var(--hcx-ink); }
+  .hcx-btn--secondary:hover { border-color: #c5d2ff; box-shadow: 0 12px 30px rgba(55,93,251,.12); }
+  .hcx-btn--light { background: #fff; color: #171a21; }
+
+  .hcx-hero { margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .hcx-hero__grid { display: grid; width: 100%; max-width: 1080px; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .hcx-hero__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; text-align: left; }
+  .hcx-hero .hcx-eyebrow, .hcx-hero__title, .hcx-hero__lead, .hcx-hero__points, .hcx-hero .hcx-actions { margin: 0; }
+  .hcx-hero .hcx-eyebrow { font-size: 16px; font-weight: 500; letter-spacing: normal; }
+  .hcx-hero__title { width: 100%; max-width: 620px; background: linear-gradient(98deg, var(--hcx-ink) 43.06%, #8f8f8f 91.81%); color: transparent; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background-clip: text; -webkit-background-clip: text; }
+  .hcx-hero__lead { width: 100%; max-width: 560px; color: var(--hcx-copy); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .hcx-hero__points { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; color: #475467; font: 500 14px/1.4 var(--font-body); list-style: none; }
+  .hcx-hero__points li { display: flex; align-items: center; color: inherit; font: inherit; }
+  .hcx-hero__points li::before { width: 6px; height: 6px; margin: 0 10px 2px 0; border-radius: 50%; background: #10b981; content: ""; }
+  .hcx-hero .hcx-actions { gap: 14px; padding-top: 6px; }
+  .hcx-hero .hcx-btn { min-height: 48px; padding: 12px 32px; border-radius: 10px; }
+  .hcx-hero__visual { position: relative; z-index: 3; align-self: start; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .hcx-hero__image { padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; backdrop-filter: blur(16px); }
+  .hcx-hero__image-inner { display: flex; min-height: 488px; align-items: center; overflow: hidden; padding: 28px; border-radius: 16px 0 0 16px; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); backdrop-filter: blur(18px); }
+  .hcx-hero__screenshot { display: block; width: 100%; height: auto; border: 1px solid #dce4ff; border-radius: 18px; background: #fff; box-shadow: 0 20px 52px rgba(35,47,91,.13); animation: hcxHeroFloat 6s ease-in-out infinite; }
+  .hcx-console { width: 100%; overflow: hidden; border: 1px solid #dce4ff; border-radius: 18px; background: #fff; box-shadow: 0 20px 52px rgba(35,47,91,.13); animation: hcxHeroFloat 6s ease-in-out infinite; }
+  @keyframes hcxHeroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  .hcx-console__bar { display: flex; align-items: center; gap: 6px; padding: 14px 16px; border-bottom: 1px solid #e9edf5; background: #f8faff; }
+  .hcx-console__bar span { width: 8px; height: 8px; border-radius: 50%; background: #ff8ca5; }
+  .hcx-console__bar span:nth-child(2) { background: #ffce73; } .hcx-console__bar span:nth-child(3) { background: #7bd7b2; }
+  .hcx-console__bar b { margin-left: 8px; color: #5d6677; font: 700 10.5px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .hcx-console__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px; }
+  .hcx-console__head div { display: grid; gap: 6px; }
+  .hcx-console__head small, .hcx-console__flow small { color: #8b94a6; font: 700 10px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .hcx-console__head strong { font: 500 20px/1.2 var(--font-heading); }
+  .hcx-console__head > span { padding: 8px 10px; border: 1px solid #cfead9; border-radius: 999px; background: #effbf4; color: #18864b; font: 700 10px/1 var(--font-body); }
+  .hcx-console__flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0 24px 24px; }
+  .hcx-console__flow div { display: grid; gap: 8px; min-height: 118px; padding: 18px; border: 1px solid #e6ebf4; border-radius: 16px; background: #f7f9ff; }
+  .hcx-console__flow b { font: 500 18px/1.1 var(--font-heading); }
+  .hcx-console__flow span { color: var(--hcx-copy); font: 400 12.5px/1.4 var(--font-body); }
+
+  .hcx-rail { padding: 24px; border-top: 1px solid var(--hcx-line); background: linear-gradient(90deg, rgba(235,240,255,.65), rgba(255,245,250,.68)); }
+  .hcx-rail__inner { display: flex; max-width: 1280px; align-items: center; justify-content: center; flex-wrap: wrap; gap: 22px 36px; margin: 0 auto; }
+  .hcx-rail__item { color: var(--hcx-copy); font: 400 .9375rem/1.4 var(--font-body); white-space: nowrap; }
+  .hcx-rail__item b { color: var(--hcx-ink); font-weight: 700; }
+
+  .hcx-choice { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 40px; }
+  .hcx-choice__card { display: flex; min-height: 300px; flex-direction: column; padding: 34px; border: 1px solid var(--hcx-line); border-radius: 24px; background: #fff; }
+  .hcx-choice__card--tint { border-color: #b6dcd8; background: #ecfaf7; }
+  .hcx-choice__card--boundary { border-color: #e4d9ff; background: #f7f2ff; }
+  .hcx-choice__mark { width: fit-content; margin-bottom: auto; color: #8b94a6; font: 700 11px/1 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .hcx-choice h3 { margin: 36px 0 12px; font: 500 25px/1.15 var(--font-heading); }
+  .hcx-choice p { margin: 0 0 24px; color: var(--hcx-copy); font: 400 15.5px/1.65 var(--font-body); }
+  .hcx-pill { width: fit-content; margin-top: auto; padding: 7px 11px; border-radius: 999px; background: var(--surface-blue-tint, #e5ebff); color: #3158d4; font: 700 12px/1 var(--font-body); }
+  .hcx-note { max-width: 720px; margin: 24px auto 0; color: var(--hcx-copy); font: 500 14px/1.5 var(--font-body); text-align: center; }
+
+  .hcx-model { display: flex; flex-direction: column; align-items: center; padding: 64px 24px 40px; background: #fff; }
+  .hcx-model__header { display: flex; max-width: 1100px; flex-direction: column; align-items: center; margin-bottom: 24px; text-align: center; }
+  .hcx-model__header h2 { margin: 0 0 12px; background: linear-gradient(98deg, var(--heading-dark, #1e1d24) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; font: 500 clamp(28px, 4.2vw, 48px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .hcx-model__header p { max-width: 640px; margin: 0; color: var(--subheading-gray, #555); font: 400 18px/1.5 var(--font-body); }
+  .hcx-model__quad { position: relative; display: grid; width: 100%; max-width: 1180px; grid-template: 1fr 1fr / 1fr 1fr; margin: 24px auto; }
+  .hcx-model__cell { display: flex; min-width: 0; min-height: 260px; flex-direction: column; justify-content: center; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .hcx-model__cell:nth-child(2n) { border-right: 0; }
+  .hcx-model__cell:nth-child(n + 3) { border-bottom: 0; }
+  .hcx-model__cell h3 { margin: 0 0 16px; color: var(--heading-dark, #1e1d24); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .hcx-model__cell p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font: 400 16px/1.6 var(--font-body); }
+  .hcx-model__cell--media { min-height: 360px; align-items: center; padding: 18px 22px; overflow: hidden; background: #fff; }
+  .hcx-model__cross { position: absolute; top: 50%; left: 50%; z-index: 4; width: 18px; height: 18px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .hcx-model-workspace { position: relative; display: flex; width: 100%; height: 320px; align-items: center; justify-content: center; padding: 12px; overflow: hidden; border-radius: 18px; background: linear-gradient(150deg, #edf2ff, #fff); }
+  .hcx-model-image { display: block; width: 100%; height: 100%; border: 1px solid #d7deea; border-radius: 12px; object-fit: contain; object-position: center top; box-shadow: 0 18px 40px rgba(31,41,72,.16); }
+  .hcx-model-screen { position: absolute; right: 18px; bottom: 20px; z-index: 2; width: 76%; overflow: hidden; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); animation: hcxModelFloat 7s ease-in-out infinite; }
+  .hcx-model-screen__bar { display: flex; align-items: center; gap: 5px; padding: 11px 13px; border-bottom: 1px solid #e9edf5; background: #f8faff; }
+  .hcx-model-screen__bar i { width: 6px; height: 6px; border-radius: 50%; background: #ff8ca5; }
+  .hcx-model-screen__bar i:nth-child(2) { background: #ffce73; }
+  .hcx-model-screen__bar i:nth-child(3) { background: #7bd7b2; }
+  .hcx-model-screen__bar b { margin-left: 5px; color: #647087; font: 700 9px/1 var(--font-body); letter-spacing: .04em; }
+  .hcx-model-screen__body { display: grid; gap: 8px; padding: 14px; }
+  .hcx-model-screen__body span { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 11px; border: 1px solid #edf0f5; border-radius: 8px; background: #fff; }
+  .hcx-model-screen__body small { color: #7d8798; font: 600 9px/1.2 var(--font-body); }
+  .hcx-model-screen__body strong { color: #2d3748; font: 700 9px/1.2 var(--font-body); text-align: right; }
+  .hcx-model-screen--showcase { left: 18px; right: auto; }
+  .hcx-model-workspace--showcase { background: linear-gradient(150deg, #e9fbf7, #fff); }
+  .hcx-model-status, .hcx-model-action { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 10px; white-space: nowrap; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .hcx-model-status { top: 14px; left: 14px; padding: 10px 12px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .hcx-model-action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .hcx-model-workspace--showcase .hcx-model-status { right: 14px; left: auto; }
+  .hcx-model-workspace--showcase .hcx-model-action { right: auto; left: 14px; }
+  .hcx-model-cursor { position: absolute; right: 4px; bottom: 34px; z-index: 6; width: 16px; height: 21px; filter: drop-shadow(0 3px 3px rgba(17,24,39,.25)); transform: rotate(-18deg); }
+  .hcx-model-cursor::before { display: block; width: 0; height: 0; border-width: 10px 0 10px 15px; border-style: solid; border-color: transparent transparent transparent #202736; content: ""; clip-path: polygon(0 0, 100% 50%, 46% 62%, 60% 100%, 43% 100%, 30% 66%, 0 82%); }
+  .hcx-model-workspace--showcase .hcx-model-cursor { right: auto; bottom: 34px; left: 118px; }
+  @keyframes hcxModelFloat { 0%, 100% { transform: translateY(4px) scale(.985) rotate(-.7deg); } 50% { transform: translateY(-4px) scale(1) rotate(0); } }
+
+  .hcx-programme-band {
+    --band-p: 0;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: clamp(88px, 9vw, 116px) 0 clamp(56px, 7vw, 88px);
+    overflow: hidden;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.22) 0%, rgba(124,108,255,.1) 45%, transparent 72%);
+    background-repeat: no-repeat;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+  .hcx-programme-band::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+    content: "";
+  }
+  .hcx-programme-band > * { position: relative; z-index: 1; }
+  .hcx-programme-band__heading { max-width: 980px; margin: 0 auto; padding-inline: 24px; text-align: center; }
+  .hcx-programme-band__eyebrow { margin: 0 0 18px; color: #a8b6ff; font: 700 .75rem/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .hcx-programme-band__heading h2 {
+    max-width: 920px;
+    margin: 0 auto;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font: 500 clamp(36px, 4.3vw, 56px)/1.08 var(--font-heading);
+    letter-spacing: -.03em;
+  }
+  .hcx-programme-band__heading h2 span { white-space: nowrap; }
+  .hcx-programme-band__intro { max-width: 650px; margin: 22px auto 0; color: rgba(255,255,255,.62); font: 400 17px/1.62 var(--font-body); }
+
+  .hcx-programme-grid {
+    display: grid;
+    max-width: 1076px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: clamp(48px, 5.5vw, 68px) auto 0;
+    border: 1px solid #3b3a47;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .hcx-programme-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 392px;
+    flex-direction: column;
+    padding: 36px 32px 30px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+    animation-delay: var(--delay, 0ms);
+  }
+  .hcx-programme-card:nth-child(2n) { border-right: 0; }
+  .hcx-programme-card:nth-child(n + 3) { border-bottom: 0; }
+  .hcx-programme-card h3 { margin: 0 0 14px; color: #fff; font: 700 15px/1.25 var(--font-heading); letter-spacing: -.01em; }
+  .hcx-programme-card > p { max-width: 42ch; margin: 0; color: rgba(255,255,255,.62); font: 400 .9375rem/1.38 var(--font-body); }
+  .hcx-programme-card__petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .hcx-programme-card__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .hcx-programme-card__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .hcx-programme-card__visual { position: relative; display: flex; align-items: flex-end; justify-content: center; flex: 1; margin-top: 28px; }
+  .hcx-programme-card__visual::before { position: absolute; bottom: -10%; left: 50%; width: 80%; height: 80%; border-radius: 50%; background: radial-gradient(closest-side, rgba(92,138,255,.28), rgba(124,108,255,.15) 55%, transparent 100%); content: ""; filter: blur(30px); transform: translateX(-50%); }
+  .hcx-programme-card__visual > * { position: relative; z-index: 1; }
+  .hcx-programme-card__panel,
+  .hcx-programme-card__handoff > span,
+  .hcx-programme-card__onsite > span {
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    border-radius: 12px;
+  }
+  .hcx-programme-card__panel {
+    width: min(100%, 360px);
+    padding: 16px;
+    border-color: transparent;
+    border-radius: 16px;
+    background: linear-gradient(#08080e, #08080e) padding-box, linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92,138,255,.5);
+  }
+  .hcx-programme-card__panel-label { display: block; margin-bottom: 10px; color: rgba(255,255,255,.55); font: 400 12px/1.3 var(--font-body); }
+  .hcx-programme-card__steps, .hcx-programme-card__fields, .hcx-programme-card__onsite { display: grid; gap: 10px; }
+  .hcx-programme-card__steps > span,
+  .hcx-programme-card__fields > span,
+  .hcx-programme-card__onsite > span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px 13px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    background: rgba(255,255,255,.05);
+    color: rgba(255,255,255,.84);
+    font: 500 12.5px/1.2 var(--font-body);
+  }
+  .hcx-programme-card__steps i { display: grid; flex: 0 0 25px; width: 25px; height: 25px; place-items: center; border-radius: 8px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.5); font: 700 9px/1 var(--font-body); font-style: normal; }
+  .hcx-programme-card__steps b, .hcx-programme-card__fields b { margin-left: auto; color: rgba(255,255,255,.48); font-size: 10.5px; font-weight: 600; }
+  .hcx-programme-card__steps .is-active,
+  .hcx-programme-card__fields .is-active,
+  .hcx-programme-card__onsite .is-active,
+  .hcx-programme-card__handoff .is-active {
+    border-color: transparent;
+    background: linear-gradient(#11111b, #11111b) padding-box, linear-gradient(135deg, #38bdf8, #7c6cff 58%, #a45cff) border-box;
+    color: #fff;
+  }
+  .hcx-programme-card__fields > span { justify-content: flex-start; }
+  .hcx-programme-card__fields i { width: 45%; height: 6px; margin-left: auto; border-radius: 999px; background: rgba(255,255,255,.14); }
+  .hcx-programme-card__handoff { display: grid; width: min(100%, 380px); grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
+  .hcx-programme-card__handoff > span { display: grid; gap: 8px; min-height: 104px; align-content: center; padding: 16px; }
+  .hcx-programme-card__handoff > i { color: #9baaff; font: 400 24px/1 var(--font-body); font-style: normal; }
+  .hcx-programme-card__handoff small, .hcx-programme-card__onsite small { color: rgba(255,255,255,.48); font: 500 10.5px/1.2 var(--font-body); }
+  .hcx-programme-card__handoff b, .hcx-programme-card__onsite b { color: rgba(255,255,255,.88); font: 700 12px/1.25 var(--font-body); }
+  .hcx-programme-card__onsite { width: min(100%, 370px); }
+  .hcx-programme-card__onsite > span { min-height: 53px; }
+  .hcx-programme-card__onsite > span small { margin-right: auto; }
+
+  @keyframes hcxProgrammeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes hcxProgrammeBloom { 0%, 100% { opacity: .68; } 50% { opacity: 1; } }
+  @keyframes hcxProgrammePulse { 0%, 100% { opacity: .88; } 50% { opacity: 1; } }
+  .hcx-programme-card__panel,
+  .hcx-programme-card__handoff,
+  .hcx-programme-card__onsite { animation: hcxProgrammeFloat 7s ease-in-out infinite; }
+  .hcx-programme-card:nth-child(2) .hcx-programme-card__handoff { animation-delay: -1.4s; }
+  .hcx-programme-card:nth-child(3) .hcx-programme-card__panel { animation-delay: -2.8s; }
+  .hcx-programme-card:nth-child(4) .hcx-programme-card__onsite { animation-delay: -4.2s; }
+  .hcx-programme-card__visual::before { animation: hcxProgrammeBloom 6s ease-in-out infinite; }
+  .hcx-programme-card__steps .is-active,
+  .hcx-programme-card__fields .is-active,
+  .hcx-programme-card__onsite .is-active,
+  .hcx-programme-card__handoff .is-active { animation: hcxProgrammePulse 3.2s ease-in-out infinite; }
+
+  .hcx-demo-section {
+    display: flex;
+    justify-content: center;
+    padding: 32px 24px;
+    background:
+      radial-gradient(circle 520px at 4% 20%, rgba(228,236,255,.72), transparent 100%),
+      radial-gradient(circle 520px at 96% 76%, rgba(255,232,244,.52), transparent 100%),
+      #fff;
+  }
+  .hcx-demo {
+    display: grid;
+    width: min(1120px, 100%);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 36px;
+    align-items: center;
+    padding: 48px;
+  }
+  .hcx-demo__left { min-width: 0; max-width: 560px; }
+  .hcx-demo__title {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    color: transparent;
+    font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hcx-demo__title-line { display: block; white-space: nowrap; }
+  .hcx-demo__copy { margin: 16px 0 32px; color: #374151; font: 500 15px/1.5 var(--font-body); }
+  .hcx-demo__actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+  .hcx-demo__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font: 600 13.5px/1 var(--font-body);
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .hcx-demo__btn:hover { transform: translateY(-2px); }
+  .hcx-demo__btn:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .hcx-demo__btn--dark { background: #27272a; color: #fff; }
+  .hcx-demo__btn--dark:hover { background: #18181b; }
+  .hcx-demo__btn--light { border: 1px solid #e5e7eb; background: #f3f4f6; color: #374151; }
+  .hcx-demo__btn--light:hover { background: #e5e7eb; }
+  .hcx-demo__right { width: 100%; max-width: 500px; justify-self: end; }
+  .hcx-demo__showcase {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    height: clamp(320px, 32vw, 350px);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 24px;
+    background: linear-gradient(155deg, #fff8dc 0%, #fffdf4 48%, #fff 100%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+  }
+  .hcx-demo__showcase::before { position: absolute; inset: auto 6% -24% 10%; z-index: -1; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); content: ""; filter: blur(24px); }
+  .hcx-demo__shot { position: absolute; overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }
+  .hcx-demo__shot img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .hcx-demo__shot--list { top: 30px; left: 20px; z-index: 1; width: 77%; aspect-ratio: 760 / 480; }
+  .hcx-demo__shot--settings { right: 18px; bottom: 24px; z-index: 2; width: 70%; aspect-ratio: 800 / 620; }
+  .hcx-demo__status, .hcx-demo__review { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; box-shadow: 0 8px 22px rgba(42,66,158,.18); font: 700 13px/1 var(--font-body); }
+  .hcx-demo__status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; background: #f0f4ff; color: #4163ed; }
+  .hcx-demo__status svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  .hcx-demo__review { right: 16px; bottom: 16px; padding: 12px 16px; background: #4163ed; color: #fff; }
+  .hcx-demo__cursor { position: absolute; right: 20px; bottom: 50px; z-index: 6; width: 23px; height: 27px; fill: #182033; stroke: #fff; stroke-width: 1.2; filter: drop-shadow(0 2px 3px rgba(17,24,39,.24)); }
+  .hcx-demo__sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; margin: -1px; padding: 0; border: 0; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .hcx-role-template {
+    padding: clamp(64px, 7vw, 96px) 24px;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .hcx-role-template__shell { width: min(1200px, 100%); margin: 0 auto; }
+  .hcx-role-template__heading { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .hcx-role-template__heading h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; white-space: nowrap; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hcx-role-template__sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; margin: -1px; padding: 0; border: 0; clip: rect(0 0 0 0); white-space: nowrap; }
+  .hcx-role-template__grid { position: relative; display: grid; max-width: 1200px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .hcx-role-template__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border-left: 1px solid var(--surface-card-border, #e8ecf2); }
+  .hcx-role-template__card--first { border-left: 0; }
+  .hcx-role-template__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .hcx-role-template__notch--one { left: 25%; }
+  .hcx-role-template__notch--two { left: 50%; }
+  .hcx-role-template__notch--three { left: 75%; }
+  .hcx-role-template__icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .hcx-role-template__icon svg { width: 100%; height: 100%; }
+  .hcx-role-template__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font: 600 21px/1.25 var(--font-heading); }
+  .hcx-role-template__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+
+  .hcx-suites { padding: 112px 24px; background: #fff; }
+  .hcx-suites__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .hcx-suites__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .hcx-suites__title { max-width: 840px; margin: 0 0 16px; background: linear-gradient(98deg, var(--hcx-ink) 43.06%, #8f8f8f 91.81%); color: transparent; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hcx-suites__title span { display: block; }
+  .hcx-suites__subtitle { max-width: 760px; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); }
+  .hcx-suites__tabs { display: flex; width: fit-content; max-width: 100%; justify-content: center; gap: 4px; margin: 0 auto 40px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .hcx-suites__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .hcx-suites__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .hcx-suites__tab:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 3px; }
+  .hcx-suites__tab.is-active { border-color: #dbe4f0; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: #3b82f6; }
+  .hcx-suites__panel { --hcx-suite-tint: #fff8dc; --hcx-suite-border: #f0dfa6; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 64px; padding: 52px 64px; border: 1px solid var(--hcx-suite-border); border-radius: 28px; background: linear-gradient(135deg, var(--hcx-suite-tint) 0%, #fff 72%); animation: hcxSuiteFadeIn .4s ease forwards; }
+  .hcx-suites__panel + .hcx-suites__panel { margin-top: 18px; }
+  .hcx-suites__panel:nth-child(2) { --hcx-suite-tint: #edf7ff; --hcx-suite-border: #d4e7f7; }
+  .hcx-suites__panel:nth-child(3) { --hcx-suite-tint: #f3efff; --hcx-suite-border: #e2d8fa; }
+  .hcx-suites__panel:nth-child(4) { --hcx-suite-tint: #eefbf4; --hcx-suite-border: #d4efdf; }
+  .hcx-suites.is-ready .hcx-suites__panel { display: none; margin-top: 0; }
+  .hcx-suites.is-ready .hcx-suites__panel.is-active { display: grid; }
+  .hcx-suites__copy h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .hcx-suites__copy > p { margin: 0 0 28px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .hcx-suites__connects { display: block; margin-bottom: 18px; color: #9ca3af; font: 700 11px/1 var(--font-body); letter-spacing: .12em; }
+  .hcx-suites__copy ul { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .hcx-suites__copy li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .hcx-suites__copy li svg { width: 14px; height: 14px; flex: 0 0 14px; margin-top: 2px; fill: none; stroke: #9ca3af; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .hcx-suites__visual { min-width: 0; }
+  .hcx-suites__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .hcx-suites__showcase::before { position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--hcx-suite-border); content: ""; filter: blur(22px); opacity: .48; }
+  .hcx-suites__showcase img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1117 / 837; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; object-fit: contain; }
+  .hcx-suites__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid #cddcff; border-radius: 10px; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); color: #3158d4; font: 700 11px/1.2 var(--font-body); }
+  .hcx-suites__panel:nth-child(2) .hcx-suites__visual-label { border-color: #cbeedb; border-radius: 999px; background: #eefbf5; color: #168a55; }
+  .hcx-suites__panel:nth-child(3) .hcx-suites__visual-label { border-color: #ded2ff; border-radius: 7px; background: #f5f1ff; color: #7351cf; }
+  .hcx-suites__panel:nth-child(4) .hcx-suites__visual-label { border-color: #f2dfad; border-radius: 10px 10px 10px 3px; background: #fff8e8; color: #9a6b12; }
+  .hcx-suites__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  @keyframes hcxSuiteFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hcx-grid { display: grid; gap: 18px; margin-top: 42px; }
+  .hcx-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hcx-grid--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .hcx-grid-card { padding: 20px; border: 1px solid var(--hcx-line); border-radius: 22px; background: #fff; transition: transform .2s ease, box-shadow .2s ease; animation-delay: var(--delay, 0ms); }
+  .hcx-grid-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(31,41,72,.09); }
+  .hcx-grid-card__art { position: relative; height: 142px; overflow: hidden; margin-bottom: 22px; border-radius: 16px; background: linear-gradient(145deg, #e9efff, #f9fbff); }
+  .hcx-grid-card__art--2 { background: linear-gradient(145deg, #e6fbf4, #fafffd); } .hcx-grid-card__art--3 { background: linear-gradient(145deg, #fff0f5, #fffafd); }
+  .hcx-grid-card__art span { position: absolute; top: 34px; left: 28px; width: calc(100% - 56px); height: 64px; border: 1px solid rgba(55,93,251,.16); border-radius: 13px; background: rgba(255,255,255,.8); box-shadow: 0 12px 24px rgba(55,93,251,.08); }
+  .hcx-grid-card__art span::before, .hcx-grid-card__art span::after { position: absolute; left: 14px; height: 7px; border-radius: 999px; background: #cbd6ff; content: ""; }
+  .hcx-grid-card__art span::before { top: 16px; width: 55%; } .hcx-grid-card__art span::after { top: 32px; width: 76%; background: #e4e9f4; }
+  .hcx-grid-card__art i { position: absolute; right: 18px; bottom: 18px; width: 38px; height: 38px; border-radius: 12px; background: #375dfb; box-shadow: 0 10px 22px rgba(55,93,251,.28); }
+  .hcx-grid-card small { color: #9aa3b3; font: 700 11px/1 var(--font-body); letter-spacing: .1em; }
+  .hcx-grid-card h3 { margin: 12px 0 9px; font: 500 20px/1.2 var(--font-heading); }
+  .hcx-grid-card p { margin: 0; color: var(--hcx-copy); font: 400 14.5px/1.58 var(--font-body); }
+  .hcx-grid-card--compact .hcx-grid-card__art { height: 122px; }
+
+  .hcx-event-day { padding: 100px 24px; background: #fff; }
+  .hcx-event-day__container { display: flex; max-width: 1200px; align-items: stretch; gap: 80px; margin: 0 auto; }
+  .hcx-event-day__left { flex: 0 0 40%; }
+  .hcx-event-day__sticky { position: sticky; top: 120px; }
+  .hcx-event-day__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 12px; border-radius: 99px; background: #f4f5f7; color: var(--hcx-ink); font: 600 13px/1 var(--font-body); }
+  .hcx-event-day__left h2 { margin: 0 0 24px; color: var(--hcx-ink); font: 500 clamp(36px, 4vw, 48px)/1.2 var(--font-heading); letter-spacing: -.02em; }
+  .hcx-event-day__left h2 span { background: linear-gradient(90deg, #555, #aaa); color: transparent; background-clip: text; -webkit-background-clip: text; }
+  .hcx-event-day__left p { margin: 0; color: var(--hcx-copy); font: 400 18px/1.6 var(--font-body); }
+  .hcx-event-day__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .hcx-event-day__cta:hover { background: #000; transform: translateY(-1px); }
+  .hcx-event-day__cta:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .hcx-event-day__right { display: flex; flex: 1; flex-direction: column; gap: 32px; }
+  .hcx-event-card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .hcx-event-card:nth-child(2) { top: 100px; }
+  .hcx-event-card:nth-child(3) { top: 120px; }
+  .hcx-event-card:nth-child(4) { top: 140px; }
+  .hcx-event-card:hover { transform: translateY(-4px); }
+  .hcx-event-card__header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .hcx-event-card__number { display: flex; width: 40px; height: 40px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 50%; background: #111; color: #fff; font: 700 16px/1 var(--font-heading); }
+  .hcx-event-card__text h3 { margin: 0 0 8px; color: var(--hcx-ink); font: 700 20px/1.2 var(--font-heading); }
+  .hcx-event-card__text p { margin: 0; color: var(--hcx-copy); font: 400 16px/1.6 var(--font-body); }
+  .hcx-event-card__visual { display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 18px; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .hcx-event-card__visual--1 { background: linear-gradient(180deg, #fff9dc 0%, #fffdf1 48%, #fff 100%); }
+  .hcx-event-card__visual--2 { background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #fff 100%); }
+  .hcx-event-card__visual--3 { background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #fff 100%); }
+  .hcx-event-card__visual--4 { background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #fff 100%); }
+  .hcx-event-product-shot { position: relative; width: 100%; height: 280px; }
+  .hcx-event-product-shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .hcx-event-card__visual--1 img, .hcx-event-card__visual--2 img { object-fit: contain; }
+  .hcx-event-card__visual--3 img { object-position: top center; }
+  .hcx-event-card__visual--4 img { object-position: left top; }
+  .hcx-event-product-shot__status, .hcx-event-product-shot__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); white-space: nowrap; font: 700 12px/1 var(--font-body); }
+  .hcx-event-product-shot__status { top: 0; left: 0; gap: 7px; padding: 9px 12px; border: 1px solid #ccebd8; background: #edfbf3; color: #18864b; }
+  .hcx-event-product-shot__status svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .hcx-event-product-shot__action { right: 10px; bottom: 0; padding: 11px 15px; background: #4b65f6; color: #fff; }
+  .hcx-event-product-shot__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: hcxEventCursorTap 2.4s ease-in-out infinite; }
+  @keyframes hcxEventCursorTap { 0%, 65%, 100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+
+  .hcx-connected { padding: clamp(64px, 7vw, 96px) 24px; background: linear-gradient(180deg, #f8faff 0%, #fff 78%); }
+  .hcx-connected__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .hcx-connected__header { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .hcx-connected__header h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hcx-connected__grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .hcx-connected__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border-left: 1px solid var(--surface-card-border, #e8ecf2); color: var(--hcx-ink); text-decoration: none; transition: background-color .2s ease; }
+  .hcx-connected__card--first { border-left: 0; }
+  .hcx-connected__card:hover { background: rgba(55, 93, 251, .035); }
+  .hcx-connected__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .hcx-connected__icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .hcx-connected__icon svg { width: 100%; height: 100%; }
+  .hcx-connected__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font: 600 21px/1.25 var(--font-heading); }
+  .hcx-connected__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+
+  .hcx-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .hcx-faq__inner { display: grid; max-width: 1140px; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; margin: 0 auto; }
+  .hcx-faq__sidebar { position: sticky; top: 6rem; }
+  .hcx-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .hcx-faq__heading { margin: 0 0 20px; color: #000; font: 500 44px/1.1 'Creato Display', var(--font-heading); letter-spacing: -1px; }
+  .hcx-faq__intro { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .hcx-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .hcx-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .hcx-faq__cta:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .hcx-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: healthcare-faq; }
+  .hcx-faq__item { counter-increment: healthcare-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .hcx-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .hcx-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; cursor: pointer; font: 500 1.0625rem/1.35 'Creato Display', var(--font-heading); list-style: none; }
+  .hcx-faq__question strong { font-weight: 500; }
+  .hcx-faq__question strong::before { content: counter(healthcare-faq) '. '; }
+  .hcx-faq__question::-webkit-details-marker { display: none; }
+  .hcx-faq__icon { position: relative; width: 18px; height: 18px; flex-shrink: 0; transition: transform .28s cubic-bezier(.22, 1, .36, 1); }
+  .hcx-faq__icon::before, .hcx-faq__icon::after { position: absolute; top: 50%; left: 50%; background: #000; content: ''; transform: translate(-50%, -50%); }
+  .hcx-faq__icon::before { width: 14px; height: 2px; }
+  .hcx-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .hcx-faq__item[open] .hcx-faq__icon { transform: scale(.9); }
+  .hcx-faq__item[open] .hcx-faq__icon::after { opacity: 0; }
+  .hcx-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .hcx-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+
+  @media (max-width: 1024px) {
+    .hcx-demo { grid-template-columns: 1fr; gap: 32px; }
+    .hcx-demo__left, .hcx-demo__right { max-width: none; }
+    .hcx-grid--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hcx-grid--three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .hcx-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .hcx-faq__sidebar { position: static; }
+    .hcx-faq__heading { font-size: 32px; }
+  }
+  @media (max-width: 960px) {
+    .hcx-hero { margin-top: 0; padding: 130px 20px 48px; }
+    .hcx-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .hcx-hero__copy { align-items: center; text-align: center; }
+    .hcx-hero__title, .hcx-hero__lead { max-width: 760px; }
+    .hcx-hero__points, .hcx-hero .hcx-actions { justify-content: center; }
+    .hcx-hero__visual { width: min(760px, 100%); margin: 0 auto; }
+    .hcx-hero__image { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .hcx-hero__image-inner { min-height: 0; border-radius: 16px; }
+  }
+  @media (max-width: 900px) {
+    .hcx-programme-grid { grid-template-columns: 1fr; margin-inline: 24px; }
+    .hcx-programme-card { border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .hcx-programme-card:nth-child(n + 3) { border-bottom: 1px solid #3b3a47; }
+    .hcx-programme-card:last-child { border-bottom: 0; }
+    .hcx-suites__panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+  }
+  @media (max-width: 992px) {
+    .hcx-connected__grid { grid-template-columns: 1fr; }
+    .hcx-connected__notch { display: none; }
+    .hcx-connected__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .hcx-connected__card--first { border-top: 0; }
+    .hcx-event-day__container { flex-direction: column; gap: 40px; }
+    .hcx-event-day__left { width: 100%; flex: none; }
+    .hcx-event-day__sticky { position: static; }
+    .hcx-event-card { padding: 32px 24px; }
+    .hcx-event-card__header { flex-direction: column; gap: 16px; }
+    .hcx-event-card__visual { padding: 14px; }
+    .hcx-event-product-shot { height: 240px; }
+    .hcx-event-product-shot__status, .hcx-event-product-shot__action { font-size: 11px; }
+    .hcx-role-template__grid { grid-template-columns: 1fr; }
+    .hcx-role-template__notch { display: none; }
+    .hcx-role-template__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .hcx-role-template__card--first { border-top: 0; }
+  }
+  @media (max-width: 767px) {
+    .hcx-wrap { width: min(calc(100% - 32px), 640px); }
+    .hcx-section { padding: 64px 0; }
+    .hcx-role-template { padding: 60px 20px; }
+    .hcx-role-template__heading h2 { white-space: normal; }
+    .hcx-actions { flex-direction: column; }
+    .hcx-btn { width: 100%; }
+    .hcx-console__head { align-items: flex-start; flex-direction: column; padding: 20px; }
+    .hcx-console__flow { grid-template-columns: 1fr; padding: 0 20px 20px; }
+    .hcx-console__flow div { min-height: 0; }
+    .hcx-rail__inner { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .hcx-choice, .hcx-grid--three, .hcx-grid--four { grid-template-columns: 1fr; }
+    .hcx-model { padding: 60px 16px; }
+    .hcx-model__header { margin-bottom: 24px; }
+    .hcx-model__quad { grid-template-columns: 1fr; grid-template-rows: auto; margin: 24px auto; }
+    .hcx-model__cross { display: none; }
+    .hcx-model__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .hcx-model__cell:nth-child(n + 3) { border-bottom: 1px solid #eef0f3; }
+    .hcx-model__cell:nth-child(1) { order: 1; }
+    .hcx-model__cell:nth-child(2) { order: 2; min-height: 0; padding: 16px 20px 32px; }
+    .hcx-model__cell:nth-child(4) { order: 3; }
+    .hcx-model__cell:nth-child(3) { order: 4; min-height: 0; padding: 16px 20px 32px; border-bottom: 0; }
+    .hcx-model-workspace { height: auto; aspect-ratio: 960 / 498; padding: 8px; }
+    .hcx-choice__card { min-height: 260px; padding: 28px; }
+    .hcx-programme-band { padding-top: 72px; }
+    .hcx-programme-band__heading { padding-inline: 20px; }
+    .hcx-programme-band__heading h2 span { white-space: normal; }
+    .hcx-programme-band__intro { font-size: 15.5px; }
+    .hcx-programme-grid { margin: 42px 12px 0; }
+    .hcx-programme-card { min-height: 350px; padding: 28px 22px 24px; }
+    .hcx-suites { padding: 72px 20px; }
+    .hcx-suites__title span { display: inline; }
+    .hcx-suites__subtitle { font-size: 16px; }
+    .hcx-suites__tabs { width: 100%; justify-content: flex-start; overflow-x: auto; border-radius: 20px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .hcx-suites__tabs::-webkit-scrollbar { display: none; }
+    .hcx-suites__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .hcx-suites__panel { gap: 36px; padding: 32px 24px; border-radius: 20px; }
+    .hcx-suites__showcase { padding: 14px; border-radius: 18px; }
+    .hcx-suites__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .hcx-grid-card__art { height: 126px; }
+    .hcx-event-day { padding: 64px 16px; }
+    .hcx-event-day__cta { width: 100%; justify-content: center; }
+    .hcx-connected { padding: 48px 20px; }
+    .hcx-connected__header { margin-bottom: 46px; }
+    .hcx-faq { padding: 56px 16px; }
+    .hcx-faq__heading { font-size: 28px; }
+    .hcx-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .hcx-faq__question { padding: 18px 0; font-size: .9375rem; }
+  }
+  @media (max-width: 640px) {
+    .hcx-demo-section { padding: 20px 16px; }
+    .hcx-demo { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+    .hcx-demo__title { font-size: 28px; }
+    .hcx-demo__title-line { white-space: normal; }
+    .hcx-demo__copy { font-size: 16px; }
+    .hcx-demo__actions { width: 100%; flex-direction: column; align-items: stretch; }
+    .hcx-demo__btn { width: 100%; }
+    .hcx-demo__showcase { height: 300px; border-radius: 18px; }
+    .hcx-demo__shot--list { top: 30px; left: 12px; width: 80%; }
+    .hcx-demo__shot--settings { right: 12px; bottom: 23px; width: 72%; }
+    .hcx-demo__status { top: 14px; left: 12px; }
+    .hcx-demo__review { right: 12px; bottom: 12px; }
+    .hcx-demo__cursor { right: 15px; bottom: 46px; }
+    .hcx-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .hcx-hero__title, .hcx-suites__title { font-size: 38px; line-height: 1.2; letter-spacing: 0; }
+    .hcx-hero__lead { font-size: 15px; line-height: 1.7; }
+    .hcx-hero__points { justify-content: center; }
+    .hcx-hero .hcx-actions { width: 100%; flex-direction: column; }
+    .hcx-hero .hcx-btn { width: 100%; justify-content: center; }
+    .hcx-hero__image { padding: 10px; border-radius: 18px; }
+    .hcx-hero__image-inner { padding: 18px; border-radius: 14px; }
+    .hcx-console__bar { padding: 10px 12px; }
+    .hcx-console__bar b { font-size: 8px; }
+    .hcx-console__head { gap: 10px; padding: 14px; }
+    .hcx-console__head strong { font-size: 16px; }
+    .hcx-console__head > span { padding: 6px 8px; font-size: 8px; }
+    .hcx-console__flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 0 14px 14px; }
+    .hcx-console__flow div { min-height: 88px; gap: 6px; padding: 10px; }
+    .hcx-console__flow b { font-size: 15px; }
+    .hcx-console__flow span { font-size: 10px; }
+  }
+  @media (max-width: 420px) {
+    .hcx-heading h2 { font-size: 31px; }
+    .hcx-programme-band__heading h2 { font-size: 34px; }
+    .hcx-programme-card__handoff { grid-template-columns: 1fr; }
+    .hcx-programme-card__handoff > i { transform: rotate(90deg); text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hcx-programme-band { clip-path: none; will-change: auto; } .hcx-console, .hcx-hero__screenshot, .hcx-model-screen, .hcx-event-product-shot__cursor, .hcx-suites__panel, .hcx-programme-card__panel, .hcx-programme-card__handoff, .hcx-programme-card__onsite, .hcx-programme-card__visual::before, .hcx-programme-card__steps .is-active, .hcx-programme-card__fields .is-active, .hcx-programme-card__onsite .is-active, .hcx-programme-card__handoff .is-active { animation: none; } .hcx-btn, .hcx-demo__btn, .hcx-connected__card, .hcx-grid-card, .hcx-event-card, .hcx-event-day__cta, .hcx-faq__cta, .hcx-faq__item, .hcx-faq__icon, .hcx-faq__icon::after, .hcx-suites__tab { transition: none; } .hcx-btn:hover, .hcx-demo__btn:hover, .hcx-grid-card:hover, .hcx-event-card:hover, .hcx-event-day__cta:hover, .hcx-faq__cta:hover { transform: none; } }
+</style>
+
+<script>
+  function initHealthcareSuites() {
+    const suite = document.querySelector("[data-hcx-suites]");
+    if (!suite || suite.dataset.ready === "true") return;
+
+    const tabs = Array.from(suite.querySelectorAll("[data-hcx-suite-tab]"));
+    const panels = Array.from(suite.querySelectorAll("[data-hcx-suite-panel]"));
+    if (!tabs.length || !panels.length) return;
+
+    const activateTab = (nextTab, moveFocus = false) => {
+      const target = nextTab.dataset.hcxSuiteTab;
+      tabs.forEach((tab) => {
+        const active = tab === nextTab;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-selected", String(active));
+        tab.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.hcxSuitePanel === target));
+      if (moveFocus) nextTab.focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateTab(tab));
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex = index;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") nextIndex = 0;
+        else if (event.key === "End") nextIndex = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        activateTab(tabs[nextIndex], true);
+      });
+    });
+
+    suite.classList.add("is-ready");
+    suite.dataset.ready = "true";
+  }
+
+  function initHealthcareFaq() {
+    const items = Array.from(document.querySelectorAll("[data-hcx-faq]"));
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  }
+
+  function initHealthcareProgrammeBand() {
+    const band = document.querySelector<HTMLElement>(".hcx-programme-band");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    let ticking = false;
+    let lastProgress = -1;
+    const update = () => {
+      ticking = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === lastProgress) return;
+      lastProgress = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      lastProgress = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  function initHealthcarePage() {
+    initHealthcareSuites();
+    initHealthcareFaq();
+    initHealthcareProgrammeBand();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initHealthcarePage);
+  else initHealthcarePage();
+</script>
