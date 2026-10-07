@@ -1,0 +1,1903 @@
+---
+interface Props {
+  faqs: [string, string][];
+}
+
+const { faqs } = Astro.props;
+
+const operatingStages = [
+  ["Configure", "Event + access"],
+  ["Invite", "Audience segments"],
+  ["Register", "Forms + tickets"],
+  ["Programme", "Sessions + speakers"],
+  ["Connect", "Members + partners"],
+  ["Review", "Event + portfolio data"],
+];
+
+const attendeeJourney = [
+  {
+    title: "Discover",
+    copy: "Publish the association event and programme.",
+    bullets: ["Publish a branded event website", "Share the programme and speakers", "Keep updates in one place"],
+  },
+  {
+    title: "Register",
+    copy: "Collect the configured attendee details and ticket selection.",
+    bullets: ["Configure attendee fields", "Apply ticket and access rules", "Build one connected attendee record"],
+  },
+  {
+    title: "Prepare",
+    copy: "Send planned campaigns and operational updates.",
+    bullets: ["Schedule email campaigns", "Target the right event audience", "Track campaign delivery"],
+  },
+  {
+    title: "Participate",
+    copy: "Use agenda, app, networking, and engagement features as needed.",
+    bullets: ["Open the agenda and schedule", "Use networking and event chat", "Join engagement features"],
+  },
+  {
+    title: "Arrive",
+    copy: "Validate QR access and keep attendance current.",
+    bullets: ["Scan attendee QR codes", "Confirm access instantly", "Keep attendance status current"],
+  },
+  {
+    title: "Continue",
+    copy: "Review event data and prepare the next chapter or annual event.",
+    bullets: ["Review registration performance", "Read event and portfolio signals", "Prepare the next event"],
+  },
+];
+
+const boundaryScopes = [
+  {
+    id: "product",
+    tab: "Product scope",
+    title: "EventHex workflow",
+    description: "Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.",
+    checklist: ["Registration and access", "Programme and communication", "Engagement and event-day operations"],
+    visualLabel: "EventHex-owned workflow",
+    visualTitle: "Association event workspace",
+    visualRows: [["Registration", "Configured"], ["Programme", "Connected"], ["Event day", "Ready"]],
+    image: "/images/industries/associations/portal/event-setup-web-960.webp",
+    imageAlt: "EventHex event setup with ticket, venue, registration, and module controls",
+  },
+  {
+    id: "review",
+    tab: "Review scope",
+    title: "Your specialist requirements",
+    description: "Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.",
+    checklist: ["Name the requirement owner", "Confirm the responsible system", "Record the implementation decision"],
+    visualLabel: "Specialist review required",
+    visualTitle: "Requirement ownership review",
+    visualRows: [["Legal and regulatory", "Assign owner"], ["Accreditation", "Validate"], ["External systems", "Confirm separately"]],
+    image: "/images/industries/associations/portal/crm-integrations-web-960.webp",
+    imageAlt: "EventHex CRM integrations screen for reviewing external systems and data connections",
+  },
+];
+
+const eventFormats = [
+  {
+    id: "annual",
+    index: "01",
+    title: "Annual conferences",
+    copy: "Connect programme, partners, registration, communications, and reporting.",
+    modifier: "conference",
+    checklist: ["Programme and speaker coordination", "Sponsor and exhibitor workflows", "Registration, communication, and reporting"],
+    visualLabel: "Conference workflow",
+    visualRows: [["Programme", "Connected"], ["Partners", "Ready"], ["Registration", "Open"]],
+    image: "/images/industries/associations/portal/registration-analytics-web-960.webp",
+    imageAlt: "EventHex conference analytics with registrations, sessions, speakers, and exhibitors",
+  },
+  {
+    id: "chapter",
+    index: "02",
+    title: "Chapter events",
+    copy: "Use a focused event setup and maintain portfolio visibility across regions.",
+    modifier: "chapter",
+    checklist: ["Focused event setup", "Regional team workflow", "Portfolio visibility"],
+    visualLabel: "Chapter workspace",
+    visualRows: [["Event setup", "Focused"], ["Region", "Assigned"], ["Portfolio", "Visible"]],
+    image: "/images/industries/associations/portal/event-portfolio-web-960.webp",
+    imageAlt: "EventHex event portfolio showing events across organizations, dates, and locations",
+  },
+  {
+    id: "awards",
+    index: "03",
+    title: "Awards and galas",
+    copy: "Configure attendee access, keep seating outside EventHex unless separately proven, and connect badges and communications.",
+    modifier: "awards",
+    checklist: ["Attendee access", "Badges and communications", "Separately reviewed seating needs"],
+    visualLabel: "Guest access ready",
+    visualRows: [["Guest access", "Configured"], ["Badges", "Connected"], ["Seating", "Review separately"]],
+    image: "/images/industries/associations/portal/ticket-configuration-web-960.webp",
+    imageAlt: "EventHex ticket configuration for managing guest registration and access",
+  },
+  {
+    id: "trade-shows",
+    index: "04",
+    title: "Trade shows",
+    copy: "Add exhibitors, sponsor visibility, attendee access, meetings, and lead capture.",
+    modifier: "tradeshow",
+    checklist: ["Exhibitor and sponsor visibility", "Attendee access and meetings", "Lead capture"],
+    visualLabel: "Trade show operations",
+    visualRows: [["Exhibitors", "Onboarded"], ["Meetings", "Available"], ["Lead capture", "Active"]],
+    image: "/images/industries/associations/portal/exhibitor-packages-web-960.webp",
+    imageAlt: "EventHex exhibitor package workspace with team access and response controls",
+  },
+];
+
+const featureLinks = [
+  ["Event Ticketing", "Configure access and pricing rules.", "/event-ticketing/"],
+  ["Sponsor Management", "Present sponsor records.", "/sponsor-management/"],
+  ["Exhibitor Management", "Run exhibitor and lead workflows.", "/exhibitor-management/"],
+  ["Centralized Dashboard", "Review events across the portfolio.", "/centralized-dashboard/"],
+];
+---
+
+<div class="asx-page">
+  <section id="hero" class="asx-hero" aria-labelledby="asx-hero-title">
+    <div class="asx-hero__shell">
+      <div class="asx-hero__grid">
+      <div class="asx-hero__content">
+        <p class="asx-hero__badge animate-on-scroll" data-animation="fadeInDown">Event management software for associations</p>
+        <h1 id="asx-hero-title" class="asx-hero__title animate-on-scroll" data-animation="fadeInUp" data-delay="80">
+          <span>Connect annual,</span>
+          <span>chapter, member, and</span>
+          <span>partner events in one</span>
+          <span>operating workflow</span>
+        </h1>
+        <p class="asx-hero__lead animate-on-scroll" data-animation="fadeInUp" data-delay="150">
+          Run association conferences, chapter events, awards, and trade shows with configurable registration, ticket rules, sponsors, exhibitors, communications, networking, and portfolio visibility.
+        </p>
+        <ul class="asx-hero__points animate-on-scroll" data-animation="fadeInUp" data-delay="220">
+          <li>Annual and chapter events</li>
+          <li>Partner visibility</li>
+          <li>Portfolio oversight</li>
+        </ul>
+        <div class="asx-actions animate-on-scroll" data-animation="fadeInUp" data-delay="290">
+          <a class="asx-button asx-button--primary" href="/book-a-demo/">Book a Demo</a>
+          <a class="asx-button asx-button--secondary" href="#operating-map">See the operating model</a>
+        </div>
+      </div>
+
+      <div
+        class="asx-hero__visual animate-on-scroll"
+        data-animation="fadeInRight"
+        data-delay="120"
+        role="img"
+        aria-label="EventHex association event workspace showing member audiences, event access, partners, and attendee experience"
+      >
+        <div class="asx-hero__visual-card" aria-hidden="true">
+          <div class="asx-hero__visual-inner">
+            <div class="asx-hero-phone">
+              <div class="asx-hero-phone__bar"><span>9:41</span><i></i></div>
+              <div class="asx-hero-phone__head"><b>‹</b><span><strong>Members</strong><small>Annual Leadership Congress</small></span><b>⌕</b></div>
+              <div class="asx-hero-phone__members">
+                <div><i class="asx-avatar asx-avatar--one"></i><span><strong>Amelia Chen</strong><small>Chapter delegate</small></span></div>
+                <div><i class="asx-avatar asx-avatar--two"></i><span><strong>Omar Rahman</strong><small>Industry partner</small></span></div>
+                <div><i class="asx-avatar asx-avatar--three"></i><span><strong>Sofia Patel</strong><small>Programme speaker</small></span></div>
+              </div>
+            </div>
+
+            <div class="asx-hero-access">
+              <div class="asx-hero-access__top"><span>Event access</span><b>•••</b></div>
+              <div class="asx-hero-access__tools"><span>⌕</span><b>Filter</b><b>Sort</b></div>
+              <div class="asx-hero-access__row"><i class="asx-avatar asx-avatar--one"></i><span><strong>Professional member</strong><small>Chapter access</small></span><b>Approved</b></div>
+              <div class="asx-hero-access__row"><i class="asx-avatar asx-avatar--two"></i><span><strong>Partner delegate</strong><small>Exhibitor team</small></span><b>Active</b></div>
+              <div class="asx-hero-access__row"><i class="asx-avatar asx-avatar--three"></i><span><strong>Industry guest</strong><small>Public ticket</small></span><b>Ready</b></div>
+            </div>
+
+            <div class="asx-hero-pulse">
+              <small>PARTNER REGISTRATION</small>
+              <strong>Audience status</strong>
+              <div><span>Members</span><i><b style="width: 78%"></b></i><em>78%</em></div>
+              <div><span>Partners</span><i><b style="width: 62%"></b></i><em>62%</em></div>
+              <div><span>Guests</span><i><b style="width: 44%"></b></i><em>44%</em></div>
+            </div>
+
+            <div class="asx-hero-app">
+              <div class="asx-hero-app__bar"><span>Annual Congress</span><b>•••</b></div>
+              <small>MAIN STAGE · LIVE</small>
+              <h3>Leadership keynote and community forum</h3>
+              <p>10:30 AM · Grand Hall</p>
+              <div class="asx-hero-app__actions"><span>Agenda</span><span>Connect</span><span>Updates</span></div>
+              <nav><b>Info</b><b>Programme</b><b>People</b><b>More</b></nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="asx-rail" aria-label="One connected event path: see the operating sequence before choosing modules">
+    <div class="asx-rail__inner">
+      {operatingStages.map(([label, copy]) => (
+        <span class="asx-rail__item"><b>{label}</b> {copy}</span>
+      ))}
+    </div>
+  </section>
+
+  <section id="event-model" class="asx-model-section" aria-labelledby="asx-model-title">
+    <div class="asx-model-container">
+      <header class="asx-model-header animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="asx-model-title">Start with the operating shape that fits the <span>event</span></h2>
+      </header>
+
+      <div class="asx-model-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="asx-model-notch asx-model-notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+        </span>
+        <span class="asx-model-notch asx-model-notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+        </span>
+
+        <article class="asx-model-row">
+          <div class="asx-model-cell asx-model-visual">
+            <div class="asx-model-stage asx-model-stage--community">
+              <img src="/images/industries/associations/portal/attendee-registrations-web-960.webp" alt="EventHex attendee registration workspace with ticket and registration records" width="960" height="516" loading="lazy" decoding="async" />
+              <span class="asx-model-float asx-model-float--top"><b>People first</b><small>Registration + participation</small></span>
+              <span class="asx-model-float asx-model-float--bottom"><i></i><b>Follow-up connected</b></span>
+            </div>
+          </div>
+          <div class="asx-model-cell asx-model-content">
+            <span class="asx-model-eyebrow">Primary model</span>
+            <h3>Community-led event</h3>
+            <p>Build registration, communications, participation, and follow-up around the people attending.</p>
+          </div>
+          <span class="asx-model-cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        </article>
+
+        <article class="asx-model-row asx-model-row--reverse">
+          <div class="asx-model-cell asx-model-content">
+            <span class="asx-model-eyebrow">Alternate model</span>
+            <h3>Programme-led event</h3>
+            <p>Add submissions, speakers, sessions, or exhibitors when the format needs more structure.</p>
+          </div>
+          <div class="asx-model-cell asx-model-visual">
+            <div class="asx-model-stage asx-model-stage--programme">
+              <img src="/images/industries/associations/portal/programme-sessions-web-960.webp" alt="EventHex programme workspace with scheduled sessions, speakers, and engagement tools" width="960" height="516" loading="lazy" decoding="async" />
+              <span class="asx-model-float asx-model-float--top"><b>Programme ready</b><small>Sessions + speakers</small></span>
+              <span class="asx-model-float asx-model-float--bottom"><i></i><b>Partners included</b></span>
+            </div>
+          </div>
+        </article>
+
+        <p class="asx-model-decision">Start with one model, then add only the modules the event actually needs.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="core-workflow" class="asx-agenda-band" aria-labelledby="asx-core-title">
+    <div class="asx-agenda-band__inner">
+      <header class="asx-agenda-band__header">
+        <h2 id="asx-core-title">Keep the attendee journey connected from invitation to follow-up</h2>
+      </header>
+
+      <div class="asx-agenda-grid">
+        <article class="asx-agenda-card">
+          <div class="asx-agenda-card__text">
+            <h3>Flexible access</h3>
+            <p>Use ticket types, custom fields, approvals, discounts, and coupons to represent the event’s access model.</p>
+          </div>
+          <div class="asx-agenda-visual">
+            <div class="asx-agenda-product" aria-hidden="true">
+              <div class="asx-agenda-product__bar"><span><i></i><i></i><i></i></span><small>Access model</small></div>
+              <div class="asx-agenda-product__tabs"><span class="is-active">Tickets</span><span>Rules</span><span>Approvals</span></div>
+              <div class="asx-agenda-access-list">
+                <div><span><strong>Professional member</strong><small>Approved access</small></span><i class="is-on"></i></div>
+                <div><span><strong>Chapter delegate</strong><small>Invite only</small></span><i class="is-on"></i></div>
+                <div><span><strong>Industry guest</strong><small>Public access</small></span><i></i></div>
+                <b><i></i></b>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="asx-agenda-card">
+          <span class="asx-agenda-petal asx-agenda-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36"></path></svg></span>
+          <span class="asx-agenda-petal asx-agenda-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36" transform="scale(1,-1)"></path></svg></span>
+          <div class="asx-agenda-card__text">
+            <h3>Chapter-ready event setup</h3>
+            <p>Create separate event workspaces and reuse a proven event structure where appropriate.</p>
+          </div>
+          <div class="asx-agenda-visual">
+            <div class="asx-agenda-product" aria-hidden="true">
+              <div class="asx-agenda-product__bar"><span><i></i><i></i><i></i></span><small>Workspace structure</small></div>
+              <div class="asx-agenda-product__tabs"><span class="is-active">Regions</span><span>Templates</span></div>
+              <div class="asx-agenda-outline">
+                <div><i></i><strong>Annual congress</strong><small>Global</small></div>
+                <div class="is-child"><i></i><strong>North chapter</strong><small>Ready</small></div>
+                <div class="is-child"><i></i><strong>South chapter</strong><small>Ready</small></div>
+                <div class="is-break"><i></i><strong>Shared structure</strong><small>Synced</small></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="asx-agenda-card">
+          <div class="asx-agenda-card__text">
+            <h3>Sponsors and exhibitors</h3>
+            <p>Present partner records, manage exhibitor teams, and capture leads through workflows.</p>
+          </div>
+          <div class="asx-agenda-visual">
+            <div class="asx-agenda-product" aria-hidden="true">
+              <div class="asx-agenda-product__bar"><span><i></i><i></i><i></i></span><small>Partner workspace</small></div>
+              <div class="asx-agenda-product__tabs"><span class="is-active">Sponsors</span><span>Exhibitors</span><span>Leads</span></div>
+              <div class="asx-agenda-stage-board">
+                <span><i></i><i></i></span><span><i></i><i></i></span><span><i></i><i></i></span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="asx-agenda-card">
+          <div class="asx-agenda-card__text">
+            <h3>Multi-event visibility</h3>
+            <p>Use the centralized dashboard for attention, returning people, comparison, cloning, export, and scoped access.</p>
+          </div>
+          <div class="asx-agenda-visual">
+            <div class="asx-agenda-product asx-agenda-product--wide" aria-hidden="true">
+              <div class="asx-agenda-product__bar"><span><i></i><i></i><i></i></span><small>Event portfolio</small></div>
+              <div class="asx-agenda-product__tabs"><span class="is-active">Events</span><span>Attention</span><span>Exports</span></div>
+              <div class="asx-agenda-people">
+                <div><i>AC</i><span><strong>Annual congress</strong><small>Returning audience</small></span><b>Active</b></div>
+                <div><i>RF</i><span><strong>Regional forum</strong><small>Chapter workspace</small></span><b>Ready</b></div>
+                <div><i>AE</i><span><strong>Awards evening</strong><small>Scoped access</small></span><b>Draft</b></div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="asx-agenda-card">
+          <span class="asx-agenda-petal asx-agenda-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36"></path></svg></span>
+          <span class="asx-agenda-petal asx-agenda-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#2d2d36" transform="scale(1,-1)"></path></svg></span>
+          <div class="asx-agenda-card__text">
+            <h3>One connected attendee path</h3>
+            <p>Give each event a clear path through registration, content, arrival, participation, communication, and follow-up.</p>
+          </div>
+          <div class="asx-agenda-visual">
+            <div class="asx-agenda-product asx-agenda-product--wide" aria-hidden="true">
+              <div class="asx-agenda-product__bar"><span><i></i><i></i><i></i></span><small>Attendee journey</small></div>
+              <div class="asx-agenda-product__tabs"><span class="is-active">Journey</span><span>Messages</span></div>
+              <div class="asx-agenda-schedule-list">
+                <div><time>01</time><span><strong>Invitation and registration</strong><small>Audience + access</small></span></div>
+                <div class="is-accent"><time>02</time><span><strong>Arrival and participation</strong><small>Check-in + engagement</small></span></div>
+                <div><time>03</time><span><strong>Communication and follow-up</strong><small>Connected context</small></span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-view" class="asx-coordinate" aria-labelledby="asx-operations-title">
+    <div class="asx-coordinate__inner">
+      <div class="asx-coordinate__left">
+        <h2 id="asx-operations-title" class="asx-coordinate__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="asx-coordinate__title-line">Coordinate the moments</span>
+          <span class="asx-coordinate__title-line">that shape the experience</span>
+        </h2>
+        <p class="asx-coordinate__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Give each team a clear job while keeping the attendee and event record connected. Event owners, specialist teams, and leadership work from one shared operating view from setup through follow-up.
+        </p>
+        <div class="asx-coordinate__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <a href="/book-a-demo/" class="asx-coordinate__btn asx-coordinate__btn--dark">Book a Demo &rarr;</a>
+          <a href="#event-day" class="asx-coordinate__btn asx-coordinate__btn--light">Explore Event Day &rarr;</a>
+        </div>
+      </div>
+
+      <div class="asx-coordinate__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="asx-coordinate__showcase">
+          <img src="/images/industries/associations/portal/platform-analytics-web-960.webp" alt="EventHex platform analytics with organization, event, registration, and check-in totals" width="960" height="516" loading="lazy" decoding="async" />
+          <span class="asx-coordinate__status">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+            Teams coordinated
+          </span>
+          <span class="asx-coordinate__publish">Review &amp; share</span>
+          <svg class="asx-coordinate__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="attendee-journey" class="asx-journey-workflow" aria-labelledby="asx-journey-title">
+    <div class="asx-journey-workflow__inner">
+      <header class="asx-journey-workflow__header">
+        <p class="asx-eyebrow">Audience experience</p>
+        <h2 id="asx-journey-title">Connect the moments attendees actually move through</h2>
+      </header>
+      <ol class="asx-journey-steps">
+        {attendeeJourney.map((step, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary tabindex="-1">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div class="asx-journey-step__content">
+                  <h3>{step.title}</h3>
+                  <p>{step.copy}</p>
+                  <ul>
+                    {step.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  class="asx-journey-step__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                </button>
+              </summary>
+              <div class="asx-journey-step__visual">
+                {index === 0 && <img src="/images/industries/associations/attendee-journey/cfp-portal-published-agenda-web-960.webp" alt="Published EventHex event programme with sessions and booking options" width="960" height="720" loading="lazy" decoding="async" />}
+                {index === 1 && <img src="/images/industries/associations/attendee-journey/checkout-attendee-details-web-960.webp" alt="EventHex registration checkout collecting attendee and ticket details" width="960" height="439" loading="lazy" decoding="async" />}
+                {index === 2 && <img src="/images/industries/associations/attendee-journey/lifecycle-before-event-web-936.webp" alt="EventHex email campaign workspace showing a completed attendee campaign" width="936" height="340" loading="lazy" decoding="async" />}
+                {index === 3 && <img src="/images/industries/associations/attendee-journey/attendee-mobile-app-web-960.webp" alt="EventHex attendee mobile app workspace with agenda, networking, and update modules" width="960" height="530" loading="lazy" decoding="async" />}
+                {index === 4 && <img src="/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp" alt="EventHex QR check-in scanner with attendee access confirmation" width="512" height="422" loading="lazy" decoding="async" />}
+                {index === 5 && <img src="/images/industries/associations/attendee-journey/registration-analytics-web-960.webp" alt="EventHex registration analytics dashboard with event totals and timeline" width="960" height="530" loading="lazy" decoding="async" />}
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="event-day" class="asx-event-day" aria-labelledby="asx-event-day-title">
+    <div class="asx-event-day__container">
+      <div class="asx-event-day__left">
+        <header class="asx-event-day__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="asx-event-day__eyebrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>
+            During the event
+          </div>
+          <h2 id="asx-event-day-title">Keep event-day actions tied to the <span>same event record</span></h2>
+          <p>Move from arrival to participation without splitting each team into a separate operating story.</p>
+          <a class="asx-event-day__cta" href="/book-a-demo/">Book a Demo<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        </header>
+      </div>
+
+      <div class="asx-event-day__cards">
+        <article class="asx-event-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="asx-event-card__header"><div class="asx-event-card__number">01</div><div class="asx-event-card__text"><h3>Member and guest arrival</h3><p>Scan the ticket issued by the configured registration flow.</p></div></div>
+          <div class="asx-event-card__visual"><div class="asx-event-card__shot asx-event-card__shot--arrival">
+            <img src="/images/industries/associations/event-day/attendance-overview-web-960.webp" alt="EventHex attendance workspace for QR-based attendee check-in" width="960" height="530" loading="lazy" decoding="async" />
+            <span class="asx-event-card__status asx-event-card__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Check-in live</span><span class="asx-event-card__action">Open attendance</span><svg class="asx-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="asx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="asx-event-card__header"><div class="asx-event-card__number">02</div><div class="asx-event-card__text"><h3>Partner operations</h3><p>Give exhibitor teams their passes and lead-capture workflow.</p></div></div>
+          <div class="asx-event-card__visual"><div class="asx-event-card__shot asx-event-card__shot--partners">
+            <img src="/images/industries/associations/event-day/exhibitor-operations-web-806.webp" alt="EventHex exhibitor workspace with companies and booth team members" width="806" height="696" loading="lazy" decoding="async" />
+            <span class="asx-event-card__status asx-event-card__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Teams ready</span><span class="asx-event-card__action">Manage passes</span><svg class="asx-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="asx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="asx-event-card__header"><div class="asx-event-card__number">03</div><div class="asx-event-card__text"><h3>Programme access</h3><p>Keep sessions and attendee agenda discovery available.</p></div></div>
+          <div class="asx-event-card__visual"><div class="asx-event-card__shot asx-event-card__shot--programme">
+            <img src="/images/industries/associations/event-day/session-scheduling-dashboard-web-762.webp" alt="EventHex agenda workspace with sessions, times, and engagement tools" width="762" height="696" loading="lazy" decoding="async" />
+            <span class="asx-event-card__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v11H4zM7 3v4M13 3v4M4 8h12"></path></svg>Agenda available</span><span class="asx-event-card__action">View programme</span><svg class="asx-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="asx-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="asx-event-card__header"><div class="asx-event-card__number">04</div><div class="asx-event-card__text"><h3>Event communication</h3><p>Reach selected app audiences with operational push announcements.</p></div></div>
+          <div class="asx-event-card__visual"><div class="asx-event-card__shot asx-event-card__shot--communication">
+            <img src="/images/industries/associations/event-day/push-send-alert-web-668.webp" alt="EventHex urgent event announcement prepared for selected attendees" width="668" height="486" loading="lazy" decoding="async" />
+            <span class="asx-event-card__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h3l7-5v10l-7-5H4zM7 10v5"></path></svg>Audience selected</span><span class="asx-event-card__action">Send update</span><svg class="asx-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="configuration" class="asx-boundary" aria-labelledby="asx-boundary-title">
+    <div class="asx-boundary__container">
+      <header class="asx-boundary__header animate-on-scroll" data-animation="fadeInUp">
+        <p class="asx-eyebrow">Build the right scope</p>
+        <h2 id="asx-boundary-title">Keep EventHex Responsibility <span>Separate From Specialist Requirements</span></h2>
+        <p>Confirm every specialist obligation before implementation and record how it will be handled.</p>
+      </header>
+
+      <div class="asx-boundary__grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="asx-boundary__notch asx-boundary__notch--top" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        <span class="asx-boundary__notch asx-boundary__notch--bottom" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="scale(1,-1)"></path></svg></span>
+        {boundaryScopes.map((scope, index) => (
+          <div class:list={["asx-boundary__row", { "asx-boundary__row--reverse": index === 1 }]}>
+            {index === 0 && <div class="asx-boundary__cell asx-boundary__visual"><div class="asx-boundary__stage asx-boundary__stage--product"><img src={scope.image} alt="EventHex event setup screen for the supported product configuration" width="960" height="516" loading="lazy" decoding="async" /><span class="asx-boundary__visual-label"><i></i>{scope.visualLabel}</span></div></div>}
+            <div class="asx-boundary__cell asx-boundary__copy">
+              <div>
+              <span class="asx-boundary__eyebrow">{scope.tab}</span>
+              <h3>{scope.title}</h3>
+              <p>{scope.description}</p>
+              <p>{scope.checklist.join(". ")}.</p>
+              </div>
+            </div>
+            {index === 1 && <div class="asx-boundary__cell asx-boundary__visual"><div class="asx-boundary__stage asx-boundary__stage--review"><img src={scope.image} alt="EventHex integrations screen for reviewing external systems separately" width="960" height="516" loading="lazy" decoding="async" /><span class="asx-boundary__visual-label"><i></i>{scope.visualLabel}</span></div></div>}
+            <span class="asx-boundary__cross" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(-90)"></path></svg></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="use-cases" class="asx-use-cases" aria-labelledby="asx-use-cases-title">
+    <div class="asx-use-cases__inner">
+      <header class="asx-use-cases__header">
+        <p class="asx-eyebrow">Where it fits</p>
+        <h2 id="asx-use-cases-title" class="asx-use-cases__title animate-on-scroll" data-animation="fadeInUp">Configure EventHex around <span>the event you are running</span></h2>
+        <p class="asx-use-cases__subtitle animate-on-scroll" data-animation="fadeInUp">Start with the format, then add the workflows each event actually needs.</p>
+      </header>
+
+      <div class="asx-use-cases__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Association event formats">
+        {eventFormats.map((item, index) => (
+          <button
+            class:list={["asx-use-cases__tab", { "is-active": index === 0 }]}
+            id={`asx-use-case-tab-${item.id}`}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`asx-use-case-panel-${item.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            data-use-case-tab={item.id}
+          >{item.title}</button>
+        ))}
+      </div>
+
+      <div class="asx-use-cases__box animate-on-scroll" data-animation="fadeInUp">
+        {eventFormats.map((item, index) => (
+          <article
+            class:list={["asx-use-cases__panel", `asx-use-cases__panel--${item.modifier}`, { "is-active": index === 0 }]}
+            id={`asx-use-case-panel-${item.id}`}
+            role="tabpanel"
+            aria-labelledby={`asx-use-case-tab-${item.id}`}
+            data-use-case-panel={item.id}
+          >
+            <div class="asx-use-cases__content">
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
+              <span class="asx-use-cases__list-label">EVENT FOCUS</span>
+              <ul>
+                {item.checklist.map((point) => <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{point}</li>)}
+              </ul>
+            </div>
+            <div class="asx-use-cases__visual">
+              <div class={`asx-use-cases__showcase asx-use-cases__showcase--${item.modifier}`}>
+                <span class="asx-use-cases__visual-label"><i></i>{item.visualLabel}</span>
+                <img src={item.image} alt="EventHex portal screen matched to this association event format" width="960" height="516" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connected-features" class="asx-links" aria-labelledby="asx-links-title">
+    <div class="asx-links__shell">
+      <header class="asx-links__heading animate-on-scroll" data-animation="fadeInUp">
+        <p class="asx-eyebrow">Go deeper</p>
+        <h2 id="asx-links-title"><span>Open the Page That Owns</span><span>Each Association Mechanism</span></h2>
+        <p>Continue to the dedicated EventHex workflow when the event job changes.</p>
+      </header>
+      <div class="asx-links__grid">
+        <span class="asx-links__notch asx-links__notch--1" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        <span class="asx-links__notch asx-links__notch--2" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        <span class="asx-links__notch asx-links__notch--3" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        {featureLinks.map(([title, copy, href], index) => (
+          <article class="asx-links__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            {index === 2 && <span class="asx-links__cross" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(-90)"></path></svg></span>}
+            <div class="asx-links__icon" aria-hidden="true">
+              {index === 0 && <svg viewBox="0 0 24 24"><path d="M4 7h16v10H4zM8 7V5h8v2M7 12h3M14 12h3"></path></svg>}
+              {index === 1 && <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8L12 3Z"></path></svg>}
+              {index === 2 && <svg viewBox="0 0 24 24"><path d="M4 10h16M6 10V7h12v3M6 10v9h12v-9M9 14h6M9 17h6"></path></svg>}
+              {index === 3 && <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h3v3H8zM13 8h3v3h-3zM8 13h3v3H8zM13 13h3v3h-3z"></path></svg>}
+            </div>
+            <h3><a href={href}>{title}</a></h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="demo-fit" class="asx-demo" aria-labelledby="asx-demo-title">
+    <div class="asx-demo__card">
+      <span class="asx-demo__glow asx-demo__glow--one" aria-hidden="true"></span>
+      <span class="asx-demo__glow asx-demo__glow--two" aria-hidden="true"></span>
+
+      <div class="asx-demo__content">
+        <span class="asx-demo__eyebrow animate-on-scroll" data-animation="fadeIn">Plan the configuration</span>
+        <h2 id="asx-demo-title" class="asx-demo__title animate-on-scroll" data-animation="fadeInUp">Bring One Real Event Workflow to the Demo</h2>
+        <p class="asx-demo__desc animate-on-scroll" data-animation="fadeInUp">Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p>
+        <div class="asx-demo__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span>Event format</span>
+          <span>Required modules</span>
+          <span>Configuration review</span>
+        </div>
+        <a class="asx-demo__button" href="/book-a-demo/">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+
+      <div class="asx-demo__visual">
+        <img src="/images/industries/associations/portal/event-dashboard-web-960.webp" alt="EventHex event dashboard with registration and ticket revenue summary cards" width="960" height="516" loading="lazy" decoding="async" />
+        <span class="asx-demo-action" aria-hidden="true">Review workflow</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="asx-section asx-faq" aria-labelledby="asx-faq-title">
+    <div class="asx-faq__shell">
+      <div class="asx-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="asx-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2 id="asx-faq-title">Associations Event Software<br />Questions, Answered.</h2>
+        <p>Find quick answers about membership data, chapter events, ticket pricing, partner workflows, and past-event audiences.</p>
+        <a href="/contact-en/" class="asx-faq__cta">
+          Talk to EventHex
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+      <div class="asx-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="asx-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} open={index === 0}>
+            <summary class="asx-faq__question"><strong>{question}</strong><span class="asx-faq__icon" aria-hidden="true"></span></summary>
+            <div class="asx-faq__answer"><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+  .asx-page {
+    --asx-shadow: 0 22px 54px rgba(35, 49, 89, 0.1);
+    overflow: clip;
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(circle 380px at 3% 34%, rgba(175, 163, 255, 0.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255, 182, 213, 0.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130, 170, 255, 0.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255, 224, 150, 0.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+    color: var(--heading-dark);
+    font-family: var(--font-body);
+  }
+
+  .asx-shell {
+    width: min(1120px, calc(100% - 48px));
+    margin-inline: auto;
+  }
+
+  .asx-section {
+    padding-block: clamp(72px, 8vw, 108px);
+  }
+
+  .asx-section--soft {
+    background: var(--surface-light);
+  }
+
+  .asx-eyebrow {
+    margin: 0 0 16px;
+    color: var(--brand-blue);
+    font: 700 0.8125rem/1.4 var(--font-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .asx-heading {
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+
+  .asx-heading--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .asx-heading h2 {
+    margin: 0;
+    color: var(--heading-dark);
+    font: 500 clamp(36px, 4vw, 56px)/1.08 var(--font-heading);
+    letter-spacing: -0.03em;
+  }
+
+  .asx-heading > p:last-child {
+    max-width: 650px;
+    margin: 18px 0 0;
+    color: var(--subheading-gray);
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  .asx-heading--center > p:last-child {
+    margin-inline: auto;
+  }
+
+  .asx-button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 30px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font: 600 15px/1.4 var(--font-body);
+    text-decoration: none;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .asx-button:hover { transform: translateY(-2px); }
+  .asx-button:focus-visible,
+  .asx-links__card a:focus-visible,
+  .asx-faq summary:focus-visible {
+    outline: 3px solid rgba(55, 93, 251, 0.34);
+    outline-offset: 4px;
+  }
+
+  .asx-button--primary { background: var(--heading-dark); color: #fff; }
+  .asx-button--primary:hover { background: #000; box-shadow: 0 12px 26px rgba(34, 39, 47, 0.18); }
+  .asx-button--secondary { border-color: #dce4ff; background: rgba(255,255,255,.92); color: var(--heading-dark); }
+  .asx-button--secondary:hover { border-color: #c5d2ff; box-shadow: 0 10px 24px rgba(55,93,251,.1); }
+  .asx-button--light { background: #fff; color: var(--heading-dark); }
+  .asx-button--light:hover { background: #f4f6ff; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
+
+  .asx-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background: transparent;
+  }
+
+  .asx-hero::after {
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 0 auto;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    content: "";
+    pointer-events: none;
+  }
+
+  .asx-hero__shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .asx-hero__grid {
+    display: grid;
+    max-width: 1080px;
+    margin: 0 auto;
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .asx-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    text-align: left;
+  }
+
+  .asx-hero__badge {
+    margin: 0;
+    color: var(--brand-blue);
+    font: 500 16px/24px var(--font-body);
+    text-transform: uppercase;
+  }
+
+  .asx-hero__title {
+    width: 100%;
+    max-width: 620px;
+    margin: 0;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font: 500 52px/58px var(--font-heading);
+    letter-spacing: -2.1px;
+  }
+
+  .asx-hero__title span {
+    display: block;
+    color: inherit;
+    white-space: nowrap;
+  }
+
+  .asx-hero__lead {
+    width: 100%;
+    max-width: 560px;
+    margin: 0;
+    color: var(--subheading-gray);
+    font: 400 18px/24px var(--font-body);
+    letter-spacing: -.25px;
+  }
+
+  .asx-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .asx-hero__points li {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 16px;
+    color: #475467;
+    font: 500 14px/20px var(--font-body);
+  }
+
+  .asx-hero__points li::before {
+    position: absolute;
+    top: 7px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    content: "";
+  }
+
+  .asx-actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding-top: 6px; }
+
+  .asx-hero__visual {
+    position: relative;
+    z-index: 3;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+  }
+
+  .asx-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,.62);
+    border-right: 0;
+    border-radius: 22px 0 0 22px;
+    background: linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57;
+    backdrop-filter: blur(16px);
+  }
+
+  .asx-hero__visual-inner {
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+    border-radius: 16px 0 0 16px;
+    background: linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff);
+  }
+
+  .asx-hero-phone,
+  .asx-hero-access,
+  .asx-hero-pulse,
+  .asx-hero-app { position: absolute; border: 1px solid #cfd7e5; background: #fff; box-shadow: 0 16px 32px rgba(36,51,82,.16); }
+
+  .asx-hero-phone {
+    top: 35px;
+    left: 22px;
+    width: 208px;
+    height: 390px;
+    overflow: hidden;
+    border: 4px solid #22272f;
+    border-radius: 28px;
+    background: linear-gradient(180deg,#84caff 0 26%,#eff6ff 26%);
+  }
+
+  .asx-hero-phone__bar { display: flex; height: 24px; align-items: center; justify-content: space-between; padding: 0 14px; color: #182336; font-size: 7px; }
+  .asx-hero-phone__bar i { position: absolute; top: 0; left: 50%; width: 78px; height: 17px; border-radius: 0 0 11px 11px; background: #111820; transform: translateX(-50%); }
+  .asx-hero-phone__head { display: grid; grid-template-columns: 22px 1fr 20px; gap: 6px; align-items: center; padding: 9px 10px 12px; color: #17305f; }
+  .asx-hero-phone__head > b { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.75); }
+  .asx-hero-phone__head span { display: grid; }
+  .asx-hero-phone__head strong { font-size: 8px; }
+  .asx-hero-phone__head small { font-size: 5px; }
+  .asx-hero-phone__members { display: grid; gap: 6px; padding: 7px; }
+  .asx-hero-phone__members > div { display: flex; min-height: 92px; align-items: center; gap: 9px; padding: 10px; border: 1px solid #d7e2f6; border-radius: 10px; background: rgba(255,255,255,.78); }
+  .asx-hero-phone__members span { display: grid; gap: 2px; }
+  .asx-hero-phone__members strong { font-size: 7px; }
+  .asx-hero-phone__members small { color: #677386; font-size: 5.5px; }
+  .asx-avatar { display: block; width: 35px; height: 35px; flex: 0 0 35px; border: 3px solid #fff; border-radius: 50%; background: radial-gradient(circle at 50% 35%,#f2c9a8 0 20%,transparent 21%),linear-gradient(145deg,#7153b5,#b8d6ff); box-shadow: 0 0 0 2px #597cff; }
+  .asx-avatar--two { background: radial-gradient(circle at 50% 35%,#ad6f4f 0 20%,transparent 21%),linear-gradient(145deg,#1d536f,#92d7cf); }
+  .asx-avatar--three { background: radial-gradient(circle at 50% 35%,#e5b28e 0 20%,transparent 21%),linear-gradient(145deg,#925773,#efc6db); }
+
+  .asx-hero-access {
+    z-index: 2;
+    top: 126px;
+    left: 126px;
+    width: 310px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .asx-hero-access__top { display: flex; align-items: center; justify-content: space-between; padding: 13px 15px; border-bottom: 1px solid #e3e8f0; color: #313a49; font-size: 10px; font-weight: 700; }
+  .asx-hero-access__tools { display: flex; gap: 6px; padding: 10px 12px; }
+  .asx-hero-access__tools span,
+  .asx-hero-access__tools b { padding: 5px 8px; border: 1px solid #e0e5ee; border-radius: 6px; color: #7b8494; font-size: 7px; }
+  .asx-hero-access__row { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; padding: 9px 12px; border-top: 1px solid #edf0f5; }
+  .asx-hero-access__row .asx-avatar { width: 24px; height: 24px; min-width: 24px; border-width: 2px; box-shadow: none; }
+  .asx-hero-access__row span { display: grid; gap: 2px; }
+  .asx-hero-access__row strong { font-size: 7px; }
+  .asx-hero-access__row small { color: #8a93a3; font-size: 5.5px; }
+  .asx-hero-access__row > b { color: #5e6b81; font-size: 6px; }
+
+  .asx-hero-pulse {
+    z-index: 4;
+    top: 46px;
+    right: 24px;
+    width: 190px;
+    padding: 12px;
+    border-radius: 11px;
+  }
+  .asx-hero-pulse > small { color: #8a93a3; font-size: 5.5px; font-weight: 800; letter-spacing: .08em; }
+  .asx-hero-pulse > strong { display: block; margin: 4px 0 9px; font-size: 8px; }
+  .asx-hero-pulse > div { display: grid; grid-template-columns: 48px 1fr 20px; gap: 6px; align-items: center; margin-top: 6px; color: #667085; font-size: 5.5px; }
+  .asx-hero-pulse i { height: 7px; overflow: hidden; border-radius: 999px; background: #e2e7ef; }
+  .asx-hero-pulse i b { display: block; height: 100%; background: linear-gradient(90deg,#4865f3,#8b64f6); }
+  .asx-hero-pulse em { font-style: normal; text-align: right; }
+
+  .asx-hero-app {
+    z-index: 5;
+    right: 2px;
+    bottom: 18px;
+    width: 218px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(180deg,#7ebdff 0 27%,#fff 27%);
+  }
+  .asx-hero-app__bar { display: flex; align-items: center; justify-content: space-between; padding: 12px; color: #fff; font-size: 7px; }
+  .asx-hero-app > small { display: block; margin: 13px 13px 4px; color: #5574ae; font-size: 5.5px; font-weight: 800; }
+  .asx-hero-app h3 { margin: 0 13px 6px; color: #243047; font: 500 11px/1.15 var(--font-heading); }
+  .asx-hero-app p { margin: 0 13px 10px; color: #6d7788; font-size: 6px; }
+  .asx-hero-app__actions { display: flex; gap: 5px; padding: 9px 12px; border-top: 1px solid #edf0f5; }
+  .asx-hero-app__actions span { flex: 1; padding: 6px 3px; border: 1px solid #e0e6ef; border-radius: 5px; color: #667085; font-size: 5.5px; text-align: center; }
+  .asx-hero-app nav { display: flex; justify-content: space-around; padding: 9px 6px; background: #f5f7fb; color: #7e8797; }
+  .asx-hero-app nav b { font-size: 5.5px; }
+
+  .asx-rail {
+    padding: 24px;
+    border-top: 1px solid var(--surface-card-border);
+    background: linear-gradient(90deg, rgba(235,240,255,.8), #fff 42%, rgba(255,239,247,.7));
+  }
+
+  .asx-rail__inner { display: flex; max-width: 1280px; margin: 0 auto; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 34px; }
+  .asx-rail__item { color: var(--subheading-gray); font-size: .9375rem; line-height: 1.4; white-space: nowrap; }
+  .asx-rail__item b { margin-right: 4px; color: var(--heading-dark); font-weight: 700; }
+
+  .asx-model-section { padding: 80px 5%; background: transparent; }
+  .asx-model-container { max-width: 1200px; margin: 0 auto; }
+  .asx-model-header { margin-bottom: 60px; text-align: center; }
+  .asx-model-header h2 { max-width: 980px; margin: 0 auto; color: var(--heading-dark); font: 500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .asx-model-header h2 span { background: linear-gradient(98deg,#555 15%,#aaa 88%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .asx-model-grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .asx-model-notch { position: absolute; z-index: 3; left: 50%; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .asx-model-notch--top { top: 0; transform: translate(-50%,-50%); }
+  .asx-model-notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .asx-model-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .asx-model-cell { display: flex; min-height: 470px; flex-direction: column; justify-content: center; padding: 4rem; }
+  .asx-model-row .asx-model-cell:first-child { border-right: 1px solid #e5e7eb; }
+  .asx-model-visual { align-items: center; }
+  .asx-model-content { background: transparent; }
+  .asx-model-eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font-size: .875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+  .asx-model-content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .asx-model-content p { margin: 0; color: #4b5563; font-size: 1.125rem; line-height: 1.45; }
+  .asx-model-stage { position: relative; width: 100%; min-height: 330px; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .asx-model-stage--community { background: linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%); }
+  .asx-model-stage--programme { background: linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%); }
+  .asx-model-float { position: absolute; z-index: 4; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; background: rgba(255,255,255,.96); color: #111827; box-shadow: 0 14px 34px rgba(30,45,88,.2); font-family: var(--font-body); line-height: 1.15; animation: asx-model-float 4.8s ease-in-out infinite; backdrop-filter: blur(10px); }
+  .asx-model-float b { font-size: .78rem; white-space: nowrap; }
+  .asx-model-float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .asx-model-float > i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .asx-model-float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .asx-model-float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .asx-model-cross { position: absolute; z-index: 3; bottom: 0; left: 50%; width: 28px; height: 28px; line-height: 0; transform: translate(-50%,50%); pointer-events: none; }
+  .asx-community-map { position: relative; height: 270px; border: 1px solid #dfe4ec; border-radius: 14px; background: rgba(255,255,255,.72); animation: asx-model-breathe 7s ease-in-out infinite; }
+  .asx-community-map__hub { position: absolute; z-index: 2; top: 50%; left: 50%; display: grid; width: 92px; height: 92px; place-items: center; border: 1px solid #d7def1; border-radius: 50%; background: #fff; color: #3b4658; box-shadow: 0 16px 32px rgba(64,76,120,.12); font-size: 12px; font-weight: 700; transform: translate(-50%,-50%); }
+  .asx-community-map > i { position: absolute; z-index: 2; width: 30px; height: 30px; border: 6px solid #fff; border-radius: 50%; background: #8196f8; box-shadow: 0 8px 16px rgba(55,93,251,.18); }
+  .asx-community-map > i:nth-of-type(1) { top: 34px; left: 19%; }
+  .asx-community-map > i:nth-of-type(2) { top: 32px; right: 18%; background: #9f81ff; }
+  .asx-community-map > i:nth-of-type(3) { bottom: 38px; left: 17%; background: #4fc5b8; }
+  .asx-community-map > i:nth-of-type(4) { right: 20%; bottom: 34px; background: #f49ab8; }
+  .asx-community-map > b { position: absolute; top: 50%; left: 50%; width: 130px; height: 1px; background: #cbd5f1; transform-origin: left center; }
+  .asx-community-map > b:nth-of-type(1) { transform: rotate(-145deg); }
+  .asx-community-map > b:nth-of-type(2) { transform: rotate(-35deg); }
+  .asx-community-map > b:nth-of-type(3) { transform: rotate(145deg); }
+  .asx-community-map > b:nth-of-type(4) { transform: rotate(35deg); }
+  .asx-programme-board { display: flex; min-height: 270px; flex-direction: column; justify-content: center; gap: 12px; padding: 26px; border: 1px solid #dfe4ec; border-radius: 14px; background: rgba(255,255,255,.72); animation: asx-model-breathe 7s ease-in-out infinite; animation-delay: -3.5s; }
+  .asx-programme-board span { display: grid; grid-template-columns: 48px 1fr 100px; gap: 12px; align-items: center; padding: 14px; border: 1px solid #e2e6ed; border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(50,62,100,.06); }
+  .asx-programme-board b { color: #667085; font-size: 9px; }
+  .asx-programme-board i { height: 7px; border-radius: 999px; background: linear-gradient(90deg,#8fa5ff,#d8e0ff); }
+  .asx-programme-board span:nth-child(2) i { background: linear-gradient(90deg,#a88be8,#eadfff); }
+  .asx-programme-board span:nth-child(3) i { background: linear-gradient(90deg,#57bba9,#d5f6ef); }
+  .asx-programme-board em { color: #6f788a; font-size: 9px; font-style: normal; }
+  .asx-model-decision { margin: 0; padding: 22px 30px; background: rgba(245,248,255,.72); color: #45516a; font-size: 13px; font-weight: 600; text-align: center; }
+  @keyframes asx-model-breathe { 0%,100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes asx-model-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-9px,0); } }
+
+  .asx-boundary { padding: 80px 5%; background: transparent; }
+  .asx-boundary__container { width: min(1200px,100%); margin: 0 auto; }
+  .asx-boundary__header { max-width: 850px; margin: 0 auto 60px; text-align: center; }
+  .asx-boundary__header .asx-eyebrow { margin-bottom: 12px; }
+  .asx-boundary__header h2 { margin: 0; color: var(--heading-dark); font: 500 clamp(38px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .asx-boundary__header h2 span { display: block; background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .asx-boundary__header > p:last-child { max-width: 650px; margin: 14px auto 0; color: var(--subheading-gray); font-size: 17px; line-height: 1.55; }
+  .asx-boundary__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; }
+  .asx-boundary__row { position: relative; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); min-height: 488px; border-bottom: 1px solid #e5e7eb; }
+  .asx-boundary__row:last-child { border-bottom: 0; }
+  .asx-boundary__cell { display: flex; min-width: 0; min-height: 488px; padding: 64px; justify-content: center; }
+  .asx-boundary__row > .asx-boundary__cell:first-child { border-right: 1px solid #e5e7eb; }
+  .asx-boundary__visual { align-items: center; }
+  .asx-boundary__copy { align-items: center; }
+  .asx-boundary__copy > div { width: 100%; }
+  .asx-boundary__eyebrow { display: block; margin-bottom: 16px; color: #5b21b6; font-size: 14px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
+  .asx-boundary__copy h3 { margin: 0 0 20px; color: #111827; font: 500 36px/1.02 var(--font-heading); letter-spacing: -.025em; }
+  .asx-boundary__copy p { margin: 0 0 16px; color: #4b5563; font-size: 18px; line-height: 1.45; }
+  .asx-boundary__copy p:last-child { margin-bottom: 0; }
+  .asx-boundary__stage { position: relative; width: 100%; height: 360px; padding: 42px 24px 24px; overflow: hidden; border-radius: 22px; }
+  .asx-boundary__stage--product { background: linear-gradient(#fdefb8,#fdf7dd 45%,#f5f6f9); }
+  .asx-boundary__stage--review { background: linear-gradient(#cdf3de,#e6f8ee 45%,#f5f6f9); }
+  .asx-boundary__visual-label { position: absolute; top: 22px; left: 18px; z-index: 2; display: inline-flex; padding: 9px 12px; align-items: center; gap: 7px; border: 1px solid #cbeedb; border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(31,41,55,.14); color: #168a55; font: 700 11px/1.2 var(--font-body); }
+  .asx-boundary__stage--review .asx-boundary__visual-label { border-color: #ded2ff; border-radius: 8px; color: #7351cf; }
+  .asx-boundary__visual-label i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .asx-boundary__console { overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .asx-boundary__console-bar { display: flex; height: 42px; padding: 0 14px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9edf3; background: #f8f9fc; }
+  .asx-boundary__console-bar span { display: flex; gap: 5px; }
+  .asx-boundary__console-bar i { width: 7px; height: 7px; border-radius: 50%; background: #d6dbe5; }
+  .asx-boundary__console-bar b { color: #81899a; font-size: 9px; letter-spacing: .04em; }
+  .asx-boundary__console-body { display: flex; min-height: 246px; padding: 28px 20px 20px; flex-direction: column; }
+  .asx-boundary__console-body > small { margin-bottom: 7px; color: #9ca3af; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .asx-boundary__console-body > strong { margin-bottom: 18px; color: #253047; font: 500 18px/1.2 var(--font-heading); }
+  .asx-boundary__console-body > span { display: flex; min-height: 43px; padding: 10px 12px; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #edf0f5; color: #667085; font-size: 11px; }
+  .asx-boundary__console-body > span b { font-weight: 600; }
+  .asx-boundary__console-body > span em { padding: 5px 8px; border-radius: 999px; background: #eefbf4; color: #527063; font-size: 9px; font-style: normal; font-weight: 700; }
+  .asx-boundary__stage--review .asx-boundary__console-body > span em { background: #f3efff; color: #7351cf; }
+  .asx-boundary__notch,
+  .asx-boundary__cross { position: absolute; z-index: 3; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .asx-boundary__notch { left: 50%; }
+  .asx-boundary__notch--top { top: 0; transform: translate(-50%,-50%); }
+  .asx-boundary__notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .asx-boundary__cross { bottom: 0; left: 50%; transform: translate(-50%,50%); }
+  .asx-boundary__notch svg,
+  .asx-boundary__cross svg { width: 28px; height: 28px; overflow: visible; }
+  .asx-boundary__notch path,
+  .asx-boundary__cross path { fill: #e5e7eb; }
+
+  .asx-agenda-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(64px,7vw,88px) 24px clamp(68px,8vw,96px);
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.13) 0%,rgba(124,108,255,.055) 45%,transparent 72%);
+  }
+  .asx-agenda-band::before {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+    content: "";
+    opacity: .24;
+    pointer-events: none;
+  }
+  .asx-agenda-band__inner { width: min(1200px,100%); margin: 0 auto; }
+  .asx-agenda-band__header { max-width: 1040px; margin: 0 auto clamp(40px,5vw,56px); text-align: center; }
+  .asx-agenda-band__header h2 {
+    margin: 0;
+    color: #fff;
+    font: 500 clamp(42px,5.4vw,60px)/1.1 var(--font-heading);
+    letter-spacing: -.04em;
+    background: linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .asx-agenda-grid { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); overflow: hidden; border: 1px solid #2d2d36; border-radius: 14px; background: transparent; }
+  .asx-agenda-card { position: relative; display: flex; grid-column: span 2; min-height: 430px; padding: 32px 30px; flex-direction: column; align-items: stretch; border-right: 1px solid #2d2d36; border-bottom: 1px solid #2d2d36; background: transparent; transition: background .2s ease; }
+  .asx-agenda-card:nth-child(n + 4) { grid-column: span 3; border-bottom: 0; }
+  .asx-agenda-card:nth-child(3),
+  .asx-agenda-card:nth-child(5) { border-right: 0; }
+  .asx-agenda-card:hover { background: rgba(125,141,255,.045); }
+  .asx-agenda-card h3 { margin: 0 0 14px; color: #fff; font-size: 15px; font-weight: 700; line-height: 1.3; letter-spacing: -.01em; }
+  .asx-agenda-card p { max-width: 36ch; margin: 0; color: rgba(255,255,255,.56); font-size: 15px; line-height: 1.5; }
+  .asx-agenda-petal { position: absolute; z-index: 2; left: 0; width: 22px; height: 22px; line-height: 0; pointer-events: none; }
+  .asx-agenda-petal--top { top: 0; transform: translate(-50%,-50%); }
+  .asx-agenda-petal--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .asx-agenda-petal svg { width: 22px; height: 22px; }
+  .asx-agenda-visual { position: relative; display: flex; min-height: 214px; margin-top: 22px; flex: 1; align-items: center; justify-content: center; }
+  .asx-agenda-product { position: relative; width: 100%; max-width: 310px; height: 220px; overflow: hidden; border: 1px solid rgba(255,255,255,.15); border-radius: 14px 14px 0 0; background: linear-gradient(145deg,#111218,#090a0e 65%); box-shadow: 0 18px 42px rgba(0,0,0,.22); color: rgba(255,255,255,.78); font-family: var(--font-body); transform: translateY(2px); }
+  .asx-agenda-product::before { position: absolute; inset: 0 0 auto; height: 1px; background: linear-gradient(90deg,#38bdf8,#7c6cff 55%,#d85aa8); content: ""; }
+  .asx-agenda-product--wide { max-width: 430px; }
+  .asx-agenda-product__bar { display: flex; height: 34px; padding: 0 13px; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); }
+  .asx-agenda-product__bar > span { display: flex; gap: 5px; }
+  .asx-agenda-product__bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,.13); }
+  .asx-agenda-product__bar small { color: rgba(255,255,255,.42); font-size: 9px; }
+  .asx-agenda-product__tabs { display: flex; gap: 5px; padding: 9px 11px 8px; border-bottom: 1px solid rgba(255,255,255,.07); }
+  .asx-agenda-product__tabs span { padding: 5px 9px; border: 1px solid transparent; border-radius: 6px; color: rgba(255,255,255,.38); font-size: 8px; }
+  .asx-agenda-product__tabs span.is-active { border-color: rgba(125,141,255,.28); background: rgba(125,141,255,.1); color: #c5ccff; }
+  .asx-agenda-schedule-list { padding: 7px 11px; }
+  .asx-agenda-schedule-list > div { display: grid; grid-template-columns: 40px 1fr; min-height: 42px; padding: 5px 7px; align-items: center; gap: 9px; border-bottom: 1px solid rgba(255,255,255,.065); }
+  .asx-agenda-schedule-list > div.is-accent { border: 1px solid rgba(125,141,255,.22); border-radius: 7px; background: linear-gradient(90deg,rgba(92,138,255,.1),rgba(164,92,255,.06)); }
+  .asx-agenda-schedule-list time { color: #a8b6ff; font-size: 9px; }
+  .asx-agenda-schedule-list span,
+  .asx-agenda-people span,
+  .asx-agenda-access-list span { display: flex; flex-direction: column; gap: 3px; }
+  .asx-agenda-schedule-list strong,
+  .asx-agenda-outline strong,
+  .asx-agenda-people strong,
+  .asx-agenda-access-list strong { font-size: 9px; font-weight: 500; }
+  .asx-agenda-schedule-list small,
+  .asx-agenda-outline small,
+  .asx-agenda-people small,
+  .asx-agenda-access-list small { color: rgba(255,255,255,.34); font-size: 7.5px; }
+  .asx-agenda-outline { padding: 10px 14px; }
+  .asx-agenda-outline > div { position: relative; display: grid; grid-template-columns: 10px 1fr auto; min-height: 31px; align-items: center; gap: 8px; }
+  .asx-agenda-outline > div > i { width: 8px; height: 8px; border: 1px solid #7d8dff; border-radius: 50%; }
+  .asx-agenda-outline > div > small { letter-spacing: .04em; text-transform: uppercase; }
+  .asx-agenda-outline > div.is-child { padding-left: 24px; }
+  .asx-agenda-outline > div.is-child::before { position: absolute; top: -6px; left: 4px; width: 15px; height: 22px; border-bottom: 1px solid rgba(255,255,255,.13); border-left: 1px solid rgba(255,255,255,.13); border-radius: 0 0 0 5px; content: ""; }
+  .asx-agenda-outline > div.is-break > i { border-color: #38bdf8; border-radius: 2px; }
+  .asx-agenda-stage-board { display: grid; grid-template-columns: repeat(3,1fr); height: 142px; padding: 9px 11px 12px; gap: 7px; }
+  .asx-agenda-stage-board > span { display: flex; padding: 6px; flex-direction: column; gap: 7px; border: 1px solid rgba(255,255,255,.07); border-radius: 7px; background: rgba(255,255,255,.018); }
+  .asx-agenda-stage-board i { display: block; height: 45px; border: 1px solid rgba(92,138,255,.25); border-radius: 5px; background: rgba(92,138,255,.09); }
+  .asx-agenda-stage-board span:nth-child(2) i { border-color: rgba(164,92,255,.25); background: rgba(164,92,255,.09); }
+  .asx-agenda-stage-board span:nth-child(3) i { border-color: rgba(56,189,248,.22); background: rgba(56,189,248,.07); }
+  .asx-agenda-stage-board span i:last-child { height: 57px; }
+  .asx-agenda-people,
+  .asx-agenda-access-list { padding: 8px 13px; }
+  .asx-agenda-people > div,
+  .asx-agenda-access-list > div { display: flex; min-height: 40px; align-items: center; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.065); }
+  .asx-agenda-people > div > i { display: grid; width: 25px; height: 25px; place-items: center; border: 1px solid rgba(125,141,255,.28); border-radius: 50%; background: rgba(125,141,255,.08); color: #c5ccff; font-size: 7px; font-style: normal; }
+  .asx-agenda-people span,
+  .asx-agenda-access-list span { flex: 1; }
+  .asx-agenda-people b { padding: 4px 7px; border: 1px solid rgba(255,255,255,.1); border-radius: 5px; color: rgba(255,255,255,.45); font-size: 7px; font-weight: 500; }
+  .asx-agenda-access-list > div > i { position: relative; width: 24px; height: 13px; border-radius: 999px; background: rgba(255,255,255,.1); }
+  .asx-agenda-access-list > div > i::after { position: absolute; top: 2px; left: 2px; width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.38); content: ""; }
+  .asx-agenda-access-list > div > i.is-on { background: rgba(125,141,255,.3); }
+  .asx-agenda-access-list > div > i.is-on::after { left: 13px; background: #a8b6ff; }
+  .asx-agenda-access-list > b { display: block; height: 3px; margin-top: 11px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.08); }
+  .asx-agenda-access-list > b > i { display: block; width: 70%; height: 100%; background: linear-gradient(90deg,#5c8aff,#a45cff); }
+
+  .asx-coordinate {
+    display: flex;
+    justify-content: center;
+    padding: 32px 24px;
+    background:
+      radial-gradient(circle at 88% 15%,rgba(126,104,238,.09),transparent 34%),
+      radial-gradient(circle at 10% 100%,rgba(75,192,219,.07),transparent 30%),
+      #fff;
+    color: #22272f;
+  }
+  .asx-coordinate__inner {
+    display: grid;
+    width: min(1120px,100%);
+    padding: 48px;
+    grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
+    gap: 36px;
+    align-items: center;
+  }
+  .asx-coordinate__left { min-width: 0; max-width: 560px; }
+  .asx-coordinate__title {
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+    color: transparent;
+    font: 500 clamp(36px,5vw,56px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+    background: linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .asx-coordinate__title span { font-size: inherit; font-weight: inherit; }
+  .asx-coordinate__title-line { display: block; white-space: normal; }
+  .asx-coordinate__copy { margin: 16px 0 32px; color: #374151; font: 500 15px/1.5 var(--font-body); }
+  .asx-coordinate__actions { display: flex; margin-top: 4px; align-items: center; gap: 12px; }
+  .asx-coordinate__btn { display: inline-flex; padding: 10px 20px; align-items: center; justify-content: center; border-radius: 6px; font: 600 13.5px/1.4 var(--font-body); text-decoration: none; transition: all .2s ease; }
+  .asx-coordinate__btn--dark { background: #27272a; color: #fff; }
+  .asx-coordinate__btn--dark:hover { background: #18181b; }
+  .asx-coordinate__btn--light { border: 1px solid #e5e7eb; background: #f3f4f6; color: #374151; }
+  .asx-coordinate__btn--light:hover { background: #e5e7eb; }
+  .asx-coordinate__right { width: 100%; max-width: 500px; justify-self: end; }
+  .asx-coordinate__showcase { position: relative; isolation: isolate; width: 100%; height: clamp(320px,32vw,350px); overflow: hidden; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: linear-gradient(155deg,#fff8dc 0%,#fffdf4 48%,#fff 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+  .asx-coordinate__showcase::before { position: absolute; z-index: -1; inset: auto 6% -24% 10%; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); content: ""; filter: blur(24px); }
+  .asx-coordinate__shot { position: absolute; overflow: hidden; aspect-ratio: 1117 / 837; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }
+  .asx-coordinate__shot--overview { z-index: 1; top: 30px; left: 20px; width: 77%; }
+  .asx-coordinate__shot--detail { z-index: 2; right: 18px; bottom: 24px; width: 70%; }
+  .asx-coordinate__chrome { display: flex; height: 30px; padding: 0 10px; align-items: center; justify-content: space-between; border-bottom: 1px solid #edf0f5; background: #f8f9fc; }
+  .asx-coordinate__chrome > span { display: flex; gap: 4px; }
+  .asx-coordinate__chrome i { display: block; width: 6px; height: 6px; border-radius: 50%; background: #cbd2df; }
+  .asx-coordinate__chrome small { color: #7b8494; font-size: 6.5px; font-weight: 700; }
+  .asx-coordinate__tabs { display: flex; gap: 5px; padding: 8px 10px 6px; border-bottom: 1px solid #edf0f5; }
+  .asx-coordinate__tabs span { padding: 4px 7px; border-radius: 5px; color: #8a93a4; font-size: 6px; }
+  .asx-coordinate__tabs .is-active { border: 1px solid #d9e2ff; background: #eff3ff; color: #4163ed; font-weight: 700; }
+  .asx-coordinate__team-list { padding: 5px 9px 10px; }
+  .asx-coordinate__team-list > div { display: grid; grid-template-columns: 24px 1fr auto; min-height: 37px; align-items: center; gap: 7px; border-bottom: 1px solid #edf0f5; }
+  .asx-coordinate__team-list > div:last-child { border-bottom: 0; }
+  .asx-coordinate__team-list > div > i { display: grid; width: 21px; height: 21px; place-items: center; border-radius: 6px; background: #eff3ff; color: #4163ed; font-size: 6px; font-style: normal; font-weight: 800; }
+  .asx-coordinate__team-list span { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+  .asx-coordinate__team-list strong { color: #2c3443; font-size: 7px; font-weight: 700; }
+  .asx-coordinate__team-list small { overflow: hidden; color: #8a93a4; font-size: 5.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .asx-coordinate__team-list b { padding: 3px 5px; border-radius: 999px; background: #f3f5f9; color: #6f7a8c; font-size: 5px; }
+  .asx-coordinate__detail-heading { display: flex; padding: 11px 12px 8px; align-items: center; justify-content: space-between; }
+  .asx-coordinate__detail-heading span { color: #283142; font-size: 8px; font-weight: 800; }
+  .asx-coordinate__detail-heading b { padding: 3px 6px; border-radius: 999px; background: #eefaf6; color: #238866; font-size: 5px; }
+  .asx-coordinate__detail-grid { display: grid; padding: 0 12px 8px; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .asx-coordinate__detail-grid span { display: flex; min-height: 39px; padding: 7px; flex-direction: column; justify-content: center; gap: 3px; border: 1px solid #e8ecf3; border-radius: 7px; background: #fafbfe; }
+  .asx-coordinate__detail-grid small { color: #8a93a4; font-size: 5.5px; }
+  .asx-coordinate__detail-grid b { color: #3a4658; font-size: 7px; }
+  .asx-coordinate__detail-note { display: flex; margin: 0 12px 10px; padding: 7px 8px; align-items: center; gap: 7px; border-radius: 6px; background: #26345f; color: #eef2ff; font-size: 5.5px; }
+  .asx-coordinate__detail-note i { width: 5px; height: 5px; border-radius: 50%; background: #83e8d2; box-shadow: 0 0 0 3px rgba(131,232,210,.14); }
+  .asx-coordinate__status,
+  .asx-coordinate__publish { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; font: 700 13px/1 var(--font-body); box-shadow: 0 8px 22px rgba(42,66,158,.18); }
+  .asx-coordinate__status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; background: #f0f4ff; color: #4163ed; }
+  .asx-coordinate__status svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  .asx-coordinate__publish { right: 16px; bottom: 16px; padding: 12px 16px; background: #4163ed; color: #fff; }
+  .asx-coordinate__cursor { position: absolute; z-index: 6; right: 20px; bottom: 50px; width: 23px; height: 27px; fill: #182033; stroke: #fff; stroke-width: 1.2; filter: drop-shadow(0 2px 3px rgba(17,24,39,.24)); }
+
+  .asx-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .asx-journey-workflow {
+    padding: clamp(110px,12vw,160px) 24px;
+    background: linear-gradient(135deg,rgba(255,255,255,.2) 0%,rgba(246,248,255,.52) 52%,rgba(255,255,255,.18) 100%);
+  }
+  .asx-journey-workflow__inner { width: min(1218px,100%); margin-inline: auto; }
+  .asx-journey-workflow__header { display: flex; max-width: 1000px; margin: 0 auto 64px; flex-direction: column; align-items: center; text-align: center; }
+  .asx-journey-workflow__header h2 {
+    max-width: 950px;
+    margin: 0;
+    font: 500 60px/66px var(--font-heading);
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .asx-journey-steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .asx-journey-steps > li { position: relative; display: block; padding: 0; border: 0; background: transparent; }
+  .asx-journey-steps details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--asx-journey-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg,var(--asx-journey-tint) 0%,#fff 82%);
+    box-shadow: 0 8px 24px rgba(31,41,55,.04);
+    transition: border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease;
+  }
+  .asx-journey-steps > li:nth-child(1) { --asx-journey-tint: #fff8dc; --asx-journey-border: #f0dfa6; }
+  .asx-journey-steps > li:nth-child(2) { --asx-journey-tint: #edf7ff; --asx-journey-border: #d4e7f7; }
+  .asx-journey-steps > li:nth-child(3) { --asx-journey-tint: #f3efff; --asx-journey-border: #e2d8fa; }
+  .asx-journey-steps > li:nth-child(4) { --asx-journey-tint: #eefbf4; --asx-journey-border: #d4efdf; }
+  .asx-journey-steps > li:nth-child(5) { --asx-journey-tint: #fff0f7; --asx-journey-border: #f4d6e5; }
+  .asx-journey-steps > li:nth-child(6) { --asx-journey-tint: #eef2ff; --asx-journey-border: #d7def8; }
+  .asx-journey-steps summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0,1fr);
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease;
+  }
+  .asx-journey-steps summary::-webkit-details-marker { display: none; }
+  .asx-journey-steps summary:hover { background: rgba(255,255,255,.28); }
+  .asx-journey-steps details:not([open]):hover { box-shadow: 0 12px 30px rgba(31,41,55,.08); transform: translateY(-2px); }
+  .asx-journey-steps summary > span { color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .asx-journey-step__content { display: flex; flex-direction: column; }
+  .asx-journey-steps details:not([open]) .asx-journey-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .asx-journey-step__content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .asx-journey-step__content p { display: none; }
+  .asx-journey-steps details:not([open]) .asx-journey-step__content p { display: -webkit-box; max-width: 460px; margin: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .asx-journey-step__content ul { display: none; }
+  .asx-journey-step__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(17,24,39,.2);
+    border-radius: 50%;
+    background: rgba(255,255,255,.78);
+    color: #111827;
+    cursor: pointer;
+    transition: transform .25s ease,background .2s ease,border-color .2s ease;
+  }
+  .asx-journey-step__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .asx-journey-step__arrow:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .asx-journey-step__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-journey-steps details[open] { display: flex; margin: 0; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg,var(--asx-journey-tint) 0%,#fff 72%); }
+  .asx-journey-steps details[open] summary { display: grid; flex: 0 0 55%; grid-template-columns: 44px minmax(0,1fr); min-height: 0; padding: 64px 40px 64px 28px; align-items: start; gap: 14px; background: transparent; }
+  .asx-journey-steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .asx-journey-steps details[open] summary > span { color: #050505; font-size: 26px; line-height: 1; }
+  .asx-journey-steps details[open] .asx-journey-step__content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .asx-journey-steps details[open] .asx-journey-step__content p { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font-size: 17px; line-height: 1.6; }
+  .asx-journey-steps details[open] .asx-journey-step__content ul { display: flex; margin: 0; padding: 0; flex-direction: column; gap: 18px; list-style: none; }
+  .asx-journey-steps details[open] .asx-journey-step__content li { display: flex; padding: 0; align-items: center; gap: 14px; border: 0; background: transparent; color: #111; font-size: 16px; font-weight: 500; }
+  .asx-journey-steps details[open] .asx-journey-step__content li i { font-size: 16px; font-style: normal; }
+  .asx-journey-steps details[open] .asx-journey-step__arrow { top: 28px; transform: rotate(180deg); }
+  .asx-journey-step__visual { display: none; margin: 0; opacity: 0; }
+  .asx-journey-steps details[open] .asx-journey-step__visual { display: flex; flex: 0 0 45%; max-height: none; padding: 40px 88px 40px 0; align-items: center; justify-content: flex-start; overflow: visible; opacity: 1; }
+  .asx-journey-step__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+
+  .asx-event-day { padding: 100px 24px; background: transparent; }
+  .asx-event-day__container { display: flex; max-width: 1200px; margin: 0 auto; align-items: stretch; gap: 80px; }
+  .asx-event-day__left { flex: 0 0 40%; }
+  .asx-event-day__sticky { position: sticky; top: 120px; }
+  .asx-event-day__eyebrow { display: inline-flex; margin-bottom: 24px; padding: 6px 12px; align-items: center; gap: 8px; border-radius: 99px; background: #f4f5f7; color: var(--heading-dark); font: 600 13px/1.2 var(--font-body); text-transform: none; letter-spacing: 0; }
+  .asx-event-day__eyebrow svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-event-day__left h2 { margin: 0 0 24px; color: var(--heading-dark); font: 500 clamp(36px,4vw,48px)/1.2 var(--font-heading); letter-spacing: -.02em; }
+  .asx-event-day__left h2 span { background: linear-gradient(96deg,#5f6675,#9aa1ae); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .asx-event-day__left p { margin: 0; color: var(--subheading-gray); font: 400 18px/1.6 var(--font-body); }
+  .asx-event-day__cta { display: inline-flex; margin-top: 28px; padding: 14px 24px; align-items: center; gap: 10px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1.2 var(--font-body); text-decoration: none; transition: background .2s ease,transform .2s ease; }
+  .asx-event-day__cta:hover { background: #000; transform: translateY(-1px); }
+  .asx-event-day__cta svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-event-day__cards { display: flex; flex: 1; flex-direction: column; gap: 32px; }
+  .asx-event-card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .asx-event-card:nth-child(1) { top: 80px; }
+  .asx-event-card:nth-child(2) { top: 100px; }
+  .asx-event-card:nth-child(3) { top: 120px; }
+  .asx-event-card:nth-child(4) { top: 140px; }
+  .asx-event-card:hover { transform: translateY(-4px); }
+  .asx-event-card__header { display: flex; margin-bottom: 24px; align-items: flex-start; gap: 16px; }
+  .asx-event-card__number { display: flex; width: 40px; height: 40px; flex: 0 0 40px; align-items: center; justify-content: center; border-radius: 50%; background: #111; color: #fff; font: 700 16px/1 var(--font-heading); }
+  .asx-event-card__text h3 { margin: 0 0 8px; color: var(--heading-dark); font: 700 20px/1.2 var(--font-heading); }
+  .asx-event-card__text p { margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .asx-event-card__visual { display: flex; padding: 18px; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .asx-event-card:nth-child(1) .asx-event-card__visual { background: linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%); }
+  .asx-event-card:nth-child(2) .asx-event-card__visual { background: linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%); }
+  .asx-event-card:nth-child(3) .asx-event-card__visual { background: linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%); }
+  .asx-event-card:nth-child(4) .asx-event-card__visual { background: linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%); }
+  .asx-event-card__shot { position: relative; width: 100%; height: 280px; }
+  .asx-event-card__shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .asx-event-card__shot--arrival > img { object-position: 50% 16%; }
+  .asx-event-card__shot--partners > img { object-position: 50% 10%; }
+  .asx-event-card__shot--programme > img { object-position: 50% 16%; }
+  .asx-event-card__shot--communication > img { object-position: 50% 50%; }
+  .asx-event-card__status,
+  .asx-event-card__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 12px/1 var(--font-body); box-shadow: 0 10px 24px rgba(17,24,39,.16); }
+  .asx-event-card__status { top: 0; left: 0; padding: 9px 12px; gap: 7px; border: 1px solid #dfe4f2; background: #fff; color: #253047; }
+  .asx-event-card__status--success { border-color: #ccebd8; background: #edfbf3; color: #18864b; }
+  .asx-event-card__status svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-event-card__action { right: 10px; bottom: 0; padding: 11px 15px; background: #4b65f6; color: #fff; }
+  .asx-event-card__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: asx-event-card-tap 2.4s ease-in-out infinite; }
+  @keyframes asx-event-card-tap { 0%,65%,100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+
+  .asx-use-cases { padding: 112px 24px; background: var(--surface-light); }
+  .asx-use-cases__inner { width: min(1080px,100%); margin: 0 auto; }
+  .asx-use-cases__header { display: flex; margin-bottom: 32px; flex-direction: column; align-items: center; text-align: center; }
+  .asx-use-cases__header .asx-eyebrow { margin-bottom: 12px; }
+  .asx-use-cases__title { max-width: 880px; margin: 0 0 16px; color: #111827; font: 500 clamp(36px,4.5vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .asx-use-cases__title span { background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .asx-use-cases__subtitle { max-width: 700px; margin: 0; color: #6b7280; font-size: 17.5px; font-weight: 500; line-height: 1.5; }
+  .asx-use-cases__tabs { display: flex; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; justify-content: center; gap: 4px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .asx-use-cases__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease; }
+  .asx-use-cases__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .asx-use-cases__tab.is-active { border-color: #dbe4f0; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: var(--brand-blue); }
+  .asx-use-cases__tab:focus-visible { outline: 3px solid rgba(55,93,251,.24); outline-offset: 3px; }
+  .asx-use-cases__box { min-width: 0; }
+  .asx-use-cases__panel { --asx-use-tint: #edf7ff; --asx-use-border: #d4e7f7; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: 52px 64px; align-items: center; gap: 64px; border: 1px solid var(--asx-use-border); border-radius: 28px; background: linear-gradient(135deg,var(--asx-use-tint) 0%,#fff 72%); }
+  .asx-use-cases.is-ready .asx-use-cases__panel { display: none; }
+  .asx-use-cases.is-ready .asx-use-cases__panel.is-active { display: grid; animation: asx-use-case-enter .4s ease both; }
+  .asx-use-cases__panel--chapter { --asx-use-tint: #eefbf4; --asx-use-border: #d4efdf; }
+  .asx-use-cases__panel--awards { --asx-use-tint: #fff8dc; --asx-use-border: #f0dfa6; }
+  .asx-use-cases__panel--tradeshow { --asx-use-tint: #f3efff; --asx-use-border: #e2d8fa; }
+  .asx-use-cases__content h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .asx-use-cases__content > p { margin: 0 0 32px; color: #4b5563; font-size: 16px; font-weight: 500; line-height: 1.6; }
+  .asx-use-cases__list-label { display: block; margin-bottom: 18px; color: #9ca3af; font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .asx-use-cases__content ul { display: flex; margin: 0; padding: 0; flex-direction: column; gap: 12px; list-style: none; }
+  .asx-use-cases__content li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font-size: 14.5px; font-weight: 500; line-height: 1.4; }
+  .asx-use-cases__content li svg { width: 14px; height: 14px; margin-top: 2px; flex: 0 0 14px; fill: none; stroke: #9ca3af; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-use-cases__visual { min-width: 0; }
+  .asx-use-cases__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .asx-use-cases__showcase::before { position: absolute; z-index: -1; inset: 10% 7% -8%; border-radius: 12px; background: var(--asx-use-border); content: ""; filter: blur(22px); opacity: .48; }
+  .asx-use-cases__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; padding: 9px 12px; align-items: center; gap: 7px; border: 1px solid #cddcff; border-radius: 10px; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); color: #3158d4; font: 700 11px/1.2 var(--font-body); }
+  .asx-use-cases__showcase--chapter .asx-use-cases__visual-label { border-color: #cbeedb; border-radius: 999px; background: #eefbf5; box-shadow: 0 8px 22px rgba(22,138,85,.15); color: #168a55; }
+  .asx-use-cases__showcase--awards .asx-use-cases__visual-label { border-color: #f2dfad; background: #fff8e8; box-shadow: 0 8px 22px rgba(154,107,18,.15); color: #9a6b12; }
+  .asx-use-cases__showcase--tradeshow .asx-use-cases__visual-label { border-color: #ded2ff; border-radius: 7px; background: #f5f1ff; box-shadow: 0 8px 22px rgba(115,81,207,.16); color: #7351cf; }
+  .asx-use-cases__visual-label > i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .asx-use-cases__art { overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .asx-use-cases__art-bar { display: flex; height: 42px; padding: 0 14px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9edf3; background: #f8f9fc; }
+  .asx-use-cases__art-bar span { display: flex; gap: 5px; }
+  .asx-use-cases__art-bar i { width: 7px; height: 7px; border-radius: 50%; background: #d6dbe5; }
+  .asx-use-cases__art-bar b { color: #81899a; font-size: 9px; letter-spacing: .04em; }
+  .asx-use-cases__art-body { display: flex; min-height: 246px; padding: 42px 20px 20px; flex-direction: column; }
+  .asx-use-cases__art-body > small { margin-bottom: 7px; color: #9ca3af; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .asx-use-cases__art-body > strong { margin-bottom: 18px; color: #253047; font: 500 18px/1.2 var(--font-heading); }
+  .asx-use-cases__art-body > span { display: flex; min-height: 43px; padding: 10px 12px; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #edf0f5; color: #667085; font-size: 11px; }
+  .asx-use-cases__art-body > span b { font-weight: 600; }
+  .asx-use-cases__art-body > span em { padding: 5px 8px; border-radius: 999px; background: var(--asx-use-tint); color: #5269bd; font-size: 9px; font-style: normal; font-weight: 700; }
+  .asx-use-cases__panel--chapter .asx-use-cases__art-body > span em { color: #168a55; }
+  .asx-use-cases__panel--awards .asx-use-cases__art-body > span em { color: #9a6b12; }
+  .asx-use-cases__panel--tradeshow .asx-use-cases__art-body > span em { color: #7351cf; }
+  @keyframes asx-use-case-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .asx-links { padding: clamp(58px,4.5vw,76px) 24px clamp(52px,4vw,68px); scroll-margin-top: 68px; background: linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.82) 62%,#fff); }
+  .asx-links__shell { width: min(1140px,100%); margin: 0 auto; }
+  .asx-links__heading { padding: 0 24px clamp(52px,5vw,65px); text-align: center; }
+  .asx-links__heading .asx-eyebrow { margin-bottom: 12px; }
+  .asx-links__heading h2 { max-width: 1092px; margin: 0 auto; color: #111827; font: 500 clamp(38px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .asx-links__heading h2 span { display: block; }
+  .asx-links__heading h2 span:last-child { background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .asx-links__heading > p:last-child { max-width: 650px; margin: 14px auto 0; color: var(--subheading-gray); font-size: 17px; line-height: 1.55; }
+  .asx-links__grid { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: 1px solid var(--surface-card-border); }
+  .asx-links__card { position: relative; min-height: 254px; padding: 28px; }
+  .asx-links__card + .asx-links__card { border-left: 1px solid var(--surface-card-border); }
+  .asx-links__icon { display: inline-flex; width: 30px; height: 30px; margin-bottom: 28px; align-items: center; justify-content: center; color: var(--brand-blue); }
+  .asx-links__icon svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .asx-links__card h3 { min-height: 48px; margin: 0 0 28px; font: 500 21px/1.15 var(--font-heading); }
+  .asx-links__card h3 a { color: var(--heading-dark); text-decoration: none; }
+  .asx-links__card h3 a::after { position: absolute; inset: 0; content: ""; }
+  .asx-links__card p { margin: 14px 0 0; color: var(--body-gray); font-size: 15px; line-height: 1.4; }
+  .asx-links__card { transition: background-color 180ms ease; }
+  .asx-links__card:hover { background: rgba(238,243,255,.58); }
+  .asx-links__card:hover h3 a { color: var(--brand-blue); }
+  .asx-links__notch,
+  .asx-links__cross { position: absolute; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .asx-links__notch { top: 0; transform: translate(-50%,-50%); }
+  .asx-links__notch--1 { left: 25%; }
+  .asx-links__notch--2 { left: 50%; }
+  .asx-links__notch--3 { left: 75%; }
+  .asx-links__cross { top: 0; left: 0; transform: translate(-50%,-50%); }
+  .asx-links__notch svg,
+  .asx-links__cross svg { width: 28px; height: 28px; overflow: visible; }
+  .asx-links__notch path,
+  .asx-links__cross path { fill: var(--surface-card-border); }
+
+  .asx-demo { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; }
+  .asx-demo__card { position: relative; display: flex; min-height: 536px; padding: 60px 40px; align-items: center; gap: 40px; overflow: hidden; border-radius: 24px; background: #0f1629; text-align: left; }
+  .asx-demo__glow { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .asx-demo__glow--one { top: -100px; left: -50px; width: 400px; height: 400px; background: rgba(55,93,251,.2); }
+  .asx-demo__glow--two { right: -30px; bottom: -80px; width: 300px; height: 300px; background: rgba(159,129,255,.15); }
+  .asx-demo__content { position: relative; z-index: 2; display: flex; min-width: 0; flex: 1; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .asx-demo__eyebrow { display: inline-flex; padding: 8px 14px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.72); font: 600 13px/18px var(--font-body); letter-spacing: .04em; text-transform: uppercase; }
+  .asx-demo__title { margin: 0; color: #fff; font: 500 48px/1.15 var(--font-heading); letter-spacing: -1px; }
+  .asx-demo__desc { margin: 0; color: rgba(255,255,255,.65); font: 400 18px/28px var(--font-body); letter-spacing: -.3px; }
+  .asx-demo__proof-row { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
+  .asx-demo__proof-row span { display: inline-flex; padding: 9px 12px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; background: rgba(255,255,255,.06); color: rgba(255,255,255,.74); font: 500 13px/18px var(--font-body); }
+  .asx-demo__button { display: inline-flex; padding: 12px 28px; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; background: var(--brand-blue); box-shadow: 0 4px 20px rgba(55,93,251,.35); color: #fff; font: 600 15px/24px var(--font-body); letter-spacing: -.3px; text-decoration: none; transition: background .3s,transform .3s,box-shadow .3s; }
+  .asx-demo__button:hover { background: var(--brand-blue-hover); box-shadow: 0 6px 28px rgba(55,93,251,.4); transform: translateY(-1px); }
+  .asx-demo__visual { position: relative; z-index: 1; width: 100%; height: 380px; flex: 0 0 45%; animation: asx-demo-float 4s ease-in-out infinite; }
+  .asx-demo-board { position: absolute; top: 74px; left: 22px; width: 72%; overflow: hidden; border: 1px solid #dce3f1; border-radius: 12px; background: #fff; box-shadow: 0 20px 46px rgba(3,8,24,.36); }
+  .asx-demo-board__bar { display: flex; height: 40px; padding: 0 13px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8ecf4; background: #f8f9fc; }
+  .asx-demo-board__bar span { display: flex; gap: 5px; }
+  .asx-demo-board__bar i { width: 7px; height: 7px; border-radius: 50%; background: #d2d8e4; }
+  .asx-demo-board__bar b { color: #7f899b; font-size: 8px; letter-spacing: .04em; }
+  .asx-demo-board__body { padding: 20px 18px 16px; }
+  .asx-demo-board__body > small { display: block; margin-bottom: 6px; color: #9aa3b2; font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+  .asx-demo-board__body > strong { display: block; margin-bottom: 12px; color: #263149; font: 500 16px/1.2 var(--font-heading); }
+  .asx-demo-board__body > div { display: flex; min-height: 38px; padding: 8px 6px; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #edf0f5; color: #6f7889; font-size: 10px; }
+  .asx-demo-board__body > div b { padding: 4px 7px; border-radius: 999px; background: #edf8f4; color: #41735f; font-size: 8px; }
+  .asx-demo-audience { position: absolute; z-index: 3; top: 26px; right: 6px; width: 194px; padding: 14px; border: 1px solid rgba(255,255,255,.6); border-radius: 12px; background: linear-gradient(145deg,#89bbff,#c4e4ff); box-shadow: 0 16px 34px rgba(3,8,24,.28); }
+  .asx-demo-audience small,
+  .asx-demo-review small { display: block; margin-bottom: 9px; color: #53627a; font-size: 7px; font-weight: 800; letter-spacing: .09em; }
+  .asx-demo-audience > div { display: flex; margin-bottom: 9px; }
+  .asx-demo-audience i { display: grid; width: 38px; height: 38px; margin-right: -5px; place-items: center; border: 2px solid rgba(255,255,255,.88); border-radius: 50%; background: linear-gradient(145deg,#536ed8,#202d5d); color: #fff; font-size: 8px; font-style: normal; font-weight: 700; }
+  .asx-demo-audience strong { color: #253047; font-size: 9px; line-height: 1.3; }
+  .asx-demo-review { position: absolute; z-index: 4; right: 4px; bottom: 42px; width: 178px; padding: 15px; border: 1px solid #dbe2ef; border-radius: 11px; background: #fff; box-shadow: 0 16px 34px rgba(3,8,24,.3); }
+  .asx-demo-review strong { display: block; margin-bottom: 12px; color: #263149; font: 500 13px/1.25 var(--font-heading); }
+  .asx-demo-review span { display: flex; align-items: center; gap: 7px; color: #657084; font-size: 8px; }
+  .asx-demo-review span i { width: 7px; height: 7px; border-radius: 50%; background: #31b878; box-shadow: 0 0 0 4px rgba(49,184,120,.12); }
+  .asx-demo-action { position: absolute; z-index: 5; right: 14px; bottom: 6px; padding: 10px 15px; border-radius: 7px; background: var(--brand-blue); box-shadow: 0 8px 20px rgba(55,93,251,.38); color: #fff; font-size: 10px; font-weight: 700; }
+  @keyframes asx-demo-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  .asx-faq { width: 100%; padding: 80px 24px; background: transparent; }
+  .asx-faq__shell { display: grid; width: 100%; max-width: 1140px; margin: 0 auto; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .asx-faq__sidebar { position: sticky; top: 6rem; }
+  .asx-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; margin-bottom: 20px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .asx-faq__sidebar h2 { margin: 0 0 20px; color: #000; font: 500 44px/1.1 "Creato Display", var(--font-heading); letter-spacing: -1px; }
+  .asx-faq__sidebar > p { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .asx-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .asx-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .asx-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: associations-faq; }
+  .asx-faq__item { counter-increment: associations-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .asx-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .asx-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font: 500 1.0625rem/1.35 "Creato Display", var(--font-heading); cursor: pointer; list-style: none; }
+  .asx-faq__question::-webkit-details-marker { display: none; }
+  .asx-faq__question strong { font-weight: 500; }
+  .asx-faq__question strong::before { content: counter(associations-faq) ". "; }
+  .asx-faq__icon { position: relative; width: 18px; height: 18px; flex-shrink: 0; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .asx-faq__icon::before,
+  .asx-faq__icon::after { position: absolute; top: 50%; left: 50%; background: #000; content: ""; transform: translate(-50%,-50%); }
+  .asx-faq__icon::before { width: 14px; height: 2px; }
+  .asx-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .asx-faq__item[open] .asx-faq__icon { transform: scale(.9); }
+  .asx-faq__item[open] .asx-faq__icon::after { opacity: 0; }
+  .asx-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .asx-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+
+  @media (max-width: 1120px) {
+    .asx-hero { padding: 140px 20px 56px; }
+    .asx-hero__grid { grid-template-columns: minmax(0,1fr) minmax(0,460px); gap: 32px; }
+    .asx-hero__title { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }
+    .asx-hero__lead { max-width: 520px; }
+  }
+
+  @media (max-width: 1024px) {
+    .asx-faq__shell { grid-template-columns: 1fr; gap: 40px; }
+    .asx-faq__sidebar { position: static; }
+    .asx-faq__sidebar h2 { font-size: 32px; }
+    .asx-demo__card { padding: 60px 24px; }
+    .asx-demo__title { font-size: 36px; }
+    .asx-demo__desc { font-size: 16px; }
+    .asx-demo__visual { flex-basis: 40%; }
+    .asx-links__grid { grid-template-columns: repeat(2,1fr); }
+    .asx-links__card:nth-of-type(odd) { border-left: 0; }
+    .asx-links__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border); }
+    .asx-links__notch,
+    .asx-links__cross { display: none; }
+    .asx-use-cases__panel,
+    .asx-use-cases.is-ready .asx-use-cases__panel.is-active { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+  }
+
+  @media (max-width: 992px) {
+    .asx-event-day__container { flex-direction: column; gap: 40px; }
+    .asx-event-day__left { width: 100%; flex: none; }
+    .asx-event-day__sticky { position: static; }
+    .asx-event-day__left h2 { max-width: 760px; }
+    .asx-event-day__left p { max-width: 700px; }
+    .asx-event-card { padding: 32px 24px; }
+    .asx-event-card__header { flex-direction: column; gap: 16px; }
+    .asx-event-card__visual { padding: 14px; }
+    .asx-event-card__shot { height: 240px; }
+    .asx-event-card__status,
+    .asx-event-card__action { font-size: 11px; }
+  }
+
+  @media (max-width: 960px) {
+    .asx-hero { padding: 130px 20px 48px; }
+    .asx-hero::after { display: none; }
+    .asx-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .asx-hero__content { align-items: center; text-align: center; }
+    .asx-hero__title,
+    .asx-hero__lead { max-width: 760px; }
+    .asx-hero__title { font-size: 42px; line-height: 1.1; }
+    .asx-hero__visual { width: min(760px,100%); margin: 0 auto; }
+    .asx-hero__visual-card { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .asx-hero__visual-inner { border-radius: 16px; }
+    .asx-hero__points,
+    .asx-actions { justify-content: center; }
+  }
+
+  @media (max-width: 900px) {
+    .asx-journey-workflow__header h2 { font-size: 52px; line-height: 1.05; }
+    .asx-boundary { padding: 72px 24px; }
+    .asx-boundary__row { display: flex; min-height: 0; flex-direction: column; }
+    .asx-boundary__cell { min-height: 0; padding: 48px; }
+    .asx-boundary__row > .asx-boundary__cell:first-child { border-right: 0; border-bottom: 1px solid #e5e7eb; }
+    .asx-boundary__notch,
+    .asx-boundary__cross { display: none; }
+    .asx-model-row { display: flex; flex-direction: column; }
+    .asx-model-cell { min-height: 0; padding: 3rem 1.5rem; }
+    .asx-model-row .asx-model-cell:first-child { border-right: 0; }
+    .asx-model-content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .asx-model-visual { order: 2; min-height: 430px; }
+    .asx-agenda-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .asx-agenda-card,
+    .asx-agenda-card:nth-child(n + 4) { grid-column: auto; min-height: 280px; border-right: 1px solid #2d2d36; border-bottom: 1px solid #2d2d36; }
+    .asx-agenda-card:nth-child(even) { border-right: 0; }
+    .asx-agenda-card:last-child { grid-column: 1 / -1; border-right: 0; border-bottom: 0; }
+    .asx-agenda-petal { display: none; }
+    .asx-agenda-visual { min-height: 190px; }
+    .asx-coordinate__inner { grid-template-columns: 1fr; gap: 32px; }
+    .asx-coordinate__left,
+    .asx-coordinate__right { max-width: none; }
+  }
+
+  @media (max-width: 767px) {
+    .asx-shell { width: min(calc(100% - 32px),640px); }
+    .asx-section { padding-block: 64px; }
+    .asx-faq { padding: 56px 16px; }
+    .asx-faq__sidebar h2 { font-size: 28px; }
+    .asx-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .asx-faq__question { padding: 18px 0; font-size: .9375rem; }
+    .asx-heading { margin-bottom: 30px; }
+    .asx-heading h2 { font-size: clamp(32px,10vw,42px); }
+    .asx-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .asx-hero__grid { gap: 34px; padding-bottom: 30px; }
+    .asx-hero__title { font-size: 38px; line-height: 1.2; letter-spacing: 0; }
+    .asx-hero__lead { font-size: 15px; line-height: 1.7; }
+    .asx-hero__badge { font-size: 16px; line-height: 1.1; }
+    .asx-hero__points { justify-content: center; }
+    .asx-hero__points li { font-size: 13px; }
+    .asx-actions { display: grid; width: 100%; }
+    .asx-actions .asx-button { width: 100%; }
+    .asx-button { width: 100%; }
+    .asx-hero__visual-card { padding: 10px; border-radius: 18px; }
+    .asx-hero__visual-inner { height: 360px; border-radius: 14px; }
+    .asx-hero-phone { top: 24px; left: 10px; transform: scale(.72); transform-origin: top left; }
+    .asx-hero-access { top: 90px; left: 90px; transform: scale(.72); transform-origin: top left; }
+    .asx-hero-pulse { top: 30px; right: 6px; transform: scale(.72); transform-origin: top right; }
+    .asx-hero-app { right: 0; bottom: 10px; transform: scale(.72); transform-origin: bottom right; }
+    .asx-rail__inner { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .asx-links__grid { grid-template-columns: 1fr; }
+    .asx-links { padding: 64px 16px 48px; }
+    .asx-links__heading { padding: 0 0 44px; }
+    .asx-links__heading h2 { font-size: clamp(34px,10vw,42px); }
+    .asx-links__heading > p:last-child { font-size: 16px; }
+    .asx-links__card { min-height: 0; padding: 28px 20px; }
+    .asx-links__card + .asx-links__card,
+    .asx-links__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border); border-left: 0; }
+    .asx-links__card h3 { min-height: 0; margin-bottom: 16px; }
+    .asx-links__card p { margin-top: 0; }
+    .asx-journey-workflow { padding: 76px 20px; }
+    .asx-journey-workflow__header { margin-bottom: 46px; }
+    .asx-journey-workflow__header h2 { font-size: 43px; line-height: 1.03; letter-spacing: -1.7px; }
+    .asx-journey-steps summary,
+    .asx-journey-steps summary:hover { grid-template-columns: 26px minmax(0,1fr); min-height: 96px; padding: 18px 62px 18px 14px; gap: 10px; }
+    .asx-journey-step__arrow { top: 31px; right: 16px; }
+    .asx-journey-steps summary > span { font-size: 13px; }
+    .asx-journey-steps details:not([open]) .asx-journey-step__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .asx-journey-steps details:not([open]) .asx-journey-step__content p { font-size: 13px; line-height: 1.4; }
+    .asx-journey-steps details[open] { flex-direction: column; }
+    .asx-journey-steps details[open] summary,
+    .asx-journey-steps details[open] summary:hover { flex: none; grid-template-columns: 32px minmax(0,1fr); padding: 34px 62px 24px 14px; gap: 10px; }
+    .asx-journey-steps details[open] summary > span { font-size: 21px; }
+    .asx-journey-steps details[open] .asx-journey-step__content h3 { font-size: 28px; }
+    .asx-journey-steps details[open] .asx-journey-step__content p { max-width: none; margin-bottom: 24px; font-size: 16px; }
+    .asx-journey-steps details[open] .asx-journey-step__content ul { gap: 14px; }
+    .asx-journey-steps details[open] .asx-journey-step__content li { font-size: 15px; }
+    .asx-journey-steps details[open] .asx-journey-step__arrow { top: 24px; right: 16px; }
+    .asx-journey-steps details[open] .asx-journey-step__visual { flex: none; padding: 0 24px 28px; margin: 0; justify-content: center; }
+    .asx-journey-step__visual img { max-width: 520px; }
+    .asx-boundary { padding: 64px 16px; }
+    .asx-boundary__header { margin-bottom: 44px; }
+    .asx-boundary__header h2 { font-size: clamp(34px,10vw,42px); }
+    .asx-boundary__header > p:last-child { font-size: 16px; }
+    .asx-boundary__cell { padding: 32px 20px; }
+    .asx-boundary__copy h3 { font-size: 32px; }
+    .asx-boundary__copy p { font-size: 16px; }
+    .asx-boundary__stage { height: 310px; padding: 38px 14px 14px; }
+    .asx-boundary__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .asx-use-cases { padding: 72px 20px; }
+    .asx-use-cases__title { font-size: clamp(30px,8.3vw,42px); }
+    .asx-use-cases__subtitle { font-size: 16px; }
+    .asx-use-cases__tabs { width: 100%; justify-content: flex-start; overflow-x: auto; border-radius: 20px; scrollbar-width: none; scroll-snap-type: x proximity; }
+    .asx-use-cases__tabs::-webkit-scrollbar { display: none; }
+    .asx-use-cases__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .asx-use-cases__panel,
+    .asx-use-cases.is-ready .asx-use-cases__panel.is-active { padding: 32px 24px; gap: 36px; border-radius: 20px; }
+    .asx-use-cases__showcase { padding: 14px; border-radius: 18px; }
+    .asx-use-cases__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .asx-model-section { padding: 64px 16px; }
+    .asx-model-header { margin-bottom: 36px; }
+    .asx-model-cell { padding: 36px 20px; }
+    .asx-model-visual { min-height: 380px; }
+    .asx-model-stage { min-height: 310px; padding: 26px 14px; }
+    .asx-community-map,
+    .asx-programme-board { min-height: 250px; height: 250px; }
+    .asx-programme-board { padding: 18px; }
+    .asx-programme-board span { grid-template-columns: 42px 1fr; }
+    .asx-programme-board em { display: none; }
+    .asx-event-day { padding: 72px 20px; }
+    .asx-event-day__left h2 { font-size: clamp(36px,10vw,44px); }
+    .asx-event-day__left p { font-size: 16px; }
+    .asx-event-card { padding: 26px 18px; border-radius: 20px; }
+    .asx-event-card__text h3 { font-size: 19px; }
+    .asx-event-card__text p { font-size: 14px; }
+    .asx-event-card__visual { padding: 10px; border-radius: 16px; }
+    .asx-event-card__shot { height: 220px; }
+    .asx-event-card__status { left: 2px; }
+    .asx-event-card__action { right: 4px; }
+    .asx-demo { padding: 40px 16px 60px; }
+    .asx-demo__card { min-height: 0; padding: 48px 20px; flex-direction: column; border-radius: 20px; }
+    .asx-demo__content { align-items: center; text-align: center; }
+    .asx-demo__title { font-size: 28px; line-height: 1.2; }
+    .asx-demo__desc { font-size: 15px; }
+    .asx-demo__proof-row { justify-content: center; gap: 8px; }
+    .asx-demo__button { width: 100%; }
+    .asx-demo__visual { display: none; }
+  }
+
+  @media (max-width: 620px) {
+    .asx-agenda-band { padding: 56px 16px 64px; }
+    .asx-agenda-band__header { margin-bottom: 40px; }
+    .asx-agenda-band__header h2 { font-size: clamp(38px,12vw,48px); }
+    .asx-agenda-grid { grid-template-columns: 1fr; }
+    .asx-agenda-card,
+    .asx-agenda-card:nth-child(n + 4),
+    .asx-agenda-card:last-child { grid-column: auto; min-height: 250px; padding: 30px 26px; border-right: 0; border-bottom: 1px solid #2d2d36; }
+    .asx-agenda-card:last-child { border-bottom: 0; }
+    .asx-agenda-visual { min-height: 170px; }
+    .asx-coordinate { padding: 12px 16px; }
+    .asx-coordinate__inner { padding: 32px 24px; grid-template-columns: 1fr; gap: 32px; }
+    .asx-coordinate__title { font-size: 28px; }
+    .asx-coordinate__title-line { white-space: normal; }
+    .asx-coordinate__copy { font-size: 16px; }
+    .asx-coordinate__actions { width: 100%; flex-direction: column; align-items: stretch; }
+    .asx-coordinate__btn { width: 100%; }
+    .asx-coordinate__showcase { height: 300px; border-radius: 18px; }
+    .asx-coordinate__shot--overview { top: 30px; left: 12px; width: 80%; }
+    .asx-coordinate__shot--detail { right: 12px; bottom: 23px; width: 72%; }
+    .asx-coordinate__status { top: 14px; left: 12px; }
+    .asx-coordinate__publish { right: 12px; bottom: 12px; }
+    .asx-coordinate__cursor { right: 15px; bottom: 46px; }
+  }
+
+  @media (max-width: 420px) {
+    .asx-hero__title { font-size: 33px; line-height: 1.15; }
+    .asx-model-header h2 { font-size: 34px; }
+    .asx-model-float { padding: 9px 11px; }
+    .asx-model-float b { font-size: .68rem; }
+    .asx-model-float small { font-size: .58rem; }
+    .asx-community-map > b { width: 94px; }
+  }
+
+  /* Real EventHex portal captures replace the illustrative product mocks. */
+  .asx-model-stage,
+  .asx-boundary__stage,
+  .asx-coordinate__showcase,
+  .asx-demo__visual { padding: 0; background: #f7f9fc; }
+
+  .asx-model-stage > img,
+  .asx-boundary__stage > img,
+  .asx-coordinate__showcase > img,
+  .asx-demo__visual > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .asx-model-stage > img,
+  .asx-boundary__stage > img { border-radius: 22px; }
+  .asx-coordinate__showcase > img { border-radius: 24px; }
+
+  .asx-use-cases__showcase > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 960 / 516;
+    border: 1px solid rgba(128, 144, 178, .2);
+    border-radius: 15px;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .asx-demo__visual {
+    overflow: hidden;
+    height: min(29vw, 380px);
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 18px;
+    box-shadow: 0 26px 54px rgba(0,0,0,.26);
+  }
+
+  .asx-demo__visual > img { border-radius: inherit; }
+
+  @media (max-width: 620px) {
+    .asx-model-stage > img,
+    .asx-boundary__stage > img,
+    .asx-coordinate__showcase > img { border-radius: 18px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .asx-community-map,
+    .asx-programme-board,
+    .asx-model-float,
+    .asx-demo__visual,
+    .asx-use-cases.is-ready .asx-use-cases__panel.is-active { animation: none; }
+    .asx-button,
+    .asx-links__card,
+    .asx-faq__item,
+    .asx-faq__icon,
+    .asx-faq__icon::after,
+    .asx-agenda-card,
+    .asx-coordinate__btn,
+    .asx-use-cases__tab,
+    .asx-event-card,
+    .asx-event-day__cta { transition: none; }
+    .asx-event-card__cursor { animation: none; }
+  }
+</style>
+
+<script>
+  const useCases = document.querySelector<HTMLElement>(".asx-use-cases");
+
+  if (useCases) {
+    const useCaseTabs = Array.from(useCases.querySelectorAll<HTMLButtonElement>("[data-use-case-tab]"));
+    const useCasePanels = Array.from(useCases.querySelectorAll<HTMLElement>("[data-use-case-panel]"));
+
+    const activateUseCase = (tab: HTMLButtonElement, moveFocus = false) => {
+      const target = tab.dataset.useCaseTab;
+      useCaseTabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      useCasePanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.useCasePanel === target));
+      if (moveFocus) tab.focus();
+    };
+
+    useCases.classList.add("is-ready");
+    useCaseTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateUseCase(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const next = useCaseTabs[(index + direction + useCaseTabs.length) % useCaseTabs.length];
+        if (next) activateUseCase(next, true);
+      });
+    });
+  }
+
+  const journeyItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".asx-journey-steps details"));
+
+  journeyItems.forEach((item) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".asx-journey-step__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      const title = item.querySelector("h3")?.textContent?.trim() || "journey step";
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} ${title}`);
+      if (!item.open) return;
+      journeyItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".asx-faq details"));
+
+  faqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+</script>
