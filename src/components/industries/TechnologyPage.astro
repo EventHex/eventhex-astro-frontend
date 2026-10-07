@@ -1,0 +1,771 @@
+---
+interface Props { faqs: [string, string][] }
+const { faqs } = Astro.props;
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+const rail = [["Plan", "Event structure"], ["Publish", "Website + registration"], ["Programme", "Sessions + speakers"], ["Connect", "Smart recommendations"], ["Engage", "Polls + app"], ["Continue", "Recaps + follow-up"]];
+const journey = [
+  ["Event website", "Publish the event story and programme entry points."], ["Registration", "Collect attendee and ticket-specific information."], ["Personal agenda", "Help attendees discover the sessions relevant to them."], ["Networking", "Move from recommendations to participant-controlled connections."], ["Live engagement", "Use supported polls, questions, and app interactions."], ["Post-session value", "Make supported recap outputs available after the room clears."]
+];
+const useCases = [["Developer conferences", "Build a technical agenda and help attendees navigate tracks and connections."], ["SaaS launches", "Connect a branded event page, registration, live participation, and follow-up."], ["Hackathons", "Register cohorts and mentors, publish the programme, and keep event updates visible."], ["Tech meetups", "Use a lighter registration, agenda, networking, and notification setup."]];
+const technologyJourneyCards = journey.map(([title, desc], i) => ({ title, desc, image: ["/feature-images/speaker-management/session-timeline-v2.svg", "/feature-images/speaker-management/speaker-dashboard-v2.svg", "/feature-images/speaker-management/live-engagement-v2.svg", "/feature-images/speaker-management/instarecap-v2.svg", "/feature-images/speaker-management/session-timeline-v2.svg", "/feature-images/speaker-management/live-engagement-v2.svg"][i], alt: `EventHex technology attendee journey: ${title}`, animated: true, width: 701, height: 729 }))
+---
+
+<div class="tech-page">
+  <section class="tech-hero"><div class="tech-wrap tech-hero__grid"><div><span class="tech-eyebrow">Event management software for technology events</span><h1>Run the programme, people, and participation behind your next tech event</h1><p>Build multi-track conferences, developer summits, SaaS launches, hackathons, and meetups with connected registration, sessions, networking, live engagement, and recaps.</p><div class="tech-actions"><a class="tech-btn tech-btn--dark" href="/book-a-demo/">Book a Demo <span>→</span></a><a class="tech-btn tech-btn--outline" href="#operating-map">See the operating model</a></div><ul class="tech-checks"><li>Multi-track programmes</li><li>Attendee-led networking</li><li>Live participation</li></ul></div><div class="tech-console" role="img" aria-label="EventHex technology event operating view showing programme, audience and event-day states"><div class="tech-console__bar"><i></i><i></i><i></i><span>EventHex · Technology event</span></div><div class="tech-console__head">Connected event operating view <b>Live</b></div><div class="tech-console__rows"><span>PROGRAMME <strong>6 tracks · 42 sessions</strong></span><span>PEOPLE <strong>Registration and agenda</strong></span><span>PARTICIPATION <strong>Polls · Q&amp;A · app</strong></span><span>EVENT DAY <strong>QR check-in ready</strong></span></div></div></div></section>
+
+  <section id="operating-map" class="tech-rail"><div class="tech-wrap"><p class="tech-section-note">See the operating sequence before choosing modules</p><div class="tech-rail__items">{rail.map(([label, text]) => <span><b>{label}</b> {text}</span>)}</div></div></section>
+
+  <section id="event-model" class="tech-quad-section" aria-labelledby="tech-model-title">
+    <header class="tech-quad-header animate-on-scroll" data-animation="fadeInUp">
+      <h2 id="tech-model-title">Start with the operating shape that fits the event</h2>
+      <p>Choose the path that matches how your technology event needs to run.</p>
+    </header>
+
+    <div class="tech-quad">
+      <article class="tech-quad__cell tech-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Programme-led event</h3>
+        <p>Build submissions, speakers, sessions, registration, and the attendee agenda around one programme.</p>
+      </article>
+
+      <div class="tech-quad__cell tech-quad__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="tech-model-workspace" role="img" aria-label="Programme-led technology event workspace showing submissions, speakers, and a published agenda">
+          <div class="tech-model-screen">
+            <div class="tech-model-screen__bar"><i></i><i></i><i></i><b>Programme workspace</b></div>
+            <div class="tech-model-screen__body">
+              <span><small>Submissions</small><strong>Review ready</strong></span>
+              <span><small>Speakers</small><strong>12 confirmed</strong></span>
+              <span><small>Agenda</small><strong>Publish programme</strong></span>
+            </div>
+          </div>
+          <span class="tech-status">✓ Programme connected</span>
+          <span class="tech-action">Publish agenda</span>
+          <span class="tech-model-cursor" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="tech-quad__cell tech-quad__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="tech-model-workspace tech-model-workspace--showcase" role="img" aria-label="Community technology event workspace showing registration, attendee updates, and check-in">
+          <div class="tech-model-screen tech-model-screen--showcase">
+            <div class="tech-model-screen__bar"><i></i><i></i><i></i><b>Event workspace</b></div>
+            <div class="tech-model-screen__body">
+              <span><small>Registration</small><strong>Audience connected</strong></span>
+              <span><small>Updates</small><strong>Ready to send</strong></span>
+              <span><small>Arrival</small><strong>Check-in prepared</strong></span>
+            </div>
+          </div>
+          <span class="tech-status">✓ Event connected</span>
+          <span class="tech-action">Open event view</span>
+          <span class="tech-model-cursor" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <article class="tech-quad__cell tech-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Community or showcase event</h3>
+        <p>Lead with registration, the event website, communication, arrival, and attendee participation.</p>
+      </article>
+
+      <span class="tech-quad__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg>
+      </span>
+    </div>
+  </section>
+
+  <section id="programme-capabilities" class="tech-role-template" aria-labelledby="programme-capabilities-title">
+    <div class="tech-role-template__shell">
+      <header class="tech-role-template__heading animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="programme-capabilities-title">Move from content intake to a programme people can attend</h2>
+        <p class="tech-role-template__sr-only">Connect the content, people, and access decisions that usually end up in separate files.</p>
+      </header>
+      <div class="tech-role-template__grid">
+        <span class="tech-role-template__notch tech-role-template__notch--one" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <span class="tech-role-template__notch tech-role-template__notch--two" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <span class="tech-role-template__notch tech-role-template__notch--three" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <article class="tech-role-template__card tech-role-template__card--first animate-on-scroll" data-animation="fadeInUp">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h10"></path><circle cx="19" cy="19" r="2"></circle></svg></div>
+          <div class="tech-role-template__content"><h3>Build the programme</h3><p>Arrange sessions, speakers, rooms, time, capacity, and attendee agenda discovery.</p></div>
+        </article>
+        <article class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
+          <div class="tech-role-template__content"><h3>Connect the audience</h3><p>Surface relevant attendee recommendations while participants decide whom to connect with.</p></div>
+        </article>
+        <article class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="200">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9"></path><path d="M10 19V5"></path><path d="M16 19v-7"></path><path d="M22 19V3"></path></svg></div>
+          <div class="tech-role-template__content"><h3>Engage live</h3><p>Add multiple-choice polls, anonymous access where configured, spotlight, and feedback.</p></div>
+        </article>
+        <article class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="300">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 16 4-5 4 3 5-7"></path></svg></div>
+          <div class="tech-role-template__content"><h3>Continue afterwards</h3><p>Connect eligible live transcription and recap outputs to the session experience.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech-section tech-operations-section"><div class="tech-wrap tech-spotlight"><div class="tech-spotlight__intro"><span class="tech-eyebrow">Technology operations panel</span><h2>Give the event team one operating view</h2><p>Give each team a clear job while keeping the attendee and event record connected.</p><a class="tech-operations__cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a></div><div class="tech-role-panel"><div><div class="tech-role-card__header"><span class="tech-role-card__number">01</span><div class="tech-role-card__text"><b>Event owner</b><span>Sets the event, audience, access, programme, and reporting decisions.</span><em>Accountable</em></div></div><img src="/images/industries/technology/event-dashboard-web-800.webp" alt="EventHex event owner operating dashboard" width="800" height="691" loading="lazy" decoding="async" /></div><div><div class="tech-role-card__header"><span class="tech-role-card__number">02</span><div class="tech-role-card__text"><b>Specialist teams</b><span>Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.</span><em>Operational</em></div></div><img src="/images/live-polling-qa/app/sessions-workspace.png" alt="EventHex specialist programme workspace" width="1263" height="697" loading="lazy" decoding="async" /></div><div><div class="tech-role-card__header"><span class="tech-role-card__number">03</span><div class="tech-role-card__text"><b>Event leadership</b><span>Reviews event and portfolio signals for the next operating decision.</span><em>Decision</em></div></div><img src="/images/webhooks/platform-analytics-web-960.webp" alt="EventHex event leadership analytics view" width="960" height="516" loading="lazy" decoding="async" /></div></div></div></section>
+
+  <FeatureCards cards={technologyJourneyCards} subtitle="Technology attendee journey" titleLineOne="Connect the moments attendees" titleLineTwo="actually move through" highlight="" />
+
+  <section class="tech-section tech-day-flow"><div class="tech-wrap"><header class="tech-day-flow__head"><span class="tech-eyebrow">Technology event-day workflow</span><h2>Keep event-day actions tied to the same event record</h2></header><ol class="tech-day-flow__rows"><li><details open><summary><span>01</span><div class="tech-day-flow__content"><h3>Scan arrivals</h3><p>Validate event QR codes with EventHex Scanner.</p><ul><li>Fast QR validation at the venue</li><li>Keep attendance current as people arrive</li><li>Give operations a live event-day view</li></ul></div><button type="button" class="tech-day-flow__arrow" aria-label="Collapse Scan arrivals" aria-expanded="true"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg></button></summary><div class="tech-day-flow__visual" role="img" aria-label="EventHex Scanner showing QR code ready and attendance synced"><div class="tech-day-flow__visual-bar"><i></i><i></i><i></i><span>EventHex Scanner</span></div><strong>QR code ready</strong><span>Attendance synced</span><span>Event-day view live</span></div></details></li><li><details><summary><span>02</span><div class="tech-day-flow__content"><h3>Keep attendance current</h3><p>Use live attendance context while the event is running.</p></div><button type="button" class="tech-day-flow__arrow" aria-label="Expand Keep attendance current" aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg></button></summary></details></li><li><details><summary><span>03</span><div class="tech-day-flow__content"><h3>Reach the app audience</h3><p>Publish operational push announcements to selected attendees.</p></div><button type="button" class="tech-day-flow__arrow" aria-label="Expand Reach the app audience" aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg></button></summary></details></li><li><details><summary><span>04</span><div class="tech-day-flow__content"><h3>Review event signals</h3><p>Use the event analytics surfaces after the event.</p></div><button type="button" class="tech-day-flow__arrow" aria-label="Expand Review event signals" aria-expanded="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg></button></summary></details></li></ol></div></section>
+
+  <section class="tech-section tech-section--tint"><div class="tech-wrap"><header class="tech-header"><span class="tech-eyebrow">Technology configuration boundary</span><h2>Keep EventHex responsibility separate from specialist requirements</h2></header><div class="tech-choice"><article><span class="tech-kicker">Product scope</span><h3>EventHex workflow</h3><p>Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p></article><article><span class="tech-kicker">Review scope</span><h3>Your specialist requirements</h3><p>Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p></article></div><p class="tech-decision">Confirm every specialist obligation before implementation and record how it will be handled.</p></div></section>
+
+  <section class="tech-section tech-usecase-suite"><div class="tech-wrap"><header class="tech-header"><span class="tech-eyebrow">Technology use-case grid</span><h2>Configure EventHex around the event you are running</h2></header><div class="tech-usecase-tabs" role="tablist" aria-label="Technology event formats">{useCases.map(([title], i) => <button type="button" role="tab" aria-selected={i === 0} class:list={{'is-active': i === 0}} data-tech-usecase-tab={i}>{title}</button>)}</div><div class="tech-usecase-panels">{useCases.map(([title, text], i) => <article class:list={{'is-active': i === 0}} data-tech-usecase-panel={i} role="tabpanel"><div class="tech-usecase-copy"><span class="tech-kicker">Use case 0{i + 1}</span><h3>{title}</h3><p>{text}</p><ul><li>Connect registration and the event website</li><li>Publish the programme and attendee agenda</li><li>Keep communication and participation in one workflow</li></ul></div><div class="tech-usecase-art" aria-hidden="true"><div class="tech-usecase-art__top"><i></i><i></i><i></i><b>EventHex · {title}</b></div><div class="tech-usecase-art__body"><span>PROGRAMME <strong>Ready to publish</strong></span><span>ATTENDEES <strong>Audience connected</strong></span><span>EVENT DAY <strong>Workflow prepared</strong></span></div></div></article>)}</div></div></section>
+
+  <section id="connected-features" class="tech-role-template tech-role-template--links" aria-labelledby="connected-features-title">
+    <div class="tech-role-template__shell">
+      <header class="tech-role-template__heading animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="connected-features-title">Open the page that owns each mechanism</h2>
+      </header>
+      <div class="tech-role-template__grid">
+        <span class="tech-role-template__notch tech-role-template__notch--one" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <span class="tech-role-template__notch tech-role-template__notch--two" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <span class="tech-role-template__notch tech-role-template__notch--three" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg></span>
+        <a class="tech-role-template__card tech-role-template__card--first animate-on-scroll" data-animation="fadeInUp" href="/session-management/">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h10"></path><path d="m17 16 3 3 3-3"></path></svg></div>
+          <div class="tech-role-template__content"><h3>Session Management</h3><p>Build the multi-track programme.</p></div>
+        </a>
+        <a class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="100" href="/enhance-networking-ai-smart-connect/">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></div>
+          <div class="tech-role-template__content"><h3>AI Smart-Connect</h3><p>Support attendee-led discovery.</p></div>
+        </a>
+        <a class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="200" href="/live-polling-qa/">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path><path d="M8 9h8"></path><path d="M8 13h5"></path></svg></div>
+          <div class="tech-role-template__content"><h3>Live Polling &amp; Q&amp;A</h3><p>Add live participation.</p></div>
+        </a>
+        <a class="tech-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="300" href="/ai-session-recap/">
+          <div class="tech-role-template__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M8 13h8"></path><path d="M8 17h6"></path></svg></div>
+          <div class="tech-role-template__content"><h3>AI Session Recap</h3><p>Continue the value after a session.</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="tech-section tech-demo-section"><div class="tech-wrap tech-demo"><div class="tech-demo__content"><h2><span>Bring one real event</span><span>workflow to the demo</span></h2><p>Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p><div class="tech-demo__actions"><a class="tech-btn tech-btn--dark" href="/book-a-demo/">Book a Demo <span>→</span></a><a class="tech-btn tech-btn--outline" href="#operating-map">See the operating model <span>→</span></a></div></div><div class="tech-demo__visual" role="img" aria-label="Technology event workflow preview showing programme, audience, and event-day setup"><div class="tech-demo__window tech-demo__window--list"><div class="tech-demo__windowbar"><i></i><i></i><i></i><b>EventHex · Programme</b></div><div class="tech-demo__screen"><strong>Technology event setup</strong><span>Programme <b>6 tracks ready</b></span><span>Audience <b>Registration connected</b></span><span>Event day <b>Check-in prepared</b></span></div></div><div class="tech-demo__window tech-demo__window--builder"><div class="tech-demo__windowbar"><i></i><i></i><i></i><b>EventHex · Review</b></div><div class="tech-demo__screen"><strong>Workflow review</strong><span>Access rules <b>Confirmed</b></span><span>Integrations <b>Supported</b></span></div></div><div class="tech-demo__float">✓ Workflow ready</div><span class="tech-demo__publish">Review &amp; publish</span></div></div></section>
+
+  <section class="tech-section tech-section--faq"><div class="tech-wrap tech-faq"><div class="tech-faq__sidebar"><span class="tech-faq__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quick Answers</span><h2>Review the<br />questions that<br />shape the setup</h2><p>Short answers, with the important limits kept visible.</p><a class="tech-faq__cta" href="/contact-en/">Visit Help Center <span aria-hidden="true">→</span></a></div><div class="tech-faq__list">{faqs.map(([q, a], index) => <details class="tech-faq__item" open={index === 0}><summary><strong>{q}</strong><span class="tech-faq__icon" aria-hidden="true"></span></summary><p>{a}</p></details>)}</div></div></section>
+
+</div>
+
+<style>
+  .tech-page{color:var(--heading-dark);font-family:var(--font-body);overflow-x:clip}.tech-wrap{width:min(1180px,calc(100% - 48px));margin:auto}.tech-hero{padding:150px 0 110px;background:radial-gradient(circle at 8% 10%,#e8eeff,transparent 30%),radial-gradient(circle at 90% 20%,#fff0f5,transparent 32%),#fff}.tech-hero__grid{display:grid;grid-template-columns:1.02fr .98fr;gap:64px;align-items:center}.tech-eyebrow{display:inline-block;margin-bottom:16px;color:var(--brand-blue);font:700 .78rem/1 var(--font-body);letter-spacing:.11em;text-transform:uppercase}.tech-hero h1,.tech-header h2,.tech-spotlight h2,.tech-workflow h2,.tech-demo h2,.tech-faq h2,.tech-final h2{font-family:var(--font-heading);font-weight:500;letter-spacing:-.04em;line-height:1.08;margin:0 0 18px}.tech-hero h1{font-size:clamp(40px,5vw,66px);background:linear-gradient(98deg,#22272f 38%,#8f8f8f 92%);color:transparent;background-clip:text}.tech-hero p,.tech-header p,.tech-spotlight p,.tech-workflow p,.tech-demo p,.tech-faq header p,.tech-final p{color:var(--subheading-gray);font-size:17px;line-height:1.62;max-width:660px}.tech-actions{display:flex;gap:12px;flex-wrap:wrap;margin:26px 0}.tech-btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:12px 24px;border-radius:10px;font-weight:600;text-decoration:none;transition:.2s}.tech-btn:hover{transform:translateY(-2px)}.tech-btn--dark{background:#22272f;color:#fff}.tech-btn--outline{border:1px solid #dce4ff;color:#22272f;background:#fff}.tech-btn--light{background:#fff;color:#22272f}.tech-checks{display:flex;gap:22px;flex-wrap:wrap;padding:0;margin:0;list-style:none;color:var(--subheading-gray);font-size:14px}.tech-checks li:before{content:'✓';margin-right:7px;color:#1aa66b;font-weight:700}.tech-console{padding:22px;border:1px solid #e2e8f5;border-radius:24px;background:linear-gradient(145deg,#f9fbff,#eef3ff);box-shadow:0 24px 60px #253b8324}.tech-console__bar{display:flex;align-items:center;gap:7px;color:#697386;font-size:11px;margin-bottom:32px}.tech-console__bar i{width:9px;height:9px;border-radius:50%;background:#d4dcec}.tech-console__bar span{margin-left:8px}.tech-console__head{font:500 22px var(--font-heading);padding-bottom:18px;border-bottom:1px solid #dfe6f2}.tech-console__head b{float:right;padding:6px 9px;border-radius:999px;background:#e8fff5;color:#18864b;font:700 10px var(--font-body)}.tech-console__rows{display:grid;gap:10px;padding-top:18px}.tech-console__rows span{display:flex;justify-content:space-between;gap:10px;padding:14px;border-radius:12px;background:#fff;color:#7b8495;font-size:10px;font-weight:700;letter-spacing:.08em}.tech-console__rows strong{color:#2d3440;font-size:12px;letter-spacing:0;text-align:right}.tech-rail{padding:26px 0;border-top:1px solid var(--surface-card-border);background:linear-gradient(90deg,#f5f8ff,#fff4f8)}.tech-section-note{text-align:center;color:var(--subheading-gray);margin:0 0 16px;font-size:15px}.tech-rail__items{display:flex;justify-content:center;flex-wrap:wrap;gap:12px 34px}.tech-rail__items span{color:var(--subheading-gray);font-size:14px}.tech-rail__items b{color:var(--heading-dark)}.tech-section{padding:96px 0;background:#fff}.tech-section--tint,.tech-section--faq{background:var(--surface-light)}.tech-header{text-align:center;max-width:800px;margin:0 auto 42px}.tech-header h2,.tech-spotlight h2,.tech-workflow h2,.tech-demo h2,.tech-faq h2{font-size:clamp(32px,4vw,52px)}.tech-header p{margin:0 auto}.tech-choice{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:900px;margin:auto}.tech-choice article{padding:34px;border:1px solid var(--surface-card-border);border-radius:22px;background:#fff}.tech-choice .is-accent{background:#ecfaf7;border-color:#b6dcd8}.tech-kicker{display:block;color:var(--brand-blue);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}.tech-choice h3,.tech-bento h3,.tech-grid h3,.tech-links h3{font:500 22px var(--font-heading);margin:0 0 10px}.tech-choice p,.tech-bento p,.tech-grid p,.tech-links p,.tech-role-panel span,.tech-demo__cards span{color:var(--subheading-gray);line-height:1.6;margin:0}.tech-decision{text-align:center;color:var(--subheading-gray);font-size:14px;margin:24px 0 0}.tech-bento{display:grid;grid-template-columns:1.12fr .88fr;grid-template-rows:1fr 1fr;gap:16px}.tech-bento article{padding:28px;border-radius:22px;background:#effffb}.tech-bento article:nth-child(3){background:#fff3fa}.tech-bento article:nth-child(4){background:#eef2ff;grid-column:2}.tech-bento__lead{grid-row:span 2;background:linear-gradient(145deg,#172347,#375dfb)!important;color:#fff}.tech-bento__lead h3{font-size:30px;color:#fff;max-width:440px}.tech-bento__lead .tech-kicker{color:#cbd6ff}.mini-board{display:grid;gap:8px;margin-top:30px}.mini-board span{padding:11px 14px;border:1px solid #ffffff33;border-radius:10px;background:#ffffff14;color:#d9def7;font-size:12px}.tech-spotlight,.tech-workflow,.tech-demo{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:center}.tech-role-panel{padding:10px 26px;border-radius:24px;background:linear-gradient(145deg,#fff0f2,#f3f6ff)}.tech-role-panel div{display:grid;grid-template-columns:1fr auto;gap:5px 18px;padding:22px 0;border-bottom:1px solid #dfe4ef}.tech-role-panel div:last-child{border:0}.tech-role-panel b{font:500 20px var(--font-heading)}.tech-role-panel span{grid-column:1/-1;font-size:14px}.tech-role-panel em{font-size:11px;color:var(--brand-blue);font-style:normal;font-weight:700;text-transform:uppercase}.tech-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.tech-grid article{padding:26px;border:1px solid var(--surface-card-border);border-radius:20px;background:#fff}.tech-grid article>span{display:block;color:#a7b0c1;font-weight:700;font-size:12px;letter-spacing:.1em;margin-bottom:26px}.tech-grid--formats{grid-template-columns:repeat(4,1fr)}.tech-workflow ol{display:grid;gap:12px;margin:0;padding:0;list-style:none}.tech-workflow li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;padding:16px;border-radius:16px;background:#fff;border:1px solid var(--surface-card-border)}.tech-workflow li>b{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:var(--surface-blue-tint);color:var(--brand-blue)}.tech-workflow li span{display:grid;gap:4px;color:var(--subheading-gray);font-size:13px}.tech-workflow li strong{font:500 18px var(--font-heading);color:var(--heading-dark)}.tech-links{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.tech-links a{display:flex;flex-direction:column;min-height:220px;padding:26px;border-radius:22px;background:#fff;border:1px solid var(--surface-card-border);text-decoration:none;transition:.2s}.tech-links a:hover{transform:translateY(-3px);box-shadow:0 16px 30px #253b8314}.tech-link-icon{color:var(--brand-blue);font-size:24px}.tech-links p{font-size:14px}.tech-learn{margin-top:auto;color:var(--brand-blue);font-size:14px;font-weight:600}.tech-learn b{margin-left:8px}.tech-demo__cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.tech-demo__cards div{display:grid;gap:9px;padding:20px;border:1px solid var(--surface-card-border);border-radius:16px;background:#fff}.tech-demo__cards b{color:var(--brand-blue);font-size:11px}.tech-demo__cards strong{font:500 18px var(--font-heading)}.tech-demo__cards span{font-size:13px}.tech-demo__cards a{grid-column:1/-1;justify-self:start;margin-top:10px}.tech-faq{display:grid;grid-template-columns:.8fr 1.2fr;gap:70px}.tech-faq>div{border-top:1px solid var(--surface-card-border)}.tech-faq details{border-bottom:1px solid var(--surface-card-border)}.tech-faq summary{display:flex;justify-content:space-between;gap:20px;padding:20px 0;cursor:pointer;list-style:none;font:500 18px var(--font-heading)}.tech-faq summary::-webkit-details-marker{display:none}.tech-faq summary span{font:400 24px var(--font-body)}.tech-faq details[open] summary span{transform:rotate(45deg)}.tech-faq details p{padding:0 35px 20px 0;color:var(--subheading-gray);line-height:1.65;margin:0}.tech-final{padding:110px 0;text-align:center;background:linear-gradient(115deg,#05060c,#1a1450 42%,#375dfb 70%,#4fd6e0 112%);color:#fff}.tech-final .tech-wrap{max-width:760px}.tech-final .tech-eyebrow{color:#cbd6ff}.tech-final h2{font-size:clamp(36px,4vw,56px)}.tech-final p{color:#ffffffc7;max-width:700px;margin:0 auto 28px}.tech-final .tech-btn{margin:auto}
+  .tech-quad-section{display:flex;flex-direction:column;align-items:center;padding:clamp(72px,9vw,112px) 24px;background:radial-gradient(circle at 8% 55%,#eef4ff,transparent 33%),radial-gradient(circle at 92% 55%,#fff1f7,transparent 34%),#fff}.tech-quad-header{display:flex;flex-direction:column;align-items:center;max-width:1100px;margin-bottom:24px;text-align:center}.tech-quad-header h2{margin:0 0 12px;font:500 clamp(32px,4.2vw,56px)/1.08 var(--font-heading);letter-spacing:-.04em;background:linear-gradient(98deg,var(--heading-dark) 43%,#8f8f8f 92%);-webkit-background-clip:text;background-clip:text;color:transparent}.tech-quad-header h2 span{display:block}.tech-quad-header p{max-width:640px;margin:0;color:var(--subheading-gray);font:400 18px/1.5 var(--font-body)}.tech-quad{position:relative;display:grid;grid-template:1fr 1fr/minmax(0,1fr) minmax(0,1fr);width:100%;max-width:1180px;margin:24px auto}.tech-quad__cell{display:flex;flex-direction:column;justify-content:center;min-height:260px;padding:56px 48px;border-right:1px solid #eef0f3;border-bottom:1px solid #eef0f3}.tech-quad__cell:nth-child(2n){border-right:0}.tech-quad__cell:nth-child(n+3){border-bottom:0}.tech-quad__cell h3{margin:0 0 14px;font:500 clamp(25px,2.7vw,34px)/1.1 var(--font-heading);letter-spacing:-.03em}.tech-quad__cell p{max-width:40ch;margin:0;color:var(--subheading-gray);font:400 16px/1.6 var(--font-body)}.tech-quad__cell--media{align-items:center;min-height:360px;padding:18px 22px;overflow:hidden}.tech-quad__composite{position:relative;width:100%;height:320px}.tech-shot{position:absolute;display:flex;flex-direction:column;gap:9px;top:42px;left:20px;z-index:1;width:74%;height:62%;padding:18px;border:1px solid #d1d6e2;border-radius:12px;background:linear-gradient(160deg,#fbfcff,#f3f6ff);box-shadow:0 16px 34px #1f294824;color:#2b3242;font:12px var(--font-body)}.tech-shot b{margin-bottom:5px;color:#8a93a5;font-size:10px;letter-spacing:.08em;text-transform:uppercase}.tech-shot span{padding:9px 10px;border:1px solid #e8ecf4;border-radius:9px;background:#fff;font-weight:600}.tech-shot span:nth-child(2){border-color:#c9d6ff;background:#f3f6ff;color:#3350d6}.tech-status,.tech-action{position:absolute;z-index:5;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px;box-shadow:0 10px 24px #1f294829;font:700 11px/1 var(--font-body)}.tech-status{top:14px;left:14px;gap:7px;padding:9px 11px;border:1px solid #cfead9;background:#effbf4;color:#18864b}.tech-action{right:14px;bottom:14px;padding:10px 13px;background:#4b65f6;color:#fff}.tech-quad__cross{position:absolute;left:50%;top:50%;z-index:2;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--surface-light);box-shadow:inset 0 0 0 1px #dce2ed;transform:translate(-50%,-50%);color:var(--brand-blue);font-size:12px}.tech-quad-note{max-width:850px;margin:10px auto 0;color:var(--subheading-gray);font:400 14px/1.6 var(--font-body);text-align:center}
+  .tech-band{position:relative;overflow:hidden;max-width:1240px;margin:0 auto;padding:clamp(72px,8vw,104px) 38px clamp(64px,7vw,92px);border-radius:28px;background:radial-gradient(120% 54% at 50% 0%,#526dff44,transparent 70%),#0b0d18;color:#fff}.tech-band__head{max-width:900px;margin:0 auto 46px;text-align:center}.tech-band__head .tech-eyebrow{color:#9db4ff}.tech-band__head h2{margin:0 0 16px;font:500 clamp(34px,4.2vw,56px)/1.08 var(--font-heading);letter-spacing:-.04em;background:linear-gradient(96deg,#fff 25%,#af9dff 85%);-webkit-background-clip:text;background-clip:text;color:transparent}.tech-band__head p{max-width:680px;margin:0 auto;color:#c7cee3;font-size:17px;line-height:1.6}.tech-cap{display:grid;grid-template-columns:1.15fr .85fr;grid-template-rows:1fr 1fr;gap:14px;max-width:1150px;margin:auto}.tech-cap article{position:relative;min-height:190px;padding:28px;border:1px solid #ffffff1a;border-radius:20px;background:#ffffff0b}.tech-cap article:not(.tech-cap__lead){background:#182039}.tech-cap__lead{grid-row:span 2;background:linear-gradient(145deg,#1d2c60,#375dfb)!important}.tech-cap h3{margin:0 0 10px;font:500 23px/1.12 var(--font-heading);color:#fff}.tech-cap__lead h3{max-width:430px;font-size:31px}.tech-cap p{margin:0;color:#cbd3e7;font-size:14px;line-height:1.6}.tech-cap .tech-kicker{color:#aabaff}.tech-cap__visual{display:grid;gap:8px;margin-top:24px;max-width:410px;padding:14px;border:1px solid #ffffff2b;border-radius:13px;background:#070d24aa;font-size:11px}.tech-cap__visual b{color:#d9def7;font-size:10px;letter-spacing:.08em;text-transform:uppercase}.tech-cap__visual span{display:flex;justify-content:space-between;padding:9px 10px;border-radius:8px;background:#ffffff12;color:#d9def7}.tech-cap__visual i{width:32%;height:7px;border-radius:99px;background:#88a2ff}.tech-cap__mini{display:flex;gap:7px;flex-wrap:wrap;margin-top:22px}.tech-cap__mini span{padding:7px 9px;border-radius:999px;background:#ffffff12;color:#cbd3e7;font-size:11px}
+  @media(max-width:900px){.tech-hero__grid,.tech-spotlight,.tech-workflow,.tech-demo,.tech-faq{grid-template-columns:1fr;gap:38px}.tech-bento{grid-template-columns:1fr}.tech-bento__lead{grid-row:auto}.tech-bento article:nth-child(4){grid-column:auto}.tech-grid--formats{grid-template-columns:repeat(2,1fr)}.tech-links{grid-template-columns:repeat(2,1fr)}.tech-demo__cards{grid-template-columns:1fr}.tech-demo__cards a{grid-column:auto}.tech-band{margin-inline:16px;padding-inline:22px}.tech-cap{grid-template-columns:1fr}.tech-cap__lead{grid-row:auto}}
+  @media(max-width:620px){.tech-wrap{width:min(100% - 32px,1180px)}.tech-hero{padding:112px 0 70px}.tech-hero h1{font-size:40px}.tech-section{padding:68px 0}.tech-choice,.tech-grid,.tech-grid--formats,.tech-links{grid-template-columns:1fr}.tech-actions,.tech-actions .tech-btn{width:100%}.tech-actions .tech-btn{justify-content:center}.tech-checks{display:grid;gap:10px}.tech-rail__items{align-items:flex-start;flex-direction:column;gap:10px}.tech-console{padding:16px}.tech-console__rows span{display:grid;gap:6px}.tech-console__rows strong{text-align:left}.tech-final{padding:78px 0}.tech-faq summary{font-size:16px}.tech-quad-section{padding-inline:18px}.tech-quad{grid-template-columns:minmax(0,1fr)}.tech-quad__cross{display:none}.tech-quad__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}.tech-quad__cell:nth-child(3){order:4;border-bottom:0}.tech-quad__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}.tech-quad__cell--media{padding:16px 20px 32px}.tech-quad__composite{height:285px}.tech-quad-header h2{font-size:34px}}
+  .tech-owner-links{padding-top:96px;padding-bottom:96px}.tech-owner-links .tech-header{max-width:900px;margin-bottom:42px}.tech-owner-links .tech-header h2{max-width:760px;margin-inline:auto}.tech-owner-links .tech-links{grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid #dfe5f1}.tech-owner-links .tech-links a{min-height:315px;padding:28px 26px;border:0;border-right:1px solid #dfe5f1;border-radius:0;background:transparent;box-shadow:none}.tech-owner-links .tech-links a:last-child{border-right:0}.tech-owner-links .tech-links a:hover{transform:none;box-shadow:none}.tech-owner-links .tech-link-icon{display:block;margin-bottom:28px;font-size:24px;line-height:1;color:var(--brand-blue)}.tech-owner-links .tech-links h3{font-size:21px;margin-bottom:48px}.tech-owner-links .tech-links p{font-size:16px;line-height:1.5}.tech-owner-links .tech-learn{display:none}
+  @media(max-width:900px){.tech-owner-links .tech-links{grid-template-columns:repeat(2,1fr)}.tech-owner-links .tech-links a:nth-child(2){border-right:0}.tech-owner-links .tech-links a:nth-child(-n+2){border-bottom:1px solid #dfe5f1}}
+  @media(max-width:620px){.tech-owner-links{padding-top:68px;padding-bottom:68px}.tech-owner-links .tech-links{grid-template-columns:1fr}.tech-owner-links .tech-links a{min-height:0;padding:24px 0;border-right:0;border-bottom:1px solid #dfe5f1!important}.tech-owner-links .tech-links a:last-child{border-bottom:0!important}.tech-owner-links .tech-links h3{margin-bottom:14px}}
+  .tech-usecase-suite{background:#fff}.tech-usecase-suite .tech-header{max-width:900px;margin-bottom:28px}.tech-usecase-suite .tech-header h2{max-width:760px;margin-inline:auto}.tech-usecase-tabs{display:flex;justify-content:center;gap:4px;width:max-content;max-width:100%;margin:0 auto 38px;padding:6px;border:1px solid #e4e8f0;border-radius:999px;background:#f1f3f7}.tech-usecase-tabs button{border:1px solid transparent;border-radius:999px;padding:10px 20px;background:transparent;color:#64748b;font:600 13.5px var(--font-body);cursor:pointer;white-space:nowrap}.tech-usecase-tabs button.is-active{border-color:#dbe4f0;background:#fff;color:var(--brand-blue);box-shadow:0 5px 14px #253b8318}.tech-usecase-panels{position:relative}.tech-usecase-panels article{display:none;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:56px;align-items:center;padding:52px 64px;border:1px solid #dce6f5;border-radius:28px;background:linear-gradient(135deg,#eef5ff,#fff 72%);min-height:390px}.tech-usecase-panels article.is-active{display:grid}.tech-usecase-copy h3{margin:0 0 14px;font:500 clamp(32px,3.8vw,46px)/1.08 var(--font-heading);letter-spacing:-.04em}.tech-usecase-copy p{margin:0 0 22px;color:var(--subheading-gray);font-size:16px;line-height:1.6}.tech-usecase-copy ul{display:grid;gap:10px;margin:0;padding:0;list-style:none;color:var(--subheading-gray);font-size:14px}.tech-usecase-copy li::before{content:'✓';margin-right:9px;color:var(--brand-blue);font-weight:700}.tech-usecase-art{padding:22px;border-radius:24px;background:#ffffff99;box-shadow:0 22px 48px #253b831c}.tech-usecase-art__top{display:flex;align-items:center;gap:7px;padding-bottom:18px;border-bottom:1px solid #e4eaf5;color:#7b8495;font-size:11px}.tech-usecase-art__top i{width:8px;height:8px;border-radius:50%;background:#d2dbea}.tech-usecase-art__top b{margin-left:7px;font-weight:600}.tech-usecase-art__body{display:grid;gap:10px;padding-top:18px}.tech-usecase-art__body span{display:flex;justify-content:space-between;gap:12px;padding:15px;border:1px solid #e6ebf4;border-radius:12px;background:#fff;color:#7b8495;font-size:10px;font-weight:700;letter-spacing:.08em}.tech-usecase-art__body strong{color:#2d3440;font-size:12px;letter-spacing:0;text-align:right}.tech-usecase-suite .tech-kicker{margin-bottom:12px}
+  @media(max-width:900px){.tech-usecase-panels article{grid-template-columns:1fr;padding:38px 30px;gap:30px}.tech-usecase-tabs{width:100%;overflow-x:auto;justify-content:flex-start}.tech-usecase-tabs button{flex:0 0 auto}}
+  @media(max-width:620px){.tech-usecase-suite{padding-top:68px;padding-bottom:68px}.tech-usecase-panels article{padding:28px 20px;border-radius:22px}.tech-usecase-copy h3{font-size:34px}.tech-usecase-art{padding:16px}.tech-usecase-art__body span{display:grid;gap:6px}.tech-usecase-art__body strong{text-align:left}}
+  .tech-faq{grid-template-columns:360px 1fr;gap:64px;align-items:start}.tech-faq>div{border-top:0}.tech-faq__sidebar{position:sticky;top:6rem}.tech-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;margin-bottom:20px;color:#000;font-family:var(--font-body);font-size:.8125rem;font-weight:500}.tech-faq__sidebar h2{font-family:'Creato Display',var(--font-heading);font-size:44px;font-weight:500;color:#000;margin:0 0 20px;line-height:1.1;letter-spacing:-1px}.tech-faq__sidebar p{margin:0 0 28px;color:var(--body-light);font-family:var(--font-body);font-size:1rem;line-height:1.6}.tech-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font-family:var(--font-body);font-size:.9375rem;font-weight:500;text-decoration:none}.tech-faq__list{display:flex;flex-direction:column;gap:16px;counter-reset:technology-faq}.tech-faq__item{counter-increment:technology-faq;padding:4px 28px;overflow:hidden;border:1px solid #e4e7ec;border-radius:20px;background:#fff}.tech-faq__item[open]{background:#e4e7ec}.tech-faq__item summary{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;font-family:'Creato Display',var(--font-heading);font-size:1.0625rem;font-weight:500;color:#000;cursor:pointer;list-style:none}.tech-faq__item summary strong{font-weight:500}.tech-faq__item summary strong::before{content:counter(technology-faq) '. '}.tech-faq__item summary::-webkit-details-marker{display:none}.tech-faq__icon{position:relative;flex-shrink:0;width:18px;height:18px}.tech-faq__icon::before,.tech-faq__icon::after{content:'';position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.tech-faq__icon::before{width:14px;height:2px}.tech-faq__icon::after{width:2px;height:14px}.tech-faq__item[open] .tech-faq__icon::after{opacity:0}.tech-faq__item[open] .tech-faq__icon{transform:scale(.9)}.tech-faq__item p{max-width:640px;padding:0 0 24px;margin:0;font-family:var(--font-body);font-size:.9375rem;line-height:1.7;color:#000}.tech-faq__sidebar h2{font-size:44px}.tech-faq__item summary span{font-size:24px}
+  @media(max-width:900px){.tech-faq__sidebar{position:static}}
+  @media(max-width:620px){.tech-faq__sidebar h2{font-size:32px}.tech-faq__item{padding:4px 20px;border-radius:16px}.tech-faq__item summary{font-size:.9375rem;padding:18px 0}}
+  .tech-band{max-width:none;margin:0;border-radius:0;padding:clamp(90px,10vw,140px) 24px;background:linear-gradient(180deg,#f8faff 0%,#fff 78%);color:var(--heading-dark)}.tech-band__head{max-width:1040px;margin:0 auto 68px;text-align:center}.tech-band__head .tech-eyebrow{display:none}.tech-band__head h2{font-size:clamp(36px,5vw,56px);background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.tech-band__head p{max-width:760px;margin:0 auto;color:var(--subheading-gray);font-size:17px;line-height:1.6}.tech-band .tech-cap{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:none;gap:0;max-width:1200px;border-top:1px solid #e8ecf2;border-radius:0;overflow:visible}.tech-band .tech-cap article{min-height:318px;padding:28px 28px 34px;border:0;border-left:1px solid #e8ecf2;border-right:0;border-radius:0;background:transparent}.tech-band .tech-cap article:first-child{border-left:0}.tech-band .tech-cap h3{min-height:2.5em;margin:0 0 28px;font:600 21px/1.25 var(--font-heading);color:var(--heading-dark)}.tech-band .tech-cap p{margin:14px 0 0;color:var(--subheading-gray);font-size:15px;line-height:1.4}.tech-band .tech-cap__icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:var(--brand-blue);font:400 30px/1 var(--font-body)}
+  @media(max-width:900px){.tech-band .tech-cap{grid-template-columns:repeat(2,1fr)}.tech-band .tech-cap article:nth-child(2){border-right:0}.tech-band .tech-cap article:nth-child(-n+2){border-bottom:1px solid #dfe5f1}}
+  @media(max-width:620px){.tech-band{padding:68px 0}.tech-band__head{padding:0 16px;margin-bottom:38px}.tech-band .tech-cap{grid-template-columns:1fr}.tech-band .tech-cap article{min-height:0;padding:28px 20px;border-right:0;border-bottom:1px solid #dfe5f1!important}.tech-band .tech-cap article:last-child{border-bottom:0!important}}
+  .tech-band .tech-cap article:not(.tech-cap__lead){background:transparent}
+  .tech-demo{position:relative;grid-template-columns:.95fr 1.05fr;gap:54px;max-width:1180px;margin:0 auto;padding:64px 40px;border-radius:28px;background:linear-gradient(135deg,#111a43,#080d20 72%);overflow:hidden}.tech-demo::after{content:'';position:absolute;right:-120px;bottom:-170px;width:500px;height:500px;border-radius:50%;background:#375dfb33;filter:blur(10px)}.tech-demo>div:first-child{position:relative;z-index:1}.tech-demo>div:first-child .tech-eyebrow{padding:10px 14px;border:1px solid #ffffff2e;border-radius:999px;color:#cbd6ff;background:#ffffff0a}.tech-demo h2{font-size:clamp(36px,4.2vw,58px);color:#fff;max-width:520px}.tech-demo p{color:#cbd3e7;max-width:560px}.tech-demo__cards{position:relative;z-index:1;grid-template-columns:repeat(3,1fr);align-content:start;gap:12px}.tech-demo__cards div{min-height:205px;padding:20px;border:1px solid #ffffff2b;border-radius:16px;background:#ffffff12}.tech-demo__cards b{color:#9db4ff}.tech-demo__cards strong{color:#fff;font-size:17px}.tech-demo__cards span{color:#cbd3e7}.tech-demo__cards a{background:#4b65f6;color:#fff;border:0;margin-top:10px}.tech-demo__cards a:hover{background:#6680ff}.tech-demo__cards::before{content:'Event workflow';position:absolute;left:12%;top:34%;width:76%;height:62%;border:1px solid #ffffff22;border-radius:18px;background:#ffffff08;z-index:-1;transform:rotate(-4deg)}
+  @media(max-width:900px){.tech-demo{grid-template-columns:1fr;padding:48px 28px}.tech-demo__cards{grid-template-columns:1fr 1fr}.tech-demo__cards a{grid-column:1/-1}.tech-demo__cards::before{display:none}}
+  @media(max-width:620px){.tech-demo{padding:38px 20px;border-radius:22px}.tech-demo__cards{grid-template-columns:1fr}.tech-demo__cards a{grid-column:auto}}
+  .tech-demo{grid-template-columns:1fr 1fr;align-items:center;min-height:535px}.tech-demo__content{position:relative;z-index:2}.tech-demo__eyebrow{display:inline-flex;padding:10px 14px;border:1px solid #ffffff2e;border-radius:999px;color:#cbd6ff;background:#ffffff0a;font:700 .78rem/1 var(--font-body);letter-spacing:.1em;text-transform:uppercase}.tech-demo__content h2{color:#fff;max-width:520px}.tech-demo__content p{color:#cbd3e7;max-width:550px}.tech-demo__proof{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}.tech-demo__proof span{padding:9px 12px;border:1px solid #ffffff2b;border-radius:999px;color:#d9def7;background:#ffffff0b;font-size:12px}.tech-demo__content .tech-btn{margin-top:4px}.tech-demo__visual{position:relative;z-index:2;min-height:330px;display:grid;place-items:center}.tech-demo__window{width:min(100%,500px);padding:18px;border:1px solid #ffffff2e;border-radius:18px;background:#ffffff12;box-shadow:0 28px 60px #0006;transform:rotate(2deg)}.tech-demo__windowbar{display:flex;align-items:center;gap:7px;padding-bottom:16px;border-bottom:1px solid #ffffff20;color:#cbd3e7;font-size:10px}.tech-demo__windowbar i{width:8px;height:8px;border-radius:50%;background:#7483ad}.tech-demo__windowbar b{margin-left:8px;font-weight:600}.tech-demo__screen{display:grid;gap:10px;padding-top:18px}.tech-demo__screen>strong{color:#fff;font:500 22px var(--font-heading);margin-bottom:5px}.tech-demo__screen>span{display:flex;justify-content:space-between;gap:10px;padding:13px;border-radius:10px;background:#ffffff12;color:#cbd3e7;font-size:11px}.tech-demo__screen>span b{color:#fff;font-size:12px}.tech-demo__float{position:absolute;right:4%;bottom:14%;padding:11px 14px;border:1px solid #cfead9;border-radius:10px;background:#effbf4;color:#18864b;font:700 11px var(--font-body);box-shadow:0 12px 28px #0004}.tech-demo__cards{display:none}
+  @media(max-width:900px){.tech-demo{grid-template-columns:1fr;min-height:0}.tech-demo__visual{min-height:280px}.tech-demo__float{right:4%;bottom:5%}}
+  @media(max-width:620px){.tech-demo__visual{min-height:240px}.tech-demo__window{transform:none}.tech-demo__screen>span{display:grid;gap:5px}.tech-demo__screen>span b{font-size:11px}}
+  .tech-demo-section{padding:48px 24px;background:transparent}.tech-demo-section .tech-demo{width:min(1120px,100%);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:36px;align-items:center;min-height:0;padding:48px;background:transparent;border-radius:0;overflow:visible}.tech-demo-section .tech-demo__content{max-width:560px}.tech-demo-section .tech-demo__content h2{display:flex;flex-direction:column;margin:0;font:650 clamp(32px,3.5vw,42px)/1.1 var(--font-heading);letter-spacing:-.03em;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.tech-demo-section .tech-demo__content h2 span{display:block;white-space:nowrap}.tech-demo-section .tech-demo__content p{margin:16px 0 24px;max-width:560px;color:#374151;font:500 15px/1.5 var(--font-body)}.tech-demo-section .tech-demo__proof{gap:8px;margin:0 0 22px}.tech-demo-section .tech-demo__proof span{padding:8px 11px;border:1px solid #e5e7eb;border-radius:999px;background:#f8fafc;color:#596579;font-size:12px}.tech-demo__actions{display:flex;align-items:center;gap:12px}.tech-demo__actions .tech-btn{min-height:0;padding:10px 20px;border-radius:6px;font-size:13.5px}.tech-demo__actions .tech-btn--outline{background:#f3f4f6;border-color:#e5e7eb}.tech-demo-section .tech-demo__visual{width:100%;max-width:500px;justify-self:end;min-height:350px;display:block;position:relative}.tech-demo-section .tech-demo__window{position:absolute;overflow:hidden;aspect-ratio:1117/837;width:77%;height:auto;padding:18px;border:1px solid #e0e4ec;border-radius:12px;background:#fff;box-shadow:0 14px 30px rgba(17,24,39,.14);transform:none}.tech-demo-section .tech-demo__window--list{top:30px;left:20px;z-index:1}.tech-demo-section .tech-demo__window--builder{right:18px;bottom:24px;width:70%;z-index:2}.tech-demo-section .tech-demo__windowbar{padding-bottom:12px;color:#7b8495;background:transparent}.tech-demo-section .tech-demo__screen{gap:8px;padding-top:14px}.tech-demo-section .tech-demo__screen>strong{color:#2d3440;font-size:18px}.tech-demo-section .tech-demo__screen>span{padding:11px;background:#f8fafc;color:#7b8495}.tech-demo-section .tech-demo__screen>span b{color:#2d3440}.tech-demo-section .tech-demo__float{right:16px;top:16px;bottom:auto;z-index:5;padding:11px 15px;border:1px solid #dce4ff;border-radius:11px;background:#f0f4ff;color:#4163ed;box-shadow:0 8px 22px rgba(42,66,158,.18)}.tech-demo__publish{position:absolute;right:16px;bottom:16px;z-index:5;padding:12px 16px;border-radius:11px;background:#4163ed;color:#fff;font:700 13px var(--font-body);box-shadow:0 8px 22px rgba(42,66,158,.18)}
+  @media(max-width:900px){.tech-demo-section .tech-demo{grid-template-columns:1fr;gap:32px;padding:32px 24px}.tech-demo-section .tech-demo__content,.tech-demo-section .tech-demo__visual{max-width:none}.tech-demo-section .tech-demo__visual{min-height:350px}.tech-demo__actions{flex-wrap:wrap}}
+  @media(max-width:620px){.tech-demo-section{padding:12px 16px}.tech-demo-section .tech-demo{padding:32px 24px}.tech-demo-section .tech-demo__content h2 span{white-space:normal}.tech-demo__actions,.tech-demo__actions .tech-btn{width:100%}.tech-demo__actions .tech-btn{justify-content:center}.tech-demo-section .tech-demo__visual{min-height:300px}.tech-demo-section .tech-demo__window--list{top:20px;left:0;width:80%}.tech-demo-section .tech-demo__window--builder{right:0;bottom:12px;width:72%}}
+  .tech-journey-stack{width:100%;background:linear-gradient(180deg,#0d0a2c 0%,#070b1b 420px,#000 100%);color:#fff}.tech-journey-stack__inner{width:min(1140px,100%);margin:0 auto;padding:4px 0 30px}.tech-journey-stack__header{position:sticky;top:69px;z-index:20;display:flex;flex-direction:column;align-items:center;gap:16px;width:min(94%,1050px);margin:0 auto;padding:24px 0;text-align:center}.tech-journey-stack__header::before{content:"";position:absolute;z-index:-1;inset:-1px -50vw -28px;background:linear-gradient(180deg,rgba(13,10,44,.99),rgba(7,11,27,.98) 72%,rgba(7,11,27,0));pointer-events:none}.tech-journey-stack__eyebrow{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 12px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.12);color:#fff;font:500 15px/1 var(--font-body);box-shadow:inset 0 1px rgba(255,255,255,.16)}.tech-journey-stack__eyebrow span:first-child{color:#4f8cff}.tech-journey-stack__header h2{margin:0;font:500 46px/1.15 var(--font-heading);letter-spacing:-.03em;color:#fff}.tech-journey-stack__header h2 span{display:block}.tech-journey-stack__header h2 span:first-child{color:#fff}.tech-journey-stack__header h2 span:last-child{color:#afa3ff}.tech-journey-stack__cards{position:relative;width:100%;padding:80px 0 50px}.tech-journey-stack__spacer{height:150px}.tech-journey-card{position:sticky;top:300px;z-index:var(--journey-index);display:flex;height:500px;margin-bottom:60px;overflow:hidden;border:1px solid rgba(255,255,255,.08);border-radius:20px;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f}.tech-journey-card__content{flex:0 0 45%;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:40px}.tech-journey-card__eyebrow{align-self:flex-start;padding:7px 13px;border:1px solid rgba(175,163,255,.28);border-radius:999px;background:rgba(175,163,255,.1);color:#afa3ff;font:600 12px/1.2 var(--font-body)}.tech-journey-card h3{margin:0;color:#e7e4fa;font:500 32px/1.2 var(--font-heading)}.tech-journey-card p{margin:0;color:rgba(255,255,255,.55);font:400 17px/1.65 var(--font-body)}.tech-journey-card a{display:inline-flex;align-self:flex-start;margin-top:8px;padding:12px 26px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.06);color:#fff;font:500 15px var(--font-body);text-decoration:none}.tech-journey-card__visual{position:relative;flex:1;align-self:center;height:78%;margin:0 34px 0 0;padding:20px;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:linear-gradient(145deg,#252936,#10131e);box-shadow:0 20px 50px rgba(0,0,0,.35)}.tech-journey-card__mock-head{display:flex;align-items:center;gap:7px;padding-bottom:15px;border-bottom:1px solid rgba(255,255,255,.14);color:#cbd3e7;font-size:10px}.tech-journey-card__mock-head i{width:8px;height:8px;border-radius:50%;background:#7483ad}.tech-journey-card__mock-head b{margin-left:8px;font-weight:600}.tech-journey-card__mock-title{margin-top:36px;color:#e7e4fa;font:500 24px var(--font-heading)}.tech-journey-card__mock-row{height:70px;margin-top:28px;border-radius:10px;background:linear-gradient(90deg,#7190ff55,#ffffff12)}.tech-journey-card__mock-row--short{width:72%;height:44px;margin-top:12px}.tech-journey-card__mock-pill{position:absolute;right:18px;bottom:18px;padding:9px 13px;border-radius:9px;background:#4163ed;color:#fff;font:700 11px var(--font-body)}
+  @media(max-width:767px){.tech-journey-stack__header h2{font-size:32px}.tech-journey-stack__header h2 span{white-space:normal}.tech-journey-stack__cards{padding-top:54px}.tech-journey-card{top:250px;display:block;height:auto;min-height:560px;margin:0 16px 40px}.tech-journey-card__content{padding:30px 24px}.tech-journey-card h3{font-size:28px}.tech-journey-card p{font-size:16px}.tech-journey-card__visual{height:240px;margin:0 24px 24px}.tech-journey-stack__spacer{height:80px}}
+  .tech-day-flow{padding-block:clamp(110px,12vw,160px);background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(246,248,255,.52) 52%,rgba(255,255,255,.18))}.tech-day-flow__head{max-width:820px;margin:0 auto 64px;text-align:center}.tech-day-flow__head h2{margin:0;font:650 clamp(40px,5vw,62px)/1.08 var(--font-heading);letter-spacing:-.045em;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.tech-day-flow__rows{display:grid;gap:14px;margin:0;padding:0;list-style:none}.tech-day-flow__rows>li{position:relative}.tech-day-flow__rows details{position:relative;overflow:hidden;border:1px solid var(--tech-flow-border);border-radius:18px;background:linear-gradient(135deg,var(--tech-flow-tint),#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:border-radius .35s,box-shadow .25s,transform .25s}.tech-day-flow__rows>li:nth-child(1){--tech-flow-tint:#fff8dc;--tech-flow-border:#f0dfa6}.tech-day-flow__rows>li:nth-child(2){--tech-flow-tint:#edf7ff;--tech-flow-border:#d4e7f7}.tech-day-flow__rows>li:nth-child(3){--tech-flow-tint:#f3efff;--tech-flow-border:#e2d8fa}.tech-day-flow__rows>li:nth-child(4){--tech-flow-tint:#eefbf4;--tech-flow-border:#d4efdf}.tech-day-flow__rows details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}.tech-day-flow__rows summary{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none}.tech-day-flow__rows summary::-webkit-details-marker{display:none}.tech-day-flow__rows summary>span{color:#111;font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}.tech-day-flow__content{display:grid;grid-template-columns:minmax(230px,.7fr) minmax(320px,1.3fr);align-items:center;gap:36px}.tech-day-flow__content h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}.tech-day-flow__content p{margin:0;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}.tech-day-flow__content ul{display:none}.tech-day-flow__arrow{position:absolute;top:24px;right:28px;display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;cursor:pointer}.tech-day-flow__arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.tech-day-flow__rows details[open]{display:flex;align-items:stretch;border-radius:28px;background:linear-gradient(135deg,var(--tech-flow-tint),#fff 72%)}.tech-day-flow__rows details[open] summary{flex:0 0 55%;grid-template-columns:44px minmax(0,1fr);align-items:start;padding:64px 40px 64px 28px;min-height:0}.tech-day-flow__rows details[open] summary>span{font-size:26px;line-height:1;color:#050505}.tech-day-flow__rows details[open] .tech-day-flow__content{display:flex;flex-direction:column;align-items:flex-start;gap:0}.tech-day-flow__rows details[open] .tech-day-flow__content h3{font:600 32px/1.2 var(--font-heading);margin-bottom:16px;color:#050505}.tech-day-flow__rows details[open] .tech-day-flow__content p{display:block;max-width:90%;margin:0 0 32px;color:#333;font:400 17px/1.6 var(--font-body)}.tech-day-flow__rows details[open] .tech-day-flow__content ul{display:flex;flex-direction:column;gap:18px;margin:0;padding:0;list-style:none}.tech-day-flow__rows details[open] .tech-day-flow__content li{display:flex;align-items:center;gap:14px;color:#111;font-size:16px;font-weight:500}.tech-day-flow__rows details[open] .tech-day-flow__content li::before{content:'✦';font-size:16px}.tech-day-flow__rows details[open] .tech-day-flow__arrow{top:28px;transform:rotate(180deg)}.tech-day-flow__visual{display:none}.tech-day-flow__rows details[open] .tech-day-flow__visual{flex:0 0 45%;display:grid;align-content:center;gap:12px;padding:40px 88px 40px 0}.tech-day-flow__visual-bar{display:flex;align-items:center;gap:7px;padding:16px;border-bottom:1px solid #e4eaf5;color:#7b8495;font-size:11px}.tech-day-flow__visual-bar i{width:8px;height:8px;border-radius:50%;background:#d2dbea}.tech-day-flow__visual-bar span{margin-left:7px}.tech-day-flow__visual strong,.tech-day-flow__visual>span{display:block;padding:14px 16px;border:1px solid #e6ebf4;border-radius:12px;background:#fff;color:#2d3440;font-size:13px}.tech-day-flow__visual>span{color:#5d687b;font-size:12px}
+  @media(max-width:700px){.tech-day-flow{padding-block:88px}.tech-day-flow__head{margin-bottom:46px}.tech-day-flow__rows summary,.tech-day-flow__rows details[open] summary{grid-template-columns:42px 1fr;padding:18px 58px 18px 20px}.tech-day-flow__content{display:block}.tech-day-flow__content h3{font-size:19px}.tech-day-flow__content p{margin-top:8px}.tech-day-flow__rows details[open]{display:flex;flex-direction:column}.tech-day-flow__rows details[open] summary{flex:none;padding:34px 52px 30px 20px}.tech-day-flow__rows details[open] .tech-day-flow__content h3{font-size:28px}.tech-day-flow__rows details[open] .tech-day-flow__content p{max-width:none;margin-top:0}.tech-day-flow__rows details[open] .tech-day-flow__visual{flex:0 0 auto;padding:0 20px 24px}.tech-day-flow__arrow{right:18px}}
+</style>
+
+<style>
+  /* Match the established Speaker Management hero composition. */
+  .tech-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 170px 0 64px;
+    background: #fff;
+  }
+  .tech-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: 56%;
+    background: linear-gradient(90deg, transparent, rgba(238, 244, 255, .7) 45%, rgba(255, 244, 248, .62));
+    pointer-events: none;
+  }
+  .tech-hero__grid { position: relative; z-index: 1; max-width: 1080px; gap: 42px; }
+  .tech-hero__grid > div:first-child { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+  .tech-hero h1 { width: 100%; max-width: 600px; font-size: clamp(42px, 5vw, 58px); line-height: 1.08; letter-spacing: -1.8px; }
+  .tech-hero p { max-width: 560px; }
+  .tech-checks { order: 3; gap: 10px 18px; }
+  .tech-actions { order: 4; }
+  .tech-hero__grid > div:last-child { position: relative; z-index: 3; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .tech-console { border-radius: 22px 0 0 22px; box-shadow: 0 24px 70px rgba(37, 59, 131, .12); }
+  @media (max-width: 960px) {
+    .tech-hero { margin-top: -80px; padding: 140px 20px 56px; }
+    .tech-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .tech-hero__grid > div:first-child { align-items: center; text-align: center; }
+    .tech-hero h1, .tech-hero p { max-width: 760px; }
+    .tech-hero__grid > div:last-child { width: min(760px, 100%); margin: 0 auto; }
+    .tech-console { border-radius: 22px; }
+    .tech-checks, .tech-actions { justify-content: center; }
+  }
+  @media (max-width: 767px) {
+    .tech-hero { padding: 120px 18px 44px; }
+    .tech-hero h1 { font-size: 38px; letter-spacing: 0; }
+    .tech-hero p { font-size: 15px; line-height: 1.7; }
+    .tech-actions { width: 100%; flex-direction: column; }
+    .tech-actions .tech-btn { width: 100%; justify-content: center; }
+  }
+  .tech-hero .tech-console {
+    min-height: 420px;
+    background-image: url('/images/industries/technology/event-dashboard-web-800.webp');
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+  }
+  .tech-hero .tech-console > * { display: none; }
+  .tech-day-flow__visual img {
+    display: block;
+    width: 100%;
+    max-height: 330px;
+    object-fit: contain;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 14px 32px rgba(31, 41, 55, .12);
+  }
+  @media (max-width: 700px) {
+    .tech-day-flow__visual img { max-height: 260px; }
+  }
+  .tech-quad__composite {
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  .tech-quad__composite .tech-shot { display: none; }
+  .tech-quad__screenshot {
+    position: absolute;
+    inset: 18px 12px 18px 12px;
+    z-index: 1;
+    width: calc(100% - 24px);
+    height: calc(100% - 36px);
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid #dbe3f0;
+    border-radius: 14px;
+    box-shadow: 0 16px 34px rgba(31, 41, 55, .14);
+    background: #fff;
+  }
+  .tech-choice {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+    max-width: 1100px;
+    margin: 26px auto 0;
+    overflow: hidden;
+    border: 1px solid #dfe5f1;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, .38);
+  }
+  .tech-choice article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    min-height: 360px;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .tech-choice article + article {
+    border-top: 1px solid #dfe5f1;
+  }
+  .tech-choice article:nth-child(2) {
+    grid-template-areas: "copy image";
+  }
+  .tech-choice article > .tech-choice__screenshot {
+    display: block;
+    grid-area: image;
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    margin: 0;
+    object-fit: cover;
+    object-position: top left;
+    border: 0;
+    border-right: 1px solid #dfe5f1;
+    background: #fff;
+  }
+  .tech-choice article:nth-child(2) > .tech-choice__screenshot {
+    border-right: 0;
+    border-left: 1px solid #dfe5f1;
+  }
+  .tech-choice article > .tech-kicker,
+  .tech-choice article > h3,
+  .tech-choice article > p {
+    grid-column: 2;
+    padding-inline: 48px;
+  }
+  .tech-choice article:nth-child(2) > .tech-kicker,
+  .tech-choice article:nth-child(2) > h3,
+  .tech-choice article:nth-child(2) > p {
+    grid-column: 1;
+  }
+  .tech-choice article > .tech-kicker {
+    align-self: end;
+    margin: 0 0 14px;
+    padding-top: 36px;
+  }
+  .tech-choice article > h3 {
+    align-self: center;
+    margin: 0 0 10px;
+  }
+  .tech-choice article > p {
+    align-self: start;
+    padding-bottom: 36px;
+  }
+  @media (max-width: 700px) {
+    .tech-choice article,
+    .tech-choice article:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .tech-choice article > .tech-choice__screenshot,
+    .tech-choice article:nth-child(2) > .tech-choice__screenshot {
+      width: 100%;
+      min-height: 220px;
+      height: 220px;
+      border: 0;
+      border-bottom: 1px solid #dfe5f1;
+    }
+    .tech-choice article > .tech-kicker,
+    .tech-choice article > h3,
+    .tech-choice article > p,
+    .tech-choice article:nth-child(2) > .tech-kicker,
+    .tech-choice article:nth-child(2) > h3,
+    .tech-choice article:nth-child(2) > p {
+      width: 100%;
+      padding-inline: 24px;
+    }
+    .tech-choice article > .tech-kicker { padding-top: 28px; }
+    .tech-choice article > p { padding-bottom: 28px; }
+  }
+  /* Exact Event Registration-style bento treatment for the boundary section. */
+  .tech-section--tint:not(.tech-owner-links) {
+    padding: 110px 0 128px;
+    background: linear-gradient(135deg, #f3f7ff, #fff 52%, #fff4fa);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-header {
+    max-width: 920px;
+    margin-bottom: 52px;
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-header h2 {
+    font-size: clamp(42px, 5vw, 58px);
+    line-height: 1.08;
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice {
+    max-width: 1140px;
+    border-color: #dce3ef;
+    border-radius: 24px;
+    background: rgba(255,255,255,.22);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article {
+    min-height: 400px;
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article > .tech-choice__screenshot {
+    min-height: 400px;
+    padding: 48px;
+    object-fit: contain;
+    background: linear-gradient(145deg, #fff5c6, #fdfdfd 75%);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:nth-child(2) > .tech-choice__screenshot {
+    background: linear-gradient(145deg, #e8f1ff, #fff 75%);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:first-child::before,
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:nth-child(2)::before {
+    position: absolute;
+    z-index: 3;
+    padding: 10px 14px;
+    border: 1px solid #cfead9;
+    border-radius: 10px;
+    background: #effbf4;
+    color: #18864b;
+    box-shadow: 0 10px 24px rgba(31,41,55,.14);
+    font: 700 12px/1 var(--font-body);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:first-child::before {
+    content: '✓ Workflow configured';
+    top: 24px;
+    left: calc(50% - 34px);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:nth-child(2)::before {
+    content: '✓ Review required';
+    top: 24px;
+    right: calc(50% - 34px);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article { position: relative; }
+  .tech-section--tint:not(.tech-owner-links) { display: none !important; }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice__stage {
+    grid-area: image;
+    position: relative;
+    display: grid;
+    place-items: center;
+    min-height: 400px;
+    padding: 48px;
+    background: linear-gradient(145deg, #fff5c6, #fdfdfd 75%);
+    border-right: 1px solid #dfe5f1;
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice article:nth-child(2) .tech-choice__stage {
+    background: linear-gradient(145deg, #e8f1ff, #fff 75%);
+    border-right: 0;
+    border-left: 1px solid #dfe5f1;
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice__stage::before {
+    content: '';
+    position: absolute;
+    inset: 36px 48px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.46);
+    box-shadow: 0 18px 38px rgba(31,41,55,.1);
+  }
+  .tech-section--tint:not(.tech-owner-links) .tech-choice__stage .tech-choice__screenshot {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 285px;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(31,41,55,.16);
+  }
+  @media (max-width: 700px) {
+    .tech-section--tint:not(.tech-owner-links) { padding: 76px 0 88px; }
+    .tech-section--tint:not(.tech-owner-links) .tech-header { margin-bottom: 34px; padding: 0 20px; }
+    .tech-section--tint:not(.tech-owner-links) .tech-header h2 { font-size: 36px; }
+    .tech-section--tint:not(.tech-owner-links) .tech-choice article > .tech-choice__stage,
+    .tech-section--tint:not(.tech-owner-links) .tech-choice article:nth-child(2) > .tech-choice__stage { width: 100%; min-height: 250px; padding: 24px; border: 0; border-bottom: 1px solid #dfe5f1; }
+    .tech-section--tint:not(.tech-owner-links) .tech-choice__stage::before { inset: 20px 24px; }
+    .tech-section--tint:not(.tech-owner-links) .tech-choice__stage .tech-choice__screenshot { height: 200px; }
+  }
+</style>
+
+<style>
+  .tech-owner-links {
+    padding: 112px 24px 0;
+    background: #fff;
+  }
+  .tech-owner-links .tech-wrap { width: min(1180px, 100%); }
+  .tech-owner-links .tech-header { max-width: 900px; margin: 0 auto 44px; }
+  .tech-owner-links .tech-eyebrow { display: none; }
+  .tech-owner-links .tech-header h2 { max-width: 760px; margin-inline: auto; font-size: clamp(42px, 5vw, 58px); }
+  .tech-owner-links .tech-links {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid #d7e1f1;
+  }
+  .tech-owner-links .tech-links a {
+    min-height: 250px;
+    padding: 34px 26px 44px;
+    border: 0;
+    border-right: 1px solid #d7e1f1;
+    border-radius: 0;
+    background: transparent;
+    transform: none;
+    box-shadow: none;
+  }
+  .tech-owner-links .tech-links a:first-child { border-left: 0; }
+  .tech-owner-links .tech-links a:last-child { border-right: 0; }
+  .tech-owner-links .tech-link-icon { margin-bottom: 34px; color: var(--brand-blue); font-size: 22px; }
+  .tech-owner-links .tech-links h3 { margin: 0 0 42px; font: 500 21px/1.25 var(--font-heading); }
+  .tech-owner-links .tech-links p { max-width: 22ch; margin: 0; font-size: 16px; line-height: 1.5; }
+  .tech-owner-links .tech-learn { display: none; }
+  @media (max-width: 800px) {
+    .tech-owner-links { padding: 76px 20px 0; }
+    .tech-owner-links .tech-links { grid-template-columns: repeat(2, 1fr); }
+    .tech-owner-links .tech-links a:nth-child(2) { border-right: 0; }
+    .tech-owner-links .tech-links a:nth-child(-n+2) { border-bottom: 1px solid #d7e1f1; }
+  }
+  @media (max-width: 520px) {
+    .tech-owner-links .tech-links { grid-template-columns: 1fr; }
+    .tech-owner-links .tech-links a { min-height: 0; border-right: 0; border-bottom: 1px solid #d7e1f1; }
+    .tech-owner-links .tech-links a:last-child { border-bottom: 0; }
+  }
+  .tech-demo-section { padding: 112px 24px; background: #fff; }
+  .tech-demo-section .tech-demo { width: min(1080px, 100%); min-height: 0; padding: 0; gap: 64px; background: transparent; }
+  .tech-demo-section .tech-demo::after { display: none; }
+  .tech-demo-section .tech-demo__content { max-width: 520px; }
+  .tech-demo-section .tech-demo__content h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .tech-demo-section .tech-demo__content p { font-size: 17.5px; line-height: 1.5; }
+  .tech-demo-section .tech-demo__visual { min-height: 360px; }
+  .tech-demo-section .tech-demo__visual::before {
+    content: '';
+    position: absolute;
+    inset: 18px 10% 16px 2%;
+    border-radius: 24px;
+    background: linear-gradient(145deg, #fff5c7, #fff 72%);
+    box-shadow: 0 22px 48px rgba(37,59,131,.12);
+  }
+  .tech-demo-section .tech-demo__window { overflow: hidden; }
+  .tech-demo-section .tech-demo__window .tech-demo__screen { display: none; }
+  .tech-demo-section .tech-demo__window .tech-demo-screenshot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  @media (max-width: 620px) { .tech-demo-section { padding: 72px 18px; } }
+  .tech-section--faq {
+    padding: 80px 24px;
+    background: #fff;
+  }
+  .tech-section--faq .tech-wrap { width: min(1140px, 100%); }
+  .tech-operations-section { padding: 100px 24px; background: #fff; }
+  .tech-operations-section .tech-spotlight { grid-template-columns: 40% 1fr; gap: 80px; width: min(1200px, 100%); align-items: stretch; }
+  .tech-operations-section .tech-spotlight__intro { position: sticky; top: 120px; align-self: start; text-align: left; }
+  .tech-operations-section .tech-spotlight__intro .tech-eyebrow { display: inline-flex; align-items: center; margin-bottom: 24px; padding: 6px 12px; border-radius: 99px; background: #f4f5f7; color: var(--heading-dark); font-size: 13px; font-weight: 600; letter-spacing: 0; text-transform: none; }
+  .tech-operations-section .tech-spotlight__intro h2 { margin-bottom: 24px; font-size: clamp(36px, 4vw, 48px); line-height: 1.2; letter-spacing: -.02em; white-space: normal; }
+  .tech-operations-section .tech-spotlight__intro p { max-width: 660px; }
+  .tech-operations__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font-size: .9375rem; font-weight: 500; text-decoration: none; }
+  .tech-operations-section .tech-role-panel { display: flex; flex-direction: column; gap: 32px; padding: 0; background: transparent; }
+  .tech-operations-section .tech-role-panel > div { display: block !important; position: sticky; padding: 32px; border: 0; border-radius: 24px; background: #f4f5f7; overflow: hidden; }
+  .tech-operations-section .tech-role-panel > div:nth-child(1) { top: 80px; }
+  .tech-operations-section .tech-role-panel > div:nth-child(2) { top: 100px; }
+  .tech-operations-section .tech-role-panel > div:nth-child(3) { top: 120px; }
+  .tech-role-card__header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .tech-role-card__header, .tech-role-card__text { padding: 0 !important; border: 0 !important; }
+  .tech-operations-section .tech-role-panel .tech-role-card__number { display: grid !important; place-items: center; flex: 0 0 40px; width: 40px; height: 40px; border-radius: 50%; background: #111; color: #fff !important; font-size: 16px; font-weight: 700; grid-column: auto !important; }
+  .tech-operations-section .tech-role-panel .tech-role-card__text { display: grid; grid-template-columns: 1fr !important; gap: 8px; padding: 0 !important; border: 0 !important; }
+  .tech-operations-section .tech-role-panel .tech-role-card__text span { grid-column: auto !important; }
+  .tech-role-card__text b { font-size: 20px; }
+  .tech-role-card__text span { font-size: 16px; line-height: 1.6; }
+  .tech-role-card__text em { font-size: 11px; color: var(--brand-blue); font-style: normal; font-weight: 700; text-transform: uppercase; }
+  .tech-operations-section .tech-role-panel img { display: block; width: 100%; height: 220px; object-fit: cover; object-position: top left; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; padding: 24px; background: #edf7f5; box-sizing: border-box; }
+  @media (max-width: 620px) {
+    .tech-operations-section { padding: 64px 18px; }
+    .tech-operations-section .tech-spotlight__intro h2 { font-size: 36px; white-space: normal; }
+    .tech-operations-section .tech-spotlight { grid-template-columns: 1fr; gap: 40px; }
+    .tech-operations-section .tech-spotlight__intro { position: static; }
+    .tech-operations-section .tech-role-panel > div { position: relative; padding: 24px; border-radius: 22px; }
+    .tech-role-card__header { gap: 14px; }
+    .tech-operations-section .tech-role-panel img { height: 190px; padding: 16px; }
+  }
+  .tech-usecase-suite { padding: 112px 24px; background: #fff; }
+  .tech-usecase-suite .tech-wrap { width: min(1080px, 100%); }
+  .tech-usecase-suite .tech-header { max-width: 900px; margin: 0 auto 28px; }
+  .tech-usecase-suite .tech-header h2 { max-width: 860px; margin-inline: auto; font-size: clamp(42px, 5vw, 58px); }
+  .tech-usecase-tabs { margin-bottom: 38px; }
+  .tech-usecase-panels article { min-height: 420px; padding: 64px; border-radius: 28px; background: linear-gradient(135deg, #eef5ff, #fff 72%); }
+  .tech-usecase-art { min-height: 290px; padding: 18px; border-radius: 20px; background: rgba(255,255,255,.68); box-shadow: 0 22px 48px rgba(37,59,131,.12); overflow: hidden; }
+  .tech-usecase-art > * { display: none; }
+  .tech-usecase-art .tech-usecase-screenshot { display: block; width: 100%; height: 290px; object-fit: cover; object-position: top left; border-radius: 12px; box-shadow: 0 12px 26px rgba(31,41,55,.14); }
+  @media (max-width: 900px) { .tech-usecase-panels article { padding: 38px 30px; } }
+  @media (max-width: 620px) { .tech-usecase-suite { padding: 72px 18px; } .tech-usecase-panels article { padding: 28px 20px; border-radius: 22px; } .tech-usecase-art .tech-usecase-screenshot { height: 220px; } }
+
+  /* Keep the technology event-model section identical to the approved healthcare composition. */
+  .tech-quad-section { display: flex; flex-direction: column; align-items: center; padding: 64px 24px 40px; background: #fff; }
+  .tech-quad-header { display: flex; max-width: 1100px; flex-direction: column; align-items: center; margin-bottom: 24px; text-align: center; }
+  .tech-quad-header h2 { margin: 0 0 12px; background: linear-gradient(98deg, var(--heading-dark, #1e1d24) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; font: 500 clamp(28px, 4.2vw, 48px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .tech-quad-header p { max-width: 640px; margin: 0; color: var(--subheading-gray, #555); font: 400 18px/1.5 var(--font-body); }
+  .tech-quad { position: relative; display: grid; width: 100%; max-width: 1180px; grid-template: 1fr 1fr / 1fr 1fr; margin: 24px auto; }
+  .tech-quad__cell { display: flex; min-width: 0; min-height: 260px; flex-direction: column; justify-content: center; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .tech-quad__cell:nth-child(2n) { border-right: 0; }
+  .tech-quad__cell:nth-child(n + 3) { border-bottom: 0; }
+  .tech-quad__cell h3 { margin: 0 0 16px; color: var(--heading-dark, #1e1d24); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .tech-quad__cell p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font: 400 16px/1.6 var(--font-body); }
+  .tech-quad__cell--media { min-height: 360px; align-items: center; padding: 18px 22px; overflow: hidden; background: #fff; }
+  .tech-quad__cross { position: absolute; top: 50%; left: 50%; z-index: 4; display: block; width: 18px; height: 18px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); background: transparent; border-radius: 0; box-shadow: none; color: inherit; font-size: inherit; }
+  .tech-model-workspace { position: relative; width: 100%; height: 320px; overflow: visible; }
+  .tech-model-workspace::before { position: absolute; top: 42px; left: 20px; width: 74%; height: 62%; border: 1px solid #d7deea; border-radius: 12px; background: linear-gradient(150deg, #edf2ff, #fff); box-shadow: 0 16px 34px rgba(31,41,72,.1); content: ""; transform: translate(-10px, -9px); }
+  .tech-model-screen { position: absolute; right: 18px; bottom: 20px; z-index: 2; width: 76%; overflow: hidden; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); animation: techModelFloat 7s ease-in-out infinite; }
+  .tech-model-screen__bar { display: flex; align-items: center; gap: 5px; padding: 11px 13px; border-bottom: 1px solid #e9edf5; background: #f8faff; }
+  .tech-model-screen__bar i { width: 6px; height: 6px; border-radius: 50%; background: #ff8ca5; }
+  .tech-model-screen__bar i:nth-child(2) { background: #ffce73; }
+  .tech-model-screen__bar i:nth-child(3) { background: #7bd7b2; }
+  .tech-model-screen__bar b { margin-left: 5px; color: #647087; font: 700 9px/1 var(--font-body); letter-spacing: .04em; }
+  .tech-model-screen__body { display: grid; gap: 8px; padding: 14px; }
+  .tech-model-screen__body span { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 11px; border: 1px solid #edf0f5; border-radius: 8px; background: #fff; }
+  .tech-model-screen__body small { color: #7d8798; font: 600 9px/1.2 var(--font-body); }
+  .tech-model-screen__body strong { color: #2d3748; font: 700 9px/1.2 var(--font-body); text-align: right; }
+  .tech-model-screen--showcase { right: auto; left: 18px; }
+  .tech-model-workspace--showcase::before { right: 20px; left: auto; background: linear-gradient(150deg, #e9fbf7, #fff); transform: translate(10px, -9px); }
+  .tech-status, .tech-action { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 10px; white-space: nowrap; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .tech-status { top: 14px; left: 14px; padding: 10px 12px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .tech-action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .tech-model-workspace--showcase .tech-status { right: 14px; left: auto; }
+  .tech-model-workspace--showcase .tech-action { right: auto; left: 14px; }
+  .tech-model-cursor { position: absolute; right: 4px; bottom: 34px; z-index: 6; width: 16px; height: 21px; filter: drop-shadow(0 3px 3px rgba(17,24,39,.25)); transform: rotate(-18deg); }
+  .tech-model-cursor::before { display: block; width: 0; height: 0; border-width: 10px 0 10px 15px; border-style: solid; border-color: transparent transparent transparent #202736; content: ""; clip-path: polygon(0 0, 100% 50%, 46% 62%, 60% 100%, 43% 100%, 30% 66%, 0 82%); }
+  .tech-model-workspace--showcase .tech-model-cursor { right: auto; bottom: 34px; left: 118px; }
+  @keyframes techModelFloat { 0%, 100% { transform: translateY(4px) scale(.985) rotate(-.7deg); } 50% { transform: translateY(-4px) scale(1) rotate(0); } }
+  @media (max-width: 620px) {
+    .tech-quad-section { padding: 60px 16px; }
+    .tech-quad-header { margin-bottom: 24px; }
+    .tech-quad-header h2 { font-size: 34px; }
+    .tech-quad { grid-template-columns: 1fr; grid-template-rows: auto; margin: 24px auto; }
+    .tech-quad__cross { display: none; }
+    .tech-quad__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .tech-quad__cell:nth-child(n + 3) { border-bottom: 1px solid #eef0f3; }
+    .tech-quad__cell:nth-child(1) { order: 1; }
+    .tech-quad__cell:nth-child(2) { order: 2; min-height: 360px; padding: 16px 20px 32px; }
+    .tech-quad__cell:nth-child(4) { order: 3; }
+    .tech-quad__cell:nth-child(3) { order: 4; min-height: 360px; padding: 16px 20px 32px; border-bottom: 0; }
+    .tech-model-workspace { height: 285px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tech-model-screen { animation: none; } }
+
+  /* Healthcare operating-view template, reused for both technology peer-item groups. */
+  .tech-role-template {
+    padding: clamp(64px, 7vw, 96px) 24px;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .tech-role-template__shell { width: min(1200px, 100%); margin: 0 auto; }
+  .tech-role-template__heading { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .tech-role-template__heading h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .tech-role-template__sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; margin: -1px; padding: 0; border: 0; clip: rect(0 0 0 0); white-space: nowrap; }
+  .tech-role-template__grid { position: relative; display: grid; max-width: 1200px; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .tech-role-template__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border: 0; border-left: 1px solid var(--surface-card-border, #e8ecf2); border-radius: 0; background: transparent; color: inherit; text-decoration: none; box-shadow: none; }
+  .tech-role-template__card--first { border-left: 0; }
+  .tech-role-template__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .tech-role-template__notch--one { left: 25%; }
+  .tech-role-template__notch--two { left: 50%; }
+  .tech-role-template__notch--three { left: 75%; }
+  .tech-role-template__icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .tech-role-template__icon svg { width: 100%; height: 100%; }
+  .tech-role-template__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font: 600 21px/1.25 var(--font-heading); }
+  .tech-role-template__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+  .tech-role-template--links .tech-role-template__card { cursor: pointer; }
+  .tech-role-template--links .tech-role-template__card:focus-visible { outline: 3px solid rgba(55,93,251,.3); outline-offset: -3px; }
+  @media (max-width: 992px) {
+    .tech-role-template__grid { grid-template-columns: 1fr; }
+    .tech-role-template__notch { display: none; }
+    .tech-role-template__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .tech-role-template__card--first { border-top: 0; }
+  }
+  @media (max-width: 767px) {
+    .tech-role-template { padding: 60px 20px; background-attachment: scroll; }
+    .tech-role-template__heading { margin-bottom: 44px; }
+    .tech-role-template__heading h2 { white-space: normal; }
+  }
+
+  /* Match the event-day title to the technology use-case header system. */
+  .tech-day-flow {
+    padding: 120px 24px;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .tech-day-flow > .tech-wrap { width: min(1200px, 100%); }
+  .tech-day-flow__head { max-width: 900px; margin: 0 auto 68px; text-align: center; }
+  .tech-day-flow__head .tech-eyebrow { margin-bottom: 16px; }
+  .tech-day-flow__head h2 { max-width: 860px; margin: 0 auto; background: none; color: var(--heading-dark, #22272f); font: 500 clamp(42px, 5vw, 58px)/1.08 var(--font-heading); letter-spacing: -.04em; -webkit-text-fill-color: currentColor; }
+  @media (max-width: 767px) {
+    .tech-day-flow { padding: 88px 16px; background-attachment: scroll; }
+    .tech-day-flow__head { margin-bottom: 44px; }
+  }
+</style>
+
+<script>
+  const faq = document.querySelectorAll(".tech-faq details");
+  faq.forEach((item) => item.addEventListener("toggle", () => { if (item.open) faq.forEach((other) => { if (other !== item) other.removeAttribute("open"); }); }));
+  const usecaseTabs = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-tech-usecase-tab]"));
+  const usecasePanels = Array.from(document.querySelectorAll<HTMLElement>("[data-tech-usecase-panel]"));
+  usecaseTabs.forEach((tab) => tab.addEventListener("click", () => {
+    const selected = tab.dataset.techUsecaseTab;
+    usecaseTabs.forEach((item) => { const active = item === tab; item.classList.toggle("is-active", active); item.setAttribute("aria-selected", String(active)); });
+    usecasePanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.techUsecasePanel === selected));
+  }));
+  const dayFlowItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".tech-day-flow__rows details"));
+  dayFlowItems.forEach((item) => item.addEventListener("toggle", () => { if (item.open) dayFlowItems.forEach((other) => { if (other !== item) other.removeAttribute("open"); }); }));
+
+  const dayFlowScreens = [
+    ["/feature-images/event-check-in/scan-engine-visual.png", "EventHex Scanner showing a QR code ready for arrival validation", 240, 197],
+    ["/images/live-polling-qa/app/attendance-overview.png", "EventHex attendance workspace showing check-in status and attendance context", 1263, 697],
+    ["/images/event-mobile-app/app/platform-notification-management.png", "EventHex platform notifications workspace for reaching the app audience", 900, 520],
+    ["/images/webhooks/platform-analytics-web-960.webp", "EventHex Platform Analytics showing event creation, registration, and check-in trends", 960, 516],
+  ];
+  dayFlowItems.forEach((item, index) => {
+    let visual = item.querySelector<HTMLElement>(".tech-day-flow__visual");
+    if (!visual) {
+      visual = document.createElement("div");
+      visual.className = "tech-day-flow__visual";
+      item.appendChild(visual);
+    }
+    const [src, alt, width, height] = dayFlowScreens[index];
+    visual.setAttribute("role", "img");
+    visual.setAttribute("aria-label", alt);
+    visual.innerHTML = `<img src="${src}" alt="${alt}" width="${width}" height="${height}" loading="lazy" decoding="async" />`;
+  });
+
+  const boundaryScreens = [
+    ["/images/industries/technology/event-dashboard-web-800.webp", "EventHex event dashboard showing the supported workflow across registrations, sessions, speakers, and attendees", 800, 691],
+    ["/images/webhooks/platform-analytics-web-960.webp", "EventHex analytics workspace showing the review and reporting surface around event operations", 960, 516],
+  ];
+  document.querySelectorAll<HTMLElement>(".tech-choice article").forEach((article, index) => {
+    const [src, alt, width, height] = boundaryScreens[index];
+    const image = document.createElement("img");
+    image.className = "tech-choice__screenshot";
+    image.src = src;
+    image.alt = alt;
+    image.width = width;
+    image.height = height;
+    image.loading = "lazy";
+    image.decoding = "async";
+    const stage = document.createElement("div");
+    stage.className = "tech-choice__stage";
+    stage.append(image);
+    article.prepend(stage);
+  });
+
+  const useCaseScreens = [
+    ["/images/live-polling-qa/app/sessions-workspace.png", "EventHex sessions workspace for a developer conference programme", 1263, 697],
+    ["/images/industries/technology/event-dashboard-web-800.webp", "EventHex event dashboard for a SaaS launch", 800, 691],
+    ["/images/live-polling-qa/app/attendance-overview.png", "EventHex attendance workspace for a hackathon", 1263, 697],
+    ["/images/event-mobile-app/app/platform-notification-management.png", "EventHex platform notifications for a technology meetup", 900, 520],
+  ];
+  document.querySelectorAll<HTMLElement>(".tech-usecase-art").forEach((art, index) => {
+    const [src, alt, width, height] = useCaseScreens[index];
+    const image = document.createElement("img");
+    image.className = "tech-usecase-screenshot";
+    image.src = src;
+    image.alt = alt;
+    image.width = width;
+    image.height = height;
+    image.loading = "lazy";
+    image.decoding = "async";
+    art.prepend(image);
+  });
+
+  const demoScreens = [
+    ["/images/industries/technology/event-dashboard-web-800.webp", "EventHex Programme workspace showing the technology event setup", 800, 691],
+    ["/images/webhooks/platform-analytics-web-960.webp", "EventHex Review workspace showing supported event operations", 960, 516],
+  ];
+  document.querySelectorAll<HTMLElement>(".tech-demo__window").forEach((window, index) => {
+    const [src, alt, width, height] = demoScreens[index];
+    const image = document.createElement("img");
+    image.className = "tech-demo-screenshot";
+    image.src = src;
+    image.alt = alt;
+    image.width = width;
+    image.height = height;
+    image.loading = "lazy";
+    image.decoding = "async";
+    window.prepend(image);
+  });
+</script>
