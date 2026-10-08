@@ -1,119 +1,1137 @@
 ---
-import IndustryLayout from "../../components/industries/IndustryLayout.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+
+const title = "Hospitality Event Management Software | EventHex";
+const description =
+  "Run hotel conferences, tourism summits, F&B trade shows, and hospitality awards with event websites, registration, exhibitors, partners, programme, communication, badges, and analytics.";
+const canonical = "https://eventhex.ai/industries/hospitality/";
+
+const workflow = [
+  { label: "Brand", detail: "Website + identity" },
+  { label: "Invite", detail: "Guests + partners" },
+  { label: "Register", detail: "Fields + tickets" },
+  { label: "Present", detail: "Exhibitors + programme" },
+  { label: "Host", detail: "Badges + updates" },
+  { label: "Review", detail: "Event signals" },
+];
+
+const eventModel = [
+  {
+    tag: "Primary model",
+    title: "Exhibition-led event",
+    copy: "Connect exhibitor setup, passes, lead capture, attendee access, and event reporting.",
+    primaryImage: "/images/platform-analytics-dashboard.jpg",
+    primaryAlt: "EventHex analytics dashboard for exhibition operations",
+    secondaryImage: "/feature-images/hospitality/platform-analytics-dashboard.png",
+    secondaryAlt: "EventHex analytics view for exhibition event trends",
+    detailImage: "/images/platform-analytics-dashboard.jpg",
+  },
+  {
+    tag: "Alternate model",
+    title: "Conference-led event",
+    copy: "Use registration, programme, speakers, meetings, and communications without adding expo complexity.",
+    primaryImage: "/feature-images/session-management/timeline-view.jpeg",
+    primaryAlt: "EventHex programme timeline for a conference-led event",
+    secondaryImage: "/feature-images/speaker-management/session-scheduling-dashboard.png",
+    secondaryAlt: "EventHex agenda and sessions screen for conference planning",
+    detailImage: "/feature-images/session-management/detail-panel.png",
+    detailAlt: "EventHex selected session details for a conference programme",
+  },
+];
+
+const coreFeatures = [
+  { title: "Branded event website", copy: "Publish the event, programme, partners, and registration entry points in a consistent EventHex site.", link: "/event-website-builder/" },
+  { title: "Guest registration", copy: "Configure forms, ticket types, approvals, discounts, and delivery for the audience.", link: "/event-registration/" },
+  { title: "Exhibitors and sponsors", copy: "Manage partner records, exhibitor teams, passes, resources, and leads.", link: "/exhibitor-management/" },
+  { title: "Event experience", copy: "Connect app, notifications, badges, QR arrival, photos, and event analytics where needed.", link: "/event-mobile-app/" },
+];
+
+const hospitalityWorkflowFeatures = [
+  {
+    eyebrow: "Connected workflow",
+    title: "One event record, from invite to review",
+    copy: "Bring the audience, programme, partners, and operations into a workflow teams can understand. Keep the exhibitor journey attached to the attendee journey as the event changes.",
+    image: "/images/platform-analytics-dashboard.jpg",
+    alt: "EventHex platform analytics dashboard showing connected event activity",
+    link: "/book-a-demo/",
+  },
+  {
+    title: "Branded event website",
+    copy: "Publish the event, programme, partners, and registration entry points in a consistent EventHex site.",
+    image: "/feature-images/event-registration/website-embed.png",
+    alt: "EventHex website mode settings for a branded hospitality event website",
+    link: "/event-website-builder/",
+  },
+  {
+    title: "Guest registration",
+    copy: "Configure forms, ticket types, approvals, discounts, and delivery for the audience.",
+    image: "/feature-images/event-registration-dashboard.png",
+    alt: "EventHex registration dashboard for hospitality event guests",
+    link: "/event-registration/",
+  },
+  {
+    title: "Exhibitors and sponsors",
+    copy: "Manage partner records, exhibitor teams, passes, resources, and leads.",
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex platform analytics view for exhibitor and sponsor activity",
+    link: "/exhibitor-management/",
+  },
+  {
+    title: "Event experience",
+    copy: "Connect app, notifications, badges, QR arrival, photos, and event analytics where needed.",
+    image: "/feature-images/solutions/events-activities-laptop-mockup.png",
+    alt: "EventHex event experience dashboard for hospitality attendees",
+    link: "/event-mobile-app/",
+  },
+];
+
+const roles = [
+  {
+    title: "Event owner",
+    cue: "Accountable",
+    copy: "Sets the event, audience, access, programme, and reporting decisions.",
+    accent: "#375dfb",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"></path><path d="M6 21V8l6-4 6 4v13"></path><path d="M9 21v-5h6v5"></path><path d="M9 10h.01M15 10h.01"></path></svg>`,
+  },
+  {
+    title: "Specialist teams",
+    cue: "Operational",
+    copy: "Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.",
+    accent: "#375dfb",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
+  },
+  {
+    title: "Event leadership",
+    cue: "Decision",
+    copy: "Reviews event and portfolio signals for the next operating decision.",
+    accent: "#375dfb",
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 6-7"></path><path d="M17 7h3v3"></path></svg>`,
+  },
+];
+
+const journey = [
+  ["Discover", "Open with the hospitality event's own brand and programme."],
+  ["Register", "Collect configured guest and ticket details."],
+  ["Prepare", "Send planned campaigns and operational updates."],
+  ["Arrive", "Validate access and issue the configured badge."],
+  ["Participate", "Use agenda, app, networking, polling, and photos as relevant."],
+  ["Review", "Use supported event and exhibitor reporting after the event."],
+];
+
+const journeyVisuals = [
+  { image: "/feature-images/hospitality/platform-analytics-dashboard.png", alt: "EventHex platform analytics dashboard showing hospitality event activity", width: 1262, height: 697 },
+  { image: "/feature-images/event-registration-dashboard.png", alt: "EventHex registration dashboard for hospitality event guests", width: 512, height: 459 },
+  { image: "/feature-images/event-registration/confirmation-delivery.png", alt: "EventHex WhatsApp campaigns screen for sending hospitality event updates", width: 762, height: 696 },
+  { image: "/feature-images/event-check-in/scan-engine-figma.png", alt: "EventHex QR check-in screen confirming a hospitality event attendee", width: 512, height: 422 },
+  { image: "/feature-images/session-management/agenda-card-visual.svg", alt: "EventHex event agenda and session engagement view for attendees", width: 672, height: 584 },
+  { image: "/feature-images/speaker-management/audience-engagement-dashboard.png", alt: "EventHex event feedback dashboard for post-event review", width: 762, height: 696 },
+];
+
+const eventDaySteps = [
+  {
+    num: "01",
+    title: "Guest arrival",
+    desc: "Scan the EventHex ticket and show clear status feedback.",
+    bullets: ["Fast QR validation", "Clear access status", "Arrival stays on the event record"],
+    image: "/feature-images/event-check-in/scan-engine-visual.png",
+    alt: "EventHex QR check-in screen showing a guest access status",
+    width: 240,
+    height: 197,
+  },
+  {
+    num: "02",
+    title: "Exhibitor teams",
+    desc: "Use allocated passes, badges, and lead capture.",
+    bullets: ["Team passes in one place", "Badge-ready guest details", "Lead capture for exhibitors"],
+    image: "/feature-images/hospitality/platform-analytics-dashboard.png",
+    alt: "EventHex platform analytics dashboard for exhibitor team activity and event reporting",
+    width: 1262,
+    height: 697,
+  },
+  {
+    num: "03",
+    title: "Programme updates",
+    desc: "Keep sessions and operational app announcements current.",
+    bullets: ["Live agenda changes", "Operational announcements", "One connected event workspace"],
+    image: "/feature-images/solutions/events-activities-laptop-mockup.png",
+    alt: "EventHex event activities and programme workspace on a laptop",
+    width: 255,
+    height: 215,
+  },
+  {
+    num: "04",
+    title: "Photo discovery",
+    desc: "Use the attendee selfie/face-match gallery flow where approved.",
+    bullets: ["Attendee photo discovery", "Mobile-first event experience", "Share moments after arrival"],
+    image: "/feature-images/ai-photo-gallery/selfie-match-visual.svg",
+    alt: "EventHex AI photo gallery selfie-match experience for attendee photo discovery",
+    width: 775,
+    height: 812,
+  },
+];
+
+const formats = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-5h6v5"></path><path d="M9 10h.01M15 10h.01"></path></svg>`,
+    title: "Hotel conferences",
+    copy: "Connect branded registration, programme, guest communication, and arrival.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3a14 14 0 0 1 0 18"></path><path d="M12 3a14 14 0 0 0 0 18"></path></svg>`,
+    title: "Tourism summits",
+    copy: "Coordinate speakers, partners, delegates, networking, and event reporting.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V8h14v13"></path><path d="M3 8h18"></path><path d="M7 8V5h10v3"></path><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"></path></svg>`,
+    title: "F&B trade shows",
+    copy: "Manage exhibitors, team access, attendee tickets, leads, and event-day updates.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"></path></svg>`,
+    title: "Hospitality awards",
+    copy: "Keep nominations in the responsible system; use EventHex for the event, guests, programme, badges, and communication.",
+  },
+];
+
+const deepLinks = [
+  ["Event Website Builder", "Create the event destination.", "/event-website-builder/"],
+  ["Exhibitor Management", "Coordinate exhibitors and leads.", "/exhibitor-management/"],
+  ["Sponsor Management", "Present event partners.", "/sponsor-management/"],
+  ["Badge & Certificate Designer", "Prepare event outputs.", "/badge-certificate-designer/"],
+];
+
+const deepLinkVisuals = [
+  {
+    id: "website",
+    label: "Event Website Builder",
+    title: "Shape the hospitality event destination",
+    description: "Publish the event identity, programme, partners, and registration entry points in one branded surface.",
+    checklist: ["Branded event destination", "Programme and partner content", "Registration entry point"],
+    image: "/feature-images/solutions/event-builder-laptop-mockup.png",
+    alt: "EventHex event website builder laptop mockup for a hospitality event",
+    width: 512,
+    height: 355,
+  },
+  {
+    id: "exhibitors",
+    label: "Exhibitor Management",
+    title: "Keep exhibitor operations connected",
+    description: "Coordinate partner records, team access, resources, lead capture, and the event-day handoff.",
+    checklist: ["Exhibitor teams and passes", "Partner resources", "Lead capture and reporting"],
+    image: "/feature-images/hospitality/exhibitor-add-form.png",
+    alt: "EventHex exhibitor setup form for company, category, and booth details",
+    width: 800,
+    height: 1020,
+  },
+  {
+    id: "sponsors",
+    label: "Sponsor Management",
+    title: "Present partners with the event context",
+    description: "Give sponsors a clear place in the event story while keeping their delivery and reporting connected.",
+    checklist: ["Partner visibility", "Sponsor-ready event content", "Connected event reporting"],
+    image: "/images/_tmp-analytics-reference.png",
+    alt: "EventHex analytics reference dashboard for sponsor and partner reporting",
+    width: 1262,
+    height: 697,
+  },
+  {
+    id: "badges",
+    label: "Badge & Certificate Designer",
+    title: "Prepare the outputs guests carry",
+    description: "Turn configured guest data into badges and event outputs that are ready for arrival and follow-up.",
+    checklist: ["Configured badge details", "Event-ready output design", "Guest record stays connected"],
+    image: "/feature-images/solutions/badge-management-mockup.png",
+    alt: "EventHex badge management mockup for hospitality event credentials",
+    width: 615,
+    height: 512,
+  },
+];
+
+const setupSteps = [
+  ["Start with the event format", "Choose the smallest workflow that matches this event."],
+  ["Add only the modules you need", "Use the connected feature pages to understand each mechanism."],
+  ["Review the setup in the demo", "Bring market, event, audience, access, communication, and onsite requirements."],
+];
+
+const faqs = [
+  ["Can the event use its own brand?", "Use the website and branding controls documented on the Event Website Builder and White Label pages."],
+  ["Can exhibitors manage teams and resources?", "Yes. The exhibitor portal covers company, products, resources, booth teams, passes, badges, and leads."],
+  ["Does EventHex manage tasting entitlements?", "No. EventHex does not include a specialized F&B entitlement workflow."],
+  ["Does EventHex include awards nominee management?", "No. EventHex does not include a specialized nominee-management workflow. Use EventHex for the surrounding event operations."],
+  ["Is every attendee surface multilingual?", "EventHex does not promise universal multilingual coverage. Validate the exact required surfaces during the demo."],
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org", "@type": "SoftwareApplication", name: "EventHex Hospitality Event Management Software",
+  applicationCategory: "BusinessApplication", operatingSystem: "Web", description, url: canonical,
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: ["Branded event websites", "Guest registration and ticketing", "Exhibitor and partner workflows", "Programme and speaker management", "Event-day badges and QR arrival", "Event and exhibitor reporting"],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org", "@type": "FAQPage",
+  mainEntity: faqs.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })),
+};
 ---
 
-<IndustryLayout
-  industry="Hospitality"
-  title="Event Management Software for Hospitality & Tourism Events | EventHex"
-  description="Run hotel conferences, tourism summits, F&B expos, and hospitality awards with EventHex. Guest management, sponsor portals, and branded event experiences."
-  canonical="https://eventhex.ai/industries/hospitality/"
-  badge="Hospitality Events"
-  heroTitleLine1="Event Management for"
-  heroTitleLine2="Hospitality & Tourism"
-  heroCopy="Manage hotel industry conferences, tourism summits, F&B expos, and hospitality awards with guest-centric registration, sponsor visibility, and branded event experiences."
-  trustItems={["Trusted by hospitality brands", "Guest experience focus"]}
-  challenges={[
-    {
-      icon: "🏨",
-      title: "Creating premium, brand-aligned guest experiences",
-      desc: "Hospitality events must reflect the high standards of the brands they represent, requiring pixel-perfect branding and guest-centric design."
-    },
-    {
-      icon: "🍽️",
-      title: "Managing F&B exhibitor booths and tasting sessions",
-      desc: "Food and beverage expos require specialized booth setups with tasting schedules, product catalogs, and hygiene compliance tracking."
-    },
-    {
-      icon: "🏆",
-      title: "Coordinating awards ceremonies with nominee management",
-      desc: "Awards events involve complex nominee submissions, jury review workflows, and live ceremony coordination across multiple categories."
-    },
-    {
-      icon: "🌐",
-      title: "Handling multi-language attendees from global tourism markets",
-      desc: "Tourism events attract international delegates who expect communications and event content in their preferred language."
-    }
-  ]}
-  solutions={[
-    {
-      icon: "🌐",
-      title: "Event Website Builder",
-      desc: "Branded event websites matching hotel and tourism brand identity",
-      link: "/event-website-builder/"
-    },
-    {
-      icon: "🏢",
-      title: "Exhibitor Management",
-      desc: "F&B exhibitor booths with product catalogs and tasting schedules",
-      link: "/exhibitor-management/"
-    },
-    {
-      icon: "🎖️",
-      title: "Badge & Certificate Designer",
-      desc: "Premium name badges and award certificates with on-site printing",
-      link: "/badge-certificate-designer/"
-    },
-    {
-      icon: "📧",
-      title: "Event Notifications",
-      desc: "Multi-language notifications via email, WhatsApp, and SMS",
-      link: "/event-notifications/"
-    },
-    {
-      icon: "🤝",
-      title: "Sponsor Management",
-      desc: "Hotel and tourism brand sponsor packages with digital visibility",
-      link: "/sponsor-management/"
-    },
-    {
-      icon: "📊",
-      title: "Event Analytics",
-      desc: "Guest engagement tracking and post-event satisfaction reporting",
-      link: "/event-analytics/"
-    }
-  ]}
-  useCases={[
-    {
-      title: "Hotel Industry Conferences",
-      desc: "Large-scale hotel and hospitality industry conferences with keynote sessions, networking lounges, and sponsor exhibitions"
-    },
-    {
-      title: "Tourism Board Summits",
-      desc: "Government and private tourism board summits with international delegates, policy sessions, and destination showcases"
-    },
-    {
-      title: "F&B Trade Shows",
-      desc: "Food and beverage trade exhibitions with tasting sessions, product launches, and supplier-buyer matchmaking"
-    },
-    {
-      title: "Hospitality Awards Ceremonies",
-      desc: "Industry awards events with nominee submissions, jury evaluation, and live ceremony management"
-    }
-  ]}
-  ctaTitle="Ready to Elevate Your Hospitality Event?"
-  ctaCopy="See how EventHex helps hospitality brands run premium conferences, expos, and awards with guest-centric features."
-  faqs={[
-    {
-      q: "Can I create branded event websites matching my hotel or tourism brand?",
-      a: "Yes. EventHex provides a drag-and-drop website builder with custom themes, brand colors, and typography to match your hospitality brand identity."
-    },
-    {
-      q: "How does exhibitor management work for F&B expos?",
-      a: "Exhibitors get self-service portals to upload product catalogs, manage tasting schedules, and track visitor engagement at their booth."
-    },
-    {
-      q: "Does EventHex support multi-language event communications?",
-      a: "Yes. Send notifications in multiple languages via email, WhatsApp, and SMS. Event websites and registration forms also support multilingual content."
-    },
-    {
-      q: "Can I manage an awards ceremony with EventHex?",
-      a: "Yes. Use the submission portal for nominee entries, configure jury review workflows, and manage the live awards ceremony with presentation support."
-    },
-    {
-      q: "How does guest management work for hospitality events?",
-      a: "Attendees receive personalized registration experiences, QR-coded badges, and real-time notifications. VIP guests get priority check-in and exclusive access zones."
-    }
-  ]}
-  supportNote={{ title: "Free hospitality event consultation", desc: "Our team helps you design premium guest experiences and configure exhibitor management for your event." }}
-  supportCta={{ label: "Plan my hospitality event", href: "/book-a-demo/" }}
-/>
+<MarketingLayout
+  {title}
+  {description}
+  {canonical}
+  footerCtaEyebrow="Plan Your Next Hospitality Event"
+  footerCtaTitle="See the workflow with your own event requirements"
+  footerCtaSubtitle="Bring the format, audience, registration and access rules, programme, communication channels, onsite plan, and integration needs. We’ll show the supported EventHex path and identify anything that needs separate validation."
+  footerCtaProofItems={["Branded event workflows", "Guest and exhibitor operations", "Event-day reporting"]}
+  footerCtaButtonText="Book a Free Demo"
+  footerCtaHref="/book-a-demo/"
+  footerCtaImageSrc="/feature-images/speaker-management/cta-illustration.svg"
+  footerCtaImageAlt="EventHex event management workflow illustration with connected speaker and attendee tools"
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <main class="hsp-page">
+    <section class="hsp-hero">
+      <div class="hsp-hero__shell">
+        <div class="hsp-hero__grid">
+          <div class="hsp-hero__content">
+            <div class="hsp-hero__badge animate-on-scroll" data-animation="fadeInDown">
+              <span>Hospitality event management</span>
+            </div>
+
+            <h1 class="hsp-hero__title animate-on-scroll" data-animation="fadeInUp">
+              <span class="hsp-hero__title-line">Build a branded guest,</span>
+              <span class="hsp-hero__title-line">exhibitor, and event-day</span>
+              <span class="hsp-hero__title-line">journey for hospitality</span>
+              <span class="hsp-hero__title-line">events</span>
+            </h1>
+
+            <p class="hsp-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+              Run hotel conferences, tourism summits, F&amp;B trade shows, and hospitality awards with event websites, registration, exhibitors, partners, programme, communication, badges, and analytics.
+            </p>
+
+            <div class="hsp-hero__points animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 950ms" aria-label="Hospitality event workflow capabilities">
+              <span class="hsp-hero__point">Branded event website + registration</span>
+              <span class="hsp-hero__point">Guest, exhibitor and partner workflows</span>
+              <span class="hsp-hero__point">Event-day check-in and analytics</span>
+            </div>
+
+            <div class="hsp-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+              <a href="/book-a-demo/" class="hsp-hero__btn hsp-hero__btn--primary">Get a Free Demo</a>
+              <a href="#hsp-workflow" class="hsp-hero__btn hsp-hero__btn--secondary">See how it works</a>
+            </div>
+          </div>
+
+          <div class="hsp-hero__visual animate-on-scroll" data-animation="fadeInRight">
+            <div class="hsp-hero__visual-card">
+              <div class="hsp-hero__visual-inner">
+                <img
+                  src="/images/platform-analytics-dashboard.jpg"
+                  alt="EventHex platform analytics dashboard for hospitality event workflows"
+                  class="hsp-hero__img"
+                  width="1262"
+                  height="700"
+                  loading="eager"
+                  decoding="async"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hsp-workflow" class="hsp-workflow-strip" aria-label="Connected hospitality event workflow"><div class="hsp-workflow-strip__inner">{workflow.map((step, index) => <span class="hsp-workflow-strip__stat animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}><strong>{step.label}</strong> <span>{step.detail}</span></span>)}</div></section>
+
+    <section class="hsp-model hsp-section">
+      <div class="hsp-container">
+        <div class="hsp-model__header">
+          <h2>Start with the operating shape <span>that fits the event</span></h2>
+          <p>Start with one model, then add only the modules the event actually needs.</p>
+        </div>
+
+        <div class="hsp-model__grid">
+          {eventModel.map((model, index) => {
+            const label = index === 0 ? "Exhibition operations" : "Conference operations";
+            const action = index === 0 ? "Review event data" : "Review programme data";
+            return (
+              <div class:list={["hsp-model__row", index % 2 === 1 && "hsp-model__row--reverse"]}>
+                <article class="hsp-model__cell hsp-model__cell--copy">
+                  <span class="hsp-model__tag">{model.tag}</span>
+                  <h3>{model.title}</h3>
+                  <p>{model.copy}</p>
+                </article>
+                <div class="hsp-model__cell hsp-model__cell--media">
+                  <div class="hsp-model__composite">
+                    <img class="hsp-model__screen hsp-model__screen--primary" src={model.primaryImage} alt={model.primaryAlt} width="1262" height="700" loading="lazy" decoding="async" />
+                    <img class="hsp-model__screen hsp-model__screen--secondary" src={model.secondaryImage} alt={model.secondaryAlt} width="1262" height="700" loading="lazy" decoding="async" />
+                    <img class="hsp-model__screen hsp-model__screen--detail" src={model.detailImage} alt={model.detailAlt ?? ""} width="1262" height="700" loading="lazy" decoding="async" aria-hidden={model.detailAlt ? undefined : "true"} />
+                    <span class="hsp-model__status">✓ {label}</span>
+                    <span class="hsp-model__action">{action}</span>
+                  </div>
+                </div>
+                <span class="hsp-model__cross" aria-hidden="true">
+                  <svg width="28" height="28" viewBox="-14 -14 28 28">
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+                    <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+                  </svg>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-core hsp-section">
+      <div class="hsp-container hsp-workflow-stack">
+        <div class="hsp-workflow-stack__header">
+          <div class="hsp-workflow-stack__eyebrow"><span aria-hidden="true">✦</span><span>From event setup to event-day review</span></div>
+          <h2><span class="hsp-workflow-stack__title-line">Connect the exhibitor journey to the</span><span class="hsp-workflow-stack__title-line"><span>attendee journey</span></span></h2>
+        </div>
+
+        <div class="hsp-workflow-stack__cards" id="hsp-workflow-stack">
+          {hospitalityWorkflowFeatures.map((feature, index) => (
+            <article class="hsp-workflow-stack__card" data-card-index={index} style={`--card-index: ${index};`}>
+              <div class="hsp-workflow-stack__copy">
+                {feature.eyebrow && <span class="hsp-workflow-stack__tag">{feature.eyebrow}</span>}
+                <h3>{feature.title}</h3>
+                <p>{feature.copy}</p>
+                <a href={feature.link} class="hsp-workflow-stack__button">Explore More</a>
+              </div>
+              <div class="hsp-workflow-stack__image">
+                <img src={feature.image} alt={feature.alt} width="1262" height="700" loading="lazy" decoding="async" />
+              </div>
+            </article>
+          ))}
+          <div class="hsp-workflow-stack__spacer" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-roles hsp-section">
+      <div class="hsp-container hsp-roles__inner">
+        <header class="hsp-roles__header">
+          <span class="hsp-kicker">Team coordination</span>
+          <h2>Keep the floor team and event team aligned</h2>
+          <p>Give each team a clear job while keeping the attendee and event record connected.</p>
+        </header>
+        <div class="hsp-roles__grid">
+          {roles.slice(0, -1).map((_, index) => (
+            <span class="hsp-roles__notch" style={`left: ${((index + 1) / roles.length) * 100}%`} aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--hsp-role-line, #e8ecf2)"></path>
+              </svg>
+            </span>
+          ))}
+          {roles.map((role, index) => (
+            <article class:list={["hsp-role-card", { "hsp-role-card--first": index === 0 }]} style={`--hsp-role-accent: ${role.accent}`}>
+              <span class="hsp-role-card__icon" set:html={role.icon} aria-hidden="true" />
+              <div class="hsp-role-card__content">
+                <h3>{role.title}</h3>
+                <span class="hsp-role-card__cue">{role.cue}</span>
+                <p>{role.copy}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-journey hsp-section">
+      <div class="hsp-container hsp-journey__container">
+        <div class="hsp-journey__left">
+          <div class="hsp-journey__sticky">
+            <div class="hsp-journey__eyebrow">Audience experience</div>
+            <h2>Connect the moments <span>attendees actually move through</span></h2>
+            <p>Keep each attendee moment connected to the same hospitality event record, from discovery through post-event review.</p>
+            <a class="hsp-journey__cta" href="/book-a-demo/">
+              Book a Demo
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="hsp-journey__right">
+          {journey.map(([label, copy], index) => (
+            <article class="hsp-journey__stack-card" style={`--hsp-journey-top: ${80 + index * 20}px`}>
+              <div class="hsp-journey__stack-header">
+                <div class="hsp-journey__stack-number">0{index + 1}</div>
+                <div class="hsp-journey__stack-copy">
+                  <h3>{label}</h3>
+                  <p>{copy}</p>
+                </div>
+              </div>
+              <div class:list={["hsp-journey__visual", `hsp-journey__visual--${index + 1}`]}>
+                <img src={journeyVisuals[index].image} alt={journeyVisuals[index].alt} width={journeyVisuals[index].width} height={journeyVisuals[index].height} loading="lazy" decoding="async" />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-day hsp-section">
+      <div class="hsp-day__inner">
+        <header class="hsp-day__header">
+          <h2>Keep event-day actions tied to the same event record</h2>
+        </header>
+        <ol class="hsp-day__steps">
+          {eventDaySteps.map((step, index) => (
+            <li>
+              <details open={index === 0}>
+                <summary tabindex="-1">
+                  <span>{step.num}</span>
+                  <div class="hsp-day__step-content">
+                    <h3>{step.title}</h3>
+                    <p class="hsp-day__step-desc">{step.desc}</p>
+                    <ul class="hsp-day__step-bullets">
+                      {step.bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}
+                    </ul>
+                  </div>
+                  <button type="button" class="hsp-day__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                  </button>
+                </summary>
+                <div class="hsp-day__visual">
+                  <img src={step.image} alt={step.alt} width={step.width} height={step.height} loading="lazy" decoding="async" />
+                </div>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="hsp-formats hsp-section">
+      <div class="hsp-container">
+        <div class="hsp-section-heading hsp-section-heading--center">
+          <span class="hsp-kicker">Where it fits</span>
+          <h2>Configure EventHex around the event you are running</h2>
+        </div>
+        <div class="hsp-formats__grid">
+          {formats.slice(0, -1).map((_, index) => (
+            <span class="hsp-formats__notch" style={`left: ${((index + 1) / formats.length) * 100}%`} aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path></svg>
+            </span>
+          ))}
+          {formats.map((card, index) => (
+            <article class:list={["hsp-formats__card", { "hsp-formats__card--first": index === 0 }]}>
+              <span class="hsp-formats__icon" set:html={card.icon} aria-hidden="true"></span>
+              <h3>{card.title}</h3>
+              <p>{card.copy}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-demo hsp-section">
+      <div class="hsp-demo__heading">
+        <span class="hsp-kicker">Plan the configuration</span>
+        <h2>Bring one real event <span>workflow to the demo</span></h2>
+      </div>
+      <div class="hsp-demo__grid">
+        <div class="hsp-demo__steps">
+          {setupSteps.map(([label, copy], index) => (
+            <article class="hsp-demo__cell animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 80)}>
+              {index > 0 && <>
+                <span class="hsp-demo__petal hsp-demo__petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+                <span class="hsp-demo__petal hsp-demo__petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+              </>}
+              <span class="hsp-demo__step">0{index + 1}</span>
+              <h3>{label}</h3>
+              <p>{copy}</p>
+              <div class:list={["hsp-demo__visual", `hsp-demo__visual--${index + 1}`]} aria-hidden="true">
+                {index === 0 && <div class="hsp-demo__format-mock"><span class="hsp-demo__mock-label">Event format</span><div class="hsp-demo__mock-row is-active"><span>Conference</span><i></i></div><div class="hsp-demo__mock-row"><span>Exhibition</span><i></i></div><div class="hsp-demo__mock-row"><span>Awards</span><i></i></div></div>}
+                {index === 1 && <div class="hsp-demo__module-mock"><span class="hsp-demo__mock-label">Connected modules</span><div class="hsp-demo__module-pills"><span class="is-active">Registration</span><span>Programme</span><span>Exhibitors</span><span>Badges</span><span>Analytics</span></div></div>}
+                {index === 2 && <div class="hsp-demo__review-mock"><span class="hsp-demo__mock-label">Demo checklist</span><div class="hsp-demo__review-row is-active"><b>✓</b><span>Audience and access</span><i></i></div><div class="hsp-demo__review-row"><b>✓</b><span>Communication plan</span><i></i></div><div class="hsp-demo__review-row"><b>✓</b><span>Onsite requirements</span><i></i></div></div>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-links hsp-section" aria-labelledby="hsp-links-title">
+      <div class="hsp-links__inner">
+        <header class="hsp-links__header">
+          <h2 id="hsp-links-title">Built for the mechanisms that make hospitality events work</h2>
+          <p>Open the workflow that owns each part of the event, with the right context for the teams using it.</p>
+        </header>
+        <div class="hsp-links__tabs" role="tablist">
+          {deepLinkVisuals.map((item, index) => (
+            <button class:list={["hsp-links__tab", { "hsp-links__tab--active": index === 0 }]} role="tab" aria-selected={index === 0 ? "true" : "false"} aria-controls={`hsp-links-panel-${item.id}`} id={`hsp-links-tab-${item.id}`} data-target={item.id}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+        <div class="hsp-links__box">
+          {deepLinkVisuals.map((item, index) => (
+            <article class:list={["hsp-links__panel", { "hsp-links__panel--active": index === 0 }]} id={`hsp-links-panel-${item.id}`} role="tabpanel" aria-labelledby={`hsp-links-tab-${item.id}`} data-panel={item.id}>
+              <div class="hsp-links__panel-copy">
+                <a class="hsp-links__panel-title" href={deepLinks[index][2]}>{item.title}</a>
+                <p class="hsp-links__panel-desc">{item.description}</p>
+                <ul class="hsp-links__checklist">
+                  {item.checklist.map((check) => <li><span aria-hidden="true">✓</span>{check}</li>)}
+                </ul>
+              </div>
+              <div class="hsp-links__showcase">
+                <img src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hsp-faq hsp-section">
+      <div class="hsp-faq__inner">
+        <div class="hsp-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+          <span class="hsp-faq__eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Quick Answers
+          </span>
+          <h2 class="hsp-faq__heading">Hospitality Event<br />Questions, Answered.</h2>
+          <p class="hsp-faq__intro">Find quick answers about event formats, guest registration, exhibitors, event-day operations, and reporting.</p>
+          <a href="/contact-en/" class="hsp-faq__cta">
+            Visit Help Center
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+        </div>
+        <div class="hsp-faq__list">
+          {faqs.map(([question, answer], index) => (
+            <details class="hsp-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} open={index === 0}>
+              <summary class="hsp-faq__question"><strong>{question}</strong><span class="hsp-faq__icon" aria-hidden="true"></span></summary>
+              <div class="hsp-faq__answer"><p>{answer}</p></div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </main>
+</MarketingLayout>
+
+<style>
+  .hsp-page { --ink: #11131a; --muted: #667085; --line: #e6e8ee; --blue: #375dfb; color: var(--ink); background: #fff; overflow: clip; }
+  .hsp-container { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+  .hsp-section { padding: clamp(76px, 9vw, 128px) 0; }
+  .hsp-kicker { display: inline-flex; margin-bottom: 18px; color: #5c4bce; font: 700 12px/1.2 var(--font-body); letter-spacing: .11em; text-transform: uppercase; }
+  .hsp-section-heading h2 { max-width: 680px; margin: 0; color: var(--ink); font: 500 clamp(34px, 4.8vw, 58px)/1.06 var(--font-heading); letter-spacing: -.045em; }
+  .hsp-section-heading p { max-width: 620px; margin: 22px 0 0; color: var(--muted); font: 400 17px/1.65 var(--font-body); }
+  .hsp-section-heading--center { text-align: center; display: flex; flex-direction: column; align-items: center; }.hsp-section-heading--center h2, .hsp-section-heading--center p { max-width: 760px; }.hsp-section-heading--light h2, .hsp-section-heading--light p, .hsp-section-heading--light .hsp-kicker { color: #fff; }
+  .hsp-button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; padding: 0 21px; border-radius: 999px; font: 600 14px/1 var(--font-body); text-decoration: none; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }.hsp-button:hover { transform: translateY(-2px); }.hsp-button--dark { background: var(--ink); color: #fff; box-shadow: 0 12px 24px rgba(17,19,26,.16); }.hsp-button--quiet { color: var(--ink); border: 1px solid var(--line); background: rgba(255,255,255,.7); }.hsp-button--white { background: #fff; color: var(--ink); box-shadow: 0 14px 30px rgba(0,0,0,.16); }
+  .hsp-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background:
+      radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%),
+      #fff;
+  }
+  .hsp-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; width: 220px; max-width: 30vw; background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf); pointer-events: none; z-index: 2; }
+  .hsp-hero__shell { position: relative; z-index: 1; width: 100%; padding: 0; background: none; }
+  .hsp-hero__grid { max-width: 1080px; margin: 0 auto; padding: 0; display: grid; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .hsp-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; text-align: left; }
+  .hsp-hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 0; font-family: var(--font-body); font-size: 16px; font-weight: 500; line-height: 24px; letter-spacing: normal; color: var(--brand-blue); text-transform: uppercase; }
+  .hsp-hero__title { margin: 0; font-family: var(--font-heading); width: 100%; max-width: 620px; font-size: 52px; font-weight: 500; line-height: 58px; letter-spacing: -2.1px; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .hsp-hero__title-line { display: block; white-space: nowrap; }
+  .hsp-hero__desc { margin: 0; width: 100%; max-width: 560px; font-family: var(--font-body); font-size: 18px; font-weight: 400; line-height: 24px; letter-spacing: -0.25px; color: var(--subheading-gray); }
+  .hsp-hero__points { display: flex; flex-wrap: wrap; gap: 10px; }
+  .hsp-hero__point { display: inline-flex; align-items: center; position: relative; padding: 0 0 0 16px; border-radius: 0; background: transparent; border: 0; font-family: var(--font-body); font-size: 14px; font-weight: 500; line-height: 20px; color: #475467; box-shadow: none; }
+  .hsp-hero__point::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .hsp-hero__cta { display: flex; gap: 14px; padding-top: 6px; }
+  .hsp-hero__btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 32px; border-radius: 10px; text-decoration: none; font-family: var(--font-body); font-size: 15px; font-weight: 600; line-height: 24px; letter-spacing: -0.48px; transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s; }
+  .hsp-hero__btn--primary { color: #fff; background: var(--heading-dark); box-shadow: none; }
+  .hsp-hero__btn--primary:hover { transform: translateY(-2px); background: #000; box-shadow: none; }
+  .hsp-hero__btn--secondary { color: var(--heading-dark); background: rgba(255, 255, 255, 0.9); border: 1px solid #dce4ff; }
+  .hsp-hero__btn--secondary:hover { transform: translateY(-2px); border-color: #c5d2ff; box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06); }
+  .hsp-hero__visual { position: relative; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); z-index: 3; }
+  .hsp-hero__visual-card { position: relative; display: flex; min-height: 460px; padding: 14px; border-radius: 22px 0 0 22px; border: 1px solid rgba(255, 255, 255, 0.62); border-right: none; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .hsp-hero__visual-inner { position: relative; display: flex; flex: 1; align-items: center; border-radius: 16px 0 0 16px; overflow: hidden; padding: 28px; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+  .hsp-hero__img { display: block; width: 100%; max-height: 520px; object-fit: contain; height: auto; animation: hspHeroFloat 6s ease-in-out infinite; }
+  @keyframes hspHeroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  .hsp-workflow-strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 24px 24px; background: linear-gradient(90deg, #faf8ff 0%, #f7f9ff 52%, #f4f8ff 100%); color: var(--ink); }
+  .hsp-workflow-strip__inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; flex-wrap: wrap; gap: 18px 36px; }
+  .hsp-workflow-strip__stat { font-family: var(--font-body); font-size: 15px; font-weight: 400; line-height: 1.4; color: var(--muted); white-space: nowrap; }
+  .hsp-workflow-strip__stat strong { color: var(--ink); font-weight: 700; }
+  .hsp-model { padding: clamp(72px, 9vw, 112px) 24px; background: #fff; overflow: hidden; }
+  .hsp-model__header { max-width: 860px; margin: 0 auto 24px; padding: 10px 20px 20px; text-align: center; }
+  .hsp-model__header h2 { max-width: 700px; margin: 0 auto; color: var(--heading-dark); font: 500 clamp(38px, 4.8vw, 58px)/1.08 var(--font-heading); letter-spacing: -.05em; }
+  .hsp-model__header h2 span { color: #9aa1ae; }
+  .hsp-model__header p { max-width: 650px; margin: 18px auto 0; color: var(--subheading-gray); font: 400 17px/1.55 var(--font-body); }
+  .hsp-model__grid { position: relative; width: 100%; max-width: 1180px; margin: 24px auto 0; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .hsp-model__row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .hsp-model__row:last-child { border-bottom: 0; }
+  .hsp-model__cell { display: flex; flex-direction: column; justify-content: center; min-height: 320px; padding: 4rem; }
+  .hsp-model__row:not(.hsp-model__row--reverse) .hsp-model__cell--media { border-left: 1px solid #e5e7eb; }
+  .hsp-model__row.hsp-model__row--reverse .hsp-model__cell--media { grid-column: 1; grid-row: 1; border-right: 1px solid #e5e7eb; }
+  .hsp-model__row.hsp-model__row--reverse .hsp-model__cell--copy { grid-column: 2; grid-row: 1; }
+  .hsp-model__cell--copy h3 { margin: 0 0 16px; color: var(--heading-dark); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .hsp-model__cell--copy p { max-width: 40ch; margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .hsp-model__tag { display: inline-flex; align-items: center; align-self: flex-start; margin-bottom: 22px; padding: 7px 11px; border-radius: 999px; background: #f5f1ff; color: #6e59d9; font: 700 10px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .hsp-model__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }
+  .hsp-model__composite { position: relative; width: 100%; height: 320px; overflow: visible; }
+  .hsp-model__screen { position: absolute; display: block; object-fit: cover; object-position: top left; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); }
+  .hsp-model__screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; }
+  .hsp-model__screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; }
+  .hsp-model__screen--detail { left: 24px; bottom: 12px; z-index: 3; width: 30%; height: 48%; }
+  .hsp-model__status, .hsp-model__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .hsp-model__status { top: 14px; left: 14px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .hsp-model__action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .hsp-model__cross { position: absolute; left: 50%; bottom: 0; z-index: 6; width: 28px; height: 28px; transform: translate(-50%, 50%); pointer-events: none; line-height: 0; }
+  .hsp-core { color: #fff; background: radial-gradient(circle at 82% 5%,rgba(93,76,220,.34),transparent 28%),linear-gradient(145deg,#090a0f,#1b1e2a 70%,#101522); }.hsp-core__grid { display: grid; grid-template-columns: 1.35fr repeat(2,1fr); gap: 14px; margin-top: 54px; }.hsp-core__anchor,.hsp-core__card { min-height: 245px; border: 1px solid rgba(255,255,255,.13); border-radius: 22px; background: rgba(255,255,255,.06); }.hsp-core__anchor { grid-row: span 2; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 26px; overflow: hidden; }.hsp-core__anchor-copy { position: relative; z-index: 1; }.hsp-core__anchor h3 { max-width: 330px; margin: 28px 0 12px; font: 500 32px/1.05 var(--font-heading); letter-spacing: -.04em; }.hsp-core__anchor p { max-width: 330px; margin: 0; color: #aab0bd; font: 400 14px/1.55 var(--font-body); }.hsp-core__anchor img { position: absolute; right: 15px; bottom: 16px; width: 175px; opacity: .92; transform: rotate(-6deg); }.hsp-core__card { display: flex; flex-direction: column; padding: 25px; text-decoration: none; transition: transform .2s ease, background .2s ease; }.hsp-core__card:hover { background: rgba(255,255,255,.11); transform: translateY(-3px); }.hsp-card-icon { display: inline-flex; align-items: center; justify-content: center; width: 31px; height: 31px; border: 1px solid rgba(170,180,255,.45); border-radius: 10px; color: #b7baff; font-size: 21px; }.hsp-core__card h3 { margin: 25px 0 10px; color: #fff; font: 600 18px/1.15 var(--font-heading); }.hsp-core__card p { margin: 0; color: #aab0bd; font: 400 13px/1.55 var(--font-body); }.hsp-card-link { margin-top: auto; padding-top: 21px; color: #b7baff; font: 600 12px/1 var(--font-body); }
+  .hsp-workflow-stack { width: min(1140px, calc(100% - 40px)); padding: 4px 0 30px; }
+  .hsp-workflow-stack__header { position: sticky; top: 69px; z-index: 20; isolation: isolate; display: flex; flex-direction: column; align-items: center; gap: 16px; width: min(94%, 1050px); margin: 0 auto; padding: 24px 0; text-align: center; transform: translateY(var(--hsp-stack-release-y, 0px)); will-change: transform; }
+  .hsp-workflow-stack__header::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -28px; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; background: linear-gradient(180deg, rgba(13,10,44,.99) 0%, rgba(7,11,27,.98) 72%, rgba(7,11,27,0) 100%); }
+  .hsp-workflow-stack__eyebrow { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 6px 16px 6px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), 0 6px 16px -6px rgba(0,0,0,.35); color: #fff; font: 500 15px/24px var(--font-body); }
+  .hsp-workflow-stack__eyebrow span:first-child { color: #8ab4ff; }
+  .hsp-workflow-stack__header h2 { max-width: 1000px; margin: 0; color: #fff; font: 500 46px/1.15 var(--font-heading); letter-spacing: -.04em; }
+  .hsp-workflow-stack__title-line { display: block; }
+  .hsp-workflow-stack__title-line > span { color: #afa3ff; }
+  .hsp-workflow-stack__cards { --hsp-stack-top: 300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .hsp-workflow-stack__spacer { height: 190px; }
+  .hsp-workflow-stack__card { position: sticky; top: calc(var(--hsp-stack-top) + var(--card-index) * 20px); z-index: var(--card-index); display: flex; align-items: stretch; height: 500px; margin-bottom: 60px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255,255,255,.16) 0%, transparent 70%), radial-gradient(circle at 12% 8%, rgba(90,130,255,.18) 0%, transparent 40%), #0a0a0f; box-shadow: none; }
+  .hsp-workflow-stack__card:first-child { background: radial-gradient(circle at 82% 12%, rgba(109,92,235,.24), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66,173,218,.13), transparent 28%), #090a10; }
+  .hsp-workflow-stack__copy { flex: 0 0 45%; display: flex; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .hsp-workflow-stack__tag { display: inline-flex; align-items: center; align-self: flex-start; margin-bottom: 2px; padding: 7px 13px; border: 1px solid rgba(175,163,255,.28); border-radius: 999px; background: rgba(175,163,255,.1); color: #afa3ff; font: 600 12px/1.2 var(--font-body); letter-spacing: .02em; }
+  .hsp-workflow-stack__copy h3 { margin: 0; color: #e7e4fa; font: 500 32px/1.2 var(--font-heading); letter-spacing: -.03em; }
+  .hsp-workflow-stack__copy p { margin: 0; color: rgba(255,255,255,.55); font: 400 17px/1.65 var(--font-body); }
+  .hsp-workflow-stack__button { display: inline-flex; align-items: center; align-self: flex-start; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.06); box-shadow: inset 0 1px 0 rgba(255,255,255,.08); color: #fff; font: 500 15px/1 var(--font-body); text-decoration: none; transition: transform .3s, background .3s; }
+  .hsp-workflow-stack__button:hover { transform: scale(1.05); background: rgba(255,255,255,.1); }
+  .hsp-workflow-stack__image { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; margin: 16px 16px 16px 0; padding: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); box-shadow: inset 0 1px 0 rgba(255,255,255,.12); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+  .hsp-workflow-stack__image img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: high-quality; animation: hsp-workflow-stack-float 4s ease-in-out infinite; transform: translateZ(0); }
+  @keyframes hsp-workflow-stack-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .hsp-roles { background: #fff; }
+  .hsp-roles__inner { width: min(1200px, calc(100% - 48px)); }
+  .hsp-roles__header { margin: 0 auto 64px; text-align: center; }
+  .hsp-roles__header .hsp-kicker { margin-bottom: 18px; color: #7b68ee; }
+  .hsp-roles__header h2 { max-width: 860px; margin: 0 auto; color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); -webkit-background-clip: text; background-clip: text; }
+  .hsp-roles__header p { max-width: 650px; margin: 18px auto 0; color: #656572; font: 400 17px/1.55 var(--font-body); }
+  .hsp-roles__grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 auto; border-top: 1px solid var(--hsp-role-line, #e8ecf2); }
+  .hsp-role-card { position: relative; display: block; min-height: 320px; padding: 28px; border-left: 1px solid var(--hsp-role-line, #e8ecf2); background: #fff; }
+  .hsp-role-card--first { border-left: 0; }
+  .hsp-roles__notch { position: absolute; top: 0; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; z-index: 2; }
+  .hsp-role-card__icon { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; margin-bottom: 48px; color: #375dfb; }
+  .hsp-role-card__icon svg { width: 23px; height: 23px; }
+  .hsp-role-card__content h3 { min-height: 2.5em; margin: 0 0 8px; color: #202020; font: 650 24px/1.25 var(--font-heading); letter-spacing: -.025em; }
+  .hsp-role-card__cue { display: inline-flex; margin-bottom: 16px; color: var(--hsp-role-accent); font: 700 10px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .hsp-role-card__content p { margin: 0; color: #656572; font: 400 16px/1.58 var(--font-body); }
+  .hsp-journey { background: #fff; }
+  .hsp-journey__container { display: flex; align-items: stretch; gap: clamp(42px, 7vw, 84px); width: min(1200px, calc(100% - 48px)); }
+  .hsp-journey__left { flex: 0 0 min(40%, 430px); }
+  .hsp-journey__sticky { position: sticky; top: 120px; height: max-content; }
+  .hsp-journey__eyebrow { display: inline-flex; align-items: center; margin-bottom: 22px; padding: 8px 13px; border: 1px solid #ded9ff; border-radius: 999px; background: #f5f2ff; color: #6652c8; font: 700 11px/1 var(--font-body); letter-spacing: .11em; text-transform: uppercase; }
+  .hsp-journey__sticky h2 { max-width: 480px; margin: 0; color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); -webkit-background-clip: text; background-clip: text; }
+  .hsp-journey__sticky h2 span { display: block; color: transparent; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); -webkit-background-clip: text; background-clip: text; }
+  .hsp-journey__sticky > p { max-width: 390px; margin: 24px 0 0; color: #667085; font: 400 16px/1.65 var(--font-body); }
+  .hsp-journey__cta { display: inline-flex; align-items: center; justify-content: center; gap: 12px; margin-top: 30px; min-height: 49px; padding: 0 22px; border-radius: 999px; background: #11131a; box-shadow: 0 13px 28px rgba(17,19,26,.18); color: #fff; font: 600 14px/1 var(--font-body); text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
+  .hsp-journey__cta:hover { transform: translateY(-2px); box-shadow: 0 16px 32px rgba(17,19,26,.24); }
+  .hsp-journey__right { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 30px; padding-bottom: 45px; }
+  .hsp-journey__stack-card { position: sticky; top: var(--hsp-journey-top, 80px); z-index: 1; min-height: 430px; padding: 30px; overflow: hidden; border: 1px solid #e4e6ec; border-radius: 24px; background: #f4f5f7; box-shadow: 0 18px 45px rgba(31,38,67,.08); }
+  .hsp-journey__stack-card:nth-child(2) { z-index: 2; }
+  .hsp-journey__stack-card:nth-child(3) { z-index: 3; }
+  .hsp-journey__stack-card:nth-child(4) { z-index: 4; }
+  .hsp-journey__stack-card:nth-child(5) { z-index: 5; }
+  .hsp-journey__stack-card:nth-child(6) { z-index: 6; }
+  .hsp-journey__stack-header { display: flex; align-items: flex-start; gap: 15px; }
+  .hsp-journey__stack-number { display: inline-flex; flex: 0 0 40px; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #11131a; color: #fff; font: 700 12px/1 var(--font-body); letter-spacing: .06em; }
+  .hsp-journey__stack-copy { min-width: 0; }
+  .hsp-journey__stack-copy h3 { margin: 2px 0 7px; color: #191a20; font: 600 clamp(22px, 2.35vw, 30px)/1.1 var(--font-heading); letter-spacing: -.035em; }
+  .hsp-journey__stack-copy p { max-width: 470px; margin: 0; color: #697386; font: 400 14px/1.55 var(--font-body); }
+  .hsp-journey__visual { display: flex; align-items: center; justify-content: center; min-height: 250px; margin-top: 28px; padding: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,.76); border-radius: 18px; }
+  .hsp-journey__visual img { display: block; width: 100%; max-width: 620px; max-height: 275px; object-fit: contain; border-radius: 11px; box-shadow: 0 15px 27px rgba(27,34,70,.13); }
+  .hsp-journey__visual--1 { background: linear-gradient(135deg, #fff1bb, #fff9ed); }
+  .hsp-journey__visual--2 { background: linear-gradient(135deg, #dff7ea, #f5fff8); }
+  .hsp-journey__visual--3 { background: linear-gradient(135deg, #e9e4ff, #faf8ff); }
+  .hsp-journey__visual--4 { background: linear-gradient(135deg, #ffe4e9, #fff7f4); }
+  .hsp-journey__visual--5 { background: linear-gradient(135deg, #dff0ff, #f7fbff); }
+  .hsp-journey__visual--6 { background: linear-gradient(135deg, #e7e4ff, #f8f7ff); }
+  .hsp-journey__card > span { color: #8b79db; font: 700 11px/1 var(--font-body); letter-spacing: .1em; }
+  .hsp-day { background: #eef2ff; }
+  .hsp-day__inner { width: min(1218px, calc(100% - 48px)); margin: 0 auto; }
+  .hsp-day__header { max-width: 820px; margin: 0 auto clamp(46px, 6vw, 72px); text-align: center; }
+  .hsp-day__header h2,
+  .hsp-formats .hsp-section-heading h2 { max-width: 780px; margin: 0 auto; color: transparent; font: 500 clamp(40px, 5vw, 62px)/1.08 var(--font-heading); letter-spacing: -.045em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; background-clip: text; }
+  .hsp-day__steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .hsp-day__steps > li { position: relative; display: block; padding: 0; border: 0; background: transparent; }
+  .hsp-day__steps details { position: relative; overflow: hidden; border: 1px solid var(--hsp-day-border); border-radius: 18px; background: linear-gradient(135deg, var(--hsp-day-tint) 0%, #fff 82%); box-shadow: 0 8px 24px rgba(31,41,55,.04); transition: border-radius .35s ease, background .35s ease, box-shadow .25s ease, transform .25s ease; }
+  .hsp-day__steps > li:nth-child(1) { --hsp-day-tint: #fff8dc; --hsp-day-border: #f0dfa6; }
+  .hsp-day__steps > li:nth-child(2) { --hsp-day-tint: #edf7ff; --hsp-day-border: #d4e7f7; }
+  .hsp-day__steps > li:nth-child(3) { --hsp-day-tint: #f3efff; --hsp-day-border: #e2d8fa; }
+  .hsp-day__steps > li:nth-child(4) { --hsp-day-tint: #eefbf4; --hsp-day-border: #d4efdf; }
+  .hsp-day__steps details:not([open]):hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(31,41,55,.08); }
+  .hsp-day__steps summary { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; gap: 14px; min-height: 82px; padding: 18px 82px 18px 20px; cursor: pointer; list-style: none; transition: background .25s ease; }
+  .hsp-day__steps summary::-webkit-details-marker { display: none; }
+  .hsp-day__steps summary:hover { background: rgba(255,255,255,.28); }
+  .hsp-day__steps summary > span { display: block; color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .hsp-day__step-content { display: flex; flex-direction: column; min-width: 0; }
+  .hsp-day__step-content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .hsp-day__step-desc { display: none; }
+  .hsp-day__step-bullets { display: none; }
+  .hsp-day__arrow { position: absolute; top: 24px; right: 28px; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 1px solid rgba(17,24,39,.2); border-radius: 50%; background: rgba(255,255,255,.78); color: #111827; cursor: pointer; transition: transform .25s ease, background .2s ease, border-color .2s ease; }
+  .hsp-day__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .hsp-day__arrow:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .hsp-day__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .hsp-day__steps details[open] { display: flex; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg, var(--hsp-day-tint) 0%, #fff 72%); }
+  .hsp-day__steps details[open] summary { flex: 0 0 55%; display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; gap: 14px; min-height: 0; padding: 64px 40px 64px 28px; background: transparent; }
+  .hsp-day__steps details[open] summary:hover { background: transparent; }
+  .hsp-day__steps details[open] summary > span { font-size: 26px; line-height: 1; color: #050505; }
+  .hsp-day__steps details[open] .hsp-day__step-content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .hsp-day__steps details[open] .hsp-day__step-desc { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font: 400 17px/1.6 var(--font-body); }
+  .hsp-day__steps details[open] .hsp-day__step-bullets { display: flex; flex-direction: column; gap: 18px; margin: 0; padding: 0; list-style: none; }
+  .hsp-day__steps details[open] .hsp-day__step-bullets li { display: flex; align-items: center; gap: 14px; color: #111; font: 500 16px/1.3 var(--font-body); }
+  .hsp-day__steps details[open] .hsp-day__step-bullets i { font-size: 16px; font-style: normal; }
+  .hsp-day__steps details[open] .hsp-day__arrow { top: 28px; transform: rotate(180deg); }
+  .hsp-day__visual { display: none; margin: 0; opacity: 0; }
+  .hsp-day__steps details[open] .hsp-day__visual { flex: 0 0 45%; display: flex; align-items: center; justify-content: flex-start; max-height: none; padding: 40px 88px 40px 0; overflow: visible; opacity: 1; }
+  .hsp-day__visual img { display: block; width: 100%; max-width: 400px; height: auto; max-height: 340px; object-fit: contain; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+  /* ===== EVENT FIT GRID — Speaker Management icon-card pattern ===== */
+  .hsp-formats { background: #fff; }
+  .hsp-formats .hsp-section-heading { margin-bottom: clamp(46px, 6vw, 72px); }
+  .hsp-formats__grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .hsp-formats__card { min-width: 0; min-height: 320px; padding: 28px; border-left: 1px solid var(--line); }
+  .hsp-formats__card--first { border-left: 0; }
+  .hsp-formats__notch { position: absolute; top: 0; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; z-index: 2; }
+  .hsp-formats__icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 28px; color: #375dfb; }
+  .hsp-formats__icon svg { width: 100%; height: 100%; }
+  .hsp-formats__card h3 { min-height: 2.5em; margin: 0; color: #22272f; font: 600 21px/1.25 var(--font-heading); }
+  .hsp-formats__card p { margin: 14px 0 0; color: #596579; font: 400 15px/1.6 var(--font-body); }
+  .hsp-links { background: #f1f4ff; }
+  .hsp-links__inner { width: min(1080px, calc(100% - 48px)); margin: 0 auto; }
+  .hsp-links__header { display: flex; flex-direction: column; align-items: center; margin: 0 auto 32px; text-align: center; }
+  .hsp-links__header h2 { max-width: 800px; margin: 0 0 16px; color: transparent; font: 500 clamp(36px, 4.5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; background-clip: text; }
+  .hsp-links__header p { max-width: 720px; margin: 0; color: #6b7280; font: 500 17px/1.5 var(--font-body); }
+  .hsp-links__tabs { display: flex; justify-content: center; gap: 4px; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; flex-wrap: wrap; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .hsp-links__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: all .2s ease; }
+  .hsp-links__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .hsp-links__tab--active { border-color: #dbe4f0; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: #3b82f6; }
+  .hsp-links__box { background: transparent; }
+  .hsp-links__panel { --hsp-links-tint: #fff8dc; --hsp-links-border: #f0dfa6; display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; padding: 52px 64px; border: 1px solid var(--hsp-links-border); border-radius: 28px; background: linear-gradient(135deg, var(--hsp-links-tint) 0%, #fff 72%); animation: hspLinksFadeIn .4s ease forwards; }
+  .hsp-links__panel:nth-child(2) { --hsp-links-tint: #edf7ff; --hsp-links-border: #d4e7f7; }
+  .hsp-links__panel:nth-child(3) { --hsp-links-tint: #f3efff; --hsp-links-border: #e2d8fa; }
+  .hsp-links__panel:nth-child(4) { --hsp-links-tint: #eefbf4; --hsp-links-border: #d4efdf; }
+  .hsp-links__panel--active { display: grid; }
+  @keyframes hspLinksFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .hsp-links__panel-copy { min-width: 0; }
+  .hsp-links__panel-title { display: inline-block; margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; text-decoration: none; }
+  .hsp-links__panel-title:hover { color: #5f4bd8; }
+  .hsp-links__panel-desc { margin: 0 0 32px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .hsp-links__checklist { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .hsp-links__checklist li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .hsp-links__checklist li span { flex: 0 0 auto; color: #8b79db; font-weight: 700; }
+  .hsp-links__showcase { position: relative; min-width: 0; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .hsp-links__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: 0; border-radius: 12px; background: var(--hsp-links-border); filter: blur(22px); opacity: .48; }
+  .hsp-links__showcase img { position: relative; z-index: 1; display: block; width: 100%; height: auto; max-height: 340px; object-fit: contain; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  /* ===== CONFIGURATION CAPABILITIES DARK BAND ===== */
+  .hsp-demo {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(64px, 8vw, 96px) 0 0;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, .22) 0%, rgba(124, 108, 255, .1) 45%, transparent 78%);
+  }
+  .hsp-demo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E");
+  }
+  .hsp-demo > * { position: relative; z-index: 1; }
+  .hsp-demo__heading { max-width: 980px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .hsp-demo__heading .hsp-kicker { color: #b9b4ff; }
+  .hsp-demo__heading h2 {
+    max-width: 900px;
+    margin: 0 auto;
+    font: 500 clamp(40px, 5.3vw, 64px)/1.06 var(--font-heading);
+    letter-spacing: -.045em;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hsp-demo__heading h2 span { -webkit-text-fill-color: transparent; }
+  .hsp-demo__grid { max-width: 1140px; margin: 0 auto; padding: clamp(40px, 5vw, 72px) 24px clamp(56px, 7vw, 88px); }
+  .hsp-demo__steps { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid #3b3a47; border-radius: 16px; overflow: hidden; }
+  .hsp-demo__cell { position: relative; display: flex; flex-direction: column; min-height: 430px; padding: 36px 32px; border-right: 1px solid #3b3a47; }
+  .hsp-demo__cell:last-child { border-right: none; }
+  .hsp-demo__petal { position: absolute; left: 0; width: 28px; height: 28px; pointer-events: none; line-height: 0; z-index: 2; }
+  .hsp-demo__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .hsp-demo__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .hsp-demo__step { display: block; margin-bottom: 14px; color: #a8b6ff; font: 700 11px/1.2 var(--font-body); letter-spacing: .1em; }
+  .hsp-demo__cell h3 { margin: 0 0 14px; color: #fff; font: 700 17px/1.2 var(--font-heading); letter-spacing: -.01em; }
+  .hsp-demo__cell > p { max-width: 34ch; margin: 0; color: rgba(255,255,255,.62); font: 400 .9375rem/1.42 var(--font-body); }
+  .hsp-demo__visual { position: relative; display: flex; align-items: flex-end; justify-content: center; flex: 1; margin-top: 32px; }
+  .hsp-demo__visual::before { content: ""; position: absolute; left: 50%; bottom: -10%; width: 80%; height: 80%; transform: translateX(-50%); border-radius: 50%; filter: blur(30px); pointer-events: none; background: radial-gradient(closest-side, rgba(92,138,255,.28), rgba(124,108,255,.15) 55%, transparent 100%); animation: hspDemoBloom 6s ease-in-out infinite; }
+  .hsp-demo__visual > * { position: relative; z-index: 1; }
+  .hsp-demo__format-mock, .hsp-demo__module-mock, .hsp-demo__review-mock { width: 100%; max-width: 290px; padding: 16px; border: 1px solid transparent; border-radius: 16px; background: linear-gradient(#08080e,#08080e) padding-box, linear-gradient(135deg,#38bdf8 0%,#5c8aff 38%,#7c6cff 70%,#a45cff 100%) border-box; box-shadow: 0 18px 44px -22px rgba(92,138,255,.5); animation: hspDemoFloat 7s ease-in-out infinite; }
+  .hsp-demo__module-mock { animation-delay: -1.5s; }
+  .hsp-demo__review-mock { animation-delay: -3s; }
+  .hsp-demo__mock-label { display: block; margin-bottom: 12px; color: rgba(255,255,255,.55); font: 400 12px/1.2 var(--font-body); }
+  .hsp-demo__mock-row, .hsp-demo__review-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid rgba(255,255,255,.12); border-radius: 9px; background: rgba(255,255,255,.05); color: rgba(255,255,255,.78); font: 400 13px/1.2 var(--font-body); }
+  .hsp-demo__mock-row + .hsp-demo__mock-row, .hsp-demo__review-row + .hsp-demo__review-row { margin-top: 10px; }
+  .hsp-demo__mock-row i, .hsp-demo__review-row i { display: block; width: 34%; height: 5px; margin-left: auto; border-radius: 999px; background: rgba(255,255,255,.16); transform-origin: left center; animation: hspDemoFill 4.5s ease-in-out infinite; }
+  .hsp-demo__mock-row.is-active, .hsp-demo__review-row.is-active { border-color: transparent; background: linear-gradient(135deg,#0d1a30 0%,#131938 58%,#1b1740 100%) padding-box, linear-gradient(135deg,#38bdf8,#a45cff) border-box; color: #fff; animation: hspDemoPulse 3.2s ease-in-out infinite; }
+  .hsp-demo__module-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .hsp-demo__module-pills span { padding: 7px 11px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: rgba(255,255,255,.72); font: 400 12px/1.2 var(--font-body); }
+  .hsp-demo__module-pills .is-active { border-color: transparent; background: linear-gradient(135deg,#0d1a30,#1b1740) padding-box, linear-gradient(135deg,#38bdf8,#a45cff) border-box; color: #fff; animation: hspDemoPulse 3.2s ease-in-out infinite; }
+  .hsp-demo__review-row b { flex: 0 0 auto; color: #a8b6ff; font-size: 13px; }
+  @keyframes hspDemoFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes hspDemoBloom { 0%,100% { opacity: .68; } 50% { opacity: 1; } }
+  @keyframes hspDemoPulse { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.15); } }
+  @keyframes hspDemoFill { 0% { transform: scaleX(.25); } 60%,100% { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hsp-demo__visual::before, .hsp-demo__format-mock, .hsp-demo__module-mock, .hsp-demo__review-mock, .hsp-demo__mock-row i, .hsp-demo__review-row i, .hsp-demo__mock-row.is-active, .hsp-demo__review-row.is-active, .hsp-demo__module-pills .is-active { animation: none; }
+  }
+  .hsp-faq { width: 100%; background: #fff; }
+  .hsp-faq__inner { max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .hsp-faq__sidebar { position: sticky; top: 6rem; }
+  .hsp-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .hsp-faq__heading { margin: 0 0 20px; color: #000; font: 500 44px/1.1 'Creato Display', var(--font-heading); letter-spacing: -1px; }
+  .hsp-faq__intro { margin: 0 0 28px; color: var(--body-light, #667085); font: 400 1rem/1.6 var(--font-body); }
+  .hsp-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .hsp-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .hsp-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: hospitality-faq; }
+  .hsp-faq__item { counter-increment: hospitality-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .hsp-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .hsp-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font: 500 1.0625rem/1.35 'Creato Display', var(--font-heading); cursor: pointer; list-style: none; }
+  .hsp-faq__question strong { font-weight: 500; }
+  .hsp-faq__question strong::before { content: counter(hospitality-faq) '. '; }
+  .hsp-faq__question::-webkit-details-marker { display: none; }
+  .hsp-faq__icon { position: relative; flex-shrink: 0; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .hsp-faq__icon::before, .hsp-faq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .hsp-faq__icon::before { width: 14px; height: 2px; }
+  .hsp-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .hsp-faq__item[open] .hsp-faq__icon { transform: scale(.9); }
+  .hsp-faq__item[open] .hsp-faq__icon::after { opacity: 0; }
+  .hsp-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .hsp-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+  @media (prefers-reduced-motion: reduce) { .hsp-faq__item, .hsp-faq__icon, .hsp-faq__icon::after { transition: none; } }
+  @media (max-width: 1120px) {
+    .hsp-hero { padding: 140px 20px 56px; }
+    .hsp-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 32px; padding: 0; }
+    .hsp-hero__desc { max-width: 520px; }
+    .hsp-hero__title { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }
+  }
+  @media (max-width: 960px) {
+    .hsp-hero { padding: 130px 20px 48px; }
+    .hsp-hero::after { display: none; }
+    .hsp-hero__grid { grid-template-columns: 1fr; gap: 34px; padding: 0; }
+    .hsp-hero__content { align-items: center; text-align: center; }
+    .hsp-hero__title, .hsp-hero__desc { max-width: 760px; }
+    .hsp-hero__visual { width: min(760px, 100%); margin: 0 auto; }
+    .hsp-hero__visual-card { border-radius: 22px; border-right: 1px solid rgba(255, 255, 255, 0.62); }
+    .hsp-hero__visual-inner { border-radius: 16px; }
+    .hsp-hero__desc { max-width: 720px; }
+    .hsp-hero__points, .hsp-hero__cta { justify-content: center; }
+    .hsp-hero__title { font-size: 42px; line-height: 1.1em; }
+    .hsp-day__grid,.hsp-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .hsp-faq__sidebar { position: static; }
+    .hsp-faq__heading { font-size: 32px; }
+    .hsp-demo__steps { grid-template-columns: 1fr; }
+    .hsp-demo__cell { min-height: 0; padding: 32px 24px; border-right: none; border-bottom: 1px solid #3b3a47; }
+    .hsp-demo__cell:last-child { border-bottom: none; }
+    .hsp-demo__petal { display: none; }
+    .hsp-day__steps details[open] { display: block; }
+    .hsp-day__steps details[open] summary { padding: 48px 64px 38px 28px; }
+    .hsp-day__steps details[open] .hsp-day__visual { padding: 0 28px 32px; justify-content: center; }
+    .hsp-day__visual img { max-width: 540px; }
+    .hsp-roles__grid { grid-template-columns: 1fr; gap: 0; border-top: 0; }
+    .hsp-roles__notch { display: none; }
+    .hsp-role-card { border-left: 0; border-top: 1px solid var(--hsp-role-line, #e8ecf2); }
+    .hsp-role-card--first { border-top: 0; }
+    .hsp-core__grid { grid-template-columns: repeat(2,1fr); }
+    .hsp-core__anchor { grid-row: auto; grid-column: 1/-1; min-height: 280px; }
+    .hsp-formats__grid,.hsp-journey__grid { grid-template-columns: repeat(2,1fr); }
+    .hsp-formats__notch { display: none; }
+    .hsp-formats__card:nth-of-type(odd) { border-left: 0; }
+    .hsp-formats__card:nth-of-type(n + 3) { border-top: 1px solid var(--line); }
+    .hsp-links__panel { grid-template-columns: 1fr; gap: 40px; padding: 48px; }
+    .hsp-links__showcase { max-width: 640px; margin: 0 auto; }
+    .hsp-journey__container { flex-direction: column; gap: 44px; }
+    .hsp-journey__left { flex: none; width: 100%; }
+    .hsp-journey__sticky { position: static; }
+    .hsp-journey__sticky h2, .hsp-journey__sticky > p { max-width: 760px; }
+    .hsp-journey__right { width: 100%; }
+    .hsp-journey__stack-card { position: relative; top: auto !important; min-height: 0; }
+    .hsp-workflow-stack { padding: 20px 20px 30px; }
+    .hsp-workflow-stack__header { width: 94%; }
+    .hsp-workflow-stack__header h2 { font-size: 40px; line-height: 1em; }
+    .hsp-workflow-stack__cards { --hsp-stack-top: 292px; }
+    .hsp-workflow-stack__card { height: 450px; }
+    .hsp-workflow-stack__copy { flex-basis: 50%; }
+    .hsp-workflow-stack__copy h3 { font-size: 28px; }
+    .hsp-workflow-stack__copy p { font-size: 16px; }
+  }
+  @media (max-width: 767px) {
+    .hsp-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .hsp-hero__grid { padding: 0 0 30px; }
+    .hsp-hero__visual-card { min-height: 0; padding: 10px; border-radius: 18px; }
+    .hsp-hero__visual-inner { padding: 18px; border-radius: 14px; }
+    .hsp-hero__title { font-size: 38px; line-height: 1.2em; letter-spacing: 0; }
+    .hsp-hero__desc { font-size: 15px; line-height: 1.7; }
+    .hsp-hero__badge { font-size: 16px; line-height: 1.1em; }
+    .hsp-hero__point { font-size: 13px; padding: 0 0 0 16px; }
+    .hsp-hero__cta { width: 100%; flex-direction: column; }
+    .hsp-hero__btn { width: 100%; }
+    .hsp-workflow-strip { padding: 20px 16px; }
+    .hsp-workflow-strip__inner { justify-content: center; gap: 12px 20px; }
+    .hsp-workflow-strip__stat { white-space: normal; text-align: center; }
+    .hsp-model { padding: 56px 20px 64px; }
+    .hsp-model__grid,.hsp-core__grid,.hsp-journey__grid,.hsp-formats__grid { grid-template-columns: 1fr; grid-template-rows: none; margin-top: 28px; }
+    .hsp-model__row { display: flex; flex-direction: column; }
+    .hsp-model__cell { min-height: 0; padding: 32px 20px; border-right: 0 !important; border-left: 0 !important; border-bottom: 1px solid #eef0f3; }
+    .hsp-model__cell--copy { order: 1; }
+    .hsp-model__cell--media { order: 2; }
+    .hsp-model__cell--media { padding: 16px 20px 32px; }
+    .hsp-model__composite { height: 285px; }
+    .hsp-model__screen--primary { width: 78%; }
+    .hsp-model__screen--secondary { width: 68%; }
+    .hsp-model__cross { display: none; }
+    .hsp-core__anchor img { width: 130px; }
+    .hsp-journey__card { min-height: 165px; padding: 20px; }
+    .hsp-journey { padding: 64px 0 72px; }
+    .hsp-journey__container { width: min(100% - 36px, 620px); gap: 34px; }
+    .hsp-journey__sticky h2 { font-size: clamp(36px, 10vw, 48px); }
+    .hsp-journey__sticky > p { font-size: 15px; }
+    .hsp-journey__cta { margin-top: 24px; }
+    .hsp-journey__right { gap: 18px; padding-bottom: 0; }
+    .hsp-journey__stack-card { padding: 22px 18px 18px; border-radius: 20px; }
+    .hsp-journey__stack-header { gap: 12px; }
+    .hsp-journey__stack-number { flex-basis: 36px; width: 36px; height: 36px; }
+    .hsp-journey__stack-copy h3 { font-size: 24px; }
+    .hsp-journey__stack-copy p { font-size: 13px; }
+    .hsp-journey__visual { min-height: 190px; margin-top: 20px; padding: 14px; border-radius: 14px; }
+    .hsp-journey__visual img { max-height: 195px; border-radius: 8px; }
+    .hsp-journey__card h3 { margin-top: 30px; }
+    .hsp-formats__grid { grid-template-columns: 1fr; }
+    .hsp-formats__card, .hsp-formats__card:nth-of-type(odd) { min-height: 190px; border-left: 0; border-top: 1px solid var(--line); }
+    .hsp-formats__card--first { border-top: 0; }
+    .hsp-links__inner { width: min(100% - 36px, 620px); }
+    .hsp-links__header h2 { font-size: 42px; }
+    .hsp-links__header p { font-size: 15px; }
+    .hsp-links__tabs { width: 100%; margin-bottom: 26px; border-radius: 20px; }
+    .hsp-links__tab { flex: 1 1 45%; padding: 9px 10px; font-size: 12px; }
+    .hsp-links__panel { gap: 28px; padding: 30px 22px; border-radius: 22px; }
+    .hsp-links__panel-title { font-size: 32px; }
+    .hsp-links__panel-desc { font-size: 15px; }
+    .hsp-links__showcase { padding: 14px; border-radius: 18px; }
+    .hsp-day__grid,.hsp-faq__inner { gap: 32px; }
+    .hsp-faq { padding: 56px 16px; }
+    .hsp-faq__heading { font-size: 28px; }
+    .hsp-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .hsp-faq__question { font-size: .9375rem; padding: 18px 0; }
+    .hsp-day { padding: 64px 0 72px; }
+    .hsp-day__inner { width: min(100% - 36px, 620px); }
+    .hsp-day__header { margin-bottom: 42px; }
+    .hsp-day__header h2, .hsp-formats .hsp-section-heading h2 { font-size: 42px; }
+    .hsp-day__steps details[open] summary { grid-template-columns: 32px minmax(0, 1fr); gap: 12px; padding: 34px 52px 26px 20px; }
+    .hsp-day__steps details[open] summary > span { font-size: 20px; }
+    .hsp-day__steps details[open] .hsp-day__step-content h3 { font-size: 27px; }
+    .hsp-day__steps details[open] .hsp-day__step-desc { max-width: none; margin-bottom: 24px; font-size: 15px; }
+    .hsp-day__steps details[open] .hsp-day__step-bullets { gap: 13px; }
+    .hsp-day__steps details[open] .hsp-day__step-bullets li { font-size: 14px; }
+    .hsp-day__steps details[open] .hsp-day__visual { padding: 0 18px 24px; }
+    .hsp-day__arrow { right: 18px; }
+    .hsp-role-card { min-height: 0; padding: 28px 20px 32px; }
+    .hsp-role-card__icon { margin-bottom: 30px; }
+    .hsp-section-heading h2 { font-size: 39px; }
+    .hsp-workflow-stack { padding: 16px 20px 30px; }
+    .hsp-workflow-stack__header { width: 100%; }
+    .hsp-workflow-stack__header h2 { font-size: 30px; }
+    .hsp-workflow-stack__cards { --hsp-stack-top: 320px; padding-top: 80px; padding-bottom: 40px; }
+    .hsp-workflow-stack__card { flex-direction: column; height: 520px; }
+    .hsp-workflow-stack__copy { flex: 0 0 50%; padding: 20px 20px 0; }
+    .hsp-workflow-stack__copy h3 { font-size: 24px; }
+    .hsp-workflow-stack__copy p { font-size: 15px; }
+    .hsp-workflow-stack__image { margin: 12px; padding: 16px; }
+  }
+  @media (max-width: 420px) {
+    .hsp-hero__title { font-size: 33px; line-height: 1.15em; }
+  }
+  @media (prefers-reduced-motion: reduce) { .hsp-button,.hsp-core__card,.hsp-links__grid a { transition: none; } .hsp-workflow-stack__image img { animation: none; } .hsp-workflow-stack__header { transform: none !important; } }
+</style>
+
+<script>
+  const hospitalityFaqs = Array.from(document.querySelectorAll<HTMLDetailsElement>(".hsp-faq details"));
+  hospitalityFaqs.forEach((item) => { item.addEventListener("toggle", () => { if (!item.open) return; hospitalityFaqs.forEach((other) => { if (other !== item) other.open = false; }); }); });
+
+  const eventDayDetails = Array.from(document.querySelectorAll<HTMLDetailsElement>(".hsp-day__steps details"));
+  eventDayDetails.forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".hsp-day__arrow");
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} event-day feature`);
+      if (!item.open) return;
+      all.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+
+  const linksSuite = document.querySelector<HTMLElement>(".hsp-links");
+  if (linksSuite) {
+    const tabs = Array.from(linksSuite.querySelectorAll<HTMLButtonElement>(".hsp-links__tab"));
+    const panels = Array.from(linksSuite.querySelectorAll<HTMLElement>(".hsp-links__panel"));
+    let linksRotationId: number | undefined;
+    const activateLinksTab = (tab: HTMLButtonElement) => {
+      const targetId = tab.getAttribute("data-target");
+      tabs.forEach((item) => { item.classList.remove("hsp-links__tab--active"); item.setAttribute("aria-selected", "false"); });
+      panels.forEach((panel) => { panel.classList.remove("hsp-links__panel--active"); });
+      tab.classList.add("hsp-links__tab--active");
+      tab.setAttribute("aria-selected", "true");
+      linksSuite.querySelector<HTMLElement>(`#hsp-links-panel-${targetId}`)?.classList.add("hsp-links__panel--active");
+    };
+    const stopLinksRotation = () => { if (linksRotationId === undefined) return; window.clearInterval(linksRotationId); linksRotationId = undefined; };
+    const startLinksRotation = () => {
+      stopLinksRotation();
+      if (tabs.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      linksRotationId = window.setInterval(() => {
+        const currentIndex = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+        activateLinksTab(tabs[(currentIndex + 1) % tabs.length]);
+      }, 4000);
+    };
+    tabs.forEach((tab) => { tab.addEventListener("click", () => { activateLinksTab(tab); startLinksRotation(); }); });
+    linksSuite.addEventListener("mouseenter", stopLinksRotation);
+    linksSuite.addEventListener("mouseleave", startLinksRotation);
+    linksSuite.addEventListener("focusin", stopLinksRotation);
+    linksSuite.addEventListener("focusout", (event) => { if (!(event.relatedTarget instanceof Node) || !linksSuite.contains(event.relatedTarget)) startLinksRotation(); });
+    document.addEventListener("visibilitychange", () => { document.hidden ? stopLinksRotation() : startLinksRotation(); });
+    startLinksRotation();
+  }
+
+  const workflowStack = document.querySelector<HTMLElement>(".hsp-workflow-stack");
+  const workflowStackHeader = workflowStack?.querySelector<HTMLElement>(".hsp-workflow-stack__header");
+  const workflowStackCards = workflowStack?.querySelectorAll<HTMLElement>(".hsp-workflow-stack__card");
+  const workflowStackFinalCard = workflowStackCards?.[workflowStackCards.length - 1];
+  if (workflowStackHeader && workflowStackFinalCard) {
+    let workflowStackFrame = 0;
+    const syncWorkflowStackRelease = () => {
+      workflowStackFrame = 0;
+      const stickyTop = Number.parseFloat(getComputedStyle(workflowStackFinalCard).top) || 0;
+      const releaseOffset = Math.min(0, workflowStackFinalCard.getBoundingClientRect().top - stickyTop);
+      workflowStackHeader.style.setProperty("--hsp-stack-release-y", `${releaseOffset}px`);
+      workflowStackHeader.style.transform = `translateY(${releaseOffset}px)`;
+    };
+    const queueWorkflowStackRelease = () => {
+      if (workflowStackFrame) return;
+      workflowStackFrame = requestAnimationFrame(syncWorkflowStackRelease);
+    };
+    window.addEventListener("scroll", queueWorkflowStackRelease, { passive: true });
+    window.addEventListener("resize", queueWorkflowStackRelease, { passive: true });
+    syncWorkflowStackRelease();
+  }
+</script>
