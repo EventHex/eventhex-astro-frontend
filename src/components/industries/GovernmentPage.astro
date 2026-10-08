@@ -1,0 +1,1415 @@
+---
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+
+interface Props {
+  faqs: [string, string][];
+}
+
+const { faqs } = Astro.props;
+
+const operatingStages = [
+  ["Scope", "Audience + event"],
+  ["Configure", "Fields + approval"],
+  ["Publish", "Programme + website"],
+  ["Notify", "Selected audiences"],
+  ["Validate", "Badge + QR"],
+  ["Review", "Attendance + data"],
+];
+
+const eventDaySteps = [
+  ["Entry validation", "Scan event QR codes and distinguish valid, duplicate, and ineligible attempts."],
+  ["Offline resilience", "Continue supported capture when venue connectivity is unstable."],
+  ["Audience updates", "Send operational push announcements to the selected app audience."],
+  ["Live attendance", "Give the operating team current arrival context."],
+];
+
+const attendeeJourneyCards = [
+  {
+    title: "Invitation",
+    desc: "Guide each attendee group to the intended entry point.",
+    image: "/images/industries/associations/attendee-journey/lifecycle-before-event-web-936.webp",
+    alt: "EventHex event communication lifecycle before an attendee arrives",
+    animated: true,
+    width: 936,
+    height: 340,
+  },
+  {
+    title: "Application or registration",
+    desc: "Collect configured information and use approval where appropriate.",
+    image: "/images/industries/associations/attendee-journey/checkout-attendee-details-web-960.webp",
+    alt: "EventHex registration checkout collecting configured attendee details",
+    animated: true,
+    width: 960,
+    height: 439,
+  },
+  {
+    title: "Programme",
+    desc: "Publish session and speaker information for the event.",
+    image: "/images/industries/associations/attendee-journey/cfp-portal-published-agenda-web-960.webp",
+    alt: "EventHex published agenda with sessions and speakers available to attendees",
+    animated: true,
+    width: 960,
+    height: 720,
+  },
+  {
+    title: "Updates",
+    desc: "Send supported campaigns and operational announcements.",
+    image: "/images/event-notifications/app/push-platform-notifications-web-900.webp",
+    alt: "EventHex push notification workspace for operational event announcements",
+    animated: true,
+    width: 900,
+    height: 483,
+  },
+  {
+    title: "Arrival",
+    desc: "Validate the event ticket and keep attendance current.",
+    image: "/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp",
+    alt: "EventHex QR scanner showing attendee arrival validation states",
+    animated: true,
+    width: 512,
+    height: 422,
+  },
+  {
+    title: "Review",
+    desc: "Use event-level analytics and controlled exports within the product scope.",
+    image: "/images/industries/associations/attendee-journey/registration-analytics-web-960.webp",
+    alt: "EventHex registration analytics showing event-level attendee activity",
+    animated: true,
+    width: 960,
+    height: 530,
+  },
+];
+
+const useCases = [
+  {
+    id: "government-summits",
+    title: "Government summits",
+    description: "Coordinate delegates, programme, communications, badges, and arrival.",
+    action: "Coordinate",
+    checklist: ["Delegates", "Programme and communications", "Badges and arrival"],
+  },
+  {
+    id: "policy-conferences",
+    title: "Policy conferences",
+    description: "Run speaker and session programmes with configured registration.",
+    action: "Run",
+    checklist: ["Speaker programmes", "Session programmes", "Configured registration"],
+  },
+  {
+    id: "public-consultations",
+    title: "Public consultations",
+    description: "Collect event registration data and communicate updates while consultation records remain in the responsible system.",
+    action: "Collect and communicate",
+    checklist: ["Event registration data", "Communicate updates", "Consultation records remain in the responsible system"],
+  },
+  {
+    id: "inter-agency-events",
+    title: "Inter-agency events",
+    description: "Use scoped event access, invitations, programme, and reporting.",
+    action: "Use",
+    checklist: ["Scoped event access", "Invitations and programme", "Reporting"],
+  },
+];
+
+const connectedFeatures = [
+  ["Event Registration", "Configure attendee intake and approval.", "/event-registration/"],
+  ["Session Management", "Build the event programme.", "/session-management/"],
+  ["Event Notifications", "Send operational app announcements.", "/event-notifications/"],
+  ["Event Check-In", "Operate arrival validation.", "/event-check-in/"],
+];
+
+const connectedFeatureIcons = [
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="14" y2="17"></line></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M8 14h3v3H8z"></path></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3M14 18v3"></path></svg>`,
+];
+---
+
+<main class="gov-page">
+  <section id="hero" class="gov-hero">
+    <div class="gov-wrap gov-hero__grid">
+      <div class="gov-hero__copy">
+        <p class="gov-eyebrow animate-on-scroll" data-animation="fadeInDown">Event management software for public-sector events</p>
+        <h1 class="gov-hero__title animate-on-scroll" data-animation="fadeInUp">Configure public-sector registration, programme, communication, and event day</h1>
+        <p class="gov-hero__lead animate-on-scroll" data-animation="fadeInUp">
+          Run government summits, policy conferences, public consultations, and inter-agency events with configurable registration, approvals, sessions, badges, notifications, check-in, and reporting—within a clear product boundary.
+        </p>
+        <ul class="gov-hero__points animate-on-scroll" data-animation="fadeInUp" aria-label="Government event workflow priorities">
+          <li>Configured registration</li>
+          <li>Programme and communications</li>
+          <li>Controlled event day</li>
+        </ul>
+        <div class="gov-actions animate-on-scroll" data-animation="fadeInUp">
+          <a class="gov-btn gov-btn--primary" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+          <a class="gov-btn gov-btn--secondary" href="#operating-map">See the operating model</a>
+        </div>
+      </div>
+
+      <div class="gov-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="gov-hero__image">
+          <div class="gov-hero__image-inner">
+            <img class="gov-hero__screenshot" src="/images/industries/healthcare/app/healthcare-event-analytics-web-890.webp" alt="EventHex event analytics showing registration, programme, and attendance activity" width="890" height="600" loading="eager" decoding="async" fetchpriority="high" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="gov-rail" aria-label="One connected event path. See the operating sequence before choosing modules">
+    <div class="gov-rail__inner">
+      {operatingStages.map(([label, copy]) => <span class="gov-rail__item"><b>{label}</b> {copy}</span>)}
+    </div>
+  </section>
+
+  <section id="event-model" class="gov-model" aria-labelledby="gov-model-title">
+    <header class="gov-model__header animate-on-scroll" data-animation="fadeInUp">
+      <p class="gov-eyebrow">Choose the right event model</p>
+      <h2 id="gov-model-title">Start with the operating shape that fits the event</h2>
+    </header>
+
+    <div class="gov-model__quad">
+      <article class="gov-model__cell gov-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Programme-led event</h3>
+        <p>Build submissions, speakers, sessions, registration, and the attendee agenda around one programme.</p>
+      </article>
+
+      <div class="gov-model__cell gov-model__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="gov-model-workspace">
+          <img class="gov-model-image" src="/images/industries/healthcare/app/programme-sessions-web-960.webp" alt="EventHex programme workspace with scheduled sessions, speakers, and engagement tools" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <div class="gov-model__cell gov-model__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="gov-model-workspace gov-model-workspace--showcase">
+          <img class="gov-model-image" src="/images/industries/healthcare/app/registration-ticket-web-960.webp" alt="EventHex registration workspace showing an active delegate ticket and registration count" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <article class="gov-model__cell gov-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Community or showcase event</h3>
+        <p>Lead with registration, the event website, communication, arrival, and attendee participation.</p>
+      </article>
+
+      <span class="gov-model__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg>
+      </span>
+    </div>
+    <p class="gov-model__note">Start with one model, then add only the modules the event actually needs.</p>
+  </section>
+
+  <section id="core-workflow" class="gov-programme-band">
+    <header class="gov-programme-band__heading animate-on-scroll" data-animation="fadeInUp">
+      <p class="gov-programme-band__eyebrow">Programme operations</p>
+      <h2>Move from content intake to a <span>programme people can attend</span></h2>
+      <p class="gov-programme-band__intro">Connect the content, people, and access decisions that usually end up in separate files.</p>
+    </header>
+
+    <div class="gov-programme-grid">
+      <article class="gov-programme-card animate-on-scroll" data-animation="fadeInUp">
+        <h3>Registration and approval</h3>
+        <p>Configure the attendee journey, fields, ticket/access type, and approval status for the event.</p>
+        <div class="gov-programme-card__visual" aria-hidden="true">
+          <div class="gov-programme-card__panel">
+            <span class="gov-programme-card__panel-label">Attendee journey</span>
+            <div class="gov-programme-card__steps">
+              <span><i>01</i>Fields<b>Configured</b></span>
+              <span class="is-active"><i>02</i>Approval<b>In review</b></span>
+              <span><i>03</i>Access<b>Ready</b></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="gov-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:60ms">
+        <span class="gov-programme-card__petal gov-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Programme coordination</h3>
+        <p>Publish sessions, speakers, rooms, time, capacity context, and attendee agenda discovery.</p>
+        <div class="gov-programme-card__visual" aria-hidden="true">
+          <div class="gov-programme-card__handoff">
+            <span><small>Content</small><b>Sessions + speakers</b></span>
+            <i>→</i>
+            <span class="is-active"><small>Programme</small><b>Publish agenda</b></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="gov-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:120ms">
+        <span class="gov-programme-card__petal gov-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Operational communication</h3>
+        <p>Use planned campaigns and supported app announcements with clear audience and status controls.</p>
+        <div class="gov-programme-card__visual" aria-hidden="true">
+          <div class="gov-programme-card__panel">
+            <span class="gov-programme-card__panel-label">Audience updates</span>
+            <div class="gov-programme-card__fields">
+              <span>Audience<i></i></span>
+              <span>Channel<i></i></span>
+              <span class="is-active">Status control<b>Ready</b></span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="gov-programme-card animate-on-scroll" data-animation="fadeInUp" style="--delay:180ms">
+        <span class="gov-programme-card__petal gov-programme-card__petal--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>
+        </span>
+        <h3>Arrival and reporting</h3>
+        <p>Connect badge output, QR validation, offline-resilient capture, live attendance, and event analytics.</p>
+        <div class="gov-programme-card__visual" aria-hidden="true">
+          <div class="gov-programme-card__onsite">
+            <span><small>Badge</small><b>Ready to print</b></span>
+            <span class="is-active"><small>QR check-in</small><b>Live</b></span>
+            <span><small>Attendance</small><b>Current context</b></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="operating-view" class="gov-role-template" aria-labelledby="operating-view-title">
+    <div class="gov-role-template__shell">
+      <header class="gov-role-template__heading animate-on-scroll" data-animation="fadeInUp">
+        <p class="gov-eyebrow">Team coordination</p>
+        <h2 id="operating-view-title">Give the event team one operating view</h2>
+        <p class="gov-role-template__lead">Give each team a clear job while keeping the attendee and event record connected.</p>
+      </header>
+
+      <div class="gov-role-template__grid">
+        <span class="gov-role-template__notch gov-role-template__notch--one" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+        <span class="gov-role-template__notch gov-role-template__notch--two" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+        </span>
+        <article class="gov-role-template__card gov-role-template__card--first animate-on-scroll" data-animation="fadeInUp">
+          <div class="gov-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          </div>
+          <div class="gov-role-template__content"><h3>Event owner</h3><p>Sets the event, audience, access, programme, and reporting decisions.</p></div>
+        </article>
+
+        <article class="gov-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="100">
+          <div class="gov-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </div>
+          <div class="gov-role-template__content"><h3>Specialist teams</h3><p>Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.</p></div>
+        </article>
+
+        <article class="gov-role-template__card animate-on-scroll" data-animation="fadeInUp" data-delay="200">
+          <div class="gov-role-template__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 16 4-5 4 3 5-7"></path></svg>
+          </div>
+          <div class="gov-role-template__content"><h3>Event leadership</h3><p>Reviews event and portfolio signals for the next operating decision.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <FeatureCards
+    id="attendee-journey"
+    cards={attendeeJourneyCards}
+    subtitle="Audience experience"
+    titleLineOne="Connect the moments attendees"
+    highlight="actually"
+    titleLineTwo="move through"
+    showLinks={false}
+  />
+
+  <section id="event-day" class="gov-event-day">
+    <div class="gov-event-day__container">
+      <div class="gov-event-day__left">
+        <div class="gov-event-day__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="gov-event-day__eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14H3V6a2 2 0 0 1 2-2Z"></path>
+            </svg>
+            During the event
+          </div>
+          <h2>Keep event-day actions tied to the <span>same event record</span></h2>
+          <a class="gov-event-day__cta" href="/book-a-demo/">
+            Book a Demo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="gov-event-day__right">
+        <article class="gov-event-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="gov-event-card__header">
+            <div class="gov-event-card__number">01</div>
+            <div class="gov-event-card__text"><h3>{eventDaySteps[0][0]}</h3><p>{eventDaySteps[0][1]}</p></div>
+          </div>
+          <div class="gov-event-card__visual gov-event-card__visual--1">
+            <div class="gov-event-product-shot">
+              <img src="/images/industries/healthcare/delegate-qr-arrival.webp" alt="EventHex QR scanner and attendee check-in status for delegate arrival" width="512" height="422" loading="lazy" decoding="async" />
+              <span class="gov-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>QR validated</span>
+              <span class="gov-event-product-shot__action">Check in delegate</span>
+              <svg class="gov-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="gov-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="gov-event-card__header">
+            <div class="gov-event-card__number">02</div>
+            <div class="gov-event-card__text"><h3>{eventDaySteps[1][0]}</h3><p>{eventDaySteps[1][1]}</p></div>
+          </div>
+          <div class="gov-event-card__visual gov-event-card__visual--2">
+            <div class="gov-offline-board" role="img" aria-label="EventHex check-in queue retaining captured arrivals until venue connectivity returns">
+              <div class="gov-offline-board__top"><span>Check-in capture</span><b>Offline-ready</b></div>
+              <div class="gov-offline-board__row"><i></i><span>Arrival captured</span><b>Stored</b></div>
+              <div class="gov-offline-board__row"><i></i><span>Arrival captured</span><b>Stored</b></div>
+              <div class="gov-offline-board__sync"><span></span>Ready to sync</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="gov-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="gov-event-card__header">
+            <div class="gov-event-card__number">03</div>
+            <div class="gov-event-card__text"><h3>{eventDaySteps[2][0]}</h3><p>{eventDaySteps[2][1]}</p></div>
+          </div>
+          <div class="gov-event-card__visual gov-event-card__visual--3">
+            <div class="gov-event-product-shot">
+              <img src="/images/industries/associations/event-day/push-send-alert-web-668.webp" alt="EventHex push announcement composer for a selected event audience" width="668" height="486" loading="lazy" decoding="async" />
+              <span class="gov-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Audience selected</span>
+              <span class="gov-event-product-shot__action">Send update</span>
+              <svg class="gov-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="gov-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="gov-event-card__header">
+            <div class="gov-event-card__number">04</div>
+            <div class="gov-event-card__text"><h3>{eventDaySteps[3][0]}</h3><p>{eventDaySteps[3][1]}</p></div>
+          </div>
+          <div class="gov-event-card__visual gov-event-card__visual--4">
+            <div class="gov-event-product-shot">
+              <img src="/images/industries/healthcare/attendance-review.webp" alt="EventHex attendance workspace showing current arrival totals and attendance status" width="640" height="353" loading="lazy" decoding="async" />
+              <span class="gov-event-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Attendance current</span>
+              <span class="gov-event-product-shot__action">Review attendance</span>
+              <svg class="gov-event-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="configuration" class="gov-model gov-model--scope" aria-labelledby="gov-scope-title">
+    <header class="gov-model__header animate-on-scroll" data-animation="fadeInUp">
+      <p class="gov-eyebrow">Build the right scope</p>
+      <h2 id="gov-scope-title">Keep EventHex responsibility separate from specialist requirements</h2>
+      <p>Confirm every specialist obligation before implementation and record how it will be handled.</p>
+    </header>
+
+    <div class="gov-model__quad">
+      <article class="gov-model__cell gov-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>EventHex workflow</h3>
+        <p>Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p>
+      </article>
+
+      <div class="gov-model__cell gov-model__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="gov-model-workspace">
+          <img class="gov-model-image" src="/images/industries/healthcare/app/event-modules-web-960.webp" alt="EventHex event configuration with programme, exhibitor, gallery, recap, and attendee modules" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <div class="gov-model__cell gov-model__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="gov-model-workspace gov-model-workspace--showcase">
+          <img class="gov-model-image" src="/images/industries/healthcare/app/ticket-requirements-web-960.webp" alt="EventHex ticket requirements with form, approval, policy, delivery, and badge controls" width="960" height="498" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <article class="gov-model__cell gov-model__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3>Your specialist requirements</h3>
+        <p>Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p>
+      </article>
+
+      <span class="gov-model__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg>
+      </span>
+    </div>
+  </section>
+
+  <section id="use-cases" class="gov-use-cases gov-suites" aria-labelledby="gov-use-cases-title">
+    <div class="gov-suites__inner">
+      <header class="gov-suites__header">
+        <p class="gov-eyebrow animate-on-scroll" data-animation="fadeInDown">Where it fits</p>
+        <h2 id="gov-use-cases-title" class="gov-suites__title animate-on-scroll" data-animation="fadeInUp">
+          <span>Configure EventHex around</span>
+          <span>the event you are running</span>
+        </h2>
+      </header>
+
+      <div class="gov-suites__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Government event formats">
+        {useCases.map((useCase, index) => (
+          <button
+            class:list={["gov-suites__tab", { "is-active": index === 0 }]}
+            type="button"
+            role="tab"
+            id={`gov-tab-${useCase.id}`}
+            aria-controls={`gov-panel-${useCase.id}`}
+            aria-selected={index === 0 ? "true" : "false"}
+            tabindex={index === 0 ? 0 : -1}
+            data-gov-suite-tab={useCase.id}
+          >
+            {useCase.title}
+          </button>
+        ))}
+      </div>
+
+      <div class="gov-suites__box animate-on-scroll" data-animation="fadeInUp">
+        {useCases.map((useCase, index) => (
+          <article
+            class:list={["gov-suites__panel", { "is-active": index === 0 }]}
+            id={`gov-panel-${useCase.id}`}
+            role="tabpanel"
+            aria-labelledby={`gov-tab-${useCase.id}`}
+            data-gov-suite-panel={useCase.id}
+          >
+            <div class="gov-suites__copy">
+              <h3>{useCase.title}</h3>
+              <p>{useCase.description}</p>
+              <span class="gov-suites__connects">{useCase.action.toUpperCase()}</span>
+              <ul>
+                {useCase.checklist.map((item) => (
+                  <li>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="gov-suites__visual">
+              <div class="gov-suites__showcase">
+                {index === 0 && <img src="/images/industries/healthcare/app/programme-sessions-web-960.webp" alt="EventHex programme workspace with sessions, speakers, rooms, and schedule details" width="960" height="498" loading="lazy" decoding="async" />}
+                {index === 1 && <img src="/images/industries/education/sessions-workspace-web-800.webp" alt="EventHex sessions workspace for coordinating a conference programme" width="800" height="441" loading="lazy" decoding="async" />}
+                {index === 2 && <img src="/images/industries/associations/portal/registration-analytics-web-960.webp" alt="EventHex registration analytics with event registration and attendance activity" width="960" height="516" loading="lazy" decoding="async" />}
+                {index === 3 && <img src="/images/industries/healthcare/private-ticket-settings.webp" alt="EventHex private ticket settings for scoped event access" width="760" height="480" loading="lazy" decoding="async" />}
+                <span class="gov-suites__visual-label">
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3.5" width="14" height="13" rx="2"></rect><path d="M3 8h14M7.5 8v8.5"></path></svg>
+                  {useCase.title}
+                </span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connected-features" class="gov-connected">
+    <div class="gov-connected__inner">
+      <header class="gov-connected__header animate-on-scroll" data-animation="fadeInUp">
+        <p class="gov-eyebrow">Go deeper</p>
+        <h2>Open the page that owns<br />each mechanism</h2>
+      </header>
+      <div class="gov-connected__grid">
+        {connectedFeatures.slice(0, -1).map((_, index) => (
+          <span class="gov-connected__notch" style={`left: ${((index + 1) / connectedFeatures.length) * 100}%`} aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path></svg>
+          </span>
+        ))}
+        {connectedFeatures.map(([title, copy, href], index) => (
+          <a class:list={["gov-connected__card", { "gov-connected__card--first": index === 0 }]} href={href}>
+            <span class="gov-connected__icon" set:html={connectedFeatureIcons[index]} />
+            <div class="gov-connected__content"><h3>{title}</h3><p>{copy}</p></div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="demo-fit" class="gov-demo-section" aria-labelledby="gov-demo-title">
+    <div class="gov-demo">
+      <div class="gov-demo__left">
+        <p class="gov-eyebrow animate-on-scroll" data-animation="fadeInDown">Plan the configuration</p>
+        <h2 id="gov-demo-title" class="gov-demo__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="gov-demo__title-line">Bring one real event</span>
+          <span class="gov-demo__title-line">workflow to the demo</span>
+        </h2>
+        <p class="gov-demo__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.
+        </p>
+        <ol class="gov-demo__steps animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 160ms">
+          <li><strong>Start with the event format</strong><span>Choose the smallest workflow that matches this event.</span></li>
+          <li><strong>Add only the modules you need</strong><span>Use the connected feature pages to understand each mechanism.</span></li>
+          <li><strong>Review the setup in the demo</strong><span>Bring market, event, audience, access, communication, and onsite requirements.</span></li>
+        </ol>
+        <div class="gov-demo__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <a class="gov-demo__btn gov-demo__btn--dark" href="/book-a-demo/">Book a Demo →</a>
+        </div>
+      </div>
+
+      <div class="gov-demo__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="gov-demo__showcase" role="img" aria-label="EventHex private-ticket access and ticket settings prepared for a government event review">
+          <div class="gov-demo__shot gov-demo__shot--list">
+            <img src="/images/industries/healthcare/private-ticket-settings.webp" alt="" aria-hidden="true" width="760" height="480" loading="lazy" decoding="async" />
+          </div>
+          <div class="gov-demo__shot gov-demo__shot--settings">
+            <img src="/images/industries/healthcare/ticket-specific-rules.webp" alt="" aria-hidden="true" width="800" height="620" loading="lazy" decoding="async" />
+          </div>
+          <span class="gov-demo__status">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+            Configuration ready
+          </span>
+          <span class="gov-demo__review">Review in demo</span>
+          <svg class="gov-demo__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="gov-faq">
+    <div class="gov-faq__inner">
+      <div class="gov-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="gov-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Government event software questions
+        </span>
+        <h2 class="gov-faq__heading">Review the questions<br />that shape the setup</h2>
+      </div>
+      <div class="gov-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="gov-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-gov-faq open={index === 0}>
+            <summary class="gov-faq__question"><strong>{question}</strong><span class="gov-faq__icon" aria-hidden="true"></span></summary>
+            <div class="gov-faq__answer"><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<style>
+  .gov-page {
+    --gov-ink: var(--heading-dark, #22272f);
+    --gov-copy: var(--subheading-gray, #475467);
+    --gov-line: var(--surface-card-border, #e8ecf2);
+    overflow: clip;
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(
+        circle 380px at 3% 34%,
+        rgba(175, 163, 255, 0.28) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 97% 30%,
+        rgba(255, 182, 213, 0.26) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 340px at 95% 75%,
+        rgba(130, 170, 255, 0.24) 0%,
+        transparent 100%
+      ),
+      radial-gradient(
+        circle 300px at 4% 78%,
+        rgba(255, 224, 150, 0.2) 0%,
+        transparent 100%
+      ),
+      #ffffff;
+    background-attachment: fixed;
+    color: var(--gov-ink);
+  }
+  .gov-hero,
+  .gov-rail,
+  .gov-model,
+  .gov-role-template,
+  .gov-event-day,
+  .gov-suites,
+  .gov-connected,
+  .gov-demo-section,
+  .gov-faq { background: transparent !important; }
+  .gov-wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+  .gov-section { padding: clamp(72px, 8vw, 108px) 0; }
+  .gov-section--light { background: var(--surface-light, #f5f8ff); }
+  :global(#attendee-journey.smf-shell) {
+    background-color: #000 !important;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, .22) 0%,
+      rgba(124, 108, 255, .1) 45%,
+      transparent 72%
+    ) !important;
+  }
+  .gov-eyebrow { margin: 0 0 16px; color: var(--brand-blue, #375dfb); font: 700 .8125rem/1.3 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .gov-heading { max-width: 720px; }
+  .gov-heading--center { margin-inline: auto; text-align: center; }
+  .gov-heading h2 { margin: 0; color: var(--gov-ink); font: 500 clamp(36px, 4vw, 56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .gov-heading > p:last-child { max-width: 650px; margin: 20px 0 0; color: var(--gov-copy); font: 400 17px/1.62 var(--font-body); }
+  .gov-heading--center > p:last-child { margin-inline: auto; }
+  .gov-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .gov-btn { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 10px; padding: 12px 28px; border: 1px solid transparent; border-radius: 10px; font: 600 15px/1 var(--font-body); text-decoration: none; transition: transform .2s ease, background .2s ease, box-shadow .2s ease; }
+  .gov-btn:hover { transform: translateY(-2px); }
+  .gov-btn:focus-visible, .gov-connected__card:focus-visible, .gov-faq summary:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .gov-btn--primary { background: var(--gov-ink); color: #fff; }
+  .gov-btn--primary:hover { background: #000; }
+  .gov-btn--secondary { border-color: #dce4ff; background: rgba(255,255,255,.92); color: var(--gov-ink); }
+  .gov-btn--secondary:hover { border-color: #c5d2ff; box-shadow: 0 12px 30px rgba(55,93,251,.12); }
+  .gov-btn--light { background: #fff; color: #171a21; }
+
+  .gov-hero { margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .gov-hero__grid { display: grid; width: 100%; max-width: 1080px; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .gov-hero__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; text-align: left; }
+  .gov-hero .gov-eyebrow, .gov-hero__title, .gov-hero__lead, .gov-hero__points, .gov-hero .gov-actions { margin: 0; }
+  .gov-hero .gov-eyebrow { font-size: 16px; font-weight: 500; letter-spacing: normal; }
+  .gov-hero__title { width: 100%; max-width: 620px; background: linear-gradient(98deg, var(--gov-ink) 43.06%, #8f8f8f 91.81%); color: transparent; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background-clip: text; -webkit-background-clip: text; }
+  .gov-hero__lead { width: 100%; max-width: 560px; color: var(--gov-copy); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .gov-hero__points { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; color: #475467; font: 500 14px/1.4 var(--font-body); list-style: none; }
+  .gov-hero__points li { display: flex; align-items: center; color: inherit; font: inherit; }
+  .gov-hero__points li::before { width: 6px; height: 6px; margin: 0 10px 2px 0; border-radius: 50%; background: #10b981; content: ""; }
+  .gov-hero .gov-actions { gap: 14px; padding-top: 6px; }
+  .gov-hero .gov-btn { min-height: 48px; padding: 12px 32px; border-radius: 10px; }
+  .gov-hero__visual { position: relative; z-index: 3; align-self: start; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); }
+  .gov-hero__image { padding: 14px; border: 1px solid rgba(255,255,255,.62); border-right: 0; border-radius: 22px 0 0 22px; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; backdrop-filter: blur(16px); }
+  .gov-hero__image-inner { display: flex; min-height: 488px; align-items: center; overflow: hidden; padding: 28px; border-radius: 16px 0 0 16px; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); backdrop-filter: blur(18px); }
+  .gov-hero__screenshot { display: block; width: 100%; height: auto; border: 1px solid #dce4ff; border-radius: 18px; background: #fff; box-shadow: 0 20px 52px rgba(35,47,91,.13); animation: govHeroFloat 6s ease-in-out infinite; }
+  .gov-console { width: 100%; overflow: hidden; border: 1px solid #dce4ff; border-radius: 18px; background: #fff; box-shadow: 0 20px 52px rgba(35,47,91,.13); animation: govHeroFloat 6s ease-in-out infinite; }
+  @keyframes govHeroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  .gov-console__bar { display: flex; align-items: center; gap: 6px; padding: 14px 16px; border-bottom: 1px solid #e9edf5; background: #f8faff; }
+  .gov-console__bar span { width: 8px; height: 8px; border-radius: 50%; background: #ff8ca5; }
+  .gov-console__bar span:nth-child(2) { background: #ffce73; } .gov-console__bar span:nth-child(3) { background: #7bd7b2; }
+  .gov-console__bar b { margin-left: 8px; color: #5d6677; font: 700 10.5px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .gov-console__head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px; }
+  .gov-console__head div { display: grid; gap: 6px; }
+  .gov-console__head small, .gov-console__flow small { color: #8b94a6; font: 700 10px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .gov-console__head strong { font: 500 20px/1.2 var(--font-heading); }
+  .gov-console__head > span { padding: 8px 10px; border: 1px solid #cfead9; border-radius: 999px; background: #effbf4; color: #18864b; font: 700 10px/1 var(--font-body); }
+  .gov-console__flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding: 0 24px 24px; }
+  .gov-console__flow div { display: grid; gap: 8px; min-height: 118px; padding: 18px; border: 1px solid #e6ebf4; border-radius: 16px; background: #f7f9ff; }
+  .gov-console__flow b { font: 500 18px/1.1 var(--font-heading); }
+  .gov-console__flow span { color: var(--gov-copy); font: 400 12.5px/1.4 var(--font-body); }
+
+  .gov-rail { padding: 24px; border-top: 1px solid var(--gov-line); background: linear-gradient(90deg, rgba(235,240,255,.65), rgba(255,245,250,.68)); }
+  .gov-rail__inner { display: flex; max-width: 1280px; align-items: center; justify-content: center; flex-wrap: wrap; gap: 22px 36px; margin: 0 auto; }
+  .gov-rail__item { color: var(--gov-copy); font: 400 .9375rem/1.4 var(--font-body); white-space: nowrap; }
+  .gov-rail__item b { color: var(--gov-ink); font-weight: 700; }
+
+  .gov-choice { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 40px; }
+  .gov-choice__card { display: flex; min-height: 300px; flex-direction: column; padding: 34px; border: 1px solid var(--gov-line); border-radius: 24px; background: #fff; }
+  .gov-choice__card--tint { border-color: #b6dcd8; background: #ecfaf7; }
+  .gov-choice__card--boundary { border-color: #e4d9ff; background: #f7f2ff; }
+  .gov-choice__mark { width: fit-content; margin-bottom: auto; color: #8b94a6; font: 700 11px/1 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .gov-choice h3 { margin: 36px 0 12px; font: 500 25px/1.15 var(--font-heading); }
+  .gov-choice p { margin: 0 0 24px; color: var(--gov-copy); font: 400 15.5px/1.65 var(--font-body); }
+  .gov-pill { width: fit-content; margin-top: auto; padding: 7px 11px; border-radius: 999px; background: var(--surface-blue-tint, #e5ebff); color: #3158d4; font: 700 12px/1 var(--font-body); }
+  .gov-note { max-width: 720px; margin: 24px auto 0; color: var(--gov-copy); font: 500 14px/1.5 var(--font-body); text-align: center; }
+
+  .gov-model { display: flex; flex-direction: column; align-items: center; padding: 64px 24px 40px; background: #fff; }
+  .gov-model__header { display: flex; max-width: 1100px; flex-direction: column; align-items: center; margin-bottom: 24px; text-align: center; }
+  .gov-model__header h2 { margin: 0 0 12px; background: linear-gradient(98deg, var(--heading-dark, #1e1d24) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; font: 500 clamp(28px, 4.2vw, 48px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .gov-model__header p { max-width: 640px; margin: 0; color: var(--subheading-gray, #555); font: 400 18px/1.5 var(--font-body); }
+  .gov-model__header .gov-eyebrow { margin-bottom: 14px; color: var(--brand-blue, #375dfb); font: 700 .8125rem/1.2 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .gov-model__quad { position: relative; display: grid; width: 100%; max-width: 1180px; grid-template: 1fr 1fr / 1fr 1fr; margin: 24px auto; }
+  .gov-model__note { max-width: 760px; margin: 26px auto 0; color: var(--gov-copy); font: 600 14.5px/1.55 var(--font-body); text-align: center; }
+  .gov-model__cell { display: flex; min-width: 0; min-height: 260px; flex-direction: column; justify-content: center; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .gov-model__cell:nth-child(2n) { border-right: 0; }
+  .gov-model__cell:nth-child(n + 3) { border-bottom: 0; }
+  .gov-model__cell h3 { margin: 0 0 16px; color: var(--heading-dark, #1e1d24); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .gov-model__cell p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font: 400 16px/1.6 var(--font-body); }
+  .gov-model__cell--media { min-height: 360px; align-items: center; padding: 18px 22px; overflow: hidden; background: #fff; }
+  .gov-model__cross { position: absolute; top: 50%; left: 50%; z-index: 4; width: 18px; height: 18px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .gov-model-workspace { position: relative; display: flex; width: 100%; height: 320px; align-items: center; justify-content: center; padding: 12px; overflow: hidden; border-radius: 18px; background: linear-gradient(150deg, #edf2ff, #fff); }
+  .gov-model-image { display: block; width: 100%; height: 100%; border: 1px solid #d7deea; border-radius: 12px; object-fit: contain; object-position: center top; box-shadow: 0 18px 40px rgba(31,41,72,.16); }
+  .gov-model-screen { position: absolute; right: 18px; bottom: 20px; z-index: 2; width: 76%; overflow: hidden; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); animation: govModelFloat 7s ease-in-out infinite; }
+  .gov-model-screen__bar { display: flex; align-items: center; gap: 5px; padding: 11px 13px; border-bottom: 1px solid #e9edf5; background: #f8faff; }
+  .gov-model-screen__bar i { width: 6px; height: 6px; border-radius: 50%; background: #ff8ca5; }
+  .gov-model-screen__bar i:nth-child(2) { background: #ffce73; }
+  .gov-model-screen__bar i:nth-child(3) { background: #7bd7b2; }
+  .gov-model-screen__bar b { margin-left: 5px; color: #647087; font: 700 9px/1 var(--font-body); letter-spacing: .04em; }
+  .gov-model-screen__body { display: grid; gap: 8px; padding: 14px; }
+  .gov-model-screen__body span { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 11px; border: 1px solid #edf0f5; border-radius: 8px; background: #fff; }
+  .gov-model-screen__body small { color: #7d8798; font: 600 9px/1.2 var(--font-body); }
+  .gov-model-screen__body strong { color: #2d3748; font: 700 9px/1.2 var(--font-body); text-align: right; }
+  .gov-model-screen--showcase { left: 18px; right: auto; }
+  .gov-model-workspace--showcase { background: linear-gradient(150deg, #e9fbf7, #fff); }
+  .gov-model-status, .gov-model-action { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 10px; white-space: nowrap; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .gov-model-status { top: 14px; left: 14px; padding: 10px 12px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .gov-model-action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .gov-model-workspace--showcase .gov-model-status { right: 14px; left: auto; }
+  .gov-model-workspace--showcase .gov-model-action { right: auto; left: 14px; }
+  .gov-model-cursor { position: absolute; right: 4px; bottom: 34px; z-index: 6; width: 16px; height: 21px; filter: drop-shadow(0 3px 3px rgba(17,24,39,.25)); transform: rotate(-18deg); }
+  .gov-model-cursor::before { display: block; width: 0; height: 0; border-width: 10px 0 10px 15px; border-style: solid; border-color: transparent transparent transparent #202736; content: ""; clip-path: polygon(0 0, 100% 50%, 46% 62%, 60% 100%, 43% 100%, 30% 66%, 0 82%); }
+  .gov-model-workspace--showcase .gov-model-cursor { right: auto; bottom: 34px; left: 118px; }
+  @keyframes govModelFloat { 0%, 100% { transform: translateY(4px) scale(.985) rotate(-.7deg); } 50% { transform: translateY(-4px) scale(1) rotate(0); } }
+
+  .gov-programme-band {
+    --band-p: 0;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: clamp(88px, 9vw, 116px) 0 clamp(56px, 7vw, 88px);
+    overflow: hidden;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.22) 0%, rgba(124,108,255,.1) 45%, transparent 72%);
+    background-repeat: no-repeat;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px, 3.5vw, 56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+  .gov-programme-band::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: .55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+    content: "";
+  }
+  .gov-programme-band > * { position: relative; z-index: 1; }
+  .gov-programme-band__heading { max-width: 980px; margin: 0 auto; padding-inline: 24px; text-align: center; }
+  .gov-programme-band__eyebrow { margin: 0 0 18px; color: #a8b6ff; font: 700 .75rem/1.3 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .gov-programme-band__heading h2 {
+    max-width: 920px;
+    margin: 0 auto;
+    background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    font: 500 clamp(36px, 4.3vw, 56px)/1.08 var(--font-heading);
+    letter-spacing: -.03em;
+  }
+  .gov-programme-band__heading h2 span { white-space: nowrap; }
+  .gov-programme-band__intro { max-width: 650px; margin: 22px auto 0; color: rgba(255,255,255,.62); font: 400 17px/1.62 var(--font-body); }
+
+  .gov-programme-grid {
+    display: grid;
+    max-width: 1076px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: clamp(48px, 5.5vw, 68px) auto 0;
+    border: 1px solid #3b3a47;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .gov-programme-card {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    min-height: 392px;
+    flex-direction: column;
+    padding: 36px 32px 30px;
+    border-right: 1px solid #3b3a47;
+    border-bottom: 1px solid #3b3a47;
+    animation-delay: var(--delay, 0ms);
+  }
+  .gov-programme-card:nth-child(2n) { border-right: 0; }
+  .gov-programme-card:nth-child(n + 3) { border-bottom: 0; }
+  .gov-programme-card h3 { margin: 0 0 14px; color: #fff; font: 700 15px/1.25 var(--font-heading); letter-spacing: -.01em; }
+  .gov-programme-card > p { max-width: 42ch; margin: 0; color: rgba(255,255,255,.62); font: 400 .9375rem/1.38 var(--font-body); }
+  .gov-programme-card__petal { position: absolute; left: 0; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .gov-programme-card__petal--top { top: 0; transform: translate(-50%, -50%); }
+  .gov-programme-card__petal--bottom { bottom: 0; transform: translate(-50%, 50%); }
+  .gov-programme-card__visual { position: relative; display: flex; align-items: flex-end; justify-content: center; flex: 1; margin-top: 28px; }
+  .gov-programme-card__visual::before { position: absolute; bottom: -10%; left: 50%; width: 80%; height: 80%; border-radius: 50%; background: radial-gradient(closest-side, rgba(92,138,255,.28), rgba(124,108,255,.15) 55%, transparent 100%); content: ""; filter: blur(30px); transform: translateX(-50%); }
+  .gov-programme-card__visual > * { position: relative; z-index: 1; }
+  .gov-programme-card__panel,
+  .gov-programme-card__handoff > span,
+  .gov-programme-card__onsite > span {
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.04);
+    border-radius: 12px;
+  }
+  .gov-programme-card__panel {
+    width: min(100%, 360px);
+    padding: 16px;
+    border-color: transparent;
+    border-radius: 16px;
+    background: linear-gradient(#08080e, #08080e) padding-box, linear-gradient(135deg, #38bdf8 0%, #5c8aff 38%, #7c6cff 70%, #a45cff 100%) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92,138,255,.5);
+  }
+  .gov-programme-card__panel-label { display: block; margin-bottom: 10px; color: rgba(255,255,255,.55); font: 400 12px/1.3 var(--font-body); }
+  .gov-programme-card__steps, .gov-programme-card__fields, .gov-programme-card__onsite { display: grid; gap: 10px; }
+  .gov-programme-card__steps > span,
+  .gov-programme-card__fields > span,
+  .gov-programme-card__onsite > span {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+    padding: 12px 13px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    background: rgba(255,255,255,.05);
+    color: rgba(255,255,255,.84);
+    font: 500 12.5px/1.2 var(--font-body);
+  }
+  .gov-programme-card__steps i { display: grid; flex: 0 0 25px; width: 25px; height: 25px; place-items: center; border-radius: 8px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.5); font: 700 9px/1 var(--font-body); font-style: normal; }
+  .gov-programme-card__steps b, .gov-programme-card__fields b { margin-left: auto; color: rgba(255,255,255,.48); font-size: 10.5px; font-weight: 600; }
+  .gov-programme-card__steps .is-active,
+  .gov-programme-card__fields .is-active,
+  .gov-programme-card__onsite .is-active,
+  .gov-programme-card__handoff .is-active {
+    border-color: transparent;
+    background: linear-gradient(#11111b, #11111b) padding-box, linear-gradient(135deg, #38bdf8, #7c6cff 58%, #a45cff) border-box;
+    color: #fff;
+  }
+  .gov-programme-card__fields > span { justify-content: flex-start; }
+  .gov-programme-card__fields i { width: 45%; height: 6px; margin-left: auto; border-radius: 999px; background: rgba(255,255,255,.14); }
+  .gov-programme-card__handoff { display: grid; width: min(100%, 380px); grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; }
+  .gov-programme-card__handoff > span { display: grid; gap: 8px; min-height: 104px; align-content: center; padding: 16px; }
+  .gov-programme-card__handoff > i { color: #9baaff; font: 400 24px/1 var(--font-body); font-style: normal; }
+  .gov-programme-card__handoff small, .gov-programme-card__onsite small { color: rgba(255,255,255,.48); font: 500 10.5px/1.2 var(--font-body); }
+  .gov-programme-card__handoff b, .gov-programme-card__onsite b { color: rgba(255,255,255,.88); font: 700 12px/1.25 var(--font-body); }
+  .gov-programme-card__onsite { width: min(100%, 370px); }
+  .gov-programme-card__onsite > span { min-height: 53px; }
+  .gov-programme-card__onsite > span small { margin-right: auto; }
+
+  @keyframes govProgrammeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes govProgrammeBloom { 0%, 100% { opacity: .68; } 50% { opacity: 1; } }
+  @keyframes govProgrammePulse { 0%, 100% { opacity: .88; } 50% { opacity: 1; } }
+  .gov-programme-card__panel,
+  .gov-programme-card__handoff,
+  .gov-programme-card__onsite { animation: govProgrammeFloat 7s ease-in-out infinite; }
+  .gov-programme-card:nth-child(2) .gov-programme-card__handoff { animation-delay: -1.4s; }
+  .gov-programme-card:nth-child(3) .gov-programme-card__panel { animation-delay: -2.8s; }
+  .gov-programme-card:nth-child(4) .gov-programme-card__onsite { animation-delay: -4.2s; }
+  .gov-programme-card__visual::before { animation: govProgrammeBloom 6s ease-in-out infinite; }
+  .gov-programme-card__steps .is-active,
+  .gov-programme-card__fields .is-active,
+  .gov-programme-card__onsite .is-active,
+  .gov-programme-card__handoff .is-active { animation: govProgrammePulse 3.2s ease-in-out infinite; }
+
+  .gov-demo-section {
+    display: flex;
+    justify-content: center;
+    padding: 32px 24px;
+    background:
+      radial-gradient(circle 520px at 4% 20%, rgba(228,236,255,.72), transparent 100%),
+      radial-gradient(circle 520px at 96% 76%, rgba(255,232,244,.52), transparent 100%),
+      #fff;
+  }
+  .gov-demo {
+    display: grid;
+    width: min(1120px, 100%);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: 36px;
+    align-items: center;
+    padding: 48px;
+  }
+  .gov-demo__left { min-width: 0; max-width: 560px; }
+  .gov-demo__title {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    color: transparent;
+    font: 500 clamp(36px, 4.2vw, 48px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .gov-demo__title-line { display: block; white-space: normal; }
+  .gov-demo__copy { margin: 16px 0 22px; color: #374151; font: 500 15px/1.5 var(--font-body); }
+  .gov-demo__steps { display: grid; gap: 10px; margin: 0 0 24px; padding: 0; list-style: none; counter-reset: government-demo-step; }
+  .gov-demo__steps li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 2px 10px; align-items: center; padding: 10px 12px; border: 1px solid #e5e9f0; border-radius: 12px; background: rgba(255,255,255,.72); counter-increment: government-demo-step; }
+  .gov-demo__steps li::before { display: flex; width: 28px; height: 28px; grid-row: 1 / span 2; align-items: center; justify-content: center; border-radius: 9px; background: var(--surface-blue-tint, #e5ebff); color: var(--brand-blue, #375dfb); content: counter(government-demo-step, decimal-leading-zero); font: 800 10px/1 var(--font-body); }
+  .gov-demo__steps strong { color: #22272f; font: 600 13px/1.25 var(--font-body); }
+  .gov-demo__steps span { color: #667085; font: 400 12px/1.4 var(--font-body); }
+  .gov-demo__actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }
+  .gov-demo__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font: 600 13.5px/1 var(--font-body);
+    text-decoration: none;
+    transition: background .2s ease, transform .2s ease;
+  }
+  .gov-demo__btn:hover { transform: translateY(-2px); }
+  .gov-demo__btn:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .gov-demo__btn--dark { background: #27272a; color: #fff; }
+  .gov-demo__btn--dark:hover { background: #18181b; }
+  .gov-demo__btn--light { border: 1px solid #e5e7eb; background: #f3f4f6; color: #374151; }
+  .gov-demo__btn--light:hover { background: #e5e7eb; }
+  .gov-demo__right { width: 100%; max-width: 500px; justify-self: end; }
+  .gov-demo__showcase {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    height: clamp(320px, 32vw, 350px);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.9);
+    border-radius: 24px;
+    background: linear-gradient(155deg, #fff8dc 0%, #fffdf4 48%, #fff 100%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.55);
+  }
+  .gov-demo__showcase::before { position: absolute; inset: auto 6% -24% 10%; z-index: -1; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); content: ""; filter: blur(24px); }
+  .gov-demo__shot { position: absolute; overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }
+  .gov-demo__shot img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .gov-demo__shot--list { top: 30px; left: 20px; z-index: 1; width: 77%; aspect-ratio: 760 / 480; }
+  .gov-demo__shot--settings { right: 18px; bottom: 24px; z-index: 2; width: 70%; aspect-ratio: 800 / 620; }
+  .gov-demo__status, .gov-demo__review { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; box-shadow: 0 8px 22px rgba(42,66,158,.18); font: 700 13px/1 var(--font-body); }
+  .gov-demo__status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; background: #f0f4ff; color: #4163ed; }
+  .gov-demo__status svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  .gov-demo__review { right: 16px; bottom: 16px; padding: 12px 16px; background: #4163ed; color: #fff; }
+  .gov-demo__cursor { position: absolute; right: 20px; bottom: 50px; z-index: 6; width: 23px; height: 27px; fill: #182033; stroke: #fff; stroke-width: 1.2; filter: drop-shadow(0 2px 3px rgba(17,24,39,.24)); }
+
+  .gov-role-template {
+    padding: clamp(64px, 7vw, 96px) 24px;
+    background:
+      radial-gradient(ellipse 75% 68% at 50% 40%, rgba(255,255,255,.94) 0%, rgba(255,255,255,.65) 38%, rgba(255,255,255,.28) 58%, transparent 78%),
+      linear-gradient(to bottom, #fff 0, rgba(255,255,255,.85) 130px, rgba(255,255,255,.5) 260px, rgba(255,255,255,.18) 390px, transparent 500px),
+      linear-gradient(to top, #fff 0, rgba(255,255,255,.7) 70px, rgba(255,255,255,.3) 130px, transparent 190px),
+      radial-gradient(circle 380px at 3% 34%, rgba(175,163,255,.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255,182,213,.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130,170,255,.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255,224,150,.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+  }
+  .gov-role-template__shell { width: min(1200px, 100%); margin: 0 auto; }
+  .gov-role-template__heading { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .gov-role-template__heading h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; white-space: nowrap; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .gov-role-template__lead { max-width: 660px; margin: 18px auto 0; color: var(--gov-copy); font: 400 17px/1.6 var(--font-body); }
+  .gov-role-template__grid { position: relative; display: grid; max-width: 1080px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .gov-role-template__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border-left: 1px solid var(--surface-card-border, #e8ecf2); }
+  .gov-role-template__card--first { border-left: 0; }
+  .gov-role-template__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .gov-role-template__notch--one { left: 33.333%; }
+  .gov-role-template__notch--two { left: 66.666%; }
+  .gov-role-template__icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .gov-role-template__icon svg { width: 100%; height: 100%; }
+  .gov-role-template__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font: 600 21px/1.25 var(--font-heading); }
+  .gov-role-template__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+
+  .gov-suites, .gov-use-cases { padding: 112px 24px; background: #fff; }
+  .gov-suites__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .gov-suites__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .gov-suites__title { max-width: 840px; margin: 0 0 16px; background: linear-gradient(98deg, var(--gov-ink) 43.06%, #8f8f8f 91.81%); color: transparent; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .gov-suites__title span { display: block; }
+  .gov-suites__subtitle { max-width: 760px; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); }
+  .gov-suites__tabs { display: flex; width: fit-content; max-width: 100%; justify-content: center; gap: 4px; margin: 0 auto 40px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .gov-suites__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .gov-suites__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .gov-suites__tab:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 3px; }
+  .gov-suites__tab.is-active { border-color: #dbe4f0; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: #3b82f6; }
+  .gov-suites__panel { --gov-suite-tint: #fff8dc; --gov-suite-border: #f0dfa6; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: 64px; padding: 52px 64px; border: 1px solid var(--gov-suite-border); border-radius: 28px; background: linear-gradient(135deg, var(--gov-suite-tint) 0%, #fff 72%); animation: govSuiteFadeIn .4s ease forwards; }
+  .gov-suites__panel + .gov-suites__panel { margin-top: 18px; }
+  .gov-suites__panel:nth-child(2) { --gov-suite-tint: #edf7ff; --gov-suite-border: #d4e7f7; }
+  .gov-suites__panel:nth-child(3) { --gov-suite-tint: #f3efff; --gov-suite-border: #e2d8fa; }
+  .gov-suites__panel:nth-child(4) { --gov-suite-tint: #eefbf4; --gov-suite-border: #d4efdf; }
+  .gov-suites.is-ready .gov-suites__panel { display: none; margin-top: 0; }
+  .gov-suites.is-ready .gov-suites__panel.is-active { display: grid; }
+  .gov-suites__copy h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .gov-suites__copy > p { margin: 0 0 28px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .gov-suites__connects { display: block; margin-bottom: 18px; color: #9ca3af; font: 700 11px/1 var(--font-body); letter-spacing: .12em; }
+  .gov-suites__copy ul { display: flex; flex-direction: column; gap: 12px; margin: 0; padding: 0; list-style: none; }
+  .gov-suites__copy li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .gov-suites__copy li svg { width: 14px; height: 14px; flex: 0 0 14px; margin-top: 2px; fill: none; stroke: #9ca3af; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .gov-suites__visual { min-width: 0; }
+  .gov-suites__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .gov-suites__showcase::before { position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--gov-suite-border); content: ""; filter: blur(22px); opacity: .48; }
+  .gov-suites__showcase img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1117 / 837; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; object-fit: contain; }
+  .gov-suites__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid #cddcff; border-radius: 10px; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); color: #3158d4; font: 700 11px/1.2 var(--font-body); }
+  .gov-suites__panel:nth-child(2) .gov-suites__visual-label { border-color: #cbeedb; border-radius: 999px; background: #eefbf5; color: #168a55; }
+  .gov-suites__panel:nth-child(3) .gov-suites__visual-label { border-color: #ded2ff; border-radius: 7px; background: #f5f1ff; color: #7351cf; }
+  .gov-suites__panel:nth-child(4) .gov-suites__visual-label { border-color: #f2dfad; border-radius: 10px 10px 10px 3px; background: #fff8e8; color: #9a6b12; }
+  .gov-suites__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  @keyframes govSuiteFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .gov-grid { display: grid; gap: 18px; margin-top: 42px; }
+  .gov-grid--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .gov-grid--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .gov-grid-card { padding: 20px; border: 1px solid var(--gov-line); border-radius: 22px; background: #fff; transition: transform .2s ease, box-shadow .2s ease; animation-delay: var(--delay, 0ms); }
+  .gov-grid-card:hover { transform: translateY(-3px); box-shadow: 0 18px 40px rgba(31,41,72,.09); }
+  .gov-grid-card__art { position: relative; height: 142px; overflow: hidden; margin-bottom: 22px; border-radius: 16px; background: linear-gradient(145deg, #e9efff, #f9fbff); }
+  .gov-grid-card__art--2 { background: linear-gradient(145deg, #e6fbf4, #fafffd); } .gov-grid-card__art--3 { background: linear-gradient(145deg, #fff0f5, #fffafd); }
+  .gov-grid-card__art span { position: absolute; top: 34px; left: 28px; width: calc(100% - 56px); height: 64px; border: 1px solid rgba(55,93,251,.16); border-radius: 13px; background: rgba(255,255,255,.8); box-shadow: 0 12px 24px rgba(55,93,251,.08); }
+  .gov-grid-card__art span::before, .gov-grid-card__art span::after { position: absolute; left: 14px; height: 7px; border-radius: 999px; background: #cbd6ff; content: ""; }
+  .gov-grid-card__art span::before { top: 16px; width: 55%; } .gov-grid-card__art span::after { top: 32px; width: 76%; background: #e4e9f4; }
+  .gov-grid-card__art i { position: absolute; right: 18px; bottom: 18px; width: 38px; height: 38px; border-radius: 12px; background: #375dfb; box-shadow: 0 10px 22px rgba(55,93,251,.28); }
+  .gov-grid-card small { color: #9aa3b3; font: 700 11px/1 var(--font-body); letter-spacing: .1em; }
+  .gov-grid-card h3 { margin: 12px 0 9px; font: 500 20px/1.2 var(--font-heading); }
+  .gov-grid-card p { margin: 0; color: var(--gov-copy); font: 400 14.5px/1.58 var(--font-body); }
+  .gov-grid-card--compact .gov-grid-card__art { height: 122px; }
+  .gov-journey-grid { padding: clamp(72px, 8vw, 104px) 0; background: var(--surface-light, #f5f8ff); }
+  .gov-section-head { max-width: 820px; margin: 0 auto; text-align: center; }
+  .gov-section-head h2 { margin: 0; color: var(--gov-ink); font: 500 clamp(36px, 4vw, 56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .gov-section-head .gov-eyebrow { margin-bottom: 16px; }
+  .gov-grid-card__art--image { display: flex; height: 180px; align-items: center; justify-content: center; padding: 14px; background: linear-gradient(145deg, #eef3ff, #fff); }
+  .gov-grid-card__art--image img { display: block; width: 100%; height: 100%; border: 1px solid #dfe4ed; border-radius: 10px; background: #fff; object-fit: contain; object-position: center; }
+  .gov-grid-card__art--4 { background: linear-gradient(145deg, #fff8e8, #fff); }
+
+  .gov-event-day { padding: 100px 24px; background: #fff; }
+  .gov-event-day__container { display: flex; max-width: 1200px; align-items: stretch; gap: 80px; margin: 0 auto; }
+  .gov-event-day__left { flex: 0 0 40%; }
+  .gov-event-day__sticky { position: sticky; top: 120px; }
+  .gov-event-day__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 12px; border-radius: 99px; background: #f4f5f7; color: var(--gov-ink); font: 600 13px/1 var(--font-body); }
+  .gov-event-day__left h2 { margin: 0 0 24px; color: var(--gov-ink); font: 500 clamp(36px, 4vw, 48px)/1.2 var(--font-heading); letter-spacing: -.02em; }
+  .gov-event-day__left h2 span { background: linear-gradient(90deg, #555, #aaa); color: transparent; background-clip: text; -webkit-background-clip: text; }
+  .gov-event-day__left p { margin: 0; color: var(--gov-copy); font: 400 18px/1.6 var(--font-body); }
+  .gov-event-day__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .gov-event-day__cta:hover { background: #000; transform: translateY(-1px); }
+  .gov-event-day__cta:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .gov-event-day__right { display: flex; flex: 1; flex-direction: column; gap: 32px; }
+  .gov-event-card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .gov-event-card:nth-child(2) { top: 100px; }
+  .gov-event-card:nth-child(3) { top: 120px; }
+  .gov-event-card:nth-child(4) { top: 140px; }
+  .gov-event-card:hover { transform: translateY(-4px); }
+  .gov-event-card__header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .gov-event-card__number { display: flex; width: 40px; height: 40px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 50%; background: #111; color: #fff; font: 700 16px/1 var(--font-heading); }
+  .gov-event-card__text h3 { margin: 0 0 8px; color: var(--gov-ink); font: 700 20px/1.2 var(--font-heading); }
+  .gov-event-card__text p { margin: 0; color: var(--gov-copy); font: 400 16px/1.6 var(--font-body); }
+  .gov-event-card__visual { display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 18px; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .gov-event-card__visual--1 { background: linear-gradient(180deg, #fff9dc 0%, #fffdf1 48%, #fff 100%); }
+  .gov-event-card__visual--2 { background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #fff 100%); }
+  .gov-event-card__visual--3 { background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #fff 100%); }
+  .gov-event-card__visual--4 { background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #fff 100%); }
+  .gov-event-product-shot { position: relative; width: 100%; height: 280px; }
+  .gov-event-product-shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .gov-event-card__visual--1 img, .gov-event-card__visual--2 img { object-fit: contain; }
+  .gov-event-card__visual--3 img { object-position: top center; }
+  .gov-event-card__visual--4 img { object-position: left top; }
+  .gov-event-product-shot__status, .gov-event-product-shot__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); white-space: nowrap; font: 700 12px/1 var(--font-body); }
+  .gov-event-product-shot__status { top: 0; left: 0; gap: 7px; padding: 9px 12px; border: 1px solid #ccebd8; background: #edfbf3; color: #18864b; }
+  .gov-event-product-shot__status svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .gov-event-product-shot__action { right: 10px; bottom: 0; padding: 11px 15px; background: #4b65f6; color: #fff; }
+  .gov-event-product-shot__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: govEventCursorTap 2.4s ease-in-out infinite; }
+  .gov-offline-board { display: flex; width: min(100%, 480px); min-height: 252px; flex-direction: column; justify-content: center; gap: 10px; padding: 22px; border: 1px solid #dfe7e2; border-radius: 16px; background: rgba(255,255,255,.9); box-shadow: 0 16px 34px rgba(17,24,39,.1); }
+  .gov-offline-board__top, .gov-offline-board__row { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border: 1px solid #e8ecf2; border-radius: 11px; background: #f8fafc; color: var(--gov-copy); font: 600 12px/1.3 var(--font-body); }
+  .gov-offline-board__top { justify-content: space-between; background: #eefbf4; color: #246f4b; }
+  .gov-offline-board__top b, .gov-offline-board__row b { margin-left: auto; color: #18864b; font-size: 11px; }
+  .gov-offline-board__row i { width: 9px; height: 9px; flex: 0 0 9px; border-radius: 50%; background: #375dfb; box-shadow: 0 0 0 4px #e5ebff; }
+  .gov-offline-board__sync { display: flex; align-items: center; gap: 8px; padding: 4px 2px 0; color: #667085; font: 600 11px/1.2 var(--font-body); }
+  .gov-offline-board__sync span { width: 8px; height: 8px; border-radius: 50%; background: #f1b84b; }
+  @keyframes govEventCursorTap { 0%, 65%, 100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+
+  .gov-connected { padding: clamp(64px, 7vw, 96px) 24px; background: linear-gradient(180deg, #f8faff 0%, #fff 78%); }
+  .gov-connected__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .gov-connected__header { max-width: 1040px; margin: 0 auto 68px; text-align: center; }
+  .gov-connected__header h2 { margin: 0; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .gov-connected__grid { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--surface-card-border, #e8ecf2); }
+  .gov-connected__card { position: relative; display: block; min-height: 318px; padding: 28px 28px 34px; border-left: 1px solid var(--surface-card-border, #e8ecf2); color: var(--gov-ink); text-decoration: none; transition: background-color .2s ease; }
+  .gov-connected__card--first { border-left: 0; }
+  .gov-connected__card:hover { background: rgba(55, 93, 251, .035); }
+  .gov-connected__notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; line-height: 0; pointer-events: none; transform: translate(-50%, -50%); }
+  .gov-connected__icon { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; margin-bottom: 28px; color: var(--brand-blue, #375dfb); }
+  .gov-connected__icon svg { width: 100%; height: 100%; }
+  .gov-connected__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark, #22272f); font: 600 21px/1.25 var(--font-heading); }
+  .gov-connected__content p { margin: 14px 0 0; color: var(--body-gray, #525866); font: 400 15px/1.4 var(--font-body); }
+
+  .gov-faq { width: 100%; padding: 80px 24px; background: #fff; }
+  .gov-faq__inner { display: grid; max-width: 1140px; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; margin: 0 auto; }
+  .gov-faq__sidebar { position: sticky; top: 6rem; }
+  .gov-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 20px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .gov-faq__heading { margin: 0 0 20px; color: #000; font: 500 44px/1.1 'Creato Display', var(--font-heading); letter-spacing: -1px; }
+  .gov-faq__intro { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .gov-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .gov-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .gov-faq__cta:focus-visible { outline: 3px solid #9fb4ff; outline-offset: 4px; }
+  .gov-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: government-faq; }
+  .gov-faq__item { counter-increment: government-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .gov-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .gov-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; cursor: pointer; font: 500 1.0625rem/1.35 'Creato Display', var(--font-heading); list-style: none; }
+  .gov-faq__question strong { font-weight: 500; }
+  .gov-faq__question strong::before { content: counter(government-faq) '. '; }
+  .gov-faq__question::-webkit-details-marker { display: none; }
+  .gov-faq__icon { position: relative; width: 18px; height: 18px; flex-shrink: 0; transition: transform .28s cubic-bezier(.22, 1, .36, 1); }
+  .gov-faq__icon::before, .gov-faq__icon::after { position: absolute; top: 50%; left: 50%; background: #000; content: ''; transform: translate(-50%, -50%); }
+  .gov-faq__icon::before { width: 14px; height: 2px; }
+  .gov-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .gov-faq__item[open] .gov-faq__icon { transform: scale(.9); }
+  .gov-faq__item[open] .gov-faq__icon::after { opacity: 0; }
+  .gov-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .gov-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+
+  @media (max-width: 1024px) {
+    .gov-demo { grid-template-columns: 1fr; gap: 32px; }
+    .gov-demo__left, .gov-demo__right { max-width: none; }
+    .gov-grid--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gov-grid--three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gov-faq__inner { grid-template-columns: 1fr; gap: 40px; }
+    .gov-faq__sidebar { position: static; }
+    .gov-faq__heading { font-size: 32px; }
+  }
+  @media (max-width: 960px) {
+    .gov-hero { margin-top: 0; padding: 130px 20px 48px; }
+    .gov-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .gov-hero__copy { align-items: center; text-align: center; }
+    .gov-hero__title, .gov-hero__lead { max-width: 760px; }
+    .gov-hero__points, .gov-hero .gov-actions { justify-content: center; }
+    .gov-hero__visual { width: min(760px, 100%); margin: 0 auto; }
+    .gov-hero__image { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .gov-hero__image-inner { min-height: 0; border-radius: 16px; }
+  }
+  @media (max-width: 900px) {
+    .gov-programme-grid { grid-template-columns: 1fr; margin-inline: 24px; }
+    .gov-programme-card { border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .gov-programme-card:nth-child(n + 3) { border-bottom: 1px solid #3b3a47; }
+    .gov-programme-card:last-child { border-bottom: 0; }
+    .gov-suites__panel { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+  }
+  @media (max-width: 992px) {
+    .gov-connected__grid { grid-template-columns: 1fr; }
+    .gov-connected__notch { display: none; }
+    .gov-connected__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .gov-connected__card--first { border-top: 0; }
+    .gov-event-day__container { flex-direction: column; gap: 40px; }
+    .gov-event-day__left { width: 100%; flex: none; }
+    .gov-event-day__sticky { position: static; }
+    .gov-event-card { padding: 32px 24px; }
+    .gov-event-card__header { flex-direction: column; gap: 16px; }
+    .gov-event-card__visual { padding: 14px; }
+    .gov-event-product-shot { height: 240px; }
+    .gov-event-product-shot__status, .gov-event-product-shot__action { font-size: 11px; }
+    .gov-role-template__grid { grid-template-columns: 1fr; }
+    .gov-role-template__notch { display: none; }
+    .gov-role-template__card { min-height: 0; border-top: 1px solid var(--surface-card-border, #e8ecf2); border-left: 0; }
+    .gov-role-template__card--first { border-top: 0; }
+  }
+  @media (max-width: 767px) {
+    .gov-wrap { width: min(calc(100% - 32px), 640px); }
+    .gov-section { padding: 64px 0; }
+    .gov-role-template { padding: 60px 20px; }
+    .gov-role-template__heading h2 { white-space: normal; }
+    .gov-actions { flex-direction: column; }
+    .gov-btn { width: 100%; }
+    .gov-console__head { align-items: flex-start; flex-direction: column; padding: 20px; }
+    .gov-console__flow { grid-template-columns: 1fr; padding: 0 20px 20px; }
+    .gov-console__flow div { min-height: 0; }
+    .gov-rail__inner { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .gov-choice, .gov-grid--three, .gov-grid--four { grid-template-columns: 1fr; }
+    .gov-model { padding: 60px 16px; }
+    .gov-model__header { margin-bottom: 24px; }
+    .gov-model__quad { grid-template-columns: 1fr; grid-template-rows: auto; margin: 24px auto; }
+    .gov-model__cross { display: none; }
+    .gov-model__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }
+    .gov-model__cell:nth-child(n + 3) { border-bottom: 1px solid #eef0f3; }
+    .gov-model__cell:nth-child(1) { order: 1; }
+    .gov-model__cell:nth-child(2) { order: 2; min-height: 0; padding: 16px 20px 32px; }
+    .gov-model__cell:nth-child(4) { order: 3; }
+    .gov-model__cell:nth-child(3) { order: 4; min-height: 0; padding: 16px 20px 32px; border-bottom: 0; }
+    .gov-model-workspace { height: auto; aspect-ratio: 960 / 498; padding: 8px; }
+    .gov-choice__card { min-height: 260px; padding: 28px; }
+    .gov-programme-band { padding-top: 72px; }
+    .gov-programme-band__heading { padding-inline: 20px; }
+    .gov-programme-band__heading h2 span { white-space: normal; }
+    .gov-programme-band__intro { font-size: 15.5px; }
+    .gov-programme-grid { margin: 42px 12px 0; }
+    .gov-programme-card { min-height: 350px; padding: 28px 22px 24px; }
+    .gov-suites { padding: 72px 20px; }
+    .gov-suites__title span { display: inline; }
+    .gov-suites__subtitle { font-size: 16px; }
+    .gov-suites__tabs { width: 100%; justify-content: flex-start; overflow-x: auto; border-radius: 20px; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .gov-suites__tabs::-webkit-scrollbar { display: none; }
+    .gov-suites__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .gov-suites__panel { gap: 36px; padding: 32px 24px; border-radius: 20px; }
+    .gov-suites__showcase { padding: 14px; border-radius: 18px; }
+    .gov-suites__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .gov-grid-card__art { height: 126px; }
+    .gov-event-day { padding: 64px 16px; }
+    .gov-event-day__cta { width: 100%; justify-content: center; }
+    .gov-connected { padding: 48px 20px; }
+    .gov-connected__header { margin-bottom: 46px; }
+    .gov-faq { padding: 56px 16px; }
+    .gov-faq__heading { font-size: 28px; }
+    .gov-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .gov-faq__question { padding: 18px 0; font-size: .9375rem; }
+  }
+  @media (max-width: 640px) {
+    .gov-demo-section { padding: 20px 16px; }
+    .gov-demo { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px; }
+    .gov-demo__title { font-size: 28px; }
+    .gov-demo__title-line { white-space: normal; }
+    .gov-demo__copy { font-size: 16px; }
+    .gov-demo__actions { width: 100%; flex-direction: column; align-items: stretch; }
+    .gov-demo__btn { width: 100%; }
+    .gov-demo__showcase { height: 300px; border-radius: 18px; }
+    .gov-demo__shot--list { top: 30px; left: 12px; width: 80%; }
+    .gov-demo__shot--settings { right: 12px; bottom: 23px; width: 72%; }
+    .gov-demo__status { top: 14px; left: 12px; }
+    .gov-demo__review { right: 12px; bottom: 12px; }
+    .gov-demo__cursor { right: 15px; bottom: 46px; }
+    .gov-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .gov-hero__title, .gov-suites__title { font-size: 38px; line-height: 1.2; letter-spacing: 0; }
+    .gov-hero__lead { font-size: 15px; line-height: 1.7; }
+    .gov-hero__points { justify-content: center; }
+    .gov-hero .gov-actions { width: 100%; flex-direction: column; }
+    .gov-hero .gov-btn { width: 100%; justify-content: center; }
+    .gov-hero__image { padding: 10px; border-radius: 18px; }
+    .gov-hero__image-inner { padding: 18px; border-radius: 14px; }
+    .gov-console__bar { padding: 10px 12px; }
+    .gov-console__bar b { font-size: 8px; }
+    .gov-console__head { gap: 10px; padding: 14px; }
+    .gov-console__head strong { font-size: 16px; }
+    .gov-console__head > span { padding: 6px 8px; font-size: 8px; }
+    .gov-console__flow { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 0 14px 14px; }
+    .gov-console__flow div { min-height: 88px; gap: 6px; padding: 10px; }
+    .gov-console__flow b { font-size: 15px; }
+    .gov-console__flow span { font-size: 10px; }
+  }
+  @media (max-width: 420px) {
+    .gov-heading h2 { font-size: 31px; }
+    .gov-programme-band__heading h2 { font-size: 34px; }
+    .gov-programme-card__handoff { grid-template-columns: 1fr; }
+    .gov-programme-card__handoff > i { transform: rotate(90deg); text-align: center; }
+  }
+  @media (prefers-reduced-motion: reduce) { .gov-programme-band { clip-path: none; will-change: auto; } .gov-console, .gov-hero__screenshot, .gov-model-screen, .gov-event-product-shot__cursor, .gov-suites__panel, .gov-programme-card__panel, .gov-programme-card__handoff, .gov-programme-card__onsite, .gov-programme-card__visual::before, .gov-programme-card__steps .is-active, .gov-programme-card__fields .is-active, .gov-programme-card__onsite .is-active, .gov-programme-card__handoff .is-active { animation: none; } .gov-btn, .gov-demo__btn, .gov-connected__card, .gov-grid-card, .gov-event-card, .gov-event-day__cta, .gov-faq__cta, .gov-faq__item, .gov-faq__icon, .gov-faq__icon::after, .gov-suites__tab { transition: none; } .gov-btn:hover, .gov-demo__btn:hover, .gov-grid-card:hover, .gov-event-card:hover, .gov-event-day__cta:hover, .gov-faq__cta:hover { transform: none; } }
+</style>
+
+<script>
+  function initGovernmentFaq() {
+    const items = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-gov-faq]"));
+    items.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        items.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  }
+
+  function initGovernmentProgrammeBand() {
+    const band = document.querySelector<HTMLElement>(".gov-programme-band");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    let bandTop = 0;
+    let viewportHeight = window.innerHeight || 1;
+    const measure = () => {
+      viewportHeight = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    let ticking = false;
+    let lastProgress = -1;
+    const update = () => {
+      ticking = false;
+      const travelled = viewportHeight - (bandTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (viewportHeight * .7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === lastProgress) return;
+      lastProgress = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      lastProgress = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  function initGovernmentSuites() {
+    const suite = document.querySelector<HTMLElement>(".gov-suites");
+    if (!suite || suite.dataset.suitesReady === "true") return;
+
+    const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>("[data-gov-suite-tab]"));
+    const panels = Array.from(suite.querySelectorAll<HTMLElement>("[data-gov-suite-panel]"));
+    if (!tabs.length || !panels.length) return;
+
+    suite.dataset.suitesReady = "true";
+    suite.classList.add("is-ready");
+    let rotationId: number | undefined;
+
+    const activate = (tab: HTMLButtonElement, moveFocus = false) => {
+      const target = tab.dataset.govSuiteTab;
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.govSuitePanel === target));
+      if (moveFocus) tab.focus();
+    };
+
+    const stopRotation = () => {
+      if (rotationId === undefined) return;
+      window.clearInterval(rotationId);
+      rotationId = undefined;
+    };
+    const startRotation = () => {
+      stopRotation();
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      rotationId = window.setInterval(() => {
+        const current = Math.max(0, tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true"));
+        activate(tabs[(current + 1) % tabs.length]);
+      }, 4000);
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => {
+        activate(tab);
+        startRotation();
+      });
+      tab.addEventListener("keydown", (event) => {
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % tabs.length;
+        else if (event.key === "ArrowLeft") next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        activate(tabs[next], true);
+      });
+    });
+
+    suite.addEventListener("mouseenter", stopRotation);
+    suite.addEventListener("mouseleave", startRotation);
+    suite.addEventListener("focusin", stopRotation);
+    suite.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node) || !suite.contains(event.relatedTarget)) startRotation();
+    });
+    startRotation();
+  }
+
+  function initGovernmentPage() {
+    initGovernmentFaq();
+    initGovernmentProgrammeBand();
+    initGovernmentSuites();
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initGovernmentPage);
+  else initGovernmentPage();
+</script>
