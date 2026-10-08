@@ -1,0 +1,782 @@
+---
+interface Faq { question: string; answer: string }
+interface Props { faqs: Faq[] }
+const { faqs } = Astro.props;
+
+const useCases = [
+  { index: '01', title: 'Event agencies', copy: 'Create a recognizable sender for each client workflow and event portfolio.' },
+  { index: '02', title: 'Associations', copy: 'Reuse a verified sender across recurring member campaigns while keeping transactional mail separate.' },
+  { index: '03', title: 'Conferences', copy: 'Connect registration-aware audiences to a sender that has completed readiness checks.' },
+  { index: '04', title: 'Exhibitions', copy: 'Send exhibitor and visitor campaigns from the organization identity used for the programme.' },
+];
+
+const connected = [
+  ['Event Marketing', 'Build targeted email and WhatsApp campaigns from EventHex audience data.', '/event-marketing/'],
+  ['Event Notifications', 'Orchestrate operational reminders and delivery status across channels.', '/event-notifications/'],
+  ['Event Registration', 'Collect the attendee data used by transactional and campaign messages.', '/event-registration/'],
+  ['WhatsApp Integration', 'Connect the account and approved template behind WhatsApp delivery.', '/whatsapp-event-concierge/'],
+];
+---
+
+<div class="eml-page">
+  <section class="eml-hero" id="hero">
+    <div class="eml-hero__grid">
+      <div class="eml-hero__content animate-on-scroll" data-animation="fadeInUp">
+        <span class="eml-hero__badge">AWS SES email integration</span>
+        <h1>Set up a verified sender for event email campaigns</h1>
+        <p>Create a dedicated sending subdomain, let EventHex provision and verify the SES identity, set the from name and reply-to address, and review delivery events without mixing marketing with transactional email.</p>
+        <div class="eml-hero__cta-row">
+          <a href="/book-a-demo/" class="eml-btn">Book a Demo <span aria-hidden="true">→</span></a>
+          <a href="#eml-choice" class="eml-btn eml-btn--outline">See sender setup</a>
+        </div>
+        <div class="eml-hero__trust"><span>Managed SES identity</span><span>Readiness checks</span></div>
+      </div>
+      <div class="eml-hero__visual animate-on-scroll" data-animation="fadeInRight"><div class="eml-hero__visual-card"><div class="eml-hero__visual-inner">
+        <img class="eml-app-screenshot eml-app-screenshot--hero" src="/images/integrations/email/integration-overview-web-806.webp" alt="EventHex app integrations screen showing Marketing Email active" width="806" height="696" loading="eager" decoding="async" />
+      </div></div></div>
+    </div>
+  </section>
+
+  <section class="eml-rail" aria-label="From subdomain choice to delivery feedback"><div class="eml-rail__inner"><span><b>Choose</b> Sending subdomain</span><span><b>Verify</b> SES identity and DNS</span><span><b>Brand</b> From name and reply-to</span><span><b>Review</b> Delivery events</span></div></section>
+
+  <section class="eml-flow" id="eml-choice">
+    <div class="eml-section-head"><h2>Keep marketing email on its own <em>verified identity</em></h2><p>Separate the messages that operate your event from the campaigns that represent your organization.</p></div>
+    <div class="eml-flow-quad">
+      <article class="eml-flow-quad__cell"><span>Transactional email</span><h3>Keep the operational path dependable</h3><p>Use the platform's operational path for supported OTP, registration, ticket, approval, and certificate messages.</p></article>
+      <div class="eml-flow-quad__cell eml-flow-quad__cell--media"><div class="eml-flow-composite" role="img" aria-label="Transactional event email path"><img class="eml-flow-screenshot" src="/images/event-notifications/app/email-notification-log.png" alt="EventHex notification log showing delivered transactional messages" width="960" height="540" loading="lazy" decoding="async" /><span class="eml-flow-status">✓ Operational path</span></div></div>
+      <div class="eml-flow-quad__cell eml-flow-quad__cell--media"><div class="eml-flow-composite" role="img" aria-label="Marketing email sender identity"><img class="eml-flow-screenshot" src="/images/integrations/email/marketing-email-settings-crop-web-920.webp" alt="EventHex Marketing Email settings showing a verified campaign sender" width="920" height="698" loading="lazy" decoding="async" /><span class="eml-flow-status">✓ Verified sender</span></div></div>
+      <article class="eml-flow-quad__cell"><span>Marketing email</span><h3>Give campaigns their own identity</h3><p>Use the organization's dedicated verified sender for campaigns and apply marketing suppression and unsubscribe handling.</p></article>
+      <span class="eml-flow-cross" aria-hidden="true">✦</span>
+    </div>
+  </section>
+
+
+  <section class="eml-workflow" id="setup"><div class="eml-workflow-container"><div class="eml-workflow-left"><div class="eml-workflow-sticky"><span class="eml-workflow-eyebrow">✦ Zero-touch provisioning workflow</span><h2>Choose the label; EventHex handles the <em>infrastructure sequence</em></h2><p>One managed flow takes a sending subdomain from selection to a tenant-associated identity.</p><a class="eml-workflow-cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a></div></div><div class="eml-workflow-right">
+    <article class="eml-workflow-card"><div class="eml-workflow-card__header"><div class="eml-workflow-number">01</div><div><h3>Choose a sending subdomain</h3><p>Select the organization label used under the EventHex-managed sending root.</p></div></div><div class="eml-workflow-visual eml-workflow-visual--identity"><img src="/images/integrations/email/marketing-email-settings-web-806.webp" alt="EventHex marketing email settings for choosing an organization sending identity" width="806" height="696" loading="lazy" decoding="async" /><span class="eml-workflow-status">✓ Label selected</span></div></article>
+    <article class="eml-workflow-card"><div class="eml-workflow-card__header"><div class="eml-workflow-number">02</div><div><h3>Create the SES identity</h3><p>EventHex creates or reuses the sending identity and records the sender address.</p></div></div><div class="eml-workflow-visual eml-workflow-visual--analytics"><img src="/images/integrations/email/app-platform-analytics-web-960.webp" alt="EventHex platform analytics workspace showing organization event data" width="960" height="540" loading="lazy" decoding="async" /><span class="eml-workflow-status">✓ Identity created</span></div></article>
+    <article class="eml-workflow-card"><div class="eml-workflow-card__header"><div class="eml-workflow-number">03</div><div><h3>Publish DNS records</h3><p>Provision the required DKIM and MAIL FROM records for verification.</p></div></div><div class="eml-workflow-visual eml-workflow-visual--notifications"><img src="/images/integrations/email/app-platform-notifications-web-960.webp" alt="EventHex platform notifications workspace for verification updates" width="960" height="540" loading="lazy" decoding="async" /><span class="eml-workflow-status">✓ Verification updates</span></div></article>
+    <article class="eml-workflow-card"><div class="eml-workflow-card__header"><div class="eml-workflow-number">04</div><div><h3>Associate the tenant</h3><p>Connect the identity and configuration set before the sender is marked ready.</p></div></div><div class="eml-workflow-visual eml-workflow-visual--whatsapp"><img src="/images/integrations/email/app-whatsapp-concierge-web-960.webp" alt="EventHex WhatsApp concierge workspace connected to an event organization" width="960" height="540" loading="lazy" decoding="async" /><span class="eml-workflow-status">✓ Tenant connected</span></div></article>
+  </div></div></section>
+
+
+  <section class="eml-readiness" id="readiness">
+    <div class="eml-readiness__header">
+      <div class="eml-readiness__eyebrow"><span aria-hidden="true">✦</span><span>Connection readiness</span></div>
+      <h2>Know whether the sender is <em>ready,<br class="eml-readiness__break" /> waiting, paused, or needs repair</em></h2>
+    </div>
+    <div class="eml-readiness__cards">
+      <article class="eml-readiness__card" style="--card-index: 0">
+        <div class="eml-readiness__copy">
+          <span class="eml-readiness__label">Verify the connection</span>
+          <h3>See the organization sender at a glance.</h3>
+          <p>Confirm which integrations are active before a campaign leaves EventHex. Marketing Email stays separate from the operational email path.</p>
+          <a href="/book-a-demo/" class="eml-readiness__btn">Explore sender setup <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="eml-readiness__media">
+          <img src="/images/integrations/email/integration-overview-web-806.webp" alt="EventHex integrations overview showing Marketing Email active alongside other organization connections" width="806" height="696" loading="lazy" decoding="async" />
+        </figure>
+      </article>
+      <article class="eml-readiness__card" style="--card-index: 1">
+        <div class="eml-readiness__copy">
+          <span class="eml-readiness__label">Ready to send</span>
+          <h3>Set the from name and reply-to your audience recognizes.</h3>
+          <p>Once the dedicated domain is active, keep the sender defaults visible and editable for the team running event campaigns.</p>
+          <a href="/book-a-demo/" class="eml-readiness__btn">Review sender defaults <span aria-hidden="true">→</span></a>
+        </div>
+        <figure class="eml-readiness__media">
+          <img src="/images/integrations/email/marketing-email-settings-web-806.webp" alt="EventHex Marketing Email settings showing an active sender, from name and reply-to fields" width="806" height="696" loading="lazy" decoding="async" />
+        </figure>
+      </article>
+      <div class="eml-readiness__spacer" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <section class="eml-transport" id="delivery-path">
+    <div class="eml-transport-container">
+      <header class="eml-transport-header animate-on-scroll" data-animation="fadeInUp">
+        <h2>Keep the Campaign Tied to the <em>Verified Organization Sender</em></h2>
+      </header>
+
+      <div class="eml-transport-bento animate-on-scroll" data-animation="fadeInUp">
+        <span class="eml-bento-notch eml-bento-notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+        </span>
+        <span class="eml-bento-notch eml-bento-notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+        </span>
+
+        <article class="eml-transport-row">
+          <div class="eml-transport-cell eml-transport-visual">
+            <div class="eml-transport-shot eml-bento-shot-stage--confirm">
+              <img class="eml-product-shot" src="/images/integrations/email/marketing-email-settings-web-806.webp" alt="EventHex Marketing Email settings showing the active organization sender and reply-to address" width="806" height="696" loading="lazy" decoding="async" />
+              <span class="eml-shot-float eml-shot-float--top"><b>✓ Sender verified</b><small>Organization identity</small></span>
+              <span class="eml-shot-float eml-shot-float--bottom"><i></i><b>Ready to send</b></span>
+            </div>
+          </div>
+          <div class="eml-transport-cell eml-transport-copy">
+            <span class="eml-transport-eyebrow">Verified source</span>
+            <h3>Send from the Organization Identity</h3>
+            <p>Use the dedicated sender only when its identity and tenant association are ready, so every delivery event stays attached to the right event workspace.</p>
+          </div>
+          <span class="eml-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>
+        </article>
+
+        <article class="eml-transport-row eml-transport-row--reverse">
+          <div class="eml-transport-cell eml-transport-copy">
+            <span class="eml-transport-eyebrow">Message context</span>
+            <h3>Keep Reply Handling and Headers Intact</h3>
+            <p>Apply the configured reply-to address and the MIME/SES path when attachments, unsubscribe headers, or tenant attribution are required.</p>
+          </div>
+          <div class="eml-transport-cell eml-transport-visual">
+            <div class="eml-transport-shot eml-bento-shot-stage--embed">
+              <img class="eml-product-shot" src="/images/integrations/email/integration-overview-crop-web-920.webp" alt="EventHex integrations overview showing the organization email connection" width="920" height="698" loading="lazy" decoding="async" />
+              <span class="eml-shot-float eml-shot-float--top"><b>Reply-to preserved</b><small>Headers stay attached</small></span>
+              <span class="eml-shot-float eml-shot-float--bottom"><i></i><b>Event-aware message</b></span>
+            </div>
+          </div>
+          <span class="eml-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>
+        </article>
+
+        <article class="eml-transport-row">
+          <div class="eml-transport-cell eml-transport-visual">
+            <div class="eml-transport-shot eml-bento-shot-stage--invite">
+              <img class="eml-product-shot" src="/images/integrations/email/app-platform-notifications-web-960.webp" alt="EventHex notification workspace showing organization-aware delivery messages" width="960" height="540" loading="lazy" decoding="async" />
+              <span class="eml-shot-float eml-shot-float--top"><b>✓ No identity leak</b><small>Tenant sender enforced</small></span>
+              <span class="eml-shot-float eml-shot-float--bottom"><i></i><b>Operational path separate</b></span>
+            </div>
+          </div>
+          <div class="eml-transport-cell eml-transport-copy">
+            <span class="eml-transport-eyebrow">Safe separation</span>
+            <h3>Never Fall Back to Platform SMTP</h3>
+            <p>Marketing campaigns stay on the verified organization sender instead of leaking a platform account into tenant communications.</p>
+          </div>
+          <span class="eml-bento-cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>
+        </article>
+
+        <article class="eml-transport-row eml-transport-row--reverse">
+          <div class="eml-transport-cell eml-transport-copy">
+            <span class="eml-transport-eyebrow">Delivery feedback</span>
+            <h3>Record the Outcome Against the Message</h3>
+            <p>Keep accepted, delivered, bounce, complaint, delay, and rendering events connected to the original campaign and recipient context.</p>
+          </div>
+          <div class="eml-transport-cell eml-transport-visual">
+            <div class="eml-transport-shot eml-bento-shot-stage--events">
+              <img class="eml-product-shot" src="/images/event-notifications/app/email-notification-log.png" alt="EventHex email notification log showing message delivery outcomes" width="1280" height="720" loading="lazy" decoding="async" />
+              <span class="eml-shot-float eml-shot-float--top"><b>✓ Event recorded</b><small>Message context retained</small></span>
+              <span class="eml-shot-float eml-shot-float--bottom"><i></i><b>Delivery status available</b></span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section class="eml-suppression" aria-labelledby="eml-suppression-title">
+    <div class="eml-suppression-inner">
+      <header class="eml-suppression-head">
+        <h2 id="eml-suppression-title">Apply different suppression decisions to critical, transactional, and marketing email</h2>
+      </header>
+      <ol class="eml-policy-list">
+        <li>
+          <details data-eml-policy open>
+            <summary tabindex="-1">
+              <span>01</span>
+              <div class="eml-policy-content">
+                <h3>Critical</h3>
+                <p>OTP and password-reset types are not blocked by the EventHex suppression list; the provider still handles invalid delivery.</p>
+                <ul class="eml-policy-bullets">
+                  <li><i aria-hidden="true">✦</i> OTP and password resets</li>
+                  <li><i aria-hidden="true">✦</i> EventHex suppression bypass</li>
+                  <li><i aria-hidden="true">✦</i> Provider delivery checks remain active</li>
+                </ul>
+              </div>
+              <button type="button" class="eml-policy-arrow" aria-label="Collapse critical suppression policy" aria-expanded="true">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg>
+              </button>
+            </summary>
+            <figure class="eml-policy-visual"><img src="/images/integrations/email/app-platform-notifications-web-960.webp" alt="EventHex operational notifications list used for critical messages" width="960" height="540" loading="lazy" decoding="async" /></figure>
+          </details>
+        </li>
+        <li>
+          <details data-eml-policy>
+            <summary tabindex="-1">
+              <span>02</span>
+              <div class="eml-policy-content">
+                <h3>Transactional</h3>
+                <p>Suppress verified permanent hard bounces while allowing the operational policy for other reasons.</p>
+                <ul class="eml-policy-bullets">
+                  <li><i aria-hidden="true">✦</i> Permanent hard bounces suppressed</li>
+                  <li><i aria-hidden="true">✦</i> Other reasons follow operational policy</li>
+                  <li><i aria-hidden="true">✦</i> Transactional purpose stays distinct</li>
+                </ul>
+              </div>
+              <button type="button" class="eml-policy-arrow" aria-label="Expand transactional suppression policy" aria-expanded="false">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg>
+              </button>
+            </summary>
+            <figure class="eml-policy-visual"><img src="/images/event-notifications/app/email-notification-log.png" alt="EventHex email delivery event log used for transactional message review" width="1280" height="720" loading="lazy" decoding="async" /></figure>
+          </details>
+        </li>
+        <li>
+          <details data-eml-policy>
+            <summary tabindex="-1">
+              <span>03</span>
+              <div class="eml-policy-content">
+                <h3>Marketing</h3>
+                <p>Suppress active bounce, complaint, unsubscribe, or manual records before campaign sending.</p>
+                <ul class="eml-policy-bullets">
+                  <li><i aria-hidden="true">✦</i> Bounce and complaint controls</li>
+                  <li><i aria-hidden="true">✦</i> Unsubscribe records respected</li>
+                  <li><i aria-hidden="true">✦</i> Manual suppression before sending</li>
+                </ul>
+              </div>
+              <button type="button" class="eml-policy-arrow" aria-label="Expand marketing suppression policy" aria-expanded="false">
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg>
+              </button>
+            </summary>
+            <figure class="eml-policy-visual"><img src="/images/integrations/email/marketing-email-settings-web-806.webp" alt="EventHex Marketing Email sender settings used for campaign suppression decisions" width="806" height="696" loading="lazy" decoding="async" /></figure>
+          </details>
+        </li>
+      </ol>
+      <p class="eml-note">Suppression rules reduce harmful sends; they do not guarantee inbox placement.</p>
+    </div>
+  </section>
+  <section class="eml-usecases" aria-labelledby="eml-usecases-title"><div class="eml-usecases-inner"><header class="eml-usecases-head"><h2 id="eml-usecases-title">Give every event portfolio a clearer <em>campaign identity</em></h2><p>Choose the sender setup that fits the way your organization communicates.</p></header><div class="eml-usecase-tabs" role="tablist" aria-label="Email sender use cases">{useCases.map((item, i) => <button type="button" class:list={["eml-usecase-tab", i === 0 && "is-active"]} role="tab" aria-selected={i === 0 ? "true" : "false"} aria-controls={`eml-usecase-panel-${i}`} id={`eml-usecase-tab-${i}`} tabindex={i === 0 ? 0 : -1} data-eml-usecase-tab={i}>{item.title}</button>)}</div><div class="eml-usecase-panels">{useCases.map((item, i) => <article class:list={["eml-usecase-panel", i === 0 && "is-active"]} role="tabpanel" id={`eml-usecase-panel-${i}`} aria-labelledby={`eml-usecase-tab-${i}`} data-eml-usecase-panel={i} hidden={i !== 0}><div class="eml-usecase-copy"><span class="eml-usecase-index">{item.index}</span><h3>{item.title}</h3><p>{item.copy}</p><div class="eml-usecase-replaces"><span>WORKS WITH</span><b>Email</b><b>WhatsApp</b><b>Notifications</b></div><ul><li>Dedicated organization sender</li><li>Tenant-aware delivery context</li><li>Clear campaign ownership</li></ul></div><div class="eml-usecase-showcase">{i === 0 && <img class="eml-usecase-screenshot" src="/images/integrations/email/marketing-email-settings-web-806.webp" alt="EventHex Marketing Email settings with the organization sender active for an event agency" width="806" height="696" loading="lazy" decoding="async" />}{i === 1 && <img class="eml-usecase-screenshot" src="/images/integrations/email/app-platform-analytics-web-960.webp" alt="EventHex event analytics workspace used alongside recurring association campaigns" width="960" height="540" loading="lazy" decoding="async" />}{i === 2 && <img class="eml-usecase-screenshot" src="/images/integrations/email/app-platform-notifications-web-960.webp" alt="EventHex notifications workspace showing conference communication activity" width="960" height="540" loading="lazy" decoding="async" />}{i === 3 && <img class="eml-usecase-screenshot" src="/images/integrations/email/app-whatsapp-concierge-web-960.webp" alt="EventHex communications workspace used for exhibition visitor messaging" width="960" height="540" loading="lazy" decoding="async" />}<span class="eml-suite-label">✓ Verified sender</span></div></article>)}</div></div></section>
+
+  <section class="eml-boundary" aria-labelledby="eml-boundary-title">
+    <div class="eml-boundary__header"><span class="eml-eyebrow">Keep the promise accurate</span><h2 id="eml-boundary-title">Sender infrastructure here; campaign strategy on <span>Event Marketing</span></h2></div>
+    <div class="eml-boundary__quad">
+      <article class="eml-boundary__cell eml-boundary__copy"><span>THIS INTEGRATION</span><h3>Provision and readiness</h3><p>Subdomain, SES identity, DNS, tenant association, readiness, sender defaults, delivery events, and suppression.</p></article>
+      <div class="eml-boundary__cell eml-boundary__media"><div class="eml-boundary__visual eml-boundary__visual--identity"><img class="eml-boundary-screenshot" src="/images/integrations/email/integration-overview-crop-web-920.webp" alt="EventHex sender readiness and integration status" width="920" height="698" loading="lazy" decoding="async" /><span>✓ Identity verified</span></div></div>
+      <div class="eml-boundary__cell eml-boundary__media"><div class="eml-boundary__visual eml-boundary__visual--campaign"><img class="eml-boundary-screenshot" src="/images/integrations/email/marketing-email-settings-crop-web-920.webp" alt="EventHex Event Marketing campaign sender setup" width="920" height="698" loading="lazy" decoding="async" /><span>↗ Explore campaign tools</span></div></div>
+      <article class="eml-boundary__cell eml-boundary__copy"><span>EVENT MARKETING</span><h3>Audience and campaign operation</h3><p>Audience building, campaign content, scheduling, recipient workflow, and campaign performance review.</p><a href="/event-marketing/">Explore Event Marketing →</a></article>
+      <span class="eml-boundary__cross" aria-hidden="true"><svg width="18" height="18" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#eef0f3" transform="rotate(-90)"></path></svg></span>
+    </div>
+  </section>
+  <section class="eml-connected" aria-labelledby="eml-connected-title">
+    <div class="eml-connected__heading">
+      <span class="eml-eyebrow">Connected event communication</span>
+      <h2 id="eml-connected-title">Continue into the page that owns the <span class="eml-connected-gradient">message job</span></h2>
+    </div>
+    <div class="eml-connected-grid">
+      <div class="eml-connected-notch eml-connected-notch--1" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path></svg></div>
+      <div class="eml-connected-notch eml-connected-notch--2" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path></svg></div>
+      <div class="eml-connected-notch eml-connected-notch--3" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--line)"></path></svg></div>
+      {connected.map((item, i) => <a href={item[2]} class="eml-connected-card">
+        <span class="eml-connected-card__icon" aria-hidden="true">
+          {i === 0 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2M8 16h2m4 0h2"></path></svg>}
+          {i === 1 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>}
+          {i === 2 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4m8-4v4M3 10h18M8 14h3m-3 3h5"></path></svg>}
+          {i === 3 && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4zM8 8h8M8 12h8M8 16h5"></path></svg>}
+        </span>
+        <h3>{item[0]}</h3><p>{item[1]}</p><b>Learn more <span aria-hidden="true">→</span></b>
+      </a>)}
+    </div>
+  </section>
+
+  <section class="eml-faq" id="faq">
+    <div class="eml-faq__inner">
+      <div class="eml-faq__sidebar">
+        <span class="eml-faq__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quick Answers</span>
+        <h2 class="eml-faq__heading">Email Integration<br />Questions, Answered.</h2>
+        <p class="eml-faq__intro">Find quick answers about sender setup, SES verification, readiness, deliverability, and suppression.</p>
+        <a href="/contact-en/" class="eml-faq__cta">Visit Help Center <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+      </div>
+      <div class="eml-faq__list">
+        {faqs.map((faq, i) => <details class="eml-faq__item" data-eml-faq open={i === 0}>
+          <summary class="eml-faq__question"><strong>{faq.question}</strong><span class="eml-faq__icon" aria-hidden="true"></span></summary>
+          <div class="eml-faq__answer"><p>{faq.answer}</p></div>
+        </details>)}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  const emlFaqItems = Array.from(document.querySelectorAll('[data-eml-faq]'));
+  emlFaqItems.forEach((item) => item.addEventListener('toggle', () => {
+    if (!(item instanceof HTMLDetailsElement) || !item.open) return;
+    emlFaqItems.forEach((other) => { if (other !== item && other instanceof HTMLDetailsElement) other.open = false; });
+  }));
+  const emlPolicyItems = Array.from(document.querySelectorAll('[data-eml-policy]'));
+  emlPolicyItems.forEach((item) => {
+    if (!(item instanceof HTMLDetailsElement)) return;
+    const summary = item.querySelector('summary');
+    const trigger = item.querySelector('.eml-policy-arrow');
+    summary?.addEventListener('click', (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+    item.addEventListener('toggle', () => {
+      trigger?.setAttribute('aria-expanded', String(item.open));
+      trigger?.setAttribute('aria-label', `${item.open ? 'Collapse' : 'Expand'} suppression policy`);
+      if (!item.open) return;
+      emlPolicyItems.forEach((other) => {
+        if (other !== item && other instanceof HTMLDetailsElement) other.open = false;
+      });
+    });
+  });
+  const emlUsecaseTabs = Array.from(document.querySelectorAll('[data-eml-usecase-tab]'));
+  const emlUsecasePanels = Array.from(document.querySelectorAll('[data-eml-usecase-panel]'));
+  const activateUsecase = (tab) => {
+    const target = tab.getAttribute('data-eml-usecase-tab');
+    emlUsecaseTabs.forEach((item) => {
+      const active = item === tab;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-selected', String(active));
+      item.setAttribute('tabindex', active ? '0' : '-1');
+    });
+    emlUsecasePanels.forEach((panel) => {
+      const active = panel.getAttribute('data-eml-usecase-panel') === target;
+      panel.classList.toggle('is-active', active);
+      if (panel instanceof HTMLElement) panel.hidden = !active;
+    });
+  };
+  emlUsecaseTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => activateUsecase(tab));
+    tab.addEventListener('keydown', (event) => {
+      if (!(event instanceof KeyboardEvent) || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const last = emlUsecaseTabs.length - 1;
+      const nextIndex = event.key === 'Home' ? 0 : event.key === 'End' ? last : event.key === 'ArrowRight' ? (index + 1) % emlUsecaseTabs.length : (index - 1 + emlUsecaseTabs.length) % emlUsecaseTabs.length;
+      const next = emlUsecaseTabs[nextIndex];
+      if (next instanceof HTMLButtonElement) { activateUsecase(next); next.focus(); }
+    });
+  });
+</script>
+
+<style>
+  :global(html:has(.eml-page)),:global(body:has(.eml-page)){overflow-x:clip}
+  .eml-page{--ink:#22272f;--muted:#596579;--blue:#375dfb;--line:#e4e8ef;color:var(--ink);font-family:var(--font-body);background:#fff;overflow-x:clip;overflow-y:visible}.eml-page *{box-sizing:border-box}.eml-hero{padding:140px 24px 64px;margin-top:-90px;background:radial-gradient(ellipse 700px 500px at -5% -10%,rgba(55,93,251,.14),transparent 75%),radial-gradient(ellipse 800px 600px at 100% 105%,rgba(255,116,184,.24),transparent 78%),#fff}.eml-hero__grid{max-width:1080px;margin:auto;display:grid;grid-template-columns:minmax(0,542px) minmax(0,490px);gap:48px;align-items:center}.eml-hero__content{display:flex;flex-direction:column;align-items:flex-start;gap:20px}.eml-hero__badge,.eml-eyebrow{font-size:.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--blue)}.eml-hero h1{margin:0;font-family:var(--font-heading);font-size:clamp(42px,5vw,60px);line-height:1.1;letter-spacing:-2px;background:linear-gradient(98deg,#22272f 43%,#8f8f8f 92%);background-clip:text;-webkit-background-clip:text;color:transparent}.eml-hero p,.eml-section-head p{margin:0;color:var(--muted);font-size:1.08rem;line-height:1.6}.eml-hero__cta-row{display:flex;gap:12px;flex-wrap:wrap}.eml-btn,.eml-final-cta a,.eml-dark-cta>a{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:12px;background:var(--ink);color:#fff;text-decoration:none;font-weight:650}.eml-btn--outline{background:#fff;color:var(--ink);border:1px solid #dce2ec}.eml-hero__trust{display:flex;gap:20px;flex-wrap:wrap;color:var(--ink);font-size:.9rem}.eml-hero__trust span{padding-left:15px;position:relative}.eml-hero__trust span:before{content:"";position:absolute;left:0;top:8px;width:6px;height:6px;border-radius:50%;background:#10b981}.eml-hero__visual{margin-right:calc(-1 * (max(0px,(100vw - 1128px)/2) + 24px))}.eml-window{padding:14px;border-radius:22px 0 0 22px;border:1px solid rgba(255,255,255,.7);border-right:0;background:rgba(255,255,255,.45);box-shadow:0 24px 70px rgba(52,77,157,.16);backdrop-filter:blur(16px)}.eml-window__bar{display:flex;align-items:center;gap:6px;color:#7b87a1;font-size:11px;padding:10px 8px 18px}.eml-window__bar i{width:8px;height:8px;border-radius:50%;background:#c3cbe0}.eml-window__bar span{margin-left:8px}.eml-window__head,.eml-window__row,.eml-window__foot{display:flex;align-items:center;gap:12px}.eml-window__head{justify-content:space-between;padding:0 10px 18px;border-bottom:1px solid #e9edf6}.eml-window__head small,.eml-window__row span{font-size:10px;font-weight:700;letter-spacing:.08em;color:#8b96aa}.eml-window__head strong{display:block;font:500 18px var(--font-heading);margin-top:6px}.eml-window__head b{padding:7px 10px;border-radius:99px;background:#e9fbf1;color:#18864b;font-size:11px}.eml-window__row{justify-content:space-between;padding:16px 10px;border-bottom:1px solid #edf0f7}.eml-window__row strong{font-size:13px}.eml-window__row small{color:#7b87a1;font-size:11px}.eml-window__foot{justify-content:space-between;padding:16px 10px 4px;color:#64718a;font-size:11px}.eml-window__foot i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#28bd72;margin-right:6px}.eml-trust-strip{border-top:1px solid var(--line);padding:24px}.eml-trust-strip__inner{max-width:1280px;margin:auto;display:flex;justify-content:center;flex-wrap:wrap;gap:34px;color:var(--muted);font-size:.94rem}.eml-trust-strip b{color:var(--ink)}.eml-flow,.eml-capabilities,.eml-workflow,.eml-usecases,.eml-connected{max-width:1140px;margin:auto;padding:86px 24px}.eml-section-head{max-width:760px;margin:0 auto 42px;text-align:center}.eml-section-head h2,.eml-spotlight h2,.eml-final-cta h2{margin:10px 0 14px;font-family:var(--font-heading);font-size:clamp(30px,4vw,44px);line-height:1.15;letter-spacing:-1.4px}.eml-section-head h2 em,.eml-spotlight h2 em,.eml-final-cta h2 em{font-style:normal;color:#77839a}.eml-section-head>p{max-width:680px;margin:auto}.eml-choice-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.eml-choice-grid article{padding:42px 48px;min-height:280px;border-right:1px solid var(--line)}.eml-choice-grid article:last-child{border-right:0}.eml-choice-grid span,.eml-bento-grid article>span,.eml-usecase-grid article>span{color:var(--blue);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.eml-choice-grid h3,.eml-bento-grid h3,.eml-usecase-grid h3{font-family:var(--font-heading);font-size:1.45rem;margin:16px 0 10px}.eml-choice-grid p,.eml-bento-grid p,.eml-usecase-grid p{color:var(--muted);line-height:1.6;margin:0}.eml-choice-grid b{display:block;margin-top:28px;font-size:.85rem}.eml-choice-card--accent{background:linear-gradient(135deg,#f4f7ff,#fff4fb)}.eml-capabilities{padding-top:10px}.eml-cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 42px}.eml-cap-grid article{padding:28px 0;border-top:1px solid var(--line)}.eml-cap-grid article>span{color:var(--blue);font-size:.8rem;font-weight:700}.eml-cap-grid h3{font-family:var(--font-heading);font-size:1.1rem;margin:12px 0 8px}.eml-cap-grid p{color:var(--muted);line-height:1.55;margin:0;font-size:.95rem}.eml-dark-cta{max-width:1140px;margin:24px auto;padding:52px 56px;border-radius:24px;color:#fff;display:flex;align-items:flex-end;justify-content:space-between;gap:30px;background:linear-gradient(115deg,#05060c 0%,#1a1450 42%,#375dfb 72%,#4fd6e0 100%)}.eml-dark-cta h2{font:700 clamp(28px,3.4vw,42px)/1.12 var(--font-heading);max-width:620px;margin:16px 0 12px}.eml-dark-cta p{color:rgba(255,255,255,.72);max-width:600px;margin:0;line-height:1.6}.eml-dark-cta__brand{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}.eml-dark-cta>a{background:#fff;color:var(--ink);white-space:nowrap;border-radius:999px}.eml-workflow{padding-top:96px}.eml-workflow-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}.eml-workflow-grid article{padding:28px 24px 8px 0;border-right:1px solid var(--line);margin-right:24px}.eml-workflow-grid article:last-child{border-right:0;margin-right:0}.eml-workflow-grid article>span{color:var(--blue);font-weight:700;font-size:.8rem}.eml-workflow-grid h3{font:700 1.05rem/1.3 var(--font-heading);margin:18px 0 8px}.eml-workflow-grid p{color:var(--muted);font-size:.92rem;line-height:1.55;margin:0}.eml-spotlight{max-width:1140px;margin:0 auto;padding:86px 24px;display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}.eml-spotlight__copy>p{color:var(--muted);line-height:1.65}.eml-spotlight ul{list-style:none;padding:0;margin:26px 0 0}.eml-spotlight li{padding:11px 0 11px 24px;border-top:1px solid var(--line);color:var(--muted);position:relative}.eml-spotlight li:before{content:"✓";position:absolute;left:0;color:#10a866;font-weight:700}.eml-email-mock{padding:28px;border-radius:20px;background:linear-gradient(135deg,#e8f1ff,#fff);border:1px solid #d8e3fb;box-shadow:0 24px 60px rgba(52,77,157,.14)}.eml-email-mock>span{font-size:.72rem;letter-spacing:.1em;color:#8190aa;font-weight:700}.eml-email-mock h3{font:700 1.35rem var(--font-heading);margin:10px 0 24px}.eml-email-mock label{display:block;font-size:.68rem;letter-spacing:.08em;color:#8190aa;font-weight:700;margin:16px 0}.eml-email-mock input{display:block;width:100%;margin-top:7px;padding:12px 13px;border:1px solid #dbe2ef;border-radius:9px;background:#fff;color:var(--ink);font:500 .95rem var(--font-body)}.eml-email-mock>div{display:flex;justify-content:space-between;padding-top:16px;margin-top:22px;border-top:1px solid #dbe2ef;font-size:.85rem}.eml-email-mock strong{color:#16834a}.eml-bento{padding:86px 24px;background:#f7f9fc}.eml-bento>.eml-section-head{max-width:900px}.eml-bento-grid{max-width:1140px;margin:auto;display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:16px}.eml-bento-grid article{padding:28px;border:1px solid var(--line);border-radius:16px;background:#fff;min-height:168px}.eml-bento-grid__lead{grid-row:span 2;background:linear-gradient(145deg,#1b2450,#375dfb)!important;color:#fff;border:0!important;display:flex;flex-direction:column;justify-content:flex-end}.eml-bento-grid__lead>span{color:#b9c4ff}.eml-bento-grid__lead h3{font-size:1.8rem}.eml-bento-grid__lead p{color:rgba(255,255,255,.72)}.eml-usecase-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}.eml-usecase-grid article{padding:28px 24px 10px 0;margin-right:22px;border-right:1px solid var(--line)}.eml-usecase-grid article:last-child{border-right:0;margin-right:0}.eml-usecase-grid h3{font-size:1.1rem;margin:15px 0 9px}.eml-usecase-grid p{font-size:.93rem}.eml-connected{padding-top:30px}.eml-connected-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.eml-connected-grid a{padding:22px;border:1px solid var(--line);border-radius:14px;text-decoration:none;color:var(--ink);transition:transform .2s,box-shadow .2s}.eml-connected-grid a:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(32,47,93,.09)}.eml-connected-grid a>span{color:var(--blue);font-size:1.3rem}.eml-connected-grid h3{font:700 1rem var(--font-heading);margin:16px 0 8px}.eml-connected-grid p{color:var(--muted);font-size:.88rem;line-height:1.5;min-height:66px}.eml-connected-grid b{font-size:.82rem}.eml-faq{padding:84px 24px;background:#fff}.eml-faq__inner{max-width:760px;margin:auto;text-align:center}.eml-faq__list{text-align:left;border-top:1px solid var(--line);margin-top:36px}.eml-faq details{border-bottom:1px solid var(--line)}.eml-faq summary{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 0;list-style:none;cursor:pointer}.eml-faq summary::-webkit-details-marker{display:none}.eml-faq summary strong{font:500 1.05rem var(--font-body)}.eml-faq summary span{font-size:1.4rem;color:#7f8ba0;transition:transform .2s}.eml-faq details[open] summary span{transform:rotate(180deg)}.eml-faq details>div{padding:0 40px 22px 0}.eml-faq p{color:var(--muted);line-height:1.7;margin:0}.eml-final-cta{max-width:1140px;margin:0 auto 64px;padding:48px 52px;border-radius:24px;display:flex;justify-content:space-between;align-items:flex-end;gap:28px;background:linear-gradient(115deg,#05060c 0%,#1a1450 42%,#375dfb 72%,#4fd6e0 100%);color:#fff}.eml-final-cta h2{max-width:650px;margin-bottom:10px}.eml-final-cta h2 em{color:#c8d0ff}.eml-final-cta p{max-width:620px;color:rgba(255,255,255,.72);line-height:1.6;margin:0}.eml-final-cta .eml-eyebrow{color:#c8d0ff}.eml-final-cta a{background:#fff;color:var(--ink);border-radius:999px;white-space:nowrap}
+  @media (max-width:960px){.eml-hero__grid{grid-template-columns:1fr;gap:32px}.eml-hero__content{align-items:center;text-align:center}.eml-hero__cta-row,.eml-hero__trust{justify-content:center}.eml-hero__visual{margin-right:0}.eml-window{border-right:1px solid rgba(255,255,255,.7);border-radius:22px}.eml-cap-grid{grid-template-columns:repeat(2,1fr)}.eml-bento-grid{grid-template-columns:1fr 1fr}.eml-bento-grid__lead{grid-row:span 1}.eml-connected-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:767px){.eml-hero{margin-top:-80px;padding:112px 16px 40px}.eml-hero h1{font-size:36px;letter-spacing:-1px}.eml-hero__cta-row{width:100%;flex-direction:column}.eml-btn{width:100%;justify-content:center}.eml-trust-strip__inner{gap:14px 24px;text-align:center}.eml-flow,.eml-capabilities,.eml-workflow,.eml-usecases,.eml-connected{padding:58px 20px}.eml-choice-grid,.eml-spotlight{grid-template-columns:1fr}.eml-choice-grid article{border-right:0;border-bottom:1px solid var(--line);padding:30px 24px;min-height:0}.eml-choice-grid article:last-child{border-bottom:0}.eml-cap-grid,.eml-workflow-grid,.eml-usecase-grid,.eml-connected-grid{grid-template-columns:1fr}.eml-cap-grid{gap:0}.eml-workflow-grid article,.eml-usecase-grid article{border-right:0;border-bottom:1px solid var(--line);margin:0;padding:24px 0}.eml-dark-cta,.eml-final-cta{margin:16px 16px 0;padding:34px 24px;display:flex;flex-direction:column;align-items:flex-start;border-radius:20px}.eml-dark-cta>a,.eml-final-cta a{width:100%;justify-content:center}.eml-spotlight{gap:34px;padding-top:58px;padding-bottom:58px}.eml-bento{padding:58px 20px}.eml-bento-grid{grid-template-columns:1fr}.eml-bento-grid article{min-height:0}.eml-connected{padding-top:16px}.eml-faq{padding:58px 20px}.eml-faq summary{padding:18px 0}.eml-faq summary strong{font-size:.95rem}.eml-final-cta{margin-bottom:48px}}
+  .eml-flow{max-width:none;padding:86px 24px 112px}.eml-flow .eml-section-head{max-width:1100px;margin-bottom:42px}.eml-flow-quad{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;max-width:1180px;margin:auto}.eml-flow-quad__cell{display:flex;flex-direction:column;justify-content:center;min-height:260px;padding:36px 48px}.eml-flow-quad__cell>span{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)}.eml-flow-quad__cell h3{font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading);letter-spacing:-.03em;margin:16px 0}.eml-flow-quad__cell p{max-width:40ch;color:var(--muted);font-size:16px;line-height:1.6;margin:0}.eml-flow-quad__cell--media{align-items:center;min-height:360px;padding:18px 22px;overflow:hidden}.eml-flow-composite{position:relative;width:100%;height:320px;overflow:visible}.eml-flow-screen{position:absolute;border:1px solid #d1d6e2;border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14);padding:22px;display:flex;flex-direction:column;gap:10px}.eml-flow-screen small{font-size:9px;letter-spacing:.09em;color:#8994a8;font-weight:700}.eml-flow-screen strong{font:600 18px var(--font-heading)}.eml-flow-screen span{font-size:11px;color:var(--muted)}.eml-flow-screen b{font-size:14px;color:#18864b}.eml-flow-screen--primary{top:42px;left:20px;z-index:1;width:74%;height:62%;background:linear-gradient(135deg,#fff,#f0f5ff)}.eml-flow-screen--secondary{right:18px;bottom:20px;z-index:2;width:64%;height:52%;justify-content:center}.eml-flow-line{height:9px;border-radius:99px;background:#d8e3fa;margin-top:12px}.eml-flow-line--short{width:65%;margin-top:0}.eml-flow-status,.eml-flow-action{position:absolute;z-index:5;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px;font-size:11px;font-weight:700;line-height:1;box-shadow:0 10px 24px rgba(31,41,72,.16)}.eml-flow-status{top:14px;left:14px;padding:9px 11px;border:1px solid #cfead9;background:#effbf4;color:#18864b}.eml-flow-action{right:14px;bottom:14px;padding:10px 13px;background:#4b65f6;color:#fff}.eml-flow-cross{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;color:#d2d8e5;background:#fff;border-radius:50%;font-size:15px;line-height:18px}.eml-capabilities{padding-top:10px}
+  @media (max-width:767px){.eml-flow{padding:58px 20px 72px}.eml-flow-quad{grid-template-columns:1fr;grid-template-rows:auto}.eml-flow-quad__cell{min-height:0;padding:28px 4px}.eml-flow-quad__cell--media{min-height:270px;padding:10px 0}.eml-flow-composite{height:260px}.eml-flow-quad__cell:nth-child(2){order:2}.eml-flow-quad__cell:nth-child(1){order:1}.eml-flow-quad__cell:nth-child(3){order:3}.eml-flow-quad__cell:nth-child(4){order:4}.eml-flow-cross{display:none}}
+  .eml-rail{padding:24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(90deg,#fafcff,#fff5f9)}.eml-rail__inner{max-width:1180px;margin:auto;display:flex;justify-content:center;flex-wrap:wrap;gap:18px}.eml-rail__inner span{display:inline-flex;align-items:center;gap:7px;color:var(--muted);font-size:14px}.eml-rail__inner b{color:var(--ink)}.eml-rail__inner small{font-size:inherit}.eml-rail__inner i{font-style:normal;color:#9ba7bb}.eml-transport,.eml-events,.eml-suppression,.eml-boundary{padding:86px 24px;max-width:1140px;margin:auto}.eml-transport-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:16px}.eml-transport-grid article{padding:26px;border:1px solid var(--line);border-radius:16px;background:#fff}.eml-transport-grid p,.eml-event-grid p,.eml-policy-grid p,.eml-boundary-grid p{color:var(--muted);line-height:1.6;margin:10px 0 0}.eml-transport-lead{background:linear-gradient(145deg,#1b2450,#375dfb)!important;color:#fff;border:0!important}.eml-transport-lead>span{font-size:1.7rem}.eml-transport-lead h3{font:700 1.35rem var(--font-heading);margin:20px 0 0}.eml-transport-lead p{color:rgba(255,255,255,.75)}.eml-transport-grid article>b{font:700 1rem var(--font-heading)}
+  .eml-events{position:relative;isolation:isolate;overflow:hidden;padding:clamp(64px,7vw,88px) 24px clamp(68px,8vw,96px);max-width:none;background-color:#000 !important;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.13),rgba(124,108,255,.055) 45%,transparent 72%) !important}.eml-events::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.24;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}.eml-events .eml-section-head{max-width:940px;margin:0 auto clamp(40px,5vw,56px)}.eml-events .eml-eyebrow{color:#8da4ff}.eml-events .eml-section-head h2{margin:10px 0 14px;color:#fff;font-size:clamp(42px,5.4vw,60px);font-weight:500;line-height:1.1;letter-spacing:-.04em;background:linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.eml-events .eml-section-head p{color:rgba(255,255,255,.58)}.eml-event-grid{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));overflow:hidden;border:1px solid #2d2d36;border-radius:14px}.eml-event-grid article{grid-column:span 2;display:flex;flex-direction:column;align-items:stretch;min-height:430px;padding:32px 30px;border:0;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36;background:transparent}.eml-event-grid article:nth-child(3n){border-right:0}.eml-event-grid article:nth-child(n+4){border-bottom:0}.eml-event-grid article>span{color:#8da4ff;font-weight:700;font-size:.8rem}.eml-event-grid h3{font:700 15px/1.3 var(--font-heading);color:#fff;margin:0 0 14px}.eml-event-grid p{color:rgba(255,255,255,.56);font-size:15px;line-height:1.5;margin:0;max-width:36ch}.eml-event-visual{position:relative;width:100%;max-width:320px;height:190px;margin:22px auto 0;border:1px solid rgba(255,255,255,.13);border-radius:12px;background:#090a0f;box-shadow:none;padding:28px 18px 18px;display:flex;flex-direction:column;gap:14px;justify-content:center}.eml-event-visual::before{content:"";position:absolute;top:0;left:0;right:0;height:30px;border-bottom:1px solid rgba(255,255,255,.1);background:radial-gradient(circle at 14px 15px,#586071 0 3px,transparent 4px),radial-gradient(circle at 25px 15px,#3d4451 0 3px,transparent 4px),radial-gradient(circle at 36px 15px,#2f3542 0 3px,transparent 4px)}.eml-event-visual i{display:block;height:12px;border-radius:3px;background:linear-gradient(90deg,#566dff,#a39cff);opacity:.9}.eml-event-visual i:nth-child(2){width:72%;background:#56647c}.eml-event-visual i:nth-child(3){width:48%;background:#39425c}.eml-policy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.eml-policy-grid article{padding:28px;border:1px solid var(--line);border-radius:16px;background:#fff}.eml-policy-grid article>span,.eml-boundary-grid article>span{color:var(--blue);font-size:.72rem;font-weight:700;letter-spacing:.1em}.eml-policy-grid h3,.eml-boundary-grid h3{font:700 1.3rem var(--font-heading);margin:14px 0 0}.eml-note{text-align:center;color:var(--muted);font-size:.9rem;margin:28px 0 0}.eml-boundary{background:#f7f9fc;max-width:none}.eml-boundary>.eml-section-head,.eml-boundary-grid{max-width:1140px}.eml-boundary-grid{margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}.eml-boundary-grid article{padding:30px;border:1px solid var(--line);border-radius:16px;background:#fff}.eml-boundary-grid a{display:inline-block;margin-top:18px;color:var(--blue);font-weight:700;text-decoration:none}
+  @media (max-width:960px){.eml-transport-grid{grid-template-columns:1fr 1fr}.eml-event-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.eml-event-grid article{grid-column:auto;min-height:280px;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36}.eml-event-grid article:nth-child(even){border-right:0}.eml-event-grid article:nth-child(n+5){border-bottom:0}.eml-rail__inner{gap:12px 18px}}
+  @media (max-width:767px){.eml-rail{padding:18px 16px}.eml-rail__inner{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.eml-rail__inner i{display:none}.eml-transport,.eml-events,.eml-suppression,.eml-boundary{padding:58px 20px}.eml-transport-grid,.eml-event-grid,.eml-policy-grid,.eml-boundary-grid{grid-template-columns:1fr}.eml-event-grid article,.eml-event-grid article:nth-child(2n),.eml-event-grid article:nth-child(3n){grid-column:auto;border-right:0;border-bottom:1px solid #2d2d36;min-height:250px;padding:30px 26px}.eml-event-grid article:last-child{border-bottom:0}.eml-transport-grid article{padding:22px}.eml-boundary-grid{gap:12px}}
+
+  /* Match Event Registration section-heading scale, weight, and tracking. */
+  .eml-section-head h2,
+  .eml-spotlight h2,
+  .eml-final-cta h2 {
+    font-size: clamp(2.25rem, 4vw, 3.75rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.045em;
+  }
+
+  /* Registration dark-band heading treatment for the dark CTA. */
+  .eml-final-cta h2 {
+    background: linear-gradient(100deg, #ffffff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .eml-final-cta h2 em {
+    color: inherit;
+  }
+  /* Connected destinations mirror the registration page's quiet,
+     border-led use-case grid. */
+  .eml-connected {
+    width: 100%;
+    max-width: none;
+    padding: clamp(58px, 7vw, 92px) 24px clamp(78px, 9vw, 116px);
+    background: linear-gradient(135deg, #f8faff 0%, #f1f4ff 52%, #f8fbff 100%);
+  }
+  .eml-connected .eml-section-head {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px clamp(26px, 3vw, 38px);
+  }
+  .eml-connected .eml-section-head h2 {
+    max-width: none;
+    margin: 0 auto;
+    font-size: clamp(2.35rem, 4.6vw, 4rem);
+    font-weight: 500;
+  }
+  .eml-connected-grid {
+    max-width: 1180px;
+    margin: 0 auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .eml-connected-grid a {
+    min-height: 300px;
+    padding: 38px 28px 30px;
+    border: 0;
+    border-left: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .eml-connected-grid a:first-child { border-left: 0; }
+  .eml-connected-grid a:hover,
+  .eml-connected-grid a:focus-visible {
+    transform: none;
+    box-shadow: none;
+    background: rgba(255,255,255,.28);
+  }
+  .eml-connected-grid a > span {
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    color: var(--blue);
+    font-size: 1.55rem;
+    line-height: 1;
+  }
+  .eml-connected-grid h3 {
+    max-width: 230px;
+    min-height: 2.3em;
+    margin: 0 0 14px;
+    font-size: 1.32rem;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .eml-connected-grid p {
+    min-height: 0;
+    margin: 0;
+    color: var(--muted);
+    font-size: .96rem;
+    line-height: 1.45;
+  }
+  .eml-connected-grid b {
+    margin-top: auto;
+    padding-top: 28px;
+    font-size: .9rem;
+  }
+  @media (max-width: 960px) {
+    .eml-connected-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .eml-connected-grid a:nth-child(odd) { border-left: 0; }
+    .eml-connected-grid a:nth-child(n + 3) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 767px) {
+    .eml-connected { padding: 58px 16px 72px; }
+    .eml-connected .eml-section-head { padding-inline: 0; }
+    .eml-connected-grid { grid-template-columns: 1fr; }
+    .eml-connected-grid a,
+    .eml-connected-grid a:nth-child(n + 3) { border-left: 0; border-top: 1px solid var(--line); }
+    .eml-connected-grid a:first-child { border-top: 0; }
+    .eml-connected-grid a { min-height: 0; padding: 30px 4px; }
+  }
+  .eml-readiness{width:100%;background:#070b1b;background-image:linear-gradient(180deg,#0d0a2c 0%,transparent 320px),radial-gradient(circle at 12% 30%,rgba(70,130,255,.28) 0%,transparent 55%);padding:4px 24px 90px;color:#fff;overflow-x:clip;overflow-y:visible}
+  .eml-readiness__header{position:sticky;top:69px;z-index:20;isolation:isolate;width:min(94%,1050px);margin:0 auto;padding:24px 0 54px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .eml-readiness__header:before{content:"";position:absolute;z-index:-1;top:-1px;bottom:-28px;left:50%;width:100vw;transform:translateX(-50%);pointer-events:none;background:linear-gradient(180deg,rgba(13,10,44,.99) 0%,rgba(7,11,27,.98) 72%,rgba(7,11,27,0) 100%)}
+  .eml-readiness__eyebrow{display:flex;align-items:center;gap:8px;padding:6px 16px 6px 12px;border:1px solid rgba(255,255,255,.24);border-radius:999px;background:rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 16px -6px rgba(0,0,0,.35);font:500 15px/1.2 var(--font-body);color:#fff}
+  .eml-readiness__eyebrow span:first-child{color:#4f8cff;font-size:16px}
+  .eml-readiness__header h2{margin:0;font:500 clamp(34px,4.6vw,58px)/1.1 var(--font-heading);letter-spacing:-1.7px;color:#f7f8ff}
+  .eml-readiness__header h2 em{font-style:normal;color:#afa3ff}
+  .eml-readiness__cards{width:min(1124px,100%);margin:0 auto;padding:72px 0 40px;position:relative}
+  .eml-readiness__card{position:sticky;top:calc(300px + var(--card-index) * 20px);z-index:var(--card-index);display:flex;align-items:stretch;height:440px;margin-bottom:60px;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:20px;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,255,255,.16),transparent 70%),radial-gradient(circle at 12% 8%,rgba(90,130,255,.18),transparent 40%),#0a0a0f}
+  .eml-readiness__card:first-child{background:radial-gradient(circle at 82% 12%,rgba(109,92,235,.24),transparent 34%),radial-gradient(circle at 8% 92%,rgba(66,173,218,.13),transparent 28%),#090a10}
+  .eml-readiness__copy{flex:0 0 45%;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:40px}
+  .eml-readiness__label{align-self:flex-start;padding:7px 13px;border:1px solid rgba(175,163,255,.28);border-radius:999px;background:rgba(175,163,255,.1);color:#afa3ff;font:600 12px/1.2 var(--font-body);letter-spacing:.02em}
+  .eml-readiness__copy h3{margin:0;color:#e7e4fa;font:500 clamp(28px,3vw,38px)/1.18 var(--font-heading);letter-spacing:-.03em}
+  .eml-readiness__copy p{margin:0;color:rgba(255,255,255,.58);font:400 16px/1.6 var(--font-body)}
+  .eml-readiness__btn{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:12px 22px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(255,255,255,.06);color:#fff;text-decoration:none;font:500 14px/1 var(--font-body);transition:transform .2s,background .2s}
+  .eml-readiness__btn:hover{transform:scale(1.04);background:rgba(255,255,255,.12)}
+  .eml-readiness__media{flex:1;display:flex;align-items:center;justify-content:center;margin:16px 16px 16px 0;padding:18px;overflow:hidden;border:1px solid rgba(255,255,255,.16);border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));box-shadow:inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(24px)}
+  .eml-readiness__media img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;border-radius:10px;box-shadow:0 18px 40px rgba(0,0,0,.24)}
+  .eml-readiness__spacer{height:150px}
+  @media (max-width:767px){.eml-readiness{padding:4px 16px 58px}.eml-readiness__header{position:relative;top:auto;width:100%;padding:24px 0 28px}.eml-readiness__header h2{font-size:36px;letter-spacing:-1px}.eml-readiness__break{display:none}.eml-readiness__cards{padding-top:34px}.eml-readiness__card{position:relative;top:auto!important;height:auto;min-height:0;display:flex;flex-direction:column;margin-bottom:24px}.eml-readiness__copy{padding:28px 24px 24px}.eml-readiness__copy h3{font-size:30px}.eml-readiness__media{height:260px;margin:0 12px 12px;padding:10px}.eml-readiness__spacer{display:none}}
+  @media (prefers-reduced-motion:reduce){.eml-readiness__btn{transition:none}}
+  .eml-transport{max-width:none;padding:96px 24px;background:#fff}.eml-transport>.eml-section-head{max-width:1040px}.eml-transport-bento{max-width:1140px;margin:auto;border:1px solid #e5e7eb;border-radius:24px;overflow:hidden;background:#fff}.eml-transport-row{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:350px;border-bottom:1px solid #e5e7eb}.eml-transport-row:last-child{border-bottom:0}.eml-transport-row--reverse .eml-transport-copy{order:1}.eml-transport-row--reverse .eml-transport-visual{order:2}.eml-transport-copy{display:flex;flex-direction:column;justify-content:center;padding:56px 58px}.eml-transport-eyebrow{color:var(--blue);font-size:.76rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}.eml-transport-copy h3{font:500 clamp(26px,3vw,38px)/1.08 var(--font-heading);letter-spacing:-.04em;margin:16px 0 12px}.eml-transport-copy p{max-width:44ch;color:var(--muted);font-size:1rem;line-height:1.65;margin:0}.eml-transport-visual{display:flex;align-items:center;justify-content:center;padding:26px;background:linear-gradient(135deg,#f6f8ff,#fff6fb)}.eml-transport-shot{position:relative;width:min(100%,470px);aspect-ratio:16/10}.eml-transport-shot img{display:block;width:100%;height:100%;object-fit:cover;object-position:top left;border:1px solid #dce2ee;border-radius:14px;box-shadow:0 20px 36px rgba(31,41,72,.16)}.eml-shot-float{position:absolute;z-index:2;display:flex;flex-direction:column;gap:3px;padding:10px 13px;border-radius:11px;background:#fff;box-shadow:0 12px 28px rgba(31,41,72,.16);font-size:11px;line-height:1.1}.eml-shot-float b{font-weight:700;color:var(--ink)}.eml-shot-float small{color:#77839a;font-size:10px}.eml-shot-float--top{top:-14px;left:-14px;border:1px solid #cfead9}.eml-shot-float--bottom{right:-14px;bottom:-14px}.eml-shot-float i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#20ae6c;margin-right:5px}@media (max-width:767px){.eml-transport{padding:58px 16px}.eml-transport-bento{border-radius:20px}.eml-transport-row,.eml-transport-row--reverse{grid-template-columns:1fr}.eml-transport-row--reverse .eml-transport-copy,.eml-transport-row--reverse .eml-transport-visual{order:initial}.eml-transport-copy{padding:34px 24px}.eml-transport-visual{padding:42px 22px}.eml-shot-float--top{left:-6px}.eml-shot-float--bottom{right:-6px}}
+  .eml-transport{padding:80px 5%;background:transparent;max-width:none}.eml-transport-container{max-width:1200px;margin:0 auto}.eml-transport>.eml-transport-container>.eml-section-head{max-width:none;text-align:center;margin-bottom:60px}.eml-transport>.eml-transport-container>.eml-section-head h2{font-size:clamp(32px,4vw,56px);font-weight:500;letter-spacing:-.03em}.eml-transport-bento{position:relative;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;background:transparent}.eml-transport-row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb;min-height:0}.eml-transport-row:last-child{border-bottom:none}.eml-transport-cell{padding:4rem;display:flex;flex-direction:column;justify-content:center}.eml-transport-row:not(.eml-transport-row--reverse) .eml-transport-cell:first-child,.eml-transport-row.eml-transport-row--reverse .eml-transport-cell:first-child{border-right:1px solid #e5e7eb}.eml-transport-copy{background:transparent;order:initial}.eml-transport-copy h3{font-family:var(--font-heading);font-size:2.25rem;font-weight:500;line-height:1.02;letter-spacing:-.02em;margin:1rem 0 1.25rem;color:#111827}.eml-transport-copy p{font-size:1.125rem;color:#4b5563;line-height:1.45;margin:0}.eml-transport-visual{background:transparent;align-items:center}.eml-transport-shot{position:relative;width:100%;padding:32px 18px;border-radius:22px;isolation:isolate;aspect-ratio:auto}.eml-bento-shot-stage--confirm{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%)}.eml-bento-shot-stage--embed{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}.eml-bento-shot-stage--invite{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%)}.eml-product-shot{display:block;width:100%;border:1px solid #dfe4ec;border-radius:14px;animation:eml-product-shot-breathe 7s ease-in-out infinite;will-change:transform}.eml-transport-row:nth-child(even) .eml-product-shot{animation-delay:-3.5s}.eml-shot-float{align-items:flex-start;flex-direction:column;gap:3px;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 14px 34px rgba(30,45,88,.2);font-family:var(--font-body);line-height:1.15;animation:eml-shot-card-float 4.8s ease-in-out infinite;backdrop-filter:blur(10px)}.eml-shot-float b{font-size:.78rem;font-weight:700;white-space:nowrap}.eml-shot-float small{display:block;color:#7b8497;font-size:.65rem;white-space:nowrap}.eml-shot-float i{width:9px;height:9px;border-radius:50%;background:#19b874;box-shadow:0 0 0 5px rgba(25,184,116,.13)}.eml-shot-float--top{top:12px;right:3px}.eml-shot-float--bottom{bottom:12px;left:3px;animation-delay:-2.4s}.eml-bento-notch{position:absolute;left:50%;width:28px;height:28px;pointer-events:none;line-height:28px;z-index:2;color:#e5e7eb;font-size:32px}.eml-bento-notch--top{top:0;transform:translate(-50%,-50%)}.eml-bento-notch--bottom{bottom:0;transform:translate(-50%,50%)}.eml-bento-cross{position:absolute;bottom:0;left:50%;width:28px;height:28px;transform:translate(-50%,50%);pointer-events:none;line-height:28px;text-align:center;z-index:2;color:#dfe3ea;background:#fff;border-radius:50%;font-size:18px}.eml-transport-row:last-child .eml-bento-cross{display:none}@keyframes eml-product-shot-breathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}@keyframes eml-shot-card-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-9px,0)}}@media (prefers-reduced-motion:reduce){.eml-product-shot,.eml-shot-float{animation:none;will-change:auto}}@media (max-width:900px){.eml-transport-row{display:flex;flex-direction:column}.eml-transport-cell{padding:3rem 1.5rem}.eml-transport-row .eml-transport-cell:first-child{border-right:none}.eml-transport-copy{order:1;border-bottom:1px solid #e5e7eb}.eml-transport-visual{order:2}}@media (max-width:767px){.eml-transport{padding:58px 20px}.eml-transport>.eml-transport-container>.eml-section-head{margin-bottom:40px}.eml-transport-cell{padding:3rem 1.5rem}.eml-transport-shot{padding:24px 12px}}
+  /* Exact Event Registration confirmation-bento structure for Campaign Delivery Path. */
+  .eml-transport{padding:80px 5%;background:transparent;max-width:none}
+  .eml-transport-container{max-width:1200px;margin:0 auto}
+  .eml-transport-header{text-align:center;margin-bottom:60px}
+  .eml-transport-header h2{margin:0;font-family:var(--font-heading);font-size:clamp(32px,4vw,56px);font-weight:500;line-height:1.08;letter-spacing:-.03em;color:#22272f}
+  .eml-transport-header h2 em{font-style:normal;background:linear-gradient(96deg,#5f6675,#9aa1ae);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .eml-transport-bento{position:relative;max-width:none;margin:0;border:1px solid #e5e7eb;border-radius:16px;overflow:hidden;background:transparent}
+  .eml-bento-notch{position:absolute;left:50%;width:28px;height:28px;pointer-events:none;line-height:0;z-index:2}
+  .eml-bento-notch svg,.eml-bento-cross svg{display:block}
+  .eml-bento-notch--top{top:0;transform:translate(-50%,-50%)}
+  .eml-bento-notch--bottom{bottom:0;transform:translate(-50%,50%)}
+  .eml-transport-row{position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:0;border-bottom:1px solid #e5e7eb}
+  .eml-transport-row:last-child{border-bottom:0}
+  .eml-transport-cell{display:flex;flex-direction:column;justify-content:center;padding:4rem}
+  .eml-transport-row:not(.eml-transport-row--reverse) .eml-transport-cell:first-child,.eml-transport-row.eml-transport-row--reverse .eml-transport-cell:first-child{border-right:1px solid #e5e7eb}
+  .eml-transport-copy{order:initial;background:transparent}
+  .eml-transport-visual{align-items:center;background:transparent}
+  .eml-transport-visual>*{max-width:100%;height:auto}
+  .eml-transport-shot{position:relative;width:100%;padding:32px 18px;border-radius:22px;isolation:isolate;aspect-ratio:auto}
+  .eml-bento-shot-stage--confirm{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%)}
+  .eml-bento-shot-stage--embed{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}
+  .eml-bento-shot-stage--invite{background:linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%)}
+  .eml-bento-shot-stage--events{background:linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%)}
+  .eml-product-shot{display:block;width:100%;height:auto;object-fit:initial;object-position:initial;border:1px solid #dfe4ec;border-radius:14px;box-shadow:none;animation:eml-product-shot-breathe 7s ease-in-out infinite;will-change:transform}
+  .eml-transport-row:nth-child(even) .eml-product-shot{animation-delay:-3.5s}
+  .eml-shot-float{position:absolute;z-index:2;display:flex;align-items:center;flex-direction:row;gap:9px;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 14px 34px rgba(30,45,88,.2);font-family:var(--font-body);line-height:1.15;animation:eml-shot-card-float 4.8s ease-in-out infinite;backdrop-filter:blur(10px)}
+  .eml-shot-float b{font-size:.78rem;font-weight:700;white-space:nowrap;color:#111827}
+  .eml-shot-float small{display:block;color:#7b8497;font-size:.65rem;white-space:nowrap}
+  .eml-shot-float i{width:9px;height:9px;margin:0;border-radius:50%;background:#19b874;box-shadow:0 0 0 5px rgba(25,184,116,.13)}
+  .eml-shot-float--top{top:12px;right:3px;left:auto;align-items:flex-start;flex-direction:column;gap:3px}
+  .eml-shot-float--bottom{right:auto;bottom:12px;left:3px;animation-delay:-2.4s}
+  .eml-bento-shot-stage--invite .eml-shot-float--top,.eml-bento-shot-stage--events .eml-shot-float--top{animation-delay:-1.2s}
+  .eml-transport-visual:hover .eml-product-shot{animation-play-state:paused;transform:scale(1.018)}
+  .eml-bento-cross{position:absolute;bottom:0;left:50%;width:28px;height:28px;transform:translate(-50%,50%);pointer-events:none;line-height:0;z-index:2;color:inherit;background:transparent;border-radius:0;font-size:inherit}
+  .eml-transport-row:last-child .eml-bento-cross{display:none}
+  .eml-transport-eyebrow{display:block;margin-bottom:1rem;color:#5b21b6;font-size:.875rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  .eml-transport-copy h3{margin:0 0 1.25rem;font-family:var(--font-heading);font-size:2.25rem;font-weight:500;line-height:1.02;letter-spacing:-.02em;color:#111827}
+  .eml-transport-copy p{max-width:none;margin:0 0 1rem;font-size:1.125rem;line-height:1.45;color:#4b5563}
+  .eml-transport-copy p:last-child{margin-bottom:0}
+  @media (prefers-reduced-motion:reduce){.eml-product-shot,.eml-shot-float{animation:none;will-change:auto}.eml-transport-visual:hover .eml-product-shot{transform:none}}
+  @media (max-width:900px){.eml-transport-row{display:flex;flex-direction:column}.eml-transport-cell{padding:3rem 1.5rem}.eml-transport-row .eml-transport-cell:first-child{border-right:0}.eml-transport-copy{order:1;border-bottom:1px solid #e5e7eb}.eml-transport-visual{order:2}}
+  @media (max-width:767px){.eml-transport{padding:58px 20px}.eml-transport-header{margin-bottom:40px}.eml-transport-cell{padding:3rem 1.5rem}.eml-transport-shot{padding:24px 12px}}
+
+  .eml-workflow{padding:100px 24px;background:#fff;max-width:none}.eml-workflow-container{max-width:1200px;margin:0 auto;display:flex;gap:80px;align-items:stretch}.eml-workflow-left{flex:0 0 40%}.eml-workflow-sticky{position:sticky;top:120px}.eml-workflow-eyebrow{display:inline-flex;align-items:center;gap:8px;background:#f4f5f7;padding:6px 12px;border-radius:99px;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:24px}.eml-workflow-sticky h2{font-family:var(--font-heading);font-size:clamp(36px,4vw,48px);font-weight:500;color:var(--ink);margin:0 0 24px;letter-spacing:-.02em;line-height:1.2}.eml-workflow-sticky h2 em{font-style:normal;color:#77839a}.eml-workflow-sticky p{font-size:18px;line-height:1.6;color:var(--muted);margin:0}.eml-workflow-cta{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font-size:.9375rem;font-weight:500;text-decoration:none}.eml-workflow-right{flex:1;display:flex;flex-direction:column;gap:32px}.eml-workflow-card{background:#f4f5f7;border-radius:24px;padding:32px;transition:transform .3s ease;position:sticky;top:80px}.eml-workflow-card:nth-child(1){top:80px}.eml-workflow-card:nth-child(2){top:100px}.eml-workflow-card:nth-child(3){top:120px}.eml-workflow-card:nth-child(4){top:140px}.eml-workflow-card:hover{transform:translateY(-4px)}.eml-workflow-card__header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}.eml-workflow-number{width:40px;height:40px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:16px;font-weight:700;flex-shrink:0}.eml-workflow-card h3{font-family:var(--font-heading);font-size:20px;font-weight:700;color:var(--ink);margin:0 0 8px}.eml-workflow-card p{font-size:16px;line-height:1.6;color:var(--muted);margin:0}.eml-workflow-visual{position:relative;border:1px solid rgba(255,255,255,.86);border-radius:20px;padding:24px;display:flex;justify-content:center;align-items:center;overflow:hidden}.eml-workflow-card:nth-child(1) .eml-workflow-visual{background:linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%)}.eml-workflow-card:nth-child(2) .eml-workflow-visual{background:linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%)}.eml-workflow-card:nth-child(3) .eml-workflow-visual{background:linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%)}.eml-workflow-card:nth-child(4) .eml-workflow-visual{background:linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%)}.eml-workflow-visual img{max-width:100%;width:100%;max-height:280px;height:auto;border-radius:12px;object-fit:contain}.eml-workflow-status{position:absolute;top:34px;left:34px;padding:10px 13px;border-radius:10px;background:rgba(255,255,255,.96);border:1px solid #cfead9;color:#18864b;font-size:.75rem;font-weight:700;box-shadow:0 12px 26px rgba(30,45,88,.14)}@media (max-width:1024px){.eml-workflow-container{gap:44px}}@media (max-width:900px){.eml-workflow-container{display:block}.eml-workflow-left{margin-bottom:48px}.eml-workflow-sticky{position:static}.eml-workflow-card{position:relative!important;top:auto!important}.eml-workflow{padding:72px 24px}}@media (max-width:767px){.eml-workflow{padding:58px 20px}.eml-workflow-card{padding:24px;border-radius:20px}.eml-workflow-card__header{gap:12px}.eml-workflow-visual{padding:18px}.eml-workflow-sticky h2{font-size:36px}}
+  /* Delivery events uses the same dark capability-grid language as the agenda deck. */
+  .eml-events{position:relative;isolation:isolate;overflow:hidden;max-width:none;padding:clamp(64px,7vw,88px) 24px clamp(68px,8vw,96px);background:#08090f!important;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.13) 0%,rgba(124,108,255,.055) 45%,transparent 72%)!important;color:#fff}
+  .eml-events:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .eml-events-inner{width:min(1200px,100%);margin:auto}.eml-events-head{max-width:940px;margin:0 auto clamp(40px,5vw,56px);text-align:center}.eml-events-head h2{margin:0;color:#fff;font-family:var(--font-heading);font-size:clamp(42px,5.4vw,60px);font-weight:500;line-height:1.1;letter-spacing:-.04em;background:linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .eml-event-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));overflow:hidden;border:1px solid #2d2d36;border-radius:14px}.eml-event-grid article{position:relative;grid-column:span 2;display:flex;flex-direction:column;align-items:stretch;min-height:430px;padding:32px 30px;border:0;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36;background:transparent;transition:background .2s ease}.eml-event-grid article:hover{background:rgba(125,141,255,.045)}.eml-event-grid article:nth-child(n+4){grid-column:span 3;border-bottom:0}.eml-event-grid article:nth-child(3),.eml-event-grid article:nth-child(5){border-right:0}.eml-event-grid article>span{color:#a8b6ff;font-size:15px;font-weight:700;letter-spacing:.02em}.eml-event-grid h3{margin:14px 0;color:#fff;font-family:var(--font-heading);font-size:15px;font-weight:700;line-height:1.3;letter-spacing:-.01em}.eml-event-grid p{margin:0;max-width:36ch;color:rgba(255,255,255,.56);font-size:15px;line-height:1.5}.eml-event-visual{position:relative;display:flex;align-items:center;justify-content:center;flex:1;margin-top:22px;padding:18px;border:1px solid #2d2d36;border-radius:14px;background:linear-gradient(145deg,#0e1018,#171b2c);box-shadow:0 18px 35px rgba(0,0,0,.28)}.eml-event-bar{position:absolute;top:12px;left:14px;right:14px;display:flex;justify-content:space-between}.eml-event-bar i{width:7px;height:7px;border-radius:50%;background:#454d65}.eml-event-lines{width:100%;display:flex;flex-direction:column;gap:12px}.eml-event-lines i{display:block;height:8px;border-radius:99px;background:linear-gradient(90deg,#5d6df4,#9d8dff);opacity:.92}.eml-event-lines i:nth-child(2){width:72%;background:#a8b6ff;opacity:.65}.eml-event-lines i:nth-child(3){width:48%;background:#55617d;opacity:.7}
+  @media (max-width:1024px){.eml-event-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.eml-event-grid article,.eml-event-grid article:nth-child(n+4){grid-column:span 2}.eml-event-grid article:nth-child(2n){border-right:0}.eml-event-grid article:nth-child(n+5){border-bottom:0}}
+  @media (max-width:767px){.eml-events{padding:58px 16px 68px}.eml-events-head{margin-bottom:40px}.eml-events-head h2{font-size:clamp(38px,12vw,48px)}.eml-event-grid{grid-template-columns:1fr}.eml-event-grid article,.eml-event-grid article:nth-child(n+4){grid-column:span 1;min-height:360px;border-right:0;border-bottom:1px solid #2d2d36}.eml-event-grid article:last-child{border-bottom:0}}
+  /* Product-window anatomy mirrors the agenda cards exactly. */
+  .eml-event-visual{width:100%;max-width:310px;height:220px;min-height:220px;margin:22px auto 0;overflow:hidden;align-items:stretch;justify-content:flex-start;padding:0;border-radius:14px 14px 0 0;background:linear-gradient(145deg,#111218,#090a0e 65%);box-shadow:0 18px 42px rgba(0,0,0,.22)}
+  .eml-event-visual::before{display:none}
+  .eml-event-visual::after{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,#38bdf8,#7c6cff 55%,#d85aa8)}
+  .eml-event-bar{position:relative;inset:auto;display:flex;align-items:center;justify-content:space-between;height:34px;padding:0 13px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+  .eml-event-bar > span,.eml-event-bar > i{display:block}.eml-event-bar > i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.13)}
+  .eml-event-bar > i:nth-child(2){margin-left:5px}.eml-event-bar > i:nth-child(3){margin-left:5px}.eml-event-bar > small{margin-left:auto;color:rgba(255,255,255,.42);font-size:9px}
+  .eml-event-tabs{display:flex;gap:5px;padding:9px 11px 8px;border-bottom:1px solid rgba(255,255,255,.07)}.eml-event-tabs span{padding:5px 9px;border:1px solid transparent;border-radius:6px;color:rgba(255,255,255,.38);font-size:8px}.eml-event-tabs span.is-active{border-color:rgba(125,141,255,.28);background:rgba(125,141,255,.1);color:#c5ccff}
+  .eml-event-lines{width:auto;margin:0 11px;padding:10px 7px;display:flex;flex-direction:column;justify-content:center;gap:12px;flex:1}.eml-event-lines i{height:8px;border-radius:99px;background:linear-gradient(90deg,#5d6df4,#9d8dff);opacity:.92}.eml-event-lines i:nth-child(2){width:72%;background:#a8b6ff;opacity:.65}.eml-event-lines i:nth-child(3){width:48%;background:#55617d;opacity:.7}
+  @media (max-width:767px){.eml-event-visual{height:210px;min-height:210px}}
+
+  /* Suppression policies use the same calm, single-row accordion treatment as the CFP flow. */
+  .eml-suppression{max-width:none;padding:clamp(90px,10vw,140px) 24px;background:linear-gradient(180deg,#f8faff 0%,#fff 78%)}
+  .eml-suppression-inner{width:min(1200px,100%);margin:0 auto}.eml-suppression-head{max-width:1040px;margin:0 auto 68px;text-align:center}.eml-suppression-head h2{margin:10px 0 0;font:500 clamp(36px,5vw,56px)/1.08 var(--font-heading);letter-spacing:-.03em;background:linear-gradient(98deg,#111827 28%,#202938 55%,#77839a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.eml-suppression-head h2 em{font-style:normal;color:inherit}
+  .eml-policy-list{display:flex;flex-direction:column;gap:14px}.eml-policy-list article{display:grid;grid-template-columns:46px minmax(0,1fr) 42px;align-items:center;gap:0;min-height:82px;padding:20px;border:1px solid #dce6f2;border-radius:20px;background:#fff;box-shadow:0 10px 26px rgba(40,61,110,.04)}.eml-policy-list article:nth-child(1){border-color:#f3dda1;background:linear-gradient(100deg,#fff9e8,#fff)}.eml-policy-list article:nth-child(2){border-color:#c9e3f8;background:linear-gradient(100deg,#eff8ff,#fff)}.eml-policy-list article:nth-child(3){border-color:#e1d4fb;background:linear-gradient(100deg,#f7f1ff,#fff)}.eml-policy-index{font:700 14px/1 var(--font-body);color:#202a38}.eml-policy-list h3{margin:0 0 4px;font:500 24px/1.15 var(--font-heading);color:#141a26}.eml-policy-list p{margin:0;color:#667085;font:400 15px/1.45 var(--font-body);max-width:620px}.eml-policy-cue{display:grid;place-items:center;width:34px;height:34px;border:1px solid #d8dee8;border-radius:50%;background:rgba(255,255,255,.74);color:#1d2939;font-size:18px;line-height:1;transform:translateY(-1px)}
+  @media (max-width:767px){.eml-suppression{padding:60px 20px}.eml-suppression-head{margin-bottom:42px}.eml-suppression-head h2{font-size:clamp(36px,10vw,48px)}.eml-policy-list article{grid-template-columns:34px minmax(0,1fr) 34px;padding:18px 16px;border-radius:16px}.eml-policy-list h3{font-size:21px}.eml-policy-list p{font-size:14px}.eml-policy-index{font-size:12px}}
+
+  /* Connected destinations share the attendee feature-grid treatment. */
+  .eml-connected{width:100%;max-width:none;padding:clamp(90px,10vw,140px) 24px clamp(78px,9vw,116px);background:linear-gradient(180deg,#f8faff 0%,#fff 78%)}
+  .eml-connected .eml-section-head{max-width:1040px;margin:0 auto 68px}.eml-connected .eml-section-head h2{margin:0;font:500 clamp(36px,5vw,56px)/1.1 var(--font-heading);letter-spacing:-.03em;background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.eml-connected .eml-section-head h2 em{font-style:normal;color:inherit}.eml-connected-grid{width:min(1200px,100%);margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid #e8ecf2}.eml-connected-grid a{min-height:318px;padding:28px 28px 34px;border:0;border-left:1px solid #e8ecf2;border-radius:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:flex-start;color:var(--ink);text-decoration:none}.eml-connected-grid a:first-child{border-left:0}.eml-connected-grid a>span{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:#375dfb;font-size:25px;line-height:1}.eml-connected-grid h3{margin:0 0 28px;font:600 21px/1.25 var(--font-heading);color:#22272f}.eml-connected-grid p{margin:14px 0 0;min-height:0;color:#525866;font:400 15px/1.4 var(--font-body)}.eml-connected-grid b{margin-top:auto;color:#375dfb;font:600 14px var(--font-body)}.eml-connected-grid a:hover,.eml-connected-grid a:focus-visible{transform:none;box-shadow:none;background:rgba(255,255,255,.3)}
+  @media (max-width:992px){.eml-connected-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.eml-connected-grid a:nth-child(odd){border-left:0}.eml-connected-grid a:nth-child(n+3){border-top:1px solid #e8ecf2}}
+  @media (max-width:767px){.eml-connected{padding:60px 20px 78px}.eml-connected .eml-section-head{margin-bottom:42px}.eml-connected .eml-section-head h2{font-size:clamp(36px,10vw,48px)}.eml-connected-grid{grid-template-columns:1fr}.eml-connected-grid a,.eml-connected-grid a:nth-child(n+3){min-height:0;padding:28px 4px 32px;border-left:0;border-top:1px solid #e8ecf2}.eml-connected-grid a:first-child{border-top:0}}
+  .eml-usecases{padding:112px 24px;background:#fff}.eml-usecases-inner{width:min(1080px,100%);margin:0 auto}.eml-usecases-head{text-align:center;margin-bottom:32px;display:flex;flex-direction:column;align-items:center}.eml-usecases-head h2{font-family:var(--font-heading);font-size:clamp(36px,4.5vw,56px);font-weight:700;line-height:1.1;letter-spacing:-.03em;margin:0 0 16px;max-width:800px;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.eml-usecases-head h2 em{font-style:normal}.eml-usecases-head p{font-size:17.5px;color:#6b7280;margin:0;line-height:1.5;font-weight:500}.eml-usecase-tabs{display:flex;justify-content:center;gap:4px;width:fit-content;max-width:100%;margin:0 auto 40px;padding:6px;background:#f1f3f7;border:1px solid #e5e7eb;border-radius:999px;flex-wrap:wrap}.eml-usecase-tab{background:transparent;border:1px solid transparent;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:600;color:#64748b;cursor:pointer;transition:all .2s ease;font-family:var(--font-body)}.eml-usecase-tab.is-active{background:#fff;color:#3b82f6;border-color:#dbe4f0;box-shadow:0 2px 8px rgba(30,41,59,.08)}.eml-usecase-panel{--eml-panel-tint:#fff8dc;--eml-panel-border:#f0dfa6;display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;padding:52px 64px;border:1px solid var(--eml-panel-border);border-radius:28px;background:linear-gradient(135deg,var(--eml-panel-tint) 0%,#fff 72%);animation:emlSuiteFade .4s ease forwards}.eml-usecase-panel.is-active{display:grid}.eml-usecase-panel:nth-child(2){--eml-panel-tint:#edf7ff;--eml-panel-border:#d4e7f7}.eml-usecase-panel:nth-child(3){--eml-panel-tint:#f3efff;--eml-panel-border:#e2d8fa}.eml-usecase-panel:nth-child(4){--eml-panel-tint:#eefbf4;--eml-panel-border:#d4efdf}@keyframes emlSuiteFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.eml-usecase-index{display:block;color:#6366f1;font-size:13px;font-weight:700;letter-spacing:.1em;margin-bottom:10px}.eml-usecase-copy h3{font-family:var(--font-heading);font-size:clamp(30px,3.8vw,42px);line-height:1.08;letter-spacing:-.03em;color:var(--ink);margin:0 0 14px}.eml-usecase-copy p{font-size:16px;line-height:1.55;color:#64748b;margin:0 0 20px}.eml-usecase-replaces{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:22px;color:#8b95a7;font-size:10px;font-weight:700;letter-spacing:.1em}.eml-usecase-replaces b{padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.72);color:#64748b;font-size:11px;letter-spacing:0}.eml-usecase-copy ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}.eml-usecase-copy li{display:flex;align-items:center;gap:8px;color:#475569;font-size:14px}.eml-usecase-copy li:before{content:'✓';color:#10a866;font-weight:700}.eml-usecase-showcase{position:relative}.eml-suite-art{position:relative;min-height:260px;padding:18px;border-radius:20px;background:#11131d;box-shadow:0 24px 48px rgba(31,41,72,.18);overflow:hidden}.eml-suite-art:before{content:"";position:absolute;inset:0;background:radial-gradient(90% 90% at 10% 0%,rgba(95,116,255,.28),transparent 55%),radial-gradient(70% 70% at 100% 100%,rgba(177,103,255,.24),transparent 55%)}.eml-suite-art__bar,.eml-suite-art__body{position:relative;z-index:1}.eml-suite-art__bar{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.45);font-size:10px}.eml-suite-art__bar i{width:7px;height:7px;border-radius:50%;background:#4b536c}.eml-suite-art__bar span{margin-left:auto}.eml-suite-art__body{margin-top:38px;padding:24px;border:1px solid rgba(169,181,255,.24);border-radius:14px;background:rgba(20,24,40,.82);color:#fff;display:grid;gap:12px}.eml-suite-art__body b{font-size:18px;font-weight:600}.eml-suite-art__body small{color:#aeb9dc;font-size:11px}.eml-suite-art__line{height:9px;border-radius:99px;background:linear-gradient(90deg,#7084ff,#b29cff)}.eml-suite-art__line--short{width:62%;background:#4e5b86}.eml-suite-label{position:absolute;left:-10px;bottom:-12px;padding:10px 13px;border:1px solid #cddcff;border-radius:10px;background:#eef4ff;color:#3158d4;font-size:11px;font-weight:700;box-shadow:0 12px 24px rgba(31,41,72,.14)}@media (max-width:767px){.eml-usecases{padding:72px 20px}.eml-usecases-head h2{font-size:42px}.eml-usecases-head p{font-size:16px}.eml-usecase-tabs{width:100%;justify-content:flex-start;overflow:auto;flex-wrap:nowrap;margin-bottom:24px}.eml-usecase-tab{white-space:nowrap}.eml-usecase-panel{grid-template-columns:1fr;gap:28px;padding:30px 24px}.eml-suite-art{min-height:220px}}
+  /* Delivery events use the same inset dark capability band as Event Registration. */
+  .eml-events{margin:0 10px;border-radius:28px 28px 0 0;padding-top:clamp(88px,9vw,116px);background-color:#08090f!important;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+  .eml-events::before{opacity:.55}
+  .eml-events-head{max-width:920px;margin-bottom:clamp(48px,5.5vw,68px)}
+  .eml-events-head h2{background:linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center}
+  .eml-event-grid{width:min(1124px,100%);border-radius:15px}
+  .eml-event-grid article{min-height:392px;padding:36px 32px 30px}
+  .eml-event-visual{margin-top:28px}
+  @media (max-width:767px){.eml-events{margin:0 8px;border-radius:20px 20px 0 0}}
+
+  /* Boundary flow aligned with the Smart Connect discovery section. */
+  .eml-boundary{display:flex;flex-direction:column;align-items:center;max-width:none;padding:40px 24px 72px;background:#fff}
+  .eml-boundary__header{display:flex;max-width:1100px;flex-direction:column;align-items:center;margin-bottom:24px;text-align:center}
+  .eml-boundary__header h2{margin:0 0 12px;background:linear-gradient(98deg,#1e1d24 43%,#8f8f8f 92%);background-clip:text;-webkit-background-clip:text;color:transparent;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}
+  .eml-boundary__header h2 span{color:inherit}
+  .eml-boundary__quad{position:relative;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:100%;max-width:1180px;margin:24px auto}
+  .eml-boundary__cell{display:flex;min-width:0;min-height:260px;flex-direction:column;justify-content:center;padding:56px 48px;border-right:1px solid #eef0f3;border-bottom:1px solid #eef0f3}
+  .eml-boundary__cell:nth-child(2n){border-right:0}.eml-boundary__cell:nth-child(n+3){border-bottom:0}
+  .eml-boundary__copy>span{color:var(--blue);font-size:.76rem;font-weight:700;letter-spacing:.1em}.eml-boundary__copy h3{margin:16px 0;color:#1e1d24;font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading);letter-spacing:-.03em}.eml-boundary__copy p{max-width:40ch;margin:0;color:var(--muted);font:400 16px/1.6 var(--font-body)}.eml-boundary__copy a{margin-top:20px;color:var(--blue);font-weight:700;text-decoration:none}
+  .eml-boundary__media{min-height:360px;align-items:center;padding:18px 22px;overflow:hidden;background:#fff}
+  .eml-boundary__visual{position:relative;display:grid;width:100%;height:320px;place-items:center;isolation:isolate;overflow:visible}
+  .eml-boundary__visual::before{content:"";position:absolute;width:330px;height:330px;border:1px solid rgba(55,93,251,.16);border-radius:50%;animation:eml-boundary-pulse 5s ease-in-out infinite}
+  .eml-boundary__window{position:relative;z-index:1;display:flex;width:min(82%,430px);min-height:205px;flex-direction:column;gap:12px;padding:24px;border:1px solid #dce3ee;border-radius:15px;background:#fff;box-shadow:0 22px 46px rgba(38,66,105,.18);animation:eml-boundary-breathe 7s ease-in-out infinite}
+  .eml-boundary__window small{color:#8994a8;font-size:9px;font-weight:700;letter-spacing:.09em}.eml-boundary__window strong{font:600 18px var(--font-heading);color:#1e1d24}.eml-boundary__window b{align-self:flex-start;padding:7px 10px;border-radius:8px;background:#effbf4;color:#18864b;font-size:11px}.eml-boundary__window i{height:9px;border-radius:99px;background:#d8e3fa}.eml-boundary__window i:nth-of-type(2){width:70%}.eml-boundary__window i:nth-of-type(3){width:46%}
+  .eml-boundary__visual>span{position:absolute;z-index:3;right:18px;bottom:26px;padding:10px 13px;border-radius:10px;background:#4b65f6;color:#fff;font-size:11px;font-weight:700;box-shadow:0 10px 24px rgba(31,41,72,.16)}.eml-boundary__visual--identity>span{left:18px;right:auto;border:1px solid #cfead9;background:#effbf4;color:#18864b}.eml-boundary__cross{position:absolute;left:50%;top:50%;z-index:4;width:18px;height:18px;transform:translate(-50%,-50%);pointer-events:none;line-height:0}
+  @keyframes eml-boundary-breathe{0%,100%{transform:translateY(4px) scale(.985) rotate(-.7deg)}50%{transform:translateY(-4px) scale(1) rotate(0)}}@keyframes eml-boundary-pulse{0%,100%{transform:scale(.96);opacity:.4}50%{transform:scale(1.04);opacity:.9}}
+  @media (max-width:767px){.eml-boundary{padding:60px 16px}.eml-boundary__header{margin-bottom:24px}.eml-boundary__quad{grid-template-columns:1fr;margin:24px auto}.eml-boundary__cross{display:none}.eml-boundary__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}.eml-boundary__cell:nth-child(n+3){border-bottom:1px solid #eef0f3}.eml-boundary__copy:nth-child(1){order:1}.eml-boundary__media:nth-child(2){order:2;min-height:360px;padding:16px 20px 32px}.eml-boundary__media:nth-child(3){order:4;min-height:360px;padding:16px 20px 32px}.eml-boundary__copy:nth-child(4){order:3}.eml-boundary__visual{height:285px}.eml-boundary__window{width:88%}}
+
+  /* Connected destinations aligned with the Event Registration use-case grid. */
+  .eml-connected{padding:clamp(40px,4.5vw,60px) 24px clamp(82px,9vw,116px);background:transparent}
+  .eml-connected__heading{max-width:none;margin:0;padding:0 24px clamp(20px,2.4vw,32px);text-align:center}
+  .eml-connected__heading h2{max-width:none;margin:0 auto;font:500 clamp(2.45rem,4.6vw,4rem)/1.1 var(--font-heading);letter-spacing:-.035em;color:#22272f}
+  .eml-connected-gradient{background:linear-gradient(90deg,#555 0%,#aaa 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .eml-connected-grid{position:relative;width:min(1200px,100%);margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid #e8ecf2}
+  .eml-connected-card{position:relative;min-height:300px;padding:28px;border:0;border-left:1px solid #e8ecf2;border-radius:0;background:transparent;box-shadow:none;display:flex;flex-direction:column;align-items:flex-start;color:#22272f;text-decoration:none}
+  .eml-connected-card:first-of-type{border-left:0}
+  .eml-connected-card:hover,.eml-connected-card:focus-visible{transform:none;box-shadow:none;background:rgba(255,255,255,.3)}
+  .eml-connected-card__icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:#375dfb}
+  .eml-connected-card__icon svg{width:100%;height:100%}
+  .eml-connected-card h3{max-width:230px;min-height:2.3em;margin:0 0 28px;font:500 21px/1.15 var(--font-heading);color:#22272f}
+  .eml-connected-card p{margin:14px 0 0;color:#525866;font:400 15px/1.4 var(--font-body)}
+  .eml-connected-card b{margin-top:auto;padding-top:28px;color:#375dfb;font:600 14px var(--font-body)}
+  .eml-connected-card b span{font-size:18px}
+  .eml-connected-notch{position:absolute;top:0;width:28px;height:28px;transform:translate(-50%,-50%);pointer-events:none;line-height:0;z-index:2}
+  .eml-connected-notch--1{left:25%}.eml-connected-notch--2{left:50%}.eml-connected-notch--3{left:75%}
+  @media (max-width:900px){.eml-connected-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.eml-connected-notch--1,.eml-connected-notch--3{display:none}.eml-connected-card:nth-of-type(odd){border-left:0}.eml-connected-card:nth-of-type(n+3){border-top:1px solid #e8ecf2}}
+  @media (max-width:767px){.eml-connected{padding:62px 16px 82px}.eml-connected__heading{padding-inline:0}.eml-connected__heading h2{font-size:clamp(2.25rem,10vw,3rem)}.eml-connected-grid{grid-template-columns:1fr}.eml-connected-card,.eml-connected-card:nth-of-type(n+3){min-height:0;padding:30px 4px;border-left:0;border-top:1px solid #e8ecf2}.eml-connected-card:first-of-type{border-top:0}.eml-connected-notch{display:none}}
+
+  /* FAQ treatment aligned with the Event Registration question cards. */
+  .eml-faq{width:100%;max-width:none;margin:0;padding:80px 24px;background:#fff}
+  .eml-faq__inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start;text-align:left}
+  .eml-faq__sidebar{position:sticky;top:6rem}
+  .eml-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;margin-bottom:20px;color:#000;font:500 .8125rem/1.2 var(--font-body)}
+  .eml-faq__heading{margin:0 0 20px;color:#000;font:500 44px/1.1 'Creato Display',var(--font-heading);letter-spacing:-1px}
+  .eml-faq__intro{margin:0 0 28px;color:var(--muted);font:400 1rem/1.6 var(--font-body)}
+  .eml-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 .9375rem/1.2 var(--font-body);text-decoration:none;transition:background .2s ease,transform .2s ease}
+  .eml-faq__cta:hover{background:#000;transform:translateY(-1px)}
+  .eml-faq__list{display:flex;flex-direction:column;gap:16px;border:0;margin:0;counter-reset:eml-faq}
+  .eml-faq__item{counter-increment:eml-faq;overflow:hidden;margin:0;padding:4px 28px;border:1px solid #e4e7ec;border-radius:20px;background:#fff;transition:background .25s ease,border-color .25s ease}
+  .eml-faq__item[open]{border-color:#e4e7ec;background:#e4e7ec}
+  .eml-faq__question{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;color:#000;font:500 1.0625rem/1.3 'Creato Display',var(--font-heading);cursor:pointer;list-style:none}
+  .eml-faq__question strong{font-weight:500}.eml-faq__question strong::before{content:counter(eml-faq) '. '}.eml-faq__question::-webkit-details-marker{display:none}
+  .eml-faq__icon{position:relative;flex-shrink:0;width:18px;height:18px;transition:transform .28s cubic-bezier(.22,1,.36,1)}
+  .eml-faq__icon::before,.eml-faq__icon::after{content:'';position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}
+  .eml-faq__icon::before{width:14px;height:2px}.eml-faq__icon::after{width:2px;height:14px;transition:opacity .2s ease}
+  .eml-faq__item[open] .eml-faq__icon{transform:scale(.9)}.eml-faq__item[open] .eml-faq__icon::after{opacity:0}
+  .eml-faq__answer{max-width:640px;padding:0 0 24px}.eml-faq__answer p{margin:0;color:#000;font:400 .9375rem/1.7 var(--font-body)}
+  @media (max-width:1024px){.eml-faq__inner{grid-template-columns:1fr;gap:40px}.eml-faq__sidebar{position:static}.eml-faq__heading{font-size:32px}}
+  @media (max-width:767px){.eml-faq{padding:56px 16px}.eml-faq__item{padding:4px 20px;border-radius:16px}.eml-faq__question{padding:18px 0;font-size:.9375rem}.eml-faq__heading{font-size:28px}}
+  /* Intentional stacked-scroll treatment for the long-form workflow cards. */
+  @media (min-width: 901px) {
+    .eml-workflow-right { position: relative; gap: 0; padding-bottom: 120px; }
+    .eml-workflow-card { min-height: 560px; margin-bottom: 150px; box-shadow: 0 18px 44px rgba(35,48,82,.12); }
+    .eml-workflow-card:nth-child(1) { top: 104px; z-index: 1; }
+    .eml-workflow-card:nth-child(2) { top: 124px; z-index: 2; }
+    .eml-workflow-card:nth-child(3) { top: 144px; z-index: 3; }
+    .eml-workflow-card:nth-child(4) { top: 164px; z-index: 4; }
+  }
+  @media (min-width: 768px) {
+    .eml-readiness__cards { padding-top: 42px; padding-bottom: 180px; }
+    .eml-readiness__card { margin-bottom: 170px; box-shadow: 0 22px 54px rgba(0,0,0,.3); }
+    .eml-readiness__card:nth-of-type(1) { top: 122px; }
+    .eml-readiness__card:nth-of-type(2) { top: 146px; }
+    .eml-readiness__spacer { height: 0; }
+  }
+  /* Product captures used in the annotated integration sections. */
+  .eml-app-screenshot{display:block;width:100%;height:auto;border:1px solid #dce3ee;border-radius:22px;background:#fff;box-shadow:0 24px 54px rgba(38,66,105,.18)}
+  .eml-app-screenshot--hero{max-height:520px;object-fit:cover;object-position:top center}
+  .eml-flow-screenshot{display:block;width:100%;height:100%;min-height:260px;object-fit:cover;object-position:top center;border:1px solid #dce3ee;border-radius:16px;background:#fff;box-shadow:0 18px 34px rgba(31,41,72,.14)}
+  .eml-flow-composite:has(.eml-flow-screenshot){height:320px}
+  .eml-policy-list article{grid-template-columns:46px minmax(0,1fr) 96px 42px}
+  .eml-policy-list article img{width:82px;height:58px;object-fit:cover;border:1px solid #dce3ee;border-radius:8px;box-shadow:0 6px 14px rgba(40,61,110,.1)}
+  .eml-usecase-screenshot{display:block;width:100%;height:100%;min-height:260px;object-fit:cover;object-position:top center;border:1px solid rgba(169,181,255,.35);border-radius:18px;box-shadow:0 24px 48px rgba(31,41,72,.18)}
+  .eml-usecase-showcase{min-height:260px}
+  .eml-boundary-screenshot{position:relative;z-index:1;display:block;width:min(92%,460px);height:280px;object-fit:cover;object-position:top center;border:1px solid #dce3ee;border-radius:15px;background:#fff;box-shadow:0 22px 46px rgba(38,66,105,.18)}
+  @media (max-width:767px){.eml-policy-list article{grid-template-columns:34px minmax(0,1fr) 58px 34px}.eml-policy-list article img{width:54px;height:44px}.eml-flow-screenshot{min-height:220px}.eml-usecase-screenshot{min-height:220px}.eml-boundary-screenshot{width:94%;height:240px}}
+  /* Exact Event Registration hero and trust-strip geometry. */
+  .eml-hero{position:relative;overflow:hidden;margin-top:-90px;padding:140px 24px 64px}
+  .eml-hero::after{content:"";position:absolute;inset:0 0 0 auto;width:220px;max-width:30vw;background:linear-gradient(to right,transparent,rgba(255,255,255,.45) 70%,rgba(255,255,255,.75));pointer-events:none;z-index:2}
+  .eml-hero__grid{max-width:1080px;grid-template-columns:minmax(260px,542px) minmax(0,490px);gap:48px}
+  .eml-hero__badge{font:500 16px/1.2 var(--font-body);letter-spacing:normal}
+  .eml-hero h1{width:100%;font:500 60px/66px var(--font-heading);letter-spacing:-2.1px}
+  .eml-hero p{width:100%;font:400 18px/24px var(--font-body);letter-spacing:-.25px}
+  .eml-hero__cta-row{align-items:center;gap:16px;padding-top:8px}
+  .eml-btn{min-height:48px;padding:12px 20px;border:1px solid transparent;border-radius:12px;font:650 15px/22px var(--font-body);letter-spacing:-.3px;transition:transform .3s,background .3s,border-color .3s}
+  .eml-btn:hover{transform:translateY(-2px);background:#000}.eml-btn--outline{background:transparent;border-color:rgba(16,24,40,.22)}.eml-btn--outline:hover{background:transparent;border-color:var(--ink)}
+  .eml-hero__trust{gap:18px;padding-top:4px;font-size:16px}.eml-hero__visual{position:relative}.eml-hero__visual-card{position:relative;padding:14px;border:1px solid rgba(255,255,255,.62);border-right:0;border-radius:22px 0 0 22px;background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.28)),rgba(255,255,255,.34);backdrop-filter:blur(16px)}
+  .eml-hero__visual-inner{position:relative;overflow:hidden;padding:32px;border-radius:16px 0 0 16px;background:linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff)}.eml-app-screenshot{border-radius:12px;box-shadow:none}.eml-app-screenshot--hero{max-height:420px;object-fit:contain}
+  .eml-rail{padding:1.5rem;border-top:1px solid var(--line);border-bottom:0;background:transparent}.eml-rail__inner{max-width:1280px;gap:2.25rem}.eml-rail__inner span{display:inline;color:var(--muted);font:400 .9375rem/1.4 var(--font-body);white-space:nowrap}.eml-rail__inner b{color:var(--ink);font-weight:700}.eml-rail__inner small,.eml-rail__inner i{display:none}
+
+  /* Exact Event Registration flow heading and cell typography. */
+  .eml-flow{padding:clamp(72px,9vw,112px) 24px;background:transparent}.eml-flow .eml-section-head{max-width:1100px;margin-bottom:42px}.eml-flow .eml-section-head h2{margin:0 0 12px;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}.eml-flow .eml-section-head p{max-width:640px;font:400 18px/1.5 var(--font-body)}
+  .eml-flow-quad__cell{padding:36px 24px}.eml-flow-quad__cell h3{font:700 clamp(24px,2.6vw,32px)/1.1 var(--font-heading);letter-spacing:-.03em}.eml-flow-quad__cell p{font:400 16px/1.6 var(--font-body)}
+  .eml-flow-quad{grid-template-rows:360px 360px}
+
+  /* Exact Event Registration access-stack rhythm; remove the previous stretched-card override. */
+  @media (min-width:901px){.eml-workflow-right{gap:32px;padding-bottom:0}.eml-workflow-card{min-height:0;margin-bottom:0;box-shadow:none}.eml-workflow-card:nth-child(1){top:80px}.eml-workflow-card:nth-child(2){top:100px}.eml-workflow-card:nth-child(3){top:120px}.eml-workflow-card:nth-child(4){top:140px}}
+
+  /* Exact Speaker Management stacked showcase card dimensions. */
+  .eml-readiness__cards{width:min(1140px,100%)}.eml-readiness__card{height:500px}.eml-readiness__copy h3{font:500 32px/1.2 var(--font-heading);letter-spacing:normal}.eml-readiness__copy p{font:400 17px/1.65 var(--font-body)}.eml-readiness__media{padding:20px}.eml-readiness__media img{object-fit:contain;box-shadow:none}
+
+  /* Exact Speaker Management tab-panel type; the former page inherited bold defaults here. */
+  .eml-usecase-copy h3{font:500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading);letter-spacing:-.03em}.eml-usecase-copy p{font:500 16px/1.6 var(--font-body)}
+  .eml-usecases{max-width:none}.eml-usecases-head h2{font-weight:500}
+
+  /* Exact Speaker Management CFP workflow structure for suppression policy. */
+  .eml-suppression{max-width:none;padding:112px 24px;background:#fff}.eml-suppression-inner{width:min(1080px,100%);margin:auto}.eml-suppression-head{max-width:820px;margin:0 auto 64px;text-align:center}.eml-suppression-head h2{max-width:780px;margin:10px auto 0;font:500 clamp(40px,5vw,62px)/1.08 var(--font-heading);letter-spacing:-.045em}
+  .eml-policy-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}.eml-policy-list>li{--eml-policy-tint:#fff8dc;--eml-policy-border:#f0dfa6}.eml-policy-list>li:nth-child(2){--eml-policy-tint:#edf7ff;--eml-policy-border:#d4e7f7}.eml-policy-list>li:nth-child(3){--eml-policy-tint:#f3efff;--eml-policy-border:#e2d8fa}.eml-policy-list details{position:relative;overflow:hidden;border:1px solid var(--eml-policy-border);border-radius:18px;background:linear-gradient(135deg,var(--eml-policy-tint),#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:border-radius .35s,background .35s,box-shadow .25s,transform .25s}.eml-policy-list details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}
+  .eml-policy-list summary{position:relative;display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none}.eml-policy-list summary::-webkit-details-marker{display:none}.eml-policy-list summary>span{font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}.eml-policy-list summary h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}.eml-policy-list summary p{margin:4px 0 0;max-width:620px;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}.eml-policy-list summary>i{position:absolute;top:24px;right:28px;display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78)}.eml-policy-list summary>i::before,.eml-policy-list summary>i::after{content:"";position:absolute;width:12px;height:1.5px;background:#111827}.eml-policy-list summary>i::after{transform:rotate(90deg)}.eml-policy-list details[open] summary>i::after{opacity:0}
+  .eml-policy-list details[open]{display:grid;grid-template-columns:55% 45%;border-radius:28px;background:linear-gradient(135deg,var(--eml-policy-tint),#fff 72%)}.eml-policy-list details[open] summary{grid-template-columns:44px minmax(0,1fr);align-items:start;padding:64px 40px 64px 28px}.eml-policy-list details[open] summary>span{font-size:26px}.eml-policy-list details[open] summary h3{font:500 32px/1.2 var(--font-heading)}.eml-policy-list details[open] summary p{margin-top:16px;font-size:17px;line-height:1.6}.eml-policy-list figure{display:none;margin:0}.eml-policy-list details[open] figure{display:flex;align-items:center;padding:40px 40px 40px 0}.eml-policy-list figure img{display:block;width:100%;max-height:300px;object-fit:contain;border:1px solid #dce3ee;border-radius:12px;background:#fff;box-shadow:0 16px 34px rgba(31,41,72,.14)}
+  .eml-bento-shot-stage--events{background:linear-gradient(180deg,#fdeff3,#fff8fa 48%,#fff)}
+
+  @media (max-width:1024px){.eml-hero__grid{grid-template-columns:1fr}.eml-hero__visual{margin-right:0}.eml-hero__visual-card{border-right:1px solid rgba(255,255,255,.62);border-radius:22px}.eml-hero__visual-inner{border-radius:16px}.eml-policy-list details[open]{grid-template-columns:1fr}.eml-policy-list details[open] figure{padding:0 28px 40px}}
+  @media (max-width:767px){.eml-hero{margin-top:-80px;padding:112px 16px 40px}.eml-hero::after{display:none}.eml-hero h1{font-size:40px;line-height:1.1;letter-spacing:-1.4px}.eml-hero p{font-size:17px;line-height:1.55}.eml-hero__visual-inner{padding:20px}.eml-rail__inner{align-items:flex-start;flex-direction:column;gap:12px}.eml-flow-quad{grid-template-rows:auto}.eml-readiness__card{height:auto}.eml-policy-list summary{grid-template-columns:28px minmax(0,1fr);padding:18px 62px 18px 16px}.eml-policy-list summary p{display:none}.eml-policy-list details[open] summary{padding:32px 24px}.eml-policy-list details[open] summary p{display:block}.eml-policy-list details[open] figure{padding:0 20px 28px}.eml-suppression{padding:72px 20px}.eml-suppression-head h2{font-size:42px}.eml-policy-list summary>i{right:16px}}
+  @media (max-width:420px){.eml-hero h1{font-size:36px}.eml-suppression-head h2{font-size:36px}}
+
+  /* Restore the flow-quad center dividers and exact mobile border order. */
+  .eml-flow-quad__cell{border-right:1px solid #eef0f3;border-bottom:1px solid #eef0f3}
+  .eml-flow-quad>.eml-flow-quad__cell:nth-child(2n){border-right:0}
+  .eml-flow-quad>.eml-flow-quad__cell:nth-child(n+3){border-bottom:0}
+
+  /* Sticky stacks need vertical overflow to remain visible on every ancestor. */
+  @media (min-width:901px){
+    .eml-workflow-right{position:relative;gap:0;padding-bottom:120px}
+    .eml-workflow-card{min-height:560px;margin-bottom:150px;box-shadow:0 18px 44px rgba(35,48,82,.12)}
+    .eml-workflow-card:nth-child(1){top:104px;z-index:1}
+    .eml-workflow-card:nth-child(2){top:124px;z-index:2}
+    .eml-workflow-card:nth-child(3){top:144px;z-index:3}
+    .eml-workflow-card:nth-child(4){top:164px;z-index:4}
+  }
+  @media (max-width:768px){
+    .eml-flow-quad__cell{border-right:0;border-bottom:1px solid #eef0f3}
+    .eml-flow-quad>.eml-flow-quad__cell:nth-child(3){order:4;border-bottom:0}
+    .eml-flow-quad>.eml-flow-quad__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}
+  }
+
+  /* Exact Speaker Management CFP workflow design for suppression policies. */
+  .eml-suppression{max-width:none;padding:clamp(72px,8vw,108px) 24px;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(246,248,255,.52) 52%,rgba(255,255,255,.18))}
+  .eml-suppression-inner{width:min(1218px,100%);margin:0 auto}
+  .eml-suppression-head{display:flex;width:100%;max-width:none;align-items:center;justify-content:center;margin:0 auto 64px;text-align:center}
+  .eml-suppression-head h2{max-width:780px;margin:0 auto;font:500 clamp(40px,5vw,56px)/1.1 var(--font-heading);letter-spacing:-.045em;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+  .eml-policy-list{display:grid;gap:14px;margin:0;padding:0;border:0;list-style:none}
+  .eml-policy-list>li{position:relative;display:block;padding:0;border:0;background:transparent;--eml-policy-tint:#fff8dc;--eml-policy-border:#f0dfa6}
+  .eml-policy-list>li:nth-child(2){--eml-policy-tint:#edf7ff;--eml-policy-border:#d4e7f7}
+  .eml-policy-list>li:nth-child(3){--eml-policy-tint:#f3efff;--eml-policy-border:#e2d8fa}
+  .eml-policy-list details{position:relative;overflow:hidden;border:1px solid var(--eml-policy-border);border-radius:18px;background:linear-gradient(135deg,var(--eml-policy-tint),#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:border-radius .35s,background .35s,box-shadow .25s,transform .25s}
+  .eml-policy-list details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}
+  .eml-policy-list summary{position:static;display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none;transition:background .25s}
+  .eml-policy-list summary::-webkit-details-marker{display:none}
+  .eml-policy-list summary:hover{background:rgba(255,255,255,.28)}
+  .eml-policy-list summary>span{display:block;color:#111;font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}
+  .eml-policy-content{display:flex;flex-direction:column}
+  .eml-policy-list details:not([open]) .eml-policy-content{display:grid;grid-template-columns:minmax(230px,.7fr) minmax(320px,1.3fr);align-items:center;gap:36px}
+  .eml-policy-list summary h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}
+  .eml-policy-list summary p{display:none;margin:0;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}
+  .eml-policy-list details:not([open]) summary p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-width:460px}
+  .eml-policy-bullets{display:none;margin:0;padding:0;list-style:none}
+  .eml-policy-arrow{position:absolute;top:24px;right:28px;display:grid;width:34px;height:34px;padding:0;place-items:center;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;cursor:pointer;transition:transform .25s,background .2s,border-color .2s}
+  .eml-policy-arrow:hover{border-color:rgba(17,24,39,.42);background:#fff}
+  .eml-policy-arrow:focus-visible{outline:3px solid rgba(59,130,246,.28);outline-offset:2px}
+  .eml-policy-arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .eml-policy-list details[open]{display:flex;align-items:stretch;min-height:370px;margin:0;border-radius:28px;background:linear-gradient(135deg,var(--eml-policy-tint),#fff 72%)}
+  .eml-policy-list details[open] summary{flex:0 0 55%;display:grid;grid-template-columns:44px minmax(0,1fr);align-items:start;gap:14px;min-height:0;padding:64px 40px 64px 28px;background:transparent}
+  .eml-policy-list details[open] summary:hover{padding-left:28px;background:transparent}
+  .eml-policy-list details[open] summary>span{font-size:26px;line-height:1;color:#050505}
+  .eml-policy-list details[open] summary h3{margin:0 0 16px;color:#050505;font:500 32px/1.2 var(--font-heading)}
+  .eml-policy-list details[open] summary p{display:block;max-width:90%;margin:0 0 32px;color:#333;font:400 17px/1.6 var(--font-body)}
+  .eml-policy-list details[open] .eml-policy-bullets{display:flex;flex-direction:column;gap:18px}
+  .eml-policy-list details[open] .eml-policy-bullets li{display:flex;align-items:center;gap:14px;padding:0;border:0;background:transparent;color:#111;font:500 16px/1.35 var(--font-body)}
+  .eml-policy-list details[open] .eml-policy-bullets i{font-style:normal;font-size:16px}
+  .eml-policy-list details[open] .eml-policy-arrow{top:28px;transform:rotate(180deg)}
+  .eml-policy-visual{display:none;margin:0;opacity:0}
+  .eml-policy-list details[open] .eml-policy-visual{flex:0 0 45%;display:flex;align-items:center;justify-content:flex-start;padding:40px 88px 40px 0;opacity:1;overflow:visible}
+  .eml-policy-visual img,.eml-policy-list figure img{display:block;width:100%;max-width:400px;height:auto;max-height:none;object-fit:contain;border:0;border-radius:12px;background:transparent;box-shadow:0 24px 60px rgba(0,0,0,.08)}
+  .eml-suppression .eml-note{margin-top:28px}
+  @media (max-width:767px){
+    .eml-suppression{padding:76px 16px}
+    .eml-suppression-head{margin-bottom:46px}
+    .eml-suppression-head h2{font-size:42px}
+    .eml-policy-list summary,.eml-policy-list summary:hover{grid-template-columns:26px minmax(0,1fr);gap:10px;min-height:96px;padding:18px 62px 18px 14px}
+    .eml-policy-arrow{top:31px;right:16px}
+    .eml-policy-list summary>span{font-size:13px}
+    .eml-policy-list details:not([open]) .eml-policy-content{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+    .eml-policy-list details:not([open]) summary p{font-size:13px;line-height:1.4}
+    .eml-policy-list details[open]{flex-direction:column;min-height:0}
+    .eml-policy-list details[open] summary,.eml-policy-list details[open] summary:hover{flex:none;grid-template-columns:32px minmax(0,1fr);gap:10px;padding:34px 62px 24px 14px}
+    .eml-policy-list details[open] .eml-policy-arrow{top:24px;right:16px}
+    .eml-policy-list details[open] summary>span{font-size:21px}
+    .eml-policy-list details[open] summary h3{font-size:28px}
+    .eml-policy-list details[open] summary p{max-width:none;margin-bottom:24px;font-size:17px}
+    .eml-policy-list details[open] .eml-policy-bullets{gap:12px}
+    .eml-policy-list details[open] .eml-policy-visual{flex:none;padding:0 24px 28px}
+  }
+  @media (prefers-reduced-motion:reduce){.eml-page *,.eml-page *::before,.eml-page *::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.eml-product-shot,.eml-shot-float,.eml-boundary__visual::before,.eml-boundary__window{animation:none!important;transform:none!important}}
+</style>
