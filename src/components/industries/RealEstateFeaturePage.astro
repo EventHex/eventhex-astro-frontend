@@ -1,0 +1,956 @@
+---
+const stages = [
+  { label: "Invite", detail: "Exhibitors + visitors" },
+  { label: "Approve", detail: "Packages + access" },
+  { label: "Present", detail: "Companies + products" },
+  { label: "Register", detail: "Tickets + fields" },
+];
+
+const journeyCards = [
+  { label: "Discover", detail: "Publish the expo, exhibitors, programme, and registration entry points." },
+  { label: "Register", detail: "Collect the event-specific visitor and ticket information." },
+  { label: "Prepare", detail: "Send tickets, campaigns, and operational updates." },
+  { label: "Arrive", detail: "Validate event QR access and issue the configured badge." },
+  { label: "Explore", detail: "Use exhibitor discovery, sessions, app, and meetings." },
+  { label: "Connect", detail: "Capture and export exhibitor leads for the team's next workflow." },
+];
+
+const journeyVisuals = [
+  { src: "/images/platform-analytics-dashboard.jpg", alt: "EventHex platform analytics dashboard for event discovery and audience activity", status: "Audience signal", action: "Review event data" },
+  { src: "/images/revenue-analytics-source.jpg", alt: "EventHex subscription analytics view for registration planning and audience preparation", status: "Registration active", action: "Open registration" },
+  { src: "/images/stripe-analytics-overview.png", alt: "EventHex platform analytics overview for campaign and ticket preparation", status: "Campaign ready", action: "View preparation" },
+  { src: "/images/stripe-analytics-revenue.png", alt: "EventHex analytics view for event-day entry verification and attendance trends", status: "Entry verified", action: "Review check-in" },
+  { src: "/images/stripe-payment-dashboard.png", alt: "EventHex platform analytics view for attendee discovery, speakers, and sessions", status: "Discovery view", action: "Explore attendees" },
+  { src: "/images/stripe-revenue-analytics.jpg", alt: "EventHex platform analytics view for exhibitor follow-up and qualified leads", status: "Follow-up ready", action: "Review leads" },
+];
+
+const eventDaySteps = [
+  { label: "Visitor arrival", detail: "Scan the issued event ticket at the entrance." },
+  { label: "Exhibitor access", detail: "Use allocated passes and badge workflows for booth teams." },
+  { label: "Lead capture", detail: "Record QR or manual leads and add the supported qualification detail." },
+  { label: "Event overview", detail: "Review attendance, exhibitor, and other event signals." },
+];
+
+const eventDayVisuals = [
+  { src: "/images/razorpay-platform-analytics-overview.png", alt: "EventHex analytics overview for visitor arrival and check-in", status: "QR verified", action: "Open check-in" },
+  { src: "/images/stripe-step-checkout.png", alt: "EventHex analytics view for exhibitor access and badge workflows", status: "Access ready", action: "Review passes" },
+  { src: "/images/stripe-flow-review.jpg", alt: "EventHex analytics view for QR and manual lead capture", status: "Lead captured", action: "Qualify contact" },
+  { src: "/images/stripe-step-connect.png", alt: "EventHex analytics dashboard for the event overview", status: "Signals live", action: "View overview" },
+];
+
+const formats = [
+  { label: "Property exhibitions", detail: "Connect exhibitors, attendees, passes, leads, meetings, and reporting." },
+  { label: "Developer launches", detail: "Build a branded event, invite audiences, configure access, and capture interest." },
+  { label: "Broker conferences", detail: "Combine programme, registration, networking, and follow-up-ready contacts." },
+  { label: "Investment summits", detail: "Use configured approval, ticket, programme, and event-day workflows." },
+];
+
+const formatVisuals = [
+  { src: "/images/platform-analytics-dashboard.jpg", alt: "EventHex platform analytics dashboard for property exhibition activity", status: "Exhibitor operations", action: "Review event data" },
+  { src: "/images/_tmp-analytics-reference.png", alt: "EventHex platform analytics view for developer launch registration and activity", status: "Launch ready", action: "Open event data" },
+  { src: "/images/razorpay-platform-analytics-reference.png", alt: "EventHex platform analytics view for broker conference registrations and payments", status: "Conference live", action: "Review registrations" },
+  { src: "/images/stripe-analytics-overview.png", alt: "EventHex analytics overview for investment summit event signals", status: "Summit overview", action: "View event signals" },
+];
+
+const mechanisms = [
+  { label: "Exhibitor Management", detail: "Run exhibitor and lead workflows.", href: "/exhibitor-management/" },
+  { label: "Event Registration", detail: "Configure visitor intake.", href: "/event-registration/" },
+  { label: "Appointments & Meetings", detail: "Coordinate event meetings.", href: "/appointments-meetings/" },
+  { label: "Event Analytics", detail: "Review event signals.", href: "/event-analytics/" },
+];
+
+const mechanismTabs = [
+  {
+    id: "exhibitor-management",
+    label: "Exhibitor Management",
+    title: "Keep exhibitor work in one place",
+    description: "Run exhibitor, company, product, pass, badge, and lead workflows from the same connected event record.",
+    checklist: ["Company and product records", "Pass and badge workflows", "QR or manual lead capture"],
+    image: "/images/razorpay-platform-analytics-organizations.png",
+    imageAlt: "EventHex analytics view showing connected exhibitor organisations",
+    visualLabel: "Exhibitor records linked"
+  },
+  {
+    id: "event-registration",
+    label: "Event Registration",
+    title: "Shape the visitor intake",
+    description: "Configure the registration flow, collect the event-specific fields, and keep ticket and access details tied to the attendee record.",
+    checklist: ["Custom registration fields", "Ticket and approval rules", "Event-day access details"],
+    image: "/images/_tmp-analytics-reference.png",
+    imageAlt: "EventHex registration analytics view for attendee intake and ticket activity",
+    visualLabel: "Registration flow ready"
+  },
+  {
+    id: "appointments-meetings",
+    label: "Appointments & Meetings",
+    title: "Coordinate the conversations",
+    description: "Give attendees and exhibitors a clear path to discover one another and manage the meetings configured for the event.",
+    checklist: ["Attendee and exhibitor discovery", "Meeting availability", "Connected event context"],
+    image: "/images/platform-analytics-dashboard.jpg",
+    imageAlt: "EventHex platform analytics dashboard for attendee discovery and meeting activity",
+    visualLabel: "Meetings in context"
+  },
+  {
+    id: "event-analytics",
+    label: "Event Analytics",
+    title: "Review the signals that matter",
+    description: "Use the event record to review attendance, registration, exhibitor, and lead signals without treating them as sales attribution.",
+    checklist: ["Attendance and registration signals", "Exhibitor and lead views", "Export-ready event data"],
+    image: "/images/stripe-analytics-overview.png",
+    imageAlt: "EventHex analytics overview for attendance, exhibitor, and event signals",
+    visualLabel: "Event signals visible"
+  },
+];
+
+const prepCards = [
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+    title: "Start with the event format",
+    body: "Choose the smallest workflow that matches this event.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>`,
+    title: "Add only the modules you need",
+    body: "Use the connected feature pages to understand each mechanism.",
+  },
+  {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.1-6.8"></path><polyline points="21 3 21 9 15 9"></polyline><polyline points="8 12 11 15 17 9"></polyline></svg>`,
+    title: "Review the setup in the demo",
+    body: "Bring market, event, audience, access, communication, and onsite requirements.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Can exhibitors manage their own company and team information?",
+    a: "Yes. The exhibitor portal supports company, product, resource, team, pass, and badge workflows.",
+  },
+  {
+    q: "Can exhibitor teams scan leads?",
+    a: "Yes. They can use supported QR or manual lead capture, add qualification detail, and export CSV.",
+  },
+  {
+    q: "Does EventHex include a floor-plan editor?",
+    a: "No. EventHex does not include a floor-plan editor.",
+  },
+  {
+    q: "Can leads be sent to a CRM?",
+    a: "An optional best-effort exhibitor CRM handoff exists where configured. It is not a guaranteed bidirectional sync or sales workflow.",
+  },
+  {
+    q: "Can EventHex prove property sales ROI?",
+    a: "No. Attendance, exhibitor, and lead data must not be presented as property-sales attribution or ROI.",
+  },
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex Real Estate Event Management",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description: "Event management software for property expos, developer launches, broker conferences, and investment summits with connected exhibitor, registration, communication, participation, and event-day workflows.",
+  url: "https://eventhex.ai/industries/real-estate/",
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: [
+    "Exhibitor portal workflows",
+    "Custom visitor registration",
+    "QR and manual lead capture",
+    "Event tickets and badges",
+    "Meetings and attendee discovery",
+    "Event analytics and reporting",
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
+---
+
+<div class="rer-page">
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <section class="rer-hero">
+    <div class="rer-shell rer-hero__grid">
+      <div class="rer-hero__copy">
+        <p class="rer-eyebrow">Event management software for property events</p>
+        <h1>
+          <span>Connect property-event</span>
+          <span>exhibitors, visitors,</span>
+          <span>leads, and</span>
+          <span>follow-up-ready data</span>
+        </h1>
+        <p class="rer-lead">Run property expos, developer launches, broker conferences, and investment summits with exhibitor operations, registration, tickets, badges, QR arrival, lead capture, meetings, and reporting.</p>
+        <div class="rer-hero__points" aria-label="Event workflow highlights">
+          <span>Exhibitor portal workflows</span>
+          <span>QR and manual lead capture</span>
+          <span>Event-day reporting</span>
+        </div>
+        <div class="rer-actions">
+          <a class="rer-button rer-button--primary" href="/book-a-demo/">Book a Demo</a>
+          <a class="rer-button rer-button--quiet" href="#rer-sequence">See the workflow</a>
+        </div>
+      </div>
+
+      <div class="rer-hero__visual" aria-label="Connected real estate event workflow preview">
+        <div class="rer-hero__visual-card">
+          <div class="rer-hero__visual-inner">
+            <img
+              src="/images/razorpay-platform-analytics-usage.png"
+              alt="EventHex platform analytics feature usage and plan distribution dashboard"
+              class="rer-hero__img"
+              width="1262"
+              height="697"
+              loading="eager"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-section rer-section--light rer-sequence-section" id="rer-sequence">
+    <div class="rer-shell">
+      <div class="rer-sequence" role="list" aria-label="Connected event workflow">
+        {stages.map((stage) => (
+          <div class="rer-sequence__item" role="listitem">
+            <span class="rer-sequence__label">{stage.label}</span>
+            <span class="rer-sequence__detail">{stage.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-model-spotlight">
+    <div class="rer-model-spotlight__header">
+      <p class="rer-eyebrow">Choose the right event model</p>
+      <h2 class="rer-model-spotlight__title">Start with the operating shape that fits the event</h2>
+      <p class="rer-model-spotlight__subtitle">Pick the event model that matches how your property audience moves through the day. Add only the modules the event actually needs.</p>
+    </div>
+
+    <div class="rer-model-spotlight__grid">
+      <article class="rer-model-spotlight__cell rer-model-spotlight__cell--copy">
+        <h3>Exhibition-led event</h3>
+        <p>Connect exhibitor setup, passes, lead capture, attendee access, and event reporting.</p>
+      </article>
+      <div class="rer-model-spotlight__cell rer-model-spotlight__cell--media">
+        <div class="rer-model-spotlight__composite">
+          <img class="rer-model-spotlight__screen rer-model-spotlight__screen--primary" src="/images/platform-analytics-dashboard.jpg" alt="EventHex platform analytics dashboard for exhibition event activity" width="1262" height="697" loading="lazy" />
+          <img class="rer-model-spotlight__screen rer-model-spotlight__screen--secondary" src="/images/_tmp-analytics-reference.png" alt="EventHex platform analytics view of registration and check-in trends" width="1262" height="697" loading="lazy" />
+          <span class="rer-model-spotlight__status">Exhibitor operations</span>
+          <span class="rer-model-spotlight__action">Review event data</span>
+        </div>
+      </div>
+
+      <div class="rer-model-spotlight__cell rer-model-spotlight__cell--media">
+        <div class="rer-model-spotlight__composite">
+          <img class="rer-model-spotlight__screen rer-model-spotlight__screen--primary" src="/images/razorpay-platform-analytics-organizations.png" alt="EventHex platform analytics organization and event operations view for conferences" width="1262" height="697" loading="lazy" />
+          <img class="rer-model-spotlight__screen rer-model-spotlight__screen--secondary" src="/images/razorpay-platform-analytics-payment-result.png" alt="EventHex platform analytics feature usage and plan distribution view for conferences" width="1262" height="697" loading="lazy" />
+          <span class="rer-model-spotlight__status">Conference operations</span>
+          <span class="rer-model-spotlight__action">Review event data</span>
+        </div>
+      </div>
+      <article class="rer-model-spotlight__cell rer-model-spotlight__cell--copy">
+        <h3>Conference-led event</h3>
+        <p>Use registration, programme, speakers, meetings, and communications without adding expo complexity.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="rer-section rer-section--dark rer-exhibition-band" id="rer-exhibition">
+    <div class="rer-shell">
+      <div class="rer-section__heading rer-section__heading--dark"><p class="rer-eyebrow">Exhibition operations</p><h2>Connect the exhibitor journey to the attendee journey</h2><p>Keep exhibitor records, team access, leads, and event-day activity attached to the same event.</p></div>
+      <div class="rer-exhibition-grid">
+        <article class="rer-exhibition-card rer-exhibition-card--portal">
+          <span class="rer-exhibition-label">01 · Exhibitor portal</span>
+          <h3>One record for every booth team</h3>
+          <p>Move approved exhibitors into a portal for company, product, resource, team, pass, and badge details.</p>
+          <div class="rer-exhibition-visual rer-portal-ui" aria-hidden="true">
+            <div class="rer-ui-window__top"><span>Exhibitor portal</span><i></i></div>
+            <div class="rer-ui-row"><b>Company profile</b><span>Complete</span></div>
+            <div class="rer-ui-row"><b>Team access</b><span>6 members</span></div>
+            <div class="rer-ui-row"><b>Passes + badges</b><span>Ready</span></div>
+          </div>
+          <a class="rer-exhibition-link" href="/exhibitor-management/">Learn about exhibitor management <span aria-hidden="true">→</span></a>
+        </article>
+
+        <article class="rer-exhibition-card rer-exhibition-card--registration">
+          <span class="rer-exhibition-label">02 · Visitor registration</span>
+          <h3>Configure buyer intake</h3>
+          <p>Use custom and ticket-specific fields to configure buyer, broker, investor, or guest intake.</p>
+          <div class="rer-exhibition-visual rer-form-ui" aria-hidden="true">
+            <div class="rer-ui-window__top"><span>Visitor registration</span><b>Live</b></div>
+            <div class="rer-ui-input"><span>Full name</span><i></i></div>
+            <div class="rer-ui-input"><span>Company / role</span><i></i></div>
+            <div class="rer-ui-chip-row"><em>Buyer</em><em class="is-active">Broker</em><em>Investor</em></div>
+          </div>
+        </article>
+
+        <article class="rer-exhibition-card rer-exhibition-card--leads">
+          <span class="rer-exhibition-label">03 · Lead capture</span>
+          <h3>Capture useful contacts</h3>
+          <p>Let exhibitor teams capture QR or manual leads, qualify them, and export CSV.</p>
+          <div class="rer-exhibition-visual rer-leads-ui" aria-hidden="true">
+            <div class="rer-ui-window__top"><span>New lead captured</span><i class="rer-ui-dot"></i></div>
+            <div class="rer-lead-row"><span class="rer-lead-avatar">AM</span><b>Arun Mathew</b><em>QR scan</em></div>
+            <div class="rer-lead-row"><span class="rer-lead-avatar rer-lead-avatar--violet">SK</span><b>Sarah Khan</b><em>Qualified</em></div>
+            <div class="rer-ui-progress"><i></i></div>
+          </div>
+        </article>
+
+        <article class="rer-exhibition-card rer-exhibition-card--meetings">
+          <span class="rer-exhibition-label">04 · Meetings and follow-up</span>
+          <h3>Keep the next step connected</h3>
+          <p>Connect attendee discovery and meeting operations; use optional best-effort CRM handoff only where configured.</p>
+          <div class="rer-exhibition-visual rer-meetings-ui" aria-hidden="true">
+            <div class="rer-ui-window__top"><span>Follow-up queue</span><b>Today</b></div>
+            <div class="rer-meeting-row"><span>10:30</span><b>Buyer briefing</b><i>Ready</i></div>
+            <div class="rer-meeting-row"><span>12:15</span><b>Booth meeting</b><i>Next</i></div>
+            <div class="rer-meeting-row"><span>15:45</span><b>Send qualified leads</b><i>CSV</i></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-section rer-section--light rer-team-section" id="rer-team">
+    <div class="rer-shell">
+      <div class="rer-team-heading"><p class="rer-eyebrow">Team coordination</p><h2>Keep the floor team and event team aligned</h2><p>Give each team a clear job while keeping the attendee and event record connected.</p></div>
+      <div class="rer-team-grid" role="list" aria-label="Event team responsibilities">
+        <span class="rer-team-notch rer-team-notch--one" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>
+        <span class="rer-team-notch rer-team-notch--two" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e8ecf2"></path></svg></span>
+        <article class="rer-team-card" role="listitem">
+          <span class="rer-team-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path><path d="M5 5 3 3"></path></svg></span>
+          <div class="rer-team-card__content"><h3>Event owner</h3><p>Sets the event, audience, access, programme, and reporting decisions.</p></div>
+        </article>
+        <article class="rer-team-card" role="listitem">
+          <span class="rer-team-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+          <div class="rer-team-card__content"><h3>Specialist teams</h3><p>Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.</p></div>
+        </article>
+        <article class="rer-team-card" role="listitem">
+          <span class="rer-team-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="m7 15 4-4 3 3 5-6"></path><path d="M17 8h2v2"></path></svg></span>
+          <div class="rer-team-card__content"><h3>Event leadership</h3><p>Reviews event and portfolio signals for the next operating decision.</p></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-section rer-audience-access" id="rer-audience">
+    <div class="rer-shell rer-audience-access__container">
+      <div class="rer-audience-access__left">
+        <div class="rer-audience-access__sticky">
+          <div class="rer-audience-access__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Audience experience</div>
+          <h2>Connect the moments attendees actually move through</h2>
+          <p>Keep discovery, registration, arrival, engagement, and exhibitor follow-up connected to one event record.</p>
+          <a class="rer-audience-access__cta" href="/book-a-demo/">Book a Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        </div>
+      </div>
+
+      <div class="rer-audience-access__right">
+        {journeyCards.map((card, index) => (
+          <article class:list={["rer-audience-card", `rer-audience-card--${index + 1}`]} style={`--audience-index: ${index};`}>
+            <div class="rer-audience-card__header"><div class="rer-audience-card__number">0{index + 1}</div><div class="rer-audience-card__text"><h3>{card.label}</h3><p>{card.detail}</p></div></div>
+            <div class="rer-audience-card__visual"><img src={journeyVisuals[index].src} alt={journeyVisuals[index].alt} width="1262" height="697" loading="lazy" /><span class="rer-audience-card__status">{journeyVisuals[index].status}</span><span class="rer-audience-card__action">{journeyVisuals[index].action}</span></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-section rer-event-bento" id="rer-event-day">
+    <div class="rer-shell rer-event-bento__container">
+      <div class="rer-event-bento__header"><p class="rer-eyebrow">During the event</p><h2>Keep event-day actions tied to the same event record</h2></div>
+      <div class="rer-event-bento__grid">
+        <span class="rer-event-bento__notch rer-event-bento__notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="rer-event-bento__notch rer-event-bento__notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+        {eventDaySteps.map((step, index) => (
+          <div class:list={["rer-event-bento__row", { "rer-event-bento__row--reverse": index % 2 === 1 }]}>
+            <div class="rer-event-bento__cell rer-event-bento__visual"><div class:list={["rer-event-bento__stage", `rer-event-bento__stage--${index + 1}`]}><img src={eventDayVisuals[index].src} alt={eventDayVisuals[index].alt} width="1262" height="697" loading="lazy" /><span class="rer-event-bento__status">{eventDayVisuals[index].status}</span><span class="rer-event-bento__action">{eventDayVisuals[index].action}</span></div></div>
+            <div class="rer-event-bento__cell rer-event-bento__copy"><span class="rer-event-bento__eyebrow">0{index + 1} · During the event</span><h3>{step.label}</h3><p>{step.detail}</p></div>
+            <span class="rer-event-bento__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-scope-section" id="rer-scope">
+    <div class="rer-scope-inner">
+      <div class="rer-scope-left">
+        <p class="rer-eyebrow">Build the right scope</p>
+        <h2>Keep EventHex responsibility separate from specialist requirements</h2>
+        <p class="rer-scope-copy"><strong>Your specialist requirements</strong> Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them. Confirm every specialist obligation before implementation and record how it will be handled.</p>
+        <div class="rer-scope-actions">
+          <a class="rer-scope-btn rer-scope-btn--dark" href="/book-a-demo/">Get Started Free <span aria-hidden="true">→</span></a>
+          <a class="rer-scope-btn rer-scope-btn--light" href="/event-analytics/">Explore Solution <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="rer-scope-right" role="img" aria-label="EventHex platform analytics views for reviewing specialist requirements">
+        <div class="rer-scope-showcase">
+          <div class="rer-scope-shot rer-scope-shot--list"><img src="/images/platform-analytics-dashboard.jpg" alt="EventHex platform analytics dashboard for reviewing event workflow requirements" width="1262" height="697" loading="lazy" decoding="async" /></div>
+          <div class="rer-scope-shot rer-scope-shot--builder"><img src="/images/_tmp-analytics-reference.png" alt="EventHex analytics view for validating specialist event requirements" width="1262" height="697" loading="lazy" decoding="async" /></div>
+          <span class="rer-scope-status"><i aria-hidden="true"></i>Specialist validation</span>
+          <span class="rer-scope-publish">Review &amp; publish</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rer-format-stack" id="rer-formats">
+    <div class="rer-format-stack__section">
+      <div class="rer-format-stack__header">
+        <div class="rer-format-stack__eyebrow">
+          <span class="rer-format-stack__eyebrow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M10.5 3c.4 2.6 1.2 4.3 2.4 5.5S15.9 10.1 18.5 10.5c-2.6.4-4.3 1.2-5.6 2.5S10.9 15.9 10.5 18.5c-.4-2.6-1.2-4.3-2.5-5.6S5.1 10.9 2.5 10.5c2.6-.4 4.3-1.2 5.5-2.5S10.1 5.6 10.5 3Z" fill="#4F8CFF"/><path d="M17.5 13c.2 1.3.6 2.1 1.2 2.8s1.5 1 2.8 1.2c-1.3.2-2.1.6-2.8 1.2s-1 1.5-1.2 2.8c-.2-1.3-.6-2.1-1.2-2.8s-1.5-1-2.8-1.2c1.3-.2 2.1-.6 2.8-1.2s1-1.5 1.2-2.8Z" fill="#B08BFF"/></svg>
+          </span>
+          <span>Where it fits</span>
+        </div>
+        <h2 class="rer-format-stack__title">
+          <span>Configure EventHex around the</span>
+          <span><span class="rer-format-stack__highlight">event</span> you are running</span>
+        </h2>
+      </div>
+
+      <div class="rer-format-stack__cards" id="rer-format-stack-cards">
+        {formats.map((format, index) => (
+          <article class="rer-format-stack__card" style={`--format-index: ${index};`}>
+            <div class="rer-format-stack__content">
+              <span class="rer-format-stack__card-eyebrow">0{index + 1} · {format.label}</span>
+              <h3>{format.label}</h3>
+              <p>{format.detail}</p>
+              <a href="/book-a-demo/" class="rer-format-stack__button">Explore More <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="rer-format-stack__image rer-format-stack__image--animated">
+              <img src={formatVisuals[index].src} alt={formatVisuals[index].alt} width="1262" height="697" loading="lazy" decoding="async" />
+              <span class="rer-format-stack__status">{formatVisuals[index].status}</span>
+              <span class="rer-format-stack__action">{formatVisuals[index].action} <b aria-hidden="true">↗</b></span>
+            </div>
+          </article>
+        ))}
+        <div class="rer-format-stack__spacer" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const formatStack = document.querySelector<HTMLElement>("#rer-format-stack-cards");
+    const formatHeader = formatStack?.closest<HTMLElement>(".rer-format-stack")?.querySelector<HTMLElement>(".rer-format-stack__header");
+    const formatCards = formatStack?.querySelectorAll<HTMLElement>(".rer-format-stack__card");
+    const finalFormatCard = formatCards?.[formatCards.length - 1];
+
+    if (formatStack && formatHeader && finalFormatCard) {
+      let formatFrame = 0;
+      const syncFormatRelease = () => {
+        formatFrame = 0;
+        const stickyTop = Number.parseFloat(getComputedStyle(finalFormatCard).top) || 0;
+        const releaseOffset = Math.min(0, finalFormatCard.getBoundingClientRect().top - stickyTop);
+        formatHeader.style.setProperty("--rer-format-release-y", `${releaseOffset}px`);
+        formatHeader.style.transform = `translateY(${releaseOffset}px)`;
+      };
+      const queueFormatRelease = () => {
+        if (formatFrame) return;
+        formatFrame = requestAnimationFrame(syncFormatRelease);
+      };
+
+      window.addEventListener("scroll", queueFormatRelease, { passive: true });
+      window.addEventListener("resize", queueFormatRelease, { passive: true });
+      syncFormatRelease();
+    }
+  </script>
+
+  <section class="rer-mechanisms" id="rer-mechanisms" aria-labelledby="rer-mechanisms-title">
+    <div class="rer-mechanisms__inner">
+      <header class="rer-mechanisms__header">
+        <p class="rer-eyebrow">Go deeper</p>
+        <h2 id="rer-mechanisms-title" class="rer-mechanisms__title">
+          <span>Open the page that</span>
+          <span>owns each mechanism</span>
+        </h2>
+        <p class="rer-mechanisms__subtitle">Explore the connected EventHex pages behind each part of the property-event workflow.</p>
+      </header>
+
+      <div class="rer-mechanisms__tabs" role="tablist" aria-label="EventHex mechanism pages">
+        {mechanismTabs.map((tab, index) => (
+          <button
+            class:list={["rer-mechanisms__tab", index === 0 && "rer-mechanisms__tab--active"]}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`rer-mechanisms-panel-${tab.id}`}
+            id={`rer-mechanisms-tab-${tab.id}`}
+            data-target={tab.id}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="rer-mechanisms__box">
+        {mechanismTabs.map((tab, index) => (
+          <div
+            class:list={["rer-mechanisms__panel", index === 0 && "rer-mechanisms__panel--active"]}
+            id={`rer-mechanisms-panel-${tab.id}`}
+            role="tabpanel"
+            aria-labelledby={`rer-mechanisms-tab-${tab.id}`}
+            data-panel={tab.id}
+            tabindex="0"
+          >
+            <div class="rer-mechanisms__copy">
+              <p class="rer-mechanisms__panel-kicker">{tab.label}</p>
+              <h3 class="rer-mechanisms__panel-title">{tab.title}</h3>
+              <p class="rer-mechanisms__panel-desc">{tab.description}</p>
+              <ul class="rer-mechanisms__checklist">
+                {tab.checklist.map((item) => (
+                  <li>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <a class="rer-mechanisms__link" href={mechanisms[index].href}>Open {tab.label} <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="rer-mechanisms__visual">
+              <div class="rer-mechanisms__showcase">
+                <img src={tab.image} alt={tab.imageAlt} width="1262" height="697" loading="lazy" decoding="async" />
+                <span class:list={["rer-mechanisms__visual-label", `rer-mechanisms__visual-label--${tab.id}`]}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m4.5 10.2 3.1 3.1 7-7"></path></svg>
+                  {tab.visualLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const suite = document.querySelector<HTMLElement>(".rer-mechanisms");
+      if (!suite) return;
+
+      const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>(".rer-mechanisms__tab"));
+      const panels = Array.from(suite.querySelectorAll<HTMLElement>(".rer-mechanisms__panel"));
+      let rotationId: number | undefined;
+
+      const activateTab = (tab: HTMLButtonElement) => {
+        const targetId = tab.getAttribute("data-target");
+        if (!targetId) return;
+
+        tabs.forEach((item) => {
+          const active = item === tab;
+          item.classList.toggle("rer-mechanisms__tab--active", active);
+          item.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        panels.forEach((panel) => {
+          panel.classList.toggle("rer-mechanisms__panel--active", panel.getAttribute("data-panel") === targetId);
+        });
+      };
+
+      const stopRotation = () => {
+        if (rotationId === undefined) return;
+        window.clearInterval(rotationId);
+        rotationId = undefined;
+      };
+
+      const startRotation = () => {
+        stopRotation();
+        if (tabs.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        rotationId = window.setInterval(() => {
+          const currentIndex = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+          activateTab(tabs[(currentIndex + 1) % tabs.length]);
+        }, 4000);
+      };
+
+      tabs.forEach((tab) => tab.addEventListener("click", () => {
+        activateTab(tab);
+        startRotation();
+      }));
+      suite.addEventListener("mouseenter", stopRotation);
+      suite.addEventListener("mouseleave", startRotation);
+      suite.addEventListener("focusin", stopRotation);
+      suite.addEventListener("focusout", (event) => {
+        if (!(event.relatedTarget instanceof Node) || !suite.contains(event.relatedTarget)) startRotation();
+      });
+      document.addEventListener("visibilitychange", () => (document.hidden ? stopRotation() : startRotation()));
+      startRotation();
+    });
+  </script>
+
+  <section class="rer-setup-hero" id="rer-setup" aria-labelledby="rer-setup-title">
+    <div class="rer-setup-hero__inner">
+      <header class="rer-setup-hero__header">
+        <p class="rer-eyebrow">Plan the configuration</p>
+        <h2 id="rer-setup-title">Bring one real event workflow<br />to the demo</h2>
+        <p>Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p>
+      </header>
+
+      <div class="rer-setup-grid">
+        {prepCards.slice(0, -1).map((_, index) => (
+          <div
+            class="rer-setup-notch"
+            style={`left: ${((index + 1) / prepCards.length) * 100}%`}
+            aria-hidden="true"
+          >
+            <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--rer-setup-border, #e8ecf2)"></path></svg>
+          </div>
+        ))}
+        {prepCards.map((card, index) => (
+          <article class:list={["rer-setup-card", index === 0 && "rer-setup-card--first"]}>
+            <span class="rer-setup-card__icon" set:html={card.icon} aria-hidden="true" />
+            <div class="rer-setup-card__content">
+              <h3>{card.title}</h3>
+              <p>{card.body}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+    </div>
+  </section>
+
+  <section class="rer-faq" id="rer-faq" aria-labelledby="rer-faq-title">
+    <div class="rer-faq__inner">
+      <div class="rer-faq__sidebar">
+        <span class="rer-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7M17 7H8M17 7v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2 id="rer-faq-title" class="rer-faq__heading">Real Estate Event<br />Questions, Answered.</h2>
+        <p class="rer-faq__intro">Find quick answers about exhibitor workflows, registration, event-day operations, and reporting.</p>
+        <a href="/contact-en/" class="rer-faq__cta">
+          Visit Help Center
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+
+      <div class="rer-faq__list">
+        {faqs.map((faq, index) => (
+          <details class="rer-faq__item" data-rer-faq-item open={index === 0}>
+            <summary class="rer-faq__question">
+              <strong>{faq.q}</strong>
+              <span class="rer-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <div class="rer-faq__answer"><p>{faq.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const realEstateFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-rer-faq-item]"));
+    realEstateFaqItems.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (!item.open) return;
+        realEstateFaqItems.forEach((other) => {
+          if (other !== item) other.open = false;
+        });
+      });
+    });
+  </script>
+
+</div>
+
+<style>
+  .rer-page { --rer-ink: #161a24; --rer-muted: #667085; --rer-border: #e4e8f0; --rer-purple: #a999ff; --rer-cyan: #9deff4; --rer-yellow: #ffd985; color: var(--rer-ink); background: #fff; overflow: clip; }
+  .rer-shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+  .rer-hero { position: relative; overflow: hidden; margin-top: -90px; padding: 140px 24px 64px; background: radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%), radial-gradient(ellipse 800px 600px at 100% 105%, #ff74b83d, #ff74b81a 45%, #ff74b800 78%), #fff; }
+  .rer-hero::after { content: ""; position: absolute; inset: 0 0 0 auto; width: 220px; max-width: 30vw; background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf); pointer-events: none; z-index: 2; }
+  .rer-hero__grid { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 542px) minmax(0, 490px); gap: 48px; align-items: center; }
+  .rer-hero__copy { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; text-align: left; }
+  .rer-eyebrow { margin: 0; color: var(--brand-blue); font: 500 16px/24px var(--font-body); letter-spacing: normal; text-transform: uppercase; }
+  .rer-hero h1 { width: 100%; max-width: 620px; margin: 0; font: 500 52px/58px var(--font-heading); letter-spacing: -2.1px; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .rer-hero h1 span { display: block; white-space: nowrap; }
+  .rer-lead { width: 100%; max-width: 560px; margin: 0; color: var(--subheading-gray); font: 400 18px/24px var(--font-body); letter-spacing: -.25px; }
+  .rer-hero__points { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rer-hero__points span { position: relative; display: inline-flex; align-items: center; padding-left: 16px; color: #475467; font: 500 14px/20px var(--font-body); }
+  .rer-hero__points span::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: #10b981; }
+  .rer-actions { display: flex; gap: 14px; padding-top: 6px; }
+  .rer-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 32px; border-radius: 10px; text-decoration: none; font: 600 15px/24px var(--font-body); letter-spacing: -.48px; transition: transform .3s, box-shadow .3s, background .3s, border-color .3s; }
+  .rer-button:hover { transform: translateY(-2px); }
+  .rer-button--primary { color: #fff; background: var(--heading-dark); }
+  .rer-button--primary:hover { background: #000; }
+  .rer-button--quiet { color: var(--heading-dark); background: rgba(255,255,255,.9); border: 1px solid #dce4ff; }
+  .rer-button--quiet:hover { border-color: #c5d2ff; box-shadow: 0 10px 24px rgba(34,39,47,.06); }
+  .rer-button--white { color: #1d2540; background: #fff; }
+  .rer-hero__visual { position: relative; margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px)); z-index: 3; }
+  .rer-hero__visual-card { position: relative; padding: 14px; border-radius: 22px 0 0 22px; border: 1px solid rgba(255,255,255,.62); border-right: none; background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .rer-hero__visual-inner { position: relative; border-radius: 16px 0 0 16px; overflow: hidden; padding: 22px; background: linear-gradient(135deg, #d9ecfa, #eef6fc 45%, #fff); }
+  .rer-hero__img { display: block; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 15px 28px rgba(34,39,47,.14); animation: rerHeroFloat 6s ease-in-out infinite; }
+  @keyframes rerHeroFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .rer-section { padding: clamp(78px, 9vw, 126px) 0; }.rer-section--light { background: #fff; }.rer-section--tint { background: #f7f8fc; }.rer-section--dark { color: #fff; background: #0d1020; background-image: radial-gradient(90% 90% at 90% 0%, rgba(83, 72, 196, .35), transparent 58%), radial-gradient(70% 80% at 0% 100%, rgba(35, 148, 184, .13), transparent 55%); }.rer-section__heading { max-width: 760px; margin-bottom: 46px; }.rer-section__heading--dark { margin-bottom: 50px; }.rer-section__heading--dark h2, .rer-section__heading--dark p:not(.rer-eyebrow) { color: #fff; }.rer-section__heading--dark p:not(.rer-eyebrow) { color: rgba(255,255,255,.63); }.rer-section__heading--left { margin-bottom: 0; }.rer-section h2 { margin: 0; font: 500 clamp(34px, 4vw, 57px)/1.05 var(--font-heading); letter-spacing: -.045em; }.rer-section__heading > p:not(.rer-eyebrow) { max-width: 680px; margin: 20px 0 0; color: var(--rer-muted); font: 400 18px/1.6 var(--font-body); }
+  .rer-sequence-section { padding: 0; }.rer-sequence { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--rer-border); border-bottom: 1px solid var(--rer-border); }.rer-sequence__item { min-height: 0; padding: 22px 18px; display: flex; align-items: baseline; gap: 7px; }.rer-sequence__number, .rer-card-index, .rer-role-number, .rer-journey-step, .rer-day-number, .rer-format-number, .rer-prep-grid span { display: block; color: #7769ee; font: 700 12px var(--font-body); letter-spacing: .08em; }.rer-sequence__label { display: inline; color: var(--rer-ink); font: 700 14px/1.4 var(--font-body); white-space: nowrap; }.rer-sequence__detail { display: inline; color: var(--rer-muted); font: 400 14px/1.4 var(--font-body); white-space: nowrap; }
+  .rer-model-spotlight { padding: clamp(72px, 9vw, 112px) 24px; background: #fff; overflow: hidden; }.rer-model-spotlight__header { display: flex; flex-direction: column; align-items: center; max-width: 1100px; margin: 0 auto 24px; text-align: center; }.rer-model-spotlight__title { max-width: 760px; margin: 0 0 12px; font: 500 clamp(34px, 4.2vw, 52px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; }.rer-model-spotlight__subtitle { max-width: 650px; margin: 0; color: var(--subheading-gray); font: 400 18px/1.5 var(--font-body); }.rer-model-spotlight__grid { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 100%; max-width: 1180px; margin: 24px auto 0; }.rer-model-spotlight__cell { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }.rer-model-spotlight__cell:nth-child(2n) { border-right: 0; }.rer-model-spotlight__cell:nth-child(n + 3) { border-bottom: 0; }.rer-model-spotlight__cell--copy h3 { margin: 0 0 16px; color: var(--heading-dark); font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }.rer-model-spotlight__cell--copy p { max-width: 40ch; margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }.rer-model-spotlight__cell--media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }.rer-model-spotlight__composite { position: relative; width: 100%; height: 320px; overflow: visible; }.rer-model-spotlight__screen { position: absolute; display: block; object-fit: cover; object-position: top left; border: 1px solid rgba(209,214,226,.92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31,41,72,.14); }.rer-model-spotlight__screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; }.rer-model-spotlight__screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; }.rer-model-spotlight__status, .rer-model-spotlight__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }.rer-model-spotlight__status { top: 14px; left: 14px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }.rer-model-spotlight__action { right: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
+  .rer-feature-layout { display: grid; grid-template-columns: minmax(250px, .82fr) minmax(0, 1.18fr); gap: 18px; }.rer-anchor-card, .rer-support-grid article { border: 1px solid rgba(192, 184, 255, .23); border-radius: 18px; background: rgba(255,255,255,.055); }.rer-anchor-card { display: flex; flex-direction: column; padding: 32px; }.rer-anchor-card .rer-card-index { color: var(--rer-cyan); }.rer-mini-label { margin: 0; color: var(--rer-cyan); font: 700 11px var(--font-body); letter-spacing: .08em; text-transform: uppercase; }.rer-anchor-card h3 { margin: 48px 0 12px; font: 500 32px/1.1 var(--font-heading); letter-spacing: -.03em; }.rer-anchor-card p:not(.rer-mini-label), .rer-support-grid p:not(.rer-mini-label) { margin: 0; color: rgba(255,255,255,.65); font: 400 15px/1.62 var(--font-body); }.rer-anchor-card a { display: inline-flex; gap: 9px; margin-top: auto; padding-top: 35px; color: var(--rer-cyan); text-decoration: none; font: 700 13px var(--font-body); }.rer-support-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }.rer-support-grid article { min-height: 205px; padding: 26px; }.rer-support-grid article:last-child { grid-column: 1 / -1; }.rer-support-grid h3 { margin: 25px 0 9px; font: 600 22px var(--font-heading); }
+  .rer-exhibition-band { position: relative; overflow: hidden; isolation: isolate; padding: clamp(64px, 8vw, 96px) 0 clamp(76px, 9vw, 112px); background-color: #000; background-image: radial-gradient(130% 42% at 50% 0%, rgba(92,138,255,.22), rgba(124,108,255,.1) 45%, transparent 72%); }
+  .rer-exhibition-band::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .55; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.3'/%3E%3C/svg%3E"); }
+  .rer-exhibition-band > .rer-shell { position: relative; z-index: 1; }
+  .rer-exhibition-band .rer-section__heading { max-width: 900px; margin-right: auto; margin-left: auto; text-align: center; }
+  .rer-exhibition-band .rer-section__heading > p:not(.rer-eyebrow) { margin-right: auto; margin-left: auto; }
+  .rer-exhibition-band .rer-section__heading h2 { max-width: 820px; background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .rer-exhibition-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; overflow: hidden; border: 1px solid #3b3a47; border-radius: 18px; background: #3b3a47; }
+  .rer-exhibition-card { position: relative; display: flex; flex-direction: column; min-height: 430px; padding: 32px; overflow: hidden; background: rgba(7,7,14,.94); }
+  .rer-exhibition-card::after { content: ""; position: absolute; right: -20%; bottom: -35%; width: 72%; height: 70%; border-radius: 50%; background: radial-gradient(circle, rgba(92,138,255,.24), transparent 68%); filter: blur(24px); pointer-events: none; animation: rerExhibitionGlow 6s ease-in-out infinite; }
+  .rer-exhibition-card:nth-child(2)::after { animation-delay: -1.5s; background: radial-gradient(circle, rgba(164,92,255,.22), transparent 68%); }
+  .rer-exhibition-card:nth-child(3)::after { animation-delay: -3s; background: radial-gradient(circle, rgba(56,189,248,.2), transparent 68%); }
+  .rer-exhibition-card:nth-child(4)::after { animation-delay: -4.5s; background: radial-gradient(circle, rgba(125,141,255,.2), transparent 68%); }
+  .rer-exhibition-label { position: relative; z-index: 1; display: block; margin-bottom: 24px; color: #8eabff; font: 700 11px/1.35 var(--font-body); letter-spacing: .08em; text-transform: uppercase; }
+  .rer-exhibition-card h3 { position: relative; z-index: 1; max-width: 17ch; margin: 0 0 12px; color: #fff; font: 500 clamp(24px, 2.25vw, 32px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .rer-exhibition-card p { position: relative; z-index: 1; max-width: 42ch; margin: 0; color: rgba(255,255,255,.64); font: 400 15px/1.55 var(--font-body); }
+  .rer-exhibition-visual { position: relative; z-index: 1; display: flex; flex-direction: column; justify-content: flex-end; min-height: 152px; margin-top: auto; padding-top: 28px; animation: rerExhibitionFloat 7s ease-in-out infinite; }
+  .rer-exhibition-card:nth-child(2) .rer-exhibition-visual { animation-delay: -1.75s; }
+  .rer-exhibition-card:nth-child(3) .rer-exhibition-visual { animation-delay: -3.5s; }
+  .rer-exhibition-card:nth-child(4) .rer-exhibition-visual { animation-delay: -5.25s; }
+  .rer-exhibition-link { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 8px; width: fit-content; margin-top: 22px; color: #a8b6ff; text-decoration: none; font: 700 13px var(--font-body); }
+  .rer-exhibition-link span { transition: transform .25s ease; }
+  .rer-exhibition-link:hover span { transform: translateX(4px); }
+  .rer-ui-window__top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; color: rgba(255,255,255,.58); font: 600 11px var(--font-body); }
+  .rer-ui-window__top i, .rer-ui-window__top b { display: inline-flex; align-items: center; min-height: 22px; padding: 0 8px; border: 1px solid rgba(125,141,255,.34); border-radius: 999px; color: #b9c4ff; background: rgba(120,140,255,.12); font: 700 10px var(--font-body); font-style: normal; }
+  .rer-ui-window__top i { width: 7px; min-height: 7px; padding: 0; border: 0; border-radius: 50%; background: #63e6be; box-shadow: 0 0 0 5px rgba(99,230,190,.1); animation: rerExhibitionPulse 2.8s ease-in-out infinite; }
+  .rer-portal-ui, .rer-form-ui, .rer-leads-ui, .rer-meetings-ui { padding: 18px; border: 1px solid transparent; border-radius: 16px; background: linear-gradient(#0d0d16,#0d0d16) padding-box, linear-gradient(135deg,#38bdf8,#5c8aff 45%,#a45cff) border-box; box-shadow: 0 18px 44px -22px rgba(92,138,255,.55); }
+  .rer-ui-row, .rer-ui-input, .rer-lead-row, .rer-meeting-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 11px; border-radius: 9px; background: rgba(255,255,255,.05); color: rgba(255,255,255,.82); font: 400 12px/1.25 var(--font-body); }
+  .rer-ui-row + .rer-ui-row, .rer-ui-input + .rer-ui-input, .rer-lead-row + .rer-lead-row, .rer-meeting-row + .rer-meeting-row { margin-top: 8px; }
+  .rer-ui-row b, .rer-ui-input span, .rer-lead-row b, .rer-meeting-row b { font-weight: 600; }
+  .rer-ui-row span, .rer-meeting-row i { color: #9fe0c0; font-size: 10px; font-style: normal; }
+  .rer-ui-input i { width: 32%; height: 5px; border-radius: 999px; background: rgba(255,255,255,.18); animation: rerExhibitionScan 4.5s ease-in-out infinite; transform-origin: right center; }
+  .rer-ui-input:nth-of-type(3) i { animation-delay: -1.6s; }
+  .rer-ui-chip-row { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .rer-ui-chip-row em { padding: 7px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; color: rgba(255,255,255,.62); background: rgba(255,255,255,.04); font: 400 10px var(--font-body); font-style: normal; }
+  .rer-ui-chip-row em.is-active { border-color: rgba(150,170,255,.55); color: #fff; background: rgba(120,140,255,.16); animation: rerExhibitionPulse 3.2s ease-in-out infinite; }
+  .rer-lead-row { justify-content: flex-start; }
+  .rer-lead-row em { margin-left: auto; color: #b9c4ff; font-size: 10px; font-style: normal; }
+  .rer-lead-avatar { display: grid; flex: 0 0 26px; place-items: center; width: 26px; height: 26px; border-radius: 50%; color: #06111e; background: linear-gradient(135deg,#6be2c0,#38bdf8); font: 700 9px var(--font-body); }
+  .rer-lead-avatar--violet { color: #fff; background: linear-gradient(135deg,#7d8dff,#a45cff); }
+  .rer-ui-progress { height: 4px; margin-top: 12px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.12); }
+  .rer-ui-progress i { display: block; width: 72%; height: 100%; border-radius: inherit; background: linear-gradient(90deg,#38bdf8,#a45cff); transform-origin: left center; animation: rerExhibitionScan 4.5s ease-in-out infinite; }
+  .rer-meeting-row { padding: 9px 11px; }
+  .rer-meeting-row span { flex: 0 0 38px; color: #b9c4ff; font: 700 10px ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .rer-meeting-row i { margin-left: auto; }
+  @keyframes rerExhibitionFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @keyframes rerExhibitionGlow { 0%,100% { opacity: .6; transform: scale(.96); } 50% { opacity: 1; transform: scale(1.04); } }
+  @keyframes rerExhibitionPulse { 0%,100% { opacity: .76; } 50% { opacity: 1; } }
+  @keyframes rerExhibitionScan { 0% { transform: scaleX(.35); opacity: .65; } 60%,100% { transform: scaleX(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .rer-exhibition-visual, .rer-exhibition-card::after, .rer-ui-window__top i, .rer-ui-input i, .rer-ui-chip-row em.is-active, .rer-ui-progress i { animation: none; } }
+  .rer-roles { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--rer-border); border-radius: 18px; overflow: hidden; }.rer-roles article { min-height: 230px; padding: 28px; border-right: 1px solid var(--rer-border); }.rer-roles article:last-child { border-right: 0; }.rer-role-number { color: #a295ff; }.rer-roles h3 { margin: 48px 0 10px; font: 600 22px var(--font-heading); }.rer-roles p { margin: 0; color: var(--rer-muted); font: 400 15px/1.6 var(--font-body); }
+  .rer-team-section { background: #fff; }
+  .rer-team-heading { max-width: 850px; margin: 0 auto 64px; text-align: center; }
+  .rer-team-heading h2 { margin: 0; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .rer-team-heading > p:not(.rer-eyebrow) { max-width: 690px; margin: 20px auto 0; color: var(--rer-muted); font: 400 18px/1.6 var(--font-body); }
+  .rer-team-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; border: 1px solid #e3e8f1; border-radius: 22px; overflow: hidden; }
+  .rer-team-card { min-width: 0; min-height: 320px; padding: 32px 28px 38px; border-left: 1px solid #e3e8f1; background: #fff; transition: background .25s ease, transform .25s ease; }
+  .rer-team-card:first-of-type { border-left: 0; }
+  .rer-team-card:hover { background: #fbfcff; }
+  .rer-team-icon { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; margin-bottom: 40px; color: var(--brand-blue); }
+  .rer-team-icon svg { width: 100%; height: 100%; }
+  .rer-team-card__content h3 { min-height: 2.5em; margin: 0 0 28px; color: var(--heading-dark); font: 600 21px/1.25 var(--font-heading); }
+  .rer-team-card__content p { margin: 14px 0 0; color: var(--rer-muted); font: 400 15px/1.55 var(--font-body); }
+  .rer-team-notch { position: absolute; top: 0; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; z-index: 2; }
+  .rer-team-notch--one { left: 33.333%; }
+  .rer-team-notch--two { left: 66.666%; }
+  .rer-journey-section { background-color: #0c1122; }.rer-journey-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; overflow: hidden; border: 1px solid rgba(255,255,255,.15); border-radius: 18px; background: rgba(255,255,255,.15); }.rer-journey-grid article { min-height: 190px; padding: 25px; background: rgba(17, 21, 39, .92); }.rer-journey-grid article:nth-child(3n+2) { background: rgba(24, 28, 50, .92); }.rer-journey-grid h3 { margin: 38px 0 10px; color: #fff; font: 600 21px var(--font-heading); }.rer-journey-grid p { margin: 0; color: rgba(255,255,255,.62); font: 400 14px/1.6 var(--font-body); }
+  .rer-audience-access { padding: clamp(84px, 9vw, 124px) 24px; background: linear-gradient(135deg, #f7f9ff 0%, #f4fbff 100%); }
+  .rer-audience-access__container { display: flex; gap: 80px; align-items: stretch; }
+  .rer-audience-access__left { flex: 0 0 40%; }
+  .rer-audience-access__sticky { position: sticky; top: 120px; }
+  .rer-audience-access__eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 12px; border-radius: 99px; color: var(--rer-ink); background: #f4f5f7; font: 600 13px var(--font-body); }
+  .rer-audience-access__sticky h2 { max-width: 540px; margin: 0 0 24px; color: var(--heading-dark); font: 500 clamp(36px, 4vw, 48px)/1.2 var(--font-heading); letter-spacing: -.03em; background: linear-gradient(100deg, #1e2533 0%, #4e5663 58%, #969ba4 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .rer-audience-access__sticky > p { max-width: 470px; margin: 0; color: var(--subheading-gray); font: 400 18px/1.6 var(--font-body); }
+  .rer-audience-access__cta { display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 15px var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .rer-audience-access__cta:hover { background: #000; transform: translateY(-1px); }
+  .rer-audience-access__right { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+  .rer-audience-card { position: sticky; top: calc(80px + (var(--audience-index) * 20px)); padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease, box-shadow .3s ease; }
+  .rer-audience-card:hover { transform: translateY(-4px); box-shadow: 0 18px 38px rgba(38,66,105,.1); }
+  .rer-audience-card__header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .rer-audience-card__number { display: flex; flex: 0 0 40px; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; color: #fff; background: #111; font: 700 16px var(--font-heading); }
+  .rer-audience-card__text h3 { margin: 0 0 8px; color: var(--heading-dark); font: 700 20px var(--font-heading); }
+  .rer-audience-card__text p { margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .rer-audience-card__visual { position: relative; display: flex; align-items: center; justify-content: center; height: 280px; overflow: hidden; padding: 18px; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .rer-audience-card:nth-child(1) .rer-audience-card__visual { background: linear-gradient(180deg, #fff9dc 0%, #fffdf1 48%, #fff 100%); }
+  .rer-audience-card:nth-child(2) .rer-audience-card__visual { background: linear-gradient(180deg, #e9f9f0 0%, #f5fcf8 48%, #fff 100%); }
+  .rer-audience-card:nth-child(3) .rer-audience-card__visual { background: linear-gradient(180deg, #eef1ff 0%, #f8f9ff 48%, #fff 100%); }
+  .rer-audience-card:nth-child(4) .rer-audience-card__visual { background: linear-gradient(180deg, #fdeff3 0%, #fff8fa 48%, #fff 100%); }
+  .rer-audience-card:nth-child(5) .rer-audience-card__visual { background: linear-gradient(180deg, #e8f6ff 0%, #f6fbff 48%, #fff 100%); }
+  .rer-audience-card:nth-child(6) .rer-audience-card__visual { background: linear-gradient(180deg, #f1ecff 0%, #faf8ff 48%, #fff 100%); }
+  .rer-audience-card__visual img { display: block; width: 100%; height: 100%; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; animation: rerAudienceShot 7s ease-in-out infinite; }
+  .rer-audience-card:nth-child(2) .rer-audience-card__visual img { animation-delay: -1.2s; object-position: 50% 58%; }
+  .rer-audience-card:nth-child(3) .rer-audience-card__visual img { animation-delay: -2.4s; object-position: 50% 28%; }
+  .rer-audience-card:nth-child(4) .rer-audience-card__visual img { animation-delay: -3.6s; object-position: 50% 20%; }
+  .rer-audience-card:nth-child(5) .rer-audience-card__visual img { animation-delay: -4.8s; }
+  .rer-audience-card:nth-child(6) .rer-audience-card__visual img { animation-delay: -6s; object-position: 50% 58%; }
+  .rer-audience-card__status, .rer-audience-card__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); font: 700 12px/1 var(--font-body); }
+  .rer-audience-card__status { top: 10px; left: 10px; padding: 9px 12px; border: 1px solid #dfe4f2; color: #253047; background: #fff; }
+  .rer-audience-card__action { right: 10px; bottom: 10px; padding: 11px 15px; color: #fff; background: #4b65f6; }
+  @keyframes rerAudienceShot { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-5px) scale(1.015); } }
+  @media (prefers-reduced-motion: reduce) { .rer-audience-card__visual img { animation: none; } }
+  .rer-event-bento { padding: clamp(80px, 9vw, 124px) 24px; background: linear-gradient(135deg, #f7f9ff 0%, #f4fbff 100%); }
+  .rer-event-bento__container { max-width: 1200px; }
+  .rer-event-bento__header { max-width: 900px; margin: 0 auto 60px; text-align: center; }
+  .rer-event-bento__header h2 { max-width: 820px; margin: 0 auto; color: var(--heading-dark); font: 500 clamp(34px, 4.4vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; background: linear-gradient(100deg, #1e2533 0%, #4e5663 58%, #969ba4 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .rer-event-bento__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .rer-event-bento__row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .rer-event-bento__row:last-child { border-bottom: 0; }
+  .rer-event-bento__cell { display: flex; flex-direction: column; justify-content: center; padding: 4rem; }
+  .rer-event-bento__row:not(.rer-event-bento__row--reverse) .rer-event-bento__visual { border-right: 1px solid #e5e7eb; }
+  .rer-event-bento__row--reverse .rer-event-bento__copy { order: 1; border-right: 1px solid #e5e7eb; }
+  .rer-event-bento__row--reverse .rer-event-bento__visual { order: 2; }
+  .rer-event-bento__visual { align-items: center; background: transparent; }
+  .rer-event-bento__stage { position: relative; width: 100%; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .rer-event-bento__stage--1 { background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%); }
+  .rer-event-bento__stage--2 { background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%); }
+  .rer-event-bento__stage--3 { background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%); }
+  .rer-event-bento__stage--4 { background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%); }
+  .rer-event-bento__stage img { display: block; width: 100%; border: 1px solid #dfe4ec; border-radius: 14px; box-shadow: 0 16px 30px rgba(38,66,105,.12); animation: rerEventShotBreathe 7s ease-in-out infinite; }
+  .rer-event-bento__row:nth-child(even) .rer-event-bento__stage img { animation-delay: -3.5s; }
+  .rer-event-bento__status, .rer-event-bento__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; box-shadow: 0 10px 24px rgba(17,24,39,.16); font: 700 12px/1 var(--font-body); }
+  .rer-event-bento__status { top: 14px; left: 12px; padding: 9px 12px; border: 1px solid #dfe4f2; color: #253047; background: #fff; }
+  .rer-event-bento__action { right: 12px; bottom: 14px; padding: 11px 15px; color: #fff; background: #4b65f6; }
+  .rer-event-bento__eyebrow { display: block; margin-bottom: 18px; color: #6941ff; font: 700 12px/1.2 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .rer-event-bento__copy h3 { margin: 0 0 14px; color: var(--heading-dark); font: 700 clamp(24px, 2.4vw, 34px)/1.15 var(--font-heading); letter-spacing: -.03em; }
+  .rer-event-bento__copy p { max-width: 42ch; margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .rer-event-bento__notch, .rer-event-bento__cross { position: absolute; width: 28px; height: 28px; pointer-events: none; line-height: 0; z-index: 3; }
+  .rer-event-bento__notch--top { top: 0; left: 50%; transform: translate(-50%, -50%); }
+  .rer-event-bento__notch--bottom { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
+  .rer-event-bento__cross { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
+  .rer-event-bento__row:last-child .rer-event-bento__cross { display: none; }
+  @keyframes rerEventShotBreathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+  @media (prefers-reduced-motion: reduce) { .rer-event-bento__stage img { animation: none; } }
+  .rer-day-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }.rer-day-grid article { min-height: 220px; padding: 26px; border: 1px solid #e3e6ee; border-radius: 18px; background: #fff; }.rer-day-number { color: #6d61d9; }.rer-day-grid h3 { margin: 52px 0 10px; font: 600 20px var(--font-heading); }.rer-day-grid p { margin: 0; color: var(--rer-muted); font: 400 14px/1.6 var(--font-body); }
+  .rer-scope-section { position: relative; overflow: hidden; padding: 48px 24px; background: transparent; }
+  .rer-scope-section::before { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle 360px at 3% 50%, rgba(175,163,255,.2), transparent 72%), radial-gradient(circle 300px at 97% 46%, rgba(130,170,255,.18), transparent 72%); }
+  .rer-scope-inner { position: relative; z-index: 1; width: min(1120px, 100%); margin: 0 auto; padding: 48px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 36px; align-items: center; }
+  .rer-scope-left { min-width: 0; max-width: 560px; }
+  .rer-scope-left h2 { display: flex; flex-direction: column; max-width: 560px; margin: 0; color: transparent; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font: 500 clamp(32px, 3.5vw, 42px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .rer-scope-copy { margin: 16px 0 32px; color: #374151; font: 500 15px/1.5 var(--font-body); }.rer-scope-copy strong { display: block; margin-bottom: 4px; color: #111827; font-weight: 700; }
+  .rer-scope-actions { display: flex; align-items: center; gap: 12px; margin-top: 4px; }.rer-scope-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 20px; border-radius: 6px; text-decoration: none; font: 600 13.5px/1.35 var(--font-body); transition: all .2s ease; }.rer-scope-btn--dark { color: #fff; background: #27272a; }.rer-scope-btn--dark:hover { background: #18181b; }.rer-scope-btn--light { color: #374151; border: 1px solid #e5e7eb; background: #f3f4f6; }.rer-scope-btn--light:hover { background: #e5e7eb; }
+  .rer-scope-right { width: 100%; max-width: 500px; justify-self: end; }.rer-scope-showcase { position: relative; isolation: isolate; width: 100%; height: clamp(320px, 32vw, 350px); overflow: hidden; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: linear-gradient(155deg, #fff8dc 0%, #fffdf4 48%, #fff 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }.rer-scope-showcase::before { content: ""; position: absolute; inset: auto 6% -24% 10%; z-index: -1; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); filter: blur(24px); }
+  .rer-scope-shot { position: absolute; overflow: hidden; aspect-ratio: 1117 / 837; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }.rer-scope-shot img { display: block; width: 100%; height: 100%; object-fit: contain; }.rer-scope-shot--list { top: 30px; left: 20px; z-index: 1; width: 77%; animation: rerScopeShotFloat 6s ease-in-out infinite; }.rer-scope-shot--builder { right: 18px; bottom: 24px; z-index: 2; width: 70%; animation: rerScopeShotFloat 6s ease-in-out -2s infinite; }
+  .rer-scope-status, .rer-scope-publish { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; box-shadow: 0 8px 22px rgba(42,66,158,.18); font: 700 13px var(--font-body); }.rer-scope-status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; color: #4163ed; background: #f0f4ff; }.rer-scope-status i { width: 7px; height: 7px; border-radius: 50%; background: #4163ed; box-shadow: 0 0 0 4px rgba(65,99,237,.14); }.rer-scope-publish { right: 16px; bottom: 16px; padding: 12px 16px; color: #fff; background: #4163ed; }
+  @keyframes rerScopeShotFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } } @media (prefers-reduced-motion: reduce) { .rer-scope-shot--list, .rer-scope-shot--builder { animation: none; } }
+  @media (max-width: 980px) { .rer-scope-inner { grid-template-columns: 1fr; gap: 32px; padding: 48px 32px; }.rer-scope-left, .rer-scope-right { max-width: none; }.rer-scope-right { justify-self: stretch; } }
+  @media (max-width: 680px) { .rer-scope-section { padding: 12px 16px; }.rer-scope-inner { padding: 32px 24px; gap: 32px; }.rer-scope-left h2 { font-size: 30px; }.rer-scope-copy { font-size: 15px; }.rer-scope-actions { width: 100%; flex-direction: column; align-items: stretch; }.rer-scope-btn { width: 100%; }.rer-scope-showcase { height: 300px; border-radius: 18px; }.rer-scope-shot--list { top: 30px; left: 12px; width: 80%; }.rer-scope-shot--builder { right: 12px; bottom: 23px; width: 72%; }.rer-scope-status { top: 14px; left: 12px; }.rer-scope-publish { right: 12px; bottom: 12px; } }
+  .rer-boundary { display: grid; grid-template-columns: 1fr 45px 1fr; align-items: stretch; gap: 17px; }.rer-boundary article { padding: 32px; border: 1px solid var(--rer-border); border-radius: 18px; background: #fff; }.rer-boundary__label { display: inline-flex; padding: 6px 9px; border-radius: 5px; color: #6256d1; background: #eeecff; font: 700 11px var(--font-body); text-transform: uppercase; letter-spacing: .06em; }.rer-boundary h3 { margin: 31px 0 10px; font: 600 24px var(--font-heading); }.rer-boundary p { margin: 0; color: var(--rer-muted); font: 400 15px/1.65 var(--font-body); }.rer-boundary__divider { display: flex; align-items: center; justify-content: center; color: #7165dd; font: 500 26px var(--font-heading); }
+  /* Keep the section's vertical overflow visible so its sticky cards can form the
+     same layered scroll stack as the approved Speaker Management pattern. */
+  .rer-format-stack { width: 100%; overflow: visible; color: #fff; background-color: #000; background-image: linear-gradient(180deg, #0d0a2c 0%, transparent 320px), radial-gradient(circle at 12% 30%, rgba(70,130,255,.28) 0%, transparent 55%); background-repeat: no-repeat; background-size: 100% 100%, 120% 120%; animation: rerFormatMeshMove 30s linear infinite; }
+  .rer-format-stack__section { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1140px; margin: 0 auto; padding: 4px 0 30px; }
+  .rer-format-stack__header { position: sticky; top: 69px; z-index: 20; isolation: isolate; width: min(94%, 1050px); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px 0; text-align: center; transform: translateY(var(--rer-format-release-y, 0px)); will-change: transform; }
+  .rer-format-stack__header::before { content: ""; position: absolute; z-index: -1; top: -1px; bottom: -28px; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; background: linear-gradient(180deg, rgba(13,10,44,.99) 0%, rgba(7,11,27,.98) 72%, rgba(7,11,27,0) 100%); }
+  .rer-format-stack__eyebrow { display: flex; align-items: center; justify-content: center; gap: 8px; width: fit-content; padding: 6px 16px 6px 12px; border: 1px solid rgba(255,255,255,.24); border-radius: 999px; background: rgba(255,255,255,.12); box-shadow: inset 0 1px rgba(255,255,255,.16), 0 6px 16px -6px rgba(0,0,0,.35); color: #fff; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); font: 500 15px/1.4 var(--font-body); }
+  .rer-format-stack__eyebrow-icon { display: flex; width: 16px; height: 16px; }.rer-format-stack__eyebrow-icon svg { width: 100%; height: 100%; }
+  .rer-format-stack__title { margin: 0; color: #fff; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; }.rer-format-stack__title > span { display: block; }.rer-format-stack__highlight { color: #afa3ff; }
+  .rer-format-stack__cards { --rer-format-stack-top: 300px; position: relative; width: 100%; padding: 80px 0 50px; }
+  .rer-format-stack__spacer { height: 190px; }
+  .rer-format-stack__card { position: sticky; top: calc(var(--rer-format-stack-top) + var(--format-index) * 20px); z-index: var(--format-index); display: flex; align-items: stretch; height: 500px; margin-bottom: 60px; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 20px; background: radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255,255,255,.16) 0%, transparent 70%), radial-gradient(circle at 12% 8%, rgba(90,130,255,.18) 0%, transparent 40%), #0a0a0f; box-shadow: none; transition: transform .3s ease, box-shadow .3s ease; }
+  .rer-format-stack__card:nth-child(2) { background: radial-gradient(circle at 82% 12%, rgba(109,92,235,.24), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66,173,218,.13), transparent 28%), #090a10; }.rer-format-stack__card:nth-child(3) { background: radial-gradient(circle at 82% 12%, rgba(77,110,255,.2), transparent 34%), radial-gradient(circle at 8% 92%, rgba(55,196,188,.12), transparent 28%), #090a10; }.rer-format-stack__card:nth-child(4) { background: radial-gradient(circle at 82% 12%, rgba(168,92,255,.2), transparent 34%), radial-gradient(circle at 8% 92%, rgba(66,173,218,.12), transparent 28%), #090a10; }.rer-format-stack__card:nth-child(5) { background: radial-gradient(circle at 82% 12%, rgba(255,125,185,.16), transparent 34%), radial-gradient(circle at 8% 92%, rgba(90,130,255,.13), transparent 28%), #090a10; }
+  .rer-format-stack__content { display: flex; flex: 0 0 45%; flex-direction: column; justify-content: center; gap: 16px; padding: 40px; }
+  .rer-format-stack__card-eyebrow { display: inline-flex; align-items: center; align-self: flex-start; margin-bottom: 2px; padding: 7px 13px; border: 1px solid rgba(175,163,255,.28); border-radius: 999px; background: rgba(175,163,255,.1); color: #afa3ff; font: 600 12px/1.2 var(--font-body); letter-spacing: .02em; }
+  .rer-format-stack__content h3 { margin: 0; color: #e7e4fa; font: 500 32px/1.2 var(--font-heading); letter-spacing: -.025em; }.rer-format-stack__content p { margin: 0; color: rgba(255,255,255,.55); font: 400 17px/1.65 var(--font-body); }
+  .rer-format-stack__button { display: inline-flex; align-items: center; align-self: flex-start; gap: 8px; margin-top: 8px; padding: 12px 26px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: rgba(255,255,255,.06); box-shadow: inset 0 1px rgba(255,255,255,.08); color: #fff; text-decoration: none; font: 500 15px var(--font-body); transition: transform .3s, background .3s; }.rer-format-stack__button:hover { transform: scale(1.05); background: rgba(255,255,255,.12); }
+  .rer-format-stack__image { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; min-width: 0; margin: 16px 16px 16px 0; padding: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); border-radius: 16px; background: linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,.04)); box-shadow: inset 0 1px rgba(255,255,255,.12); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+  .rer-format-stack__image img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: high-quality; transform: translateZ(0); }.rer-format-stack__image--animated img { animation: rerFormatFloat 4s ease-in-out infinite; }.rer-format-stack__card:nth-child(3) .rer-format-stack__image img { animation-delay: -1s; }.rer-format-stack__card:nth-child(4) .rer-format-stack__image img { animation-delay: -2s; }.rer-format-stack__card:nth-child(5) .rer-format-stack__image img { animation-delay: -3s; }
+  .rer-format-stack__status, .rer-format-stack__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; box-shadow: 0 10px 24px rgba(0,0,0,.28); font: 700 11px/1 var(--font-body); }.rer-format-stack__status { top: 14px; left: 14px; padding: 9px 11px; border: 1px solid rgba(207,234,217,.7); color: #b4f1c8; background: rgba(14,74,44,.55); }.rer-format-stack__action { right: 14px; bottom: 14px; gap: 8px; padding: 10px 13px; color: #fff; background: #4b65f6; }.rer-format-stack__action b { font-size: 15px; line-height: .8; }
+  @keyframes rerFormatMeshMove { 0%,100% { background-position: 0 0, 0% 0%; } 50% { background-position: 0 0, 8% 10%; } }.rer-format-stack__card:hover { box-shadow: 0 20px 50px rgba(0,0,0,.24); }.rer-format-stack__card:hover .rer-format-stack__image img { animation-play-state: paused; }
+  @keyframes rerFormatFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @media (prefers-reduced-motion: reduce) { .rer-format-stack, .rer-format-stack__image--animated img { animation: none; }.rer-format-stack__card:hover .rer-format-stack__image img { animation-play-state: running; } }
+  .rer-format-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }.rer-format-grid article { min-height: 245px; padding: 25px; border: 1px solid rgba(192,184,255,.24); border-radius: 18px; background: rgba(255,255,255,.055); }.rer-format-number { color: var(--rer-cyan); }.rer-format-grid h3 { margin: 48px 0 10px; color: #fff; font: 600 21px/1.15 var(--font-heading); }.rer-format-grid p { margin: 0; color: rgba(255,255,255,.64); font: 400 14px/1.6 var(--font-body); }
+  @media (max-width: 1024px) { .rer-format-stack__section { padding: 20px 20px 30px; }.rer-format-stack__header { width: 94%; }.rer-format-stack__title { font-size: 40px; line-height: 1.05; }.rer-format-stack__cards { --rer-format-stack-top: 292px; }.rer-format-stack__card { height: 450px; }.rer-format-stack__content { flex-basis: 50%; padding: 32px; }.rer-format-stack__content h3 { font-size: 28px; }.rer-format-stack__content p { font-size: 16px; } }
+  @media (max-width: 767px) { .rer-format-stack__section { padding: 16px 20px 30px; }.rer-format-stack__header { width: 100%; }.rer-format-stack__title { font-size: 30px; }.rer-format-stack__cards { --rer-format-stack-top: 320px; padding-top: 80px; }.rer-format-stack__card { flex-direction: column; height: 520px; }.rer-format-stack__content { flex: 0 0 50%; padding: 20px 20px 0; }.rer-format-stack__content h3 { font-size: 24px; }.rer-format-stack__content p { font-size: 15px; }.rer-format-stack__image { flex: 1; margin: 12px; padding: 16px; }.rer-format-stack__cards { padding-bottom: 40px; } }
+  .rer-mechanisms { padding: 112px 24px; background: #fff; color: #22272f; }
+  .rer-mechanisms__inner { width: min(1080px, 100%); margin: 0 auto; }
+  .rer-mechanisms__header { display: flex; flex-direction: column; align-items: center; margin-bottom: 32px; text-align: center; }
+  .rer-mechanisms__header .rer-eyebrow { margin-bottom: 14px; }
+  .rer-mechanisms__title { max-width: 800px; margin: 0 0 16px; color: transparent; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font: 500 clamp(36px, 4.5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.04em; }
+  .rer-mechanisms__title span { display: block; }
+  .rer-mechanisms__subtitle { max-width: 720px; margin: 0; color: #6b7280; font: 500 17.5px/1.5 var(--font-body); }
+  .rer-mechanisms__tabs { display: flex; justify-content: center; gap: 4px; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; flex-wrap: wrap; }
+  .rer-mechanisms__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; color: #64748b; background: transparent; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: all .2s ease; }
+  .rer-mechanisms__tab:hover { color: #334155; background: rgba(255,255,255,.65); }
+  .rer-mechanisms__tab--active { color: #3b82f6 !important; border-color: #dbe4f0 !important; background: #fff !important; box-shadow: 0 2px 8px rgba(30,41,59,.08); }
+  .rer-mechanisms__panel { --rer-mechanism-tint: #fff8dc; --rer-mechanism-border: #f0dfa6; display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: center; padding: 52px 64px; border: 1px solid var(--rer-mechanism-border); border-radius: 28px; background: linear-gradient(135deg, var(--rer-mechanism-tint) 0%, #fff 72%); animation: rerMechanismFadeIn .4s ease forwards; }
+  .rer-mechanisms__panel:nth-child(2) { --rer-mechanism-tint: #edf7ff; --rer-mechanism-border: #d4e7f7; }
+  .rer-mechanisms__panel:nth-child(3) { --rer-mechanism-tint: #f3efff; --rer-mechanism-border: #e2d8fa; }
+  .rer-mechanisms__panel:nth-child(4) { --rer-mechanism-tint: #eefbf4; --rer-mechanism-border: #d4efdf; }
+  .rer-mechanisms__panel--active { display: grid; }
+  .rer-mechanisms__copy { min-width: 0; }
+  .rer-mechanisms__panel-kicker { margin: 0 0 12px; color: #64748b; font: 700 11px/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; }
+  .rer-mechanisms__panel-title { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px, 3.8vw, 42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .rer-mechanisms__panel-desc { margin: 0 0 28px; color: #4b5563; font: 500 16px/1.6 var(--font-body); }
+  .rer-mechanisms__checklist { display: flex; flex-direction: column; gap: 12px; list-style: none; margin: 0 0 28px; padding: 0; }
+  .rer-mechanisms__checklist li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font: 500 14.5px/1.4 var(--font-body); }
+  .rer-mechanisms__checklist svg { flex: 0 0 auto; margin-top: 2px; color: #4a77e8; }
+  .rer-mechanisms__link { display: inline-flex; align-items: center; gap: 8px; color: #3158d4; text-decoration: none; font: 650 13.5px/1.2 var(--font-body); transition: gap .2s ease, color .2s ease; }
+  .rer-mechanisms__link:hover { gap: 12px; color: #1d4ed8; }
+  .rer-mechanisms__visual { min-width: 0; }
+  .rer-mechanisms__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .rer-mechanisms__showcase::before { content: ""; position: absolute; inset: 10% 7% -8%; z-index: -1; border-radius: 12px; background: var(--rer-mechanism-border); filter: blur(22px); opacity: .48; }
+  .rer-mechanisms__showcase > img { position: relative; z-index: 1; display: block; width: 100%; height: auto; aspect-ratio: 1262 / 697; object-fit: contain; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; animation: rerMechanismFloat 6s ease-in-out infinite; }
+  .rer-mechanisms__visual-label { --rer-label-bg: #eef4ff; --rer-label-border: #cddcff; --rer-label-color: #3158d4; --rer-label-shadow: rgba(49,88,212,.16); position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; align-items: center; gap: 7px; padding: 9px 12px; border: 1px solid var(--rer-label-border); border-radius: 10px; color: var(--rer-label-color); background: var(--rer-label-bg); box-shadow: 0 8px 22px var(--rer-label-shadow); font: 700 11px/1.2 var(--font-body); }
+  .rer-mechanisms__visual-label--event-registration { --rer-label-bg: #eefbf5; --rer-label-border: #cbeedb; --rer-label-color: #168a55; --rer-label-shadow: rgba(22,138,85,.15); border-radius: 999px; }
+  .rer-mechanisms__visual-label--appointments-meetings { --rer-label-bg: #f5f1ff; --rer-label-border: #ded2ff; --rer-label-color: #7351cf; --rer-label-shadow: rgba(115,81,207,.16); border-radius: 7px; }
+  .rer-mechanisms__visual-label--event-analytics { --rer-label-bg: #fff8e8; --rer-label-border: #f2dfad; --rer-label-color: #9a6b12; --rer-label-shadow: rgba(154,107,18,.15); border-radius: 10px 10px 10px 3px; }
+  .rer-mechanisms__visual-label svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  @keyframes rerMechanismFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes rerMechanismFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @media (prefers-reduced-motion: reduce) { .rer-mechanisms__showcase > img { animation: none; } }
+  @media (max-width: 900px) { .rer-mechanisms__panel { grid-template-columns: 1fr; gap: 40px; padding: 48px; }.rer-mechanisms__subtitle { max-width: 700px; } }
+  @media (max-width: 620px) { .rer-mechanisms { padding: 72px 20px; }.rer-mechanisms__title { font-size: clamp(28px, 8.3vw, 38px); }.rer-mechanisms__tabs { width: 100%; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; border-radius: 20px; scrollbar-width: none; }.rer-mechanisms__tabs::-webkit-scrollbar { display: none; }.rer-mechanisms__tab { flex: 0 0 auto; }.rer-mechanisms__panel { gap: 32px; padding: 32px 24px; border-radius: 22px; }.rer-mechanisms__panel-title { font-size: 30px; }.rer-mechanisms__panel-desc { font-size: 15px; }.rer-mechanisms__showcase { padding: 14px; border-radius: 18px; } }
+  .rer-link-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }.rer-link-grid a { display: flex; justify-content: space-between; gap: 15px; min-height: 210px; padding: 24px; border: 1px solid var(--rer-border); border-radius: 18px; text-decoration: none; background: #fff; transition: transform .25s ease, border-color .25s ease; }.rer-link-grid a:hover { transform: translateY(-3px); border-color: #9f94f5; }.rer-link-grid small, .rer-link-grid strong, .rer-link-grid em { display: block; }.rer-link-grid small { color: #7468e2; font: 700 10px var(--font-body); text-transform: uppercase; letter-spacing: .08em; }.rer-link-grid strong { margin-top: 45px; color: var(--rer-ink); font: 600 20px/1.15 var(--font-heading); }.rer-link-grid em { margin-top: 8px; color: var(--rer-muted); font: 400 13px/1.5 var(--font-body); font-style: normal; }.rer-link-grid b { color: #6357d8; font: 500 22px var(--font-body); }
+  .rer-setup-hero { padding: clamp(90px, 10vw, 140px) 24px; background: #f7f8fc; color: #22272f; }
+  .rer-setup-hero__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .rer-setup-hero__header { max-width: 820px; margin: 0 auto 64px; text-align: center; }
+  .rer-setup-hero__header .rer-eyebrow { margin-bottom: 16px; color: #375dfb; }
+  .rer-setup-hero__header h2 { margin: 0; color: transparent; background: linear-gradient(135deg, #222 0%, #333 40%, #888 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font: 500 clamp(36px, 5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .rer-setup-hero__header > p:last-child { max-width: 700px; margin: 22px auto 0; color: #64748b; font: 400 17px/1.65 var(--font-body); }
+  .rer-setup-grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 1200px; margin: 0 auto; border-top: 1px solid var(--rer-setup-border, #e8ecf2); }
+  .rer-setup-card { position: relative; display: block; min-height: 285px; padding: 30px 28px 38px; border-left: 1px solid var(--rer-setup-border, #e8ecf2); }
+  .rer-setup-card--first { border-left: 0; }
+  .rer-setup-notch { position: absolute; top: 0; z-index: 2; width: 28px; height: 28px; transform: translate(-50%, -50%); pointer-events: none; line-height: 0; }
+  .rer-setup-card__icon { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-bottom: 22px; color: #375dfb; }
+  .rer-setup-card__icon svg { width: 100%; height: 100%; }
+  .rer-setup-card__content h3 { min-height: 2.5em; margin: 0 0 12px; color: #22272f; font: 600 21px/1.25 var(--font-heading); }
+  .rer-setup-card__content p { margin: 0; color: #596579; font: 400 15px/1.55 var(--font-body); }
+  @media (max-width: 992px) { .rer-setup-grid { grid-template-columns: 1fr; }.rer-setup-notch { display: none; }.rer-setup-card { min-height: 0; border-left: 0; border-top: 1px solid var(--rer-setup-border, #e8ecf2); }.rer-setup-card--first { border-top: 0; } }
+  @media (max-width: 680px) { .rer-setup-hero { padding: 72px 20px; }.rer-setup-hero__header { margin-bottom: 46px; }.rer-setup-hero__header h2 { font-size: 36px; }.rer-setup-hero__header h2 br { display: none; }.rer-setup-hero__header > p:last-child { font-size: 15px; }.rer-setup-card { padding: 28px 20px 34px; }.rer-setup-card__content h3 { min-height: 0; font-size: 20px; } }
+  .rer-prep-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 30px; }.rer-prep-grid article { min-height: 190px; padding: 25px; border: 1px solid #e0e4ed; border-radius: 18px; background: rgba(255,255,255,.72); }.rer-prep-grid h3 { margin: 36px 0 9px; font: 600 20px var(--font-heading); }.rer-prep-grid p { margin: 0; color: var(--rer-muted); font: 400 14px/1.6 var(--font-body); }
+  .rer-faq { width: 100%; padding: 80px 24px; background: #f7f8fc; color: #22272f; }
+  .rer-faq__inner { width: min(1140px, 100%); margin: 0 auto; display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .rer-faq__sidebar { position: sticky; top: 6rem; }
+  .rer-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 1px solid #e4e7ec; border-radius: 999px; margin-bottom: 20px; color: #000; font: 500 .8125rem/1.2 var(--font-body); }
+  .rer-faq__heading { margin: 0 0 20px; color: #000; font: 500 44px/1.1 'Creato Display', var(--font-heading); letter-spacing: -1px; }
+  .rer-faq__intro { margin: 0 0 28px; color: #667085; font: 400 1rem/1.6 var(--font-body); }
+  .rer-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; text-decoration: none; font: 500 .9375rem/1.2 var(--font-body); transition: background .2s ease, transform .2s ease; }
+  .rer-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .rer-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: rer-faq; }
+  .rer-faq__item { counter-increment: rer-faq; overflow: hidden; padding: 4px 28px; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .rer-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .rer-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; cursor: pointer; list-style: none; font: 500 1.0625rem/1.35 'Creato Display', var(--font-heading); }
+  .rer-faq__question strong { font-weight: 500; }
+  .rer-faq__question strong::before { content: counter(rer-faq) '. '; }
+  .rer-faq__question::-webkit-details-marker { display: none; }
+  .rer-faq__icon { position: relative; flex: 0 0 auto; width: 18px; height: 18px; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .rer-faq__icon::before, .rer-faq__icon::after { content: ''; position: absolute; top: 50%; left: 50%; background: #000; transform: translate(-50%, -50%); }
+  .rer-faq__icon::before { width: 14px; height: 2px; }.rer-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .rer-faq__item[open] .rer-faq__icon { transform: scale(.9); }.rer-faq__item[open] .rer-faq__icon::after { opacity: 0; }
+  .rer-faq__answer { max-width: 640px; padding: 0 0 24px; }.rer-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+  @media (prefers-reduced-motion: reduce) { .rer-faq__item, .rer-faq__icon, .rer-faq__icon::after { transition: none; } }
+  @media (max-width: 1024px) { .rer-faq__inner { grid-template-columns: 1fr; gap: 40px; }.rer-faq__sidebar { position: static; }.rer-faq__heading { font-size: 32px; } }
+  @media (max-width: 767px) { .rer-faq { padding: 56px 16px; }.rer-faq__heading { font-size: 28px; }.rer-faq__item { padding: 4px 20px; border-radius: 16px; }.rer-faq__question { padding: 18px 0; font-size: .9375rem; } }
+  .rer-faq-layout { display: grid; grid-template-columns: minmax(250px, .7fr) minmax(0, 1.3fr); gap: clamp(48px, 8vw, 120px); align-items: start; }.rer-faq-list { border-top: 1px solid var(--rer-border); }.rer-faq-list details { border-bottom: 1px solid var(--rer-border); }.rer-faq-list summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0; cursor: pointer; list-style: none; color: var(--rer-ink); font: 600 17px/1.35 var(--font-body); }.rer-faq-list summary::-webkit-details-marker { display: none; }.rer-faq-list summary span { color: #695cdf; font: 400 24px var(--font-body); }.rer-faq-list details[open] summary span { transform: rotate(45deg); }.rer-faq-list details p { max-width: 680px; margin: -4px 35px 23px 0; color: var(--rer-muted); font: 400 15px/1.65 var(--font-body); }
+  .rer-final-cta { padding: clamp(78px, 10vw, 135px) 0; color: #fff; background: #11152b; background-image: radial-gradient(circle at 80% 0%, rgba(161,145,255,.34), transparent 35%), radial-gradient(circle at 20% 100%, rgba(53,187,198,.18), transparent 32%); }.rer-final-cta__inner { max-width: 820px; text-align: center; }.rer-final-cta .rer-eyebrow { color: var(--rer-cyan); }.rer-final-cta h2 { margin: 0; font: 500 clamp(38px, 5vw, 62px)/1.04 var(--font-heading); letter-spacing: -.045em; }.rer-final-cta p:not(.rer-eyebrow) { max-width: 710px; margin: 22px auto 30px; color: rgba(255,255,255,.68); font: 400 17px/1.65 var(--font-body); }
+  @media (max-width: 1120px) { .rer-hero { padding: 140px 20px 56px; }.rer-hero__grid { grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 32px; }.rer-hero h1 { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }.rer-lead { max-width: 520px; } }
+  @media (max-width: 980px) { .rer-hero { padding: 130px 20px 48px; }.rer-hero::after { display: none; }.rer-hero__grid { grid-template-columns: 1fr; gap: 34px; }.rer-hero__copy { align-items: center; max-width: 760px; text-align: center; }.rer-hero h1, .rer-lead { max-width: 760px; }.rer-hero__visual { width: min(760px, 100%); margin: 0 auto; }.rer-hero__visual-card { border-radius: 22px; border-right: 1px solid rgba(255,255,255,.62); }.rer-hero__visual-inner { border-radius: 16px; }.rer-hero__points, .rer-actions { justify-content: center; }.rer-sequence { grid-template-columns: repeat(2, 1fr); }.rer-feature-layout, .rer-faq-layout, .rer-team-grid { grid-template-columns: 1fr; }.rer-scope-grid { grid-template-columns: 1fr; gap: 44px; }.rer-scope-copy { max-width: 760px; }.rer-scope-copy h2, .rer-scope-lead { max-width: 760px; }.rer-scope-visual { width: min(760px, 100%); margin: 0 auto; }.rer-audience-access__container { flex-direction: column; gap: 40px; }.rer-audience-access__left { flex: none; width: 100%; }.rer-audience-access__sticky { position: static; }.rer-audience-card { position: relative; top: auto; }.rer-event-bento__row { grid-template-columns: 1fr; }.rer-event-bento__row--reverse .rer-event-bento__copy, .rer-event-bento__row--reverse .rer-event-bento__visual { order: initial; }.rer-event-bento__row:not(.rer-event-bento__row--reverse) .rer-event-bento__visual, .rer-event-bento__row--reverse .rer-event-bento__copy { border-right: 0; border-bottom: 1px solid #e5e7eb; }.rer-day-grid { grid-template-columns: repeat(2, 1fr); }.rer-format-grid, .rer-link-grid { grid-template-columns: repeat(2, 1fr); }.rer-faq-layout { gap: 48px; } }
+  @media (max-width: 680px) { .rer-shell { width: min(100% - 32px, 560px); }.rer-hero { margin-top: -80px; padding: 120px 18px 44px; }.rer-hero h1 { font-size: 38px; line-height: 1.2em; letter-spacing: 0; }.rer-hero h1 span { white-space: normal; }.rer-lead { font-size: 15px; line-height: 1.7; }.rer-eyebrow { font-size: 16px; line-height: 1.1em; }.rer-actions { width: 100%; flex-direction: column; }.rer-button { width: 100%; }.rer-hero__visual-card { padding: 10px; border-radius: 18px; }.rer-hero__visual-inner { padding: 18px; border-radius: 14px; }.rer-sequence { grid-template-columns: 1fr; }.rer-sequence__item { border: 0; }.rer-roles article { border-right: 0; border-bottom: 1px solid var(--rer-border); }.rer-roles article:last-child { border-bottom: 0; }.rer-sequence__item { min-height: 0; padding: 18px 16px; }.rer-sequence__label, .rer-sequence__detail { white-space: normal; }.rer-models, .rer-roles, .rer-journey-grid, .rer-day-grid, .rer-boundary, .rer-format-grid, .rer-link-grid, .rer-prep-grid { grid-template-columns: 1fr; }.rer-model { min-height: 185px; padding: 26px; }.rer-model h3 { margin-top: 34px; }.rer-support-grid { grid-template-columns: 1fr; }.rer-support-grid article:last-child { grid-column: auto; }.rer-anchor-card { min-height: 360px; }.rer-exhibition-grid { grid-template-columns: 1fr; }.rer-exhibition-card { min-height: 390px; padding: 26px 22px; }.rer-exhibition-card h3 { max-width: 18ch; }.rer-team-grid { border-radius: 18px; }.rer-team-card { min-height: 0; padding: 28px 22px 34px; border-left: 0; border-top: 1px solid #e3e8f1; }.rer-team-card:first-of-type { border-top: 0; }.rer-team-notch { display: none; }.rer-scope-section { padding: 72px 0; }.rer-scope-copy h2 { font-size: 38px; }.rer-scope-actions { width: 100%; flex-direction: column; }.rer-scope-actions .rer-button { width: 100%; }.rer-scope-stage { min-height: 350px; padding: 30px 0; }.rer-scope-stage__halo { inset: 10% -4% 2%; }.rer-scope-status { left: 2px; top: 3%; }.rer-scope-action { right: 2px; bottom: 3%; }.rer-audience-access { padding: 64px 16px; }.rer-audience-access__sticky h2 { font-size: 38px; }.rer-audience-access__sticky > p { font-size: 16px; }.rer-audience-card { padding: 24px; border-radius: 20px; }.rer-audience-card__visual { height: 240px; padding: 14px; }.rer-event-bento { padding: 64px 16px; }.rer-event-bento__header { margin-bottom: 36px; }.rer-event-bento__header h2 { font-size: 36px; }.rer-event-bento__cell { padding: 32px 22px; }.rer-event-bento__stage { padding: 22px 12px; }.rer-roles article { min-height: 190px; }.rer-roles h3 { margin-top: 31px; }.rer-journey-grid article { min-height: 165px; }.rer-day-grid article, .rer-format-grid article { min-height: 0; }.rer-boundary__divider { min-height: 25px; }.rer-link-grid a { min-height: 0; }.rer-link-grid strong { margin-top: 27px; }.rer-faq-list summary { font-size: 15px; }.rer-faq-list details p { margin-right: 0; }.rer-final-cta h2 { font-size: 43px; } }
+  @media (max-width: 680px) { .rer-model-spotlight { padding: 60px 16px 68px; }.rer-model-spotlight__title { font-size: 34px; }.rer-model-spotlight__subtitle { font-size: 16px; }.rer-model-spotlight__grid { grid-template-columns: 1fr; margin-top: 28px; }.rer-model-spotlight__cell { min-height: 0; padding: 32px 20px; border-right: 0; border-bottom: 1px solid #eef0f3; }.rer-model-spotlight__cell:nth-child(3) { order: 4; border-bottom: 0; }.rer-model-spotlight__cell:nth-child(4) { order: 3; border-bottom: 1px solid #eef0f3; }.rer-model-spotlight__cell--media { padding: 16px 20px 32px; }.rer-model-spotlight__composite { height: 285px; }.rer-model-spotlight__screen--primary { width: 78%; }.rer-model-spotlight__screen--secondary { width: 68%; } }
+  @media (max-width: 680px) { .rer-scope-section { padding: 12px 16px; }.rer-scope-inner { padding: 32px 24px; gap: 32px; }.rer-scope-left h2 { font-size: 30px; }.rer-scope-actions { width: 100%; flex-direction: column; align-items: stretch; }.rer-scope-btn { width: 100%; }.rer-scope-showcase { height: 300px; border-radius: 18px; }.rer-scope-shot--list { top: 30px; left: 12px; width: 80%; }.rer-scope-shot--builder { right: 12px; bottom: 23px; width: 72%; }.rer-scope-status { top: 14px; left: 12px; }.rer-scope-publish { right: 12px; bottom: 12px; } }
+</style>
