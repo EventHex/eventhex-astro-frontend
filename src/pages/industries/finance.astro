@@ -1,119 +1,67 @@
 ---
-import IndustryLayout from "../../components/industries/IndustryLayout.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import FinanceIndustryPage from "../../components/industries/FinanceIndustryPage.astro";
+
+const title = "Finance Event Management Software | EventHex";
+const description =
+  "Run banking summits, fintech conferences, investor events, and insurance forums with configurable registration, ticketing, payment, programme, communication, check-in, and analytics.";
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex Finance Event Management",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: "https://eventhex.ai/industries/finance/",
+  description,
+  creator: {
+    "@type": "Organization",
+    name: "EventHex",
+    url: "https://eventhex.ai",
+  },
+  featureList: [
+    "Configurable registration and approval workflows",
+    "Ticketing and supported payment workflows",
+    "Programme and session management",
+    "Participant-controlled networking",
+    "Badge printing and QR check-in",
+    "Event analytics",
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    ["Can finance events use approval-based registration?", "Yes. Configure the appropriate registration journey and approval flow for the event."],
+    ["Which payment gateways are supported?", "Current paths include Stripe, Razorpay, and Tap Payments. Account eligibility, methods, currencies, fees, and settlement are provider-dependent."],
+    ["Does EventHex guarantee financial-services compliance?", "No. EventHex does not provide regulatory, security, data-residency, or compliance certification through this event workflow."],
+    ["Can attendees network and arrange meetings?", "Use AI Smart-Connect for participant-controlled discovery and the appointments workflow for meeting operations."],
+    ["Can we track ROI?", "EventHex provides event analytics, but financial ROI and attribution are not included."],
+  ].map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text },
+  })),
+};
 ---
 
-<IndustryLayout
-  industry="Finance"
-  title="Event Management Software for Finance & Banking Events | EventHex"
-  description="Run banking summits, fintech conferences, investor meetups with EventHex."
+<MarketingLayout
+  {title}
+  {description}
   canonical="https://eventhex.ai/industries/finance/"
-  badge="Finance Events"
-  heroTitleLine1="Event Management for"
-  heroTitleLine2="Finance & Banking"
-  heroCopy="Manage banking summits, fintech conferences, investor days, and financial services events with secure registration, VIP attendee management, and compliance-ready workflows."
-  trustItems={["Trusted by financial institutions", "Enterprise-grade security"]}
-  challenges={[
-    {
-      icon: "👔",
-      title: "VIP and C-suite management",
-      desc: "Financial events attract high-profile executives and investors who expect priority registration, exclusive access, and white-glove experiences."
-    },
-    {
-      icon: "🔒",
-      title: "Security and compliance",
-      desc: "Financial services events handle sensitive business data and require strict access controls, audit trails, and compliance-ready workflows."
-    },
-    {
-      icon: "🤝",
-      title: "Complex sponsor tiering",
-      desc: "Banking and fintech events involve multiple sponsor levels with different visibility packages, making manual tracking error-prone."
-    },
-    {
-      icon: "💱",
-      title: "Multi-currency payments",
-      desc: "International finance events attract attendees from multiple markets, requiring seamless payment processing across currencies and regions."
-    }
-  ]}
-  solutions={[
-    {
-      icon: "📝",
-      title: "Event Registration",
-      desc: "VIP registration with approval workflows, waitlists, and priority access management",
-      link: "/event-registration/"
-    },
-    {
-      icon: "💳",
-      title: "Event Payment Processing",
-      desc: "Multi-currency payments with Stripe, Razorpay, and Tap Payments integration",
-      link: "/event-payment-processing/"
-    },
-    {
-      icon: "🤝",
-      title: "Sponsor Management",
-      desc: "Tiered sponsor packages with branded visibility, ROI dashboards, and lead capture",
-      link: "/sponsor-management/"
-    },
-    {
-      icon: "✅",
-      title: "Event Check-In",
-      desc: "Secure QR-based check-in with photo verification and access level enforcement",
-      link: "/event-check-in/"
-    },
-    {
-      icon: "🤝",
-      title: "AI Smart-Connect",
-      desc: "AI-powered investor-founder matching and curated networking recommendations",
-      link: "/enhance-networking-ai-smart-connect/"
-    },
-    {
-      icon: "📊",
-      title: "Event Analytics",
-      desc: "Engagement metrics, session attendance tracking, and sponsor ROI reporting",
-      link: "/event-analytics/"
-    }
-  ]}
-  useCases={[
-    {
-      title: "Banking Summits",
-      desc: "Executive-level banking conferences with keynote sessions, panel discussions, and invitation-only networking"
-    },
-    {
-      title: "Fintech Conferences",
-      desc: "Technology-focused finance events with startup showcases, demo stages, and investor pitch sessions"
-    },
-    {
-      title: "Investor Meetups",
-      desc: "Curated investor-founder matching events with structured 1:1 meetings and deal flow sessions"
-    },
-    {
-      title: "Insurance Events",
-      desc: "Industry conferences for insurance professionals with CPD sessions, exhibitor halls, and awards programs"
-    }
-  ]}
-  ctaTitle="Ready to Run Your Next Finance Event?"
-  ctaCopy="See how EventHex powers banking summits, fintech conferences, and investor meetups with secure registration and VIP management."
-  faqs={[
-    {
-      q: "Can EventHex handle VIP and invitation-only registration?",
-      a: "Yes. Create approval-based registration workflows with priority access, waitlists, and invitation codes for C-suite and VIP attendees."
-    },
-    {
-      q: "Does EventHex support multi-currency payment processing?",
-      a: "Yes. Accept payments in USD, EUR, GBP, AED, SAR, INR, and 130+ other currencies via Stripe, Razorpay, or Tap Payments."
-    },
-    {
-      q: "How does sponsor tiering work?",
-      a: "Create unlimited sponsor tiers — Platinum, Gold, Silver, or custom levels — each with defined benefits like logo placement, booth size, speaking slots, and lead capture access."
-    },
-    {
-      q: "Is attendee data secure and audit-ready?",
-      a: "Yes. All data is encrypted at rest and in transit. Role-based access controls, audit logs, and data export policies help meet financial services compliance requirements."
-    },
-    {
-      q: "Can AI match investors with startups at fintech events?",
-      a: "Yes. AI Smart-Connect analyzes investor preferences and startup profiles to suggest relevant matches. Participants can schedule structured 1:1 meetings directly through the platform."
-    }
-  ]}
-  supportNote={{ title: "Free finance event consultation", desc: "Our team helps you configure secure registration, VIP management, and sponsor workflows for your financial services event." }}
-  supportCta={{ label: "Plan my finance event", href: "/book-a-demo/" }}
-/>
+  ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/03/Untitled-design-11-1024x576.webp"
+  footerCtaEyebrow="Plan your next finance event"
+  footerCtaTitle="See the workflow with your own event requirements"
+  footerCtaSubtitle="Bring the format, audience, access rules, programme, communication channels, onsite plan, and integration needs."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+
+  <FinanceIndustryPage />
+</MarketingLayout>
