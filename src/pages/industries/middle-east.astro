@@ -1,119 +1,78 @@
 ---
-import IndustryLayout from "../../components/industries/IndustryLayout.astro";
+import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import MiddleEastPage from "../../components/industries/MiddleEastPage.astro";
+
+const title = "Middle East & GCC Event Management Software | EventHex";
+const description =
+  "Run GCC summits, MENA conferences, exhibitions, corporate events, and technology events with market-aware payment choices, WhatsApp-ready communication.";
+
+const faqs: [string, string][] = [
+  [
+    "Does EventHex support local GCC payment methods?",
+    "Tap Payments is a supported gateway path. Actual methods, currencies, account eligibility, fees, and settlement depend on provider and market configuration.",
+  ],
+  [
+    "Can we use WhatsApp for attendee communication?",
+    "Yes, through supported workflows after the required official account, sender, and approved-template setup is ready.",
+  ],
+  [
+    "Is every EventHex surface fully Arabic and RTL?",
+    "EventHex does not promise universal Arabic and RTL coverage. Validate the exact organizer, website, registration, email, WhatsApp, app, badge, and invoice surfaces required.",
+  ],
+  [
+    "Can the scanner work offline?",
+    "The EventHex Scanner workflow supports offline-resilient capture; validate the venue operating plan before launch.",
+  ],
+  [
+    "Does EventHex automate VIP or diplomatic protocol?",
+    "No. EventHex does not include a diplomatic-protocol or hierarchy workflow.",
+  ],
+];
+
+const softwareSchema = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "EventHex Middle East and GCC Event Management",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  description,
+  url: "https://eventhex.ai/industries/middle-east/",
+  creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" },
+  featureList: [
+    "Configurable registration, tickets, and attendee journeys",
+    "Supported payment gateway connections",
+    "Supported email and WhatsApp communication workflows",
+    "Badges and offline-resilient QR check-in",
+    "Event and attendance reporting",
+  ],
+};
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text },
+  })),
+};
 ---
 
-<IndustryLayout
-  industry="Middle East"
-  title="Event Management Software for Middle East & GCC Events | EventHex"
-  description="Run GCC summits, MENA conferences with EventHex. Arabic RTL, Tap Payments, WhatsApp."
+<MarketingLayout
+  {title}
+  {description}
   canonical="https://eventhex.ai/industries/middle-east/"
-  badge="Middle East & GCC Events"
-  heroTitleLine1="Event Management for"
-  heroTitleLine2="Middle East & GCC Region"
-  heroCopy="Manage GCC summits, MENA conferences, and regional trade events with Arabic language support, Tap Payments for local currencies, WhatsApp engagement, and mada/KNET acceptance."
-  trustItems={["Built for the GCC market", "Tap Payments + WhatsApp"]}
-  challenges={[
-    {
-      icon: "🇦🇪",
-      title: "Full Arabic RTL support for event websites and communications",
-      desc: "GCC events require proper right-to-left Arabic layouts, bidirectional text handling, and culturally appropriate design — not just translated English templates."
-    },
-    {
-      icon: "💳",
-      title: "Accepting mada, KNET, and local GCC payment methods",
-      desc: "International payment gateways often don't support mada (Saudi Arabia), KNET (Kuwait), or Benefit (Bahrain) — the payment methods GCC attendees actually use."
-    },
-    {
-      icon: "📱",
-      title: "Using WhatsApp as the primary attendee communication channel",
-      desc: "In the GCC region, WhatsApp has 98%+ open rates compared to email. Events that rely on email-only communications miss most of their audience."
-    },
-    {
-      icon: "🏛️",
-      title: "Managing government protocol, VIP hierarchies, and delegation flows",
-      desc: "Government summits require strict protocol management with VIP tiers, delegation grouping, security clearance workflows, and priority access lanes."
-    }
-  ]}
-  solutions={[
-    {
-      icon: "💳",
-      title: "Event Payment Processing",
-      desc: "Tap Payments with mada, KNET, Benefit, Apple Pay, and SAR/AED/KWD support",
-      link: "/event-payment-processing/"
-    },
-    {
-      icon: "📱",
-      title: "Event Notifications",
-      desc: "WhatsApp-first messaging with 98% open rates for confirmations and updates",
-      link: "/event-notifications/"
-    },
-    {
-      icon: "🌐",
-      title: "Event Website Builder",
-      desc: "Full Arabic RTL event websites with bilingual English-Arabic support",
-      link: "/event-website-builder/"
-    },
-    {
-      icon: "✅",
-      title: "Event Check-In",
-      desc: "VIP priority lanes, delegation check-in, and government protocol workflows",
-      link: "/event-check-in/"
-    },
-    {
-      icon: "🤝",
-      title: "Sponsor Management",
-      desc: "GCC sponsor packages with branded visibility for regional and international partners",
-      link: "/sponsor-management/"
-    },
-    {
-      icon: "📊",
-      title: "Event Analytics",
-      desc: "Multi-currency reporting in SAR, AED, KWD with regional engagement insights",
-      link: "/event-analytics/"
-    }
-  ]}
-  useCases={[
-    {
-      title: "GCC Government Summits",
-      desc: "Official government events with delegation management, VIP protocol, and multi-tier security clearance workflows"
-    },
-    {
-      title: "MENA Trade Shows",
-      desc: "Regional trade exhibitions with exhibitor management, B2B matchmaking, and multi-currency transactions"
-    },
-    {
-      title: "Saudi Vision 2030 Events",
-      desc: "Innovation conferences and sector forums supporting Saudi Arabia's economic transformation agenda"
-    },
-    {
-      title: "Dubai Tourism & MICE Events",
-      desc: "International tourism conferences and MICE events with multilingual support and global attendee management"
-    }
-  ]}
-  ctaTitle="Ready to Run Your Next GCC Event with EventHex?"
-  ctaCopy="See how EventHex powers GCC summits, MENA conferences, and regional events with Arabic support, Tap Payments, and WhatsApp engagement."
-  faqs={[
-    {
-      q: "Does EventHex support full Arabic RTL for event websites?",
-      a: "Yes. Event websites render in proper right-to-left Arabic with bidirectional text support. Build fully bilingual English-Arabic event pages without separate sites."
-    },
-    {
-      q: "Can I accept mada and KNET payments?",
-      a: "Yes. EventHex integrates with Tap Payments to accept mada (Saudi Arabia), KNET (Kuwait), Benefit (Bahrain), Apple Pay, and cards in SAR, AED, KWD, and other GCC currencies."
-    },
-    {
-      q: "Does EventHex support WhatsApp for attendee communication?",
-      a: "Yes. Send event confirmations, reminders, schedule updates, and check-in QR codes via WhatsApp — achieving 98%+ open rates compared to traditional email."
-    },
-    {
-      q: "Can it handle government summit protocol and VIP management?",
-      a: "Yes. Manage delegation hierarchies, VIP tier classifications, priority check-in lanes, and security clearance workflows designed for government and diplomatic events."
-    },
-    {
-      q: "Does EventHex support bilingual English-Arabic events?",
-      a: "Yes. The entire event experience — website, registration, emails, WhatsApp messages, badges, and mobile app — can be configured in both English and Arabic simultaneously."
-    }
-  ]}
-  supportNote={{ title: "Free GCC event consultation", desc: "Our team helps set up Arabic RTL websites, Tap Payments, WhatsApp messaging, and VIP protocol workflows." }}
-  supportCta={{ label: "Plan my GCC event", href: "/book-a-demo/" }}
-/>
+  ogImage="https://eventhex.ai/images/industries/technology/event-dashboard-web-800.webp"
+  footerCtaEyebrow="Plan the configuration"
+  footerCtaTitle="See the workflow with your own event requirements"
+  footerCtaSubtitle="Bring the format, audience, registration and access rules, programme, communication channels, onsite plan, and integration needs. We’ll show the supported EventHex path and identify anything that needs separate validation."
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={true}
+>
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
+  <MiddleEastPage {faqs} />
+</MarketingLayout>

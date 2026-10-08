@@ -1,0 +1,272 @@
+---
+import eventRegistrationSource from "../../pages/event-registration.astro?raw";
+import speakerDeckSource from "../speaker-management/DeckSections.astro?raw";
+import speakerProgramSource from "../speaker-management/ProgramContentSections.astro?raw";
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+import { Image } from "astro:assets";
+
+interface Props { faqs: [string, string][] }
+const { faqs } = Astro.props;
+
+const extractStyles = (source: string) => Array.from(
+  source.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
+  (match) => match[1],
+).join("\n");
+const eventRegistrationStyles = extractStyles(eventRegistrationSource);
+const speakerDeckStyles = extractStyles(speakerDeckSource);
+const speakerProgramStyles = extractStyles(speakerProgramSource);
+
+const flowCrossSvg = `<svg width="18" height="18" viewBox="-14 -14 28 28" aria-hidden="true">
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+</svg>`;
+
+const bentoCrossSvg = `<svg width="28" height="28" viewBox="-14 -14 28 28" aria-hidden="true">
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+</svg>`;
+
+const operatingStages = [
+  ["Market", "Country + audience"],
+  ["Connect", "Provider accounts"],
+  ["Configure", "Currency + tickets"],
+  ["Message", "Email/WhatsApp readiness"],
+  ["Deliver", "Badge + scan"],
+  ["Review", "Event data"],
+];
+
+const attendeeJourney = [
+  { eyebrow: "01 · Confirm", title: "Confirm market", desc: "Start with event country, audience, currency, and channel requirements.", image: "/images/industries/technology/event-dashboard-web-800.webp", alt: "EventHex event dashboard used to confirm the event and audience setup", animated: true, width: 800, height: 691 },
+  { eyebrow: "02 · Validate", title: "Validate accounts", desc: "Review the supported payment and WhatsApp account configuration.", image: "/images/industries/media/app/organization-integrations-web-960.webp", alt: "EventHex integrations workspace for payment and communication account configuration", animated: true, width: 960, height: 657 },
+  { eyebrow: "03 · Build", title: "Build access", desc: "Configure registration, ticket rules, payment handoff, and confirmation.", image: "/images/industries/healthcare/app/registration-ticket-web-960.webp", alt: "EventHex ticket configuration workspace for an attendee registration journey", animated: true, width: 960, height: 498 },
+  { eyebrow: "04 · Prepare", title: "Prepare communication", desc: "Use sender and template readiness before campaigns.", image: "/images/industries/associations/event-day/push-send-alert-web-668.webp", alt: "EventHex audience announcement composer prepared for an event campaign", animated: true, width: 668, height: 486 },
+  { eyebrow: "05 · Arrive", title: "Run arrival", desc: "Use badge and QR-scanning workflows at the venue.", image: "/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp", alt: "EventHex scanner showing an attendee QR validation workflow", animated: true, width: 512, height: 422 },
+  { eyebrow: "06 · Review", title: "Review", desc: "Use supported order, attendance, campaign, and event data.", image: "/images/industries/associations/portal/registration-analytics-web-960.webp", alt: "EventHex registration analytics showing event and attendance signals", animated: true, width: 960, height: 657 },
+];
+
+const coreWorkflow = [
+  { eyebrow: "Payments", title: "Supported payment paths", copy: "Use Stripe, Razorpay, or Tap Payments where the event, account, market, currency, and method setup align.", image: "/images/industries/media/app/organization-integrations-web-960.webp", alt: "EventHex integrations workspace for supported payment provider configuration", width: 960, height: 657, top: "Provider connected", bottom: "Market validated" },
+  { eyebrow: "Communication", title: "WhatsApp readiness", copy: "Connect the official account and approved-template infrastructure used by supported campaigns and attendee workflows.", image: "/images/industries/associations/event-day/push-send-alert-web-668.webp", alt: "EventHex communication workspace prepared for a supported audience update", width: 668, height: 486, top: "Audience selected", bottom: "Template ready" },
+  { eyebrow: "Access", title: "Registration and ticketing", copy: "Choose the event journey and configure fields, approvals, tickets, access rules, discounts, and delivery.", image: "/images/industries/healthcare/app/registration-ticket-web-960.webp", alt: "EventHex ticket configuration workspace for an attendee registration journey", width: 960, height: 498, top: "Access configured", bottom: "Ticket path ready" },
+  { eyebrow: "Event day", title: "Connected arrival", copy: "Connect badge workflows, mobile QR scanning, offline-resilient capture, live attendance, and analytics.", image: "/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp", alt: "EventHex scanner showing an attendee QR validation workflow", width: 512, height: 422, top: "QR scanned", bottom: "Arrival recorded" },
+];
+
+const teamRoles = [
+  { title: "Event owner", desc: "Sets the event, audience, access, programme, and reporting decisions.", bullets: ["Define the event model", "Choose audience and access rules", "Approve the operating setup"], image: "/images/industries/technology/event-dashboard-web-800.webp", alt: "EventHex event dashboard used by an event owner to coordinate the operating setup", width: 800, height: 691 },
+  { title: "Specialist teams", desc: "Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.", bullets: ["Work in focused module areas", "Keep programme and registration aligned", "Coordinate event-day operations"], image: "/images/industries/media/app/media-event-workflow-dashboard-web-960.webp", alt: "EventHex workspace connecting registration, programme, exhibitors, and event marketing", width: 960, height: 552 },
+  { title: "Event leadership", desc: "Reviews event and portfolio signals for the next operating decision.", bullets: ["Review event signals", "Compare participation activity", "Choose the next operating decision"], image: "/images/industries/associations/portal/platform-analytics-web-960.webp", alt: "EventHex analytics workspace used by event leadership to review operating signals", width: 960, height: 657 },
+];
+
+const eventDaySteps = [
+  { title: "Venue connectivity", copy: "Plan around offline-resilient scanner capture where connectivity may vary.", image: "/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp", alt: "EventHex scanner prepared for offline-resilient attendee capture", width: 512, height: 422, status: "Offline-resilient", action: "Capture ready" },
+  { title: "Ticket validation", copy: "Show clear valid, duplicate, or ineligible scan feedback.", image: "/images/industries/healthcare/delegate-qr-arrival.webp", alt: "EventHex QR scanner showing attendee ticket validation status", width: 512, height: 422, status: "Scan status", action: "Validate ticket" },
+  { title: "Audience updates", copy: "Use supported app announcements and connected communication workflows.", image: "/images/industries/associations/event-day/push-send-alert-web-668.webp", alt: "EventHex announcement composer for a selected event audience", width: 668, height: 486, status: "Audience selected", action: "Prepare update" },
+  { title: "Payment boundary", copy: "Keep provider, account, and method questions with payment setup—not the entrance team.", image: "/images/industries/media/app/organization-integrations-web-960.webp", alt: "EventHex organization integrations showing payment configuration outside the entrance workflow", width: 960, height: 657, status: "Provider setup", action: "Review account" },
+];
+
+const featureLinks = [
+  ["Tap Payments Integration", "Review the supported GCC-relevant gateway path.", "/integrations/tap-payments/"],
+  ["WhatsApp Integration", "Prepare the account and template layer.", "/integrations/whatsapp/"],
+  ["Event Registration", "Configure the attendee journey.", "/event-registration/"],
+  ["Event Check-In", "Operate onsite arrival.", "/event-check-in/"],
+];
+
+const eventSuites = [
+  { id: "gcc-summits", label: "GCC summits", title: "Coordinate delegates, programme, and event day", description: "Configure delegates, programme, communication, badges, and event day around the summit's reviewed requirements.", checklist: ["Configure delegate access", "Publish the programme", "Connect badges and arrival"], image: "/images/industries/technology/event-dashboard-web-800.webp", imageAlt: "EventHex event dashboard for a configured GCC summit workflow", width: 800, height: 691, visualLabel: "Summit workflow" },
+  { id: "mena-trade-shows", label: "MENA trade shows", title: "Connect exhibitors, visitors, and reporting", description: "Connect exhibitors, passes, visitors, leads, meetings, and reporting within the supported EventHex workflow.", checklist: ["Set up exhibitor access", "Connect visitor registration", "Review event signals"], image: "/images/industries/media/app/media-event-workflow-dashboard-web-960.webp", imageAlt: "EventHex workspace connecting exhibitors, registrations, sessions, and marketing", width: 960, height: 552, visualLabel: "Trade-show workflow" },
+  { id: "corporate-events", label: "Corporate events", title: "Build invitation, access, and arrival", description: "Build invitations, attendee access, programme, communication, and arrival for the corporate event.", checklist: ["Choose invitation and access rules", "Coordinate the programme", "Prepare attendee arrival"], image: "/images/industries/healthcare/app/registration-ticket-web-960.webp", imageAlt: "EventHex registration ticket workspace for a corporate event attendee journey", width: 960, height: 498, visualLabel: "Corporate access" },
+  { id: "technology-conferences", label: "Technology conferences", title: "Connect tracks, networking, and engagement", description: "Add multi-track sessions, networking, live engagement, and recaps where they fit the conference.", checklist: ["Build multi-track sessions", "Enable relevant attendee tools", "Keep the event record connected"], image: "/images/industries/associations/event-day/session-scheduling-dashboard-web-762.webp", imageAlt: "EventHex multi-track session scheduling workspace for a technology conference", width: 762, height: 696, visualLabel: "Conference programme" },
+];
+---
+
+<main class="erg-registration-page-bg middle-east-page">
+  <section id="hero" class="erg-hero" aria-labelledby="middle-east-title">
+    <div class="erg-hero__grid">
+      <div class="erg-hero__content">
+        <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">Event management software for Middle East and GCC events</span>
+        <h1 id="middle-east-title" class="erg-hero__title me-hero-title animate-on-scroll" data-animation="fadeInUp">
+          <span class="me-hero-title__line">Configure payments,</span>
+          <span class="me-hero-title__line">communication, attendee</span>
+          <span class="me-hero-title__line">journeys, and event day</span>
+          <span class="me-hero-title__line">for GCC events</span>
+        </h1>
+        <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp">Run GCC summits, MENA conferences, exhibitions, corporate events, and technology events with market-aware payment choices, WhatsApp-ready communication, configurable registration, tickets, badges, check-in, and analytics.</p>
+        <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp">
+          <a href="/book-a-demo/" class="erg-hero__btn">Book a Demo <span aria-hidden="true">→</span></a>
+          <a href="#operating-map" class="erg-hero__btn erg-hero__btn--outline">See the operating model</a>
+        </div>
+        <div class="erg-hero__trust animate-on-scroll" data-animation="fadeIn">
+          <span class="erg-hero__trust-item">Market-aware payment setup</span>
+          <span class="erg-hero__trust-item">WhatsApp-ready workflows</span>
+          <span class="erg-hero__trust-item">Onsite operations</span>
+        </div>
+      </div>
+      <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="erg-hero__visual-card"><div class="erg-hero__visual-inner me-hero-visual">
+          <Image src="/images/industries/technology/event-dashboard-web-800.webp" alt="EventHex event dashboard connecting registration, programme, communication, and event-day work" width={800} height={691} loading="eager" decoding="async" fetchpriority="high" />
+          <span class="me-status">GCC event workflow connected</span>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="erg-trust-strip" aria-label="One connected event path: see the operating sequence before choosing modules">
+    <div class="erg-trust-strip__inner">{operatingStages.map(([label, copy]) => <span class="erg-trust-strip__stat"><b>{label}</b> {copy}</span>)}</div>
+  </section>
+
+  <section id="event-model" class="erg-flow-section" aria-labelledby="event-model-title">
+    <div class="erg-flow-header"><span class="me-eyebrow">Choose the right event model</span><h2 id="event-model-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Start with the operating shape that fits the event</h2><p class="erg-flow-subtitle">Start with one model, then add only the modules the event actually needs.</p></div>
+    <div class="erg-flow-quad">
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><h3 class="erg-flow-quad__title">GCC event configuration</h3><p class="erg-flow-quad__text">Review payment provider, event currency, WhatsApp readiness, ticket flow, and arrival setup for the target market.</p></article>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight"><div class="erg-flow-composite">
+        <Image class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/media/app/organization-integrations-web-960.webp" alt="EventHex organization integrations for supported payment and communication configuration" width={960} height={657} loading="lazy" decoding="async" />
+        <Image class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/images/industries/healthcare/app/registration-ticket-web-960.webp" alt="EventHex ticket configuration for a GCC event attendee journey" width={960} height={498} loading="lazy" decoding="async" />
+        <span class="erg-flow-composite__status">Market choices reviewed</span><span class="erg-flow-composite__action">GCC configuration</span>
+      </div></div>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft"><div class="erg-flow-composite">
+        <Image class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/technology/event-dashboard-web-800.webp" alt="EventHex event dashboard for an international event configuration" width={800} height={691} loading="lazy" decoding="async" />
+        <Image class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/images/industries/associations/portal/registration-analytics-web-960.webp" alt="EventHex registration analytics used to review an international event" width={960} height={657} loading="lazy" decoding="async" />
+        <span class="erg-flow-composite__status">Workflow reused</span><span class="erg-flow-composite__action">International configuration</span>
+      </div></div>
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><h3 class="erg-flow-quad__title">International event configuration</h3><p class="erg-flow-quad__text">Reuse the EventHex workflow while validating every market-dependent payment and communication choice.</p></article>
+      <span class="erg-flow-quad__cross" aria-hidden="true" set:html={flowCrossSvg}></span>
+    </div>
+  </section>
+
+  <section id="core-workflow" class="erg-bento-section" aria-labelledby="core-title">
+    <div class="erg-bento-container">
+      <div class="erg-bento-header animate-on-scroll" data-animation="fadeInUp"><span class="me-eyebrow">Regional configuration</span><h2 id="core-title">Configure the event for the market <span class="erg-global-heading-gradient">not around a generic regional promise</span></h2><p class="me-bento-lead">Make the payment, communication, registration, and event-day choices explicit before launch.</p></div>
+      <div class="erg-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="erg-bento-notch erg-bento-notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="erg-bento-notch erg-bento-notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+        {coreWorkflow.map((item, index) => <div class:list={["erg-bento-row", index % 2 === 1 && "erg-bento-row--reverse"]}>
+          {index % 2 === 1 && <div class="erg-bento-cell erg-bento-content"><span class="erg-bento-eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.copy}</p></div>}
+          <div class="erg-bento-cell erg-bento-visual"><div class:list={["erg-bento-shot-stage", `erg-bento-shot-stage--${["confirm","embed","invite","checkin"][index]}`]}><Image class="erg-bento-product-shot" src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" /><span class="erg-shot-float erg-shot-float--top"><b>{item.top}</b><small>EventHex workflow</small></span><span class="erg-shot-float erg-shot-float--bottom"><i></i><b>{item.bottom}</b></span></div></div>
+          {index % 2 === 0 && <div class="erg-bento-cell erg-bento-content"><span class="erg-bento-eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.copy}</p></div>}
+          <span class="erg-bento-cross" aria-hidden="true" set:html={bentoCrossSvg}></span>
+        </div>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-view" class="smp-content smp-content--clickup smp-content--workflow" aria-labelledby="team-title">
+    <div class="smp-content__inner smp-content__inner--narrow">
+      <header class="smp-workflow__header"><div class="smp-workflow__heading"><span class="me-eyebrow">Team coordination</span><h2 id="team-title" class="me-section-title"><span>Keep regional choices visible</span><span>to the operating team</span></h2><p class="me-workflow-lead">Give each team a clear job while keeping the attendee and event record connected.</p></div></header>
+      <ol class="smp-steps">{teamRoles.map((role, index) => <li><details open={index === 0} data-me-role><summary tabindex="-1"><span>0{index + 1}</span><div class="smp-step__content"><h3 class="smp-step__title">{role.title}</h3><p class="smp-step__desc">{role.desc}</p><ul class="smp-step__bullets">{role.bullets.map(item => <li><i aria-hidden="true">✦</i>{item}</li>)}</ul></div><button type="button" class="smp-workflow__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${role.title}`} aria-expanded={index === 0 ? "true" : "false"}><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg></button></summary><div class="smp-workflow__visual"><Image src={role.image} alt={role.alt} width={role.width} height={role.height} loading="lazy" decoding="async" /></div></details></li>)}</ol>
+    </div>
+  </section>
+
+  <FeatureCards id="attendee-journey" cards={attendeeJourney} subtitle="Audience experience" titleLineOne="Connect the moments attendees" titleLineTwo="move through" highlight="actually" showLinks={false} />
+
+  <section id="event-day" class="erg-content-section erg-access-redesign" aria-labelledby="event-day-title">
+    <div class="erg-access-redesign__container">
+      <div class="erg-access-redesign__left"><div class="erg-access-redesign__sticky animate-on-scroll" data-animation="fadeInUp"><div class="erg-access-redesign__eyebrow">During the event</div><h2 id="event-day-title">Keep event-day actions tied to the <span class="erg-global-heading-gradient">same event record</span></h2><p>Keep arrival, validation, audience updates, and payment questions with the teams that own them.</p></div></div>
+      <div class="erg-access-redesign__right">{eventDaySteps.map((item, index) => <article class="erg-access-rcard animate-on-scroll" data-animation="fadeInUp"><div class="erg-access-rcard__header"><div class="erg-access-rcard__number">{String(index + 1).padStart(2, "0")}</div><div class="erg-access-rcard__text"><h3>{item.title}</h3><p>{item.copy}</p></div></div><div class="erg-access-rcard__visual erg-access-rcard__visual--product-shot"><div class="erg-access-product-shot"><Image src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" /><span class="erg-access-product-shot__status erg-access-product-shot__status--success">{item.status}</span><span class="erg-access-product-shot__action">{item.action}</span></div></div></article>)}</div>
+    </div>
+  </section>
+
+  <section id="configuration" class="erg-flow-section" aria-labelledby="scope-title">
+    <div class="erg-flow-header"><span class="me-eyebrow">Build the right scope</span><h2 id="scope-title" class="erg-flow-title me-section-title"><span>Keep EventHex responsibility</span><span>separate from specialist requirements</span></h2></div>
+    <div class="erg-flow-quad">
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><h3 class="erg-flow-quad__title">EventHex workflow</h3><p class="erg-flow-quad__text">Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p></article>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight"><div class="erg-flow-composite"><Image class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/media/app/media-event-workflow-dashboard-web-960.webp" alt="EventHex event workspace connecting the supported operating workflow" width={960} height={552} loading="lazy" decoding="async" /><Image class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/images/industries/associations/portal/event-dashboard-web-960.webp" alt="EventHex event dashboard showing the configured product scope" width={960} height={829} loading="lazy" decoding="async" /><span class="erg-flow-composite__status">Product scope</span><span class="erg-flow-composite__action">EventHex workflow</span></div></div>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft"><div class="erg-flow-composite"><Image class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/media/app/organization-integrations-web-960.webp" alt="EventHex organization integrations used while mapping specialist requirements" width={960} height={657} loading="lazy" decoding="async" /><Image class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/images/industries/associations/portal/crm-integrations-web-960.webp" alt="EventHex CRM integrations available for separately reviewed connections" width={960} height={719} loading="lazy" decoding="async" /><span class="erg-flow-composite__status">Review scope</span><span class="erg-flow-composite__action">Validate separately</span></div></div>
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><h3 class="erg-flow-quad__title">Your specialist requirements</h3><p class="erg-flow-quad__text">Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p></article>
+      <span class="erg-flow-quad__cross" aria-hidden="true" set:html={flowCrossSvg}></span>
+    </div>
+    <p class="erg-content-note">Confirm every specialist obligation before implementation and record how it will be handled.</p>
+  </section>
+
+  <section id="use-cases" class="smd-agent-suites" aria-labelledby="uses-title"><div class="smd-agent-suites__inner">
+    <header class="smd-agent__header"><span class="me-eyebrow">Where it fits</span><h2 id="uses-title" class="smd-agent__title me-section-title animate-on-scroll" data-animation="fadeInUp"><span class="smd-agent__title-line">Configure EventHex around</span><span class="smd-agent__title-line">the event you are running</span></h2><p class="smd-agent__subtitle animate-on-scroll" data-animation="fadeInUp">Start with the event format, then add only the modules it needs.</p></header>
+    <div class="smd-agent__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Middle East and GCC event formats">{eventSuites.map((tab,index)=><button class:list={["smd-agent__tab",index===0&&"smd-agent__tab--active"]} role="tab" aria-selected={index===0?"true":"false"} aria-controls={`me-panel-${tab.id}`} id={`me-tab-${tab.id}`} data-me-suite-target={tab.id} tabindex={index===0?"0":"-1"}>{tab.label}</button>)}</div>
+    <div class="smd-agent__box animate-on-scroll" data-animation="fadeInUp">{eventSuites.map((tab,index)=><div class:list={["smd-agent__panel",index===0&&"smd-agent__panel--active"]} id={`me-panel-${tab.id}`} role="tabpanel" aria-labelledby={`me-tab-${tab.id}`} data-me-suite-panel={tab.id}><div class="smd-agent__left"><h3 class="smd-agent__panel-title">{tab.title}</h3><p class="smd-agent__panel-desc">{tab.description}</p><div class="smd-agent__replaces"><span class="smd-agent__replaces-label">WORKFLOW</span></div><ul class="smd-agent__checklist">{tab.checklist.map(item=><li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{item}</li>)}</ul></div><div class="smd-agent__right"><div class="smd-agent__showcase"><Image src={tab.image} alt={tab.imageAlt} width={tab.width} height={tab.height} loading="lazy" decoding="async" /><span class="smd-agent__visual-label">{tab.visualLabel}</span></div></div></div>)}</div>
+  </div></section>
+
+  <section id="connected-features" class="erg-content-section erg-use-cases" aria-labelledby="links-title"><div class="erg-content-shell"><div class="erg-content-heading me-heading--center"><span class="me-eyebrow">Go deeper</span><h2 id="links-title" class="erg-use-heading">Open the page that owns <span class="erg-use-gradient-text">each mechanism</span></h2></div><div class="erg-use-grid">{featureLinks.map(([title, copy, href], index) => <a class="erg-use-card me-link" href={href}><div class="erg-use-card__icon">{String(index + 1).padStart(2, "0")}</div><h3>{title}</h3><p>{copy}</p><span>Learn more →</span></a>)}</div></div></section>
+
+  <section id="demo-fit" class="smd-ai" aria-labelledby="demo-title"><div class="smd-ai__inner"><div class="smd-ai__left"><span class="me-eyebrow">Plan the configuration</span><h2 id="demo-title" class="smd-ai__title animate-on-scroll" data-animation="fadeInUp"><span class="smd-ai__title-line">bring one real event workflow</span><span class="smd-ai__title-line">to the demo</span></h2><p class="smd-ai__copy animate-on-scroll" data-animation="fadeInUp">Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p><div class="smd-ai__actions animate-on-scroll" data-animation="fadeInUp"><a href="/book-a-demo/" class="smd-ai__btn smd-ai__btn--dark">Book a Demo →</a><a href="/features/" class="smd-ai__btn smd-ai__btn--light">Explore Features →</a></div></div><div class="smd-ai__right animate-on-scroll" data-animation="fadeInUp"><div class="smd-ai__showcase" role="img" aria-label="EventHex event dashboard and integrations workspace prepared for configuration review"><div class="smd-ai__shot smd-ai__shot--list"><Image src="/images/industries/technology/event-dashboard-web-800.webp" alt="" width={800} height={691} loading="lazy" decoding="async" /></div><div class="smd-ai__shot smd-ai__shot--builder"><Image src="/images/industries/media/app/organization-integrations-web-960.webp" alt="" width={960} height={657} loading="lazy" decoding="async" /></div><span class="smd-ai__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Workflow mapped</span><span class="smd-ai__publish">Review configuration</span><svg class="smd-ai__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div></div></div></section>
+
+  <section id="faq" class="erg-faq" aria-labelledby="faq-title"><div class="erg-faq__inner"><div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft"><span class="erg-faq__eyebrow">Middle East and GCC event software questions</span><h2 id="faq-title" class="erg-faq__heading">Review the questions<br />that shape the setup.</h2><p class="erg-faq__intro">Clear answers about provider setup, WhatsApp, Arabic and RTL coverage, offline scanning, and protocol boundaries.</p></div><div class="erg-faq__list">{faqs.map(([question, answer], index) => <details class="erg-faq__item" data-me-faq open={index === 0}><summary class="erg-faq__question"><strong>{question}</strong><span class="erg-faq__icon" aria-hidden="true"></span></summary><div class="erg-faq__answer"><p>{answer}</p></div></details>)}</div></div></section>
+
+</main>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>("[data-me-role]").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".smp-workflow__arrow");
+    summary?.addEventListener("click", (event) => { event.preventDefault(); item.open = !item.open; });
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      if (!item.open) return;
+      all.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+
+  const suite = document.querySelector<HTMLElement>("#use-cases");
+  if (suite) {
+    const tabs = Array.from(suite.querySelectorAll<HTMLButtonElement>("[data-me-suite-target]"));
+    const panels = Array.from(suite.querySelectorAll<HTMLElement>("[data-me-suite-panel]"));
+    const activate = (tab: HTMLButtonElement, focus = false) => {
+      const target = tab.dataset.meSuiteTarget;
+      tabs.forEach((item) => { const active = item === tab; item.classList.toggle("smd-agent__tab--active", active); item.setAttribute("aria-selected", String(active)); item.tabIndex = active ? 0 : -1; });
+      panels.forEach((panel) => panel.classList.toggle("smd-agent__panel--active", panel.dataset.meSuitePanel === target));
+      if (focus) tab.focus();
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activate(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        activate(tabs[(index + offset + tabs.length) % tabs.length], true);
+      });
+    });
+  }
+
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-me-faq]"));
+  faqItems.forEach((item) => item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    faqItems.forEach((other) => { if (other !== item) other.open = false; });
+  }));
+</script>
+
+<style is:global set:html={eventRegistrationStyles}></style>
+<style is:global set:html={speakerDeckStyles}></style>
+<style is:global set:html={speakerProgramStyles}></style>
+
+<style>
+  .middle-east-page { overflow: clip; }
+  .me-eyebrow { display: inline-block; margin-bottom: 12px; color: var(--brand-blue); font: 700 .8125rem/1.35 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .me-heading--center { margin-inline: auto; text-align: center; }
+  :global(.middle-east-page .me-hero-title) { font-size: 49px; line-height: 1.08; letter-spacing: -1.6px; }
+  .me-hero-title__line { display: block; white-space: nowrap; }
+  .me-hero-visual { position: relative; padding: 18px; }
+  .me-hero-visual img { display: block; width: 100%; height: auto; aspect-ratio: 1.16; object-fit: cover; object-position: top left; border: 1px solid #e4e8f1; border-radius: 14px; box-shadow: 0 18px 42px rgba(31,41,72,.16); }
+  .me-status { position: absolute; right: 28px; bottom: 28px; padding: 10px 13px; border-radius: 10px; background: #4b65f6; color: #fff; font: 700 11px/1 var(--font-body); box-shadow: 0 10px 24px rgba(31,41,72,.16); }
+  .me-bento-lead { max-width: 650px; margin: 14px auto 0; color: var(--subheading-gray); font: 400 17px/1.62 var(--font-body); text-align: center; }
+  .me-workflow-lead { max-width: 680px; margin: 14px 0 0; color: var(--subheading-gray); font: 400 17px/1.62 var(--font-body); }
+  :global(.middle-east-page .me-section-title) { width: 100%; max-width: 880px; margin: 0 0 14px; background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%); background-clip: text; -webkit-background-clip: text; color: transparent; -webkit-text-fill-color: transparent; font: 500 clamp(36px, 4.5vw, 56px)/1.1 var(--font-heading); letter-spacing: -.03em; text-align: center; text-wrap: balance; white-space: normal; }
+  :global(.middle-east-page .me-section-title > span) { display: block; white-space: normal; }
+  :global(.middle-east-page .smp-workflow__heading) { display: flex; flex-direction: column; align-items: center; max-width: 900px; }
+  .me-workflow-lead { margin-inline: auto; text-align: center; }
+  :global(.middle-east-page .erg-flow-title) { max-width: 100%; white-space: normal; text-wrap: balance; }
+  :global(.middle-east-page .erg-flow-title.me-section-title) { max-width: 1100px; }
+  :global(.middle-east-page .erg-access-redesign__left), :global(.middle-east-page .erg-access-redesign__right) { min-width: 0; }
+  :global(.middle-east-page .erg-access-redesign__left h2) { white-space: normal; text-wrap: balance; }
+  :global(.middle-east-page #attendee-journey) { background-color: #000 !important; background-image: radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22),rgba(124,108,255,.1) 45%,rgba(0,0,0,0) 72%) !important; }
+  .me-link { color: inherit; text-decoration: none; }
+  .me-link > span { display: inline-block; margin-top: 18px; color: var(--brand-blue); font: 700 13px var(--font-body); }
+  :global(.middle-east-page .erg-flow-quad::before), :global(.middle-east-page .erg-flow-quad::after) { content: ""; position: absolute; z-index: 0; pointer-events: none; background: #e8ecf2; }
+  :global(.middle-east-page .erg-flow-quad::before) { top: 0; bottom: 0; left: 50%; width: 1px; }
+  :global(.middle-east-page .erg-flow-quad::after) { top: 50%; right: 0; left: 0; height: 1px; }
+  @media (max-width: 768px) { :global(.middle-east-page .erg-flow-quad::before), :global(.middle-east-page .erg-flow-quad::after) { display: none; } }
+  @media (max-width: 960px) { :global(.middle-east-page .me-hero-title) { font-size: 46px; line-height: 1.1; } .me-hero-title__line { display: inline; white-space: normal; } .me-hero-title__line:not(:last-child)::after { content: " "; } }
+  @media (max-width: 767px) { .me-status { right: 22px; bottom: 22px; } :global(.middle-east-page .me-hero-title) { font-size: 34px; line-height: 40px; letter-spacing: -.8px; } :global(.middle-east-page .smd-agent__title) { width: 100%; } :global(.middle-east-page .smd-agent__title-line), :global(.middle-east-page .smd-agent__subtitle), :global(.middle-east-page .smd-ai__title-line) { white-space: normal; } }
+  @media (max-width: 420px) { :global(.middle-east-page .me-section-title) { font-size: 32px; line-height: 1.12; } }
+  @media (prefers-reduced-motion: reduce) { .middle-east-page *, .middle-east-page *::before, .middle-east-page *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+</style>
