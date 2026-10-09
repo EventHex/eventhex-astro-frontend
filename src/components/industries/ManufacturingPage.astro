@@ -1,0 +1,2029 @@
+---
+interface Props {
+  faqs: [string, string][];
+}
+
+const { faqs } = Astro.props;
+
+const operatingStages = [
+  ["Recruit", "Exhibitors + buyers"],
+  ["Approve", "Packages + access"],
+  ["Prepare", "Teams + passes"],
+  ["Meet", "Discovery + appointments"],
+  ["Capture", "QR/manual leads"],
+  ["Export", "Qualified data"],
+];
+
+const attendeeJourney = [
+  {
+    title: "Exhibitor onboarding",
+    copy: "Move approved companies into the portal workflow.",
+    bullets: ["Collect approved company records", "Add product and resource details", "Prepare teams, passes, and badges"],
+  },
+  {
+    title: "Buyer registration",
+    copy: "Collect event-specific attendee and ticket information.",
+    bullets: ["Configure attendee fields", "Apply ticket and access rules", "Keep the attendee record connected"],
+  },
+  {
+    title: "Preparation",
+    copy: "Publish programme, exhibitor details, and operational updates.",
+    bullets: ["Publish the event programme", "Share exhibitor details", "Send supported audience updates"],
+  },
+  {
+    title: "Arrival",
+    copy: "Validate attendee and exhibitor access.",
+    bullets: ["Scan configured event QR codes", "Confirm attendee access", "Keep attendance status current"],
+  },
+  {
+    title: "Meet and capture",
+    copy: "Use meetings and lead capture during the event.",
+    bullets: ["Support participant discovery", "Coordinate appointments", "Capture QR or manual leads"],
+  },
+  {
+    title: "Handoff",
+    copy: "Export supported lead data for the next business workflow.",
+    bullets: ["Review team activity", "Export supported lead data", "Continue in the responsible system"],
+  },
+];
+
+const boundaryScopes = [
+  {
+    id: "product",
+    tab: "Product scope",
+    title: "EventHex workflow",
+    description: "Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.",
+    checklist: ["Registration and access", "Programme and communication", "Engagement and event-day operations"],
+    visualLabel: "EventHex-owned workflow",
+    visualTitle: "Manufacturing event workspace",
+    visualRows: [["Registration", "Configured"], ["Programme", "Connected"], ["Event day", "Ready"]],
+    image: "/images/industries/associations/portal/event-setup-web-960.webp",
+    imageAlt: "EventHex event setup with ticket, venue, registration, and module controls",
+  },
+  {
+    id: "review",
+    tab: "Review scope",
+    title: "Your specialist requirements",
+    description: "Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.",
+    checklist: ["Name the requirement owner", "Confirm the responsible system", "Record the implementation decision"],
+    visualLabel: "Specialist review required",
+    visualTitle: "Requirement ownership review",
+    visualRows: [["Legal and regulatory", "Assign owner"], ["Accreditation", "Validate"], ["External systems", "Confirm separately"]],
+    image: "/images/industries/associations/portal/crm-integrations-web-960.webp",
+    imageAlt: "EventHex CRM integrations screen for reviewing external systems and data connections",
+  },
+];
+
+const eventFormats = [
+  {
+    id: "trade-fairs",
+    index: "01",
+    title: "Industrial trade fairs",
+    copy: "Connect exhibitors, buyers, passes, leads, meetings, and event data.",
+    modifier: "conference",
+    checklist: ["Exhibitor and buyer workflows", "Passes, meetings, and lead capture", "Connected event reporting"],
+    visualLabel: "Trade fair workflow",
+    visualRows: [["Programme", "Connected"], ["Partners", "Ready"], ["Registration", "Open"]],
+    image: "/images/industries/associations/portal/event-dashboard-web-960.webp",
+    imageAlt: "EventHex event dashboard with registration and ticket activity",
+  },
+  {
+    id: "supply-chain",
+    index: "02",
+    title: "Supply-chain summits",
+    copy: "Build programme, registration, partners, networking, and event day.",
+    modifier: "chapter",
+    checklist: ["Programme and registration", "Partners and networking", "Connected event-day workflow"],
+    visualLabel: "Summit workspace",
+    visualRows: [["Event setup", "Focused"], ["Region", "Assigned"], ["Portfolio", "Visible"]],
+    image: "/images/industries/associations/portal/programme-sessions-web-960.webp",
+    imageAlt: "EventHex programme workspace with scheduled sessions and speakers",
+  },
+  {
+    id: "conferences",
+    index: "03",
+    title: "Manufacturing conferences",
+    copy: "Coordinate sessions, speakers, delegate access, and engagement.",
+    modifier: "awards",
+    checklist: ["Sessions and speakers", "Delegate access", "Supported engagement features"],
+    visualLabel: "Conference programme",
+    visualRows: [["Guest access", "Configured"], ["Badges", "Connected"], ["Seating", "Review separately"]],
+    image: "/images/industries/associations/portal/registration-analytics-web-960.webp",
+    imageAlt: "EventHex event analytics showing registrations, sessions, speakers, and exhibitors",
+  },
+  {
+    id: "machinery-expos",
+    index: "04",
+    title: "Machinery expos",
+    copy: "Run exhibitor teams, attendee entry, lead capture, and follow-up-ready exports.",
+    modifier: "tradeshow",
+    checklist: ["Exhibitor teams", "Attendee entry and lead capture", "Supported data exports"],
+    visualLabel: "Expo operations",
+    visualRows: [["Exhibitors", "Onboarded"], ["Meetings", "Available"], ["Lead capture", "Active"]],
+    image: "/images/industries/associations/portal/event-portfolio-web-960.webp",
+    imageAlt: "EventHex event portfolio showing event workspaces, dates, and locations",
+  },
+];
+
+const featureLinks = [
+  ["Exhibitor Management", "Run exhibitor and lead operations.", "/exhibitor-management/"],
+  ["Appointments & Meetings", "Coordinate B2B meetings.", "/appointments-meetings/"],
+  ["Event Check-In", "Operate attendee and team arrival.", "/event-check-in/"],
+  ["Event Analytics", "Review event signals.", "/event-analytics/"],
+];
+---
+
+<div class="mfg-page">
+  <section id="hero" class="mfg-hero" aria-labelledby="mfg-hero-title">
+    <div class="mfg-hero__shell">
+      <div class="mfg-hero__grid">
+      <div class="mfg-hero__content">
+        <p class="mfg-hero__badge animate-on-scroll" data-animation="fadeInDown">Event management software for manufacturing events</p>
+        <h1 id="mfg-hero-title" class="mfg-hero__title animate-on-scroll" data-animation="fadeInUp" data-delay="80">
+          <span>Connect exhibitors,</span>
+          <span>buyers, meetings, leads,</span>
+          <span>and event day for</span>
+          <span>industrial events</span>
+        </h1>
+        <p class="mfg-hero__lead animate-on-scroll" data-animation="fadeInUp" data-delay="150">
+          Run industrial trade fairs, supply-chain summits, manufacturing conferences, and machinery expos with exhibitor portals, attendee access, badges, lead capture, meetings, communication, and reporting.
+        </p>
+        <ul class="mfg-hero__points animate-on-scroll" data-animation="fadeInUp" data-delay="220">
+          <li>Exhibitor operations</li>
+          <li>B2B meetings</li>
+          <li>Lead capture</li>
+        </ul>
+        <div class="mfg-actions animate-on-scroll" data-animation="fadeInUp" data-delay="290">
+          <a class="mfg-button mfg-button--primary" href="/book-a-demo/">Book a Demo</a>
+          <a class="mfg-button mfg-button--secondary" href="#operating-map">See the operating model</a>
+        </div>
+      </div>
+
+      <div class="mfg-hero__visual animate-on-scroll" data-animation="fadeInRight" data-delay="120">
+        <div class="mfg-hero__visual-card">
+          <img
+            class="mfg-hero__screenshot"
+            src="/images/industries/manufacturing/portal/exhibitor-packages.webp"
+            srcset="/images/industries/manufacturing/portal/exhibitor-packages-web-640.webp 640w, /images/industries/manufacturing/portal/exhibitor-packages.webp 946w"
+            sizes="(max-width: 1024px) calc(100vw - 48px), 48vw"
+            alt="EventHex exhibitor package workspace for managing package access and booth teams"
+            width="946"
+            height="697"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+          <span class="mfg-hero__screen-label"><b>Exhibitor workflow</b><small>Packages, teams, and access</small></span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="mfg-rail" aria-label="One connected event path: see the operating sequence before choosing modules">
+    <div class="mfg-rail__inner">
+      {operatingStages.map(([label, copy]) => (
+        <span class="mfg-rail__item"><b>{label}</b> {copy}</span>
+      ))}
+    </div>
+  </section>
+
+  <section id="event-model" class="erg-bento-section mfg-scope-bento" aria-labelledby="mfg-model-title">
+    <div class="erg-bento-container">
+      <header class="erg-bento-header animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="mfg-model-title">Start with the operating shape that fits the <span class="erg-global-heading-gradient">event</span></h2>
+      </header>
+
+      <div class="erg-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="erg-bento-notch erg-bento-notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="erg-bento-notch erg-bento-notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+
+        <article class="erg-bento-row">
+          <div class="erg-bento-cell erg-bento-visual">
+            <div class="erg-bento-shot-stage erg-bento-shot-stage--confirm">
+              <img class="erg-bento-product-shot" src="/images/sponsor-management/sponsor-packages-web-806.webp" alt="EventHex exhibitor package configuration with team access controls" width="806" height="696" loading="lazy" decoding="async" />
+              <span class="erg-shot-float erg-shot-float--top"><b>Exhibitor first</b><small>Teams + attendee access</small></span>
+              <span class="erg-shot-float erg-shot-float--bottom"><i></i><b>Lead workflow connected</b></span>
+            </div>
+          </div>
+          <div class="erg-bento-cell erg-bento-content">
+            <span class="erg-bento-eyebrow">Primary model</span>
+            <h3>Exhibition-led event</h3>
+            <p>Connect exhibitor setup, passes, lead capture, attendee access, and event reporting.</p>
+          </div>
+          <span class="erg-bento-cross" aria-hidden="true">
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+            </svg>
+          </span>
+        </article>
+
+        <article class="erg-bento-row erg-bento-row--reverse">
+          <div class="erg-bento-cell erg-bento-content">
+            <span class="erg-bento-eyebrow">Alternate model</span>
+            <h3>Conference-led event</h3>
+            <p>Use registration, programme, speakers, meetings, and communications without adding expo complexity.</p>
+          </div>
+          <div class="erg-bento-cell erg-bento-visual">
+            <div class="erg-bento-shot-stage erg-bento-shot-stage--embed">
+              <img class="erg-bento-product-shot" src="/images/industries/manufacturing/portal/registration-overview.webp" srcset="/images/industries/manufacturing/portal/registration-overview-web-640.webp 640w, /images/industries/manufacturing/portal/registration-overview.webp 946w" sizes="(max-width: 768px) calc(100vw - 80px), 45vw" alt="EventHex registration overview showing attendee totals and a configured delegate pass" width="946" height="380" loading="lazy" decoding="async" />
+              <span class="erg-shot-float erg-shot-float--top"><b>Delegate access</b><small>Registration + tickets</small></span>
+              <span class="erg-shot-float erg-shot-float--bottom"><i></i><b>Programme connected</b></span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p class="mfg-reference-bento__note">Start with one model, then add only the modules the event actually needs.</p>
+    </div>
+  </section>
+
+  <section id="core-workflow" class="mfg-dark-band" aria-labelledby="mfg-core-title">
+    <header class="mfg-capabilities-heading">
+      <p class="mfg-eyebrow">Exhibition operations</p>
+      <h2 id="mfg-core-title" class="animate-on-scroll" data-animation="fadeInUp">
+        Connect the exhibitor journey <span>to the attendee journey</span>
+      </h2>
+      <p class="mfg-capabilities-heading__copy">Keep exhibitor records, team access, leads, and event-day activity attached to the same event.</p>
+    </header>
+
+    <div class="mfg-cap-grid-section">
+      <div class="mfg-cap-grid">
+        <article class="mfg-cap-cell animate-on-scroll" data-animation="fadeInUp" data-delay="0">
+          <h3 class="mfg-cap-label">Exhibitor portal</h3>
+          <p class="mfg-cap-desc">Collect approved exhibitor company, product, resource, team, pass, and badge information.</p>
+          <div class="mfg-cap-visual" aria-hidden="true">
+            <div class="mfg-cap-card">
+              <span class="mfg-cap-card__head">Exhibitor profile</span>
+              <div class="mfg-cap-field"><span>Company</span><i></i></div>
+              <div class="mfg-cap-field"><span>Products</span><i></i></div>
+              <div class="mfg-cap-field"><span>Booth team</span><i></i></div>
+              <div class="mfg-cap-field mfg-cap-field--add"><span>+ Add resource</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="mfg-cap-cell animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <span class="mfg-cap-petal mfg-cap-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+          <span class="mfg-cap-petal mfg-cap-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+          <h3 class="mfg-cap-label">Buyer and delegate access</h3>
+          <p class="mfg-cap-desc">Configure registration, ticket rules, approvals, and event communication.</p>
+          <div class="mfg-cap-visual" aria-hidden="true">
+            <div class="mfg-cap-chips">
+              <span>Buyer</span><span>Delegate</span><span class="is-active">VIP access</span><span>Speaker</span><span>Press</span><span>Partner</span><span>Day pass</span><span>Approval</span><span>Badge</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="mfg-cap-cell animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <span class="mfg-cap-petal mfg-cap-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+          <span class="mfg-cap-petal mfg-cap-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+          <h3 class="mfg-cap-label">Meetings and networking</h3>
+          <p class="mfg-cap-desc">Support participant-controlled discovery and the appointment workflow.</p>
+          <div class="mfg-cap-visual" aria-hidden="true">
+            <div class="mfg-cap-stack">
+              <div class="mfg-cap-ticket"><span>Discover participants</span><small>Browse</small></div>
+              <div class="mfg-cap-ticket"><span>Meeting request</span><small>Pending</small></div>
+              <div class="mfg-cap-ticket is-active"><span>Buyer appointment</span><small>Confirmed</small></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="mfg-cap-cell animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <h3 class="mfg-cap-label">Lead operations</h3>
+          <p class="mfg-cap-desc">Capture QR or manual leads, qualify them, review team activity, and export CSV.</p>
+          <div class="mfg-cap-visual" aria-hidden="true">
+            <div class="mfg-cap-card">
+              <span class="mfg-cap-card__head">Lead activity</span>
+              <div class="mfg-cap-lead"><b>QR</b><span><strong>Production buyer</strong><i><em></em></i></span></div>
+              <div class="mfg-cap-lead"><b>MAN</b><span><strong>Plant manager</strong><i><em style="width: 68%"></em></i></span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="mfg-cap-cell animate-on-scroll" data-animation="fadeInUp" data-delay="240">
+          <span class="mfg-cap-petal mfg-cap-petal--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg></span>
+          <span class="mfg-cap-petal mfg-cap-petal--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg></span>
+          <h3 class="mfg-cap-label">One connected event record</h3>
+          <p class="mfg-cap-desc">Keep exhibitor, attendee, meeting, lead, and event-day activity attached to the configured event.</p>
+          <div class="mfg-cap-visual" aria-hidden="true">
+            <div class="mfg-cap-records">
+              <div class="is-active"><span>01</span><b>Exhibitors + buyers</b></div>
+              <div><span>02</span><b>Appointments + leads</b></div>
+              <div><span>03</span><b>Review + export</b></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-view" class="mfg-coordinate" aria-labelledby="mfg-operations-title">
+    <div class="mfg-coordinate__inner">
+      <div class="mfg-coordinate__left">
+        <h2 id="mfg-operations-title" class="mfg-coordinate__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="mfg-coordinate__title-line">Keep the floor team</span>
+          <span class="mfg-coordinate__title-line">and event team aligned</span>
+        </h2>
+        <p class="mfg-coordinate__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Give each team a clear job while keeping the attendee and event record connected. The event owner sets the operating decisions, specialist teams work in focused areas, and event leadership reviews event and portfolio signals.
+        </p>
+        <div class="mfg-coordinate__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <a href="/book-a-demo/" class="mfg-coordinate__btn mfg-coordinate__btn--dark">Book a Demo &rarr;</a>
+          <a href="#event-day" class="mfg-coordinate__btn mfg-coordinate__btn--light">Explore Event Day &rarr;</a>
+        </div>
+      </div>
+
+      <div class="mfg-coordinate__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="mfg-coordinate__showcase">
+          <img src="/images/industries/healthcare/app/healthcare-event-analytics-web-890.webp" alt="EventHex event analytics showing registration, programme, and attendance activity" width="890" height="600" loading="lazy" decoding="async" />
+          <span class="mfg-coordinate__status">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+            Event owner accountable
+          </span>
+          <span class="mfg-coordinate__publish">Review event signals</span>
+          <svg class="mfg-coordinate__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="attendee-journey" class="mfg-journey-workflow" aria-labelledby="mfg-journey-title">
+    <div class="mfg-journey-workflow__inner">
+      <header class="mfg-journey-workflow__header">
+        <p class="mfg-eyebrow">Audience experience</p>
+        <h2 id="mfg-journey-title">Connect the moments attendees actually move through</h2>
+      </header>
+      <ol class="mfg-journey-steps">
+        {attendeeJourney.map((step, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary tabindex="-1">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div class="mfg-journey-step__content">
+                  <h3>{step.title}</h3>
+                  <p>{step.copy}</p>
+                  <ul>
+                    {step.bullets.map((bullet) => <li><i aria-hidden="true">+</i>{bullet}</li>)}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  class="mfg-journey-step__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${step.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                </button>
+              </summary>
+              <div class="mfg-journey-step__visual">
+                {index === 0 && <img src="/images/sponsor-management/exhibitor-list-web-806.webp" alt="EventHex exhibitor list showing company records in the event workspace" width="806" height="696" loading="lazy" decoding="async" />}
+                {index === 1 && <img src="/images/industries/associations/attendee-journey/checkout-attendee-details-web-960.webp" alt="EventHex registration checkout collecting attendee and ticket details" width="960" height="439" loading="lazy" decoding="async" />}
+                {index === 2 && <img src="/images/industries/associations/attendee-journey/cfp-portal-published-agenda-web-960.webp" alt="Published EventHex event programme with sessions and booking options" width="960" height="720" loading="lazy" decoding="async" />}
+                {index === 3 && <img src="/images/industries/healthcare/delegate-qr-arrival.webp" alt="EventHex QR arrival screen confirming delegate access" width="512" height="422" loading="lazy" decoding="async" />}
+                {index === 4 && <img src="/images/appointments-meetings/app/registered-attendee-directory.png" alt="EventHex attendee directory used for participant discovery and meeting setup" width="1262" height="698" loading="lazy" decoding="async" />}
+                {index === 5 && <img src="/images/industries/associations/attendee-journey/registration-analytics-web-960.webp" alt="EventHex registration analytics dashboard with event totals and timeline" width="960" height="530" loading="lazy" decoding="async" />}
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section id="event-day" class="mfg-event-day" aria-labelledby="mfg-event-day-title">
+    <div class="mfg-event-day__container">
+      <div class="mfg-event-day__left">
+        <header class="mfg-event-day__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="mfg-event-day__eyebrow">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>
+            During the event
+          </div>
+          <h2 id="mfg-event-day-title">Keep event-day actions tied to the <span>same event record</span></h2>
+          <p>Keep exhibitor entry, buyer arrival, lead capture, and team visibility connected to the event record.</p>
+          <a class="mfg-event-day__cta" href="/book-a-demo/">Book a Demo<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        </header>
+      </div>
+
+      <div class="mfg-event-day__cards">
+        <article class="mfg-event-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="mfg-event-card__header"><div class="mfg-event-card__number">01</div><div class="mfg-event-card__text"><h3>Exhibitor team entry</h3><p>Use allocated passes and badges for the configured event.</p></div></div>
+          <div class="mfg-event-card__visual"><div class="mfg-event-card__shot mfg-event-card__shot--arrival">
+            <img src="/feature-images/event-registration/approval-ticket-list.png" alt="EventHex pass approval list used to prepare team access" width="760" height="430" loading="lazy" decoding="async" />
+            <span class="mfg-event-card__status mfg-event-card__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Teams ready</span><span class="mfg-event-card__action">Manage passes</span><svg class="mfg-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="mfg-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="mfg-event-card__header"><div class="mfg-event-card__number">02</div><div class="mfg-event-card__text"><h3>Buyer arrival</h3><p>Validate event QR codes with the scanner app.</p></div></div>
+          <div class="mfg-event-card__visual"><div class="mfg-event-card__shot mfg-event-card__shot--partners">
+            <img src="/images/industries/associations/event-day/attendance-overview-web-960.webp" alt="EventHex attendance workspace for QR-based attendee check-in" width="960" height="530" loading="lazy" decoding="async" />
+            <span class="mfg-event-card__status mfg-event-card__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Check-in live</span><span class="mfg-event-card__action">Open attendance</span><svg class="mfg-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="mfg-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="mfg-event-card__header"><div class="mfg-event-card__number">03</div><div class="mfg-event-card__text"><h3>Lead capture</h3><p>Record leads by QR or manual entry and add supported qualification details.</p></div></div>
+          <div class="mfg-event-card__visual"><div class="mfg-event-card__shot mfg-event-card__shot--programme">
+            <img src="/images/industries/associations/attendee-journey/scan-engine-figma-web-512.webp" alt="EventHex QR scanning interface used during onsite event workflows" width="512" height="422" loading="lazy" decoding="async" />
+            <span class="mfg-event-card__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 5h12v11H4zM7 3v4M13 3v4M4 8h12"></path></svg>QR ready</span><span class="mfg-event-card__action">Capture lead</span><svg class="mfg-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+
+        <article class="mfg-event-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="mfg-event-card__header"><div class="mfg-event-card__number">04</div><div class="mfg-event-card__text"><h3>Team visibility</h3><p>Use the exhibitor lead and team analytics surfaces.</p></div></div>
+          <div class="mfg-event-card__visual"><div class="mfg-event-card__shot mfg-event-card__shot--communication">
+            <img src="/images/industries/associations/portal/platform-analytics-web-960.webp" alt="EventHex analytics workspace showing event, registration, and check-in signals" width="960" height="516" loading="lazy" decoding="async" />
+            <span class="mfg-event-card__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h3l7-5v10l-7-5H4zM7 10v5"></path></svg>Signals visible</span><span class="mfg-event-card__action">Review analytics</span><svg class="mfg-event-card__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+          </div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="configuration" class="erg-bento-section mfg-scope-bento" aria-labelledby="mfg-boundary-title">
+    <div class="erg-bento-container">
+      <header class="erg-bento-header animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="mfg-boundary-title">Keep EventHex Responsibility Separate From <span class="erg-global-heading-gradient">Specialist Requirements</span></h2>
+      </header>
+
+      <div class="erg-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="erg-bento-notch erg-bento-notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="erg-bento-notch erg-bento-notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+
+        {boundaryScopes.map((scope, index) => (
+          <div class:list={["erg-bento-row", index === 1 && "erg-bento-row--reverse"]}>
+            {index === 0 && (
+              <div class="erg-bento-cell erg-bento-visual">
+                <div class="erg-bento-shot-stage erg-bento-shot-stage--confirm">
+                  <img class="erg-bento-product-shot" src={scope.image} alt="EventHex event setup with ticket, venue, registration, and module controls" width="960" height="516" loading="lazy" decoding="async" />
+                  <span class="erg-shot-float erg-shot-float--top"><b>EventHex-owned</b><small>Workflow configured</small></span>
+                  <span class="erg-shot-float erg-shot-float--bottom"><i></i><b>Product scope mapped</b></span>
+                </div>
+              </div>
+            )}
+
+            <div class="erg-bento-cell erg-bento-content">
+              <span class="erg-bento-eyebrow">{scope.tab}</span>
+              <h3>{scope.title}</h3>
+              <p>{scope.description}</p>
+              <p>{scope.checklist.join(". ")}.</p>
+            </div>
+
+            {index === 1 && (
+              <div class="erg-bento-cell erg-bento-visual">
+                <div class="erg-bento-shot-stage erg-bento-shot-stage--embed">
+                  <img class="erg-bento-product-shot" src={scope.image} alt="EventHex CRM integrations for reviewing external systems and data connections" width="960" height="516" loading="lazy" decoding="async" />
+                  <span class="erg-shot-float erg-shot-float--top"><b>Specialist review</b><small>External systems</small></span>
+                  <span class="erg-shot-float erg-shot-float--bottom"><i></i><b>Ownership confirmed</b></span>
+                </div>
+              </div>
+            )}
+
+            <span class="erg-bento-cross" aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28">
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+                <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+              </svg>
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="use-cases" class="mfg-use-cases" aria-labelledby="mfg-use-cases-title">
+    <div class="mfg-use-cases__inner">
+      <header class="mfg-use-cases__header">
+        <p class="mfg-eyebrow">Where it fits</p>
+        <h2 id="mfg-use-cases-title" class="mfg-use-cases__title animate-on-scroll" data-animation="fadeInUp">Configure EventHex around <span>the event you are running</span></h2>
+        <p class="mfg-use-cases__subtitle animate-on-scroll" data-animation="fadeInUp">Start with the format, then add the workflows each event actually needs.</p>
+      </header>
+
+      <div class="mfg-use-cases__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Manufacturing event formats">
+        {eventFormats.map((item, index) => (
+          <button
+            class:list={["mfg-use-cases__tab", { "is-active": index === 0 }]}
+            id={`mfg-use-case-tab-${item.id}`}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`mfg-use-case-panel-${item.id}`}
+            tabindex={index === 0 ? 0 : -1}
+            data-use-case-tab={item.id}
+          >{item.title}</button>
+        ))}
+      </div>
+
+      <div class="mfg-use-cases__box animate-on-scroll" data-animation="fadeInUp">
+        {eventFormats.map((item, index) => (
+          <article
+            class:list={["mfg-use-cases__panel", `mfg-use-cases__panel--${item.modifier}`, { "is-active": index === 0 }]}
+            id={`mfg-use-case-panel-${item.id}`}
+            role="tabpanel"
+            aria-labelledby={`mfg-use-case-tab-${item.id}`}
+            data-use-case-panel={item.id}
+          >
+            <div class="mfg-use-cases__content">
+              <h3>{item.title}</h3>
+              <p>{item.copy}</p>
+              <span class="mfg-use-cases__list-label">EVENT FOCUS</span>
+              <ul>
+                {item.checklist.map((point) => <li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{point}</li>)}
+              </ul>
+            </div>
+            <div class="mfg-use-cases__visual">
+              <div class={`mfg-use-cases__showcase mfg-use-cases__showcase--${item.modifier}`}>
+                <span class="mfg-use-cases__visual-label"><i></i>{item.visualLabel}</span>
+                <img src={item.image} alt="EventHex portal screen supporting this manufacturing event format" width="960" height="516" loading="lazy" decoding="async" />
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connected-features" class="mfg-links" aria-labelledby="mfg-links-title">
+    <div class="mfg-links__shell">
+      <header class="mfg-links__heading animate-on-scroll" data-animation="fadeInUp">
+        <p class="mfg-eyebrow">Go deeper</p>
+        <h2 id="mfg-links-title"><span>Open the Page That Owns</span><span>Each Manufacturing Mechanism</span></h2>
+        <p>Continue to the dedicated EventHex workflow when the event job changes.</p>
+      </header>
+      <div class="mfg-links__grid">
+        <span class="mfg-links__notch mfg-links__notch--1" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        <span class="mfg-links__notch mfg-links__notch--2" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        <span class="mfg-links__notch mfg-links__notch--3" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path></svg></span>
+        {featureLinks.map(([title, copy, href], index) => (
+          <article class="mfg-links__card animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            {index === 2 && <span class="mfg-links__cross" aria-hidden="true"><svg viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" transform="rotate(-90)"></path></svg></span>}
+            <div class="mfg-links__icon" aria-hidden="true">
+              {index === 0 && <svg viewBox="0 0 24 24"><path d="M4 7h16v10H4zM8 7V5h8v2M7 12h3M14 12h3"></path></svg>}
+              {index === 1 && <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.6-5 2.6 1-5.6-4.1-4 5.6-.8L12 3Z"></path></svg>}
+              {index === 2 && <svg viewBox="0 0 24 24"><path d="M4 10h16M6 10V7h12v3M6 10v9h12v-9M9 14h6M9 17h6"></path></svg>}
+              {index === 3 && <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 8h3v3H8zM13 8h3v3h-3zM8 13h3v3H8zM13 13h3v3h-3z"></path></svg>}
+            </div>
+            <h3><a href={href}>{title}</a></h3>
+            <p>{copy}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="demo-fit" class="mfg-demo" aria-labelledby="mfg-demo-title">
+    <div class="mfg-demo__card">
+      <span class="mfg-demo__glow mfg-demo__glow--one" aria-hidden="true"></span>
+      <span class="mfg-demo__glow mfg-demo__glow--two" aria-hidden="true"></span>
+
+      <div class="mfg-demo__content">
+        <span class="mfg-demo__eyebrow animate-on-scroll" data-animation="fadeIn">Plan the configuration</span>
+        <h2 id="mfg-demo-title" class="mfg-demo__title animate-on-scroll" data-animation="fadeInUp">Bring One Real Event Workflow to the Demo</h2>
+        <p class="mfg-demo__desc animate-on-scroll" data-animation="fadeInUp">Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p>
+        <div class="mfg-demo__proof-row animate-on-scroll" data-animation="fadeInUp">
+          <span>Event format</span>
+          <span>Required modules</span>
+          <span>Configuration review</span>
+        </div>
+        <a class="mfg-demo__button" href="/book-a-demo/">
+          Book a Demo
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+
+      <div class="mfg-demo__visual">
+        <img src="/images/industries/associations/portal/attendee-registrations-web-960.webp" alt="EventHex registration workspace for reviewing the configured attendee workflow" width="960" height="516" loading="lazy" decoding="async" />
+        <span class="mfg-demo-action" aria-hidden="true">Review workflow</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="mfg-section mfg-faq" aria-labelledby="mfg-faq-title">
+    <div class="mfg-faq__shell">
+      <div class="mfg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="mfg-faq__eyebrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Quick Answers
+        </span>
+        <h2 id="mfg-faq-title">Manufacturing Event Software<br />Questions, Answered.</h2>
+        <p>Review exhibitor operations, onsite lead capture, booth-layout limits, sales handoff, and EventHex product scope.</p>
+        <a href="/contact-en/" class="mfg-faq__cta">
+          Talk to EventHex
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+      </div>
+      <div class="mfg-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="mfg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} open={index === 0}>
+            <summary class="mfg-faq__question"><strong>{question}</strong><span class="mfg-faq__icon" aria-hidden="true"></span></summary>
+            <div class="mfg-faq__answer"><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<style>
+  .mfg-page {
+    --mfg-shadow: 0 22px 54px rgba(35, 49, 89, 0.1);
+    overflow: clip;
+    background:
+      radial-gradient(
+        ellipse 75% 68% at 50% 40%,
+        rgba(255, 255, 255, 0.94) 0%,
+        rgba(255, 255, 255, 0.65) 38%,
+        rgba(255, 255, 255, 0.28) 58%,
+        transparent 78%
+      ),
+      linear-gradient(
+        to bottom,
+        #fff 0,
+        rgba(255, 255, 255, 0.85) 130px,
+        rgba(255, 255, 255, 0.5) 260px,
+        rgba(255, 255, 255, 0.18) 390px,
+        transparent 500px
+      ),
+      linear-gradient(
+        to top,
+        #fff 0,
+        rgba(255, 255, 255, 0.7) 70px,
+        rgba(255, 255, 255, 0.3) 130px,
+        transparent 190px
+      ),
+      radial-gradient(circle 380px at 3% 34%, rgba(175, 163, 255, 0.28) 0%, transparent 100%),
+      radial-gradient(circle 300px at 97% 30%, rgba(255, 182, 213, 0.26) 0%, transparent 100%),
+      radial-gradient(circle 340px at 95% 75%, rgba(130, 170, 255, 0.24) 0%, transparent 100%),
+      radial-gradient(circle 300px at 4% 78%, rgba(255, 224, 150, 0.2) 0%, transparent 100%),
+      #fff;
+    background-attachment: fixed;
+    color: var(--heading-dark);
+    font-family: var(--font-body);
+  }
+
+  .mfg-shell {
+    width: min(1120px, calc(100% - 48px));
+    margin-inline: auto;
+  }
+
+  .mfg-section {
+    padding-block: clamp(72px, 8vw, 108px);
+  }
+
+  .mfg-section--soft {
+    background: var(--surface-light);
+  }
+
+  .mfg-eyebrow {
+    margin: 0 0 16px;
+    color: var(--brand-blue);
+    font: 700 0.8125rem/1.4 var(--font-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .mfg-heading {
+    max-width: 760px;
+    margin-bottom: 40px;
+  }
+
+  .mfg-heading--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .mfg-heading h2 {
+    margin: 0;
+    color: var(--heading-dark);
+    font: 500 clamp(36px, 4vw, 56px)/1.08 var(--font-heading);
+    letter-spacing: -0.03em;
+  }
+
+  .mfg-heading > p:last-child {
+    max-width: 650px;
+    margin: 18px 0 0;
+    color: var(--subheading-gray);
+    font-size: 17px;
+    line-height: 1.62;
+  }
+
+  .mfg-heading--center > p:last-child {
+    margin-inline: auto;
+  }
+
+  .mfg-button {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 30px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font: 600 15px/1.4 var(--font-body);
+    text-decoration: none;
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+
+  .mfg-button:hover { transform: translateY(-2px); }
+  .mfg-button:focus-visible,
+  .mfg-links__card a:focus-visible,
+  .mfg-faq summary:focus-visible {
+    outline: 3px solid rgba(55, 93, 251, 0.34);
+    outline-offset: 4px;
+  }
+
+  .mfg-button--primary { background: var(--heading-dark); color: #fff; }
+  .mfg-button--primary:hover { background: #000; box-shadow: 0 12px 26px rgba(34, 39, 47, 0.18); }
+  .mfg-button--secondary { border-color: #dce4ff; background: rgba(255,255,255,.92); color: var(--heading-dark); }
+  .mfg-button--secondary:hover { border-color: #c5d2ff; box-shadow: 0 10px 24px rgba(55,93,251,.1); }
+  .mfg-button--light { background: #fff; color: var(--heading-dark); }
+  .mfg-button--light:hover { background: #f4f6ff; box-shadow: 0 14px 30px rgba(0,0,0,.18); }
+
+  .mfg-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: -90px;
+    padding: 140px 24px 64px;
+    background: transparent;
+  }
+
+  .mfg-hero::after {
+    position: absolute;
+    z-index: 2;
+    inset: 0 0 0 auto;
+    width: 220px;
+    max-width: 30vw;
+    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    content: "";
+    pointer-events: none;
+  }
+
+  .mfg-hero__shell {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+
+  .mfg-hero__grid {
+    display: grid;
+    max-width: 1080px;
+    margin: 0 auto;
+    grid-template-columns: minmax(260px, 542px) minmax(0, 490px);
+    gap: 48px;
+    align-items: center;
+  }
+
+  .mfg-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    text-align: left;
+  }
+
+  .mfg-hero__badge {
+    margin: 0;
+    color: var(--brand-blue);
+    font: 500 16px/24px var(--font-body);
+    text-transform: uppercase;
+  }
+
+  .mfg-hero__title {
+    width: 100%;
+    max-width: 620px;
+    margin: 0;
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    font: 500 52px/58px var(--font-heading);
+    letter-spacing: -2.1px;
+  }
+
+  .mfg-hero__title span {
+    display: block;
+    color: inherit;
+    white-space: nowrap;
+  }
+
+  .mfg-hero__lead {
+    width: 100%;
+    max-width: 560px;
+    margin: 0;
+    color: var(--subheading-gray);
+    font: 400 18px/24px var(--font-body);
+    letter-spacing: -.25px;
+  }
+
+  .mfg-hero__points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mfg-hero__points li {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding-left: 16px;
+    color: #475467;
+    font: 500 14px/20px var(--font-body);
+  }
+
+  .mfg-hero__points li::before {
+    position: absolute;
+    top: 7px;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    content: "";
+  }
+
+  .mfg-actions { display: flex; flex-wrap: wrap; gap: 14px; margin: 0; padding-top: 6px; }
+
+  .mfg-hero__visual {
+    position: relative;
+    z-index: 3;
+    margin-right: calc(-1 * (max(0px, (100vw - 1128px) / 2) + 24px));
+  }
+
+  .mfg-hero__visual-card {
+    position: relative;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,.62);
+    border-right: 0;
+    border-radius: 22px 0 0 22px;
+    background: linear-gradient(180deg,#ffffff9e,#ffffff47),#ffffff57;
+    backdrop-filter: blur(16px);
+  }
+
+  .mfg-hero__visual-inner {
+    position: relative;
+    height: 480px;
+    overflow: hidden;
+    border-radius: 16px 0 0 16px;
+    background: linear-gradient(135deg,#d9ecfa,#eef6fc 45%,#fff);
+  }
+
+  .mfg-hero-phone,
+  .mfg-hero-access,
+  .mfg-hero-pulse,
+  .mfg-hero-app { position: absolute; border: 1px solid #cfd7e5; background: #fff; box-shadow: 0 16px 32px rgba(36,51,82,.16); }
+
+  .mfg-hero-phone {
+    top: 35px;
+    left: 22px;
+    width: 208px;
+    height: 390px;
+    overflow: hidden;
+    border: 4px solid #22272f;
+    border-radius: 28px;
+    background: linear-gradient(180deg,#84caff 0 26%,#eff6ff 26%);
+  }
+
+  .mfg-hero-phone__bar { display: flex; height: 24px; align-items: center; justify-content: space-between; padding: 0 14px; color: #182336; font-size: 7px; }
+  .mfg-hero-phone__bar i { position: absolute; top: 0; left: 50%; width: 78px; height: 17px; border-radius: 0 0 11px 11px; background: #111820; transform: translateX(-50%); }
+  .mfg-hero-phone__head { display: grid; grid-template-columns: 22px 1fr 20px; gap: 6px; align-items: center; padding: 9px 10px 12px; color: #17305f; }
+  .mfg-hero-phone__head > b { display: grid; width: 20px; height: 20px; place-items: center; border-radius: 50%; background: rgba(255,255,255,.75); }
+  .mfg-hero-phone__head span { display: grid; }
+  .mfg-hero-phone__head strong { font-size: 8px; }
+  .mfg-hero-phone__head small { font-size: 5px; }
+  .mfg-hero-phone__members { display: grid; gap: 6px; padding: 7px; }
+  .mfg-hero-phone__members > div { display: flex; min-height: 92px; align-items: center; gap: 9px; padding: 10px; border: 1px solid #d7e2f6; border-radius: 10px; background: rgba(255,255,255,.78); }
+  .mfg-hero-phone__members span { display: grid; gap: 2px; }
+  .mfg-hero-phone__members strong { font-size: 7px; }
+  .mfg-hero-phone__members small { color: #677386; font-size: 5.5px; }
+  .mfg-avatar { display: block; width: 35px; height: 35px; flex: 0 0 35px; border: 3px solid #fff; border-radius: 50%; background: radial-gradient(circle at 50% 35%,#f2c9a8 0 20%,transparent 21%),linear-gradient(145deg,#7153b5,#b8d6ff); box-shadow: 0 0 0 2px #597cff; }
+  .mfg-avatar--two { background: radial-gradient(circle at 50% 35%,#ad6f4f 0 20%,transparent 21%),linear-gradient(145deg,#1d536f,#92d7cf); }
+  .mfg-avatar--three { background: radial-gradient(circle at 50% 35%,#e5b28e 0 20%,transparent 21%),linear-gradient(145deg,#925773,#efc6db); }
+
+  .mfg-hero-access {
+    z-index: 2;
+    top: 126px;
+    left: 126px;
+    width: 310px;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+  .mfg-hero-access__top { display: flex; align-items: center; justify-content: space-between; padding: 13px 15px; border-bottom: 1px solid #e3e8f0; color: #313a49; font-size: 10px; font-weight: 700; }
+  .mfg-hero-access__tools { display: flex; gap: 6px; padding: 10px 12px; }
+  .mfg-hero-access__tools span,
+  .mfg-hero-access__tools b { padding: 5px 8px; border: 1px solid #e0e5ee; border-radius: 6px; color: #7b8494; font-size: 7px; }
+  .mfg-hero-access__row { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: center; padding: 9px 12px; border-top: 1px solid #edf0f5; }
+  .mfg-hero-access__row .mfg-avatar { width: 24px; height: 24px; min-width: 24px; border-width: 2px; box-shadow: none; }
+  .mfg-hero-access__row span { display: grid; gap: 2px; }
+  .mfg-hero-access__row strong { font-size: 7px; }
+  .mfg-hero-access__row small { color: #8a93a3; font-size: 5.5px; }
+  .mfg-hero-access__row > b { color: #5e6b81; font-size: 6px; }
+
+  .mfg-hero-pulse {
+    z-index: 4;
+    top: 46px;
+    right: 24px;
+    width: 190px;
+    padding: 12px;
+    border-radius: 11px;
+  }
+  .mfg-hero-pulse > small { color: #8a93a3; font-size: 5.5px; font-weight: 800; letter-spacing: .08em; }
+  .mfg-hero-pulse > strong { display: block; margin: 4px 0 9px; font-size: 8px; }
+  .mfg-hero-pulse > div { display: grid; grid-template-columns: 48px 1fr 20px; gap: 6px; align-items: center; margin-top: 6px; color: #667085; font-size: 5.5px; }
+  .mfg-hero-pulse i { height: 7px; overflow: hidden; border-radius: 999px; background: #e2e7ef; }
+  .mfg-hero-pulse i b { display: block; height: 100%; background: linear-gradient(90deg,#4865f3,#8b64f6); }
+  .mfg-hero-pulse em { font-style: normal; text-align: right; }
+
+  .mfg-hero-app {
+    z-index: 5;
+    right: 2px;
+    bottom: 18px;
+    width: 218px;
+    overflow: hidden;
+    border-radius: 15px;
+    background: linear-gradient(180deg,#7ebdff 0 27%,#fff 27%);
+  }
+  .mfg-hero-app__bar { display: flex; align-items: center; justify-content: space-between; padding: 12px; color: #fff; font-size: 7px; }
+  .mfg-hero-app > small { display: block; margin: 13px 13px 4px; color: #5574ae; font-size: 5.5px; font-weight: 800; }
+  .mfg-hero-app h3 { margin: 0 13px 6px; color: #243047; font: 500 11px/1.15 var(--font-heading); }
+  .mfg-hero-app p { margin: 0 13px 10px; color: #6d7788; font-size: 6px; }
+  .mfg-hero-app__actions { display: flex; gap: 5px; padding: 9px 12px; border-top: 1px solid #edf0f5; }
+  .mfg-hero-app__actions span { flex: 1; padding: 6px 3px; border: 1px solid #e0e6ef; border-radius: 5px; color: #667085; font-size: 5.5px; text-align: center; }
+  .mfg-hero-app nav { display: flex; justify-content: space-around; padding: 9px 6px; background: #f5f7fb; color: #7e8797; }
+  .mfg-hero-app nav b { font-size: 5.5px; }
+
+  .mfg-rail {
+    padding: 24px;
+    border-top: 1px solid var(--surface-card-border);
+    background: linear-gradient(90deg, rgba(235,240,255,.8), #fff 42%, rgba(255,239,247,.7));
+  }
+
+  .mfg-rail__inner { display: flex; max-width: 1280px; margin: 0 auto; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 34px; }
+  .mfg-rail__item { color: var(--subheading-gray); font-size: .9375rem; line-height: 1.4; white-space: nowrap; }
+  .mfg-rail__item b { margin-right: 4px; color: var(--heading-dark); font-weight: 700; }
+
+  .mfg-model-section { padding: 80px 5%; background: transparent; }
+  .mfg-model-container { max-width: 1200px; margin: 0 auto; }
+  .mfg-model-header { margin-bottom: 60px; text-align: center; }
+  .mfg-model-header h2 { max-width: 980px; margin: 0 auto; color: var(--heading-dark); font: 500 clamp(32px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .mfg-model-header h2 span { background: linear-gradient(98deg,#555 15%,#aaa 88%); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .mfg-model-grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .mfg-model-notch { position: absolute; z-index: 3; left: 50%; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .mfg-model-notch--top { top: 0; transform: translate(-50%,-50%); }
+  .mfg-model-notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .mfg-model-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .mfg-model-cell { display: flex; min-height: 470px; flex-direction: column; justify-content: center; padding: 4rem; }
+  .mfg-model-row .mfg-model-cell:first-child { border-right: 1px solid #e5e7eb; }
+  .mfg-model-visual { align-items: center; }
+  .mfg-model-content { background: transparent; }
+  .mfg-model-eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font-size: .875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+  .mfg-model-content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .mfg-model-content p { margin: 0; color: #4b5563; font-size: 1.125rem; line-height: 1.45; }
+  .mfg-model-stage { position: relative; width: 100%; min-height: 330px; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .mfg-model-stage--community { background: linear-gradient(180deg,#dbe1fb 0%,#eceffd 45%,#f5f6f9 100%); }
+  .mfg-model-stage--programme { background: linear-gradient(180deg,#fbdde4 0%,#fdecf0 45%,#f5f6f9 100%); }
+  .mfg-model-float { position: absolute; z-index: 4; display: flex; align-items: center; gap: 9px; padding: 11px 14px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; background: rgba(255,255,255,.96); color: #111827; box-shadow: 0 14px 34px rgba(30,45,88,.2); font-family: var(--font-body); line-height: 1.15; animation: mfg-model-float 4.8s ease-in-out infinite; backdrop-filter: blur(10px); }
+  .mfg-model-float b { font-size: .78rem; white-space: nowrap; }
+  .mfg-model-float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .mfg-model-float > i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .mfg-model-float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .mfg-model-float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .mfg-model-cross { position: absolute; z-index: 3; bottom: 0; left: 50%; width: 28px; height: 28px; line-height: 0; transform: translate(-50%,50%); pointer-events: none; }
+  .mfg-community-map { position: relative; height: 270px; border: 1px solid #dfe4ec; border-radius: 14px; background: rgba(255,255,255,.72); animation: mfg-model-breathe 7s ease-in-out infinite; }
+  .mfg-community-map__hub { position: absolute; z-index: 2; top: 50%; left: 50%; display: grid; width: 92px; height: 92px; place-items: center; border: 1px solid #d7def1; border-radius: 50%; background: #fff; color: #3b4658; box-shadow: 0 16px 32px rgba(64,76,120,.12); font-size: 12px; font-weight: 700; transform: translate(-50%,-50%); }
+  .mfg-community-map > i { position: absolute; z-index: 2; width: 30px; height: 30px; border: 6px solid #fff; border-radius: 50%; background: #8196f8; box-shadow: 0 8px 16px rgba(55,93,251,.18); }
+  .mfg-community-map > i:nth-of-type(1) { top: 34px; left: 19%; }
+  .mfg-community-map > i:nth-of-type(2) { top: 32px; right: 18%; background: #9f81ff; }
+  .mfg-community-map > i:nth-of-type(3) { bottom: 38px; left: 17%; background: #4fc5b8; }
+  .mfg-community-map > i:nth-of-type(4) { right: 20%; bottom: 34px; background: #f49ab8; }
+  .mfg-community-map > b { position: absolute; top: 50%; left: 50%; width: 130px; height: 1px; background: #cbd5f1; transform-origin: left center; }
+  .mfg-community-map > b:nth-of-type(1) { transform: rotate(-145deg); }
+  .mfg-community-map > b:nth-of-type(2) { transform: rotate(-35deg); }
+  .mfg-community-map > b:nth-of-type(3) { transform: rotate(145deg); }
+  .mfg-community-map > b:nth-of-type(4) { transform: rotate(35deg); }
+  .mfg-programme-board { display: flex; min-height: 270px; flex-direction: column; justify-content: center; gap: 12px; padding: 26px; border: 1px solid #dfe4ec; border-radius: 14px; background: rgba(255,255,255,.72); animation: mfg-model-breathe 7s ease-in-out infinite; animation-delay: -3.5s; }
+  .mfg-programme-board span { display: grid; grid-template-columns: 48px 1fr 100px; gap: 12px; align-items: center; padding: 14px; border: 1px solid #e2e6ed; border-radius: 10px; background: #fff; box-shadow: 0 8px 18px rgba(50,62,100,.06); }
+  .mfg-programme-board b { color: #667085; font-size: 9px; }
+  .mfg-programme-board i { height: 7px; border-radius: 999px; background: linear-gradient(90deg,#8fa5ff,#d8e0ff); }
+  .mfg-programme-board span:nth-child(2) i { background: linear-gradient(90deg,#a88be8,#eadfff); }
+  .mfg-programme-board span:nth-child(3) i { background: linear-gradient(90deg,#57bba9,#d5f6ef); }
+  .mfg-programme-board em { color: #6f788a; font-size: 9px; font-style: normal; }
+  .mfg-model-decision { margin: 0; padding: 22px 30px; background: rgba(245,248,255,.72); color: #45516a; font-size: 13px; font-weight: 600; text-align: center; }
+  @keyframes mfg-model-breathe { 0%,100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes mfg-model-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-9px,0); } }
+
+  .mfg-boundary { padding: 80px 5%; background: transparent; }
+  .mfg-boundary__container { width: min(1200px,100%); margin: 0 auto; }
+  .mfg-boundary__header { max-width: 850px; margin: 0 auto 60px; text-align: center; }
+  .mfg-boundary__header .mfg-eyebrow { margin-bottom: 12px; }
+  .mfg-boundary__header h2 { margin: 0; color: var(--heading-dark); font: 500 clamp(38px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .mfg-boundary__header h2 span { display: block; background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .mfg-boundary__header > p:last-child { max-width: 650px; margin: 14px auto 0; color: var(--subheading-gray); font-size: 17px; line-height: 1.55; }
+  .mfg-boundary__grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; }
+  .mfg-boundary__row { position: relative; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); min-height: 488px; border-bottom: 1px solid #e5e7eb; }
+  .mfg-boundary__row:last-child { border-bottom: 0; }
+  .mfg-boundary__cell { display: flex; min-width: 0; min-height: 488px; padding: 64px; justify-content: center; }
+  .mfg-boundary__row > .mfg-boundary__cell:first-child { border-right: 1px solid #e5e7eb; }
+  .mfg-boundary__visual { align-items: center; }
+  .mfg-boundary__copy { align-items: center; }
+  .mfg-boundary__copy > div { width: 100%; }
+  .mfg-boundary__eyebrow { display: block; margin-bottom: 16px; color: #5b21b6; font-size: 14px; font-weight: 600; line-height: 1.2; text-transform: uppercase; }
+  .mfg-boundary__copy h3 { margin: 0 0 20px; color: #111827; font: 500 36px/1.02 var(--font-heading); letter-spacing: -.025em; }
+  .mfg-boundary__copy p { margin: 0 0 16px; color: #4b5563; font-size: 18px; line-height: 1.45; }
+  .mfg-boundary__copy p:last-child { margin-bottom: 0; }
+  .mfg-boundary__stage { position: relative; width: 100%; height: 360px; padding: 42px 24px 24px; overflow: hidden; border-radius: 22px; }
+  .mfg-boundary__stage--product { background: linear-gradient(#fdefb8,#fdf7dd 45%,#f5f6f9); }
+  .mfg-boundary__stage--review { background: linear-gradient(#cdf3de,#e6f8ee 45%,#f5f6f9); }
+  .mfg-boundary__visual-label { position: absolute; top: 22px; left: 18px; z-index: 2; display: inline-flex; padding: 9px 12px; align-items: center; gap: 7px; border: 1px solid #cbeedb; border-radius: 999px; background: rgba(255,255,255,.94); box-shadow: 0 8px 22px rgba(31,41,55,.14); color: #168a55; font: 700 11px/1.2 var(--font-body); }
+  .mfg-boundary__stage--review .mfg-boundary__visual-label { border-color: #ded2ff; border-radius: 8px; color: #7351cf; }
+  .mfg-boundary__visual-label i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .mfg-boundary__console { overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .mfg-boundary__console-bar { display: flex; height: 42px; padding: 0 14px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9edf3; background: #f8f9fc; }
+  .mfg-boundary__console-bar span { display: flex; gap: 5px; }
+  .mfg-boundary__console-bar i { width: 7px; height: 7px; border-radius: 50%; background: #d6dbe5; }
+  .mfg-boundary__console-bar b { color: #81899a; font-size: 9px; letter-spacing: .04em; }
+  .mfg-boundary__console-body { display: flex; min-height: 246px; padding: 28px 20px 20px; flex-direction: column; }
+  .mfg-boundary__console-body > small { margin-bottom: 7px; color: #9ca3af; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .mfg-boundary__console-body > strong { margin-bottom: 18px; color: #253047; font: 500 18px/1.2 var(--font-heading); }
+  .mfg-boundary__console-body > span { display: flex; min-height: 43px; padding: 10px 12px; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #edf0f5; color: #667085; font-size: 11px; }
+  .mfg-boundary__console-body > span b { font-weight: 600; }
+  .mfg-boundary__console-body > span em { padding: 5px 8px; border-radius: 999px; background: #eefbf4; color: #527063; font-size: 9px; font-style: normal; font-weight: 700; }
+  .mfg-boundary__stage--review .mfg-boundary__console-body > span em { background: #f3efff; color: #7351cf; }
+  .mfg-boundary__notch,
+  .mfg-boundary__cross { position: absolute; z-index: 3; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .mfg-boundary__notch { left: 50%; }
+  .mfg-boundary__notch--top { top: 0; transform: translate(-50%,-50%); }
+  .mfg-boundary__notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .mfg-boundary__cross { bottom: 0; left: 50%; transform: translate(-50%,50%); }
+  .mfg-boundary__notch svg,
+  .mfg-boundary__cross svg { width: 28px; height: 28px; overflow: visible; }
+  .mfg-boundary__notch path,
+  .mfg-boundary__cross path { fill: #e5e7eb; }
+
+  /* Exact Event Registration bento treatment for the scope boundary. */
+  .mfg-scope-bento { padding: 80px 5%; background: transparent; }
+  .mfg-scope-bento .erg-bento-container { max-width: 1200px; margin: 0 auto; }
+  .mfg-scope-bento .erg-bento-header { margin-bottom: 60px; text-align: center; }
+  .mfg-scope-bento .erg-bento-header h2 {
+    margin: 0;
+    color: #111827;
+    font: 500 clamp(32px,4vw,56px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+  }
+  .mfg-scope-bento .erg-global-heading-gradient {
+    background: linear-gradient(98deg,#22272f 43.06%,#8f8f8f 91.81%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .mfg-scope-bento .erg-bento-grid { position: relative; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 16px; background: transparent; }
+  .mfg-scope-bento .erg-bento-notch { position: absolute; z-index: 2; left: 50%; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .mfg-scope-bento .erg-bento-notch--top { top: 0; transform: translate(-50%,-50%); }
+  .mfg-scope-bento .erg-bento-notch--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .mfg-scope-bento .erg-bento-row { position: relative; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #e5e7eb; }
+  .mfg-scope-bento .erg-bento-row:last-child { border-bottom: 0; }
+  .mfg-scope-bento .erg-bento-cell { display: flex; padding: 4rem; flex-direction: column; justify-content: center; }
+  .mfg-scope-bento .erg-bento-row .erg-bento-cell:first-child { border-right: 1px solid #e5e7eb; }
+  .mfg-scope-bento .erg-bento-visual { align-items: center; background: transparent; }
+  .mfg-scope-bento .erg-bento-visual > * { max-width: 100%; height: auto; }
+  .mfg-scope-bento .erg-bento-content { background: transparent; }
+  .mfg-scope-bento .erg-bento-shot-stage { position: relative; width: 100%; padding: 32px 18px; border-radius: 22px; isolation: isolate; }
+  .mfg-scope-bento .erg-bento-shot-stage--confirm { background: linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%); }
+  .mfg-scope-bento .erg-bento-shot-stage--embed { background: linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%); }
+  .mfg-scope-bento .erg-bento-product-shot { display: block; width: 100%; border: 1px solid #dfe4ec; border-radius: 14px; animation: erg-product-shot-breathe 7s ease-in-out infinite; will-change: transform; }
+  .mfg-scope-bento .erg-bento-row:nth-child(even) .erg-bento-product-shot { animation-delay: -3.5s; }
+  .mfg-scope-bento .erg-shot-float { position: absolute; z-index: 2; display: flex; padding: 11px 14px; align-items: center; gap: 9px; border: 1px solid rgba(206,215,232,.9); border-radius: 12px; background: rgba(255,255,255,.96); color: #111827; box-shadow: 0 14px 34px rgba(30,45,88,.2); font-family: var(--font-body); line-height: 1.15; animation: erg-shot-card-float 4.8s ease-in-out infinite; backdrop-filter: blur(10px); }
+  .mfg-scope-bento .erg-shot-float b { font-size: .78rem; font-weight: 700; white-space: nowrap; }
+  .mfg-scope-bento .erg-shot-float small { display: block; color: #7b8497; font-size: .65rem; white-space: nowrap; }
+  .mfg-scope-bento .erg-shot-float i { width: 9px; height: 9px; border-radius: 50%; background: #19b874; box-shadow: 0 0 0 5px rgba(25,184,116,.13); }
+  .mfg-scope-bento .erg-shot-float--top { top: 12px; right: 3px; align-items: flex-start; flex-direction: column; gap: 3px; }
+  .mfg-scope-bento .erg-shot-float--bottom { bottom: 12px; left: 3px; animation-delay: -2.4s; }
+  .mfg-scope-bento .erg-bento-visual:hover .erg-bento-product-shot { animation-play-state: paused; transform: scale(1.018); }
+  .mfg-scope-bento .erg-bento-eyebrow { display: block; margin-bottom: 1rem; color: #5b21b6; font-size: .875rem; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }
+  .mfg-scope-bento .erg-bento-content h3 { margin: 0 0 1.25rem; color: #111827; font: 500 2.25rem/1.02 var(--font-heading); letter-spacing: -.02em; }
+  .mfg-scope-bento .erg-bento-content p { margin: 0 0 1rem; color: #4b5563; font-size: 1.125rem; line-height: 1.45; }
+  .mfg-scope-bento .erg-bento-content p:last-child { margin-bottom: 0; }
+  .mfg-scope-bento .erg-bento-cross { position: absolute; z-index: 2; bottom: 0; left: 50%; width: 28px; height: 28px; line-height: 0; transform: translate(-50%,50%); pointer-events: none; }
+  .mfg-scope-bento .erg-bento-row:last-child .erg-bento-cross { display: none; }
+  .mfg-reference-bento__note { max-width: 680px; margin: 24px auto 0; color: #4b5563; font-size: 1rem; line-height: 1.5; text-align: center; }
+  @keyframes erg-product-shot-breathe { 0%,100% { transform: translateY(3px) scale(.985); } 50% { transform: translateY(-3px) scale(1); } }
+  @keyframes erg-shot-card-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-9px,0); } }
+
+  @media (max-width: 900px) {
+    .mfg-scope-bento .erg-bento-row { display: flex; flex-direction: column; }
+    .mfg-scope-bento .erg-bento-cell { padding: 3rem 1.5rem; }
+    .mfg-scope-bento .erg-bento-row .erg-bento-cell:first-child { border-right: 0; }
+    .mfg-scope-bento .erg-bento-content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .mfg-scope-bento .erg-bento-visual { order: 2; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mfg-scope-bento .erg-bento-product-shot,
+    .mfg-scope-bento .erg-shot-float { animation: none; will-change: auto; }
+    .mfg-scope-bento .erg-bento-visual:hover .erg-bento-product-shot { transform: none; }
+  }
+
+  .mfg-dark-band {
+    --band-p: 0;
+    position: relative;
+    overflow: hidden;
+    padding: clamp(88px,9vw,116px) 0 0;
+    background-color: #000;
+    background-image: radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.22) 0%,rgba(124,108,255,.1) 45%,transparent 72%);
+    background-repeat: no-repeat;
+    --band-gap: calc((1 - var(--band-p)) * clamp(16px,3.5vw,56px));
+    clip-path: inset(0 var(--band-gap) round calc((1 - var(--band-p)) * 28px));
+    will-change: clip-path;
+  }
+  .mfg-dark-band::before {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E");
+    content: "";
+    opacity: .55;
+    pointer-events: none;
+  }
+  .mfg-dark-band > * { position: relative; z-index: 1; }
+  .mfg-capabilities-heading { max-width: 980px; margin: 0 auto; padding: 0 24px; text-align: center; }
+  .mfg-capabilities-heading .mfg-eyebrow { color: rgba(255,255,255,.62); }
+  .mfg-capabilities-heading h2 {
+    max-width: 920px;
+    margin: 0 auto;
+    font: 500 clamp(42px,5.4vw,60px)/1.1 var(--font-heading);
+    letter-spacing: -.04em;
+    text-align: center;
+    background: linear-gradient(100deg,#fff 0%,#f2f0ff 26%,#c9c2ff 52%,#a79aff 74%,#7d8dff 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 0;
+  }
+  .mfg-capabilities-heading h2 span { background: none; -webkit-text-fill-color: transparent; }
+  .mfg-capabilities-heading__copy { max-width: 660px; margin: 20px auto 0; color: rgba(255,255,255,.62); font: 400 16px/1.6 var(--font-body); }
+  .mfg-cap-grid-section { max-width: 1124px; margin: 0 auto; padding: clamp(48px,5.5vw,68px) 24px clamp(56px,7vw,88px); }
+  .mfg-cap-grid {
+    --cap-grad: linear-gradient(135deg,#38bdf8 0%,#5c8aff 38%,#7c6cff 70%,#a45cff 100%);
+    --cap-surface: #08080e;
+    display: grid;
+    overflow: hidden;
+    grid-template-columns: repeat(6,1fr);
+    border: 1px solid #3b3a47;
+    border-radius: 15px;
+  }
+  .mfg-cap-cell { position: relative; display: flex; min-height: 392px; padding: 36px 32px 30px; grid-column: span 2; flex-direction: column; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; }
+  .mfg-cap-cell:nth-child(n + 4) { grid-column: span 3; border-bottom: 0; }
+  .mfg-cap-cell:nth-child(3),
+  .mfg-cap-cell:nth-child(5) { border-right: 0; }
+  .mfg-cap-petal { position: absolute; z-index: 2; left: 0; width: 28px; height: 28px; line-height: 0; pointer-events: none; }
+  .mfg-cap-petal--top { top: 0; transform: translate(-50%,-50%); }
+  .mfg-cap-petal--bottom { bottom: 0; transform: translate(-50%,50%); }
+  .mfg-cap-label { margin: 0 0 14px; color: #fff; font: 700 15px/1.3 var(--font-heading); letter-spacing: -.01em; }
+  .mfg-cap-desc { max-width: 34ch; margin: 0; color: rgba(255,255,255,.62); font: 400 .9375rem/1.38 var(--font-body); }
+  .mfg-cap-visual { position: relative; display: flex; margin-top: 28px; flex: 1; align-items: flex-end; justify-content: center; }
+  .mfg-cap-visual::before { position: absolute; bottom: -10%; left: 50%; width: 80%; height: 80%; border-radius: 50%; background: radial-gradient(closest-side,rgba(92,138,255,.28),rgba(124,108,255,.15) 55%,transparent 100%); content: ""; filter: blur(30px); pointer-events: none; transform: translateX(-50%); animation: mfg-cap-bloom 6s ease-in-out infinite; }
+  .mfg-cap-visual > * { position: relative; z-index: 1; }
+  .mfg-cap-card,
+  .mfg-cap-ticket,
+  .mfg-cap-records > div,
+  .mfg-cap-chips span { border: 1px solid rgba(255,255,255,.12); border-radius: 12px; background: rgba(255,255,255,.04); }
+  .mfg-cap-card { display: flex; width: 100%; max-width: 290px; padding: 16px; flex-direction: column; gap: 10px; border-color: transparent; border-radius: 16px; background: linear-gradient(var(--cap-surface),var(--cap-surface)) padding-box,var(--cap-grad) border-box; box-shadow: 0 18px 44px -22px rgba(92,138,255,.5); }
+  .mfg-cap-card__head { color: rgba(255,255,255,.55); font: 400 12px/1.4 var(--font-body); }
+  .mfg-cap-field { display: flex; padding: 10px 12px; align-items: center; justify-content: space-between; gap: 12px; border-radius: 9px; background: rgba(255,255,255,.05); color: rgba(255,255,255,.86); font: 400 13px/1.3 var(--font-body); }
+  .mfg-cap-field i { width: 42%; height: 6px; border-radius: 999px; background: rgba(255,255,255,.14); transform-origin: right center; animation: mfg-cap-fill 5.5s ease-in-out infinite; }
+  .mfg-cap-field:nth-child(3) i { animation-delay: -1.8s; }
+  .mfg-cap-field:nth-child(4) i { animation-delay: -3.6s; }
+  .mfg-cap-field--add { justify-content: center; border: 1px dashed rgba(110,150,255,.45); background: var(--cap-grad); background-clip: text; color: #a8b6ff; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .mfg-cap-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .mfg-cap-chips span { padding: 7px 12px; color: rgba(255,255,255,.72); font: 400 12.5px/1.3 var(--font-body); }
+  .mfg-cap-chips span.is-active,
+  .mfg-cap-ticket.is-active,
+  .mfg-cap-records > div.is-active { border-color: transparent; background: linear-gradient(135deg,#0d1a30 0%,#131938 58%,#1b1740 100%) padding-box,var(--cap-grad) border-box; box-shadow: 0 10px 26px -14px rgba(92,138,255,.6); color: #fff; animation: mfg-cap-pulse 3.2s ease-in-out infinite; }
+  .mfg-cap-stack { display: flex; width: 100%; max-width: 300px; flex-direction: column; gap: 10px; }
+  .mfg-cap-ticket { display: flex; padding: 13px 14px; align-items: center; justify-content: space-between; gap: 12px; color: rgba(255,255,255,.86); font: 400 13px/1.3 var(--font-body); }
+  .mfg-cap-ticket small { color: rgba(255,255,255,.5); font-size: 11.5px; }
+  .mfg-cap-ticket.is-active small { color: #b9ccff; }
+  .mfg-cap-lead { display: flex; padding: 10px 12px; align-items: center; gap: 12px; border-radius: 9px; background: rgba(255,255,255,.05); }
+  .mfg-cap-lead > b { flex: 0 0 auto; padding: 5px 7px; border-radius: 6px; background: linear-gradient(135deg,#38bdf8,#5c8aff); color: #04101f; font: 700 9px/1 var(--font-body); letter-spacing: .05em; }
+  .mfg-cap-lead:nth-child(3) > b { background: linear-gradient(135deg,#5c8aff,#a45cff); color: #fff; }
+  .mfg-cap-lead > span { display: flex; min-width: 0; flex: 1; flex-direction: column; gap: 7px; }
+  .mfg-cap-lead strong { color: rgba(255,255,255,.82); font: 400 12.5px/1.2 var(--font-body); }
+  .mfg-cap-lead i { height: 4px; overflow: hidden; border-radius: 999px; background: rgba(255,255,255,.12); }
+  .mfg-cap-lead em { display: block; width: 100%; height: 100%; border-radius: inherit; background: var(--cap-grad); transform-origin: left center; animation: mfg-cap-fill 4.5s ease-in-out infinite; }
+  .mfg-cap-records { display: flex; width: 100%; max-width: 360px; flex-direction: column; gap: 10px; }
+  .mfg-cap-records > div { display: flex; padding: 12px 14px; align-items: center; gap: 12px; color: rgba(255,255,255,.78); font-family: var(--font-body); }
+  .mfg-cap-records span { color: rgba(255,255,255,.5); font: 400 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace; letter-spacing: .08em; }
+  .mfg-cap-records b { font-size: 13px; font-weight: 400; }
+  .mfg-cap-card,
+  .mfg-cap-stack,
+  .mfg-cap-records,
+  .mfg-cap-chips { animation: mfg-cap-float 7s ease-in-out infinite; }
+  .mfg-cap-cell:nth-child(2) .mfg-cap-chips { animation-delay: -1.4s; }
+  .mfg-cap-cell:nth-child(3) .mfg-cap-stack { animation-delay: -2.8s; }
+  .mfg-cap-cell:nth-child(4) .mfg-cap-card { animation-delay: -4.2s; }
+  .mfg-cap-cell:nth-child(5) .mfg-cap-records { animation-delay: -5.6s; }
+  @keyframes mfg-cap-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes mfg-cap-bloom { 0%,100% { opacity: .68; } 50% { opacity: 1; } }
+  @keyframes mfg-cap-pulse { 0%,100% { opacity: .88; } 50% { opacity: 1; } }
+  @keyframes mfg-cap-fill { 0% { transform: scaleX(.25); } 60%,100% { transform: scaleX(1); } }
+
+  .mfg-coordinate {
+    display: flex;
+    justify-content: center;
+    padding: 32px 24px;
+    background:
+      radial-gradient(circle at 88% 15%,rgba(126,104,238,.09),transparent 34%),
+      radial-gradient(circle at 10% 100%,rgba(75,192,219,.07),transparent 30%),
+      #fff;
+    color: #22272f;
+  }
+  .mfg-coordinate__inner {
+    display: grid;
+    width: min(1120px,100%);
+    padding: 48px;
+    grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
+    gap: 36px;
+    align-items: center;
+  }
+  .mfg-coordinate__left { min-width: 0; max-width: 560px; }
+  .mfg-coordinate__title {
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+    color: transparent;
+    font: 500 clamp(36px,5vw,56px)/1.1 var(--font-heading);
+    letter-spacing: -.03em;
+    background: linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .mfg-coordinate__title span { font-size: inherit; font-weight: inherit; }
+  .mfg-coordinate__title-line { display: block; white-space: normal; }
+  .mfg-coordinate__copy { margin: 16px 0 32px; color: #374151; font: 500 15px/1.5 var(--font-body); }
+  .mfg-coordinate__actions { display: flex; margin-top: 4px; align-items: center; gap: 12px; }
+  .mfg-coordinate__btn { display: inline-flex; padding: 10px 20px; align-items: center; justify-content: center; border-radius: 6px; font: 600 13.5px/1.4 var(--font-body); text-decoration: none; transition: all .2s ease; }
+  .mfg-coordinate__btn--dark { background: #27272a; color: #fff; }
+  .mfg-coordinate__btn--dark:hover { background: #18181b; }
+  .mfg-coordinate__btn--light { border: 1px solid #e5e7eb; background: #f3f4f6; color: #374151; }
+  .mfg-coordinate__btn--light:hover { background: #e5e7eb; }
+  .mfg-coordinate__right { width: 100%; max-width: 500px; justify-self: end; }
+  .mfg-coordinate__showcase { position: relative; isolation: isolate; width: 100%; height: clamp(320px,32vw,350px); overflow: hidden; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: linear-gradient(155deg,#fff8dc 0%,#fffdf4 48%,#fff 100%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.55); }
+  .mfg-coordinate__showcase::before { position: absolute; z-index: -1; inset: auto 6% -24% 10%; height: 65%; border-radius: 50%; background: rgba(230,232,238,.72); content: ""; filter: blur(24px); }
+  .mfg-coordinate__shot { position: absolute; overflow: hidden; aspect-ratio: 1117 / 837; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; box-shadow: 0 14px 30px rgba(17,24,39,.14); }
+  .mfg-coordinate__shot--overview { z-index: 1; top: 30px; left: 20px; width: 77%; }
+  .mfg-coordinate__shot--detail { z-index: 2; right: 18px; bottom: 24px; width: 70%; }
+  .mfg-coordinate__chrome { display: flex; height: 30px; padding: 0 10px; align-items: center; justify-content: space-between; border-bottom: 1px solid #edf0f5; background: #f8f9fc; }
+  .mfg-coordinate__chrome > span { display: flex; gap: 4px; }
+  .mfg-coordinate__chrome i { display: block; width: 6px; height: 6px; border-radius: 50%; background: #cbd2df; }
+  .mfg-coordinate__chrome small { color: #7b8494; font-size: 6.5px; font-weight: 700; }
+  .mfg-coordinate__tabs { display: flex; gap: 5px; padding: 8px 10px 6px; border-bottom: 1px solid #edf0f5; }
+  .mfg-coordinate__tabs span { padding: 4px 7px; border-radius: 5px; color: #8a93a4; font-size: 6px; }
+  .mfg-coordinate__tabs .is-active { border: 1px solid #d9e2ff; background: #eff3ff; color: #4163ed; font-weight: 700; }
+  .mfg-coordinate__team-list { padding: 5px 9px 10px; }
+  .mfg-coordinate__team-list > div { display: grid; grid-template-columns: 24px 1fr auto; min-height: 37px; align-items: center; gap: 7px; border-bottom: 1px solid #edf0f5; }
+  .mfg-coordinate__team-list > div:last-child { border-bottom: 0; }
+  .mfg-coordinate__team-list > div > i { display: grid; width: 21px; height: 21px; place-items: center; border-radius: 6px; background: #eff3ff; color: #4163ed; font-size: 6px; font-style: normal; font-weight: 800; }
+  .mfg-coordinate__team-list span { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+  .mfg-coordinate__team-list strong { color: #2c3443; font-size: 7px; font-weight: 700; }
+  .mfg-coordinate__team-list small { overflow: hidden; color: #8a93a4; font-size: 5.5px; text-overflow: ellipsis; white-space: nowrap; }
+  .mfg-coordinate__team-list b { padding: 3px 5px; border-radius: 999px; background: #f3f5f9; color: #6f7a8c; font-size: 5px; }
+  .mfg-coordinate__detail-heading { display: flex; padding: 11px 12px 8px; align-items: center; justify-content: space-between; }
+  .mfg-coordinate__detail-heading span { color: #283142; font-size: 8px; font-weight: 800; }
+  .mfg-coordinate__detail-heading b { padding: 3px 6px; border-radius: 999px; background: #eefaf6; color: #238866; font-size: 5px; }
+  .mfg-coordinate__detail-grid { display: grid; padding: 0 12px 8px; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .mfg-coordinate__detail-grid span { display: flex; min-height: 39px; padding: 7px; flex-direction: column; justify-content: center; gap: 3px; border: 1px solid #e8ecf3; border-radius: 7px; background: #fafbfe; }
+  .mfg-coordinate__detail-grid small { color: #8a93a4; font-size: 5.5px; }
+  .mfg-coordinate__detail-grid b { color: #3a4658; font-size: 7px; }
+  .mfg-coordinate__detail-note { display: flex; margin: 0 12px 10px; padding: 7px 8px; align-items: center; gap: 7px; border-radius: 6px; background: #26345f; color: #eef2ff; font-size: 5.5px; }
+  .mfg-coordinate__detail-note i { width: 5px; height: 5px; border-radius: 50%; background: #83e8d2; box-shadow: 0 0 0 3px rgba(131,232,210,.14); }
+  .mfg-coordinate__status,
+  .mfg-coordinate__publish { position: absolute; z-index: 5; display: inline-flex; align-items: center; border-radius: 11px; font: 700 13px/1 var(--font-body); box-shadow: 0 8px 22px rgba(42,66,158,.18); }
+  .mfg-coordinate__status { top: 16px; left: 16px; gap: 8px; padding: 11px 15px; border: 1px solid #dce4ff; background: #f0f4ff; color: #4163ed; }
+  .mfg-coordinate__status svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; }
+  .mfg-coordinate__publish { right: 16px; bottom: 16px; padding: 12px 16px; background: #4163ed; color: #fff; }
+  .mfg-coordinate__cursor { position: absolute; z-index: 6; right: 20px; bottom: 50px; width: 23px; height: 27px; fill: #182033; stroke: #fff; stroke-width: 1.2; filter: drop-shadow(0 2px 3px rgba(17,24,39,.24)); }
+
+  .mfg-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  .mfg-journey-workflow {
+    padding: clamp(110px,12vw,160px) 24px;
+    background: linear-gradient(135deg,rgba(255,255,255,.2) 0%,rgba(246,248,255,.52) 52%,rgba(255,255,255,.18) 100%);
+  }
+  .mfg-journey-workflow__inner { width: min(1218px,100%); margin-inline: auto; }
+  .mfg-journey-workflow__header { display: flex; max-width: 1000px; margin: 0 auto 64px; flex-direction: column; align-items: center; text-align: center; }
+  .mfg-journey-workflow__header h2 {
+    max-width: 950px;
+    margin: 0;
+    font: 500 60px/66px var(--font-heading);
+    letter-spacing: -2.1px;
+    background: linear-gradient(98deg,var(--heading-dark) 43.06%,#8f8f8f 91.81%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+  .mfg-journey-steps { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .mfg-journey-steps > li { position: relative; display: block; padding: 0; border: 0; background: transparent; }
+  .mfg-journey-steps details {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--mfg-journey-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg,var(--mfg-journey-tint) 0%,#fff 82%);
+    box-shadow: 0 8px 24px rgba(31,41,55,.04);
+    transition: border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease;
+  }
+  .mfg-journey-steps > li:nth-child(1) { --mfg-journey-tint: #fff8dc; --mfg-journey-border: #f0dfa6; }
+  .mfg-journey-steps > li:nth-child(2) { --mfg-journey-tint: #edf7ff; --mfg-journey-border: #d4e7f7; }
+  .mfg-journey-steps > li:nth-child(3) { --mfg-journey-tint: #f3efff; --mfg-journey-border: #e2d8fa; }
+  .mfg-journey-steps > li:nth-child(4) { --mfg-journey-tint: #eefbf4; --mfg-journey-border: #d4efdf; }
+  .mfg-journey-steps > li:nth-child(5) { --mfg-journey-tint: #fff0f7; --mfg-journey-border: #f4d6e5; }
+  .mfg-journey-steps > li:nth-child(6) { --mfg-journey-tint: #eef2ff; --mfg-journey-border: #d7def8; }
+  .mfg-journey-steps summary {
+    display: grid;
+    grid-template-columns: 32px minmax(0,1fr);
+    min-height: 82px;
+    padding: 18px 82px 18px 20px;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    list-style: none;
+    transition: background .25s ease;
+  }
+  .mfg-journey-steps summary::-webkit-details-marker { display: none; }
+  .mfg-journey-steps summary:hover { background: rgba(255,255,255,.28); }
+  .mfg-journey-steps details:not([open]):hover { box-shadow: 0 12px 30px rgba(31,41,55,.08); transform: translateY(-2px); }
+  .mfg-journey-steps summary > span { color: #111; font: 500 15px/1.1 var(--font-heading); letter-spacing: -.05em; }
+  .mfg-journey-step__content { display: flex; flex-direction: column; }
+  .mfg-journey-steps details:not([open]) .mfg-journey-step__content { display: grid; grid-template-columns: minmax(230px,.7fr) minmax(320px,1.3fr); align-items: center; gap: 36px; }
+  .mfg-journey-step__content h3 { margin: 0; color: #111; font: 500 22px/1.2 var(--font-body); letter-spacing: -.02em; }
+  .mfg-journey-step__content p { display: none; }
+  .mfg-journey-steps details:not([open]) .mfg-journey-step__content p { display: -webkit-box; max-width: 460px; margin: 0; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 3; color: #5f6673; font: 400 14.5px/1.5 var(--font-body); }
+  .mfg-journey-step__content ul { display: none; }
+  .mfg-journey-step__arrow {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(17,24,39,.2);
+    border-radius: 50%;
+    background: rgba(255,255,255,.78);
+    color: #111827;
+    cursor: pointer;
+    transition: transform .25s ease,background .2s ease,border-color .2s ease;
+  }
+  .mfg-journey-step__arrow:hover { border-color: rgba(17,24,39,.42); background: #fff; }
+  .mfg-journey-step__arrow:focus-visible { outline: 3px solid rgba(59,130,246,.28); outline-offset: 2px; }
+  .mfg-journey-step__arrow svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-journey-steps details[open] { display: flex; margin: 0; align-items: stretch; border-radius: 28px; background: linear-gradient(135deg,var(--mfg-journey-tint) 0%,#fff 72%); }
+  .mfg-journey-steps details[open] summary { display: grid; flex: 0 0 55%; grid-template-columns: 44px minmax(0,1fr); min-height: 0; padding: 64px 40px 64px 28px; align-items: start; gap: 14px; background: transparent; }
+  .mfg-journey-steps details[open] summary:hover { padding-left: 28px; background: transparent; }
+  .mfg-journey-steps details[open] summary > span { color: #050505; font-size: 26px; line-height: 1; }
+  .mfg-journey-steps details[open] .mfg-journey-step__content h3 { margin-bottom: 16px; color: #050505; font: 600 32px/1.2 var(--font-heading); }
+  .mfg-journey-steps details[open] .mfg-journey-step__content p { display: block; max-width: 90%; margin: 0 0 32px; color: #333; font-size: 17px; line-height: 1.6; }
+  .mfg-journey-steps details[open] .mfg-journey-step__content ul { display: flex; margin: 0; padding: 0; flex-direction: column; gap: 18px; list-style: none; }
+  .mfg-journey-steps details[open] .mfg-journey-step__content li { display: flex; padding: 0; align-items: center; gap: 14px; border: 0; background: transparent; color: #111; font-size: 16px; font-weight: 500; }
+  .mfg-journey-steps details[open] .mfg-journey-step__content li i { font-size: 16px; font-style: normal; }
+  .mfg-journey-steps details[open] .mfg-journey-step__arrow { top: 28px; transform: rotate(180deg); }
+  .mfg-journey-step__visual { display: none; margin: 0; opacity: 0; }
+  .mfg-journey-steps details[open] .mfg-journey-step__visual { display: flex; flex: 0 0 45%; max-height: none; padding: 40px 88px 40px 0; align-items: center; justify-content: flex-start; overflow: visible; opacity: 1; }
+  .mfg-journey-step__visual img { display: block; width: 100%; max-width: 400px; height: auto; object-fit: contain; border: 0; border-radius: 12px; background: transparent; box-shadow: 0 24px 60px rgba(0,0,0,.08); }
+
+  .mfg-event-day { padding: 100px 24px; background: transparent; }
+  .mfg-event-day__container { display: flex; max-width: 1200px; margin: 0 auto; align-items: stretch; gap: 80px; }
+  .mfg-event-day__left { flex: 0 0 40%; }
+  .mfg-event-day__sticky { position: sticky; top: 120px; }
+  .mfg-event-day__eyebrow { display: inline-flex; margin-bottom: 24px; padding: 6px 12px; align-items: center; gap: 8px; border-radius: 99px; background: #f4f5f7; color: var(--heading-dark); font: 600 13px/1.2 var(--font-body); text-transform: none; letter-spacing: 0; }
+  .mfg-event-day__eyebrow svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-event-day__left h2 { margin: 0 0 24px; color: var(--heading-dark); font: 500 clamp(36px,4vw,48px)/1.2 var(--font-heading); letter-spacing: -.02em; }
+  .mfg-event-day__left h2 span { background: linear-gradient(96deg,#5f6675,#9aa1ae); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .mfg-event-day__left p { margin: 0; color: var(--subheading-gray); font: 400 18px/1.6 var(--font-body); }
+  .mfg-event-day__cta { display: inline-flex; margin-top: 28px; padding: 14px 24px; align-items: center; gap: 10px; border-radius: 999px; background: #171a21; color: #fff; font: 500 .9375rem/1.2 var(--font-body); text-decoration: none; transition: background .2s ease,transform .2s ease; }
+  .mfg-event-day__cta:hover { background: #000; transform: translateY(-1px); }
+  .mfg-event-day__cta svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-event-day__cards { display: flex; flex: 1; flex-direction: column; gap: 32px; }
+  .mfg-event-card { position: sticky; top: 80px; padding: 32px; border-radius: 24px; background: #f4f5f7; transition: transform .3s ease; }
+  .mfg-event-card:nth-child(1) { top: 80px; }
+  .mfg-event-card:nth-child(2) { top: 100px; }
+  .mfg-event-card:nth-child(3) { top: 120px; }
+  .mfg-event-card:nth-child(4) { top: 140px; }
+  .mfg-event-card:hover { transform: translateY(-4px); }
+  .mfg-event-card__header { display: flex; margin-bottom: 24px; align-items: flex-start; gap: 16px; }
+  .mfg-event-card__number { display: flex; width: 40px; height: 40px; flex: 0 0 40px; align-items: center; justify-content: center; border-radius: 50%; background: #111; color: #fff; font: 700 16px/1 var(--font-heading); }
+  .mfg-event-card__text h3 { margin: 0 0 8px; color: var(--heading-dark); font: 700 20px/1.2 var(--font-heading); }
+  .mfg-event-card__text p { margin: 0; color: var(--subheading-gray); font: 400 16px/1.6 var(--font-body); }
+  .mfg-event-card__visual { display: flex; padding: 18px; align-items: center; justify-content: center; overflow: hidden; border: 1px solid rgba(255,255,255,.86); border-radius: 20px; }
+  .mfg-event-card:nth-child(1) .mfg-event-card__visual { background: linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%); }
+  .mfg-event-card:nth-child(2) .mfg-event-card__visual { background: linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%); }
+  .mfg-event-card:nth-child(3) .mfg-event-card__visual { background: linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%); }
+  .mfg-event-card:nth-child(4) .mfg-event-card__visual { background: linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%); }
+  .mfg-event-card__shot { position: relative; width: 100%; height: 280px; }
+  .mfg-event-card__shot > img { position: absolute; inset: 10px 8px 18px; width: calc(100% - 16px); height: calc(100% - 28px); max-width: none; max-height: none; border: 1px solid #e2e4e9; border-radius: 14px; background: #fff; box-shadow: 0 16px 34px rgba(17,24,39,.14); object-fit: cover; }
+  .mfg-event-card__shot--arrival > img { object-position: 50% 16%; }
+  .mfg-event-card__shot--partners > img { object-position: 50% 10%; }
+  .mfg-event-card__shot--programme > img { object-position: 50% 16%; }
+  .mfg-event-card__shot--communication > img { object-position: 50% 50%; }
+  .mfg-event-card__status,
+  .mfg-event-card__action { position: absolute; z-index: 2; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font: 700 12px/1 var(--font-body); box-shadow: 0 10px 24px rgba(17,24,39,.16); }
+  .mfg-event-card__status { top: 0; left: 0; padding: 9px 12px; gap: 7px; border: 1px solid #dfe4f2; background: #fff; color: #253047; }
+  .mfg-event-card__status--success { border-color: #ccebd8; background: #edfbf3; color: #18864b; }
+  .mfg-event-card__status svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-event-card__action { right: 10px; bottom: 0; padding: 11px 15px; background: #4b65f6; color: #fff; }
+  .mfg-event-card__cursor { position: absolute; right: 2px; bottom: 27px; z-index: 3; width: 24px; height: 28px; fill: #111827; stroke: #fff; stroke-width: 2; stroke-linejoin: round; filter: drop-shadow(0 4px 5px rgba(17,24,39,.25)); animation: mfg-event-card-tap 2.4s ease-in-out infinite; }
+  @keyframes mfg-event-card-tap { 0%,65%,100% { transform: translate(0,0); } 74% { transform: translate(-3px,3px) scale(.94); } }
+
+  .mfg-use-cases { padding: 112px 24px; background: var(--surface-light); }
+  .mfg-use-cases__inner { width: min(1080px,100%); margin: 0 auto; }
+  .mfg-use-cases__header { display: flex; margin-bottom: 32px; flex-direction: column; align-items: center; text-align: center; }
+  .mfg-use-cases__header .mfg-eyebrow { margin-bottom: 12px; }
+  .mfg-use-cases__title { max-width: 880px; margin: 0 0 16px; color: #111827; font: 500 clamp(36px,4.5vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .mfg-use-cases__title span { background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .mfg-use-cases__subtitle { max-width: 700px; margin: 0; color: #6b7280; font-size: 17.5px; font-weight: 500; line-height: 1.5; }
+  .mfg-use-cases__tabs { display: flex; width: fit-content; max-width: 100%; margin: 0 auto 40px; padding: 6px; justify-content: center; gap: 4px; border: 1px solid #e5e7eb; border-radius: 999px; background: #f1f3f7; }
+  .mfg-use-cases__tab { padding: 8px 18px; border: 1px solid transparent; border-radius: 999px; background: transparent; color: #64748b; cursor: pointer; font: 600 13.5px/1.2 var(--font-body); transition: background .2s ease,color .2s ease,border-color .2s ease,box-shadow .2s ease; }
+  .mfg-use-cases__tab:hover { background: rgba(255,255,255,.65); color: #334155; }
+  .mfg-use-cases__tab.is-active { border-color: #dbe4f0; background: #fff; box-shadow: 0 2px 8px rgba(30,41,59,.08); color: var(--brand-blue); }
+  .mfg-use-cases__tab:focus-visible { outline: 3px solid rgba(55,93,251,.24); outline-offset: 3px; }
+  .mfg-use-cases__box { min-width: 0; }
+  .mfg-use-cases__panel { --mfg-use-tint: #edf7ff; --mfg-use-border: #d4e7f7; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); padding: 52px 64px; align-items: center; gap: 64px; border: 1px solid var(--mfg-use-border); border-radius: 28px; background: linear-gradient(135deg,var(--mfg-use-tint) 0%,#fff 72%); }
+  .mfg-use-cases.is-ready .mfg-use-cases__panel { display: none; }
+  .mfg-use-cases.is-ready .mfg-use-cases__panel.is-active { display: grid; animation: mfg-use-case-enter .4s ease both; }
+  .mfg-use-cases__panel--chapter { --mfg-use-tint: #eefbf4; --mfg-use-border: #d4efdf; }
+  .mfg-use-cases__panel--awards { --mfg-use-tint: #fff8dc; --mfg-use-border: #f0dfa6; }
+  .mfg-use-cases__panel--tradeshow { --mfg-use-tint: #f3efff; --mfg-use-border: #e2d8fa; }
+  .mfg-use-cases__content h3 { margin: 0 0 18px; color: #1f2937; font: 500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading); letter-spacing: -.03em; }
+  .mfg-use-cases__content > p { margin: 0 0 32px; color: #4b5563; font-size: 16px; font-weight: 500; line-height: 1.6; }
+  .mfg-use-cases__list-label { display: block; margin-bottom: 18px; color: #9ca3af; font-size: 11px; font-weight: 700; letter-spacing: .12em; }
+  .mfg-use-cases__content ul { display: flex; margin: 0; padding: 0; flex-direction: column; gap: 12px; list-style: none; }
+  .mfg-use-cases__content li { display: flex; align-items: flex-start; gap: 10px; color: #6b7280; font-size: 14.5px; font-weight: 500; line-height: 1.4; }
+  .mfg-use-cases__content li svg { width: 14px; height: 14px; margin-top: 2px; flex: 0 0 14px; fill: none; stroke: #9ca3af; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-use-cases__visual { min-width: 0; }
+  .mfg-use-cases__showcase { position: relative; isolation: isolate; padding: 22px; border: 1px solid rgba(255,255,255,.9); border-radius: 24px; background: rgba(255,255,255,.58); box-shadow: 0 22px 48px rgba(31,41,55,.1); }
+  .mfg-use-cases__showcase::before { position: absolute; z-index: -1; inset: 10% 7% -8%; border-radius: 12px; background: var(--mfg-use-border); content: ""; filter: blur(22px); opacity: .48; }
+  .mfg-use-cases__visual-label { position: absolute; top: 10px; left: 10px; z-index: 2; display: inline-flex; padding: 9px 12px; align-items: center; gap: 7px; border: 1px solid #cddcff; border-radius: 10px; background: #eef4ff; box-shadow: 0 8px 22px rgba(49,88,212,.16); color: #3158d4; font: 700 11px/1.2 var(--font-body); }
+  .mfg-use-cases__showcase--chapter .mfg-use-cases__visual-label { border-color: #cbeedb; border-radius: 999px; background: #eefbf5; box-shadow: 0 8px 22px rgba(22,138,85,.15); color: #168a55; }
+  .mfg-use-cases__showcase--awards .mfg-use-cases__visual-label { border-color: #f2dfad; background: #fff8e8; box-shadow: 0 8px 22px rgba(154,107,18,.15); color: #9a6b12; }
+  .mfg-use-cases__showcase--tradeshow .mfg-use-cases__visual-label { border-color: #ded2ff; border-radius: 7px; background: #f5f1ff; box-shadow: 0 8px 22px rgba(115,81,207,.16); color: #7351cf; }
+  .mfg-use-cases__visual-label > i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .mfg-use-cases__art { overflow: hidden; border: 1px solid #e0e4ec; border-radius: 12px; background: #fff; }
+  .mfg-use-cases__art-bar { display: flex; height: 42px; padding: 0 14px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e9edf3; background: #f8f9fc; }
+  .mfg-use-cases__art-bar span { display: flex; gap: 5px; }
+  .mfg-use-cases__art-bar i { width: 7px; height: 7px; border-radius: 50%; background: #d6dbe5; }
+  .mfg-use-cases__art-bar b { color: #81899a; font-size: 9px; letter-spacing: .04em; }
+  .mfg-use-cases__art-body { display: flex; min-height: 246px; padding: 42px 20px 20px; flex-direction: column; }
+  .mfg-use-cases__art-body > small { margin-bottom: 7px; color: #9ca3af; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+  .mfg-use-cases__art-body > strong { margin-bottom: 18px; color: #253047; font: 500 18px/1.2 var(--font-heading); }
+  .mfg-use-cases__art-body > span { display: flex; min-height: 43px; padding: 10px 12px; align-items: center; justify-content: space-between; gap: 12px; border-top: 1px solid #edf0f5; color: #667085; font-size: 11px; }
+  .mfg-use-cases__art-body > span b { font-weight: 600; }
+  .mfg-use-cases__art-body > span em { padding: 5px 8px; border-radius: 999px; background: var(--mfg-use-tint); color: #5269bd; font-size: 9px; font-style: normal; font-weight: 700; }
+  .mfg-use-cases__panel--chapter .mfg-use-cases__art-body > span em { color: #168a55; }
+  .mfg-use-cases__panel--awards .mfg-use-cases__art-body > span em { color: #9a6b12; }
+  .mfg-use-cases__panel--tradeshow .mfg-use-cases__art-body > span em { color: #7351cf; }
+  @keyframes mfg-use-case-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .mfg-links { padding: clamp(58px,4.5vw,76px) 24px clamp(52px,4vw,68px); scroll-margin-top: 68px; background: linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.82) 62%,#fff); }
+  .mfg-links__shell { width: min(1140px,100%); margin: 0 auto; }
+  .mfg-links__heading { padding: 0 24px clamp(52px,5vw,65px); text-align: center; }
+  .mfg-links__heading .mfg-eyebrow { margin-bottom: 12px; }
+  .mfg-links__heading h2 { max-width: 1092px; margin: 0 auto; color: #111827; font: 500 clamp(38px,4vw,56px)/1.08 var(--font-heading); letter-spacing: -.03em; }
+  .mfg-links__heading h2 span { display: block; }
+  .mfg-links__heading h2 span:last-child { background: linear-gradient(90deg,#555,#aaa); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  .mfg-links__heading > p:last-child { max-width: 650px; margin: 14px auto 0; color: var(--subheading-gray); font-size: 17px; line-height: 1.55; }
+  .mfg-links__grid { position: relative; display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); border-top: 1px solid var(--surface-card-border); }
+  .mfg-links__card { position: relative; min-height: 254px; padding: 28px; }
+  .mfg-links__card + .mfg-links__card { border-left: 1px solid var(--surface-card-border); }
+  .mfg-links__icon { display: inline-flex; width: 30px; height: 30px; margin-bottom: 28px; align-items: center; justify-content: center; color: var(--brand-blue); }
+  .mfg-links__icon svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .mfg-links__card h3 { min-height: 48px; margin: 0 0 28px; font: 500 21px/1.15 var(--font-heading); }
+  .mfg-links__card h3 a { color: var(--heading-dark); text-decoration: none; }
+  .mfg-links__card h3 a::after { position: absolute; inset: 0; content: ""; }
+  .mfg-links__card p { margin: 14px 0 0; color: var(--body-gray); font-size: 15px; line-height: 1.4; }
+  .mfg-links__card { transition: background-color 180ms ease; }
+  .mfg-links__card:hover { background: rgba(238,243,255,.58); }
+  .mfg-links__card:hover h3 a { color: var(--brand-blue); }
+  .mfg-links__notch,
+  .mfg-links__cross { position: absolute; z-index: 2; width: 28px; height: 28px; pointer-events: none; line-height: 0; }
+  .mfg-links__notch { top: 0; transform: translate(-50%,-50%); }
+  .mfg-links__notch--1 { left: 25%; }
+  .mfg-links__notch--2 { left: 50%; }
+  .mfg-links__notch--3 { left: 75%; }
+  .mfg-links__cross { top: 0; left: 0; transform: translate(-50%,-50%); }
+  .mfg-links__notch svg,
+  .mfg-links__cross svg { width: 28px; height: 28px; overflow: visible; }
+  .mfg-links__notch path,
+  .mfg-links__cross path { fill: var(--surface-card-border); }
+
+  .mfg-demo { max-width: 1200px; margin: 0 auto; padding: 60px 20px 80px; }
+  .mfg-demo__card { position: relative; display: flex; min-height: 536px; padding: 60px 40px; align-items: center; gap: 40px; overflow: hidden; border-radius: 24px; background: #0f1629; text-align: left; }
+  .mfg-demo__glow { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .mfg-demo__glow--one { top: -100px; left: -50px; width: 400px; height: 400px; background: rgba(55,93,251,.2); }
+  .mfg-demo__glow--two { right: -30px; bottom: -80px; width: 300px; height: 300px; background: rgba(159,129,255,.15); }
+  .mfg-demo__content { position: relative; z-index: 2; display: flex; min-width: 0; flex: 1; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .mfg-demo__eyebrow { display: inline-flex; padding: 8px 14px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.72); font: 600 13px/18px var(--font-body); letter-spacing: .04em; text-transform: uppercase; }
+  .mfg-demo__title { margin: 0; color: #fff; font: 500 48px/1.15 var(--font-heading); letter-spacing: -1px; }
+  .mfg-demo__desc { margin: 0; color: rgba(255,255,255,.65); font: 400 18px/28px var(--font-body); letter-spacing: -.3px; }
+  .mfg-demo__proof-row { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
+  .mfg-demo__proof-row span { display: inline-flex; padding: 9px 12px; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; background: rgba(255,255,255,.06); color: rgba(255,255,255,.74); font: 500 13px/18px var(--font-body); }
+  .mfg-demo__button { display: inline-flex; padding: 12px 28px; align-items: center; justify-content: center; gap: 6px; border-radius: 10px; background: var(--brand-blue); box-shadow: 0 4px 20px rgba(55,93,251,.35); color: #fff; font: 600 15px/24px var(--font-body); letter-spacing: -.3px; text-decoration: none; transition: background .3s,transform .3s,box-shadow .3s; }
+  .mfg-demo__button:hover { background: var(--brand-blue-hover); box-shadow: 0 6px 28px rgba(55,93,251,.4); transform: translateY(-1px); }
+  .mfg-demo__visual { position: relative; z-index: 1; width: 100%; height: 380px; flex: 0 0 45%; animation: mfg-demo-float 4s ease-in-out infinite; }
+  .mfg-demo-board { position: absolute; top: 74px; left: 22px; width: 72%; overflow: hidden; border: 1px solid #dce3f1; border-radius: 12px; background: #fff; box-shadow: 0 20px 46px rgba(3,8,24,.36); }
+  .mfg-demo-board__bar { display: flex; height: 40px; padding: 0 13px; align-items: center; justify-content: space-between; border-bottom: 1px solid #e8ecf4; background: #f8f9fc; }
+  .mfg-demo-board__bar span { display: flex; gap: 5px; }
+  .mfg-demo-board__bar i { width: 7px; height: 7px; border-radius: 50%; background: #d2d8e4; }
+  .mfg-demo-board__bar b { color: #7f899b; font-size: 8px; letter-spacing: .04em; }
+  .mfg-demo-board__body { padding: 20px 18px 16px; }
+  .mfg-demo-board__body > small { display: block; margin-bottom: 6px; color: #9aa3b2; font-size: 8px; font-weight: 800; letter-spacing: .12em; }
+  .mfg-demo-board__body > strong { display: block; margin-bottom: 12px; color: #263149; font: 500 16px/1.2 var(--font-heading); }
+  .mfg-demo-board__body > div { display: flex; min-height: 38px; padding: 8px 6px; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid #edf0f5; color: #6f7889; font-size: 10px; }
+  .mfg-demo-board__body > div b { padding: 4px 7px; border-radius: 999px; background: #edf8f4; color: #41735f; font-size: 8px; }
+  .mfg-demo-audience { position: absolute; z-index: 3; top: 26px; right: 6px; width: 194px; padding: 14px; border: 1px solid rgba(255,255,255,.6); border-radius: 12px; background: linear-gradient(145deg,#89bbff,#c4e4ff); box-shadow: 0 16px 34px rgba(3,8,24,.28); }
+  .mfg-demo-audience small,
+  .mfg-demo-review small { display: block; margin-bottom: 9px; color: #53627a; font-size: 7px; font-weight: 800; letter-spacing: .09em; }
+  .mfg-demo-audience > div { display: flex; margin-bottom: 9px; }
+  .mfg-demo-audience i { display: grid; width: 38px; height: 38px; margin-right: -5px; place-items: center; border: 2px solid rgba(255,255,255,.88); border-radius: 50%; background: linear-gradient(145deg,#536ed8,#202d5d); color: #fff; font-size: 8px; font-style: normal; font-weight: 700; }
+  .mfg-demo-audience strong { color: #253047; font-size: 9px; line-height: 1.3; }
+  .mfg-demo-review { position: absolute; z-index: 4; right: 4px; bottom: 42px; width: 178px; padding: 15px; border: 1px solid #dbe2ef; border-radius: 11px; background: #fff; box-shadow: 0 16px 34px rgba(3,8,24,.3); }
+  .mfg-demo-review strong { display: block; margin-bottom: 12px; color: #263149; font: 500 13px/1.25 var(--font-heading); }
+  .mfg-demo-review span { display: flex; align-items: center; gap: 7px; color: #657084; font-size: 8px; }
+  .mfg-demo-review span i { width: 7px; height: 7px; border-radius: 50%; background: #31b878; box-shadow: 0 0 0 4px rgba(49,184,120,.12); }
+  .mfg-demo-action { position: absolute; z-index: 5; right: 14px; bottom: 6px; padding: 10px 15px; border-radius: 7px; background: var(--brand-blue); box-shadow: 0 8px 20px rgba(55,93,251,.38); color: #fff; font-size: 10px; font-weight: 700; }
+  @keyframes mfg-demo-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+  .mfg-faq { width: 100%; padding: 80px 24px; background: transparent; }
+  .mfg-faq__shell { display: grid; width: 100%; max-width: 1140px; margin: 0 auto; grid-template-columns: 360px 1fr; gap: 64px; align-items: start; }
+  .mfg-faq__sidebar { position: sticky; top: 6rem; }
+  .mfg-faq__eyebrow { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; margin-bottom: 20px; border: 1px solid #e4e7ec; border-radius: 999px; color: #000; font: 500 .8125rem/1 var(--font-body); }
+  .mfg-faq__sidebar h2 { margin: 0 0 20px; color: #000; font: 500 44px/1.1 "Creato Display", var(--font-heading); letter-spacing: -1px; }
+  .mfg-faq__sidebar > p { margin: 0 0 28px; color: var(--body-light); font: 400 1rem/1.6 var(--font-body); }
+  .mfg-faq__cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 999px; color: #fff; background: #171a21; font: 500 .9375rem/1 var(--font-body); text-decoration: none; transition: background .2s ease, transform .2s ease; }
+  .mfg-faq__cta:hover { background: #000; transform: translateY(-1px); }
+  .mfg-faq__list { display: flex; flex-direction: column; gap: 16px; counter-reset: manufacturing-faq; }
+  .mfg-faq__item { counter-increment: manufacturing-faq; padding: 4px 28px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: #fff; transition: background .25s ease, border-color .25s ease; }
+  .mfg-faq__item[open] { border-color: #e4e7ec; background: #e4e7ec; }
+  .mfg-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 0; color: #000; font: 500 1.0625rem/1.35 "Creato Display", var(--font-heading); cursor: pointer; list-style: none; }
+  .mfg-faq__question::-webkit-details-marker { display: none; }
+  .mfg-faq__question strong { font-weight: 500; }
+  .mfg-faq__question strong::before { content: counter(manufacturing-faq) ". "; }
+  .mfg-faq__icon { position: relative; width: 18px; height: 18px; flex-shrink: 0; transition: transform .28s cubic-bezier(.22,1,.36,1); }
+  .mfg-faq__icon::before,
+  .mfg-faq__icon::after { position: absolute; top: 50%; left: 50%; background: #000; content: ""; transform: translate(-50%,-50%); }
+  .mfg-faq__icon::before { width: 14px; height: 2px; }
+  .mfg-faq__icon::after { width: 2px; height: 14px; transition: opacity .2s ease; }
+  .mfg-faq__item[open] .mfg-faq__icon { transform: scale(.9); }
+  .mfg-faq__item[open] .mfg-faq__icon::after { opacity: 0; }
+  .mfg-faq__answer { max-width: 640px; padding: 0 0 24px; }
+  .mfg-faq__answer p { margin: 0; color: #000; font: 400 .9375rem/1.7 var(--font-body); }
+
+  @media (max-width: 1120px) {
+    .mfg-hero { padding: 140px 20px 56px; }
+    .mfg-hero__grid { grid-template-columns: minmax(0,1fr) minmax(0,460px); gap: 32px; }
+    .mfg-hero__title { font-size: 46px; line-height: 52px; letter-spacing: -1.5px; }
+    .mfg-hero__lead { max-width: 520px; }
+  }
+
+  @media (max-width: 1024px) {
+    .mfg-faq__shell { grid-template-columns: 1fr; gap: 40px; }
+    .mfg-faq__sidebar { position: static; }
+    .mfg-faq__sidebar h2 { font-size: 32px; }
+    .mfg-demo__card { padding: 60px 24px; }
+    .mfg-demo__title { font-size: 36px; }
+    .mfg-demo__desc { font-size: 16px; }
+    .mfg-demo__visual { flex-basis: 40%; }
+    .mfg-links__grid { grid-template-columns: repeat(2,1fr); }
+    .mfg-links__card:nth-of-type(odd) { border-left: 0; }
+    .mfg-links__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border); }
+    .mfg-links__notch,
+    .mfg-links__cross { display: none; }
+    .mfg-use-cases__panel,
+    .mfg-use-cases.is-ready .mfg-use-cases__panel.is-active { grid-template-columns: 1fr; gap: 48px; padding: 48px; }
+  }
+
+  @media (max-width: 992px) {
+    .mfg-event-day__container { flex-direction: column; gap: 40px; }
+    .mfg-event-day__left { width: 100%; flex: none; }
+    .mfg-event-day__sticky { position: static; }
+    .mfg-event-day__left h2 { max-width: 760px; }
+    .mfg-event-day__left p { max-width: 700px; }
+    .mfg-event-card { padding: 32px 24px; }
+    .mfg-event-card__header { flex-direction: column; gap: 16px; }
+    .mfg-event-card__visual { padding: 14px; }
+    .mfg-event-card__shot { height: 240px; }
+    .mfg-event-card__status,
+    .mfg-event-card__action { font-size: 11px; }
+  }
+
+  @media (max-width: 960px) {
+    .mfg-hero { padding: 130px 20px 48px; }
+    .mfg-hero::after { display: none; }
+    .mfg-hero__grid { grid-template-columns: 1fr; gap: 34px; }
+    .mfg-hero__content { align-items: center; text-align: center; }
+    .mfg-hero__title,
+    .mfg-hero__lead { max-width: 760px; }
+    .mfg-hero__title { font-size: 42px; line-height: 1.1; }
+    .mfg-hero__visual { width: min(760px,100%); margin: 0 auto; }
+    .mfg-hero__visual-card { border-right: 1px solid rgba(255,255,255,.62); border-radius: 22px; }
+    .mfg-hero__visual-inner { border-radius: 16px; }
+    .mfg-hero__points,
+    .mfg-actions { justify-content: center; }
+  }
+
+  @media (max-width: 900px) {
+    .mfg-journey-workflow__header h2 { font-size: 52px; line-height: 1.05; }
+    .mfg-boundary { padding: 72px 24px; }
+    .mfg-boundary__row { display: flex; min-height: 0; flex-direction: column; }
+    .mfg-boundary__cell { min-height: 0; padding: 48px; }
+    .mfg-boundary__row > .mfg-boundary__cell:first-child { border-right: 0; border-bottom: 1px solid #e5e7eb; }
+    .mfg-boundary__notch,
+    .mfg-boundary__cross { display: none; }
+    .mfg-model-row { display: flex; flex-direction: column; }
+    .mfg-model-cell { min-height: 0; padding: 3rem 1.5rem; }
+    .mfg-model-row .mfg-model-cell:first-child { border-right: 0; }
+    .mfg-model-content { order: 1; border-bottom: 1px solid #e5e7eb; }
+    .mfg-model-visual { order: 2; min-height: 430px; }
+    .mfg-coordinate__inner { grid-template-columns: 1fr; gap: 32px; }
+    .mfg-coordinate__left,
+    .mfg-coordinate__right { max-width: none; }
+  }
+
+  @media (max-width: 860px) {
+    .mfg-cap-grid { grid-template-columns: 1fr; }
+    .mfg-cap-cell,
+    .mfg-cap-cell:nth-child(n + 4) { min-height: 0; padding: 32px 24px; grid-column: span 1; border-right: 0; border-bottom: 1px solid #3b3a47; }
+    .mfg-cap-cell:last-child { border-bottom: 0; }
+    .mfg-cap-petal { display: none; }
+    .mfg-cap-desc { max-width: none; }
+  }
+
+  @media (max-width: 767px) {
+    .mfg-shell { width: min(calc(100% - 32px),640px); }
+    .mfg-section { padding-block: 64px; }
+    .mfg-faq { padding: 56px 16px; }
+    .mfg-faq__sidebar h2 { font-size: 28px; }
+    .mfg-faq__item { padding: 4px 20px; border-radius: 16px; }
+    .mfg-faq__question { padding: 18px 0; font-size: .9375rem; }
+    .mfg-heading { margin-bottom: 30px; }
+    .mfg-heading h2 { font-size: clamp(32px,10vw,42px); }
+    .mfg-hero { margin-top: -80px; padding: 120px 18px 44px; }
+    .mfg-hero__grid { gap: 34px; padding-bottom: 30px; }
+    .mfg-hero__title { font-size: 38px; line-height: 1.2; letter-spacing: 0; }
+    .mfg-hero__title span { white-space: normal; }
+    .mfg-hero__lead { font-size: 15px; line-height: 1.7; }
+    .mfg-hero__badge { font-size: 16px; line-height: 1.1; }
+    .mfg-hero__points { justify-content: center; }
+    .mfg-hero__points li { font-size: 13px; }
+    .mfg-actions { display: grid; width: 100%; }
+    .mfg-actions .mfg-button { width: 100%; }
+    .mfg-button { width: 100%; }
+    .mfg-hero__visual-card { padding: 10px; border-radius: 18px; }
+    .mfg-hero__visual-inner { height: 360px; border-radius: 14px; }
+    .mfg-hero-phone { top: 24px; left: 10px; transform: scale(.72); transform-origin: top left; }
+    .mfg-hero-access { top: 90px; left: 90px; transform: scale(.72); transform-origin: top left; }
+    .mfg-hero-pulse { top: 30px; right: 6px; transform: scale(.72); transform-origin: top right; }
+    .mfg-hero-app { right: 0; bottom: 10px; transform: scale(.72); transform-origin: bottom right; }
+    .mfg-rail__inner { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .mfg-links__grid { grid-template-columns: 1fr; }
+    .mfg-links { padding: 64px 16px 48px; }
+    .mfg-links__heading { padding: 0 0 44px; }
+    .mfg-links__heading h2 { font-size: clamp(34px,10vw,42px); }
+    .mfg-links__heading > p:last-child { font-size: 16px; }
+    .mfg-links__card { min-height: 0; padding: 28px 20px; }
+    .mfg-links__card + .mfg-links__card,
+    .mfg-links__card:nth-of-type(n + 3) { border-top: 1px solid var(--surface-card-border); border-left: 0; }
+    .mfg-links__card h3 { min-height: 0; margin-bottom: 16px; }
+    .mfg-links__card p { margin-top: 0; }
+    .mfg-journey-workflow { padding: 76px 20px; }
+    .mfg-journey-workflow__header { margin-bottom: 46px; }
+    .mfg-journey-workflow__header h2 { font-size: 43px; line-height: 1.03; letter-spacing: -1.7px; }
+    .mfg-journey-steps summary,
+    .mfg-journey-steps summary:hover { grid-template-columns: 26px minmax(0,1fr); min-height: 96px; padding: 18px 62px 18px 14px; gap: 10px; }
+    .mfg-journey-step__arrow { top: 31px; right: 16px; }
+    .mfg-journey-steps summary > span { font-size: 13px; }
+    .mfg-journey-steps details:not([open]) .mfg-journey-step__content { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+    .mfg-journey-steps details:not([open]) .mfg-journey-step__content p { font-size: 13px; line-height: 1.4; }
+    .mfg-journey-steps details[open] { flex-direction: column; }
+    .mfg-journey-steps details[open] summary,
+    .mfg-journey-steps details[open] summary:hover { flex: none; grid-template-columns: 32px minmax(0,1fr); padding: 34px 62px 24px 14px; gap: 10px; }
+    .mfg-journey-steps details[open] summary > span { font-size: 21px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__content h3 { font-size: 28px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__content p { max-width: none; margin-bottom: 24px; font-size: 16px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__content ul { gap: 14px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__content li { font-size: 15px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__arrow { top: 24px; right: 16px; }
+    .mfg-journey-steps details[open] .mfg-journey-step__visual { flex: none; padding: 0 24px 28px; margin: 0; justify-content: center; }
+    .mfg-journey-step__visual img { max-width: 520px; }
+    .mfg-boundary { padding: 64px 16px; }
+    .mfg-boundary__header { margin-bottom: 44px; }
+    .mfg-boundary__header h2 { font-size: clamp(34px,10vw,42px); }
+    .mfg-boundary__header > p:last-child { font-size: 16px; }
+    .mfg-boundary__cell { padding: 32px 20px; }
+    .mfg-boundary__copy h3 { font-size: 32px; }
+    .mfg-boundary__copy p { font-size: 16px; }
+    .mfg-boundary__stage { height: 310px; padding: 38px 14px 14px; }
+    .mfg-boundary__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .mfg-use-cases { padding: 72px 20px; }
+    .mfg-use-cases__title { font-size: clamp(30px,8.3vw,42px); }
+    .mfg-use-cases__subtitle { font-size: 16px; }
+    .mfg-use-cases__tabs { width: 100%; justify-content: flex-start; overflow-x: auto; border-radius: 20px; scrollbar-width: none; scroll-snap-type: x proximity; }
+    .mfg-use-cases__tabs::-webkit-scrollbar { display: none; }
+    .mfg-use-cases__tab { flex: 0 0 auto; padding-inline: 14px; white-space: nowrap; scroll-snap-align: start; }
+    .mfg-use-cases__panel,
+    .mfg-use-cases.is-ready .mfg-use-cases__panel.is-active { padding: 32px 24px; gap: 36px; border-radius: 20px; }
+    .mfg-use-cases__showcase { padding: 14px; border-radius: 18px; }
+    .mfg-use-cases__visual-label { top: 5px; left: 5px; padding: 7px 9px; font-size: 9px; }
+    .mfg-model-section { padding: 64px 16px; }
+    .mfg-model-header { margin-bottom: 36px; }
+    .mfg-model-cell { padding: 36px 20px; }
+    .mfg-model-visual { min-height: 380px; }
+    .mfg-model-stage { min-height: 310px; padding: 26px 14px; }
+    .mfg-community-map,
+    .mfg-programme-board { min-height: 250px; height: 250px; }
+    .mfg-programme-board { padding: 18px; }
+    .mfg-programme-board span { grid-template-columns: 42px 1fr; }
+    .mfg-programme-board em { display: none; }
+    .mfg-event-day { padding: 72px 20px; }
+    .mfg-event-day__left h2 { font-size: clamp(36px,10vw,44px); }
+    .mfg-event-day__left p { font-size: 16px; }
+    .mfg-event-card { padding: 26px 18px; border-radius: 20px; }
+    .mfg-event-card__text h3 { font-size: 19px; }
+    .mfg-event-card__text p { font-size: 14px; }
+    .mfg-event-card__visual { padding: 10px; border-radius: 16px; }
+    .mfg-event-card__shot { height: 220px; }
+    .mfg-event-card__status { left: 2px; }
+    .mfg-event-card__action { right: 4px; }
+    .mfg-demo { padding: 40px 16px 60px; }
+    .mfg-demo__card { min-height: 0; padding: 48px 20px; flex-direction: column; border-radius: 20px; }
+    .mfg-demo__content { align-items: center; text-align: center; }
+    .mfg-demo__title { font-size: 28px; line-height: 1.2; }
+    .mfg-demo__desc { font-size: 15px; }
+    .mfg-demo__proof-row { justify-content: center; gap: 8px; }
+    .mfg-demo__button { width: 100%; }
+    .mfg-demo__visual { display: none; }
+  }
+
+  @media (max-width: 620px) {
+    .mfg-dark-band { padding-top: 72px; }
+    .mfg-capabilities-heading h2 { font-size: clamp(38px,12vw,48px); }
+    .mfg-cap-grid-section { padding-bottom: 48px; }
+    .mfg-coordinate { padding: 12px 16px; }
+    .mfg-coordinate__inner { padding: 32px 24px; grid-template-columns: 1fr; gap: 32px; }
+    .mfg-coordinate__title { font-size: 28px; }
+    .mfg-coordinate__title-line { white-space: normal; }
+    .mfg-coordinate__copy { font-size: 16px; }
+    .mfg-coordinate__actions { width: 100%; flex-direction: column; align-items: stretch; }
+    .mfg-coordinate__btn { width: 100%; }
+    .mfg-coordinate__showcase { height: 300px; border-radius: 18px; }
+    .mfg-coordinate__shot--overview { top: 30px; left: 12px; width: 80%; }
+    .mfg-coordinate__shot--detail { right: 12px; bottom: 23px; width: 72%; }
+    .mfg-coordinate__status { top: 14px; left: 12px; }
+    .mfg-coordinate__publish { right: 12px; bottom: 12px; }
+    .mfg-coordinate__cursor { right: 15px; bottom: 46px; }
+  }
+
+  @media (max-width: 420px) {
+    .mfg-hero__title { font-size: 33px; line-height: 1.15; }
+    .mfg-model-header h2 { font-size: 34px; }
+    .mfg-model-float { padding: 9px 11px; }
+    .mfg-model-float b { font-size: .68rem; }
+    .mfg-model-float small { font-size: .58rem; }
+    .mfg-community-map > b { width: 94px; }
+  }
+
+  /* Real EventHex portal captures replace the illustrative product mocks. */
+  .mfg-model-stage,
+  .mfg-boundary__stage,
+  .mfg-coordinate__showcase,
+  .mfg-demo__visual { padding: 0; background: #f7f9fc; }
+
+  .mfg-model-stage > img,
+  .mfg-boundary__stage > img,
+  .mfg-coordinate__showcase > img,
+  .mfg-demo__visual > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .mfg-model-stage > img,
+  .mfg-boundary__stage > img { border-radius: 22px; }
+  .mfg-coordinate__showcase > img { border-radius: 24px; }
+
+  .mfg-use-cases__showcase > img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 960 / 516;
+    border: 1px solid rgba(128, 144, 178, .2);
+    border-radius: 15px;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .mfg-demo__visual {
+    overflow: hidden;
+    height: min(29vw, 380px);
+    border: 1px solid rgba(255,255,255,.22);
+    border-radius: 18px;
+    box-shadow: 0 26px 54px rgba(0,0,0,.26);
+  }
+
+  .mfg-demo__visual > img { border-radius: inherit; }
+
+  .mfg-hero__visual-card {
+    overflow: hidden;
+    padding: 14px;
+    border-right: 1px solid rgba(255,255,255,.62);
+    border-radius: 24px;
+    box-shadow: 0 30px 70px rgba(35,49,89,.16);
+  }
+
+  .mfg-hero__screenshot {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 946 / 697;
+    border: 1px solid #dfe5ef;
+    border-radius: 16px;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .mfg-hero__screen-label {
+    position: absolute;
+    right: 28px;
+    bottom: 28px;
+    display: grid;
+    gap: 3px;
+    padding: 11px 14px;
+    border: 1px solid rgba(207,220,255,.92);
+    border-radius: 11px;
+    background: rgba(255,255,255,.94);
+    box-shadow: 0 14px 30px rgba(31,41,72,.16);
+  }
+
+  .mfg-hero__screen-label b { color: var(--heading-dark); font: 700 12px/1.2 var(--font-body); }
+  .mfg-hero__screen-label small { color: var(--body-light); font: 500 10px/1.3 var(--font-body); }
+
+  @media (max-width: 620px) {
+    .mfg-model-stage > img,
+    .mfg-boundary__stage > img,
+    .mfg-coordinate__showcase > img { border-radius: 18px; }
+    .mfg-hero__visual { margin-right: 0; }
+    .mfg-hero__screen-label { right: 22px; bottom: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mfg-community-map,
+    .mfg-programme-board,
+    .mfg-model-float,
+    .mfg-demo__visual,
+    .mfg-use-cases.is-ready .mfg-use-cases__panel.is-active { animation: none; }
+    .mfg-button,
+    .mfg-links__card,
+    .mfg-faq__item,
+    .mfg-faq__icon,
+    .mfg-faq__icon::after,
+    .mfg-coordinate__btn,
+    .mfg-use-cases__tab,
+    .mfg-event-card,
+    .mfg-event-day__cta { transition: none; }
+    .mfg-event-card__cursor { animation: none; }
+    .mfg-dark-band { clip-path: none; will-change: auto; }
+    .mfg-cap-card,
+    .mfg-cap-stack,
+    .mfg-cap-records,
+    .mfg-cap-chips,
+    .mfg-cap-visual::before,
+    .mfg-cap-ticket.is-active,
+    .mfg-cap-records > div.is-active,
+    .mfg-cap-chips span.is-active,
+    .mfg-cap-field i,
+    .mfg-cap-lead em { animation: none; }
+  }
+</style>
+
+<script>
+  const useCases = document.querySelector<HTMLElement>(".mfg-use-cases");
+
+  if (useCases) {
+    const useCaseTabs = Array.from(useCases.querySelectorAll<HTMLButtonElement>("[data-use-case-tab]"));
+    const useCasePanels = Array.from(useCases.querySelectorAll<HTMLElement>("[data-use-case-panel]"));
+
+    const activateUseCase = (tab: HTMLButtonElement, moveFocus = false) => {
+      const target = tab.dataset.useCaseTab;
+      useCaseTabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("is-active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      useCasePanels.forEach((panel) => panel.classList.toggle("is-active", panel.dataset.useCasePanel === target));
+      if (moveFocus) tab.focus();
+    };
+
+    useCases.classList.add("is-ready");
+    useCaseTabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activateUseCase(tab));
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        const direction = event.key === "ArrowRight" ? 1 : -1;
+        const next = useCaseTabs[(index + direction + useCaseTabs.length) % useCaseTabs.length];
+        if (next) activateUseCase(next, true);
+      });
+    });
+  }
+
+  const journeyItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".mfg-journey-steps details"));
+
+  journeyItems.forEach((item) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".mfg-journey-step__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      const title = item.querySelector("h3")?.textContent?.trim() || "journey step";
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} ${title}`);
+      if (!item.open) return;
+      journeyItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".mfg-faq details"));
+
+  faqItems.forEach((item) => {
+    item.addEventListener("toggle", () => {
+      if (!item.open) return;
+      faqItems.forEach((other) => {
+        if (other !== item) other.open = false;
+      });
+    });
+  });
+
+  const capabilitiesBand = document.querySelector<HTMLElement>(".mfg-dark-band");
+  if (capabilitiesBand && capabilitiesBand.dataset.bleedReady !== "true" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    capabilitiesBand.dataset.bleedReady = "true";
+    let capabilitiesTop = 0;
+    let capabilitiesViewportHeight = window.innerHeight || 1;
+    let capabilitiesTicking = false;
+    let capabilitiesProgress = -1;
+
+    const measureCapabilitiesBand = () => {
+      capabilitiesViewportHeight = window.innerHeight || 1;
+      capabilitiesTop = capabilitiesBand.getBoundingClientRect().top + window.scrollY;
+    };
+
+    const updateCapabilitiesBand = () => {
+      capabilitiesTicking = false;
+      const travelled = capabilitiesViewportHeight - (capabilitiesTop - window.scrollY);
+      const progress = Math.min(1, Math.max(0, travelled / (capabilitiesViewportHeight * .7)));
+      const rounded = Math.round(progress * 100) / 100;
+      if (rounded === capabilitiesProgress) return;
+      capabilitiesProgress = rounded;
+      capabilitiesBand.style.setProperty("--band-p", String(rounded));
+    };
+
+    const onCapabilitiesScroll = () => {
+      if (capabilitiesTicking) return;
+      capabilitiesTicking = true;
+      requestAnimationFrame(updateCapabilitiesBand);
+    };
+
+    const onCapabilitiesResize = () => {
+      measureCapabilitiesBand();
+      capabilitiesProgress = -1;
+      onCapabilitiesScroll();
+    };
+
+    measureCapabilitiesBand();
+    updateCapabilitiesBand();
+    window.addEventListener("scroll", onCapabilitiesScroll, { passive: true });
+    window.addEventListener("resize", onCapabilitiesResize, { passive: true });
+    window.addEventListener("load", onCapabilitiesResize);
+  }
+
+</script>

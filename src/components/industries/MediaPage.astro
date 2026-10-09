@@ -1,0 +1,736 @@
+---
+import eventRegistrationSource from "../../pages/event-registration.astro?raw";
+import speakerDeckSource from "../speaker-management/DeckSections.astro?raw";
+import speakerProgramContentSource from "../speaker-management/ProgramContentSections.astro?raw";
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+import { Image } from "astro:assets";
+
+interface Props {
+  faqs: [string, string][];
+}
+
+const { faqs } = Astro.props;
+
+// Keep this page tied to the actual Event Registration implementation instead of
+// maintaining a look-alike stylesheet that can drift from the master template.
+const eventRegistrationStyles = Array.from(
+  eventRegistrationSource.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
+  (match) => match[1],
+).join("\n");
+const speakerDeckStyles = Array.from(
+  speakerDeckSource.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
+  (match) => match[1],
+).join("\n");
+const speakerProgramContentStyles = Array.from(
+  speakerProgramContentSource.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
+  (match) => match[1],
+).join("\n");
+
+const crossSvg = `<svg width="18" height="18" viewBox="-14 -14 28 28" aria-hidden="true">
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+</svg>`;
+
+const operatingStages = [
+  ["Open", "Submission call"],
+  ["Review", "Assignments + rubric"],
+  ["Select", "Decisions"],
+  ["Programme", "Sessions + speakers"],
+  ["Invite", "Audience registration"],
+  ["Deliver", "Badges + experience"],
+];
+
+const coreWorkflow = [
+  {
+    eyebrow: "Content intake",
+    title: "Submission workflow",
+    copy: "Collect configured proposals or content submissions, assign reviewers, score, and record decisions.",
+    image: "/feature-images/speaker-management/cfp-portal-submissions.jpg",
+    alt: "EventHex Call for Papers portal showing submitted content ready for review",
+    width: 1117,
+    height: 837,
+    top: "Submissions open",
+    bottom: "Review queue ready",
+  },
+  {
+    eyebrow: "Review",
+    title: "Programme handoff",
+    copy: "Move accepted work into sessions and coordinate speakers, rooms, time, and attendee discovery.",
+    image: "/feature-images/speaker-management/cfp-portal-rubric.jpg",
+    alt: "EventHex review portal with a configured scoring rubric",
+    width: 1117,
+    height: 837,
+    top: "Rubric active",
+    bottom: "Decision recorded",
+  },
+  {
+    eyebrow: "Access",
+    title: "Audience entry",
+    copy: "Publish the event website and configure registration, tickets, communication, and badges.",
+    image: "/feature-images/speaker-management/cfp-tickets.png",
+    alt: "EventHex event ticket workspace used to configure audience access",
+    width: 762,
+    height: 696,
+    top: "Registration connected",
+    bottom: "Audience path ready",
+  },
+  {
+    eyebrow: "Follow-up",
+    title: "Event memory",
+    copy: "Use the AI Photo Gallery discovery flow and event analytics within their exact boundaries.",
+    image: "/feature-images/speaker-management/audience-engagement-dashboard.png",
+    alt: "EventHex audience engagement dashboard showing event participation signals",
+    width: 762,
+    height: 696,
+    top: "Event signals",
+    bottom: "Follow-up view",
+  },
+];
+
+const teamRoles = [
+  {
+    title: "Event owner",
+    desc: "Sets the event, audience, access, programme, and reporting decisions.",
+    bullets: ["Define the event model", "Choose audience and access rules", "Approve the operating setup"],
+    image: "/images/industries/technology/event-dashboard-web-800.webp",
+    alt: "EventHex event dashboard used by an event owner to coordinate the operating setup",
+    width: 800,
+    height: 691,
+  },
+  {
+    title: "Specialist teams",
+    desc: "Work in focused registration, programme, exhibitor, marketing, check-in, or analytics areas.",
+    bullets: ["Work in focused module areas", "Keep programme and registration aligned", "Coordinate event-day operations"],
+    image: "/images/industries/media/cfp-portal-sessions-web-960.webp",
+    alt: "EventHex sessions workspace used by specialist teams to coordinate a media programme",
+    width: 960,
+    height: 719,
+  },
+  {
+    title: "Event leadership",
+    desc: "Reviews event and portfolio signals for the next operating decision.",
+    bullets: ["Review event signals", "Compare participation activity", "Choose the next operating decision"],
+    image: "/images/industries/media/ai-gallery-analytics-web-960.webp",
+    alt: "EventHex media event analytics used by event leadership to review participation signals",
+    width: 960,
+    height: 530,
+  },
+];
+
+const attendeeJourney = [
+  {
+    eyebrow: "01 · Submit",
+    title: "Submit",
+    desc: "Give contributors a structured submission path.",
+    image: "/images/industries/media/cfp-portal-submissions-web-960.webp",
+    alt: "EventHex submission portal showing contributor entries ready for review",
+    animated: true,
+    width: 960,
+    height: 719,
+  },
+  {
+    eyebrow: "02 · Review",
+    title: "Review",
+    desc: "Use assigned reviewers and the configured rubric.",
+    image: "/images/industries/media/cfp-portal-rubric-web-960.webp",
+    alt: "EventHex review portal showing the configured scoring rubric",
+    animated: true,
+    width: 960,
+    height: 719,
+  },
+  {
+    eyebrow: "03 · Publish",
+    title: "Publish",
+    desc: "Turn accepted work into programme content.",
+    image: "/images/industries/media/cfp-portal-sessions-web-960.webp",
+    alt: "Published media event programme on an EventHex event website",
+    animated: true,
+    width: 960,
+    height: 719,
+  },
+  {
+    eyebrow: "04 · Register",
+    title: "Register",
+    desc: "Connect audiences to the intended ticket or form.",
+    image: "/images/industries/education/single-registration-web-800.webp",
+    alt: "EventHex ticket workspace used to connect audiences with event registration",
+    animated: true,
+    width: 800,
+    height: 392,
+  },
+  {
+    eyebrow: "05 · Experience",
+    title: "Experience",
+    desc: "Use agenda, app, notifications, networking, and photos as relevant.",
+    image: "/images/industries/media/gallery-people-faces-web-960.webp",
+    alt: "EventHex AI Gallery workspace for attendee photo discovery during the event experience",
+    animated: true,
+    width: 960,
+    height: 530,
+  },
+  {
+    eyebrow: "06 · Review",
+    title: "Review",
+    desc: "Use event signals after the programme ends.",
+    image: "/images/industries/media/ai-gallery-analytics-web-960.webp",
+    alt: "EventHex media event analytics showing post-event audience signals",
+    animated: true,
+    width: 960,
+    height: 530,
+  },
+];
+
+const eventDaySteps = [
+  {
+    title: "Programme access",
+    copy: "Keep screening or session information visible to attendees.",
+    image: "/images/industries/associations/attendee-journey/cfp-portal-published-agenda-web-960.webp",
+    alt: "Published EventHex programme with sessions and booking options for attendees",
+    width: 960,
+    height: 720,
+    status: "Programme published",
+    action: "Open agenda",
+  },
+  {
+    title: "Audience arrival",
+    copy: "Validate event QR codes and manage badge output.",
+    image: "/images/industries/healthcare/delegate-qr-arrival.webp",
+    alt: "EventHex QR scanner and attendee check-in status for event arrival",
+    width: 512,
+    height: 422,
+    status: "QR validated",
+    action: "Check in",
+  },
+  {
+    title: "Operational updates",
+    copy: "Send supported announcements to selected app audiences.",
+    image: "/images/industries/associations/event-day/push-send-alert-web-668.webp",
+    alt: "EventHex push announcement composer for a selected event audience",
+    width: 668,
+    height: 486,
+    status: "Audience selected",
+    action: "Send update",
+  },
+  {
+    title: "Photo discovery",
+    copy: "Let attendees use the selfie and face-match discovery flow where approved.",
+    image: "/images/industries/media/gallery-people-faces.webp",
+    alt: "EventHex AI Gallery People and Faces workspace for attendee photo discovery",
+    width: 960,
+    height: 530,
+    status: "Gallery ready",
+    action: "Find photos",
+  },
+];
+
+const mediaFormatSuites = [
+  {
+    id: "film-festivals",
+    label: "Film festivals",
+    title: "Build the submission-to-programme path",
+    description: "Use submissions and programme tools for the event; keep film rights and asset management in the responsible system.",
+    checklist: ["Configure content submissions", "Assign reviewers and record decisions", "Move accepted work into the programme"],
+    image: "/feature-images/speaker-management/cfp-portal-call-settings.jpg",
+    imageAlt: "EventHex Call for Papers settings for a configured content submission workflow",
+    width: 1117,
+    height: 837,
+    visualClass: "multi-track",
+    visualLabel: "Submission call configured",
+  },
+  {
+    id: "media-conferences",
+    label: "Media conferences",
+    title: "Coordinate speakers, sessions, and event day",
+    description: "Connect speakers, sessions, registration, networking, and event day.",
+    checklist: ["Keep speaker and session records connected", "Publish the programme for attendees", "Coordinate registration and onsite delivery"],
+    image: "/feature-images/speaker-management/use-case-multi-track.jpg",
+    imageAlt: "EventHex visual timeline for a multi-track media conference programme",
+    width: 1117,
+    height: 837,
+    visualClass: "panel-heavy",
+    visualLabel: "Multi-track programme",
+  },
+  {
+    id: "creator-summits",
+    label: "Creator summits",
+    title: "Build a community-led attendee experience",
+    description: "Build a community-led programme with attendee discovery, meetings, and live engagement.",
+    checklist: ["Connect registration to the attendee experience", "Support discovery, meetings, and networking", "Use app engagement and photos where relevant"],
+    image: "/images/live-polling-qa/app/attendee-mobile-app.png",
+    imageAlt: "EventHex attendee mobile app with programme and participation tools",
+    width: 1263,
+    height: 697,
+    visualClass: "academic",
+    visualLabel: "Attendee experience",
+  },
+  {
+    id: "awards-events",
+    label: "Awards events",
+    title: "Connect invitations, programme, and arrival",
+    description: "Run the surrounding invitation, programme, badges, and communication while nominations remain in the responsible system.",
+    checklist: ["Configure invitation and access routes", "Coordinate programme communication", "Connect badges and attendee arrival"],
+    image: "/images/badge-certificate-designer/app/badge-preview.png",
+    imageAlt: "EventHex badge preview prepared for attendee arrival at an awards event",
+    width: 1124,
+    height: 838,
+    visualClass: "recurring",
+    visualLabel: "Badge output ready",
+  },
+];
+
+const featureLinks = [
+  ["Call for Papers", "Configure submissions and review.", "/call-for-papers/"],
+  ["Session Management", "Build the screening or session programme.", "/session-management/"],
+  ["AI Photo Gallery", "Support attendee photo discovery.", "/ai-photo-gallery/"],
+  ["Event Website Builder", "Publish the event destination.", "/event-website-builder/"],
+];
+
+---
+
+<main class="erg-registration-page-bg media-registration-replica">
+  <section id="hero" class="erg-hero" aria-labelledby="media-hero-title">
+    <div class="erg-hero__grid">
+      <div class="erg-hero__content">
+        <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">Event management software for media events</span>
+        <h1 id="media-hero-title" class="erg-hero__title animate-on-scroll" data-animation="fadeInUp">Turn submissions into a programme—and audiences into an event community</h1>
+        <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">Run film festivals, media conferences, creator summits, and awards events with configured submissions, review, programme, registration, badges, photo discovery, and reporting.</p>
+        <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+          <a href="/book-a-demo/" class="erg-hero__btn">Book a Demo <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+          <a href="#operating-map" class="erg-hero__btn erg-hero__btn--outline">See the operating model</a>
+        </div>
+        <div class="erg-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+          <span class="erg-hero__trust-item">Submission and review</span>
+          <span class="erg-hero__trust-item">Screening or session programme</span>
+          <span class="erg-hero__trust-item">Audience experience</span>
+        </div>
+      </div>
+      <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="erg-hero__visual-card">
+          <div class="erg-hero__visual-inner media-hero-visual">
+            <picture>
+              <source srcset="/images/industries/media/cfp-portal-sessions-web-640.webp 640w, /images/industries/media/cfp-portal-sessions-web-960.webp 960w" sizes="(max-width: 960px) calc(100vw - 72px), 490px" />
+              <img class="media-hero-shot" src="/images/industries/media/cfp-portal-sessions.webp" alt="EventHex festival workspace showing scheduled sessions, speakers, and programme controls" width="960" height="719" loading="eager" decoding="async" fetchpriority="high" />
+            </picture>
+            <span class="erg-flow-composite__status media-hero-status">Programme connected</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-map" class="erg-trust-strip" aria-label="One connected event path: see the operating sequence before choosing modules">
+    <div class="erg-trust-strip__inner">
+      {operatingStages.map(([label, copy]) => <span class="erg-trust-strip__stat"><b>{label}</b> {copy}</span>)}
+    </div>
+  </section>
+
+  <section id="event-model" class="erg-flow-section" aria-labelledby="event-model-title">
+    <div class="erg-flow-header">
+      <span class="media-section-eyebrow">Choose the right event model</span>
+      <h2 id="event-model-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Start with the operating shape that fits the event</h2>
+      <p class="erg-flow-subtitle animate-on-scroll" data-animation="fadeInUp">Start with one model, then add only the modules the event actually needs.</p>
+    </div>
+    <div class="erg-flow-quad">
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3 class="erg-flow-quad__title">Community-led event</h3>
+        <p class="erg-flow-quad__text">Build registration, communications, participation, and follow-up around the people attending.</p>
+      </article>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight">
+        <div class="erg-flow-composite">
+          <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/healthcare/app/registration-ticket-web-960.webp" alt="EventHex registration ticket configuration for an audience journey" width="960" height="498" loading="lazy" decoding="async" />
+          <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/feature-images/event-registration-dashboard.png" alt="EventHex attendee registration dashboard for a community-led event" width="512" height="459" loading="lazy" decoding="async" />
+          <span class="erg-flow-composite__status">Audience connected</span><span class="erg-flow-composite__action">Community path</span>
+        </div>
+      </div>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft">
+        <div class="erg-flow-composite">
+          <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/images/industries/media/cfp-portal-submissions.webp" alt="EventHex Call for Papers submissions workspace" width="960" height="719" loading="lazy" decoding="async" />
+          <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/images/industries/media/cfp-portal-rubric.webp" alt="EventHex reviewer rubric for submitted programme content" width="960" height="719" loading="lazy" decoding="async" />
+          <span class="erg-flow-composite__status">Programme structured</span><span class="erg-flow-composite__action">Programme path</span>
+        </div>
+      </div>
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+        <h3 class="erg-flow-quad__title">Programme-led event</h3>
+        <p class="erg-flow-quad__text">Add submissions, speakers, sessions, or exhibitors when the format needs more structure.</p>
+      </article>
+      <span class="erg-flow-quad__cross" aria-hidden="true" set:html={crossSvg}></span>
+    </div>
+  </section>
+
+  <section id="core-workflow" class="erg-bento-section" aria-labelledby="core-workflow-title">
+    <div class="erg-bento-container">
+      <div class="erg-bento-header animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="core-workflow-title">Keep the attendee journey connected <span class="erg-global-heading-gradient">from invitation to follow-up</span></h2>
+      </div>
+      <div class="erg-bento-grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="erg-bento-notch erg-bento-notch--top" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+        </span>
+        <span class="erg-bento-notch erg-bento-notch--bottom" aria-hidden="true">
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+        </span>
+        {coreWorkflow.map((item, index) => (
+          <div class:list={["erg-bento-row", index % 2 === 1 && "erg-bento-row--reverse"]}>
+            {index % 2 === 1 && <div class="erg-bento-cell erg-bento-content"><span class="erg-bento-eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.copy}</p></div>}
+            <div class="erg-bento-cell erg-bento-visual">
+              <div class:list={["erg-bento-shot-stage", `erg-bento-shot-stage--${["confirm", "embed", "invite", "checkin"][index]}`]}>
+                <Image class="erg-bento-product-shot" src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+                <span class="erg-shot-float erg-shot-float--top"><b>{item.top}</b><small>EventHex workflow</small></span>
+                <span class="erg-shot-float erg-shot-float--bottom"><i></i><b>{item.bottom}</b></span>
+              </div>
+            </div>
+            {index % 2 === 0 && <div class="erg-bento-cell erg-bento-content"><span class="erg-bento-eyebrow">{item.eyebrow}</span><h3>{item.title}</h3><p>{item.copy}</p></div>}
+            <span class="erg-bento-cross" aria-hidden="true" set:html={crossSvg}></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="operating-view" class="smp-content smp-content--clickup smp-content--workflow" aria-labelledby="team-title">
+    <div class="smp-content__inner smp-content__inner--narrow">
+      <header class="smp-workflow__header">
+        <div class="smp-workflow__heading">
+          <h2 id="team-title">Coordinate the moments that shape the experience</h2>
+        </div>
+      </header>
+
+      <ol class="smp-steps">
+        {teamRoles.map((role, index) => (
+          <li>
+            <details open={index === 0}>
+              <summary tabindex="-1">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div class="smp-step__content">
+                  <h3 class="smp-step__title">{role.title}</h3>
+                  <p class="smp-step__desc">{role.desc}</p>
+                  <ul class="smp-step__bullets">
+                    {role.bullets.map((bullet) => <li><i aria-hidden="true">✦</i> {bullet}</li>)}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  class="smp-workflow__arrow"
+                  aria-label={`${index === 0 ? "Collapse" : "Expand"} ${role.title}`}
+                  aria-expanded={index === 0 ? "true" : "false"}
+                >
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"></path></svg>
+                </button>
+              </summary>
+              <div class="smp-workflow__visual">
+                <Image src={role.image} alt={role.alt} width={role.width} height={role.height} loading="lazy" decoding="async" />
+              </div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <FeatureCards
+    id="attendee-journey"
+    cards={attendeeJourney}
+    subtitle="Audience experience"
+    titleLineOne="Connect the moments"
+    titleLineTwo="actually move through"
+    highlight="attendees"
+    showLinks={false}
+  />
+
+  <section id="event-day" class="erg-content-section erg-access-redesign" aria-labelledby="event-day-title">
+    <div class="erg-access-redesign__container">
+      <div class="erg-access-redesign__left"><div class="erg-access-redesign__sticky animate-on-scroll" data-animation="fadeInUp">
+        <div class="erg-access-redesign__eyebrow">During the event</div>
+        <h2 id="event-day-title">Keep event-day actions tied to the <span class="erg-global-heading-gradient">same event record</span></h2>
+        <p>Keep programme access, arrival, audience updates, and approved photo discovery connected to the event.</p>
+        <a class="erg-access-redesign__cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
+      </div></div>
+      <div class="erg-access-redesign__right">
+        {eventDaySteps.map((item, index) => (
+          <article class="erg-access-rcard animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)}>
+            <div class="erg-access-rcard__header"><div class="erg-access-rcard__number">{String(index + 1).padStart(2, "0")}</div><div class="erg-access-rcard__text"><h3>{item.title}</h3><p>{item.copy}</p></div></div>
+            <div class="erg-access-rcard__visual erg-access-rcard__visual--product-shot"><div class="erg-access-product-shot media-access-shot">
+              <Image src={item.image} alt={item.alt} width={item.width} height={item.height} loading="lazy" decoding="async" />
+              <span class="erg-access-product-shot__status erg-access-product-shot__status--success">{item.status}</span><span class="erg-access-product-shot__action">{item.action}</span>
+            </div></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="configuration" class="erg-flow-section media-scope" aria-labelledby="scope-title">
+    <div class="erg-flow-header">
+      <span class="media-section-eyebrow">Build the right scope</span>
+      <h2 id="scope-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Keep EventHex responsibility separate from specialist requirements</h2>
+    </div>
+    <div class="erg-flow-quad">
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy"><h3 class="erg-flow-quad__title">EventHex workflow</h3><p class="erg-flow-quad__text">Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p></article>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media">
+        <picture class="media-scope-shot">
+          <source srcset="/images/industries/media/app/media-event-workflow-dashboard-web-640.webp 640w, /images/industries/media/app/media-event-workflow-dashboard-web-960.webp 960w" sizes="(max-width: 768px) calc(100vw - 72px), 420px" />
+          <img src="/images/industries/media/app/media-event-workflow-dashboard-web-960.webp" alt="EventHex Harmony Live Festival dashboard connecting registrations, sessions, speakers, exhibitors, and marketing" width="960" height="552" loading="lazy" decoding="async" />
+        </picture>
+      </div>
+      <div class="erg-flow-quad__cell erg-flow-quad__cell--media">
+        <picture class="media-scope-shot media-scope-shot--integrations">
+          <source srcset="/images/industries/media/app/organization-integrations-web-640.webp 640w, /images/industries/media/app/organization-integrations-web-960.webp 960w" sizes="(max-width: 768px) calc(100vw - 72px), 420px" />
+          <img src="/images/industries/media/app/organization-integrations-web-960.webp" alt="EventHex organization integrations for email, WhatsApp, payments, payouts, and developer connections" width="960" height="657" loading="lazy" decoding="async" />
+        </picture>
+      </div>
+      <article class="erg-flow-quad__cell erg-flow-quad__cell--copy"><h3 class="erg-flow-quad__title">Your specialist requirements</h3><p class="erg-flow-quad__text">Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p></article>
+      <span class="erg-flow-quad__cross" aria-hidden="true" set:html={crossSvg}></span>
+    </div>
+    <p class="erg-content-note">Confirm every specialist obligation before implementation and record how it will be handled.</p>
+  </section>
+
+  <section id="use-cases" class="smd-agent-suites media-use-suites" aria-labelledby="media-use-case-title">
+    <div class="smd-agent-suites__inner">
+      <header class="erg-flow-header media-use-header">
+        <span class="media-section-eyebrow">Where it fits</span>
+        <h2 id="media-use-case-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Configure EventHex around the event you are running</h2>
+        <p class="erg-flow-subtitle animate-on-scroll" data-animation="fadeInUp">Start with the event format, then add only the modules it needs.</p>
+      </header>
+
+      <div class="smd-agent__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Media event formats">
+        {mediaFormatSuites.map((tab, index) => (
+          <button
+            class:list={["smd-agent__tab", index === 0 && "smd-agent__tab--active"]}
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`media-panel-${tab.id}`}
+            id={`media-tab-${tab.id}`}
+            data-media-suite-target={tab.id}
+            tabindex={index === 0 ? "0" : "-1"}
+          >{tab.label}</button>
+        ))}
+      </div>
+
+      <div class="smd-agent__box animate-on-scroll" data-animation="fadeInUp">
+        {mediaFormatSuites.map((tab, index) => (
+          <div
+            class:list={["smd-agent__panel", index === 0 && "smd-agent__panel--active"]}
+            id={`media-panel-${tab.id}`}
+            role="tabpanel"
+            aria-labelledby={`media-tab-${tab.id}`}
+            data-media-suite-panel={tab.id}
+          >
+            <div class="smd-agent__left">
+              <h3 class="smd-agent__panel-title">{tab.title}</h3>
+              <p class="smd-agent__panel-desc">{tab.description}</p>
+              <div class="smd-agent__replaces"><span class="smd-agent__replaces-label">WORKFLOW</span><span class="smd-agent__replaces-icons" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M7 8h10M7 12h7M7 16h4"></path></svg><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.5 2.5L16 9"></path></svg></span></div>
+              <ul class="smd-agent__checklist">{tab.checklist.map((item) => <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{item}</li>)}</ul>
+            </div>
+            <div class="smd-agent__right">
+              <div class="smd-agent__showcase">
+                <Image src={tab.image} alt={tab.imageAlt} width={tab.width} height={tab.height} loading="lazy" decoding="async" />
+                <span class:list={["smd-agent__visual-label", `smd-agent__visual-label--${tab.visualClass}`]}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="14" height="14" rx="2"></rect><path d="M6 7h8M6 10h6M6 13h4"></path></svg>
+                  {tab.visualLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="connected-features" class="erg-content-section erg-use-cases media-links" aria-labelledby="links-title">
+    <div class="erg-content-shell"><div class="erg-content-heading animate-on-scroll" data-animation="fadeInUp" style="text-align:center;max-width:100%">
+      <span class="media-section-eyebrow">Go deeper</span><h2 id="links-title" class="erg-use-heading">Open the page that owns <span class="erg-use-gradient-text">each mechanism</span></h2>
+    </div><div class="erg-use-grid">
+      {featureLinks.map(([title, copy, href], index) => <a class="erg-use-card media-use-link animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)} href={href}><div class="erg-use-card__icon media-use-icon" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div><h3>{title}</h3><p>{copy}</p><span class="media-link-more">Learn more →</span></a>)}
+    </div></div>
+  </section>
+
+  <section id="demo-fit" class="smd-ai" aria-labelledby="demo-title">
+    <div class="smd-ai__inner">
+      <div class="smd-ai__left">
+        <h2 id="demo-title" class="smd-ai__title animate-on-scroll" data-animation="fadeInUp">
+          <span class="smd-ai__title-line">bring one real event workflow</span>
+          <span class="smd-ai__title-line">to the demo</span>
+        </h2>
+        <p class="smd-ai__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
+          Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.
+        </p>
+
+        <div class="smd-ai__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
+          <a href="/book-a-demo/" class="smd-ai__btn smd-ai__btn--dark">Book a Demo &rarr;</a>
+          <a href="/features/" class="smd-ai__btn smd-ai__btn--light">Explore Features &rarr;</a>
+        </div>
+      </div>
+
+      <div class="smd-ai__right animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 300ms">
+        <div class="smd-ai__showcase" role="img" aria-label="EventHex media submissions and programme workspaces prepared for configuration review">
+          <div class="smd-ai__shot smd-ai__shot--list">
+            <img src="/images/industries/media/cfp-portal-submissions-web-960.webp" alt="" width="960" height="719" loading="lazy" decoding="async" />
+          </div>
+          <div class="smd-ai__shot smd-ai__shot--builder">
+            <img src="/images/industries/media/cfp-portal-sessions-web-960.webp" alt="" width="960" height="719" loading="lazy" decoding="async" />
+          </div>
+
+          <span class="smd-ai__status">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>
+            Workflow mapped
+          </span>
+          <span class="smd-ai__publish">Review configuration</span>
+          <svg class="smd-ai__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="erg-faq" aria-labelledby="faq-title">
+    <div class="erg-faq__inner">
+      <div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft"><span class="erg-faq__eyebrow">Media event software questions</span><h2 id="faq-title" class="erg-faq__heading">Review the questions<br />that shape the setup.</h2><p class="erg-faq__intro">Clear answers about submissions, programme handoff, accreditation boundaries, photos, and asset management.</p><a href="/book-a-demo/" class="erg-faq__cta">Ask us in a demo <span aria-hidden="true">→</span></a></div>
+      <div class="erg-faq__list">{faqs.map(([question, answer], index) => <details class="erg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-media-faq open={index === 0}><summary class="erg-faq__question"><strong>{question}</strong><span class="erg-faq__icon" aria-hidden="true"></span></summary><div class="erg-faq__answer"><p>{answer}</p></div></details>)}</div>
+    </div>
+  </section>
+</main>
+
+<script>
+  document.querySelectorAll<HTMLDetailsElement>("#operating-view .smp-steps details").forEach((item, _, all) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".smp-workflow__arrow");
+
+    summary?.addEventListener("click", (event) => {
+      event.preventDefault();
+      item.open = !item.open;
+    });
+
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} workflow step`);
+      if (!item.open) return;
+      all.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+
+  const mediaFaqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-media-faq]"));
+  mediaFaqItems.forEach((item) => item.addEventListener("toggle", () => {
+    if (!item.open) return;
+    mediaFaqItems.forEach((other) => { if (other !== item) other.open = false; });
+  }));
+
+  const mediaSuite = document.querySelector<HTMLElement>(".media-use-suites");
+  if (mediaSuite) {
+    const tabs = Array.from(mediaSuite.querySelectorAll<HTMLButtonElement>("[data-media-suite-target]"));
+    const panels = Array.from(mediaSuite.querySelectorAll<HTMLElement>("[data-media-suite-panel]"));
+    let rotationId: number | undefined;
+
+    const activateTab = (tab: HTMLButtonElement, moveFocus = false) => {
+      const targetId = tab.dataset.mediaSuiteTarget;
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("smd-agent__tab--active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => panel.classList.toggle("smd-agent__panel--active", panel.dataset.mediaSuitePanel === targetId));
+      if (moveFocus) tab.focus();
+    };
+
+    const stopRotation = () => {
+      if (rotationId === undefined) return;
+      window.clearInterval(rotationId);
+      rotationId = undefined;
+    };
+    const startRotation = () => {
+      stopRotation();
+      if (tabs.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      rotationId = window.setInterval(() => {
+        const index = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+        activateTab(tabs[(index + 1) % tabs.length]);
+      }, 4000);
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => { activateTab(tab); startRotation(); });
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        activateTab(tabs[(index + offset + tabs.length) % tabs.length], true);
+        startRotation();
+      });
+    });
+    mediaSuite.addEventListener("mouseenter", stopRotation);
+    mediaSuite.addEventListener("mouseleave", startRotation);
+    mediaSuite.addEventListener("focusin", stopRotation);
+    mediaSuite.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node) || !mediaSuite.contains(event.relatedTarget)) startRotation();
+    });
+    document.addEventListener("visibilitychange", () => document.hidden ? stopRotation() : startRotation());
+    startRotation();
+  }
+</script>
+
+<style is:global set:html={eventRegistrationStyles}></style>
+<style is:global set:html={speakerDeckStyles}></style>
+<style is:global set:html={speakerProgramContentStyles}></style>
+
+<style>
+  .media-registration-replica { overflow: clip; }
+  :global(.media-registration-replica #attendee-journey) {
+    background-color: #000 !important;
+    background-image: radial-gradient(
+      130% 42% at 50% 0%,
+      rgba(92, 138, 255, 0.22) 0%,
+      rgba(124, 108, 255, 0.1) 45%,
+      rgba(0, 0, 0, 0) 72%
+    ) !important;
+  }
+  .media-use-suites { padding-block: clamp(64px, 7vw, 96px); }
+  .media-use-header { margin-bottom: 42px; }
+  .media-use-header .erg-flow-subtitle { margin-inline: auto; }
+  .media-hero-visual { padding: 18px; }
+  .media-hero-visual picture { display: block; }
+  .media-hero-shot { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: top left; border: 1px solid #e4e8f1; border-radius: 14px; box-shadow: 0 18px 42px rgba(31, 41, 72, .16); }
+  .media-hero-status { top: auto; right: 28px; bottom: 28px; left: auto; }
+  .media-section-eyebrow { display: inline-block; margin-bottom: 12px; color: var(--brand-blue); font: 700 .8125rem/1.35 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
+  .media-section-eyebrow--dark { color: #aebcff; }
+  .media-registration-replica .erg-flow-title { max-width: 100%; white-space: normal; text-wrap: balance; }
+  .media-registration-replica .erg-access-redesign__left,
+  .media-registration-replica .erg-access-redesign__right { min-width: 0; }
+  .media-registration-replica .erg-access-redesign__left h2 { white-space: normal; text-wrap: balance; }
+  :global(.media-registration-replica #operating-view .smp-workflow__heading h2) {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -.03em;
+  }
+  .media-registration-replica .erg-flow-quad::before,
+  .media-registration-replica .erg-flow-quad::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    background: #e8ecf2;
+  }
+  .media-registration-replica .erg-flow-quad::before { top: 0; bottom: 0; left: 50%; width: 1px; transform: translateX(-.5px); }
+  .media-registration-replica .erg-flow-quad::after { top: 50%; right: 0; left: 0; height: 1px; transform: translateY(-.5px); }
+  .media-role-icon span, .media-use-icon { font: 700 12px/1 var(--font-body); letter-spacing: .08em; }
+  .media-access-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .media-scope-shot { display: block; width: min(420px, 100%); padding: 10px; overflow: hidden; border: 1px solid #dce4ff; border-radius: 20px; background: linear-gradient(145deg,#eef3ff,#fff); box-shadow: 0 18px 42px rgba(31,41,72,.12); }
+  .media-scope-shot--integrations { background: linear-gradient(145deg,#fff3fa,#fff); }
+  .media-scope-shot img { display: block; width: 100%; height: auto; border: 1px solid #e1e5ee; border-radius: 12px; background: #fff; }
+  .media-use-link { color: inherit; text-decoration: none; }
+  .media-link-more { margin-top: auto; padding-top: 20px; color: var(--brand-blue); font: 700 13px/1.3 var(--font-body); }
+  @media (max-width: 768px) {
+    .media-registration-replica .erg-flow-quad::before,
+    .media-registration-replica .erg-flow-quad::after { display: none; }
+  }
+  @media (max-width: 767px) {
+    .media-use-suites { padding-block: 52px; }
+    .media-registration-replica #demo-fit .smd-ai__title-line { white-space: normal; }
+    .media-scope-shot { width: 100%; padding: 8px; border-radius: 16px; }
+    .media-registration-replica .erg-template-title-nowrap { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .media-registration-replica *, .media-registration-replica *::before, .media-registration-replica *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>

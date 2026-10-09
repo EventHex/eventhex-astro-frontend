@@ -1,0 +1,717 @@
+---
+import FeatureCards from "../speaker-management/FeatureCards.astro";
+
+interface Props { faqs: Array<[string, string]>; }
+const { faqs } = Astro.props;
+
+const operatingSteps = [
+  ["Curate", "Programme + artists"], ["Publish", "Website + schedule"],
+  ["Ticket", "Passes + rules"], ["Guide", "App + updates"],
+  ["Welcome", "QR check-in"], ["Remember", "Photos + follow-up"],
+];
+const attendeeWorkflowCards = [
+  {
+    eyebrow: "One connected attendee path",
+    title: "Discover the event and choose the right way in",
+    desc: "Publish the festival story, programme, and ticket entry points, then let attendees select the configured pass or ticket that fits their visit.",
+    image: "/feature-images/event-website-builder-v4/audience-journeys/event-page-destinations.png",
+    alt: "EventHex event website page destinations for a cultural event",
+    animated: true,
+    width: 910,
+    height: 696,
+  },
+  {
+    title: "Prepare attendees before they arrive",
+    desc: "Deliver tickets, confirmations, and the supported operational information attendees need before the cultural event begins.",
+    image: "/feature-images/event-registration/confirmation-delivery.png",
+    alt: "EventHex registration confirmation delivery settings",
+    animated: true,
+    width: 762,
+    height: 696,
+  },
+  {
+    title: "Navigate the programme from the attendee app",
+    desc: "Keep the programme and attendee experience available during the event so people can move between the sessions and activities configured for them.",
+    image: "/feature-images/solutions/attendee-app-phones.png",
+    alt: "EventHex attendee mobile app showing event information",
+    animated: true,
+    width: 470,
+    height: 512,
+  },
+  {
+    title: "Arrive through the configured entry flow",
+    desc: "Validate tickets and QR codes at the relevant cultural event entrance using the EventHex check-in workflow.",
+    image: "/feature-images/event-check-in/scan-engine-visual.svg",
+    alt: "EventHex QR scanning and event entry workflow",
+    animated: true,
+    width: 578,
+    height: 476,
+  },
+  {
+    title: "Remember the event through approved photo discovery",
+    desc: "Use the configured photo-discovery experience and supported post-event communication after the cultural event.",
+    image: "/feature-images/ai-photo-gallery/selfie-match-visual.svg",
+    alt: "EventHex attendee selfie matching for event photo discovery",
+    animated: true,
+    width: 775,
+    height: 812,
+  },
+];
+const eventDay = [
+  ["Programme visibility", "Keep scheduled activities and updates available.", ["Publish the live cultural programme", "Keep times and locations current", "Give attendees one schedule to follow"], "/images/cultural-industry/app/session-management-web-960.webp", "EventHex session management showing a scheduled cultural programme", 960, 600],
+  ["Ticket validation", "Scan event QR codes at configured arrival points.", ["Validate configured tickets", "Keep arrival status current", "Support the event entrance team"], "/feature-images/event-registration/registration-to-checkin.png", "EventHex registration-to-check-in workflow", 762, 696],
+  ["Audience announcements", "Send supported app notifications to selected attendees.", ["Choose the relevant audience", "Publish supported app updates", "Keep operational messages connected"], "/images/cultural-industry/app/attendee-app-updates-web-960.webp", "EventHex attendee app updates workspace with publishing controls", 960, 600],
+  ["Photo discovery", "Let attendees find approved gallery images through the configured flow.", ["Use approved event galleries", "Configure the discovery flow", "Keep follow-up within the event experience"], "/images/cultural-industry/app/photo-discovery-settings-web-960.webp", "EventHex photo discovery settings and access controls", 960, 600],
+];
+const useCases = [
+  {
+    id: "festivals",
+    label: "Cultural festivals",
+    title: "Connect every festival touchpoint",
+    description: "Connect programme, passes, app, notifications, arrival, and photos in one coordinated event workflow.",
+    checklist: ["Build multi-stage programmes", "Keep passes and attendee updates connected", "Coordinate arrival and photo discovery"],
+    image: "/images/cultural-industry/use-cases/timeline-view-web-960.webp",
+    alt: "EventHex multi-stage timeline for coordinating a cultural festival programme",
+    width: 960,
+    height: 450,
+    visualLabel: "Festival programme connected",
+  },
+  {
+    id: "exhibitions",
+    label: "Art exhibitions",
+    title: "Guide every exhibition visit",
+    description: "Run attendee registration, sessions or talks, partners, and event-day access from the same event setup.",
+    checklist: ["Publish the exhibition entry path", "Schedule talks and partner moments", "Manage visitor access on event day"],
+    image: "/images/cultural-industry/use-cases/website-embed-web-760.webp",
+    alt: "EventHex registration embedded in a cultural event website",
+    width: 760,
+    height: 694,
+    visualLabel: "Visitor journey published",
+  },
+  {
+    id: "heritage",
+    label: "Heritage events",
+    title: "Prepare visitors before arrival",
+    description: "Publish programme and visitor information with configured tickets and timely audience updates.",
+    checklist: ["Configure visitor registration", "Publish programme and access details", "Send operational updates before arrival"],
+    image: "/images/cultural-industry/use-cases/event-registration-dashboard-web-512.webp",
+    alt: "EventHex registration dashboard for managing heritage event visitors",
+    width: 512,
+    height: 459,
+    visualLabel: "Visitor information ready",
+  },
+  {
+    id: "community",
+    label: "Community celebrations",
+    title: "Keep a lighter event easy to run",
+    description: "Use a focused website, registration, communication, and check-in workflow without unnecessary complexity.",
+    checklist: ["Share a simple event destination", "Keep registration and updates together", "Support fast event-day entry"],
+    image: "/feature-images/event-check-in/operations-visual.svg",
+    alt: "EventHex event operations view for coordinating community celebration entry",
+    width: 407,
+    height: 248,
+    visualLabel: "Event-day flow active",
+  },
+];
+const featureLinks = [
+  ["Session Management", "Build the event programme.", "/session-management/"],
+  ["Event Ticketing", "Configure passes and access rules.", "/event-ticketing/"],
+  ["Event Mobile App", "Guide the attendee experience.", "/event-mobile-app/"],
+  ["AI Photo Gallery", "Support photo discovery.", "/ai-photo-gallery/"],
+];
+---
+
+<main class="ci-page">
+  <!-- Event Registration: .erg-hero -->
+  <section class="ci-hero" id="hero">
+    <div class="ci-hero__grid">
+      <div class="ci-hero__content">
+        <span class="ci-hero__badge animate-on-scroll" data-animation="fadeInDown">Cultural Events</span>
+        <h1 class="ci-hero__title animate-on-scroll" data-animation="fadeInUp">Connect festival programme, tickets, audiences, and event day</h1>
+        <p class="ci-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration:800ms">Run cultural festivals, art exhibitions, heritage events, and community celebrations with sessions, ticketing, an attendee app, communication, supported engagement, photo discovery, and check-in.</p>
+        <div class="ci-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration:1100ms">
+          <a href="/book-a-demo/" class="ci-hero__btn">See it with your event <span aria-hidden="true">→</span></a>
+          <a href="#event-model" class="ci-hero__btn ci-hero__btn--outline">See the operating model</a>
+        </div>
+        <div class="ci-hero__trust animate-on-scroll" data-animation="fadeIn"><span>Programme and ticketing</span><span>Audience communication</span><span>Photo discovery</span></div>
+      </div>
+      <div class="ci-hero__visual animate-on-scroll" data-animation="fadeInRight">
+        <div class="ci-hero__visual-card"><div class="ci-hero__visual-inner"><picture><source media="(max-width:767px)" srcset="/images/cultural-industry/app/attendee-app-modules-web-640.webp"/><source media="(max-width:1100px)" srcset="/images/cultural-industry/app/attendee-app-modules-web-960.webp"/><img src="/images/cultural-industry/app/attendee-app-modules-web-1200.webp" alt="EventHex attendee app modules for sessions, entry passes, networking, and event photos" width="1200" height="750" loading="eager" decoding="async" fetchpriority="high"/></picture></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Registration: .erg-trust-strip -->
+  <section class="ci-trust-strip" id="operating-map" aria-label="One connected event path from programme planning to post-event follow-up">
+    <div class="ci-trust-strip__inner">{operatingSteps.map(([label, detail]) => <span class="ci-trust-strip__stat"><b>{label}</b> {detail}</span>)}</div>
+  </section>
+
+  <!-- Event Registration: #erg-spotlight / .erg-flow-quad -->
+  <section class="ci-flow-section" id="event-model" aria-labelledby="ci-model-title">
+    <header class="ci-flow-header"><p class="ci-eyebrow">Choose the right event model</p><h2 id="ci-model-title" class="ci-flow-title animate-on-scroll" data-animation="fadeInUp"><span>Community-led or programme-led.</span><span>Choose the shape that fits.</span></h2><p class="ci-flow-subtitle">Start with one model, then add only the modules the event actually needs.</p></header>
+    <div class="ci-flow-quad">
+      <article class="ci-flow-quad__cell ci-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><span class="ci-index">01 · Primary model</span><h3>Community-led event</h3><p>Build registration, communications, participation, and follow-up around the people attending.</p></article>
+      <div class="ci-flow-quad__cell ci-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight"><div class="ci-flow-composite"><img class="ci-flow-composite__screen ci-flow-composite__screen--primary" src="/feature-images/event-registration/single-registration-form.png" alt="EventHex single registration form for an attendee" width="760" height="480" loading="lazy" decoding="async"/><img class="ci-flow-composite__screen ci-flow-composite__screen--secondary" src="/feature-images/event-registration/single-ticket-list.png" alt="EventHex ticket list for a single-registration flow" width="760" height="480" loading="lazy" decoding="async"/><span class="ci-flow-composite__status">People-first workflow</span><span class="ci-flow-composite__action">Register</span></div></div>
+      <div class="ci-flow-quad__cell ci-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft"><div class="ci-flow-composite"><img class="ci-flow-composite__screen ci-flow-composite__screen--primary" src="/feature-images/event-registration/checkout-select-tickets.png" alt="EventHex multi-ticket checkout selection" width="1180" height="540" loading="lazy" decoding="async"/><img class="ci-flow-composite__screen ci-flow-composite__screen--secondary" src="/feature-images/event-registration/checkout-attendee-details.png" alt="EventHex checkout attendee details step" width="1180" height="540" loading="lazy" decoding="async"/><span class="ci-flow-composite__status">Programme-first workflow</span><span class="ci-flow-composite__action">Continue</span></div></div>
+      <article class="ci-flow-quad__cell ci-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp"><span class="ci-index">02 · Alternate model</span><h3>Programme-led event</h3><p>Add submissions, speakers, sessions, or exhibitors when the format needs more structure.</p></article>
+      <span class="ci-flow-quad__cross" aria-hidden="true">
+        <svg width="18" height="18" viewBox="-14 -14 28 28">
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e5e7eb)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e5e7eb)" transform="scale(1,-1)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e5e7eb)" transform="rotate(90)" />
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e5e7eb)" transform="rotate(-90)" />
+        </svg>
+      </span>
+    </div>
+  </section>
+
+  <!-- Speaker Management: ProgramContentSections .smp-content--agenda -->
+  <section class="ci-agenda" id="core-workflow" aria-labelledby="ci-core-title">
+    <div class="ci-agenda__inner">
+      <header class="ci-agenda__header animate-on-scroll" data-animation="fadeInUp">
+        <p class="ci-eyebrow">Connected experience</p>
+        <h2 id="ci-core-title">Keep every part of the cultural event working together</h2>
+      </header>
+      <div class="ci-agenda-grid">
+        <article class="ci-agenda-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="ci-agenda-card__text"><h3>Festival programme</h3><p>Build activities with rooms, times, capacity, speakers, performers, and the programme records EventHex supports.</p></div>
+          <div class="ci-agenda__visual"><div class="ci-agenda__product" aria-hidden="true"><div class="ci-agenda__product-bar"><span><i></i><i></i><i></i></span><small>Festival agenda</small></div><div class="ci-agenda__product-tabs"><span class="is-active">Day 1</span><span>Day 2</span><span>Day 3</span></div><div class="ci-agenda__schedule-list"><div><time>09:00</time><span><strong>Opening performance</strong><small>Main stage · 45 min</small></span></div><div class="is-accent"><time>10:15</time><span><strong>Artist conversation</strong><small>Gallery stage · 60 min</small></span></div><div><time>11:30</time><span><strong>Community workshop</strong><small>Studio · 30 min</small></span></div></div></div></div>
+        </article>
+        <article class="ci-agenda-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <span class="ci-agenda__petal ci-agenda__petal--top" aria-hidden="true">◆</span><span class="ci-agenda__petal ci-agenda__petal--bottom" aria-hidden="true">◆</span>
+          <div class="ci-agenda-card__text"><h3>Tickets and passes</h3><p>Configure ticket types, capacity, sale windows, purchase limits, discounts, add-ons, and delivery.</p></div>
+          <div class="ci-agenda__visual"><div class="ci-agenda__product" aria-hidden="true"><div class="ci-agenda__product-bar"><span><i></i><i></i><i></i></span><small>Pass structure</small></div><div class="ci-agenda__product-tabs"><span class="is-active">Passes</span><span>Rules</span></div><div class="ci-agenda__outline"><div><i></i><strong>Festival access</strong><small>3 days</small></div><div class="is-child"><i></i><strong>Weekend pass</strong><small>All areas</small></div><div class="is-child"><i></i><strong>Day pass</strong><small>Selected day</small></div><div class="is-break"><i></i><strong>Workshop add-on</strong><small>Limited</small></div></div></div></div>
+        </article>
+        <article class="ci-agenda-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <span class="ci-agenda__petal ci-agenda__petal--top" aria-hidden="true">◆</span><span class="ci-agenda__petal ci-agenda__petal--bottom" aria-hidden="true">◆</span>
+          <div class="ci-agenda-card__text"><h3>Audience experience</h3><p>Use the attendee app, notifications, supported challenges, polls, and networking where they fit.</p></div>
+          <div class="ci-agenda__visual"><div class="ci-agenda__product" aria-hidden="true"><div class="ci-agenda__product-bar"><span><i></i><i></i><i></i></span><small>Audience modules</small></div><div class="ci-agenda__product-tabs"><span class="is-active">App</span><span>Updates</span><span>Engage</span></div><div class="ci-agenda__stage-board"><span><i></i><i></i></span><span><i></i><i></i></span><span><i></i><i></i></span></div></div></div>
+        </article>
+        <article class="ci-agenda-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="ci-agenda-card__text"><h3>Event-day coordination</h3><p>Keep organisers, programme teams, communications, and entry operations working from the same event setup.</p></div>
+          <div class="ci-agenda__visual"><div class="ci-agenda__product ci-agenda__product--wide" aria-hidden="true"><div class="ci-agenda__product-bar"><span><i></i><i></i><i></i></span><small>Event team</small></div><div class="ci-agenda__product-tabs"><span>Teams</span><span class="is-active">Roles</span></div><div class="ci-agenda__people"><div><i>EO</i><span><strong>Event owner</strong><small>Event setup</small></span><b>Owner</b></div><div><i>PG</i><span><strong>Programme team</strong><small>Schedule</small></span><b>Editor</b></div><div><i>EN</i><span><strong>Entry team</strong><small>Check-in</small></span><b>Operator</b></div></div></div></div>
+        </article>
+        <article class="ci-agenda-card animate-on-scroll" data-animation="fadeInUp" data-delay="240">
+          <span class="ci-agenda__petal ci-agenda__petal--top" aria-hidden="true">◆</span>
+          <div class="ci-agenda-card__text"><h3>Photo discovery and follow-up</h3><p>Use configured photo discovery and supported event communication after the cultural event.</p></div>
+          <div class="ci-agenda__visual"><div class="ci-agenda__product ci-agenda__product--wide" aria-hidden="true"><div class="ci-agenda__product-bar"><span><i></i><i></i><i></i></span><small>Follow-up access</small></div><div class="ci-agenda__product-tabs"><span class="is-active">Gallery</span><span>Audience</span></div><div class="ci-agenda__access-list"><div><span><strong>Attendee discovery</strong><small>Configured access</small></span><i class="is-on"></i></div><div><span><strong>Contributed photos</strong><small>Approval enabled</small></span><i class="is-on"></i></div><div><span><strong>Public gallery</strong><small>Review separately</small></span><i></i></div><b><i></i></b></div></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Registration: exact .erg-access-redesign structure -->
+  <section class="ci-access" id="operating-view" aria-labelledby="ci-ops-title">
+    <div class="ci-access__container">
+      <div class="ci-access__left">
+        <div class="ci-access__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="ci-access__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>Team coordination</div>
+          <h2 id="ci-ops-title">Coordinate the moments<br/>that shape the<br/><span>experience</span></h2>
+          <p>Give each team a clear job while keeping the attendee and event record connected.</p>
+          <a class="ci-access__cta" href="/book-a-demo/">Book a Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        </div>
+      </div>
+      <div class="ci-access__right">
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="ci-access-card__header"><div class="ci-access-card__number">01</div><div class="ci-access-card__text"><h3>Event owner</h3><p>Set the event, audience, approval, access, programme, and reporting decisions.</p></div></div>
+          <div class="ci-access-card__visual ci-access-card__visual--approval"><div class="ci-approval-stack"><img class="ci-approval-stack__tickets" src="/feature-images/event-registration/approval-ticket-list.png" alt="EventHex ticket list for a cultural event registration workflow" width="760" height="430" loading="lazy" decoding="async"/><img class="ci-approval-stack__setting" src="/feature-images/event-registration/approval-setting.png" alt="EventHex approval setting for attendee registrations" width="760" height="430" loading="lazy" decoding="async"/><span class="ci-product-shot__status ci-product-shot__status--approval"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Approval required</span><span class="ci-product-shot__action">Review &amp; approve</span><svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div></div>
+        </article>
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="ci-access-card__header"><div class="ci-access-card__number">02</div><div class="ci-access-card__text"><h3>Registration and finance teams</h3><p>Coordinate approval and payment rules when the cultural event uses paid booking.</p></div></div>
+          <div class="ci-access-card__visual ci-access-card__visual--product"><div class="ci-product-shot ci-product-shot--payment"><img src="/feature-images/event-registration/hold-payment-settings.png" alt="EventHex paid booking and checkout configuration" width="760" height="500" loading="lazy" decoding="async"/><span class="ci-product-shot__status ci-product-shot__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Payment secured</span><span class="ci-product-shot__action">Approve &amp; charge</span><svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div></div>
+        </article>
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="ci-access-card__header"><div class="ci-access-card__number">03</div><div class="ci-access-card__text"><h3>Audience and communications teams</h3><p>Keep private passes off the public page and share direct access only with the intended audience.</p></div></div>
+          <div class="ci-access-card__visual ci-access-card__visual--product"><div class="ci-product-shot ci-product-shot--private"><img src="/feature-images/event-registration/private-ticket-settings.png" alt="EventHex private ticket management for selected cultural event audiences" width="760" height="480" loading="lazy" decoding="async"/><span class="ci-product-shot__status"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 9V7a3.5 3.5 0 0 1 7 0v2M5 9h10v8H5z"></path></svg>Link-only access</span><span class="ci-product-shot__action">Copy private link</span><svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div></div>
+        </article>
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+          <div class="ci-access-card__header"><div class="ci-access-card__number">04</div><div class="ci-access-card__text"><h3>Entry and operations teams</h3><p>Apply the purchase limits, sale windows, and ticket-specific rules configured for each pass.</p></div></div>
+          <div class="ci-access-card__visual ci-access-card__visual--product"><div class="ci-product-shot ci-product-shot--rules"><img src="/feature-images/event-registration/ticket-specific-rules.png" alt="EventHex ticket purchase limits and sale-period settings" width="800" height="620" loading="lazy" decoding="async"/><span class="ci-product-shot__status ci-product-shot__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Rules active</span><span class="ci-product-shot__action">Save rules</span><svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaker Management: exact FeatureCards stacking workflow -->
+  <FeatureCards
+    id="attendee-journey"
+    cards={attendeeWorkflowCards}
+    subtitle="Audience experience"
+    titleLineOne="Connect the moments attendees"
+    highlight="actually"
+    titleLineTwo="move through"
+  />
+
+  <!-- Speaker Management: ProgramContentSections workflow accordion -->
+  <section class="ci-workflow" id="event-day" aria-labelledby="ci-day-title">
+    <div class="ci-workflow__inner">
+      <header class="ci-workflow__header">
+        <h2 id="ci-day-title">Keep event-day actions tied to the same event record</h2>
+      </header>
+      <ol class="ci-steps">
+        {eventDay.map(([title, copy, bullets, image, alt, width, height], index) => (
+          <li>
+            <details open={index === 0} data-ci-workflow-item>
+              <summary tabindex="-1">
+                <span>0{index + 1}</span>
+                <div class="ci-step__content">
+                  <h3>{title}</h3>
+                  <p>{copy}</p>
+                  <ul>{bullets.map((bullet) => <li><i aria-hidden="true">✦</i>{bullet}</li>)}</ul>
+                </div>
+                <button type="button" class="ci-workflow__arrow" aria-label={`${index === 0 ? "Collapse" : "Expand"} ${title}`} aria-expanded={index === 0 ? "true" : "false"}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5" /></svg>
+                </button>
+              </summary>
+              <div class="ci-step-visual"><img src={image} alt={alt} width={width} height={height} loading="lazy" decoding="async"/></div>
+            </details>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Event Registration: exact confirmations bento grid -->
+  <section class="ci-scope" id="configuration" aria-labelledby="ci-boundary-title">
+    <div class="ci-scope__inner">
+      <header class="ci-scope__header animate-on-scroll" data-animation="fadeInUp">
+        <h2 id="ci-boundary-title">Keep EventHex responsibility separate from <span>specialist requirements</span></h2>
+      </header>
+      <div class="ci-scope__grid animate-on-scroll" data-animation="fadeInUp">
+        <span class="ci-scope__notch ci-scope__notch--top" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg></span>
+        <span class="ci-scope__notch ci-scope__notch--bottom" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg></span>
+        <article class="ci-scope__row">
+          <div class="ci-scope__cell ci-scope__visual">
+            <div class="ci-scope__stage ci-scope__stage--workflow">
+              <img class="ci-scope__shot" src="/images/industries/associations/portal/event-setup-web-960.webp" alt="EventHex event setup with venue, registration, ticket, and module controls" width="960" height="516" loading="lazy" decoding="async" />
+              <span class="ci-scope__float ci-scope__float--top"><b>Workflow ready</b><small>Event record connected</small></span>
+              <span class="ci-scope__float ci-scope__float--bottom"><i></i><b>Product scope</b></span>
+            </div>
+          </div>
+          <div class="ci-scope__cell ci-scope__content">
+            <span class="ci-scope__eyebrow">Product scope</span>
+            <h3>EventHex workflow</h3>
+            <p>Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p>
+            <p>Keep the cultural programme, audience journey, and event-day work tied to the same event record.</p>
+          </div>
+          <span class="ci-scope__cross" aria-hidden="true"><svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path></svg></span>
+        </article>
+        <article class="ci-scope__row ci-scope__row--reverse">
+          <div class="ci-scope__cell ci-scope__content">
+            <span class="ci-scope__eyebrow">Review scope</span>
+            <h3>Your specialist requirements</h3>
+            <p>Map legal, regulatory, accreditation, identity, accessibility, venue, payment-provider, and industry-specific obligations to the teams and systems responsible for them.</p>
+            <p><strong>Configuration checkpoint:</strong> Confirm every specialist obligation before implementation and record how it will be handled.</p>
+          </div>
+          <div class="ci-scope__cell ci-scope__visual">
+            <div class="ci-scope__stage ci-scope__stage--review">
+              <img class="ci-scope__shot" src="/images/industries/associations/portal/crm-integrations-web-960.webp" alt="EventHex CRM integrations available for reviewing external systems and data connections" width="960" height="516" loading="lazy" decoding="async" />
+              <span class="ci-scope__float ci-scope__float--top"><b>Requirements mapped</b><small>Specialist review</small></span>
+              <span class="ci-scope__float ci-scope__float--bottom"><i></i><b>Review scope</b></span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaker Management: exact interactive agent-suites treatment -->
+  <section class="ci-use-cases" id="use-cases" aria-labelledby="ci-use-title">
+    <div class="ci-use-cases__shell">
+      <header class="ci-use-cases__heading">
+        <h2 id="ci-use-title" class="animate-on-scroll" data-animation="fadeInUp">
+          <span>Configure EventHex around</span>
+          <span>the event you are running</span>
+        </h2>
+        <p class="animate-on-scroll" data-animation="fadeInUp">Start with the event format, then add only the modules it needs.</p>
+      </header>
+
+      <div class="ci-use-cases__tabs animate-on-scroll" data-animation="fadeInUp" role="tablist" aria-label="Cultural event formats">
+        {useCases.map((useCase, index) => (
+          <button
+            class:list={["ci-use-cases__tab", { "ci-use-cases__tab--active": index === 0 }]}
+            type="button"
+            role="tab"
+            aria-selected={index === 0 ? "true" : "false"}
+            aria-controls={`ci-use-panel-${useCase.id}`}
+            id={`ci-use-tab-${useCase.id}`}
+            data-ci-use-target={useCase.id}
+            tabindex={index === 0 ? "0" : "-1"}
+          >
+            {useCase.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="ci-use-cases__box animate-on-scroll" data-animation="fadeInUp">
+        {useCases.map((useCase, index) => (
+          <article
+            class:list={["ci-use-panel", { "ci-use-panel--active": index === 0 }]}
+            id={`ci-use-panel-${useCase.id}`}
+            role="tabpanel"
+            aria-labelledby={`ci-use-tab-${useCase.id}`}
+            data-ci-use-panel={useCase.id}
+          >
+            <div class="ci-use-panel__copy">
+              <h3>{useCase.title}</h3>
+              <p>{useCase.description}</p>
+              <div class="ci-use-panel__workflow"><span>WORKFLOW</span></div>
+              <ul>
+                {useCase.checklist.map((item) => (
+                  <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>{item}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="ci-use-panel__visual">
+              <div class="ci-use-panel__showcase">
+                <img src={useCase.image} alt={useCase.alt} width={useCase.width} height={useCase.height} loading="lazy" decoding="async" />
+                <span class={`ci-use-panel__label ci-use-panel__label--${useCase.id}`}>
+                  <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3.5" width="15" height="13" rx="2"></rect><path d="M2.5 8h15M7.5 8v8.5M12.5 8v8.5"></path></svg>
+                  {useCase.visualLabel}
+                </span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaker Management: exact divided-rail treatment from the lineup section -->
+  <section class="ci-links" id="connected-features" aria-labelledby="ci-links-title">
+    <div class="ci-links__inner">
+      <header class="ci-links__header">
+        <h2 id="ci-links-title">Open the page that owns each mechanism</h2>
+      </header>
+      <div class="ci-links__cards">
+        {featureLinks.slice(0, -1).map((_, index) => (
+          <div
+            class="ci-links__notch"
+            style={`left: ${((index + 1) / featureLinks.length) * 100}%`}
+            aria-hidden="true"
+          >
+            <svg width="28" height="28" viewBox="-14 -14 28 28">
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border, #e8ecf2)"></path>
+            </svg>
+          </div>
+        ))}
+        {featureLinks.map(([title, copy, href], index) => (
+          <a
+            class:list={["ci-link-card", "animate-on-scroll", { "ci-link-card--first": index === 0 }]}
+            data-animation="fadeInUp"
+            data-delay={String(index * 55)}
+            href={href}
+          >
+            <span class={`ci-link-card__icon ci-link-card__icon--${index + 1}`} aria-hidden="true">
+              {index === 0 && <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M8 2v4M16 2v4M3 9h18M8 13h3M8 17h6"></path></svg>}
+              {index === 1 && <svg viewBox="0 0 24 24"><path d="M3 8a3 3 0 0 0 0 6v3a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a3 3 0 0 0 0-6V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v1Z"></path><path d="M15 5v3M15 12v2M15 18v1"></path></svg>}
+              {index === 2 && <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"></rect><path d="M10 5h4M11 18h2"></path></svg>}
+              {index === 3 && <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="8.5" cy="9" r="1.5"></circle><path d="m4 17 5-5 4 4 2-2 5 5"></path></svg>}
+            </span>
+            <div class="ci-link-card__content">
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Event Registration: exact Access Control sticky-card treatment -->
+  <section class="ci-demo" id="demo-fit" aria-labelledby="ci-demo-title">
+    <div class="ci-access__container">
+      <div class="ci-access__left">
+        <div class="ci-access__sticky animate-on-scroll" data-animation="fadeInUp">
+          <div class="ci-access__eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            Plan the configuration
+          </div>
+          <h2 id="ci-demo-title">Bring one real event<br />workflow to the<br /><span>demo</span></h2>
+          <p>Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.</p>
+          <a class="ci-access__cta" href="/book-a-demo/">Book a Demo <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+        </div>
+      </div>
+
+      <div class="ci-access__right">
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp">
+          <div class="ci-access-card__header">
+            <div class="ci-access-card__number">01</div>
+            <div class="ci-access-card__text"><h3>Start with the event format</h3><p>Choose the smallest workflow that matches the real cultural event, its programme, and the way attendees participate.</p></div>
+          </div>
+          <div class="ci-access-card__visual ci-access-card__visual--product">
+            <div class="ci-product-shot ci-demo-shot ci-demo-shot--format">
+              <img src="/images/cultural-industry/demo-workflow/ai-agenda-list-web-960.webp" alt="EventHex cultural festival agenda with sessions, stages, times, and speakers" width="960" height="719" loading="lazy" decoding="async" />
+              <span class="ci-product-shot__status ci-product-shot__status--approval"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Event mapped</span>
+              <span class="ci-product-shot__action">Review agenda</span>
+              <svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+          <div class="ci-access-card__header">
+            <div class="ci-access-card__number">02</div>
+            <div class="ci-access-card__text"><h3>Add only the modules you need</h3><p>Map the attendee journey, tickets, communication, engagement, and entry points without adding unnecessary complexity.</p></div>
+          </div>
+          <div class="ci-access-card__visual ci-access-card__visual--product">
+            <div class="ci-product-shot ci-demo-shot ci-demo-shot--journey">
+              <img src="/images/cultural-industry/demo-workflow/checkout-flow-web-960.webp" alt="EventHex attendee registration, payment, and ticket journey" width="960" height="573" loading="lazy" decoding="async" />
+              <span class="ci-product-shot__status ci-product-shot__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Journey selected</span>
+              <span class="ci-product-shot__action">Confirm modules</span>
+              <svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+
+        <article class="ci-access-card animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+          <div class="ci-access-card__header">
+            <div class="ci-access-card__number">03</div>
+            <div class="ci-access-card__text"><h3>Review the complete setup</h3><p>Bring audience, access, communication, onsite, and integration requirements into one final configuration review.</p></div>
+          </div>
+          <div class="ci-access-card__visual ci-access-card__visual--product">
+            <div class="ci-product-shot ci-demo-shot ci-demo-shot--review">
+              <img src="/images/industries/media/app/organization-integrations-web-960.webp" alt="EventHex organization integrations for reviewing email, WhatsApp, and developer connections" width="960" height="657" loading="lazy" decoding="async" />
+              <span class="ci-product-shot__status ci-product-shot__status--success"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>Requirements mapped</span>
+              <span class="ci-product-shot__action">Review configuration</span>
+              <svg class="ci-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaker Management: exact FaqSection layout -->
+  <section class="ci-faq" id="faq" aria-labelledby="ci-faq-title">
+    <div class="ci-faq__inner">
+      <aside class="ci-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+        <span class="ci-faq__eyebrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>Quick Answers</span>
+        <h2 id="ci-faq-title">Cultural Event Software<br />Questions, Answered.</h2>
+        <p>Review the questions that shape a practical cultural event setup.</p>
+        <a class="ci-faq__cta" href="/book-a-demo/">Ask us directly <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+      </aside>
+      <div class="ci-faq__list">
+        {faqs.map(([question, answer], index) => (
+          <details class="ci-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-ci-faq-item open={index === 0}>
+            <summary class="ci-faq__question"><strong>{question}</strong><span class="ci-faq__icon" aria-hidden="true"></span></summary>
+            <div class="ci-faq__answer"><p>{answer}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Speaker Management: exact CTA composition with cultural-event product visuals -->
+  <section class="ci-cta" id="final-cta" aria-labelledby="ci-final-title">
+    <div class="ci-cta__card">
+      <i class="ci-cta__glow ci-cta__glow--one"></i>
+      <i class="ci-cta__glow ci-cta__glow--two"></i>
+      <div class="ci-cta__content">
+        <span class="ci-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Plan your next cultural event</span>
+        <h2 id="ci-final-title" class="animate-on-scroll" data-animation="fadeInUp">See the workflow with your own event requirements</h2>
+        <p class="animate-on-scroll" data-animation="fadeInUp">Bring the format, audience, registration and access rules, programme, communication channels, onsite plan, and integration needs. We’ll show the supported EventHex path and identify anything that needs separate validation.</p>
+        <div class="ci-cta__proof animate-on-scroll" data-animation="fadeInUp"><span>Programme</span><span>Audience</span><span>Event day</span></div>
+        <a href="/book-a-demo/" class="ci-cta__btn">Book a Demo <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
+      </div>
+      <div class="ci-cta__visual animate-on-scroll" data-animation="fadeInRight">
+        <img class="ci-cta__shot ci-cta__shot--main" src="/images/cultural-industry/cta/single-registration-web-960.webp" alt="EventHex cultural-event registration form and event details" width="960" height="470" loading="lazy" decoding="async" />
+        <img class="ci-cta__shot ci-cta__shot--session" src="/images/cultural-industry/cta/detail-panel-web-424.webp" alt="EventHex cultural programme session with speakers and engagement tools" width="424" height="524" loading="lazy" decoding="async" />
+        <img class="ci-cta__shot ci-cta__shot--attendees" src="/images/cultural-industry/cta/attendee-list-web-177.webp" alt="EventHex attendee list with confirmed cultural-event participants" width="177" height="179" loading="lazy" decoding="async" />
+        <span class="ci-cta__visual-action">Review workflow</span>
+        <svg class="ci-cta__visual-cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const exclusive = (selector: string) => {
+    const items = Array.from(document.querySelectorAll<HTMLDetailsElement>(selector));
+    items.forEach(item => item.addEventListener("toggle", () => { if (item.open) items.forEach(other => { if (other !== item) other.open = false; }); }));
+  };
+  exclusive("[data-ci-faq-item]");
+  const workflowItems = Array.from(document.querySelectorAll<HTMLDetailsElement>("[data-ci-workflow-item]"));
+  workflowItems.forEach((item) => {
+    const summary = item.querySelector("summary");
+    const trigger = item.querySelector<HTMLButtonElement>(".ci-workflow__arrow");
+    summary?.addEventListener("click", (event) => { event.preventDefault(); item.open = !item.open; });
+    item.addEventListener("toggle", () => {
+      trigger?.setAttribute("aria-expanded", String(item.open));
+      trigger?.setAttribute("aria-label", `${item.open ? "Collapse" : "Expand"} workflow step`);
+      if (item.open) workflowItems.forEach((other) => { if (other !== item) other.open = false; });
+    });
+  });
+
+  const useCaseSuite = document.querySelector<HTMLElement>("#use-cases");
+  if (useCaseSuite) {
+    const tabs = Array.from(useCaseSuite.querySelectorAll<HTMLButtonElement>("[data-ci-use-target]"));
+    const panels = Array.from(useCaseSuite.querySelectorAll<HTMLElement>("[data-ci-use-panel]"));
+    let rotationId: number | undefined;
+
+    const activateUseCase = (tab: HTMLButtonElement, focus = false) => {
+      const target = tab.dataset.ciUseTarget;
+      tabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle("ci-use-cases__tab--active", active);
+        item.setAttribute("aria-selected", String(active));
+        item.tabIndex = active ? 0 : -1;
+      });
+      panels.forEach((panel) => panel.classList.toggle("ci-use-panel--active", panel.dataset.ciUsePanel === target));
+      if (focus) tab.focus();
+    };
+
+    const stopRotation = () => {
+      if (rotationId === undefined) return;
+      window.clearInterval(rotationId);
+      rotationId = undefined;
+    };
+    const startRotation = () => {
+      stopRotation();
+      if (tabs.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      rotationId = window.setInterval(() => {
+        const current = tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true");
+        activateUseCase(tabs[(current + 1) % tabs.length]);
+      }, 5000);
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => { activateUseCase(tab); startRotation(); });
+      tab.addEventListener("keydown", (event) => {
+        if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+        event.preventDefault();
+        const offset = event.key === "ArrowRight" ? 1 : -1;
+        activateUseCase(tabs[(index + offset + tabs.length) % tabs.length], true);
+      });
+    });
+    useCaseSuite.addEventListener("mouseenter", stopRotation);
+    useCaseSuite.addEventListener("mouseleave", startRotation);
+    useCaseSuite.addEventListener("focusin", stopRotation);
+    useCaseSuite.addEventListener("focusout", (event) => {
+      if (!(event.relatedTarget instanceof Node) || !useCaseSuite.contains(event.relatedTarget)) startRotation();
+    });
+    document.addEventListener("visibilitychange", () => document.hidden ? stopRotation() : startRotation());
+    startRotation();
+  }
+</script>
+
+<style>
+  :global(html),:global(body){overflow-x:clip}
+  .ci-page{overflow:visible;background:#fff;color:var(--heading-dark)}
+  .ci-eyebrow,.ci-index{margin:0 0 14px;color:var(--brand-blue);font:700 .8125rem/1.35 var(--font-body);letter-spacing:.1em;text-transform:uppercase}
+  .ci-hero{position:relative;overflow:hidden;margin-top:-90px;padding:150px 24px 72px;background:radial-gradient(ellipse 700px 500px at -5% -10%,#375dfb24,#375dfb0f 40%,#375dfb00 75%),radial-gradient(ellipse 800px 600px at 100% 105%,#ff74b83d,#ff74b81a 45%,#ff74b800 78%),#fff}
+  .ci-hero:after{content:"";position:absolute;inset:0 0 0 auto;width:220px;max-width:30vw;background:linear-gradient(to right,#fff0,#ffffff73 70%,#ffffffbf);pointer-events:none}
+  .ci-hero__grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(260px,542px) minmax(0,490px);gap:48px;align-items:center;max-width:1080px;margin:auto}
+  .ci-hero__content{display:flex;flex-direction:column;align-items:flex-start}.ci-hero__badge{display:inline-flex;margin-bottom:20px;color:var(--brand-blue);font:700 13px/1.2 var(--font-body);letter-spacing:.1em;text-transform:uppercase}
+  .ci-hero__title{margin:0;background:linear-gradient(98deg,#22272f 43.06%,#8f8f8f 91.81%);background-clip:text;color:transparent;font:500 clamp(40px,4.4vw,58px)/1.1 var(--font-heading);letter-spacing:-1.7px}
+  .ci-hero__desc{max-width:600px;margin:22px 0 0;color:#475467;font:400 17px/1.62 var(--font-body)}
+  .ci-hero__cta-row{display:flex;gap:14px;margin-top:28px}.ci-hero__btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:12px 26px;border:1px solid #22272f;border-radius:10px;background:#22272f;color:#fff;font:600 15px/1.4 var(--font-body);text-decoration:none;transition:.25s}.ci-hero__btn:hover{transform:translateY(-2px);background:#000}.ci-hero__btn--outline{border-color:#dce4ff;background:#fff;color:#22272f}.ci-hero__btn--outline:hover{border-color:#c5d2ff;background:#fff;box-shadow:0 10px 24px #22272f0f}
+  .ci-hero__trust{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:22px}.ci-hero__trust span{position:relative;padding-left:15px;color:#475467;font:500 13px/1.4 var(--font-body)}.ci-hero__trust span:before{content:"";position:absolute;top:6px;left:0;width:6px;height:6px;border-radius:50%;background:#10b981}
+  .ci-hero__visual-card{padding:14px;border:1px solid #ffffffb3;border-radius:24px;background:#ffffff94;box-shadow:0 30px 80px #375dfb26;backdrop-filter:blur(18px)}.ci-hero__visual-inner{overflow:hidden;border-radius:16px;background:#fff}.ci-hero__visual picture,.ci-hero__visual img{display:block;width:100%}.ci-hero__visual img{aspect-ratio:1.45/1;object-fit:cover;object-position:50% 8%}
+  .ci-trust-strip{padding:24px;border-top:1px solid #e8ecf2}.ci-trust-strip__inner{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:36px;max-width:1280px;margin:auto}.ci-trust-strip__stat{color:#475467;font:400 15px/1.4 var(--font-body);white-space:nowrap}.ci-trust-strip__stat b{color:#22272f;font-weight:700}
+  .ci-flow-section{display:flex;flex-direction:column;align-items:center;padding:clamp(72px,9vw,112px) 24px;background:#fff}.ci-flow-header{display:flex;flex-direction:column;align-items:center;max-width:1100px;margin-bottom:24px;text-align:center}.ci-flow-title{margin:0 0 12px;font:500 clamp(28px,4.2vw,48px)/1.1 var(--font-heading);letter-spacing:-.04em}.ci-flow-title span{display:block}.ci-flow-title span:last-child{background:linear-gradient(90deg,#555,#aaa);background-clip:text;color:transparent}.ci-flow-subtitle{max-width:640px;margin:0;color:#475467;font:400 18px/1.5 var(--font-body)}
+  .ci-flow-quad{position:relative;display:grid;grid-template:1fr 1fr/1fr 1fr;width:100%;max-width:1180px;margin:24px auto}.ci-flow-quad__cell{display:flex;flex-direction:column;justify-content:center;min-height:260px;padding:56px 48px;border-right:1px solid #eef0f3;border-bottom:1px solid #eef0f3}.ci-flow-quad>:nth-child(2n){border-right:0}.ci-flow-quad>:nth-child(n+3){border-bottom:0}.ci-flow-quad__cell h3{margin:8px 0 12px;font:500 30px/1.18 var(--font-heading)}.ci-flow-quad__cell p{margin:0;color:#475467;font:400 16px/1.65 var(--font-body)}.ci-flow-quad__cell--media{align-items:center;min-height:360px;padding:18px 22px;overflow:hidden}.ci-flow-composite{position:relative;width:100%;height:320px}.ci-flow-composite__screen{position:absolute;display:block;object-fit:cover;object-position:top left;border:1px solid #d1d6e2eb;border-radius:12px;background:#fff;box-shadow:0 16px 34px #1f294824}.ci-flow-composite__screen--primary{top:42px;left:20px;width:74%;height:62%}.ci-flow-composite__screen--secondary{right:18px;bottom:20px;width:64%;height:52%}.ci-flow-composite__status,.ci-flow-composite__action{position:absolute;z-index:5;border-radius:10px;box-shadow:0 10px 24px #1f294829;font:700 11px/1 var(--font-body)}.ci-flow-composite__status{top:14px;left:14px;padding:9px 11px;border:1px solid #cfead9;background:#effbf4;color:#18864b}.ci-flow-composite__action{right:14px;bottom:14px;padding:10px 13px;background:#4b65f6;color:#fff}.ci-flow-quad__cross{position:absolute;top:50%;left:50%;z-index:1;width:18px;height:18px;line-height:0;pointer-events:none;transform:translate(-50%,-50%)}
+  .ci-agenda{position:relative;isolation:isolate;overflow:hidden;padding:clamp(64px,7vw,88px) 24px clamp(68px,8vw,96px);background-color:#000;background-image:radial-gradient(130% 42% at 50% 0%,rgba(92,138,255,.13) 0%,rgba(124,108,255,.055) 45%,transparent 72%)}
+  .ci-agenda:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.24;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+  .ci-agenda__inner{width:min(1200px,100%);margin:auto}.ci-agenda__header{max-width:940px;margin:0 auto clamp(40px,5vw,56px);text-align:center}.ci-agenda__header .ci-eyebrow{color:#a8b6ff}.ci-agenda__header h2{margin:0;background:linear-gradient(100deg,#fff 0%,#f2f0ff 34%,#c9c2ff 58%,#a79aff 78%,#7d8dff 100%);background-clip:text;color:transparent;font:500 clamp(42px,5.4vw,60px)/1.1 var(--font-heading);letter-spacing:-.04em}
+  .ci-agenda-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));overflow:hidden;border:1px solid #2d2d36;border-radius:14px}.ci-agenda-card{position:relative;grid-column:span 2;display:flex;flex-direction:column;align-items:stretch;min-height:430px;padding:32px 30px;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36;background:transparent;transition:background .2s ease}.ci-agenda-card:hover{background:rgba(125,141,255,.045)}.ci-agenda-card:nth-child(n+4){grid-column:span 3;border-bottom:0}.ci-agenda-card:nth-child(3),.ci-agenda-card:nth-child(5){border-right:0}.ci-agenda-card h3{margin:0 0 14px;color:#fff;font:700 15px/1.3 var(--font-body);letter-spacing:-.01em}.ci-agenda-card p{max-width:36ch;margin:0;color:rgba(255,255,255,.56);font:400 15px/1.5 var(--font-body)}
+  .ci-agenda__petal{position:absolute;left:0;z-index:2;width:22px;height:22px;color:#2d2d36;font-size:18px;line-height:22px;pointer-events:none}.ci-agenda__petal--top{top:0;transform:translate(-50%,-50%) rotate(45deg)}.ci-agenda__petal--bottom{bottom:0;transform:translate(-50%,50%) rotate(45deg)}
+  .ci-agenda__visual{position:relative;display:flex;align-items:center;justify-content:center;flex:1;min-height:214px;margin-top:22px}.ci-agenda__product{position:relative;width:100%;max-width:310px;height:220px;overflow:hidden;border:1px solid rgba(255,255,255,.15);border-radius:14px 14px 0 0;background:linear-gradient(145deg,#111218,#090a0e 65%);box-shadow:0 18px 42px rgba(0,0,0,.22);color:rgba(255,255,255,.78);font-family:var(--font-body);transform:translateY(2px)}.ci-agenda__product:before{content:"";position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,#38bdf8,#7c6cff 55%,#d85aa8)}.ci-agenda__product--wide{max-width:430px}.ci-agenda__product-bar{display:flex;align-items:center;justify-content:space-between;height:34px;padding:0 13px;border-bottom:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}.ci-agenda__product-bar>span{display:flex;gap:5px}.ci-agenda__product-bar i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.13)}.ci-agenda__product-bar small{color:rgba(255,255,255,.42);font-size:9px}.ci-agenda__product-tabs{display:flex;gap:5px;padding:9px 11px 8px;border-bottom:1px solid rgba(255,255,255,.07)}.ci-agenda__product-tabs span{padding:5px 9px;border:1px solid transparent;border-radius:6px;color:rgba(255,255,255,.38);font-size:8px}.ci-agenda__product-tabs span.is-active{border-color:rgba(125,141,255,.28);background:rgba(125,141,255,.1);color:#c5ccff}
+  .ci-agenda__schedule-list{padding:7px 11px}.ci-agenda__schedule-list>div{display:grid;grid-template-columns:40px 1fr;align-items:center;gap:9px;min-height:42px;padding:5px 7px;border-bottom:1px solid rgba(255,255,255,.065)}.ci-agenda__schedule-list>div.is-accent{border:1px solid rgba(125,141,255,.22);border-radius:7px;background:linear-gradient(90deg,rgba(92,138,255,.1),rgba(164,92,255,.06))}.ci-agenda__schedule-list time{color:#a8b6ff;font-size:9px}.ci-agenda__schedule-list span,.ci-agenda__people span,.ci-agenda__access-list span{display:flex;flex-direction:column;gap:3px}.ci-agenda__schedule-list strong,.ci-agenda__outline strong,.ci-agenda__people strong,.ci-agenda__access-list strong{font-size:9px;font-weight:500}.ci-agenda__schedule-list small,.ci-agenda__outline small,.ci-agenda__people small,.ci-agenda__access-list small{color:rgba(255,255,255,.34);font-size:7.5px}
+  .ci-agenda__outline{padding:10px 14px}.ci-agenda__outline>div{position:relative;display:grid;grid-template-columns:10px 1fr auto;align-items:center;gap:8px;min-height:31px}.ci-agenda__outline>div>i{width:8px;height:8px;border:1px solid #7d8dff;border-radius:50%}.ci-agenda__outline>div>small{letter-spacing:.04em;text-transform:uppercase}.ci-agenda__outline>div.is-child{padding-left:24px}.ci-agenda__outline>div.is-child:before{content:"";position:absolute;left:4px;top:-6px;width:15px;height:22px;border-left:1px solid rgba(255,255,255,.13);border-bottom:1px solid rgba(255,255,255,.13);border-radius:0 0 0 5px}.ci-agenda__outline>div.is-break>i{border-color:#38bdf8;border-radius:2px}
+  .ci-agenda__stage-board{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;height:142px;padding:9px 11px 12px}.ci-agenda__stage-board>span{display:flex;flex-direction:column;gap:7px;padding:6px;border:1px solid rgba(255,255,255,.07);border-radius:7px;background:rgba(255,255,255,.018)}.ci-agenda__stage-board i{display:block;height:45px;border:1px solid rgba(92,138,255,.25);border-radius:5px;background:rgba(92,138,255,.09)}.ci-agenda__stage-board span:nth-child(2) i{border-color:rgba(164,92,255,.25);background:rgba(164,92,255,.09)}.ci-agenda__stage-board span:nth-child(3) i{border-color:rgba(56,189,248,.22);background:rgba(56,189,248,.07)}.ci-agenda__stage-board span i:last-child{height:57px}
+  .ci-agenda__people,.ci-agenda__access-list{padding:8px 13px}.ci-agenda__people>div,.ci-agenda__access-list>div{display:flex;align-items:center;gap:10px;min-height:40px;border-bottom:1px solid rgba(255,255,255,.065)}.ci-agenda__people>div>i{display:grid;place-items:center;width:25px;height:25px;border:1px solid rgba(125,141,255,.28);border-radius:50%;background:rgba(125,141,255,.08);color:#c5ccff;font-size:7px;font-style:normal}.ci-agenda__people span,.ci-agenda__access-list span{flex:1}.ci-agenda__people b{padding:4px 7px;border:1px solid rgba(255,255,255,.1);border-radius:5px;color:rgba(255,255,255,.45);font-size:7px;font-weight:500}.ci-agenda__access-list>div>i{position:relative;width:24px;height:13px;border-radius:999px;background:rgba(255,255,255,.1)}.ci-agenda__access-list>div>i:after{content:"";position:absolute;left:2px;top:2px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.38)}.ci-agenda__access-list>div>i.is-on{background:rgba(125,141,255,.3)}.ci-agenda__access-list>div>i.is-on:after{left:13px;background:#a8b6ff}.ci-agenda__access-list>b{display:block;height:3px;margin-top:11px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.08)}.ci-agenda__access-list>b>i{display:block;width:70%;height:100%;background:linear-gradient(90deg,#5c8aff,#a45cff)}
+  .ci-access{padding:100px 24px;background:#fff}.ci-access__container{display:flex;gap:80px;align-items:stretch;max-width:1200px;margin:auto}.ci-access__left{flex:0 0 40%}.ci-access__sticky{position:sticky;top:120px}.ci-access__eyebrow{display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;padding:6px 12px;border-radius:99px;background:#f4f5f7;color:#22272f;font:600 13px/1.3 var(--font-body)}.ci-access__sticky h2{margin:0 0 24px;color:#22272f;font:500 clamp(36px,4vw,48px)/1.2 var(--font-heading);letter-spacing:-.02em;white-space:nowrap}.ci-access__sticky h2 span{background:linear-gradient(90deg,#555,#aaa);background-clip:text;color:transparent}.ci-access__sticky>p{margin:0;color:#475467;font:400 18px/1.6 var(--font-body)}.ci-access__cta{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 .9375rem/1.4 var(--font-body);text-decoration:none;transition:background .2s ease,transform .2s ease}.ci-access__cta:hover{background:#000;transform:translateY(-1px)}.ci-access__right{display:flex;flex:1;flex-direction:column;gap:32px}
+  .ci-access-card{position:sticky;top:80px;padding:32px;border-radius:24px;background:#f4f5f7;transition:transform .3s ease}.ci-access-card:nth-child(2){top:100px}.ci-access-card:nth-child(3){top:120px}.ci-access-card:nth-child(4){top:140px}.ci-access-card:hover{transform:translateY(-4px)}.ci-access-card__header{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px}.ci-access-card__number{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:40px;height:40px;border-radius:50%;background:#111;color:#fff;font:700 16px/1 var(--font-heading)}.ci-access-card__text h3{margin:0 0 8px;color:#22272f;font:700 20px/1.3 var(--font-heading)}.ci-access-card__text p{margin:0;color:#475467;font:400 16px/1.6 var(--font-body)}
+  .ci-access-card__visual{display:flex;align-items:center;justify-content:center;overflow:hidden;padding:24px;border:1px solid rgba(255,255,255,.86);border-radius:20px}.ci-access-card:nth-child(1) .ci-access-card__visual{background:linear-gradient(180deg,#fff9dc 0%,#fffdf1 48%,#fff 100%)}.ci-access-card:nth-child(2) .ci-access-card__visual{background:linear-gradient(180deg,#e9f9f0 0%,#f5fcf8 48%,#fff 100%)}.ci-access-card:nth-child(3) .ci-access-card__visual{background:linear-gradient(180deg,#eef1ff 0%,#f8f9ff 48%,#fff 100%)}.ci-access-card:nth-child(4) .ci-access-card__visual{background:linear-gradient(180deg,#fdeff3 0%,#fff8fa 48%,#fff 100%)}.ci-access-card__visual--approval{padding:20px}.ci-approval-stack{position:relative;width:100%;height:280px}.ci-approval-stack img{position:absolute;width:76%;max-width:none;max-height:none;border:1px solid #e2e4e9;border-radius:12px;background:#fff;box-shadow:0 14px 30px rgba(17,24,39,.14)}.ci-approval-stack__tickets{top:0;left:0}.ci-approval-stack__setting{right:0;bottom:0;z-index:1}.ci-access-card__visual--product{padding:18px}.ci-product-shot{position:relative;width:100%;height:280px}.ci-product-shot>img{position:absolute;inset:10px 8px 18px;width:calc(100% - 16px);height:calc(100% - 28px);max-width:none;max-height:none;border:1px solid #e2e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 34px rgba(17,24,39,.14);object-fit:cover}.ci-product-shot--payment>img{object-position:50% 58%}.ci-product-shot--private>img{object-position:50% 28%}.ci-product-shot--rules>img{object-position:50% 20%}
+  .ci-product-shot__status,.ci-product-shot__action{position:absolute;z-index:2;display:inline-flex;align-items:center;white-space:nowrap;border-radius:10px;box-shadow:0 10px 24px rgba(17,24,39,.16);font:700 12px/1 var(--font-body)}.ci-product-shot__status{top:0;left:0;gap:7px;padding:9px 12px;border:1px solid #dfe4f2;background:#fff;color:#253047}.ci-product-shot__status svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.ci-product-shot__status--success{border-color:#ccebd8;background:#edfbf3;color:#18864b}.ci-product-shot__status--approval{border-color:#d9dfff;background:#f1f3ff;color:#4b65f6}.ci-product-shot__action{right:10px;bottom:0;padding:11px 15px;background:#4b65f6;color:#fff}.ci-product-shot__cursor{position:absolute;right:2px;bottom:27px;z-index:3;width:24px;height:28px;fill:#111827;stroke:#fff;stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 4px 5px rgba(17,24,39,.25));animation:ci-access-cursor-tap 2.4s ease-in-out infinite}@keyframes ci-access-cursor-tap{0%,65%,100%{transform:translate(0,0)}74%{transform:translate(-3px,3px) scale(.94)}}
+  .ci-workflow{padding:clamp(110px,12vw,160px) 24px;background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(246,248,255,.52) 52%,rgba(255,255,255,.18))}.ci-workflow__inner{max-width:1218px;margin:auto}.ci-workflow__header{display:flex;align-items:center;justify-content:center;max-width:none;margin:0 0 64px;text-align:center}.ci-workflow__header h2{max-width:820px;margin:0;background:linear-gradient(98deg,#22272f 43.06%,#8f8f8f 91.81%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font:500 clamp(40px,4.4vw,58px)/1.1 var(--font-heading);letter-spacing:-1.7px}.ci-steps{display:grid;gap:14px;margin:0;padding:0;list-style:none}.ci-steps>li{position:relative;display:block;padding:0;background:transparent}.ci-steps details{position:relative;overflow:hidden;border:1px solid var(--ci-workflow-border);border-radius:18px;background:linear-gradient(135deg,var(--ci-workflow-tint),#fff 82%);box-shadow:0 8px 24px rgba(31,41,55,.04);transition:border-radius .35s ease,background .35s ease,box-shadow .25s ease,transform .25s ease}.ci-steps summary{display:grid;grid-template-columns:32px minmax(0,1fr);align-items:center;gap:14px;min-height:82px;padding:18px 82px 18px 20px;cursor:pointer;list-style:none;transition:background .25s ease}.ci-steps summary::-webkit-details-marker{display:none}.ci-steps summary:hover{background:rgba(255,255,255,.28)}.ci-steps details:not([open]):hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(31,41,55,.08)}.ci-steps summary>span{display:block;color:#111;font:500 15px/1.1 var(--font-heading);letter-spacing:-.05em}.ci-step__content{display:flex;flex-direction:column}.ci-steps details:not([open]) .ci-step__content{display:grid;grid-template-columns:minmax(230px,.7fr) minmax(320px,1.3fr);align-items:center;gap:36px}.ci-steps h3{margin:0;color:#111;font:500 22px/1.2 var(--font-body);letter-spacing:-.02em}.ci-steps p,.ci-steps ul{display:none}.ci-steps details:not([open]) p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;max-width:460px;margin:0;color:#5f6673;font:400 14.5px/1.5 var(--font-body)}.ci-workflow__arrow{position:absolute;top:24px;right:28px;display:grid;place-items:center;width:34px;height:34px;padding:0;border:1px solid rgba(17,24,39,.2);border-radius:50%;background:rgba(255,255,255,.78);color:#111827;cursor:pointer;transition:transform .25s ease,background .2s ease,border-color .2s ease}.ci-workflow__arrow:hover{border-color:rgba(17,24,39,.42);background:#fff}.ci-workflow__arrow:focus-visible{outline:3px solid rgba(59,130,246,.28);outline-offset:2px}.ci-workflow__arrow svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.ci-steps details[open] .ci-workflow__arrow{top:28px;transform:rotate(180deg)}.ci-steps details[open]{display:flex;align-items:stretch;margin:0;border-radius:28px;background:linear-gradient(135deg,var(--ci-workflow-tint),#fff 72%)}.ci-steps>li:nth-child(1){--ci-workflow-tint:#fff8dc;--ci-workflow-border:#f0dfa6}.ci-steps>li:nth-child(2){--ci-workflow-tint:#edf7ff;--ci-workflow-border:#d4e7f7}.ci-steps>li:nth-child(3){--ci-workflow-tint:#f3efff;--ci-workflow-border:#e2d8fa}.ci-steps>li:nth-child(4){--ci-workflow-tint:#eefbf4;--ci-workflow-border:#d4efdf}.ci-steps details[open] summary{flex:0 0 55%;display:grid;grid-template-columns:44px minmax(0,1fr);align-items:start;gap:14px;min-height:0;padding:64px 40px 64px 28px;background:transparent}.ci-steps details[open] summary:hover{padding-left:28px;background:transparent}.ci-steps details[open] summary>span{color:#050505;font-size:26px;line-height:1}.ci-steps details[open] h3{margin-bottom:16px;color:#050505;font:600 32px/1.2 var(--font-heading)}.ci-steps details[open] p{display:block;max-width:90%;margin:0 0 32px;color:#333;font:400 17px/1.6 var(--font-body)}.ci-steps details[open] ul{display:flex;flex-direction:column;gap:18px;margin:0;padding:0;list-style:none}.ci-steps details[open] ul li{display:flex;align-items:center;gap:14px;padding:0;border:0;background:transparent;color:#111;font:500 16px/1.4 var(--font-body)}.ci-steps details[open] ul i{font-size:16px;font-style:normal}.ci-step-visual{display:none;margin:0;opacity:0}.ci-steps details[open] .ci-step-visual{display:flex;flex:0 0 45%;align-items:center;justify-content:flex-start;overflow:visible;max-height:none;padding:40px 88px 40px 0;opacity:1}.ci-step-visual img{display:block;width:100%;max-width:400px;height:auto;border:0;border-radius:12px;background:transparent;box-shadow:0 24px 60px rgba(0,0,0,.08);object-fit:contain}
+  .ci-scope{padding:80px 5%;background:radial-gradient(ellipse 720px 520px at 100% 20%,rgba(98,112,255,.08),transparent 72%),radial-gradient(ellipse 680px 460px at 0 84%,rgba(255,116,184,.06),transparent 72%),#fff}.ci-scope__inner{max-width:1200px;margin:auto}.ci-scope__header{max-width:none;margin:0 0 60px;text-align:center}.ci-scope__header h2{margin:0;font:500 clamp(32px,4vw,56px)/normal var(--font-heading);letter-spacing:-.03em}.ci-scope__header h2 span{background:linear-gradient(98deg,#555,#aaa);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}.ci-scope__grid{position:relative;overflow:hidden;border:1px solid #e5e7eb;border-radius:16px;background:transparent}.ci-scope__notch{position:absolute;left:50%;z-index:2;width:28px;height:28px;line-height:0;pointer-events:none}.ci-scope__notch--top{top:0;transform:translate(-50%,-50%)}.ci-scope__notch--bottom{bottom:0;transform:translate(-50%,50%)}.ci-scope__row{position:relative;display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e5e7eb}.ci-scope__row:last-child{border-bottom:0}.ci-scope__cell{display:flex;flex-direction:column;justify-content:center;padding:4rem}.ci-scope__row .ci-scope__cell:first-child{border-right:1px solid #e5e7eb}.ci-scope__content{background:transparent}.ci-scope__visual{align-items:center;background:transparent}.ci-scope__stage{position:relative;width:100%;padding:32px 18px;border-radius:22px;isolation:isolate}.ci-scope__stage--workflow{background:linear-gradient(180deg,#fdefb8 0%,#fdf7dd 45%,#f5f6f9 100%)}.ci-scope__stage--review{background:linear-gradient(180deg,#cdf3de 0%,#e6f8ee 45%,#f5f6f9 100%)}.ci-scope__shot{display:block;width:100%;height:auto;border:1px solid #dfe4ec;border-radius:14px;animation:ci-scope-shot-breathe 7s ease-in-out infinite;will-change:transform}.ci-scope__row:nth-child(even) .ci-scope__shot{animation-delay:-3.5s}.ci-scope__float{position:absolute;z-index:2;display:flex;align-items:center;gap:9px;padding:11px 14px;border:1px solid rgba(206,215,232,.9);border-radius:12px;background:rgba(255,255,255,.96);color:#111827;box-shadow:0 14px 34px rgba(30,45,88,.2);font-family:var(--font-body);line-height:1.15;animation:ci-scope-card-float 4.8s ease-in-out infinite;backdrop-filter:blur(10px)}.ci-scope__float b{font-size:.78rem;font-weight:700;white-space:nowrap}.ci-scope__float small{display:block;color:#7b8497;font-size:.65rem;white-space:nowrap}.ci-scope__float i{width:9px;height:9px;border-radius:50%;background:#19b874;box-shadow:0 0 0 5px rgba(25,184,116,.13)}.ci-scope__float--top{top:12px;right:3px;align-items:flex-start;flex-direction:column;gap:3px}.ci-scope__float--bottom{bottom:12px;left:3px;animation-delay:-2.4s}.ci-scope__visual:hover .ci-scope__shot{animation-play-state:paused;transform:scale(1.018)}.ci-scope__eyebrow{display:block;margin-bottom:1rem;color:#5b21b6;font:600 .875rem/1.2 var(--font-body);letter-spacing:.05em;text-transform:uppercase}.ci-scope__content h3{margin:0 0 1.25rem;color:#111827;font:500 2.25rem/1.02 var(--font-heading);letter-spacing:-.02em}.ci-scope__content p{margin:0 0 1rem;color:#4b5563;font:400 1.125rem/1.45 var(--font-body)}.ci-scope__content p:last-child{margin-bottom:0}.ci-scope__content strong{color:#303846;font-weight:650}.ci-scope__cross{position:absolute;bottom:0;left:50%;z-index:2;width:28px;height:28px;line-height:0;pointer-events:none;transform:translate(-50%,50%)}.ci-scope__row:last-child .ci-scope__cross{display:none}@keyframes ci-scope-shot-breathe{0%,100%{transform:translateY(3px) scale(.985)}50%{transform:translateY(-3px) scale(1)}}@keyframes ci-scope-card-float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-9px,0)}}
+  .ci-use-cases{padding:clamp(64px,7vw,96px) 24px;background:#fff}
+  .ci-use-cases__shell{width:min(1080px,100%);margin:0 auto}
+  .ci-use-cases__heading{display:flex;flex-direction:column;align-items:center;margin:0 0 32px;text-align:center}
+  .ci-use-cases__heading h2{max-width:800px;margin:0 0 16px;background:linear-gradient(to right,#111827 0%,#111827 60%,#9ca3af 100%);background-clip:text;color:transparent;font:500 clamp(36px,4.5vw,56px)/1.1 var(--font-heading);letter-spacing:-.03em;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .ci-use-cases__heading h2 span{display:block}
+  .ci-use-cases__heading>p{max-width:none;margin:0;color:#6b7280;font:500 17.5px/1.5 var(--font-body);white-space:nowrap}
+  .ci-use-cases__tabs{display:flex;justify-content:center;gap:4px;width:fit-content;max-width:100%;margin:0 auto 40px;padding:6px;border:1px solid #e5e7eb;border-radius:999px;background:#f1f3f7;flex-wrap:wrap}
+  .ci-use-cases__tab{padding:8px 18px;border:1px solid transparent;border-radius:999px;background:transparent;color:#64748b;font:600 13.5px/1.2 var(--font-body);cursor:pointer;transition:all .2s ease}
+  .ci-use-cases__tab:hover{background:rgba(255,255,255,.65);color:#334155}
+  .ci-use-cases__tab:focus-visible{outline:3px solid rgba(59,130,246,.25);outline-offset:2px}
+  .ci-use-cases__tab--active{border-color:#dbe4f0!important;background:#fff!important;box-shadow:0 2px 8px rgba(30,41,59,.08);color:#3b82f6!important}
+  .ci-use-cases__box{padding:0;border:0;background:transparent;box-shadow:none}
+  .ci-use-panel{--ci-use-tint:#fff8dc;--ci-use-border:#f0dfa6;display:none;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;padding:52px 64px;border:1px solid var(--ci-use-border);border-radius:28px;background:linear-gradient(135deg,var(--ci-use-tint) 0%,#fff 72%);animation:ci-use-panel-in .4s ease forwards}
+  .ci-use-panel:nth-child(2){--ci-use-tint:#edf7ff;--ci-use-border:#d4e7f7}
+  .ci-use-panel:nth-child(3){--ci-use-tint:#f3efff;--ci-use-border:#e2d8fa}
+  .ci-use-panel:nth-child(4){--ci-use-tint:#eefbf4;--ci-use-border:#d4efdf}
+  .ci-use-panel--active{display:grid}
+  @keyframes ci-use-panel-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .ci-use-panel__copy h3{margin:0 0 18px;color:#1f2937;font:500 clamp(32px,3.8vw,42px)/1.1 var(--font-heading);letter-spacing:-.03em}
+  .ci-use-panel__copy>p{margin:0 0 32px;color:#4b5563;font:500 16px/1.6 var(--font-body)}
+  .ci-use-panel__workflow{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .ci-use-panel__workflow span{color:#9ca3af;font:700 11px/1.2 var(--font-body);letter-spacing:.12em}
+  .ci-use-panel__copy ul{display:flex;flex-direction:column;gap:12px;margin:0;padding:0;list-style:none}
+  .ci-use-panel__copy li{display:flex;align-items:flex-start;gap:10px;color:#6b7280;font:500 14.5px/1.4 var(--font-body)}
+  .ci-use-panel__copy li svg{flex-shrink:0;margin-top:2px;stroke:#9ca3af;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+  .ci-use-panel__visual{min-width:0}
+  .ci-use-panel__showcase{position:relative;isolation:isolate;padding:22px;border:1px solid rgba(255,255,255,.9);border-radius:24px;background:rgba(255,255,255,.58);box-shadow:0 22px 48px rgba(31,41,55,.1)}
+  .ci-use-panel__showcase:before{content:"";position:absolute;inset:10% 7% -8%;z-index:-1;border-radius:12px;background:var(--ci-use-border);filter:blur(22px);opacity:.48}
+  .ci-use-panel__showcase>img{position:relative;z-index:1;display:block;width:100%;height:auto;aspect-ratio:1117/837;border:1px solid #e0e4ec;border-radius:12px;background:#fff;object-fit:contain}
+  .ci-use-panel__label{--ci-label-bg:#eef4ff;--ci-label-border:#cddcff;--ci-label-color:#3158d4;--ci-label-shadow:rgba(49,88,212,.16);position:absolute;top:10px;left:10px;z-index:2;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid var(--ci-label-border);border-radius:10px;background:var(--ci-label-bg);box-shadow:0 8px 22px var(--ci-label-shadow);color:var(--ci-label-color);font:700 11px/1.2 var(--font-body)}
+  .ci-use-panel__label--exhibitions{--ci-label-bg:#eefbf5;--ci-label-border:#cbeedb;--ci-label-color:#168a55;--ci-label-shadow:rgba(22,138,85,.15);border-radius:999px}
+  .ci-use-panel__label--heritage{--ci-label-bg:#f5f1ff;--ci-label-border:#ded2ff;--ci-label-color:#7351cf;--ci-label-shadow:rgba(115,81,207,.16);border-radius:7px}
+  .ci-use-panel__label--community{--ci-label-bg:#fff8e8;--ci-label-border:#f2dfad;--ci-label-color:#9a6b12;--ci-label-shadow:rgba(154,107,18,.15);border-radius:10px 10px 10px 3px}
+  .ci-use-panel__label svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .ci-links{padding:clamp(64px,7vw,96px) 24px;background:linear-gradient(180deg,#f8faff 0%,#fff 78%)}
+  .ci-links__inner{width:min(1200px,100%);margin:0 auto}
+  .ci-links__header{max-width:1040px;margin:0 auto 68px;text-align:center}
+  .ci-links h2{margin:0;background:linear-gradient(135deg,#222 0%,#333 40%,#888 100%);background-clip:text;color:transparent;font:500 clamp(36px,5vw,56px)/1.1 var(--font-heading);letter-spacing:-.03em;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .ci-links__cards{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:1200px;margin:0 auto;border-top:1px solid var(--surface-card-border,#e8ecf2)}
+  .ci-links__notch{position:absolute;top:0;z-index:2;width:28px;height:28px;line-height:0;pointer-events:none;transform:translate(-50%,-50%)}
+  .ci-link-card{position:relative;display:block;min-height:318px;padding:28px 28px 34px;border-left:1px solid var(--surface-card-border,#e8ecf2);color:inherit;text-decoration:none;transition:background-color .25s ease}
+  .ci-link-card--first{border-left:0}
+  .ci-link-card:hover{background:rgba(248,250,255,.74)}
+  .ci-link-card:focus-visible{z-index:3;outline:3px solid rgba(55,93,251,.35);outline-offset:-3px}
+  .ci-link-card__icon{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;margin-bottom:28px;color:var(--brand-blue,#375dfb)}
+  .ci-link-card__icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .ci-link-card h3{min-height:2.5em;margin:0 0 28px;color:var(--heading-dark,#22272f);font:600 21px/1.25 var(--font-heading)}
+  .ci-link-card p{margin:14px 0 0;color:var(--body-gray,#525866);font:400 15px/1.4 var(--font-body)}
+  .ci-demo{padding:clamp(80px,9vw,120px) 24px;background:#fff}
+  .ci-demo-shot--format>img{object-position:50% 18%}
+  .ci-demo-shot--journey>img{object-fit:contain;background:linear-gradient(145deg,#fff,#f7f8ff)}
+  .ci-demo-shot--review>img{object-position:50% 18%}
+  .ci-faq{width:100%;padding:80px 24px;background:#fff}.ci-faq__inner{display:grid;grid-template-columns:360px 1fr;gap:64px;align-items:start;max-width:1140px;margin:auto}.ci-faq__sidebar{position:sticky;top:6rem;align-self:start}.ci-faq__eyebrow{display:inline-flex;align-items:center;gap:6px;margin-bottom:20px;padding:8px 16px;border:1px solid #e4e7ec;border-radius:999px;color:#000;font:500 .8125rem/1 var(--font-body)}.ci-faq__sidebar h2{margin:0 0 20px;color:#000;font:500 44px/1.1 'Creato Display',var(--font-heading);letter-spacing:-1px}.ci-faq__sidebar>p{margin:0 0 28px;color:var(--body-light);font:400 1rem/1.6 var(--font-body)}.ci-faq__cta{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;background:#171a21;color:#fff;font:500 .9375rem/1 var(--font-body);text-decoration:none;transition:background .2s ease,transform .2s ease}.ci-faq__cta:hover{background:#000;transform:translateY(-1px)}.ci-faq__list{display:flex;flex-direction:column;gap:16px;counter-reset:cultural-faq}.ci-faq__item{counter-increment:cultural-faq;overflow:hidden;padding:4px 28px;border:1px solid #e4e7ec;border-radius:20px;background:#fff;transition:background .25s ease,border-color .25s ease}.ci-faq__item[open]{border-color:#e4e7ec;background:#e4e7ec}.ci-faq__question{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;color:#000;font:500 1.0625rem/1.4 'Creato Display',var(--font-heading);cursor:pointer;list-style:none}.ci-faq__question::-webkit-details-marker{display:none}.ci-faq__question strong{font-weight:500}.ci-faq__question strong:before{content:counter(cultural-faq) '. '}.ci-faq__icon{position:relative;flex-shrink:0;width:18px;height:18px;transition:transform .28s cubic-bezier(.22,1,.36,1)}.ci-faq__icon:before,.ci-faq__icon:after{content:"";position:absolute;top:50%;left:50%;background:#000;transform:translate(-50%,-50%)}.ci-faq__icon:before{width:14px;height:2px}.ci-faq__icon:after{width:2px;height:14px;transition:opacity .2s ease}.ci-faq__item[open] .ci-faq__icon{transform:scale(.9)}.ci-faq__item[open] .ci-faq__icon:after{opacity:0}.ci-faq__answer{max-width:640px;padding:0 0 24px}.ci-faq__answer p{margin:0;color:#000;font:400 .9375rem/1.7 var(--font-body)}
+  .ci-cta{max-width:1200px;margin:0 auto;padding:60px 20px 80px}
+  .ci-cta__card{position:relative;display:flex;align-items:center;gap:40px;overflow:hidden;padding:60px 40px;border-radius:24px;background:#0f1629;text-align:left}
+  .ci-cta__glow{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+  .ci-cta__glow--one{top:-100px;left:-50px;width:400px;height:400px;background:rgba(55,93,251,.2)}
+  .ci-cta__glow--two{right:-30px;bottom:-80px;width:300px;height:300px;background:rgba(159,129,255,.15)}
+  .ci-cta__content{position:relative;z-index:2;display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:20px;min-width:0}
+  .ci-cta__eyebrow{display:inline-flex;align-items:center;justify-content:center;padding:8px 14px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.72);font:600 13px/18px var(--font-body);letter-spacing:.04em;text-transform:uppercase}
+  .ci-cta h2{margin:0;color:#fff;font:600 48px/1.15 var(--font-heading);letter-spacing:-1px}
+  .ci-cta__content>p{margin:0;color:rgba(255,255,255,.65);font:400 18px/28px var(--font-body);letter-spacing:-.3px}
+  .ci-cta__proof{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:10px}
+  .ci-cta__proof span{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid rgba(255,255,255,.08);border-radius:999px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.74);font:500 13px/18px var(--font-body)}
+  .ci-cta__btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 28px;border-radius:10px;background:var(--brand-blue);box-shadow:0 4px 20px rgba(55,93,251,.35);color:#fff;font:600 15px/24px var(--font-body);letter-spacing:-.3px;text-decoration:none;transition:background .3s,transform .3s,box-shadow .3s}
+  .ci-cta__btn:hover{background:var(--brand-blue-hover);box-shadow:0 6px 28px rgba(55,93,251,.4);transform:translateY(-1px)}
+  .ci-cta__visual{position:relative;z-index:1;flex:0 0 45%;height:410px;animation:ci-cta-float 4s ease-in-out infinite}
+  .ci-cta__shot{position:absolute;display:block;height:auto;border:1px solid rgba(219,228,255,.45);border-radius:12px;background:#fff;box-shadow:0 18px 45px rgba(0,0,0,.28)}
+  .ci-cta__shot--main{top:82px;left:7%;width:82%}
+  .ci-cta__shot--session{top:0;right:0;width:36%;max-height:250px;object-fit:cover;object-position:top}
+  .ci-cta__shot--attendees{bottom:3px;left:0;width:34%}
+  .ci-cta__visual-action{position:absolute;right:4%;bottom:46px;z-index:3;padding:11px 15px;border-radius:9px;background:var(--brand-blue);box-shadow:0 10px 24px rgba(17,24,39,.3);color:#fff;font:700 11px/1 var(--font-body)}
+  .ci-cta__visual-cursor{position:absolute;right:1%;bottom:75px;z-index:4;width:24px;height:28px;fill:#111827;stroke:#fff;stroke-width:2;stroke-linejoin:round;filter:drop-shadow(0 4px 5px rgba(17,24,39,.3))}
+  @keyframes ci-cta-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @media(max-width:1024px){.ci-hero__grid{grid-template-columns:1fr;max-width:760px;text-align:center}.ci-hero__content{align-items:center}.ci-hero__trust,.ci-hero__cta-row{justify-content:center}.ci-demo__inner{grid-template-columns:1fr}.ci-use-cases__grid{grid-template-columns:repeat(2,1fr)}.ci-faq__inner{grid-template-columns:1fr;gap:40px}.ci-faq__sidebar{position:static;text-align:left}.ci-faq__sidebar h2{font-size:32px}.ci-cta__card{padding:60px 24px}.ci-cta h2{font-size:36px}.ci-cta__content>p{font-size:16px}.ci-cta__visual{flex-basis:40%;height:360px}}
+  @media(max-width:900px){.ci-use-panel{grid-template-columns:1fr;gap:48px;padding:48px}.ci-use-cases__heading>p{max-width:700px;white-space:normal}}
+  @media(max-width:900px){.ci-scope__row{display:flex;flex-direction:column}.ci-scope__cell{padding:3rem 1.5rem}.ci-scope__row .ci-scope__cell:first-child{border-right:0}.ci-scope__content{order:1;border-bottom:1px solid #e5e7eb}.ci-scope__visual{order:2}.ci-scope__cross{display:none}}
+  @media(max-width:992px){.ci-access__container{flex-direction:column;gap:40px}.ci-access__left{flex:none;width:100%}.ci-access__sticky{position:static}.ci-access__sticky h2{white-space:normal}.ci-access-card{padding:32px 24px}.ci-access-card__header{flex-direction:column;gap:16px}.ci-access-card__visual{padding:24px}.ci-access-card__visual--approval{padding:16px}.ci-approval-stack{height:240px}.ci-approval-stack img{width:82%}.ci-access-card__visual--product{padding:14px}.ci-product-shot{height:240px}.ci-product-shot__status,.ci-product-shot__action{font-size:11px}.ci-links__cards{grid-template-columns:1fr}.ci-links__notch{display:none}.ci-link-card{min-height:0;border-top:1px solid var(--surface-card-border,#e8ecf2);border-left:0}.ci-link-card--first{border-top:0}}
+  @media(max-width:767px){.ci-hero{margin-top:-80px;padding:120px 16px 56px}.ci-hero__grid{gap:38px}.ci-hero__title{font-size:40px;letter-spacing:-1px}.ci-hero__desc{font-size:15.5px}.ci-hero__cta-row{width:100%;flex-direction:column}.ci-hero__btn{width:100%}.ci-hero__trust{align-items:flex-start;flex-direction:column}.ci-trust-strip{padding:20px 18px}.ci-trust-strip__inner{align-items:flex-start;justify-content:flex-start;flex-direction:column;gap:12px}.ci-flow-section{padding:64px 16px}.ci-flow-quad{grid-template-columns:1fr}.ci-flow-quad__cross{display:none}.ci-flow-quad__cell{min-height:0;padding:32px 20px;border-right:0;border-bottom:1px solid #eef0f3}.ci-flow-quad__cell:nth-child(3){order:4;border-bottom:0}.ci-flow-quad__cell:nth-child(4){order:3;border-bottom:1px solid #eef0f3}.ci-flow-quad__cell--media{padding:16px 20px 32px}.ci-flow-composite{height:285px}.ci-workflow,.ci-scope,.ci-use-cases,.ci-links,.ci-demo,.ci-faq{padding:64px 16px}.ci-scope__cards,.ci-use-cases__grid{grid-template-columns:1fr}.ci-steps details[open]{display:block}.ci-steps summary,.ci-steps details[open] summary{grid-template-columns:42px 1fr 34px;gap:12px;padding:20px 16px}.ci-scope-card{min-height:260px;padding:28px}.ci-link-card{grid-template-columns:44px 1fr 28px;padding:20px 16px}.ci-link-card>span{width:44px;height:44px}.ci-demo__inner{gap:36px}.ci-demo__content{text-align:center}.ci-demo__visual{padding:18px}.ci-cta{padding:40px 16px 60px}.ci-cta__card{flex-direction:column;padding:48px 20px;border-radius:20px;text-align:center}.ci-cta__content{align-items:center}.ci-cta h2{font-size:28px;line-height:1.2}.ci-cta__content>p{font-size:15px}.ci-cta__proof{justify-content:center;gap:8px}.ci-cta__visual{display:none}.ci-cta__btn{width:100%;justify-content:center}}
+  @media(max-width:767px){.ci-faq{padding:56px 16px}.ci-faq__sidebar h2{font-size:28px}.ci-faq__item{padding:4px 20px;border-radius:16px}.ci-faq__question{padding:18px 0;font-size:.9375rem}}
+  @media(max-width:767px){.ci-links{padding:48px 20px}.ci-links__header{margin-bottom:48px}.ci-link-card{display:block;padding:28px 28px 34px}.ci-link-card__icon{width:30px;height:30px}}
+  @media(max-width:420px){.ci-hero__title{font-size:35px}.ci-flow-title,.ci-workflow__header h2,.ci-scope__header h2,.ci-use-cases__heading h2,.ci-links h2{font-size:32px}.ci-flow-composite{height:245px}.ci-demo__visual article{grid-template-columns:1fr}}
+  @media(max-width:960px){.ci-agenda-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ci-agenda-card,.ci-agenda-card:nth-child(n+4){grid-column:auto;min-height:280px;border-right:1px solid #2d2d36;border-bottom:1px solid #2d2d36}.ci-agenda-card:nth-child(even){border-right:0}.ci-agenda-card:last-child{grid-column:1/-1;border-right:0;border-bottom:0}.ci-agenda__petal{display:none}.ci-agenda__visual{min-height:190px}}
+  @media(max-width:620px){.ci-agenda{padding:56px 16px 64px}.ci-agenda__header{margin-bottom:40px}.ci-agenda__header h2{font-size:clamp(38px,12vw,48px)}.ci-agenda-grid{grid-template-columns:1fr}.ci-agenda-card,.ci-agenda-card:nth-child(n+4),.ci-agenda-card:last-child{grid-column:auto;min-height:250px;padding:30px 26px;border-right:0;border-bottom:1px solid #2d2d36}.ci-agenda-card:last-child{border-bottom:0}.ci-agenda__visual{min-height:170px}}
+  @media(max-width:620px){.ci-workflow{padding-block:76px}.ci-workflow__header{margin-bottom:46px}.ci-workflow__header h2{font-size:42px}.ci-steps summary,.ci-steps summary:hover{grid-template-columns:26px minmax(0,1fr);gap:10px;min-height:96px;padding:18px 62px 18px 14px}.ci-workflow__arrow{top:31px;right:16px}.ci-steps summary>span{font-size:13px}.ci-steps details:not([open]) .ci-step__content{display:flex;flex-direction:column;align-items:flex-start;gap:5px}.ci-steps details:not([open]) p{font-size:13px;line-height:1.4}.ci-steps details[open]{display:flex;flex-direction:column}.ci-steps details[open] summary,.ci-steps details[open] summary:hover{flex:none;grid-template-columns:32px minmax(0,1fr);gap:10px;padding:34px 62px 24px 14px}.ci-steps details[open] .ci-workflow__arrow{top:24px;right:16px}.ci-steps details[open] summary>span{font-size:21px}.ci-steps details[open] h3{font-size:27px}.ci-steps details[open] p{max-width:100%;margin-top:14px;font-size:17px}.ci-steps details[open] .ci-step-visual{flex:none;margin-inline:0;padding:8px 14px 20px}.ci-step-visual img{max-width:none;border-radius:12px}}
+  @media(max-width:620px){.ci-use-cases{padding:72px 20px}.ci-use-cases__heading h2{font-size:clamp(26px,8.3vw,38px)}.ci-use-cases__heading h2 span{white-space:normal}.ci-use-cases__tabs{justify-content:flex-start;width:100%;flex-wrap:nowrap;overflow-x:auto;border-radius:20px;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}.ci-use-cases__tabs::-webkit-scrollbar{display:none}.ci-use-cases__tab{flex:0 0 auto;padding-inline:14px;white-space:nowrap;scroll-snap-align:start}.ci-use-panel{gap:32px;padding:32px 24px;border-radius:20px}.ci-use-panel__showcase{padding:14px;border-radius:18px}.ci-use-panel__label{top:5px;left:5px;padding:7px 9px;font-size:9px}}
+  @media(prefers-reduced-motion:reduce){.ci-hero__btn,.ci-use-cases__tab,.ci-link-card,.ci-steps summary>b,.ci-faq__item,.ci-faq__icon,.ci-faq__icon:after{transition:none}.ci-product-shot__cursor,.ci-use-panel,.ci-cta__visual{animation:none}.ci-scope__shot,.ci-scope__float{animation:none;will-change:auto}.ci-scope__visual:hover .ci-scope__shot{transform:none}}
+</style>
