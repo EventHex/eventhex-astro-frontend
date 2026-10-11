@@ -13,7 +13,7 @@ import { glossaryEntries } from "../data/glossary";
  */
 
 // Pages to omit even though they exist as static routes (thank-you, etc.).
-const EXCLUDE = new Set<string>(["/book-a-demo/thank-you/", "/pricing/"]);
+const EXCLUDE = new Set<string>(["/book-a-demo/thank-you/"]);
 
 // Path prefixes never included (proxy / API routes).
 const EXCLUDE_PREFIXES = ["/api/", "/wp-content/"];
