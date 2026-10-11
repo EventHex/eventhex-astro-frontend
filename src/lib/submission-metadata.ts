@@ -34,7 +34,8 @@ function submissionId(): string {
 function analyticsConsentGranted(): boolean {
   try {
     const saved = localStorage.getItem("eh_cookie_consent");
-    if (!saved) return false;
+    // No choice yet: consent mode defaults per region (Clarity itself stays cookieless in EEA/UK/CH).
+    if (!saved) return true;
     if (saved === "granted") return true;
     const parsed = JSON.parse(saved);
     return parsed?.analytics === true;

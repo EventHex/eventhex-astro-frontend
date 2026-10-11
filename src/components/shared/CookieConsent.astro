@@ -47,6 +47,7 @@
   (function () {
     const eventHexWindow = window as typeof window & {
       gtag?: (...args: unknown[]) => void;
+      clarity?: (...args: unknown[]) => void;
       loadEventHexAnalytics?: () => void;
     };
     const STORAGE_KEY = 'eh_cookie_consent';
@@ -65,6 +66,10 @@
           'ad_user_data': mState,
           'ad_personalization': mState
         });
+      }
+      // Clarity Consent API v2 (required for EEA/UK/CH sessions).
+      if (typeof eventHexWindow.clarity === 'function') {
+        eventHexWindow.clarity('consentv2', { ad_Storage: mState, analytics_Storage: aState });
       }
       if ((analytics || marketing) && typeof eventHexWindow.loadEventHexAnalytics === 'function') {
         eventHexWindow.loadEventHexAnalytics();
