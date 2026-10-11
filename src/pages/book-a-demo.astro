@@ -815,13 +815,9 @@ const canonical = "https://eventhex.ai/book-a-demo/";
     let selectedStart: string | null = null;
     let selectedRequiresConfirmation = false;
 
+    // GA4 + dataLayer + Clarity via the site-wide helper in MarketingLayout.
     function track(event: string, data: Record<string, unknown> = {}) {
-      // GTM / GA4
-      (window as any).dataLayer = (window as any).dataLayer || [];
-      (window as any).dataLayer.push({ event, ...data });
-      // Microsoft Clarity custom event (no-op if Clarity not loaded)
-      const cl = (window as any).clarity;
-      if (typeof cl === "function") cl("event", event);
+      (window as any).ehTrack?.(event, data);
     }
 
     const fmtWeekday = new Intl.DateTimeFormat([], { weekday: "short" });
@@ -870,8 +866,17 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       pickEl.style.display = "none";
       weekEl.style.display = "none";
       confirmEl.hidden = false;
+      formStarted = false;
       track("demo_slot_selected", { slot_start: slot.start });
     }
+
+    // First interaction with the details form after picking a slot.
+    let formStarted = false;
+    formEl.addEventListener("focusin", () => {
+      if (formStarted) return;
+      formStarted = true;
+      track("demo_form_started");
+    });
 
     function backToPicker() {
       confirmEl.hidden = true;
@@ -895,6 +900,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       const hp = String(fd.get("company_website") || "");
       formMsgEl.classList.remove("is-err");
       if (!name || !email || !company || !selectedStart) {
+        track("demo_form_invalid", { missing: [!name && "name", !email && "email", !company && "company"].filter(Boolean).join(",") });
         formMsgEl.textContent = "Please add your name, work email and company.";
         formMsgEl.classList.add("is-err");
         return;
@@ -925,8 +931,11 @@ const canonical = "https://eventhex.ai/book-a-demo/";
             submissionMetadata,
           }),
         });
-        const data = await r.json();
-        if (!r.ok || !data.ok) throw new Error(data.error || "Booking failed");
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok || !data.ok) {
+          track("demo_booking_error", { http_status: r.status, error_message: String(data.error || "").slice(0, 100) });
+          throw new Error(data.error || "Booking failed");
+        }
         // Conversion event fires on the thank-you page.
         const when = data.start || selectedStart;
         const status = data.status === "pending" ? "pending" : "accepted";
@@ -935,6 +944,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
           "&status=" + encodeURIComponent(status);
         return;
       } catch (err: any) {
+        if (err instanceof TypeError) track("demo_booking_error", { http_status: 0, error_message: "network" });
         submitBtn.disabled = false;
         submitBtn.classList.remove("is-loading");
         submitBtn.textContent = selectedRequiresConfirmation ? "Request this time" : "Confirm booking";
@@ -1002,6 +1012,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         if (!r.ok) throw new Error("http " + r.status);
         data = await r.json();
       } catch {
+        track("demo_slots_error", { week_offset: weekOffset });
         slotsEl.innerHTML =
           '<div class="ehx-msg ehx-msg--err">Couldn\'t load times.<button type="button" id="ehx-retry">Retry</button></div>';
         document.getElementById("ehx-retry")!.onclick = load;
