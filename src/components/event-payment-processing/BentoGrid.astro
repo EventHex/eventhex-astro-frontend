@@ -42,40 +42,34 @@ const gateways = [
       <strong>Best for event-specific payment operations</strong>
     </article>
     <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInRight">
-      <div class="eppx-account__composite">
-        <img class="eppx-account__screen eppx-account__screen--primary"
-          src="/feature-images/event-payment-processing/payment-configuration.png"
-          alt="EventHex event Payment Configuration with the payment options for the event and the gateway fee estimates"
-          width="928" height="528" loading="lazy" decoding="async" />
-        <img class="eppx-account__screen eppx-account__screen--secondary"
-          src="/feature-images/event-payment-processing/payment-options.png"
-          alt="EventHex event Payment Options showing EventHex Payment, Organization Payment, Custom Payment, and Manual Payment"
-          width="920" height="242" loading="lazy" decoding="async" />
+      <div class="eppx-shot-stage eppx-shot-stage--violet eppx-account__stage">
         <span class="eppx-account__status">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
           Event-level override
         </span>
+        <div class="eppx-account__shots">
+          <img class="eppx-shot"
+            src="/feature-images/event-payment-processing/payment-configuration.png"
+            alt="EventHex event Payment Configuration with the payment options for the event and the gateway fee estimates"
+            width="753" height="616" loading="lazy" decoding="async" />
+        </div>
         <span class="eppx-account__action">Event payment options</span>
-        <img class="eppx-account__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
       </div>
     </div>
 
     <div class="eppx-account__cell eppx-account__media animate-on-scroll" data-animation="fadeInLeft">
-      <div class="eppx-account__composite">
-        <img class="eppx-account__screen eppx-account__screen--primary"
-          src="/feature-images/event-payment-processing/gateway-credentials.png"
-          alt="EventHex organization Payment Gateway settings with Stripe, Razorpay, and TapPay credentials and encryption note"
-          width="968" height="372" loading="lazy" decoding="async" />
-        <img class="eppx-account__screen eppx-account__screen--secondary"
-          src="/feature-images/event-payment-processing/payout-integrations.png"
-          alt="EventHex organization Integrations page showing Payment Gateway, Stripe Connect, and Razorpay Route payout settings"
-          width="968" height="450" loading="lazy" decoding="async" />
+      <div class="eppx-shot-stage eppx-shot-stage--mint eppx-account__stage">
         <span class="eppx-account__status">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
           Credentials masked
         </span>
+        <div class="eppx-account__shots">
+          <img class="eppx-shot"
+            src="/feature-images/event-payment-processing/gateway-credentials.png"
+            alt="EventHex organization Payment Gateway settings with Stripe, Razorpay, and TapPay credentials and encryption note"
+            width="968" height="372" loading="lazy" decoding="async" />
+        </div>
         <span class="eppx-account__action">Save changes</span>
-        <img class="eppx-account__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
       </div>
     </div>
     <article class="eppx-account__cell eppx-account__copy animate-on-scroll" data-animation="fadeInUp">
@@ -125,8 +119,10 @@ const gateways = [
               </span>
             </>
           )}
-          <h3>{gateway.name}</h3>
-          <p>{gateway.description}</p>
+          <div class="eppx-gateway__copy">
+            <h3>{gateway.name}</h3>
+            <p>{gateway.description}</p>
+          </div>
           <div class="eppx-gateway__visual" aria-hidden="true">
             {index === 0 && (
               <div class="eppx-gateway__surface">
@@ -298,6 +294,42 @@ const gateways = [
     font: 400 .9375rem/1.38 var(--font-body);
   }
 
+  .eppx-gateway__copy {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* The "Need another gateway?" card owns the full bottom row: copy sits on
+     the left, its visual on the right, and the row drops the tall card height
+     that only made sense for the three gateway columns above it. */
+  .eppx-gateway__card:nth-child(n + 4) {
+    grid-column: span 6;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(28px, 5vw, 72px);
+    min-height: 0;
+    padding: clamp(28px, 3.2vw, 40px) clamp(28px, 3.6vw, 48px);
+    border-right: 0;
+    border-bottom: 0;
+  }
+
+  .eppx-gateway__card:nth-child(n + 4) .eppx-gateway__copy {
+    flex: 0 1 auto;
+    max-width: 52ch;
+  }
+
+  .eppx-gateway__card:nth-child(n + 4) p {
+    max-width: 46ch;
+  }
+
+  .eppx-gateway__card:nth-child(n + 4) .eppx-gateway__visual {
+    flex: 1 1 46%;
+    margin-top: 0;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
   .eppx-gateway__visual {
     position: relative;
     display: flex;
@@ -339,6 +371,23 @@ const gateways = [
     gap: 10px;
     width: 100%;
     max-width: 290px;
+    padding: 16px;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    background:
+      linear-gradient(var(--eppx-cap-surface), var(--eppx-cap-surface)) padding-box,
+      var(--eppx-cap-gradient) border-box;
+    box-shadow: 0 18px 44px -22px rgba(92, 138, 255, 0.5);
+  }
+
+  /* Every gateway card presents its visual inside the same contained surface,
+     so the chip and stack variants no longer read as loose pieces floating in
+     empty card space. Mirrors the bordered product-evidence framing used on the
+     Event Registration and Speaker Management sections. */
+  .eppx-gateway__chips,
+  .eppx-gateway__stack {
+    width: 100%;
+    max-width: 300px;
     padding: 16px;
     border: 1px solid transparent;
     border-radius: 16px;
@@ -616,43 +665,37 @@ const gateways = [
     align-items: center;
     min-height: 360px;
     padding: 18px 22px;
-    overflow: hidden;
   }
 
-  .eppx-account__composite {
-    position: relative;
+  /* Product-evidence framing, matching the finance and refund sections:
+     a pastel stage holding the real screenshots as clean bordered captures. */
+  .eppx-account__stage {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
     width: 100%;
-    height: 320px;
+    max-width: 100%;
+    padding: 22px 18px;
   }
-  .eppx-account__screen {
-    position: absolute;
-    display: block;
-    object-fit: cover;
-    object-position: top left;
-    border: 1px solid rgba(209, 214, 226, 0.92);
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
+
+  .eppx-account__shots {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
   }
-  .eppx-account__screen--primary {
-    top: 34px;
-    left: 18px;
-    z-index: 1;
-    width: 76%;
-    height: 64%;
-  }
-  .eppx-account__screen--secondary {
-    right: 16px;
-    bottom: 18px;
-    z-index: 2;
-    width: 64%;
-    height: 54%;
+
+  .eppx-account__stage .eppx-shot {
+    width: 100%;
+    /* both captures in this section share one fixed frame so the event-level
+       and organization-level screenshots render at the same size */
+    aspect-ratio: 16 / 9;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
   }
 
   .eppx-account__status,
   .eppx-account__action {
-    position: absolute;
-    z-index: 5;
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
@@ -661,8 +704,7 @@ const gateways = [
     box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
   }
   .eppx-account__status {
-    top: 14px;
-    left: 14px;
+    align-self: flex-start;
     gap: 7px;
     padding: 9px 11px;
     border: 1px solid #cfead9;
@@ -679,21 +721,10 @@ const gateways = [
     stroke-linejoin: round;
   }
   .eppx-account__action {
-    right: 14px;
-    bottom: 14px;
+    align-self: flex-end;
     padding: 10px 13px;
     background: #4b65f6;
     color: #fff;
-  }
-  .eppx-account__cursor {
-    position: absolute;
-    right: 4px;
-    bottom: 34px;
-    z-index: 6;
-    width: 22px;
-    height: 26px;
-    filter: drop-shadow(0 3px 3px rgba(17, 24, 39, 0.25));
-    pointer-events: none;
   }
 
   .eppx-account__note {
@@ -739,6 +770,27 @@ const gateways = [
       border-bottom: 0;
     }
 
+    .eppx-gateway__card:nth-child(n + 4) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .eppx-gateway__card:nth-child(n + 4) .eppx-gateway__copy {
+      max-width: none;
+    }
+
+    .eppx-gateway__card:nth-child(n + 4) p {
+      max-width: none;
+    }
+
+    .eppx-gateway__card:nth-child(n + 4) .eppx-gateway__visual {
+      flex: 1;
+      margin-top: 32px;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
     .eppx-gateway__petal {
       display: none;
     }
@@ -768,9 +820,7 @@ const gateways = [
       border-bottom: 1px solid #eef0f3;
     }
     .eppx-account__media { padding: 16px 20px 32px; }
-    .eppx-account__composite { height: 285px; }
-    .eppx-account__screen--primary { width: 78%; }
-    .eppx-account__screen--secondary { width: 68%; }
+    .eppx-account__stage { padding: 18px 12px; }
   }
 
   @media (max-width: 560px) {

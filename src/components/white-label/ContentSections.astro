@@ -1,36 +1,4 @@
 ---
-const setupCards = [
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
-    title: "Create the organization",
-    body: "Store each client, chapter, or business unit with its identity, contact, plan, and region context.",
-  },
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2a10 10 0 0 0 0 20 2 2 0 0 0 0-4 2 2 0 0 1 0-4h4a4 4 0 0 0 4-4 10 10 0 0 0-8-2Z"></path></svg>`,
-    title: "Set the brand surface",
-    body: "Apply organization logo and color settings, then enable the white-label experience where the plan supports it.",
-  },
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path><path d="m9 12 2 2 4-4"></path></svg>`,
-    title: "Assign scoped teams",
-    body: "Connect organization admins, event teams, and narrower event roles to the workspace they are permitted to operate.",
-  },
-  {
-    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>`,
-    title: "Launch and operate events",
-    body: "Create events inside the right organization so brand, account, plan, and usage context stay connected.",
-  },
-];
-
-const capabilityCards = [
-  { title: "Organization directory", body: "Find the client, chapter, or business unit without flattening every event into one undifferentiated list." },
-  { title: "Scoped access", body: "Organization admins, event teams, platform admins, and event-level roles keep responsibilities separated." },
-  { title: "Feature gates", body: "Control paid tickets, API access, white label, custom domains, and AI website generation by plan." },
-  { title: "Resource limits", body: "Apply configured limits to events, team members, attendees, campaigns, and other metered resources." },
-  { title: "Usage counters", body: "Review events, attendees, content records, campaigns, and AI or media fields tied to the organization." },
-  { title: "Payment setup", body: "Keep supported gateway credentials and connected-account configuration attached to the owning organization." },
-];
-
 const workflow = [
   {
     title: "Create the organization record",
@@ -69,116 +37,123 @@ const workflow = [
   },
 ];
 
+const flows = [
+  {
+    title: "Create the organization",
+    text: "Each client, chapter, or business unit gets its own record with identity, contact, plan, and region, then one switch turns on the white-label experience.",
+    status: "Organization created",
+    action: "Add organization",
+    primary: ["/feature-images/white-label/organization-directory.png", "EventHex organization directory with plan and status for each client", 630, 298],
+    secondary: ["/feature-images/white-label/organization-white-label-setting.png", "EventHex edit organization form with the Enable White Label option", 428, 450],
+  },
+  {
+    title: "Gate capabilities by plan",
+    text: "Custom domains, white label, and event limits follow the plan an organization is on, and attendee mobile app settings are managed per organization.",
+    status: "Plan-aware controls",
+    action: "Edit plan",
+    primary: ["/feature-images/white-label/plan-feature-gates.png", "EventHex plan overview listing custom domain and white label as plan features", 450, 320],
+    secondary: ["/feature-images/white-label/organization-mobile-app-settings.png", "EventHex organization attendee mobile app settings", 620, 245],
+  },
+];
+
+const capabilities = [
+  { title: "Organization directory", body: "Find the client, chapter, or business unit without flattening every event into one undifferentiated list.", rows: [["Northstar Events", "Professional"], ["Summit Co", "Enterprise"], ["Harbor Association", "Active"]] },
+  { title: "Scoped access", body: "Organization admins, event teams, platform admins, and event-level roles keep responsibilities separated.", chips: ["Org admin", "Event team", "Platform admin", "Scanner"], active: 1 },
+  { title: "Feature gates", body: "Control paid tickets, API access, white label, custom domains, and AI website generation by plan.", rows: [["White label", "On"], ["Custom domain", "On"], ["API access", "Plan"]] },
+  { title: "Resource limits", body: "Apply configured limits to events, team members, attendees, campaigns, and other metered resources.", bars: [["Events", 48], ["Attendees", 72], ["Campaigns", 79]] },
+  { title: "Usage counters", body: "Review events, attendees, content records, campaigns, and AI or media fields tied to the organization.", chips: ["Events", "Attendees", "Campaigns", "AI fields", "Media"], active: 2 },
+  { title: "Payment setup", body: "Keep supported gateway credentials and connected-account configuration attached to the owning organization.", rows: [["Gateway", "Organization account"], ["Mode", "Connected"], ["Owner", "Northstar Events"]] },
+];
+
 const audiences = [
-  { title: "Event agencies", body: "Manage client organizations and repeat programmes under distinct commercial relationships." },
-  { title: "Associations", body: "Support chapters, committees, or regional teams while keeping portfolio oversight." },
-  { title: "Enterprises", body: "Separate brands, business units, or markets without creating disconnected tooling." },
-  { title: "Conference portfolios", body: "Operate recurring event series where each edition or region needs its own context." },
-  { title: "Exhibition groups", body: "Coordinate show brands, exhibitor records, and event teams across a portfolio." },
-  { title: "Platform partners", body: "Define plan, payment, support, and capability responsibilities before launch." },
+  { title: "Event agencies", body: "Manage client organizations and repeat programmes under distinct commercial relationships.", icon: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" },
+  { title: "Associations", body: "Support chapters, committees, or regional teams while keeping portfolio oversight.", icon: "M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" },
+  { title: "Enterprises", body: "Separate brands, business units, or markets without creating disconnected tooling.", icon: "M4 21V5h10v16M14 9h6v12M8 9h2M8 13h2M8 17h2" },
+  { title: "Conference portfolios", body: "Operate recurring event series where each edition or region needs its own context.", icon: "M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2" },
+  { title: "Exhibition groups", body: "Coordinate show brands, exhibitor records, and event teams across a portfolio.", icon: "M3 9l9-6 9 6v11H3zM9 20v-6h6v6" },
+  { title: "Platform partners", body: "Define plan, payment, support, and capability responsibilities before launch.", icon: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" },
 ];
 ---
 
-<section class="wlc-section wlc-section--connected" id="wl-model" aria-labelledby="wl-model-title">
-  <div class="wlc-section__inner">
-    <header class="wlc-section__header">
-      <span>Organization model</span>
-      <h2 id="wl-model-title">Set up the platform around who owns each event relationship</h2>
-    </header>
-
-    <div class="wlc-connected">
-      {setupCards.map((card) => (
-        <article class="wlc-connected__card animate-on-scroll" data-animation="fadeInUp">
-          <span class="wlc-connected__icon" set:html={card.icon} />
-          <div>
-            <h3>{card.title}</h3>
-            <p>{card.body}</p>
-          </div>
-        </article>
-      ))}
-    </div>
+<section class="wlc-flow" id="wl-model" aria-labelledby="wl-model-title">
+  <div class="wlc-flow__header">
+    <h2 id="wl-model-title" class="wlc-flow__title animate-on-scroll" data-animation="fadeInUp">Set Up Around Who Owns Each Event</h2>
+    <p class="wlc-flow__subtitle animate-on-scroll" data-animation="fadeInUp">Create the organization, switch on white label, and let the plan decide what each one can use.</p>
   </div>
-</section>
 
-<section class="wlc-section wlc-split-section" aria-labelledby="wl-brand-title">
-  <div class="wlc-split">
-    <div class="wlc-split__copy animate-on-scroll" data-animation="fadeInUp">
-      <span>Brand and domains</span>
-      <h2 id="wl-brand-title">Make the workspace start from the right organization identity</h2>
-      <p>Organization brand fields drive supported surfaces. Custom-domain capability is plan-gated and is scoped to the event surface that will actually use it.</p>
-      <ul class="wlc-checklist">
-        <li>Organization logo and primary color</li>
-        <li>Supported secondary and text-color settings</li>
-        <li>Domain entitlement and DNS verification</li>
-        <li>White-label gate by organization and plan</li>
-      </ul>
-    </div>
-
-    <div class="wlc-split__visual animate-on-scroll" data-animation="fadeInRight">
-      <div class="wlc-product" role="img" aria-label="Organization brand settings, domain verification, and plan capability controls">
-        <header>
-          <div><i></i><i></i><i></i></div>
-          <span>Organization settings</span>
-          <b>White label</b>
-        </header>
-
-        <div class="wlc-product__identity">
-          <div class="wlc-product__logo">N</div>
-          <div>
-            <small>Organization</small>
-            <strong>Northstar Events Network</strong>
-          </div>
-          <span>Active</span>
-        </div>
-
-        <div class="wlc-product__row">
-          <span>Logo</span>
-          <strong>northstar-logo.svg</strong>
-        </div>
-        <div class="wlc-product__row">
-          <span>Primary color</span>
-          <strong>#171A21</strong>
-        </div>
-        <div class="wlc-product__domain">
-          <span>Domain</span>
-          <strong>events.northstar.example</strong>
-          <div><i></i>Verified</div>
-        </div>
-
-        <div class="wlc-product__toggles">
-          <span>Paid tickets <b>On</b></span>
-          <span>API access <b>On</b></span>
-          <span>Custom domains <b>Plan</b></span>
-        </div>
+  <div class="wlc-quad">
+    <article class="wlc-quad__cell wlc-quad__copy animate-on-scroll" data-animation="fadeInUp">
+      <h3>{flows[0].title}</h3>
+      <p>{flows[0].text}</p>
+    </article>
+    <div class="wlc-quad__cell wlc-quad__media animate-on-scroll" data-animation="fadeInRight">
+      <div class="wlc-composite">
+        <img class="wlc-composite__screen wlc-composite__screen--primary" src={flows[0].primary[0]} alt={flows[0].primary[1]} width={flows[0].primary[2]} height={flows[0].primary[3]} loading="lazy" />
+        <img class="wlc-composite__screen wlc-composite__screen--detail" src={flows[0].secondary[0]} alt={flows[0].secondary[1]} width={flows[0].secondary[2]} height={flows[0].secondary[3]} loading="lazy" />
+        <span class="wlc-composite__status"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>{flows[0].status}</span>
+        <span class="wlc-composite__action">{flows[0].action}</span>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="wlc-section wlc-section--capabilities" aria-labelledby="wl-capabilities-title">
-  <div class="wlc-section__inner">
-    <header class="wlc-section__header">
-      <span>Platform boundaries</span>
-      <h2 id="wl-capabilities-title">Keep ownership, access, and usage in the same organization context</h2>
-      <p>White label is not only a logo field. The organization boundary carries teams, events, capabilities, metering, and account context.</p>
-    </header>
-
-    <div class="wlc-capabilities">
-      {capabilityCards.map((card, index) => (
-        <article class="wlc-capabilities__card animate-on-scroll" data-animation="fadeInUp" data-delay={String((index % 3) * 60)}>
-          <h3>{card.title}</h3>
-          <p>{card.body}</p>
-        </article>
-      ))}
+    <div class="wlc-quad__cell wlc-quad__media animate-on-scroll" data-animation="fadeInLeft">
+      <div class="wlc-composite">
+        <img class="wlc-composite__screen wlc-composite__screen--primary" src={flows[1].primary[0]} alt={flows[1].primary[1]} width={flows[1].primary[2]} height={flows[1].primary[3]} loading="lazy" />
+        <img class="wlc-composite__screen wlc-composite__screen--secondary" src={flows[1].secondary[0]} alt={flows[1].secondary[1]} width={flows[1].secondary[2]} height={flows[1].secondary[3]} loading="lazy" />
+        <span class="wlc-composite__status"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>{flows[1].status}</span>
+        <span class="wlc-composite__action">{flows[1].action}</span>
+      </div>
     </div>
+    <article class="wlc-quad__cell wlc-quad__copy animate-on-scroll" data-animation="fadeInUp">
+      <h3>{flows[1].title}</h3>
+      <p>{flows[1].text}</p>
+    </article>
+    <span class="wlc-quad__cross" aria-hidden="true">
+      <svg width="18" height="18" viewBox="-14 -14 28 28">
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2" transform="scale(1,-1)"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2" transform="rotate(90)"></path>
+        <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2" transform="rotate(-90)"></path>
+      </svg>
+    </span>
   </div>
+  <p class="wlc-note">White label and custom domains are plan-gated. Confirm what your plan includes during the demo.</p>
 </section>
 
-<section class="wlc-section wlc-section--workflow" aria-labelledby="wl-workflow-title">
-  <div class="wlc-section__inner wlc-section__inner--narrow">
-    <header class="wlc-section__header">
-      <span>Connected workflow</span>
-      <h2 id="wl-workflow-title">From organization record to live event portfolio</h2>
+<div class="wlc-dark-band">
+  <div class="wlc-heading">
+    <h2 class="animate-on-scroll" data-animation="fadeInUp">Keep Ownership, Access, and Usage <span>In One Context</span></h2>
+    <p class="animate-on-scroll" data-animation="fadeInUp">White label is not only a logo field. The organization boundary carries teams, events, capabilities, metering, and account context.</p>
+  </div>
+  <section class="wlc-cap" aria-label="Platform boundaries">
+    {capabilities.map((cap, index) => (
+      <article class="wlc-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay={String((index % 3) * 60)}>
+        <h3>{cap.title}</h3>
+        <p>{cap.body}</p>
+        <div class="wlc-cap__visual">
+          {cap.rows && (
+            <div class="wlc-cap__card">
+              {cap.rows.map(([label, value]) => (<div class="wlc-cap__row"><span>{label}</span><b>{value}</b></div>))}
+            </div>
+          )}
+          {cap.chips && (
+            <div class="wlc-cap__chips">
+              {cap.chips.map((chip, i) => (<span class:list={[{ "is-active": i === cap.active }]}>{chip}</span>))}
+            </div>
+          )}
+          {cap.bars && (
+            <div class="wlc-cap__card">
+              {cap.bars.map(([label, pct]) => (<div class="wlc-cap__bar-row"><span>{label}</span><div class="wlc-cap__bar"><i style={`width: ${pct}%`}></i></div></div>))}
+            </div>
+          )}
+        </div>
+      </article>
+    ))}
+  </section>
+</div>
+
+<section class="wlc-workflow-section" aria-labelledby="wl-workflow-title">
+  <div class="wlc-workflow-wrap">
+    <header class="wlc-flow__header">
+      <h2 id="wl-workflow-title" class="wlc-flow__title animate-on-scroll" data-animation="fadeInUp">From Organization Record to Live Event Portfolio</h2>
     </header>
 
     <ol class="wlc-workflow">
@@ -213,15 +188,15 @@ const audiences = [
   </div>
 </section>
 
-<section class="wlc-section wlc-section--audiences" aria-labelledby="wl-audiences-title">
-  <div class="wlc-section__inner">
-    <header class="wlc-section__header">
-      <span>Distributed event businesses</span>
-      <h2 id="wl-audiences-title">Use the organization model where brand and ownership matter</h2>
-    </header>
-    <div class="wlc-audiences">
+<section class="wlc-use" aria-labelledby="wl-audiences-title">
+  <div class="wlc-use__shell">
+    <h2 id="wl-audiences-title" class="wlc-flow__title animate-on-scroll" data-animation="fadeInUp">Built for Every Kind of <span>Distributed Event Business</span></h2>
+    <div class="wlc-use__grid">
       {audiences.map((audience) => (
-        <article class="wlc-audiences__card animate-on-scroll" data-animation="fadeInUp">
+        <article class="wlc-use__card animate-on-scroll" data-animation="fadeInUp">
+          <div class="wlc-use__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d={audience.icon}></path></svg>
+          </div>
           <h3>{audience.title}</h3>
           <p>{audience.body}</p>
         </article>
@@ -243,58 +218,56 @@ const audiences = [
 </script>
 
 <style>
-  .wlc-section { padding: clamp(72px, 8vw, 108px) 24px; background: transparent; color: #22272f; }
-  .wlc-section__inner { width: min(1200px, 100%); margin: 0 auto; }
-  .wlc-section__inner--narrow { width: min(880px, 100%); }
-  .wlc-section__header { max-width: 850px; margin: 0 auto 52px; text-align: center; }
-  .wlc-section__header > span, .wlc-split__copy > span { display: block; margin-bottom: 16px; color: #375dfb; font-family: var(--font-body); font-size: 12px; font-weight: 750; line-height: 1.2; letter-spacing: .13em; text-transform: uppercase; }
-  .wlc-section__header h2, .wlc-split__copy h2 { margin: 0; font-family: var(--font-heading); font-size: clamp(38px, 4.5vw, 56px); font-weight: 650; line-height: 1.08; letter-spacing: -.04em; background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent; }
-  .wlc-section__header p { max-width: 690px; margin: 18px auto 0; color: #596579; font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+  .wlc-flow { padding: clamp(56px, 7vw, 96px) 24px 24px; color: #22272f; }
+  .wlc-flow__header { display: flex; flex-direction: column; align-items: center; max-width: 1100px; margin: 0 auto 24px; text-align: center; }
+  .wlc-flow__title { margin: 0 0 12px; font-family: var(--font-heading); font-size: clamp(28px, 4.2vw, 48px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; background: linear-gradient(98deg, var(--heading-dark, #1e1d24) 43%, #8f8f8f 92%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .wlc-flow__subtitle { max-width: 640px; margin: 0; color: var(--subheading-gray, #555); font-family: var(--font-body); font-size: 18px; line-height: 1.5; }
+  .wlc-note { margin: 24px auto 0; color: #667085; text-align: center; font-family: var(--font-body); font-weight: 500; }
 
-  .wlc-connected { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #e3e8f1; border-bottom: 1px solid #e3e8f1; }
-  .wlc-connected__card { position: relative; min-width: 0; padding: 32px 26px 38px; border-left: 1px solid #e3e8f1; }
-  .wlc-connected__card:first-child { border-left: 0; }
-  .wlc-connected__card:not(:first-child)::before, .wlc-connected__card:not(:first-child)::after { content: ""; position: absolute; left: -8px; width: 16px; height: 16px; border-radius: 50%; background: #fff; z-index: 1; }
-  .wlc-connected__card:not(:first-child)::before { top: -8px; }
-  .wlc-connected__card:not(:first-child)::after { bottom: -8px; }
-  .wlc-connected__icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 26px; border: 1px solid #dfe7f5; border-radius: 11px; background: #fff; color: #375dfb; }
-  .wlc-connected__icon svg { width: 21px; height: 21px; }
-  .wlc-connected__card h3 { margin: 0; font-family: var(--font-heading); font-size: 20px; line-height: 1.25; }
-  .wlc-connected__card p { margin: 14px 0 0; color: #596579; font-family: var(--font-body); font-size: 14px; line-height: 1.6; }
+  .wlc-quad { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; width: 100%; max-width: 1180px; margin: 24px auto; }
+  .wlc-quad__cross { position: absolute; left: 50%; top: 50%; width: 18px; height: 18px; transform: translate(-50%, -50%); line-height: 0; pointer-events: none; z-index: 1; }
+  .wlc-quad__cell { display: flex; flex-direction: column; justify-content: center; min-height: 260px; padding: 56px 48px; border-right: 1px solid #eef0f3; border-bottom: 1px solid #eef0f3; }
+  .wlc-quad__cell:nth-child(2n) { border-right: none; }
+  .wlc-quad__cell:nth-child(n + 3) { border-bottom: none; }
+  .wlc-quad__copy h3 { margin: 0 0 16px; font-family: var(--font-heading); font-size: clamp(24px, 2.6vw, 32px); font-weight: 700; line-height: 1.1; letter-spacing: -.03em; color: var(--heading-dark, #1e1d24); }
+  .wlc-quad__copy p { max-width: 40ch; margin: 0; color: var(--subheading-gray, #555); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+  .wlc-quad__media { align-items: center; min-height: 360px; padding: 18px 22px; overflow: hidden; }
 
-  .wlc-split-section { padding-top: 24px; }
-  .wlc-split { width: min(1120px, 100%); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(48px, 8vw, 112px); align-items: center; }
-  .wlc-split__copy { max-width: 560px; }
-  .wlc-split__copy p { margin: 20px 0 26px; color: #596579; font-family: var(--font-body); font-size: 16px; line-height: 1.7; }
-  .wlc-checklist { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-  .wlc-checklist li { position: relative; padding-left: 24px; color: #354053; font-family: var(--font-body); font-size: 15px; font-weight: 500; }
-  .wlc-checklist li::before { content: ""; position: absolute; left: 0; top: 7px; width: 7px; height: 7px; border-radius: 50%; background: #10b981; }
+  .wlc-composite { position: relative; width: 100%; height: 320px; }
+  .wlc-composite__screen { position: absolute; display: block; object-fit: cover; object-position: top left; border: 1px solid rgba(209, 214, 226, .92); border-radius: 12px; background: #fff; box-shadow: 0 16px 34px rgba(31, 41, 72, .14); }
+  .wlc-composite__screen--primary { top: 42px; left: 20px; z-index: 1; width: 74%; height: 62%; }
+  .wlc-composite__screen--secondary { right: 18px; bottom: 20px; z-index: 2; width: 64%; height: 52%; }
+  .wlc-composite__screen--detail { right: 18px; bottom: 12px; z-index: 3; width: 34%; height: 64%; object-position: top center; }
+  .wlc-composite__status, .wlc-composite__action { position: absolute; z-index: 5; display: inline-flex; align-items: center; white-space: nowrap; border-radius: 10px; font-family: var(--font-body); font-size: 11px; font-weight: 700; line-height: 1; box-shadow: 0 10px 24px rgba(31, 41, 72, .16); }
+  .wlc-composite__status { top: 14px; left: 14px; gap: 7px; padding: 9px 11px; border: 1px solid #cfead9; background: #effbf4; color: #18864b; }
+  .wlc-composite__status svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+  .wlc-composite__action { left: 14px; bottom: 14px; padding: 10px 13px; background: #4b65f6; color: #fff; }
 
-  .wlc-product { position: relative; border: 1px solid #dfe7f5; border-radius: 16px; background: #fff; box-shadow: 0 24px 58px rgba(29, 61, 179, .1); overflow: hidden; }
-  .wlc-product header { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #e8edf5; background: #f8fafd; }
-  .wlc-product header div { display: flex; gap: 4px; }
-  .wlc-product header i { width: 7px; height: 7px; border-radius: 50%; background: #d9dfec; }
-  .wlc-product header span { color: #596579; font-size: 11px; font-weight: 650; }
-  .wlc-product header b { color: #375dfb; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
-  .wlc-product__identity { display: grid; grid-template-columns: 42px 1fr auto; gap: 12px; align-items: center; padding: 18px; }
-  .wlc-product__logo { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 11px; background: #171a21; color: #fff; font-family: var(--font-heading); font-size: 19px; }
-  .wlc-product__identity small, .wlc-product__row span, .wlc-product__domain span { display: block; color: #7f8898; font-size: 10px; font-weight: 650; letter-spacing: .08em; text-transform: uppercase; }
-  .wlc-product__identity strong { display: block; margin-top: 4px; font-family: var(--font-heading); font-size: 17px; color: #22272f; }
-  .wlc-product__identity > span { padding: 5px 8px; border-radius: 999px; background: #e7f8f0; color: #12956a; font-size: 9px; font-weight: 700; }
-  .wlc-product__row, .wlc-product__domain { margin: 0 18px; padding: 13px 0; border-top: 1px solid #e8edf5; }
-  .wlc-product__row strong, .wlc-product__domain strong { display: block; margin-top: 6px; color: #22272f; font-family: var(--font-body); font-size: 13px; overflow-wrap: anywhere; }
-  .wlc-product__domain > div { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 5px 8px; border-radius: 999px; background: #e7f8f0; color: #12956a; font-size: 10px; font-weight: 700; }
-  .wlc-product__domain i { width: 6px; height: 6px; border-radius: 50%; background: #12956a; }
-  .wlc-product__toggles { display: grid; gap: 7px; padding: 16px 18px 20px; }
-  .wlc-product__toggles span { display: flex; align-items: center; justify-content: space-between; padding: 9px 11px; border: 1px solid #dfe7f5; border-radius: 7px; background: #fff; color: #354053; font-size: 12px; }
-  .wlc-product__toggles b { color: #12956a; font-size: 10px; }
+  .wlc-dark-band { position: relative; overflow: hidden; margin: 40px clamp(16px, 3.5vw, 56px) 0; padding: clamp(64px, 8vw, 96px) 24px; border-radius: 28px; background-color: #000; background-image: radial-gradient(130% 42% at 50% 0%, rgba(92, 138, 255, .22) 0%, rgba(124, 108, 255, .1) 45%, transparent 72%); background-repeat: no-repeat; }
+  .wlc-heading { max-width: 900px; margin: 0 auto 48px; text-align: center; }
+  .wlc-heading h2 { margin: 0; font-family: var(--font-heading); font-size: clamp(32px, 4.4vw, 52px); font-weight: 500; line-height: 1.1; letter-spacing: -.04em; background: linear-gradient(100deg, #fff 0%, #f2f0ff 26%, #c9c2ff 52%, #a79aff 74%, #7d8dff 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .wlc-heading h2 span { background: none; -webkit-text-fill-color: transparent; }
+  .wlc-heading p { max-width: 640px; margin: 18px auto 0; color: #a8a8b8; font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+  .wlc-cap { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); max-width: 1180px; margin: 0 auto; border: 1px solid #3b3a47; border-radius: 16px; overflow: hidden; }
+  .wlc-cap__cell { display: flex; flex-direction: column; min-height: 340px; padding: 36px 32px; border-right: 1px solid #3b3a47; border-bottom: 1px solid #3b3a47; }
+  .wlc-cap__cell:nth-child(3n) { border-right: none; }
+  .wlc-cap__cell:nth-child(n + 4) { border-bottom: none; }
+  .wlc-cap__cell h3 { margin: 0 0 12px; color: #fff; font-family: var(--font-heading); font-size: 22px; font-weight: 600; line-height: 1.2; letter-spacing: -.02em; }
+  .wlc-cap__cell p { margin: 0; color: #a8a8b8; font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+  .wlc-cap__visual { margin-top: auto; padding-top: 28px; }
+  .wlc-cap__card { display: grid; gap: 8px; padding: 14px; border: 1px solid #3b3a47; border-radius: 12px; background: rgba(255, 255, 255, .04); }
+  .wlc-cap__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 9px 11px; border-radius: 8px; background: rgba(255, 255, 255, .05); color: #d6d6e2; font-family: var(--font-body); font-size: 12px; }
+  .wlc-cap__row b { color: #8fb0ff; font-size: 11px; font-weight: 700; text-align: right; }
+  .wlc-cap__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .wlc-cap__chips span { padding: 7px 12px; border: 1px solid #3b3a47; border-radius: 999px; color: #c8c8d6; font-family: var(--font-body); font-size: 12px; font-weight: 600; }
+  .wlc-cap__chips span.is-active { border-color: #6d82ff; background: rgba(109, 130, 255, .18); color: #fff; }
+  .wlc-cap__bar-row { display: grid; grid-template-columns: 78px 1fr; align-items: center; gap: 10px; color: #d6d6e2; font-family: var(--font-body); font-size: 12px; }
+  .wlc-cap__bar { height: 6px; border-radius: 999px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+  .wlc-cap__bar i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6d82ff, #a79aff); }
 
-  .wlc-capabilities { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 2.5rem; row-gap: 3rem; }
-  .wlc-capabilities__card h3, .wlc-audiences__card h3 { margin: 0; font-family: var(--font-heading); font-size: 20px; line-height: 1.25; color: #22272f; }
-  .wlc-capabilities__card p, .wlc-audiences__card p { margin: 16px 0 0; color: #596579; font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
-  .wlc-capabilities__card { position: relative; padding-top: 20px; }
-  .wlc-capabilities__card::before { content: ""; position: absolute; top: 0; left: 0; width: 34px; height: 2px; background: #d9dfec; }
-
+  .wlc-workflow-section { padding: clamp(72px, 8vw, 108px) 24px; }
+  .wlc-workflow-wrap { width: min(880px, 100%); margin: 0 auto; }
+  .wlc-workflow-wrap .wlc-flow__header { margin-bottom: 40px; }
   .wlc-workflow { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
   .wlc-workflow details { overflow: hidden; border: 1px solid #e4e7ec; border-radius: 18px; background: #fff; transition: background .25s ease, border-color .25s ease; }
   .wlc-workflow details[open] { background: #e7ebf3; }
@@ -315,28 +288,42 @@ const audiences = [
   .wlc-workflow__visual strong { display: block; margin-top: 5px; color: #22272f; font-family: var(--font-body); font-size: 12px; overflow-wrap: anywhere; }
   .wlc-workflow__visual b { grid-column: 3; justify-self: end; padding: 6px 10px; border-radius: 999px; background: #dcecff; color: #2551d8; font-size: 10px; }
 
-  .wlc-audiences { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .wlc-audiences__card { padding: 26px; border: 1px solid #e4e7ec; border-radius: 14px; background: #fff; }
+  .wlc-use { padding: 0 24px clamp(72px, 8vw, 108px); }
+  .wlc-use__shell { width: min(1200px, 100%); margin: 0 auto; }
+  .wlc-use__shell > .wlc-flow__title { margin: 0 auto 40px; text-align: center; }
+  .wlc-use__shell > .wlc-flow__title span { background: none; -webkit-text-fill-color: transparent; }
+  .wlc-use__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .wlc-use__card { padding: 32px; border: 1px solid #e5eaf3; border-radius: 24px; background: #f8faff; }
+  .wlc-use__icon { display: grid; place-items: center; width: 40px; height: 40px; margin-bottom: 28px; border-radius: 10px; background: #e9eeff; color: #375dfb; }
+  .wlc-use__icon svg { width: 20px; height: 20px; }
+  .wlc-use__card h3 { margin: 0 0 10px; color: var(--heading-dark, #1e1d24); font: 700 1.25rem/1.25 var(--font-heading); }
+  .wlc-use__card p { margin: 0; color: var(--subheading-gray, #555); font-family: var(--font-body); line-height: 1.65; }
 
   @media (max-width: 1024px) {
-    .wlc-connected { grid-template-columns: repeat(2, 1fr); }
-    .wlc-connected__card:nth-child(3) { border-left: 0; }
-    .wlc-connected__card:nth-child(3)::before, .wlc-connected__card:nth-child(3)::after { display: none; }
-    .wlc-capabilities { grid-template-columns: repeat(2, 1fr); }
-    .wlc-split { grid-template-columns: 1fr; gap: 42px; }
-    .wlc-audiences { grid-template-columns: repeat(2, 1fr); }
+    .wlc-cap { grid-template-columns: repeat(2, 1fr); }
+    .wlc-cap__cell:nth-child(3n) { border-right: 1px solid #3b3a47; }
+    .wlc-cap__cell:nth-child(2n) { border-right: none; }
+    .wlc-cap__cell:nth-child(n + 4) { border-bottom: 1px solid #3b3a47; }
+    .wlc-cap__cell:nth-child(n + 5) { border-bottom: none; }
+    .wlc-use__grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media (max-width: 767px) {
-    .wlc-section { padding: 56px 16px; }
-    .wlc-section__header { margin-bottom: 34px; }
-    .wlc-section__header h2, .wlc-split__copy h2 { font-size: 31px; }
-    .wlc-connected, .wlc-capabilities, .wlc-audiences { grid-template-columns: 1fr; }
-    .wlc-connected__card { border-left: 0; border-top: 1px solid #e3e8f1; padding: 24px 0; }
-    .wlc-connected__card:first-child { border-top: 0; }
-    .wlc-connected__card::before, .wlc-connected__card::after { display: none !important; }
-    .wlc-product__identity { grid-template-columns: 42px 1fr; }
-    .wlc-product__identity > span { grid-column: 2; justify-self: start; }
+    .wlc-quad { grid-template-columns: 1fr; grid-template-rows: auto; }
+    .wlc-quad__cross { display: none; }
+    .wlc-quad__cell { min-height: 0; padding: 32px 0; border-right: none; border-bottom: 1px solid #eef0f3; }
+    .wlc-quad__cell:nth-child(n + 3) { border-bottom: 1px solid #eef0f3; }
+    .wlc-quad__cell:nth-child(4) { order: 3; }
+    .wlc-quad__cell:nth-child(3) { order: 4; border-bottom: none; }
+    .wlc-quad__media { min-height: 300px; padding: 12px 0; }
+    .wlc-composite { height: 280px; }
+    .wlc-dark-band { margin-inline: 12px; padding: 56px 16px; border-radius: 20px; }
+    .wlc-cap { grid-template-columns: 1fr; }
+    .wlc-cap__cell, .wlc-cap__cell:nth-child(n) { min-height: 0; padding: 28px 22px; border-right: none; border-bottom: 1px solid #3b3a47; }
+    .wlc-cap__cell:last-child { border-bottom: none; }
+    .wlc-workflow-section { padding: 56px 16px; }
+    .wlc-use { padding: 0 16px 56px; }
+    .wlc-use__grid { grid-template-columns: 1fr; }
     .wlc-workflow summary { grid-template-columns: 34px 1fr; }
     .wlc-workflow__chevron { display: none; }
     .wlc-workflow__visual { grid-template-columns: 1fr; padding-left: 22px; }
