@@ -14,6 +14,7 @@ test("renamed articles redirect from both legacy locations, with optional traili
 test("consolidated articles go to their replacement and exhibitor mistakes go to the article", () => {
   assert.equal(getLegacyBlogRedirect("/blog/how-ai-powered-event-matchmaking-platforms-drive-real-b2b-value/"), "/blog/ai-event-matchmaking-networking-guide/");
   assert.equal(getLegacyBlogRedirect("/12-mistakes-first-time-event-organizers-make-and-how-to-avoid-them/"), "/blog/first-time-exhibitor-management-mistakes/");
+  assert.equal(getLegacyBlogRedirect("/blog/google-drive-vs-ai-face-matching/"), "/blog/google-drive-vs-ai-face-matching-event-photo-sharing/");
 });
 
 test("current articles, unknown URLs, other route types and object keys do not redirect", () => {

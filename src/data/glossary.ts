@@ -30,7 +30,8 @@ export const glossary: GlossaryEntry[] = [
     short: "Software that lets attendees sign up, choose sessions, and pay online without any manual processing by the organiser.",
     body: `<p>Event registration software automates the full sign-up journey: custom form fields, session preferences, dietary requirements, payment processing, and automatic confirmation emails — all without a single spreadsheet or manual email. Conditional logic forms show or hide fields based on previous answers, keeping the experience clean for each attendee type.</p>
 <p>Real-time dashboards show registration velocity so teams can adjust marketing spend accordingly. The data collected at registration also seeds your CRM and personalises the attendee journey downstream — from tailored reminder emails to personalised on-site badge details.</p>
-<p>EventHex supports multi-ticket types, group registrations, promo codes, and instant confirmation emails, giving organisers everything they need to convert interest into confirmed attendance efficiently.</p>`,
+<p>EventHex supports multi-ticket types, group registrations, promo codes, and instant confirmation emails, giving organisers everything they need to convert interest into confirmed attendance efficiently.</p>
+<p>Evaluating vendors? Use our <a href="/blog/how-to-choose-event-registration-platform/">event registration platform checklist</a> to compare flows, fees, invoices, and check-in.</p>`,
     related: [
       "event-ticketing-platform",
       "registration-confirmation-email",

@@ -262,21 +262,13 @@ const canonical = "https://eventhex.ai/book-a-demo/thank-you/";
     }
   }
 
-  // Only accepted bookings fire the conversion event.
-  (window as any).dataLayer = (window as any).dataLayer || [];
-  (window as any).dataLayer.push({
-    event: pending ? "demo_booking_requested" : "demo_booking_confirmed",
-    booking_time: at || null,
-  });
-  const clr = (window as any).clarity;
-  if (typeof clr === "function") clr("event", pending ? "demo_booking_requested" : "demo_booking_confirmed");
+  // Only accepted bookings fire the conversion event (GA4 + dataLayer + Clarity via MarketingLayout).
+  const track = (event: string, data: Record<string, unknown> = {}) => (window as any).ehTrack?.(event, data);
+  track(pending ? "demo_booking_requested" : "demo_booking_confirmed", { booking_time: at || null });
 
   // WhatsApp click tracking on the thank-you page.
   const waBtn = document.querySelector('[data-wa="thankyou"]');
   if (waBtn) {
-    waBtn.addEventListener("click", () => {
-      (window as any).dataLayer.push({ event: "demo_whatsapp_click", source: "thank_you" });
-      if (typeof clr === "function") clr("event", "demo_whatsapp_click");
-    });
+    waBtn.addEventListener("click", () => track("demo_whatsapp_click", { source: "thank_you" }));
   }
 </script>

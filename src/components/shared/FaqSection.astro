@@ -2,6 +2,8 @@
 interface FaqItem {
   q: string;
   a: string;
+  /** Optional trusted inline HTML for the visible answer (links); schema keeps plain `a`. */
+  aHtml?: string;
 }
 
 interface Props {
@@ -60,7 +62,7 @@ const faqSchema = {
             {faq.q}
             <svg class="sh-faq__chevron" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 7.5l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </summary>
-          <div class="sh-faq__answer"><p>{faq.a}</p></div>
+          <div class="sh-faq__answer">{faq.aHtml ? <p set:html={faq.aHtml} /> : <p>{faq.a}</p>}</div>
         </details>
       ))}
     </div>

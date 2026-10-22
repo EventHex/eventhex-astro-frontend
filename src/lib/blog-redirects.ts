@@ -12,6 +12,7 @@ const LEGACY_BLOG_SLUGS: Readonly<Record<string, string>> = {
   "event-registration-made-effortless-how-eventhex-delivers-simplicity-without-compromising-control": "event-registration-software-made-easy-with-eventhex",
   "event-registration-made-effortless-with-eventhex-today": "event-registration-software-made-easy-with-eventhex",
   "exhibitor-management-mistakes-first-time-event-organizers-make": "first-time-exhibitor-management-mistakes",
+  "google-drive-vs-ai-face-matching": "google-drive-vs-ai-face-matching-event-photo-sharing", // near-duplicate (86% overlap), consolidated 2026-10-11
   "how-ai-matchmaking-technology-is-revolutionizing-b2b-event-networking": "ai-event-matchmaking-networking-guide",
   "how-ai-powered-event-matchmaking-platforms-drive-real-b2b-value": "ai-event-matchmaking-networking-guide",
   "how-eventhex-helps-recurring-event-boost-retention": "event-marketing-recurring-events-attendee-retention",

@@ -37,6 +37,11 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     return redirect301("/ai-event-copilot/");
   }
 
+  // Pricing page retired (2026-10-11) — send visitors to a demo instead.
+  if (path === "/pricing/" || path === "/pricing") {
+    return redirect301("/book-a-demo/");
+  }
+
   // Old WordPress /feature/{slug}/ → /{slug}/
   if (path.startsWith("/feature/")) {
     const featureSlug = path.replace(/^\/feature\//, "").replace(/\/$/, "");

@@ -156,28 +156,65 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
     {breadcrumbSchema && <script type="application/ld+json" set:html={breadcrumbSchema} />}
     <slot name="head" />
 
-    <!-- Google Consent Mode v2 defaults. GTM itself is loaded only after consent. -->
+    <!-- Google Consent Mode v2 (region-based) + GTM loader + event helper. -->
     <script>
+      type TrackParams = Record<string, unknown>;
       const eventHexWindow = window as typeof window & {
         dataLayer?: unknown[];
         gtag?: (...args: unknown[]) => void;
+        clarity?: ((...args: unknown[]) => void) & { q?: unknown[] };
+        google_tag_manager?: Record<string, unknown>;
         loadEventHexAnalytics?: () => void;
+        ehTrack?: (event: string, params?: TrackParams) => void;
         __eventHexAnalyticsLoaded?: boolean;
       };
 
+      const GA4_ID = 'G-8V20C1D9S7';
+      // Only the live site reports to GTM/GA4/Clarity; localhost and previews stay out of the data.
+      const isProductionHost = /^(www\.)?eventhex\.ai$/.test(location.hostname);
+
       eventHexWindow.dataLayer = eventHexWindow.dataLayer || [];
-      eventHexWindow.gtag = (...args: unknown[]) => eventHexWindow.dataLayer?.push(args);
+      // gtag.js only reads `arguments` objects from the dataLayer, not plain arrays.
+      eventHexWindow.gtag = function () {
+        // eslint-disable-next-line prefer-rest-params
+        eventHexWindow.dataLayer?.push(arguments);
+      };
+
+      // EEA, UK and Switzerland: analytics stays off until the visitor accepts.
+      // Everywhere else analytics runs by default; ads storage is always opt-in.
+      const CONSENT_REGIONS = [
+        'AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE',
+        'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE',
+        'IS', 'LI', 'NO', 'GB', 'CH',
+      ];
       eventHexWindow.gtag('consent', 'default', {
-        'analytics_storage': 'denied',
+        'analytics_storage': 'granted',
         'ad_storage': 'denied',
         'ad_user_data': 'denied',
         'ad_personalization': 'denied',
         'wait_for_update': 500
       });
+      eventHexWindow.gtag('consent', 'default', {
+        'analytics_storage': 'denied',
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'region': CONSENT_REGIONS,
+        'wait_for_update': 500
+      });
 
-      // Load Google Tag Manager only after analytics or marketing consent.
+      // Clarity queue stub so events fired before the GTM Clarity tag loads are kept.
+      // Without a consentv2 signal Clarity runs cookieless for EEA/UK/CH visitors.
+      if (isProductionHost && !eventHexWindow.clarity) {
+        const stub = function () {
+          // eslint-disable-next-line prefer-rest-params
+          (stub.q = stub.q || []).push(arguments);
+        } as ((...args: unknown[]) => void) & { q?: unknown[] };
+        eventHexWindow.clarity = stub;
+      }
+
       eventHexWindow.loadEventHexAnalytics = () => {
-        if (eventHexWindow.__eventHexAnalyticsLoaded) return;
+        if (!isProductionHost || eventHexWindow.__eventHexAnalyticsLoaded) return;
         eventHexWindow.__eventHexAnalyticsLoaded = true;
         eventHexWindow.dataLayer?.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
         const firstScript = document.getElementsByTagName('script')[0];
@@ -186,6 +223,53 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
         gtm.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-MLNN6CLD';
         firstScript.parentNode?.insertBefore(gtm, firstScript);
       };
+      // Consent mode now gates storage per region, so GTM loads for every visitor —
+      // after the window load event to keep it off the critical rendering path.
+      if (document.readyState === 'complete') eventHexWindow.loadEventHexAnalytics();
+      else window.addEventListener('load', () => eventHexWindow.loadEventHexAnalytics?.(), { once: true });
+
+      // Site-wide event helper: GA4 (direct gtag, sent once gtag.js is ready),
+      // a dataLayer event for future GTM triggers, and a Clarity custom event.
+      // GTM has no GA4 tags for these names; adding some would double-count in GA4.
+      const pendingEvents: [string, TrackParams][] = [];
+      let waitStarted = 0;
+      const ga4Ready = () => !!eventHexWindow.google_tag_manager?.[GA4_ID];
+      const flushEvents = () => {
+        if (!ga4Ready() && Date.now() - waitStarted < 10000) {
+          setTimeout(flushEvents, 250);
+          return;
+        }
+        waitStarted = 0;
+        pendingEvents.splice(0).forEach(([name, params]) =>
+          eventHexWindow.gtag?.('event', name, { ...params, send_to: GA4_ID }),
+        );
+      };
+      eventHexWindow.ehTrack = (event, params = {}) => {
+        if (!isProductionHost) return;
+        eventHexWindow.dataLayer?.push({ event, ...params });
+        eventHexWindow.clarity?.('event', event);
+        pendingEvents.push([event, params]);
+        if (!waitStarted) {
+          waitStarted = Date.now();
+          flushEvents();
+        }
+      };
+
+      // Which page and CTA sends people to the demo page.
+      document.addEventListener('click', (e) => {
+        const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+        if (!link) return;
+        const url = new URL(link.href, location.href);
+        if (url.origin !== location.origin || url.pathname.replace(/\/$/, '') !== '/book-a-demo') return;
+        const section = link.closest('header') ? 'header'
+          : link.closest('footer') ? 'footer'
+          : link.closest('[id]')?.id || '';
+        eventHexWindow.ehTrack?.('demo_cta_click', {
+          cta_text: (link.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
+          cta_section: section,
+          page_path: location.pathname,
+        });
+      }, { capture: true });
     </script>
   </head>
   <body>
@@ -257,6 +341,6 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
       a { color: inherit; }
     </style>
 
-    <CookieConsent />
+    <CookieConsent compact={Astro.url.pathname.startsWith("/book-a-demo")} />
   </body>
 </html>
