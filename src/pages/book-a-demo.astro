@@ -60,7 +60,7 @@ const canonical = "https://eventhex.ai/book-a-demo/";
           <h2 class="bd-form__mobile-title">See EventHex in action — built around your event workflow.</h2>
           <div class="bd-form__mobile-duration">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            <span style="vertical-align:middle;">30-Min Personalized Walkthrough</span>
+            <span style="vertical-align:middle;">Free 30-min walkthrough · Google Meet link by email</span>
           </div>
         </div>
 
@@ -948,7 +948,15 @@ const canonical = "https://eventhex.ai/book-a-demo/";
         submitBtn.disabled = false;
         submitBtn.classList.remove("is-loading");
         submitBtn.textContent = selectedRequiresConfirmation ? "Request this time" : "Confirm booking";
-        formMsgEl.textContent = err?.message || "Something went wrong. Please try again.";
+        formMsgEl.textContent = (err?.message || "Something went wrong. Please try again.") + " ";
+        // Never leave a failed booker without a way through.
+        const waLink = document.createElement("a");
+        waLink.href = "https://wa.me/917356733317?text=Hi!%20I'd%20like%20to%20book%20an%20EventHex%20demo.";
+        waLink.target = "_blank";
+        waLink.rel = "noopener noreferrer";
+        waLink.textContent = "Or book over WhatsApp";
+        waLink.addEventListener("click", () => track("demo_whatsapp_click", { source: "booking_error" }));
+        formMsgEl.appendChild(waLink);
         formMsgEl.classList.add("is-err");
       }
     });
@@ -1020,7 +1028,10 @@ const canonical = "https://eventhex.ai/book-a-demo/";
       }
 
       byDate = {};
-      (data.slots || []).forEach((s: { start: string; requiresConfirmation?: boolean }) => {
+      // Slots are edge-cached for a few minutes; drop ones now inside Cal.com's
+      // 60-min minimum notice so a visitor can't pick a time the booking will reject.
+      const earliest = Date.now() + 61 * 60000;
+      (data.slots || []).filter((s: { start: string }) => new Date(s.start).getTime() >= earliest).forEach((s: { start: string; requiresConfirmation?: boolean }) => {
         const k = localKey(new Date(s.start));
         (byDate[k] = byDate[k] || []).push(s);
       });
