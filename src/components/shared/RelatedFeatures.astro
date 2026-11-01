@@ -1,0 +1,34 @@
+---
+interface RelatedLink { href: string; label: string; text: string }
+interface Props { heading?: string; links: RelatedLink[] }
+const { heading = "Related EventHex features", links } = Astro.props;
+---
+
+<section class="related-features" aria-labelledby="related-features-title">
+  <div class="related-features__inner">
+    <h2 id="related-features-title">{heading}</h2>
+    <ul>
+      {links.map(({ href, label, text }) => (
+        <li>
+          <a href={href}>{label} <span aria-hidden="true">→</span></a>
+          <p>{text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .related-features { max-width: 1280px; margin: 64px auto 0; padding: 0 24px; }
+  .related-features__inner { padding: 40px; border: 1px solid var(--color-eh-card-border-light); border-radius: 24px; background: var(--color-eh-card-light); }
+  .related-features h2 { margin: 0 0 24px; color: var(--color-eh-heading); font-family: "Creato Display", var(--font-heading); font-size: 28px; font-weight: 600; line-height: 1.2; letter-spacing: -0.5px; }
+  .related-features ul { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+  .related-features li { padding: 20px; border: 1px solid var(--color-eh-card-border-light); border-radius: 16px; background: #fff; }
+  .related-features a { color: var(--color-eh-blue); font: 600 16px/1.4 var(--font-body); text-decoration: none; }
+  .related-features a:hover { color: var(--color-eh-blue-hover); text-decoration: underline; }
+  .related-features p { margin: 8px 0 0; color: #525866; font: 400 14px/1.5 var(--font-body); }
+  @media (max-width: 640px) {
+    .related-features__inner { padding: 24px 16px; }
+    .related-features h2 { font-size: 22px; }
+  }
+</style>
