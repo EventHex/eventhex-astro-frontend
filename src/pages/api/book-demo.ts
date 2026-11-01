@@ -95,11 +95,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
   const data = (await res.json().catch(() => ({}))) as any;
 
   if (!res.ok) {
+    // Keep Cal.com's raw reason in the worker logs (no attendee details); visitors
+    // get a plain message instead of validation text like "responses - {notes}...".
+    console.error("Cal.com demo booking failed", {
+      status: res.status,
+      eventTypeId,
+      start,
+      reason: String(data?.error?.message || "").slice(0, 300),
+    });
     const msg =
-      data?.error?.message ||
-      (res.status === 400 || res.status === 409
+      res.status === 409
         ? "That slot is no longer available. Please pick another time."
-        : "Couldn't complete the booking. Please try again.");
+        : res.status === 400
+          ? "We couldn't book that time. Please pick another time."
+          : "Couldn't complete the booking. Please try again.";
     return json({ error: msg, status: res.status }, res.status === 409 ? 409 : 502);
   }
 
