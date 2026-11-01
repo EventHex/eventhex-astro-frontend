@@ -37,6 +37,18 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     return redirect301("/ai-event-copilot/");
   }
 
+  // Dead internal targets still linked from older blog posts and pages (2026-11-01 audit).
+  const orphanRedirects: Record<string, string> = {
+    "/ai-smart-connect": "/enhance-networking-ai-smart-connect/",
+    "/home-new": "/",
+    "/contact": "/contact-en/",
+    "/event-management": "/features/",
+    "/features/registration": "/event-registration/",
+    "/features/live-transcription": "/ai-session-recap/",
+  };
+  const orphanTarget = orphanRedirects[path.replace(/\/$/, "")];
+  if (orphanTarget) return redirect301(orphanTarget);
+
   // Pricing page retired (2026-10-11) — send visitors to a demo instead.
   if (path === "/pricing/" || path === "/pricing") {
     return redirect301("/book-a-demo/");
