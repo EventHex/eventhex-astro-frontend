@@ -1,70 +1,43 @@
 ---
 import MarketingLayout from "../layouts/MarketingLayout.astro";
-import HeroSection from "../components/event-ticketing/HeroSection.astro";
-import BentoGridSection from "../components/event-ticketing/BentoGridSection.astro";
-import FeatureCardsSection from "../components/event-ticketing/FeatureCardsSection.astro";
-import CTASection from "../components/event-ticketing/CTASection.astro";
-import BenefitCardsSection from "../components/event-ticketing/BenefitCardsSection.astro";
-import FaqLightSection from "../components/event-ticketing/FaqLightSection.astro";
-import MobileCtaBar from "../components/event-ticketing/MobileCtaBar.astro";
+import "../styles/erg-registration.css";
 
 const title = "Event Ticketing Software — Sell Tickets, 0% Fees | EventHex";
-const description = "Event ticketing software with branded pages, QR tickets, waitlists, and 0% platform fees. Connect your own payment gateway and keep every penny of revenue.";
+const description =
+  "Event ticketing software with branded pages, QR tickets, discount codes, purchase limits, and 0% platform fees. Connect your own payment gateway and keep every penny of revenue.";
 
-const benefitCards = [
+const faqs = [
   [
-    {
-      title: "Versatile Platform",
-      desc: "Manage events of any size with customizable event ticketing and registration.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870.svg",
-    },
-    {
-      title: "Brand First",
-      desc: "Customize tickets with your logos and branding to give a professional outlook.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-1.svg",
-    },
-    {
-      title: "Affordable Pricing",
-      desc: "Save costs when using your own payment gateway and keep all the profit to yourself.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-2.svg",
-    },
+    "Can I create multiple ticket types for the same event?",
+    "Yes. EventHex lets you create different ticket classes such as early-bird, VIP, group bundles, sponsor passes, or invite-only registrations. You can set different prices, capacities, access rules, and branding for each tier without building separate flows.",
   ],
   [
-    {
-      title: "Easy Integrations",
-      desc: "Sync with your event workflow to better manage and update the incoming attendee.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-3.svg",
-    },
-    {
-      title: "Mobile Access",
-      desc: "Our event ticketing app works seamlessly for attendees right on-the-go.",
-      image: "https://cms.eventhex.ai/wp-content/uploads/2025/04/Frame-1000002870-4.svg",
-    },
+    "Can I use my own payment gateway?",
+    "Yes. You can connect your preferred payment gateway and keep full control over payouts, fees, and settlement timing. If you want a faster setup, EventHex can also support you with a competitive default payment flow.",
+  ],
+  [
+    "Does EventHex support QR check-in and badge printing?",
+    "It does. Each ticket can be paired with a QR-based entry workflow so your team can scan guests on arrival, validate access quickly, and connect the same registration flow to badge printing for a smoother on-site experience.",
+  ],
+  [
+    "How is ticketing different from registration?",
+    "Registration collects who is attending and what you need to know about them; ticketing defines what they can buy, including ticket types, prices, limits, and discounts. Our guide to <a href=\"/blog/how-to-choose-event-registration-platform/\">choosing an event registration platform</a> covers how the two should connect.",
+  ],
+  [
+    "Can I hold registrations for approval or waitlist them?",
+    "Yes. EventHex supports approval-based workflows and waitlists, which is especially useful for curated events, premium access, or limited-capacity ticket classes. Your team can review requests, approve attendees, and keep communication organized from one dashboard.",
+  ],
+  [
+    "Can I offer discount codes?",
+    "Yes. Create percentage discount codes, cap how many times each can be used, apply them to all tickets or selected ones, and upload codes in bulk.",
+  ],
+  [
+    "Can I limit how many tickets one person buys?",
+    "Yes. Set a maximum and minimum per purchase, cap the total tickets you sell, and choose whether the same person can buy more than once.",
   ],
 ];
 
-const faqItems = [
-  {
-    question: "Can I create multiple ticket types for the same event?",
-    answerHtml: "<p>Yes. EventHex lets you create different ticket classes such as early-bird, VIP, group bundles, sponsor passes, or invite-only registrations. You can set different prices, capacities, access rules, and branding for each tier without building separate flows.</p>",
-  },
-  {
-    question: "Can I use my own payment gateway?",
-    answerHtml: "<p>Yes. You can connect your preferred payment gateway and keep full control over payouts, fees, and settlement timing. If you want a faster setup, EventHex can also support you with a competitive default payment flow.</p>",
-  },
-  {
-    question: "Does EventHex support QR check-in and badge printing?",
-    answerHtml: "<p>It does. Each ticket can be paired with a QR-based entry workflow so your team can scan guests on arrival, validate access quickly, and connect the same registration flow to badge printing for a smoother on-site experience.</p>",
-  },
-  {
-    question: "How is ticketing different from registration?",
-    answerHtml: "<p>Registration collects who is attending and what you need to know about them; ticketing defines what they can buy, including ticket types, prices, limits, and discounts. Our guide to <a href=\"/blog/how-to-choose-event-registration-platform/\">choosing an event registration platform</a> covers how the two should connect.</p>",
-  },
-  {
-    question: "Can I hold registrations for approval or waitlist them?",
-    answerHtml: "<p>Yes. EventHex supports approval-based workflows and waitlists, which is especially useful for curated events, premium access, or limited-capacity ticket classes. Your team can review requests, approve attendees, and keep communication organized from one dashboard.</p>",
-  },
-];
+const plain = (html: string) => html.replace(/<[^>]+>/g, "");
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -73,14 +46,117 @@ const softwareSchema = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: "https://eventhex.ai/event-ticketing/",
-  description: description,
+  description,
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Free plan available — 0% platform fee with your own payment gateway",
+    description:
+      "Free plan available — 0% platform fee with your own payment gateway",
   },
+  featureList: [
+    "Multiple Ticket Types",
+    "Capacity and Sale Windows",
+    "Discount Codes",
+    "Purchase Limits",
+    "Free and Paid Tickets",
+    "Private Tickets",
+    "Approval Workflows",
+    "Email and WhatsApp Ticket Delivery",
+    "QR Tickets and Badges",
+    "Your Own Payment Gateway",
+  ],
 };
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text: plain(text) },
+  })),
+};
+
+const petalTop = `<svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>`;
+const petalBottom = `<svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>`;
+const tick = `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 10.2 3 3 6-6"></path></svg>`;
+const cursor = `<svg class="erg-access-product-shot__cursor" viewBox="0 0 28 32" aria-hidden="true"><path d="M3 2.5 23.5 17l-9.2 1.2-5.2 8.3L3 2.5Z"></path></svg>`;
+
+const rules = [
+  {
+    n: "01",
+    h: "Your gateway, your revenue",
+    p: "Connect your own payment gateway and keep every penny. EventHex charges 0% platform fees on tickets you sell through it.",
+    img: "/feature-images/event-registration/hold-payment-settings.png",
+    iw: 760,
+    ih: 500,
+    alt: "EventHex paid event and payment gateway configuration",
+    shot: "payment",
+    status: "Payments live",
+    action: "Connect gateway",
+  },
+  {
+    n: "02",
+    h: "Discount codes",
+    p: "Create percentage codes, cap how often each is used, apply them to all tickets or selected ones, and upload codes in bulk.",
+    img: "/feature-images/event-ticketing/discount-coupons.webp",
+    iw: 1400,
+    ih: 602,
+    alt: "EventHex discount coupons list with usage limits",
+    shot: "rules",
+    status: "4 codes live",
+    action: "Bulk upload",
+  },
+  {
+    n: "03",
+    h: "Limits that protect your capacity",
+    p: "Cap total tickets, set minimum and maximum per purchase, and decide whether one person can buy more than once.",
+    img: "/feature-images/event-ticketing/purchase-limits.webp",
+    iw: 1400,
+    ih: 919,
+    alt: "EventHex ticket purchase limits settings",
+    shot: "rules",
+    status: "Limits active",
+    action: "Save limits",
+  },
+  {
+    n: "04",
+    h: "Tickets with badges attached",
+    p: "Attach the ticket badge to the email or WhatsApp confirmation, or only after you approve the attendee.",
+    img: "/feature-images/event-ticketing/ticket-badges.webp",
+    iw: 1400,
+    ih: 646,
+    alt: "EventHex ticket badge attachment settings for email and WhatsApp confirmations",
+    shot: "rules",
+    status: "Badge attached",
+    action: "Send ticket",
+  },
+];
+
+const useCases = [
+  [
+    "Conferences and summits",
+    "Early-bird, standard, VIP and sponsor passes with their own prices and capacities.",
+    "M4 21v-9h16v9M7 12V5h10v7M9 8h2m2 0h2M8 16h2m4 0h2",
+    "/use-cases/conferences/",
+  ],
+  [
+    "Free community events",
+    "Free tickets skip the payment step and go straight to a confirmation with the badge.",
+    "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+  ],
+  [
+    "Workshops with limited seats",
+    "Cap the seats, open and close sales on a schedule, and use codes for partner discounts.",
+    "M3 7h18v13H3zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18",
+  ],
+  [
+    "Invite-only and private sales",
+    "Keep a ticket off the public page and share it by direct link, with approval before confirming.",
+    "M6.5 9V7a3.5 3.5 0 0 1 7 0v2M5 9h10v8H5z",
+  ],
+];
 ---
 
 <MarketingLayout
@@ -88,41 +164,450 @@ const softwareSchema = {
   description={description}
   canonical="https://eventhex.ai/event-ticketing/"
   ogImage="https://cms.eventhex.ai/wp-content/uploads/2025/04/eventticketing.png"
-  footerCtaTitle={"Upgrade Your Event\nTicketing System Today"}
-  footerCtaButtonText="Get a demo"
+  footerCtaTitle="Ready to start selling tickets?"
+  footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
+  showFooterCta={true}
 >
-  <HeroSection
-    eyebrow="Event Ticketing"
-    titleHtml="Sell Smarter, Scan Faster, and Maximise <b>Revenue</b> with <b>Event Ticketing Software</b>"
-    description={description}
-    ctaText="Get a demo"
-    ctaHref="/book-a-demo/"
-    image="https://cms.eventhex.ai/wp-content/uploads/2025/04/eventticketing.png"
-    imageAlt="EventHex event ticketing dashboard"
-  />
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </Fragment>
 
-  <BentoGridSection />
+  <div class="erg-registration-page-bg">
+    <!-- ===== HERO ===== -->
+    <section class="erg-hero">
+      <div class="erg-hero__grid">
+        <div class="erg-hero__content">
+          <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">Event Ticketing</span>
+          <h1 class="erg-hero__title animate-on-scroll" data-animation="fadeInUp">
+            Event ticketing software that sells out your event, not your margin
+          </h1>
+          <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+            Create ticket types, set prices and capacity, offer discount codes,
+            and deliver QR tickets by email and WhatsApp — on your own payment
+            gateway with 0% platform fees.
+          </p>
+          <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+            <a href="/book-a-demo/" class="erg-hero__btn">
+              See it with your event
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#erg-spotlight" class="erg-hero__btn erg-hero__btn--outline">See how it works</a>
+          </div>
+          <div class="erg-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+            <span class="erg-hero__trust-item">500+ events</span>
+            <span class="erg-hero__trust-item">15+ countries</span>
+          </div>
+        </div>
+        <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
+          <div class="erg-hero__visual-card">
+            <div class="erg-hero__visual-inner">
+              <img
+                src="/feature-images/event-ticketing/ticket-list.webp"
+                alt="EventHex ticket list showing price, capacity and registrations"
+                width="1400"
+                height="790"
+                style="display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 34px rgba(17,24,39,0.14)"
+                fetchpriority="high"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <FeatureCardsSection />
+    <!-- ===== TRUST STRIP ===== -->
+    <section class="erg-trust-strip">
+      <div class="erg-trust-strip__inner">
+        <span class="erg-trust-strip__stat"><b>500+</b> Events Run on EventHex</span>
+        <span class="erg-trust-strip__stat"><b>15+</b> Countries</span>
+        <span class="erg-trust-strip__stat"><b>Free &amp; Paid</b> Tickets</span>
+        <span class="erg-trust-strip__stat"><b>0%</b> Platform Fees on Your Gateway</span>
+      </div>
+    </section>
 
-  <BenefitCardsSection
-    title="Why EventHex is Your Best Event Ticketing Solution"
-    rows={benefitCards}
-  />
+    <!-- ===== SPOTLIGHT ===== -->
+    <section id="erg-spotlight" class="erg-flow-section">
+      <div class="erg-flow-header">
+        <h2 class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">
+          Online Event Ticketing: Set Up Every Ticket, Sell Everywhere
+        </h2>
+        <p class="erg-flow-subtitle animate-on-scroll" data-animation="fadeInUp">
+          Manage all your ticket types from one list, then control how they are
+          sold, discounted and delivered.
+        </p>
+      </div>
 
-  <CTASection />
+      <div class="erg-flow-quad">
+        <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3 class="erg-flow-quad__title">Ticket Types</h3>
+          <p class="erg-flow-quad__text">
+            One list for every pass. Set the name, price, capacity, category,
+            thumbnail and status, and watch registrations fill each one.
+          </p>
+        </article>
 
-  <FaqLightSection items={faqItems} />
+        <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight">
+          <div class="erg-flow-composite">
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/feature-images/event-ticketing/ticket-list.webp" alt="EventHex ticket list showing a ticket's price, active status and registration count" width="1400" height="790" loading="lazy" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/feature-images/event-ticketing/registration-preview.webp" alt="EventHex single registration form preview with ticket price and attendee fields" width="1400" height="898" loading="lazy" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--detail" src="/feature-images/event-ticketing/ticket-edit.webp" alt="EventHex edit ticket panel with name, category, status and ticket limit" width="800" height="1800" loading="lazy" />
+            <span class="erg-flow-composite__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Ticket live
+            </span>
+            <span class="erg-flow-composite__action">Add ticket</span>
+            <img class="erg-flow-composite__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+          </div>
+        </div>
 
-  <Fragment set:html={`<script type="application/ld+json">${JSON.stringify(softwareSchema)}</script>`} />
+        <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft">
+          <div class="erg-flow-composite">
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src="/feature-images/event-registration/checkout-select-tickets.png" alt="EventHex multi-ticket checkout selection" width="1180" height="540" loading="lazy" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src="/feature-images/event-ticketing/discount-coupons.webp" alt="EventHex discount coupons list with usage limits" width="1400" height="602" loading="lazy" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--detail" src="/feature-images/event-registration/checkout-order-details.png" alt="EventHex checkout order summary" width="360" height="440" loading="lazy" />
+            <span class="erg-flow-composite__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Code applied
+            </span>
+            <span class="erg-flow-composite__action">Pay now</span>
+            <img class="erg-flow-composite__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+          </div>
+        </div>
 
-  <MobileCtaBar
-    primaryHref="/book-a-demo/"
-    primaryText="Get a demo"
-  />
+        <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3 class="erg-flow-quad__title">Checkout &amp; Codes</h3>
+          <p class="erg-flow-quad__text">
+            Buyers pick tickets, apply a discount code and pay once. Revenue
+            goes straight to your own gateway.
+          </p>
+        </article>
+        <span class="erg-flow-quad__cross" aria-hidden="true">
+          <svg width="18" height="18" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" />
+          </svg>
+        </span>
+      </div>
+      <p class="erg-content-note">
+        Ticketing decides what people can buy. For the sign-up form they fill
+        in, see <a href="/event-registration/">event registration</a>.
+      </p>
+    </section>
+
+    <div class="erg-dark-band">
+      <!-- ===== CAPABILITIES ===== -->
+      <div class="erg-heading erg-capabilities-heading">
+        <h2 class="erg-heading__title animate-on-scroll" data-animation="fadeInUp">
+          Everything a Ticket <span class="erg-global-heading-gradient">Needs to Sell</span>
+        </h2>
+      </div>
+
+      <section class="erg-grid-section">
+        <div class="erg-cap">
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="0">
+            <h3 class="erg-cap__label">Capacity at a Glance</h3>
+            <p class="erg-cap__desc">Set a ticket limit and see registrations fill it live from the ticket list.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__card">
+                <span class="erg-cap__card-head">Full-day pass</span>
+                <div class="erg-cap__file">
+                  <span class="erg-cap__file-icon">5/20</span>
+                  <div class="erg-cap__file-meta">
+                    <span>Registered</span>
+                    <div class="erg-cap__bar"><i style="width: 25%"></i></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="60">
+            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
+            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
+            <h3 class="erg-cap__label">Ticket Categories</h3>
+            <p class="erg-cap__desc">Group passes into categories and add a thumbnail and description to each.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__chips">
+                <span>Early bird</span><span class="is-active">General</span><span>VIP</span><span>Group</span><span>Sponsor</span><span>Student</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="120">
+            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
+            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
+            <h3 class="erg-cap__label">Override per Ticket</h3>
+            <p class="erg-cap__desc">Set rules once for all tickets, then override notifications, badge and policies on any single one.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__stack">
+                <div class="erg-cap__ticket"><span class="erg-cap__ticket-name">Global settings</span><span class="erg-cap__ticket-tag">All tickets</span></div>
+                <div class="erg-cap__ticket"><span class="erg-cap__ticket-name">General pass</span><span class="erg-cap__ticket-tag">Inherits</span></div>
+                <div class="erg-cap__ticket is-active"><span class="erg-cap__ticket-name">VIP pass</span><span class="erg-cap__ticket-tag">Override</span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="180">
+            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
+            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
+            <h3 class="erg-cap__label">Delivery by Email and WhatsApp</h3>
+            <p class="erg-cap__desc">Confirm every sale on the channels your attendees use, with the badge attached.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__chips">
+                <span class="is-active">Email</span><span class="is-active">WhatsApp</span><span class="is-active">Badge</span><span>Approval</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="240">
+            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
+            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
+            <h3 class="erg-cap__label">Tickets in Every Language</h3>
+            <p class="erg-cap__desc">Translate ticket names and descriptions for international audiences.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__langs">
+                <div class="erg-cap__lang is-active"><span class="erg-cap__lang-code">EN</span><span>Full-day pass</span></div>
+                <div class="erg-cap__lang"><span class="erg-cap__lang-code">AR</span><span>تذكرة اليوم الكامل</span></div>
+                <div class="erg-cap__lang"><span class="erg-cap__lang-code">FR</span><span>Pass journée</span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== DARK BAND CTA ===== -->
+      <div class="erg-dark-cta animate-on-scroll" data-animation="fadeInUp">
+        <h2 class="erg-dark-cta__title">
+          The only ticketing platform your
+          <span class="erg-dark-cta__break">event actually needs</span>
+        </h2>
+        <a class="erg-dark-cta__btn" href="/book-a-demo/">Get Started with EventHex</a>
+      </div>
+    </div>
+
+    <!-- ===== SALES CONTROLS ===== -->
+    <section class="erg-content-section erg-access-redesign">
+      <div class="erg-access-redesign__container">
+        <div class="erg-access-redesign__left">
+          <div class="erg-access-redesign__sticky animate-on-scroll" data-animation="fadeInUp">
+            <div class="erg-access-redesign__eyebrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Sales Controls
+            </div>
+            <h2>Control how tickets <span class="erg-global-heading-gradient">sell</span></h2>
+            <p>Set the payment, discount, limit and delivery rules that fit each ticket.</p>
+            <a class="erg-access-redesign__cta" href="/book-a-demo/">
+              Book a Demo
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="erg-access-redesign__right">
+          {rules.map((r, i) => (
+            <article class="erg-access-rcard animate-on-scroll" data-animation="fadeInUp" data-delay={i * 60}>
+              <div class="erg-access-rcard__header">
+                <div class="erg-access-rcard__number">{r.n}</div>
+                <div class="erg-access-rcard__text">
+                  <h3>{r.h}</h3>
+                  <p>{r.p}</p>
+                </div>
+              </div>
+              <div class="erg-access-rcard__visual erg-access-rcard__visual--product-shot">
+                <div class={`erg-access-product-shot erg-access-product-shot--${r.shot}`}>
+                  <img src={r.img} alt={r.alt} width={r.iw} height={r.ih} loading="lazy" decoding="async" />
+                  <span class="erg-access-product-shot__status erg-access-product-shot__status--success">
+                    <Fragment set:html={tick} />
+                    {r.status}
+                  </span>
+                  <span class="erg-access-product-shot__action">{r.action}</span>
+                  <Fragment set:html={cursor} />
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== USE CASES ===== -->
+    <section class="erg-content-section erg-use-cases">
+      <div class="erg-content-shell">
+        <div class="erg-content-heading animate-on-scroll" data-animation="fadeInUp" style="text-align: center; max-width: 100%;">
+          <h2 class="erg-use-heading" style="font-size: clamp(32px, 4vw, 56px); margin-bottom: 12px;">
+            Built for Every Kind of <span class="erg-use-gradient-text">Ticket Sale</span>
+          </h2>
+        </div>
+        <div class="erg-use-grid">
+          {[1, 2, 3].map((n) => (
+            <div class={`erg-use-notch erg-use-notch--${n}`} aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2"></path></svg>
+            </div>
+          ))}
+          {useCases.map(([h, p, d, href], i) => (
+            <article class="erg-use-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 60}>
+              <div class="erg-use-card__icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d={d}></path></svg>
+              </div>
+              <h3>{href ? <a href={href}>{h}</a> : h}</h3>
+              <p>{p}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="erg-faq">
+      <div class="erg-faq__inner">
+        <div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+          <span class="erg-faq__eyebrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Quick Answers
+          </span>
+          <h2 class="erg-faq__heading">Event Ticketing<br />Questions, Answered.</h2>
+          <p class="erg-faq__intro">
+            Find quick answers about ticket types, payments, discounts, limits and check-in. Comparing vendors? Read
+            <a href="/blog/how-to-choose-event-registration-platform/">how to choose an event registration platform</a>.
+          </p>
+          <a href="/contact-en/" class="erg-faq__cta">
+            Visit Help Center
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+        </div>
+        <div class="erg-faq__list">
+          {faqs.map(([q, a], i) => (
+            <details class="erg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50} open={i === 0}>
+              <summary class="erg-faq__question">
+                <strong>{q}</strong>
+                <span class="erg-faq__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="erg-faq__answer"><p set:html={a} /></div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".erg-faq__item"));
+      const faqAnimations = new WeakMap<HTMLDetailsElement, Animation[]>();
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      const animateFaq = (item: HTMLDetailsElement, shouldOpen: boolean) => {
+        const summary = item.querySelector<HTMLElement>(".erg-faq__question");
+        const answer = item.querySelector<HTMLElement>(".erg-faq__answer");
+        if (!summary || !answer) return;
+
+        const startHeight = item.getBoundingClientRect().height;
+        faqAnimations.get(item)?.forEach((animation) => animation.cancel());
+
+        if (shouldOpen) item.open = true;
+        const styles = window.getComputedStyle(item);
+        const closedHeight = summary.getBoundingClientRect().height
+          + parseFloat(styles.paddingTop)
+          + parseFloat(styles.paddingBottom)
+          + parseFloat(styles.borderTopWidth)
+          + parseFloat(styles.borderBottomWidth);
+        const endHeight = shouldOpen ? item.getBoundingClientRect().height : closedHeight;
+
+        item.dataset.faqExpanded = String(shouldOpen);
+
+        if (reducedMotion.matches) {
+          item.open = shouldOpen;
+          return;
+        }
+
+        const itemAnimation = item.animate(
+          { height: [`${startHeight}px`, `${endHeight}px`] },
+          { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+        );
+        const answerAnimation = answer.animate(
+          shouldOpen
+            ? { opacity: [0, 1], transform: ["translateY(-6px)", "translateY(0)"] }
+            : { opacity: [1, 0], transform: ["translateY(0)", "translateY(-6px)"] },
+          { duration: shouldOpen ? 240 : 180, easing: "ease-out", fill: "both" },
+        );
+
+        faqAnimations.set(item, [itemAnimation, answerAnimation]);
+        itemAnimation.addEventListener("finish", () => {
+          item.open = shouldOpen;
+          answerAnimation.cancel();
+          faqAnimations.delete(item);
+        }, { once: true });
+      };
+
+      faqItems.forEach((item) => {
+        item.dataset.faqExpanded = String(item.open);
+        item.querySelector(".erg-faq__question")?.addEventListener("click", (event) => {
+          event.preventDefault();
+          const shouldOpen = item.dataset.faqExpanded !== "true";
+          if (shouldOpen) {
+            faqItems.forEach((other) => {
+              if (other !== item && other.dataset.faqExpanded === "true") animateFaq(other, false);
+            });
+          }
+          animateFaq(item, shouldOpen);
+        });
+      });
+    </script>
+  </div>
 </MarketingLayout>
 
-<style is:global>
-  html { scroll-behavior: smooth; }
-  main { background-color: #ffffff; }
+<script>
+  function initErgBandBleed() {
+    const band = document.querySelector<HTMLElement>(".erg-dark-band");
+    if (!band || band.dataset.bleedReady === "true") return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    band.dataset.bleedReady = "true";
+
+    // cache the band's document offset so the scroll handler never reads
+    // layout (getBoundingClientRect mid-scroll forces a synchronous reflow)
+    let bandTop = 0;
+    let vh = window.innerHeight || 1;
+    const measure = () => {
+      vh = window.innerHeight || 1;
+      bandTop = band.getBoundingClientRect().top + window.scrollY;
+    };
+
+    let ticking = false;
+    let last = -1;
+    const update = () => {
+      ticking = false;
+      // 0 while the band's top sits at the viewport bottom, 1 once it has
+      // travelled 70% of a viewport upward
+      const travelled = vh - (bandTop - window.scrollY);
+      const p = Math.min(1, Math.max(0, travelled / (vh * 0.7)));
+      const rounded = Math.round(p * 100) / 100;
+      if (rounded === last) return;
+      last = rounded;
+      band.style.setProperty("--band-p", String(rounded));
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    const onResize = () => {
+      measure();
+      last = -1;
+      onScroll();
+    };
+
+    measure();
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    window.addEventListener("load", onResize);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initErgBandBleed);
+  } else {
+    initErgBandBleed();
+  }
+</script>

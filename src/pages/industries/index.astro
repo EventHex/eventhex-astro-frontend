@@ -1,371 +1,593 @@
 ---
 import MarketingLayout from "../../layouts/MarketingLayout.astro";
+import "../../styles/erg-registration.css";
 
-const title = "Event Management Software for Every Industry | EventHex";
-const description = "EventHex powers conferences, trade shows, and corporate events across 15+ industries worldwide. Find the right event management solution for your vertical.";
+const title = "Event Management Software by Industry | EventHex";
+const description =
+  "Explore EventHex workflows for technology, healthcare, associations, education, finance, government, exhibitions, nonprofits, sports, culture, and GCC events.";
 
-const industries = [
-  { name: "Technology", color: "#6366F1", tagline: "Tech conferences, SaaS summits, and developer events", slug: "technology" },
-  { name: "Healthcare", color: "#EF4444", tagline: "Medical conferences, pharma summits, and health expos", slug: "healthcare" },
-  { name: "Associations", color: "#10B981", tagline: "Member events, annual meetings, and chapter conferences", slug: "associations" },
-  { name: "Education", color: "#F59E0B", tagline: "University events, academic conferences, and graduation ceremonies", slug: "education" },
-  { name: "Finance", color: "#0EA5E9", tagline: "Banking summits, fintech conferences, and investor meetups", slug: "finance" },
-  { name: "Real Estate", color: "#8B5CF6", tagline: "Property expos, developer launches, and broker events", slug: "real-estate" },
-  { name: "Hospitality", color: "#EC4899", tagline: "Hotel conferences, tourism summits, and F&B events", slug: "hospitality" },
-  { name: "Government", color: "#475467", tagline: "Policy summits, public consultations, and civic events", slug: "government" },
-  { name: "Media", color: "#FF6B00", tagline: "Film festivals, media conferences, and content creator events", slug: "media" },
-  { name: "Manufacturing", color: "#14B8A6", tagline: "Industrial expos, trade fairs, and supply chain summits", slug: "manufacturing" },
-  { name: "Retail", color: "#E11D48", tagline: "Retail expos, e-commerce conferences, and brand launch events", slug: "retail" },
-  { name: "Sports", color: "#2563EB", tagline: "Sports events, fitness expos, and esports tournaments", slug: "sports" },
-  { name: "NGO", color: "#059669", tagline: "Fundraising galas, awareness campaigns, and volunteer events", slug: "ngo" },
-  { name: "Cultural", color: "#9333EA", tagline: "Cultural festivals, art exhibitions, and heritage events", slug: "cultural" },
-  { name: "Middle East", color: "#D97706", tagline: "GCC summits, MENA conferences, and regional trade events", slug: "middle-east" },
+type Card = { name: string; text: string; href: string; color?: string };
+
+const groups: { id: string; eyebrow: string; title: string; cards: Card[] }[] = [
+  {
+    id: "programme",
+    eyebrow: "Programme-led industries",
+    title: "Build around content, speakers, delegates, and controlled access",
+    cards: [
+      { name: "Technology", color: "#6366F1", href: "/industries/technology/", text: "Multi-track technology conferences, developer events, launches, and meetups." },
+      { name: "Healthcare", color: "#EF4444", href: "/industries/healthcare/", text: "Medical and healthcare conferences built around submissions, programme, and delegates." },
+      { name: "Education", color: "#F59E0B", href: "/industries/education/", text: "Academic conferences, open days, graduation-related events, and student programmes." },
+      { name: "Finance", color: "#0EA5E9", href: "/industries/finance/", text: "Banking, fintech, investor, and insurance events with configured access and programme." },
+      { name: "Government", color: "#475467", href: "/industries/government/", text: "Public-sector summits, policy conferences, consultations, and inter-agency events." },
+    ],
+  },
+  {
+    id: "expo",
+    eyebrow: "Exhibition-led industries",
+    title: "Connect exhibitors, audiences, meetings, leads, and event day",
+    cards: [
+      { name: "Real Estate", color: "#8B5CF6", href: "/industries/real-estate/", text: "Property exhibitions, developer launches, broker events, and investment summits." },
+      { name: "Hospitality", color: "#EC4899", href: "/industries/hospitality/", text: "Hotel conferences, tourism summits, F&B trade shows, and hospitality awards." },
+      { name: "Manufacturing", color: "#14B8A6", href: "/industries/manufacturing/", text: "Industrial trade fairs, supply-chain summits, conferences, and machinery expos." },
+      { name: "Retail", color: "#E11D48", href: "/industries/retail/", text: "Retail expos, e-commerce conferences, brand launches, and franchise summits." },
+    ],
+  },
+  {
+    id: "community",
+    eyebrow: "Community and experience-led industries",
+    title: "Build the journey around participants, members, contributors, and audiences",
+    cards: [
+      { name: "Associations", color: "#10B981", href: "/industries/associations/", text: "Annual conferences, chapter events, awards, and association trade shows." },
+      { name: "Media", color: "#FF6B00", href: "/industries/media/", text: "Film festivals, media conferences, creator summits, and awards events." },
+      { name: "Sports", color: "#2563EB", href: "/industries/sports/", text: "Races, fitness expos, esports events, and corporate sports days." },
+      { name: "NGO & Nonprofit", color: "#059669", href: "/industries/ngo/", text: "Fundraising events, awareness programmes, community events, and nonprofit conferences." },
+      { name: "Cultural", color: "#9333EA", href: "/industries/cultural/", text: "Cultural festivals, art exhibitions, heritage events, and community celebrations." },
+    ],
+  },
+  {
+    id: "regional",
+    eyebrow: "Regional configuration",
+    title: "Review GCC and Middle East payment, communication, and onsite choices",
+    cards: [
+      { name: "Middle East & GCC", color: "#D97706", href: "/industries/middle-east/", text: "GCC and MENA events with market-aware payment, WhatsApp, registration, and event-day choices." },
+    ],
+  },
 ];
+
+const featureCards: Card[] = [
+  { name: "Registration and Ticketing", href: "/event-registration/", text: "Choose the attendee journey, ticket rules, and access products." },
+  { name: "Programme and Speakers", href: "/session-management/", text: "Build sessions, speakers, and submission handoffs." },
+  { name: "Exhibitors and Leads", href: "/exhibitor-management/", text: "Run the exhibitor portal, passes, badges, and lead workflow." },
+  { name: "Marketing and Notifications", href: "/event-marketing/", text: "Separate planned campaigns from operational alerts." },
+];
+
+const steps = [
+  ["Choose the closest operating model", "Start with programme, expo, community, or regional requirements."],
+  ["Open the feature owners", "Follow Learn more links for the mechanisms the event needs."],
+  ["List specialist obligations", "Keep legal, regulatory, accreditation, identity, accessibility, venue, and provider decisions visible."],
+  ["Review the configuration", "Bring one real event workflow to the demo and confirm the supported path."],
+];
+
+const faqs = [
+  ["Does EventHex have a separate product for each industry?", "No. Each industry page assembles supported EventHex mechanisms around a recognizable operating model; it does not imply a separate vertical product."],
+  ["What if my event spans more than one industry?", "Start with the page closest to the event's main operating model, then follow the feature links for the workflows you need."],
+  ["Where are compliance, accreditation, accessibility, and legal requirements handled?", "Keep those obligations with the responsible specialist teams and systems. The industry pages state where EventHex event operations end."],
+  ["Is the Middle East page only for payment gateways?", "No. It covers market-aware payment, WhatsApp readiness, registration, tickets, badges, check-in, and analytics with provider and surface qualification."],
+  ["Can I go directly to a feature page?", "Yes. Use the Features hub when the buyer job is already clear."],
+];
+
+const allIndustries = groups.flatMap((g) => g.cards);
 
 const itemListSchema = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  name: "EventHex Industry Solutions",
-  description: description,
-  numberOfItems: industries.length,
-  itemListElement: industries.map((ind, i) => ({
+  name: "EventHex Industry Pages",
+  description,
+  numberOfItems: allIndustries.length,
+  itemListElement: allIndustries.map((c, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: `Event Management for ${ind.name}`,
-    url: `https://eventhex.ai/industries/${ind.slug}/`,
+    name: `Event Management for ${c.name}`,
+    url: `https://eventhex.ai${c.href}`,
   })),
 };
 
-const iconMap: Record<string, string> = {
-  Technology: "💻",
-  Healthcare: "🏥",
-  Associations: "🤝",
-  Education: "🎓",
-  Finance: "💰",
-  "Real Estate": "🏢",
-  Hospitality: "🏨",
-  Government: "🏛️",
-  Media: "🎬",
-  Manufacturing: "🏭",
-  Retail: "🛍️",
-  Sports: "⚽",
-  NGO: "🌍",
-  Cultural: "🎭",
-  "Middle East": "🕌",
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map(([name, text]) => ({
+    "@type": "Question",
+    name,
+    acceptedAnswer: { "@type": "Answer", text },
+  })),
 };
+
+const petalTop = `<svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47"></path></svg>`;
+const petalBottom = `<svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#3b3a47" transform="scale(1,-1)"></path></svg>`;
+const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
 ---
 
 <MarketingLayout
   title={title}
   description={description}
   canonical="https://eventhex.ai/industries/"
+  footerCtaTitle="Bring the operating model to the demo"
+  footerCtaButtonText="Book a Demo"
+  footerCtaHref="/book-a-demo/"
+  showFooterCta={false}
 >
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   </Fragment>
 
-  <!-- HERO -->
-  <section class="indhub-hero">
-    <div class="indhub-hero__inner">
-      <span class="indhub-hero__badge animate-on-scroll">Industries</span>
-      <h1 class="indhub-hero__title animate-on-scroll" data-delay="80">
-        Event Management Software for <strong>Every Industry</strong>
-      </h1>
-      <p class="indhub-hero__sub animate-on-scroll" data-delay="160">
-        EventHex powers conferences, trade shows, and corporate events across 15+ industries worldwide.
-      </p>
-      <a href="/book-a-demo/" class="indhub-btn indhub-btn--primary animate-on-scroll" data-delay="240">Book a Free Demo</a>
-    </div>
-  </section>
+  <div class="erg-registration-page-bg">
+    <!-- ===== HERO ===== -->
+    <section class="erg-hero">
+      <div class="erg-hero__grid">
+        <div class="erg-hero__content">
+          <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">EventHex industry directory</span>
+          <h1 class="erg-hero__title animate-on-scroll" data-animation="fadeInUp">
+            Find the EventHex operating model closest to your event
+          </h1>
+          <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
+            Explore fifteen industry pages built around real event formats,
+            buyer jobs, and the EventHex features that support them.
+          </p>
+          <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
+            <a href="/book-a-demo/" class="erg-hero__btn">
+              Book a Demo
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+            <a href="#ind-model" class="erg-hero__btn erg-hero__btn--outline">Browse industries</a>
+          </div>
+          <div class="erg-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
+            <span class="erg-hero__trust-item">Programme-led</span>
+            <span class="erg-hero__trust-item">Exhibition-led</span>
+            <span class="erg-hero__trust-item">Community and regional</span>
+          </div>
+        </div>
+        <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
+          <div class="erg-hero__visual-card">
+            <div class="erg-hero__visual-inner">
+              <div class="ind-map" role="img" aria-label="Illustration of the EventHex industry directory: start with the buyer job, choose an industry, open the owner page, then review the configuration in a demo">
+                <div class="ind-map__bar"><span></span><span></span><span></span><b>EventHex · Industries</b></div>
+                <div class="ind-map__grid">
+                  <div class="ind-map__card"><small>Start</small><strong>Buyer job</strong><span>What needs to happen</span></div>
+                  <div class="ind-map__card"><small>Choose</small><strong>Industries</strong><span>Best-fit path</span></div>
+                  <div class="ind-map__card"><small>Open</small><strong>Owner page</strong><span>Mechanism or model</span></div>
+                  <div class="ind-map__card ind-map__card--active"><small>Review</small><strong>Book a Demo</strong><span>Configuration</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- INDUSTRY GRID -->
-  <section class="indhub-grid-section">
-    <div class="indhub-grid-section__inner">
-      <div class="indhub-grid">
-        {industries.map((ind, i) => (
-          <a href={`/industries/${ind.slug}/`} class="indhub-card animate-on-scroll" data-delay={String(i * 50)}>
-            <span class="indhub-card__icon" style={`background: ${ind.color}15; color: ${ind.color};`}>
-              {iconMap[ind.name] || "🏢"}
-            </span>
-            <h2 class="indhub-card__name">{ind.name}</h2>
-            <p class="indhub-card__tagline">{ind.tagline}</p>
-            <span class="indhub-card__link" style={`color: ${ind.color};`}>Learn more &rarr;</span>
+    <!-- ===== TRUST STRIP ===== -->
+    <section class="erg-trust-strip">
+      <div class="erg-trust-strip__inner">
+        <span class="erg-trust-strip__stat"><b>15</b> Industry Pages</span>
+        <span class="erg-trust-strip__stat"><b>4</b> Operating-Model Paths</span>
+        <span class="erg-trust-strip__stat"><b>Linked</b> Feature Owners</span>
+        <span class="erg-trust-strip__stat"><b>1</b> Regional Page for GCC</span>
+      </div>
+    </section>
+
+    <!-- ===== CHOOSE BY OPERATING MODEL ===== -->
+    <div class="erg-dark-band" id="ind-model">
+      <div class="erg-heading erg-capabilities-heading">
+        <h2 class="erg-heading__title animate-on-scroll" data-animation="fadeInUp">
+          Start with the work <span class="erg-global-heading-gradient">the event creates</span>
+        </h2>
+      </div>
+
+      <section class="erg-grid-section">
+        <div class="erg-cap">
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" style="grid-column: span 3">
+            <h3 class="erg-cap__label">Programme and conference</h3>
+            <p class="erg-cap__desc">Submissions, speakers, sessions, registration, attendee agenda, engagement, and event day.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__chips">
+                <span class="is-active">Content-led</span><span>Submissions</span><span>Speakers</span><span>Sessions</span><span>Agenda</span>
+              </div>
+            </div>
+          </article>
+          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="60" style="grid-column: span 3">
+            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
+            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
+            <h3 class="erg-cap__label">Expo and community</h3>
+            <p class="erg-cap__desc">Exhibitors, partners, audience access, communication, leads, mobile experience, and onsite operations.</p>
+            <div class="erg-cap__visual">
+              <div class="erg-cap__chips">
+                <span class="is-active">People-led</span><span>Exhibitors</span><span>Partners</span><span>Leads</span><span>Onsite</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <p class="ind-note">The Middle East page adds regional payment and communication configuration without turning geography into a product guarantee.</p>
+    </div>
+
+    <!-- ===== DIRECTORY GROUPS ===== -->
+    {groups.map((g) => (
+      <section id={g.id} class="erg-flow-section ind-section">
+        <div class="erg-flow-header">
+          <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">{g.eyebrow}</span>
+          <h2 class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">{g.title}</h2>
+        </div>
+        <div class="ind-grid">
+          {g.cards.map((c, i) => (
+            <a href={c.href} class="ind-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
+              <span class="ind-card__icon" style={`background:${c.color}1a;color:${c.color}`} aria-hidden="true">{c.name.charAt(0)}</span>
+              <h3>{c.name}</h3>
+              <p>{c.text}</p>
+              <span class="ind-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name} events</span></span>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- ===== WORKFLOW ===== -->
+    <section class="erg-content-section erg-use-cases">
+      <div class="erg-content-shell">
+        <div class="erg-content-heading animate-on-scroll" data-animation="fadeInUp" style="text-align: center; max-width: 100%;">
+          <span class="erg-faq__eyebrow">From industry to configuration</span>
+          <h2 class="erg-use-heading" style="font-size: clamp(32px, 4vw, 56px); margin-bottom: 12px;">
+            Use the industry page as a <span class="erg-use-gradient-text">starting point</span>—not a fixed template
+          </h2>
+        </div>
+        <div class="erg-use-grid">
+          {[1, 2, 3].map((n) => (
+            <div class={`erg-use-notch erg-use-notch--${n}`} aria-hidden="true">
+              <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e2e8f2"></path></svg>
+            </div>
+          ))}
+          {steps.map(([h, p], i) => (
+            <article class="erg-use-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 60}>
+              <div class="erg-use-card__icon ind-step" aria-hidden="true">{i + 1}</div>
+              <h3>{h}</h3>
+              <p>{p}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FEATURE HANDOFF ===== -->
+    <section id="feature-handoff" class="erg-flow-section ind-section">
+      <div class="erg-flow-header">
+        <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">Need a specific workflow?</span>
+        <h2 class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Open the feature family instead</h2>
+      </div>
+      <div class="ind-grid ind-grid--4">
+        {featureCards.map((c, i) => (
+          <a href={c.href} class="ind-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
+            <h3>{c.name}</h3>
+            <p>{c.text}</p>
+            <span class="ind-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name}</span></span>
           </a>
         ))}
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- BOTTOM CTA -->
-  <section class="indhub-cta">
-    <div class="indhub-cta__inner">
-      <div class="indhub-cta__card animate-on-scroll">
-        <div class="indhub-cta__glow indhub-cta__glow--1"></div>
-        <div class="indhub-cta__glow indhub-cta__glow--2"></div>
-        <h2 class="indhub-cta__title">Need a Solution for Your Industry?</h2>
-        <p class="indhub-cta__copy">EventHex adapts to any vertical — from intimate workshops to 10,000+ attendee conferences. Talk to our team and see how we can support your events.</p>
-        <div class="indhub-cta__btns">
-          <a href="/book-a-demo/" class="indhub-btn indhub-btn--white">Book a Free Demo</a>
-          <a href="/contact-en/" class="indhub-btn indhub-btn--ghost">Contact Us</a>
+    <!-- ===== FAQ ===== -->
+    <section class="erg-faq">
+      <div class="erg-faq__inner">
+        <div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
+          <span class="erg-faq__eyebrow">Industry directory questions</span>
+          <h2 class="erg-faq__heading">Choose the closest page<br />and configure from there.</h2>
+          <p class="erg-faq__intro">Quick answers on how the industry pages relate to features, regions, and specialist requirements.</p>
+          <a href="/features/" class="erg-faq__cta">
+            Browse all features
+            <Fragment set:html={arrow} />
+          </a>
+        </div>
+        <div class="erg-faq__list">
+          {faqs.map(([q, a], i) => (
+            <details class="erg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50} open={i === 0}>
+              <summary class="erg-faq__question">
+                <strong>{q}</strong>
+                <span class="erg-faq__icon" aria-hidden="true"></span>
+              </summary>
+              <div class="erg-faq__answer"><p>{a}</p></div>
+            </details>
+          ))}
         </div>
       </div>
+    </section>
+
+    <!-- ===== FINAL CTA ===== -->
+    <div class="erg-dark-band">
+      <div class="erg-dark-cta animate-on-scroll" data-animation="fadeInUp">
+        <span class="erg-faq__eyebrow">Plan around your event</span>
+        <h2 class="erg-dark-cta__title">
+          Bring the operating model
+          <span class="erg-dark-cta__break">to the demo</span>
+        </h2>
+        <p class="ind-cta-copy">
+          Tell us the industry, event format, audience groups, programme,
+          exhibitors or partners, access rules, communication channels, onsite
+          plan, specialist obligations, and integrations. We’ll map the
+          relevant EventHex workflow.
+        </p>
+        <a class="erg-dark-cta__btn" href="/book-a-demo/">Book a Demo</a>
+      </div>
     </div>
-  </section>
+
+    <script>
+      const faqItems = Array.from(document.querySelectorAll<HTMLDetailsElement>(".erg-faq__item"));
+      const faqAnimations = new WeakMap<HTMLDetailsElement, Animation[]>();
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      const animateFaq = (item: HTMLDetailsElement, shouldOpen: boolean) => {
+        const summary = item.querySelector<HTMLElement>(".erg-faq__question");
+        const answer = item.querySelector<HTMLElement>(".erg-faq__answer");
+        if (!summary || !answer) return;
+
+        const startHeight = item.getBoundingClientRect().height;
+        faqAnimations.get(item)?.forEach((animation) => animation.cancel());
+
+        if (shouldOpen) item.open = true;
+        const styles = window.getComputedStyle(item);
+        const closedHeight = summary.getBoundingClientRect().height
+          + parseFloat(styles.paddingTop)
+          + parseFloat(styles.paddingBottom)
+          + parseFloat(styles.borderTopWidth)
+          + parseFloat(styles.borderBottomWidth);
+        const endHeight = shouldOpen ? item.getBoundingClientRect().height : closedHeight;
+
+        item.dataset.faqExpanded = String(shouldOpen);
+
+        if (reducedMotion.matches) {
+          item.open = shouldOpen;
+          return;
+        }
+
+        const itemAnimation = item.animate(
+          { height: [`${startHeight}px`, `${endHeight}px`] },
+          { duration: 280, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+        );
+        const answerAnimation = answer.animate(
+          shouldOpen
+            ? { opacity: [0, 1], transform: ["translateY(-6px)", "translateY(0)"] }
+            : { opacity: [1, 0], transform: ["translateY(0)", "translateY(-6px)"] },
+          { duration: shouldOpen ? 240 : 180, easing: "ease-out", fill: "both" },
+        );
+
+        faqAnimations.set(item, [itemAnimation, answerAnimation]);
+        itemAnimation.addEventListener("finish", () => {
+          item.open = shouldOpen;
+          answerAnimation.cancel();
+          faqAnimations.delete(item);
+        }, { once: true });
+      };
+
+      faqItems.forEach((item) => {
+        item.dataset.faqExpanded = String(item.open);
+        item.querySelector(".erg-faq__question")?.addEventListener("click", (event) => {
+          event.preventDefault();
+          const shouldOpen = item.dataset.faqExpanded !== "true";
+          if (shouldOpen) {
+            faqItems.forEach((other) => {
+              if (other !== item && other.dataset.faqExpanded === "true") animateFaq(other, false);
+            });
+          }
+          animateFaq(item, shouldOpen);
+        });
+      });
+    </script>
+  </div>
 </MarketingLayout>
 
+<script>
+  function initErgBandBleed() {
+    document.querySelectorAll<HTMLElement>(".erg-dark-band").forEach((band) => {
+      if (band.dataset.bleedReady === "true") return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      band.dataset.bleedReady = "true";
+
+      let bandTop = 0;
+      let vh = window.innerHeight || 1;
+      const measure = () => {
+        vh = window.innerHeight || 1;
+        bandTop = band.getBoundingClientRect().top + window.scrollY;
+      };
+
+      let ticking = false;
+      let last = -1;
+      const update = () => {
+        ticking = false;
+        const travelled = vh - (bandTop - window.scrollY);
+        const p = Math.min(1, Math.max(0, travelled / (vh * 0.7)));
+        const rounded = Math.round(p * 100) / 100;
+        if (rounded === last) return;
+        last = rounded;
+        band.style.setProperty("--band-p", String(rounded));
+      };
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      };
+      const onResize = () => {
+        measure();
+        last = -1;
+        onScroll();
+      };
+
+      measure();
+      update();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onResize, { passive: true });
+      window.addEventListener("load", onResize);
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initErgBandBleed);
+  } else {
+    initErgBandBleed();
+  }
+</script>
+
 <style>
-  /* ── Hero ── */
-  .indhub-hero {
-    background: linear-gradient(135deg, #f0f4ff 0%, #e8edff 40%, #f8f6ff 100%);
-    padding: 7rem 1.5rem 4.5rem;
-    text-align: center;
-  }
-  .indhub-hero__inner {
-    max-width: 780px;
-    margin: 0 auto;
-  }
-  .indhub-hero__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-body);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--brand-blue);
-    background: rgba(55, 93, 251, 0.08);
-    border: 1px solid rgba(55, 93, 251, 0.18);
-    padding: 0.4rem 1rem;
-    border-radius: 100px;
-    margin-bottom: 1.5rem;
-  }
-  .indhub-hero__title {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 5vw, 3.25rem);
-    font-weight: 700;
-    line-height: 1.18;
-    color: var(--heading-dark);
-    margin-bottom: 1.25rem;
-  }
-  .indhub-hero__title strong {
-    color: var(--brand-blue);
-    font-weight: 800;
-  }
-  .indhub-hero__sub {
-    font-family: var(--font-body);
-    font-size: 1.125rem;
-    line-height: 1.7;
-    color: var(--subheading-gray);
-    max-width: 600px;
-    margin: 0 auto 2rem;
-  }
-
-  /* ── Buttons ── */
-  .indhub-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-body);
-    font-size: 0.9375rem;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 0.75rem 1.75rem;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
-    border: none;
-  }
-  .indhub-btn--primary {
-    background: var(--brand-blue);
-    color: #fff;
-  }
-  .indhub-btn--primary:hover {
-    background: var(--brand-blue-hover);
-    transform: translateY(-1px);
-  }
-  .indhub-btn--white {
+  .ind-map {
+    border: 1px solid #dbe4f3;
+    border-radius: 14px;
     background: #fff;
-    color: var(--heading-dark);
-  }
-  .indhub-btn--white:hover {
-    background: #f0f4ff;
-    transform: translateY(-1px);
-  }
-  .indhub-btn--ghost {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  .indhub-btn--ghost:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-
-  /* ── Grid Section ── */
-  .indhub-grid-section {
-    background: #fff;
-    padding: 5rem 1.5rem;
-  }
-  .indhub-grid-section__inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .indhub-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-  @property --indhub-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
-  .indhub-card {
-    position: relative;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.1);
     overflow: hidden;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
-    border: 1px solid #E8ECF2;
-    border-radius: 20px;
-    padding: 2rem;
-    text-decoration: none;
-    box-shadow: 0 2px 12px rgba(0,0,0,.03);
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .ind-map__bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8edf5;
+    font-size: 0.8rem;
+    color: #475467;
+  }
+  .ind-map__bar span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #d5dce8;
+  }
+  .ind-map__bar b {
+    margin-left: 8px;
+    font-weight: 600;
+  }
+  .ind-map__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding: 22px;
+    background: #f7f9fd;
+  }
+  .ind-map__card {
     display: flex;
     flex-direction: column;
-  }
-  .indhub-card::after {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
-    background: conic-gradient(from var(--indhub-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
-    opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-  }
-  .indhub-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(55, 93, 251, 0.12);
-    border-color: rgba(55, 93, 251, 0.15);
-  }
-  .indhub-card:hover::after { opacity: 1; animation: indhubBorder 2.4s linear infinite; }
-  @keyframes indhubBorder { to { --indhub-angle: 360deg; } }
-  @media (prefers-reduced-motion: reduce) { .indhub-card:hover::after { animation: none !important; } }
-  .indhub-card__icon {
-    width: 48px;
-    height: 48px;
+    gap: 4px;
+    padding: 18px;
+    border: 1px solid #e2e8f2;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  .indhub-card__name {
-    font-family: var(--font-heading);
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--heading-dark);
-    margin-bottom: 0.4rem;
-  }
-  .indhub-card__tagline {
-    font-family: var(--font-body);
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: var(--subheading-gray);
-    margin-bottom: 1rem;
-    flex: 1;
-  }
-  .indhub-card__link {
-    font-family: var(--font-body);
-    font-size: 0.8125rem;
-    font-weight: 600;
-  }
-
-  /* ── Bottom CTA ── */
-  .indhub-cta {
-    padding: 0 1.5rem 5rem;
     background: #fff;
   }
-  .indhub-cta__inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .indhub-cta__card {
-    position: relative;
-    background: linear-gradient(135deg, #1a1f4e 0%, #0f1225 100%);
-    border-radius: 24px;
-    padding: 4rem 3rem;
-    text-align: center;
-    overflow: hidden;
-  }
-  .indhub-cta__glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    pointer-events: none;
-  }
-  .indhub-cta__glow--1 {
-    width: 300px;
-    height: 300px;
-    background: rgba(55, 93, 251, 0.3);
-    top: -80px;
-    right: -60px;
-  }
-  .indhub-cta__glow--2 {
-    width: 250px;
-    height: 250px;
-    background: rgba(159, 129, 255, 0.2);
-    bottom: -60px;
-    left: -40px;
-  }
-  .indhub-cta__title {
-    position: relative;
-    font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 3vw, 2rem);
+  .ind-map__card small {
+    color: #375dfb;
+    font-size: 0.68rem;
     font-weight: 700;
-    color: #fff;
-    margin-bottom: 1rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
   }
-  .indhub-cta__copy {
-    position: relative;
-    font-family: var(--font-body);
-    font-size: 1rem;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 560px;
-    margin: 0 auto 2rem;
+  .ind-map__card strong {
+    font-size: 1.05rem;
+    color: #182230;
   }
-  .indhub-cta__btns {
-    position: relative;
+  .ind-map__card span {
+    font-size: 0.82rem;
+    color: #667085;
+  }
+  .ind-map__card--active {
+    border-color: #375dfb;
+    box-shadow: 0 0 0 3px rgba(55, 93, 251, 0.12);
+  }
+  .ind-note {
+    max-width: 760px;
+    margin: 28px auto 0;
+    padding: 0 24px 72px;
+    text-align: center;
+    color: #cbd5e4;
+    font-size: 0.95rem;
+  }
+  .ind-section {
+    padding: 56px 24px;
+  }
+  .ind-section .erg-flow-title {
+    white-space: normal;
+    max-width: 900px;
+  }
+  .ind-grid {
     display: flex;
-    gap: 0.75rem;
-    justify-content: center;
     flex-wrap: wrap;
+    justify-content: center;
+    gap: 18px;
+    width: 100%;
+    max-width: 1128px;
+    margin-top: 12px;
   }
-
-  /* ── Animations ── */
-  .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
+  .ind-card {
+    flex: 1 1 230px;
+    max-width: 272px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 26px;
+    border: 1px solid #e2e8f2;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.85);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   }
-  .animate-on-scroll.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  .ind-card:hover,
+  .ind-card:focus-visible {
+    transform: translateY(-3px);
+    border-color: #c5d2ee;
+    box-shadow: 0 14px 30px rgba(27, 50, 91, 0.1);
   }
-
-  /* ── Responsive 1024px ── */
-  @media (max-width: 1024px) {
-    .indhub-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
+  .ind-card__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.1rem;
   }
-
-  /* ── Responsive 767px ── */
-  @media (max-width: 767px) {
-    .indhub-hero {
-      padding: 5rem 1rem 3rem;
-    }
-    .indhub-grid-section {
-      padding: 3.5rem 1rem;
-    }
-    .indhub-grid {
-      grid-template-columns: 1fr;
-    }
-    .indhub-cta__card {
-      padding: 2.5rem 1.5rem;
-    }
+  .ind-card h3 {
+    margin: 4px 0 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #101828;
+  }
+  .ind-card p {
+    margin: 0;
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #667085;
+  }
+  .ind-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #375dfb;
+  }
+  .ind-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .ind-step {
+    font-weight: 800;
+    font-size: 1.2rem;
+  }
+  .ind-cta-copy {
+    max-width: 680px;
+    margin: 0;
+    color: #cbd5e4;
+    font-size: 1.05rem;
+    line-height: 1.6;
   }
 </style>
