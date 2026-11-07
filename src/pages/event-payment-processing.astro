@@ -57,89 +57,54 @@ const softwareSchema = {
 </MarketingLayout>
 
 <style is:global>
-  .eppx-page {
-    overflow: clip;
-    background: #fff;
-  }
+  .eppx-page { overflow: clip; background: var(--ds-white); }
 
-  /* Product-evidence framing, borrowed from the Event Registration bento rows:
-     pastel tinted stage + a bordered screenshot with a soft lift. */
+  /* Screenshot framing: flat border + soft shadow (design system .ds-shot look). */
   .eppx-shot-stage {
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     width: 100%;
-    padding: 30px 16px;
-    border-radius: 22px;
+    padding: 20px 16px;
+    box-sizing: border-box;
+    border-radius: var(--ds-r-lg);
     isolation: isolate;
-    background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%);
-  }
-
-  .eppx-shot-stage--warm {
-    background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%);
-  }
-
-  .eppx-shot-stage--mint {
-    background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%);
-  }
-
-  .eppx-shot-stage--rose {
-    background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%);
-  }
-
-  .eppx-shot-stage--violet {
-    background: linear-gradient(180deg, #e2dbfb 0%, #efeafd 45%, #f5f6f9 100%);
+    background: var(--ds-surface-stage);
   }
 
   .eppx-shot {
     display: block;
     width: 100%;
     height: auto;
-    border: 1px solid #dfe4ec;
-    border-radius: 14px;
-    background: #fff;
-    box-shadow: 0 16px 36px rgba(30, 45, 88, 0.14);
+    border: 1px solid var(--ds-line-strong);
+    border-radius: var(--ds-r-md);
+    background: var(--ds-white);
+    box-shadow: var(--ds-shadow-shot);
   }
 
+  /* Captions that used to float over screenshots now sit under them, same words. */
   .eppx-shot-float {
-    position: absolute;
-    z-index: 2;
-    display: flex;
+    position: static;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 13px;
-    border: 1px solid rgba(206, 215, 232, 0.9);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.96);
-    color: #111827;
-    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.2);
-    font: 700 0.76rem/1.15 var(--font-body);
-    white-space: nowrap;
-    backdrop-filter: blur(10px);
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: 1px solid var(--ds-line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ds-white) 70%, transparent);
+    color: var(--ds-sub);
+    font: 500 0.78rem/1.2 var(--ds-font-body);
+    white-space: normal;
   }
+  .eppx-shot-float b { font-weight: 500; }
+  .eppx-shot-float small { display: inline; margin-left: 6px; color: var(--ds-muted); font: 400 0.72rem/1.2 var(--ds-font-body); }
 
-  .eppx-shot-float small {
-    display: block;
-    color: #7b8497;
-    font: 400 0.64rem/1.2 var(--font-body);
-  }
-
-  .eppx-shot-float--tr {
-    top: 14px;
-    right: 10px;
-  }
-
-  .eppx-shot-float--bl {
-    bottom: 14px;
-    left: 10px;
-  }
+  .eppx-shot-float i { flex: none; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ds-success); }
+  .eppx-page .ds-hl, .eppx-page .ds-hl-dark { -webkit-text-fill-color: transparent; }
 
   @media (max-width: 767px) {
-    .eppx-shot-stage {
-      padding: 18px 10px;
-    }
-
-    .eppx-shot-float {
-      padding: 8px 10px;
-      font-size: 0.68rem;
-    }
+    .eppx-shot-stage { padding: 12px 10px; }
   }
 </style>

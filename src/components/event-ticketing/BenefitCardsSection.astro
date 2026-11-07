@@ -15,13 +15,15 @@ interface Props {
 
 const { title, rows } = Astro.props;
 const cards = rows.flat();
+// highlight the key phrase of the heading without changing its words
+const hl = (t: string) => t.replace("Best Event Ticketing Solution", '<span class="ds-hl">Best Event Ticketing Solution</span>');
 ---
 
-<section class="etbn-section">
+<section class="etbn-section ds-stage">
   <div class="etbn-inner">
     <div class="etbn-header">
       <span class="etbn-tag animate-on-scroll" data-animation="fadeIn">Why EventHex</span>
-      <h2 class="etbn-title animate-on-scroll" data-animation="fadeInUp">{title}</h2>
+      <h2 class="etbn-title animate-on-scroll" data-animation="fadeInUp" set:html={hl(title)}></h2>
       <p class="etbn-desc animate-on-scroll" data-animation="fadeInUp">
         Everything you need to sell tickets, manage attendees, and run on-site check-in — in one platform.
       </p>
@@ -42,132 +44,18 @@ const cards = rows.flat();
 </section>
 
 <style is:global>
-  .etbn-section {
-    width: 100%;
-    margin: 0;
-    padding: 80px 0;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
-  }
-
-  .etbn-inner {
-    max-width: 1240px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 48px;
-  }
-
-  .etbn-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 16px;
-    max-width: 680px;
-  }
-
-  .etbn-tag {
-    font-family: var(--font-body);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 18px;
-    color: var(--brand-blue);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .etbn-title {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -1px;
-    color: var(--heading-dark);
-    margin: 0;
-  }
-
-  .etbn-desc {
-    font-family: var(--font-body);
-    font-size: 17px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: var(--subheading-gray);
-    margin: 0;
-  }
-
-  .etbn-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    width: 100%;
-  }
-
-  .etbn-card {
-    background: rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    border-radius: 20px;
-    padding: 32px 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: background 0.3s, border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-  }
-
-  .etbn-card:hover {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(55, 93, 251, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-  }
-
-  .etbn-card__icon {
-    width: 56px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(55, 93, 251, 0.12);
-    border-radius: 14px;
-  }
-
-  .etbn-card__icon img {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
-  }
-
-  .etbn-card__title {
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.3;
-    color: var(--heading-dark);
-    margin: 0;
-  }
-
-  .etbn-card__desc {
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 1.65;
-    color: var(--body-gray);
-    margin: 0;
-  }
-
-  @media (max-width: 1024px) {
-    .etbn-section { padding: 64px 0; }
-    .etbn-title { font-size: 36px; }
-    .etbn-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-
-  @media (max-width: 767px) {
-    .etbn-section { padding: 52px 0; }
-    .etbn-title { font-size: 30px; line-height: 1.15; }
-    .etbn-desc { font-size: 15px; }
-    .etbn-grid { grid-template-columns: 1fr; }
-  }
+  .etbn-section { width: 100%; margin: 0; padding: var(--ds-section-y) 0; }
+  .etbn-inner { max-width: calc(var(--ds-container) + var(--ds-gutter) * 2); margin: 0 auto; padding: 0 var(--ds-gutter); display: flex; flex-direction: column; align-items: center; gap: 48px; box-sizing: border-box; }
+  .etbn-header { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; max-width: 680px; }
+  .etbn-tag { font-family: var(--ds-font-body); font-size: 14px; font-weight: 500; line-height: 18px; color: var(--ds-blue); }
+  .etbn-title { font-family: var(--ds-font-heading); font-size: var(--ds-h2); font-weight: 500; line-height: 1.1; letter-spacing: -0.035em; color: var(--ds-ink); margin: 0; }
+  .etbn-desc { font-family: var(--ds-font-body); font-size: 18px; line-height: 1.6; color: var(--ds-body); margin: 0; }
+  .etbn-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; width: 100%; }
+  .etbn-card { background: var(--ds-glass-fill); border: 1px solid var(--ds-glass-edge); border-radius: var(--ds-r-xl); box-shadow: var(--ds-glass-shadow); -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur); padding: 32px 28px; display: flex; flex-direction: column; gap: 14px; }
+  .etbn-card__icon { width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--ds-blue) 12%, transparent); border-radius: var(--ds-r-md); }
+  .etbn-card__icon img { width: 32px; height: 32px; object-fit: contain; }
+  .etbn-card__title { font-family: var(--ds-font-heading); font-size: var(--ds-h3-sm); font-weight: 500; letter-spacing: -0.025em; line-height: 1.2; color: var(--ds-ink); margin: 0; }
+  .etbn-card__desc { font-family: var(--ds-font-body); font-size: 16px; line-height: 1.6; color: var(--ds-body); margin: 0; }
+  @media (max-width: 1024px) { .etbn-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 767px) { .etbn-grid { grid-template-columns: minmax(0, 1fr); } .etbn-desc { font-size: 16px; } }
 </style>

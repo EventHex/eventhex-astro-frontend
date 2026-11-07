@@ -31,17 +31,20 @@ interface Props {
   options: Option[];
   composites: Composite[];
   note?: string;
+  stage?: boolean;
+  highlight?: string;
 }
 
-const { id, title, subtitle, options, composites, note } = Astro.props as Props;
+const { id, title, subtitle, options, composites, note, stage = false, highlight } = Astro.props as Props;
+const hlAt = highlight ? title.indexOf(highlight) : -1;
 const [firstOption, secondOption] = options;
 const [firstComposite, secondComposite] = composites;
 ---
 
-<section class="ecx-flow" id={id} aria-labelledby={`${id}-heading`}>
+<section class={`ecx-flow${stage ? " ecx-flow--stage" : ""}`} id={id} aria-labelledby={`${id}-heading`}>
   <div class="ecx-flow__header">
     <h2 class="ecx-flow__title animate-on-scroll" data-animation="fadeInUp" id={`${id}-heading`}>
-      {title}
+      {hlAt >= 0 ? (<Fragment>{title.slice(0, hlAt)}<span class="ds-hl">{highlight}</span>{title.slice(hlAt + highlight!.length)}</Fragment>) : title}
     </h2>
     <p class="ecx-flow__subtitle animate-on-scroll" data-animation="fadeInUp">
       {subtitle}
@@ -183,7 +186,7 @@ const [firstComposite, secondComposite] = composites;
     flex-direction: column;
     align-items: center;
     padding: 104px 24px;
-    background: #fff;
+    background: var(--ds-white);
   }
 
   .ecx-flow__header {
@@ -203,7 +206,7 @@ const [firstComposite, secondComposite] = composites;
     line-height: 1.1;
     letter-spacing: -0.04em;
     /* same ash ramp as the Event Registration spotlight title */
-    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background: linear-gradient(98deg, var(--heading-dark) 43.06%, var(--ds-label) 91.81%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -213,7 +216,7 @@ const [firstComposite, secondComposite] = composites;
   .ecx-flow__subtitle {
     max-width: 640px;
     margin: 0;
-    color: var(--subheading-gray, #555);
+    color: var(--subheading-gray, var(--ds-sub));
     font: 400 18px/1.5 var(--font-body);
   }
 
@@ -246,8 +249,8 @@ const [firstComposite, secondComposite] = composites;
     justify-content: center;
     min-height: 260px;
     padding: 56px 48px;
-    border-right: 1px solid #eef0f3;
-    border-bottom: 1px solid #eef0f3;
+    border-right: 1px solid var(--ds-surface-tab);
+    border-bottom: 1px solid var(--ds-surface-tab);
   }
 
   .ecx-flow__cell:nth-child(2n) {
@@ -267,7 +270,7 @@ const [firstComposite, secondComposite] = composites;
 
   .ecx-flow__cell-title {
     margin: 0 0 16px;
-    color: var(--heading-dark, #1e1d24);
+    color: var(--heading-dark, var(--ds-night-2));
     font: 700 clamp(24px, 2.6vw, 32px)/1.1 var(--font-heading);
     letter-spacing: -0.03em;
   }
@@ -275,7 +278,7 @@ const [firstComposite, secondComposite] = composites;
   .ecx-flow__cell-text {
     max-width: 40ch;
     margin: 0;
-    color: var(--subheading-gray, #555);
+    color: var(--subheading-gray, var(--ds-sub));
     font: 400 16px/1.6 var(--font-body);
   }
 
@@ -284,7 +287,7 @@ const [firstComposite, secondComposite] = composites;
     align-items: center;
     gap: 8px;
     margin-top: 22px;
-    color: #344054;
+    color: var(--ds-ink-2);
     font: 650 13px/1.4 var(--font-body);
   }
 
@@ -292,7 +295,7 @@ const [firstComposite, secondComposite] = composites;
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: #10b981;
+    background: var(--ds-success);
   }
 
   .ecx-composite {
@@ -308,7 +311,7 @@ const [firstComposite, secondComposite] = composites;
     object-position: top left;
     border: 1px solid rgba(209, 214, 226, 0.92);
     border-radius: 12px;
-    background: #fff;
+    background: var(--ds-white);
     box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
   }
 
@@ -356,9 +359,9 @@ const [firstComposite, secondComposite] = composites;
     left: 14px;
     gap: 7px;
     padding: 9px 11px;
-    border: 1px solid #cfead9;
-    background: #effbf4;
-    color: #18864b;
+    border: 1px solid var(--ds-line-strong);
+    background: var(--ds-surface);
+    color: var(--ds-cat-green);
   }
 
   .ecx-composite__status svg {
@@ -375,8 +378,8 @@ const [firstComposite, secondComposite] = composites;
     right: 14px;
     bottom: 14px;
     padding: 10px 13px;
-    background: #4b65f6;
-    color: #fff;
+    background: var(--ds-blue);
+    color: var(--ds-white);
   }
 
   .ecx-composite__cursor {
@@ -393,7 +396,7 @@ const [firstComposite, secondComposite] = composites;
   .ecx-flow__note {
     max-width: 920px;
     margin: 28px auto 0;
-    color: #667085;
+    color: var(--ds-muted);
     font: 500 14px/1.6 var(--font-body);
     text-align: center;
   }
@@ -418,7 +421,7 @@ const [firstComposite, secondComposite] = composites;
       min-height: 0;
       padding: 32px 20px;
       border-right: none;
-      border-bottom: 1px solid #eef0f3;
+      border-bottom: 1px solid var(--ds-surface-tab);
     }
     .ecx-flow__cell:nth-child(3) {
       order: 4;
@@ -426,7 +429,7 @@ const [firstComposite, secondComposite] = composites;
     }
     .ecx-flow__cell:nth-child(4) {
       order: 3;
-      border-bottom: 1px solid #eef0f3;
+      border-bottom: 1px solid var(--ds-surface-tab);
     }
     .ecx-flow__cell--media {
       padding: 16px 20px 32px;
@@ -440,5 +443,30 @@ const [firstComposite, secondComposite] = composites;
     .ecx-composite__screen--secondary {
       width: 68%;
     }
+  }
+
+  /* ===== EventHex design system v5 overrides (tokens only) ===== */
+  .ecx-flow--stage { background: var(--ds-g4-stage); }
+  .ecx-flow__title { background: none; -webkit-text-fill-color: currentColor; color: var(--ds-ink); letter-spacing: -0.035em; }
+  .ecx-flow__title .ds-hl { background-image: var(--ds-g1-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .ecx-flow__subtitle { color: var(--ds-body); }
+  .ecx-flow__quad { gap: 24px; }
+  .ecx-flow__cross { display: none; }
+  .ecx-flow__cell, .ecx-flow__cell:nth-child(2n), .ecx-flow__cell:nth-child(n + 3) {
+    border: 1px solid var(--ds-glass-edge); border-radius: var(--ds-r-xl);
+    background: var(--ds-glass-fill); box-shadow: var(--ds-glass-shadow);
+    -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur);
+  }
+  .ecx-flow:not(.ecx-flow--stage) .ecx-flow__cell { background: var(--ds-white); border-color: var(--ds-line); box-shadow: var(--ds-shadow-shot); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .ecx-flow__cell-title { font-weight: 500; letter-spacing: -0.025em; color: var(--ds-ink); }
+  .ecx-flow__cell-text { color: var(--ds-body); }
+  .ecx-flow__cell-note { color: var(--ds-sub); font-weight: 500; }
+  .ecx-composite__screen { border-color: var(--ds-line-strong); box-shadow: var(--ds-shadow-shot); }
+  .ecx-composite__status, .ecx-composite__action { box-shadow: none; font-weight: 500; }
+  .ecx-composite__cursor { display: none; }
+  .ecx-flow__note { color: var(--ds-body); }
+  @media (max-width: 768px) {
+    .ecx-flow__cell, .ecx-flow__cell:nth-child(2n), .ecx-flow__cell:nth-child(n + 3), .ecx-flow__cell:nth-child(3), .ecx-flow__cell:nth-child(4) { border: 1px solid var(--ds-glass-edge); }
+    .ecx-flow:not(.ecx-flow--stage) .ecx-flow__cell { border-color: var(--ds-line); }
   }
 </style>

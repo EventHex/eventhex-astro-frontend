@@ -16,7 +16,7 @@ interface Props {
 const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = Astro.props;
 ---
 
-<section class="eth-hero">
+<section class="eth-hero ds-stage">
   <div class="eth-hero__shell">
     <div class="eth-hero__grid">
 
@@ -32,8 +32,8 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
         </p>
 
         <div class="eth-hero__cta animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
-          <a href={ctaHref} class="eth-hero__btn eth-hero__btn--primary">{ctaText}</a>
-          <a href="#ticket-workflows" class="eth-hero__btn eth-hero__btn--secondary">Explore Features</a>
+          <a href={ctaHref} class="ds-btn">{ctaText}</a>
+          <a href="#ticket-workflows" class="ds-btn--ghost">Explore Features</a>
         </div>
 
         <div class="eth-hero__trust animate-on-scroll" data-animation="fadeIn" style="--anim-duration: 1250ms">
@@ -56,15 +56,15 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
 <section class="eth-trust-strip">
   <div class="eth-trust-strip__inner">
     <span class="eth-trust-strip__item">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="currentColor" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       0% platform fee option
     </span>
     <span class="eth-trust-strip__item">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="currentColor" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       QR scan + badge printing
     </span>
     <span class="eth-trust-strip__item">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="currentColor" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Real-time ticket analytics
     </span>
   </div>
@@ -72,295 +72,38 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
 
 
 <style is:global>
-  .eth-hero {
-    position: relative;
-    overflow: hidden;
-    margin-top: -90px;
-    padding: 0 0 20px;
-    background:
-      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
-      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
-  }
+  .eth-hero { position: relative; overflow: hidden; padding: clamp(40px, 6vw, 80px) var(--ds-gutter) clamp(40px, 5vw, 64px); }
+  .eth-hero__shell { position: relative; z-index: 1; width: 100%; }
+  .eth-hero__grid { max-width: var(--ds-container); margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr); gap: 48px; align-items: center; }
+  .eth-hero__content { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; }
+  .eth-hero__badge { display: inline-flex; align-items: center; gap: 8px; font-family: var(--ds-font-body); font-size: 14px; font-weight: 500; color: var(--ds-blue); }
+  .eth-hero__title { margin: 0; font-family: var(--ds-font-heading); font-size: var(--ds-h1); font-weight: 500; line-height: 1.08; letter-spacing: -0.035em; color: var(--ds-ink); }
+  .eth-hero__title b { font-weight: inherit; }
+  .eth-hero__desc { margin: 0; max-width: 580px; font-family: var(--ds-font-body); font-size: 18px; line-height: 1.6; color: var(--ds-body); }
+  .eth-hero__cta { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 6px; }
+  .eth-hero__trust { display: flex; flex-wrap: wrap; gap: 20px; }
+  .eth-hero__trust-item { position: relative; padding-left: 16px; font-family: var(--ds-font-body); font-size: 14px; font-weight: 500; line-height: 20px; color: var(--ds-muted); }
+  .eth-hero__trust-item::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--ds-success); }
+  .eth-hero__visual { position: relative; }
+  .eth-hero__visual-card { position: relative; padding: 20px 0 20px; }
+  .eth-hero__lottie { width: 100%; max-width: 520px; margin: 0 auto; }
+  .eth-hero__lottie svg { width: 100% !important; height: auto !important; }
 
-  .eth-hero__shell {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    padding: 160px 0 0;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
-  }
-
-  .eth-hero__grid {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
-    display: grid;
-    grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
-    gap: 48px;
-    align-items: center;
-  }
-
-  .eth-hero__content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
-
-  .eth-hero__badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .eth-hero__title {
-    margin: 0;
-    font-family: var(--font-heading);
-    font-size: 52px;
-    font-weight: 600;
-    line-height: 60px;
-    letter-spacing: -1px;
-    color: var(--heading-dark);
-  }
-
-  .eth-hero__title :global(b),
-  .eth-hero__title :global(span) {
-    color: var(--brand-blue);
-  }
-
-  .eth-hero__desc {
-    margin: 0;
-    max-width: 580px;
-    font-family: var(--font-body);
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 28px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
-  }
-
-  .eth-hero__cta {
-    display: flex;
-    gap: 14px;
-    padding-top: 6px;
-  }
-
-  .eth-hero__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 12px 32px;
-    border-radius: 10px;
-    text-decoration: none;
-    font-family: var(--font-body);
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 24px;
-    letter-spacing: -0.48px;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
-  }
-
-  .eth-hero__btn--primary {
-    color: #fff;
-    background: var(--brand-blue);
-    box-shadow: 0 10px 24px rgba(55, 93, 251, 0.28);
-  }
-
-  .eth-hero__btn--primary:hover {
-    transform: translateY(-2px);
-    background: var(--brand-blue-hover);
-    box-shadow: 0 14px 30px rgba(55, 93, 251, 0.34);
-  }
-
-  .eth-hero__btn--secondary {
-    color: var(--heading-dark);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #dce4ff;
-  }
-
-  .eth-hero__btn--secondary:hover {
-    transform: translateY(-2px);
-    border-color: #c5d2ff;
-    box-shadow: 0 10px 24px rgba(34, 39, 47, 0.06);
-  }
-
-  .eth-hero__trust {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .eth-hero__trust-item {
-    position: relative;
-    padding-left: 16px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-    color: #667085;
-  }
-
-  .eth-hero__trust-item::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 8px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10b981;
-  }
-
-  .eth-hero__visual {
-    position: relative;
-  }
-
-  .eth-hero__visual-card {
-    position: relative;
-    padding: 20px 0 36px;
-  }
-
-  .eth-hero__lottie {
-    width: 100%;
-    max-width: 520px;
-    margin: 0 auto;
-  }
-
-  .eth-hero__lottie svg {
-    width: 100% !important;
-    height: auto !important;
-  }
-
-  .eth-trust-strip {
-    background: var(--surface-light);
-    padding: 1.25rem 1.5rem;
-  }
-
-  .eth-trust-strip__inner {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2.5rem;
-  }
-
-  .eth-trust-strip__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-body);
-    font-size: 0.938rem;
-    font-weight: 500;
-    line-height: 1;
-    color: var(--heading-dark);
-    white-space: nowrap;
-  }
-
-  .eth-trust-strip__item svg {
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 1120px) {
-    .eth-hero {
-      padding: 0 20px 110px;
-    }
-    .eth-hero__shell {
-      padding: 136px 0 0;
-    }
-    .eth-hero__grid {
-      gap: 28px;
-      padding: 0 0 40px;
-    }
-    .eth-hero__desc {
-      max-width: 520px;
-    }
-    .eth-hero__title {
-      font-size: 46px;
-      line-height: 1.1em;
-    }
-  }
+  .eth-trust-strip { background: var(--ds-white); border-bottom: 1px solid var(--ds-line); padding: 20px var(--ds-gutter); }
+  .eth-trust-strip__inner { max-width: var(--ds-container); margin: 0 auto; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px 40px; }
+  .eth-trust-strip__item { display: inline-flex; align-items: center; gap: 8px; font-family: var(--ds-font-body); font-size: 15px; font-weight: 500; line-height: 1.2; color: var(--ds-ink); color: var(--ds-ink); }
+  .eth-trust-strip__item svg { flex-shrink: 0; color: var(--ds-blue); }
 
   @media (max-width: 960px) {
-    .eth-hero {
-      padding: 0 20px 96px;
-    }
-    .eth-hero__shell {
-      padding: 130px 0 0;
-    }
-    .eth-hero__grid {
-      grid-template-columns: 1fr;
-      gap: 34px;
-      padding: 0 0 40px;
-    }
-    .eth-hero__content {
-      align-items: center;
-      text-align: center;
-    }
-    .eth-hero__desc {
-      max-width: 720px;
-    }
-    .eth-hero__trust,
-    .eth-hero__cta {
-      justify-content: center;
-    }
-    .eth-hero__title {
-      font-size: 42px;
-      line-height: 1.1em;
-    }
-    .eth-hero__visual-card {
-      padding: 26px 0 0;
-    }
+    .eth-hero__grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+    .eth-hero__content { align-items: center; text-align: center; }
+    .eth-hero__trust, .eth-hero__cta { justify-content: center; }
   }
-
   @media (max-width: 767px) {
-    .eth-hero {
-      margin-top: -80px;
-      padding: 0 20px 90px;
-    }
-    .eth-hero__shell {
-      padding: 120px 0 0;
-    }
-    .eth-hero__grid {
-      padding: 0 0 30px;
-    }
-    .eth-hero__title {
-      font-size: 30px;
-      line-height: 1.2em;
-      letter-spacing: 0;
-    }
-    .eth-hero__desc {
-      font-size: 15px;
-      line-height: 1.7;
-    }
-    .eth-hero__badge {
-      font-size: 16px;
-      line-height: 1.1em;
-    }
-
-    .eth-hero__cta {
-      width: 100%;
-      flex-direction: column;
-    }
-    .eth-hero__btn {
-      width: 100%;
-    }
-    .eth-hero__trust {
-      gap: 10px;
-      justify-content: center;
-    }
-    .eth-hero__visual-card {
-      padding: 18px 0 0;
-    }
-
+    .eth-hero__desc { font-size: 16px; }
+    .eth-hero__cta { width: 100%; flex-direction: column; }
+    .eth-hero__cta a { width: 100%; box-sizing: border-box; }
+    .eth-hero__trust { gap: 10px; justify-content: center; }
+    .eth-trust-strip__item { white-space: normal; }
   }
 </style>
