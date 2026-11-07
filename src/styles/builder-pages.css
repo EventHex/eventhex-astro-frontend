@@ -33,6 +33,7 @@
 /* Hero */
 .bx-hero{padding:72px 0 80px;background:radial-gradient(70% 60% at 0% 0%,var(--bx-soft) 0%,#fff 60%)}
 .bx-hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:56px;align-items:center}
+.bx-hero__grid--cert{grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr)}
 .bx-hero__copy{display:flex;flex-direction:column;gap:24px}
 .bx-hero__kicker{font-size:15px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--bx-accent)}
 .bx-hero__actions{display:flex;flex-wrap:wrap;gap:12px}
@@ -47,23 +48,6 @@
 .bx-stage__chips{display:flex;flex-wrap:wrap;gap:6px}
 .bx-stage__chips span{font-size:11px;padding:4px 8px;border-radius:999px;background:#fff;border:1px solid #E4E7EC;color:#344054}
 .bx-stage__merge{position:absolute;left:216px;top:250px;width:40px;height:2px;background:repeating-linear-gradient(90deg,var(--bx-accent) 0 6px,transparent 6px 12px)}
-.bx-stage__merge::after{content:"merge";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font-size:11px;font-weight:600;color:var(--bx-accent)}
-.bx-fan{position:absolute;inset:0}
-.bx-fan img{position:absolute;display:block;height:auto;border-radius:12px;box-shadow:0 18px 36px #10182829}
-.bx-loop{position:absolute}
-.bx-loop img{position:absolute;inset:0;width:100%;height:auto;border-radius:12px;box-shadow:0 24px 48px #10182838;opacity:0;animation:bxLoop 8s infinite}
-.bx-loop img:nth-child(1){position:relative;animation-delay:0s}
-.bx-loop img:nth-child(2){animation-delay:2s}
-.bx-loop img:nth-child(3){animation-delay:4s}
-.bx-loop img:nth-child(4){animation-delay:6s}
-.bx-loop--3 img{animation-duration:6s}
-.bx-loop--3 img:nth-child(2){animation-delay:2s}
-.bx-loop--3 img:nth-child(3){animation-delay:4s}
-@keyframes bxLoop{0%{opacity:0}4%{opacity:1}25%{opacity:1}29%{opacity:0}100%{opacity:0}}
-.bx-loop--3 img{animation-name:bxLoop3}
-@keyframes bxLoop3{0%{opacity:0}5%{opacity:1}33%{opacity:1}38%{opacity:0}100%{opacity:0}}
-@media (prefers-reduced-motion:reduce){.bx-loop img{animation:none;opacity:0}.bx-loop img:nth-child(1){opacity:1}.bx-btn{transition:none}}
-
 /* Rail */
 .bx-rail{border-top:1px solid var(--bx-line);border-bottom:1px solid var(--bx-line)}
 .bx-rail__inner{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:26px 24px}
@@ -263,8 +247,141 @@
   .bx-links{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:767px){
-  .bx-stage .bx-fan img{left:50%!important;top:56px!important;width:128px!important}
-  .bx-stage .bx-loop{left:50%!important;top:30px!important;width:150px!important}
-  .bx-stage--cert .bx-fan img{width:220px!important;top:40px!important}
-  .bx-stage--cert .bx-loop{width:270px!important;top:84px!important}
 }
+
+/* ===== Motion ===== */
+@property --bx-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes bxSpin{to{--bx-angle:360deg}}
+
+/* Scroll reveal (enabled by JS adding .bx-motion) */
+.bx-motion .bx-reveal:not(.is-in){opacity:0}
+.bx-motion .bx-reveal.is-in{animation:bxRise .8s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--bx-i,0) * 90ms)}
+
+/* Hero deck */
+.bx-deck{position:absolute;left:calc(68% - 100px);top:70px;width:200px;height:360px;touch-action:pan-y;outline:none}
+.bx-deck__card{position:absolute;left:50%;top:0;width:100%;height:auto;border-radius:12px;cursor:grab;user-select:none;-webkit-user-drag:none;box-shadow:0 22px 44px #10182833;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .5s ease,filter .5s ease;will-change:transform}
+.bx-deck__card[data-pos="0"]{z-index:4;transform:translateX(-50%)}
+.bx-deck__card[data-pos="1"]{z-index:3;transform:translateX(-14%) translateY(18px) rotate(7deg) scale(.86);filter:saturate(.85)}
+.bx-deck__card[data-pos="2"]{z-index:2;transform:translateX(-86%) translateY(22px) rotate(-8deg) scale(.86);filter:saturate(.85)}
+.bx-deck__card[data-pos="3"]{z-index:1;opacity:0;transform:translateX(-50%) translateY(30px) scale(.78)}
+.bx-deck__card[data-out="left"]{z-index:5;opacity:0;transform:translateX(-170%) rotate(-16deg)!important}
+.bx-deck__card[data-out="right"]{z-index:5;opacity:0;transform:translateX(70%) rotate(16deg)!important}
+.bx-deck__card.is-dragging{transition:none;cursor:grabbing}
+.bx-deck__dots{position:absolute;left:50%;bottom:-56px;transform:translateX(-50%);display:flex;gap:8px}
+.bx-deck__dot{width:8px;height:8px;padding:0;border:0;border-radius:999px;background:#C7CEE0;cursor:pointer;transition:width .35s ease,background .35s ease}
+.bx-deck__dot[aria-current="true"]{width:24px;background:var(--bx-accent)}
+.bx-deck__dot:focus-visible{outline:2px solid var(--bx-accent);outline-offset:3px}
+.bx-deck__hint{position:absolute;left:50%;bottom:-84px;transform:translateX(-50%);font-size:12px;color:#667085;white-space:nowrap}
+.bx-stage--cert .bx-deck{left:50%;top:116px;width:430px;height:320px;transform:translateX(-50%)}
+.bx-stage--cert .bx-deck__card{border-radius:8px}
+.bx-stage--cert .bx-deck__card[data-pos="1"]{transform:translateX(-30%) translateY(-34px) rotate(5deg) scale(.86)}
+.bx-stage--cert .bx-deck__card[data-pos="2"]{transform:translateX(-70%) translateY(-44px) rotate(-6deg) scale(.86)}
+.bx-stage--cert .bx-deck__dots{bottom:-40px}
+.bx-stage--cert .bx-deck__hint{bottom:-70px}
+/* merge line flows toward the deck; pulses on each change */
+.bx-stage__merge{background-size:12px 2px;animation:bxFlow 1s linear infinite}
+@keyframes bxFlow{to{background-position:12px 0}}
+.bx-stage.is-merging .bx-stage__merge{animation:bxFlow 1s linear infinite,bxMergePulse .6s ease}
+@keyframes bxMergePulse{50%{box-shadow:0 0 0 4px var(--bx-soft);transform:scaleX(1.15)}}
+.bx-stage__template-card{position:relative;overflow:hidden}
+.bx-stage__template-card::after{content:"";position:absolute;left:8px;right:8px;top:8px;height:28%;background:linear-gradient(180deg,transparent,#375DFB26,transparent);animation:bxScan 2.8s ease-in-out infinite}
+@keyframes bxScan{0%{transform:translateY(-30%)}100%{transform:translateY(300%)}}
+.bx-hero__trust span::before{display:inline-block;animation:bxBlink 2.4s ease-in-out infinite}
+.bx-hero__trust span:nth-child(2)::before{animation-delay:.8s}.bx-hero__trust span:nth-child(3)::before{animation-delay:1.6s}
+@keyframes bxBlink{50%{opacity:.35}}
+.bx-hero .bx-hero__copy>*{animation:bxRise .8s cubic-bezier(.2,.8,.2,1) backwards}
+.bx-hero .bx-hero__copy>:nth-child(2){animation-delay:.08s}.bx-hero .bx-hero__copy>:nth-child(3){animation-delay:.16s}.bx-hero .bx-hero__copy>:nth-child(4){animation-delay:.24s}.bx-hero .bx-hero__copy>:nth-child(5){animation-delay:.32s}
+.bx-stage{animation:bxRise 1s cubic-bezier(.2,.8,.2,1) .15s backwards}
+@keyframes bxRise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* Buttons */
+.bx-btn:hover{box-shadow:0 12px 26px #10182826}
+.bx-btn--dark:hover{background:#1D2939}
+
+/* Canvas controls: panel pans up on hover */
+.bx-cols__media img{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.bx-cols__item:hover .bx-cols__media img{transform:translateY(-40px)}
+.bx-cols__item{transition:background .3s ease}
+.bx-cols__item:hover{background:linear-gradient(180deg,#fff0,var(--bx-tint))}
+
+/* Field palettes slowly pan */
+.bx-glass__frame img{animation:bxPan 16s ease-in-out infinite alternate}
+.bx-glass:nth-child(2) .bx-glass__frame img{animation-delay:-6s}
+.bx-glass__frame:hover img{animation-play-state:paused}
+@keyframes bxPan{0%,12%{transform:translateY(0)}88%,100%{transform:translateY(var(--bx-pan,-40%))}}
+.bx-darkgrid__list li{transition:background .3s ease,padding .3s ease}
+.bx-darkgrid__list li:hover{background:linear-gradient(90deg,#A79AFF14,transparent);padding-left:10px}
+
+/* Choice: chips tick in, arrow nudges, badge pops */
+.bx-motion .bx-split__side .bx-split__tickets span{opacity:0;transform:translateX(-10px);transition:opacity .4s ease,transform .5s ease}
+.bx-motion .bx-split__side.is-in .bx-split__tickets span{opacity:1;transform:none}
+.bx-motion .bx-split__side.is-in .bx-split__tickets span:nth-child(1){transition-delay:.35s}
+.bx-motion .bx-split__side.is-in .bx-split__tickets span:nth-child(2){transition-delay:.5s}
+.bx-motion .bx-split__side.is-in .bx-split__tickets span:nth-child(3){transition-delay:.65s}
+.bx-split__arrow{animation:bxNudge 1.8s ease-in-out infinite}
+@keyframes bxNudge{50%{transform:translateX(6px);color:var(--bx-accent)}}
+.bx-motion .bx-split__render{opacity:0;transform:scale(.9) rotate(-3deg);transition:opacity .6s ease .8s,transform .8s cubic-bezier(.2,1.4,.4,1) .8s}
+.bx-motion .bx-split__side.is-in .bx-split__render{opacity:1;transform:none}
+.bx-split__render{transition:transform .4s ease}
+.bx-split__stage:hover .bx-split__render{transform:translateY(-6px) rotate(1.5deg)!important}
+
+/* At the door: steps light up in turn, badge "prints" */
+.bx-steps3 li{transition:border-color .3s ease;animation:bxStep 6s infinite}
+.bx-steps3 li:nth-child(2){animation-delay:2s}.bx-steps3 li:nth-child(3){animation-delay:4s}
+@keyframes bxStep{0%,30%{border-color:#A79AFF;background:#A79AFF1f}36%,100%{border-color:#ffffff1f;background:#ffffff0f}}
+.bx-print{display:block;width:52px;height:68px;margin-top:auto;overflow:hidden;border-top:3px solid #ffffff40;border-radius:2px}
+.bx-print img{display:block;width:100%;height:auto;margin:0;border-radius:4px;animation:bxPrint 6s ease-in-out infinite}
+@keyframes bxPrint{0%,66%{transform:translateY(-102%)}82%,96%{transform:translateY(0)}100%{transform:translateY(-102%)}}
+
+/* Lanyard swings */
+.bx-lanyard{transform-origin:50% 0;animation:bxSwing 5s ease-in-out infinite}
+@keyframes bxSwing{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
+.bx-cross__cell--chips .bx-chip{transition:transform .25s ease,border-color .25s ease}
+.bx-cross__cell--chips .bx-chip:hover{transform:translateY(-3px);border-color:var(--bx-accent)}
+
+/* Hover rings + lift on cards */
+.bx-trio li,.bx-links a,.bx-mode,.bx-deliver__card{position:relative;transition:transform .3s ease,box-shadow .3s ease}
+.bx-trio li::after,.bx-links a::after,.bx-mode::after{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--bx-angle),transparent 0 62%,var(--bx-accent) 82%,transparent 94%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .35s ease;pointer-events:none}
+.bx-trio li:hover,.bx-links a:hover,.bx-mode:hover,.bx-deliver__card:hover{transform:translateY(-4px);box-shadow:0 18px 36px #1018281f}
+.bx-trio li:hover::after,.bx-links a:hover::after,.bx-mode:hover::after{opacity:1;animation:bxSpin 3s linear infinite}
+.bx-mode--dark::after{background:conic-gradient(from var(--bx-angle),transparent 0 62%,#A79AFF 82%,transparent 94%)}
+.bx-trio b{transition:transform .4s cubic-bezier(.2,1.4,.4,1)}
+.bx-trio li:hover b{transform:scale(1.15) rotate(-4deg)}
+
+/* Certificate stack fans out on reveal */
+.bx-motion .bx-stack .bx-stack__a,.bx-motion .bx-stack .bx-stack__b{opacity:0;transform:translate(-60px,30px) rotate(0)}
+.bx-motion .bx-stack.is-in .bx-stack__a{opacity:1;transform:rotate(4deg);transition:opacity .5s ease .35s,transform .9s cubic-bezier(.2,.8,.2,1) .35s}
+.bx-motion .bx-stack.is-in .bx-stack__b{opacity:1;transform:none;transition:opacity .5s ease .55s,transform .9s cubic-bezier(.2,.8,.2,1) .55s}
+.bx-sheet img{transition:transform .5s ease}
+.bx-sheet:hover img{transform:rotate(0) scale(1.02)}
+
+/* Use-case visuals slide in on tab change */
+.bx-use__panel.is-entering .bx-use__visual img:first-child{animation:bxFromL .6s cubic-bezier(.2,.8,.2,1) both}
+.bx-use__panel.is-entering .bx-use__visual img:last-child{animation:bxFromR .6s cubic-bezier(.2,.8,.2,1) .08s both}
+@keyframes bxFromL{from{opacity:0;transform:translateX(-30px) rotate(-4deg)}}
+@keyframes bxFromR{from{opacity:0;transform:translateX(30px) rotate(4deg)}}
+.bx-use__tab{transition:background .25s ease,color .25s ease}
+.bx-use__tab:hover{color:var(--bx-accent)}
+
+/* Cross-link visuals float */
+.bx-xlink__media img{animation:bxFloat 6s ease-in-out infinite}
+.bx-xlink__media img:nth-child(2){animation-delay:-3s}
+@keyframes bxFloat{50%{translate:0 -8px}}
+
+/* FAQ answer fades in */
+.bx-faq__item[open] p{animation:bxRise .4s ease both}
+
+@media (max-width:767px){
+  .bx-deck{left:50%;top:28px;width:160px;height:280px;transform:translateX(-50%)}
+  .bx-deck__dots{bottom:-34px}
+  .bx-deck__hint{display:none}
+  .bx-stage--cert .bx-deck{top:70px;width:260px;height:200px}
+  .bx-stage--cert .bx-deck__dots{bottom:-28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .bx-stage__merge,.bx-stage__template-card::after,.bx-hero__trust span::before,.bx-hero .bx-hero__copy>*,.bx-stage,.bx-glass__frame img,.bx-split__arrow,.bx-steps3 li,.bx-print img,.bx-lanyard,.bx-xlink__media img,.bx-faq__item[open] p{animation:none!important}
+  .bx-print img{transform:none}
+  .bx-deck__card,.bx-cols__media img,.bx-trio li,.bx-links a,.bx-mode,.bx-deliver__card{transition:none}
+  .bx-trio li:hover::after,.bx-links a:hover::after,.bx-mode:hover::after{animation:none}
+}
+.bx-deck:focus-visible{outline:2px solid var(--bx-accent);outline-offset:12px;border-radius:16px}

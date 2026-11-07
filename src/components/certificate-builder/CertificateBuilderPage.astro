@@ -11,6 +11,11 @@ const reasons = [
   { kicker: "Virtual & hybrid", title: "Certificates as the session ends", text: "Online check-in marks attendance. When the session ends, send every attendee's certificate to WhatsApp and email in one go." },
   { kicker: "Self-serve", title: "Attendees ask, the bot sends", text: "\"Send me my certificate\" on WhatsApp gets it delivered. Attendees can also download it in the event app or open a secure share link." },
 ];
+const heroCerts = [
+  { img: "certificate-priya.webp", name: "Priya", alt: "Certificate of participation for Priya Raman" },
+  { img: "certificate-amara.webp", name: "Amara", alt: "Certificate of participation for Amara Okafor" },
+  { img: "certificate-daniel.webp", name: "Daniel", alt: "Certificate of participation for Daniel Mensah" },
+];
 const useCases = [
   { id: "associations", label: "Associations", title: "Recognise members, speakers and contributors", text: "Different certificates for members, speakers and volunteers from the same registration data.", fields: ["Attendance and ticket eligibility", "One PDF per recipient", "Email, WhatsApp or share link"], img: "certificate-amara.webp" },
   { id: "training", label: "Training & CPD", title: "Proof of attendance for every learner", text: "Only people marked present receive a certificate, so records match who actually attended the training.", fields: ["Check-in based eligibility", "Course and event details on the PDF", "Download in the event app"], img: "certificate-priya.webp" },
@@ -21,7 +26,7 @@ const useCases = [
 ---
 <div class="bx-page bx-page--cert">
   <section class="bx-hero">
-    <div class="bx-wrap bx-hero__grid" style="grid-template-columns:minmax(0,.95fr) minmax(0,1.15fr)">
+    <div class="bx-wrap bx-hero__grid bx-hero__grid--cert">
       <div class="bx-hero__copy">
         <span class="bx-hero__kicker">Event certificate builder</span>
         <h1 class="bx-h1">A named certificate for everyone who attended. Sent in one go.</h1>
@@ -33,14 +38,10 @@ const useCases = [
         <div class="bx-hero__trust"><span>Attendance-based</span><span>PDF per attendee</span><span>WhatsApp + email</span></div>
       </div>
       <div class="bx-stage bx-stage--cert" aria-label="Certificates generated for each attendee">
-        <div class="bx-fan" aria-hidden="true">
-          <img src={`${IMG}/certificate-daniel.webp`} alt="" width="1200" height="849" style="left:50%;top:70px;width:380px;transform:translateX(-72%) rotate(-6deg)" loading="eager" />
-          <img src={`${IMG}/certificate-amara.webp`} alt="" width="1200" height="849" style="left:50%;top:110px;width:380px;transform:translateX(-22%) rotate(5deg)" loading="eager" />
-        </div>
-        <div class="bx-loop bx-loop--3" style="left:50%;top:150px;width:440px;transform:translateX(-50%)">
-          <img src={`${IMG}/certificate-priya.webp`} alt="Certificate of participation for Priya Raman" width="1200" height="849" loading="eager" style="border-radius:8px" />
-          <img src={`${IMG}/certificate-amara.webp`} alt="" width="1200" height="849" loading="lazy" style="border-radius:8px" />
-          <img src={`${IMG}/certificate-daniel.webp`} alt="" width="1200" height="849" loading="lazy" style="border-radius:8px" />
+        <div class="bx-deck" data-bx-deck tabindex="0" role="group" aria-roledescription="carousel" aria-label="Certificates generated for each attendee. Swipe or use arrow keys.">
+          {heroCerts.map((h, i) => <img class="bx-deck__card" data-pos={String(Math.min(i, 3))} src={`${IMG}/${h.img}`} alt={h.alt} width="1200" height="849" loading="eager" decoding="async" draggable="false" />)}
+          <div class="bx-deck__dots">{heroCerts.map((h, i) => <button class="bx-deck__dot" type="button" aria-label={`Show ${h.name}'s certificate`} aria-current={i === 0 ? "true" : "false"}></button>)}</div>
+          <span class="bx-deck__hint">Drag or swipe the certificate</span>
         </div>
       </div>
     </div>
@@ -225,26 +226,5 @@ const useCases = [
 </div>
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-bx-tabs]').forEach((root) => {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-    const select = (tab: HTMLButtonElement) => {
-      tabs.forEach((t) => {
-        const on = t === tab;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        const panel = document.getElementById(t.getAttribute('aria-controls') || '');
-        if (!panel) return;
-        panel.hidden = !on;
-        if (on) { panel.classList.remove('is-entering'); void panel.offsetWidth; panel.classList.add('is-entering'); }
-      });
-    };
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => select(tab));
-      tab.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        select(next); next.focus();
-      });
-    });
-  });
+  import "../../scripts/builder-motion";
 </script>

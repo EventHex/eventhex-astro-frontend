@@ -19,6 +19,13 @@ const fields = [
   ["Registration answers", "Common and custom questions from the form builder."],
   ["Custom content", "Static text or images that are not data-bound."],
 ];
+const heroBadges = [
+  { img: "badge-delegate-priya.webp", name: "Priya", alt: "Delegate badge for Priya Raman, merged from registration data" },
+  { img: "badge-speaker-daniel.webp", name: "Daniel", alt: "Speaker badge for Daniel Mensah" },
+  { img: "badge-delegate-amara.webp", name: "Amara", alt: "Delegate badge for Amara Okafor" },
+  { img: "badge-speaker-sofia.webp", name: "Sofia", alt: "Speaker badge for Sofia Lindqvist" },
+  { img: "badge-delegate-lucas.webp", name: "Lucas", alt: "Delegate badge for Lucas Ferreira" },
+];
 const useCases = [
   { id: "conferences", label: "Conferences", title: "Give every attendee the right event identity", text: "Role-aware badges for attendees, speakers, sponsors and staff without rebuilding the layout for each group.", fields: ["Ticket and participant-type targeting", "Names, titles, companies and QR codes", "One branded system across every role"], imgs: ["badge-delegate-amara.webp", "badge-speaker-sofia.webp"] },
   { id: "exhibitions", label: "Exhibitions", title: "Make exhibitors and visitors easy to identify", text: "Keep access, booth and company information clear while preserving one consistent exhibition brand.", fields: ["Booth and exhibitor details", "Distinct visitor and vendor designs", "Scan-ready identification at the venue"], imgs: ["badge-delegate-lucas.webp", "badge-delegate-priya.webp"] },
@@ -48,15 +55,10 @@ const useCases = [
         </div>
         <span class="bx-stage__merge" aria-hidden="true"></span>
         <span class="bx-stage__label" style="right:36px;top:40px">EVERY ATTENDEE</span>
-        <div class="bx-fan" aria-hidden="true">
-          <img src={`${IMG}/badge-speaker-daniel.webp`} alt="" width="600" height="901" style="left:64%;top:110px;width:190px;transform:translateX(-100%) rotate(-9deg)" loading="eager" />
-          <img src={`${IMG}/badge-delegate-amara.webp`} alt="" width="600" height="901" style="left:64%;top:120px;width:190px;transform:translateX(8%) rotate(8deg)" loading="eager" />
-        </div>
-        <div class="bx-loop" style="left:64%;top:84px;width:214px;transform:translateX(-50%)">
-          <img src={`${IMG}/badge-delegate-priya.webp`} alt="Delegate badge for Priya Raman, merged from registration data" width="600" height="901" loading="eager" />
-          <img src={`${IMG}/badge-delegate-amara.webp`} alt="" width="600" height="901" loading="lazy" />
-          <img src={`${IMG}/badge-delegate-lucas.webp`} alt="" width="600" height="901" loading="lazy" />
-          <img src={`${IMG}/badge-speaker-daniel.webp`} alt="" width="600" height="901" loading="lazy" />
+        <div class="bx-deck" data-bx-deck tabindex="0" role="group" aria-roledescription="carousel" aria-label="Badges generated for each attendee. Swipe or use arrow keys.">
+          {heroBadges.map((h, i) => <img class="bx-deck__card" data-pos={String(Math.min(i, 3))} src={`${IMG}/${h.img}`} alt={h.alt} width="600" height="901" loading={i < 3 ? "eager" : "lazy"} decoding="async" draggable="false" />)}
+          <div class="bx-deck__dots">{heroBadges.map((h, i) => <button class="bx-deck__dot" type="button" aria-label={`Show ${h.name}'s badge`} aria-current={i === 0 ? "true" : "false"}></button>)}</div>
+          <span class="bx-deck__hint">Drag or swipe the badge</span>
         </div>
       </div>
     </div>
@@ -102,8 +104,8 @@ const useCases = [
           {fields.map(([t, d], i) => <li><b>{String(i + 1).padStart(2, "0")}</b><div><strong>{t}</strong><span>{d}</span></div></li>)}
         </ol>
         <div class="bx-darkgrid__media">
-          <div class="bx-glass"><span class="bx-glass__label">USER FIELDS</span><div class="bx-glass__frame"><img src={`${IMG}/fields-user.webp`} alt="User Fields palette with QR code, full name, company, mobile and email fields" width="592" height="1672" loading="lazy" decoding="async" /></div></div>
-          <div class="bx-glass"><span class="bx-glass__label">EVENT FIELDS</span><div class="bx-glass__frame"><img src={`${IMG}/fields-event.webp`} alt="Event Fields palette with event name, location, dates, ticket name and number" width="592" height="1400" loading="lazy" decoding="async" /></div></div>
+          <div class="bx-glass"><span class="bx-glass__label">USER FIELDS</span><div class="bx-glass__frame" style="--bx-pan:-46%"><img src={`${IMG}/fields-user.webp`} alt="User Fields palette with QR code, full name, company, mobile and email fields" width="592" height="1672" loading="lazy" decoding="async" /></div></div>
+          <div class="bx-glass"><span class="bx-glass__label">EVENT FIELDS</span><div class="bx-glass__frame" style="--bx-pan:-34%"><img src={`${IMG}/fields-event.webp`} alt="Event Fields palette with event name, location, dates, ticket name and number" width="592" height="1400" loading="lazy" decoding="async" /></div></div>
         </div>
       </div>
     </div>
@@ -153,7 +155,7 @@ const useCases = [
           <ol class="bx-steps3">
             <li><b>01</b>Scan the QR or search a name</li>
             <li><b>02</b>Attendance is marked</li>
-            <li><b>03</b>Their badge prints<img src={`${IMG}/badge-delegate-priya.webp`} alt="" width="600" height="901" loading="lazy" /></li>
+            <li><b>03</b>Their badge prints<span class="bx-print" aria-hidden="true"><img src={`${IMG}/badge-delegate-priya.webp`} alt="" width="600" height="901" loading="lazy" /></span></li>
           </ol>
           <ul class="bx-mode__facts">
             <li>Zebra and thermal label printers</li><li>EventHex Print Agent or QZ Tray</li>
@@ -258,26 +260,5 @@ const useCases = [
 </div>
 
 <script>
-  document.querySelectorAll<HTMLElement>('[data-bx-tabs]').forEach((root) => {
-    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
-    const select = (tab: HTMLButtonElement) => {
-      tabs.forEach((t) => {
-        const on = t === tab;
-        t.setAttribute('aria-selected', String(on));
-        t.tabIndex = on ? 0 : -1;
-        const panel = document.getElementById(t.getAttribute('aria-controls') || '');
-        if (!panel) return;
-        panel.hidden = !on;
-        if (on) { panel.classList.remove('is-entering'); void panel.offsetWidth; panel.classList.add('is-entering'); }
-      });
-    };
-    tabs.forEach((tab, i) => {
-      tab.addEventListener('click', () => select(tab));
-      tab.addEventListener('keydown', (e) => {
-        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        select(next); next.focus();
-      });
-    });
-  });
+  import "../../scripts/builder-motion";
 </script>
