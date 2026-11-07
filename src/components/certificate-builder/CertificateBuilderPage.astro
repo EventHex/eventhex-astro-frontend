@@ -1,0 +1,232 @@
+---
+import "../../styles/builder-pages.css";
+
+export interface Props { faqs: [string, string][] }
+const { faqs } = Astro.props;
+const IMG = "/feature-images/certificate-builder";
+
+const reasons = [
+  { kicker: "Hours back", title: "Names are filled in for you", text: "Each attendee's name and event details merge into the design. No spreadsheet, no Word or Canva exports, one PDF per person." },
+  { kicker: "Unexpected guests", title: "Send one certificate on the spot", text: "A guest added at the venue? Send their certificate on its own from the admin, to WhatsApp and email, while they are still in the room." },
+  { kicker: "Virtual & hybrid", title: "Certificates as the session ends", text: "Online check-in marks attendance. When the session ends, send every attendee's certificate to WhatsApp and email in one go." },
+  { kicker: "Self-serve", title: "Attendees ask, the bot sends", text: "\"Send me my certificate\" on WhatsApp gets it delivered. Attendees can also download it in the event app or open a secure share link." },
+];
+const heroCerts = [
+  { img: "cert-meridian-leila.webp", name: "Leila", alt: "Meridian Health Congress CPD certificate for Dr. Leila Haddad" },
+  { img: "cert-ascend-priya.webp", name: "Priya", alt: "Ascend Impact Summit certificate of participation for Priya Raman" },
+  { img: "cert-pulse-nina.webp", name: "Nina", alt: "Pulse Tech Expo certificate of attendance for Nina Kowalski" },
+  { img: "cert-meridian-hannah.webp", name: "Hannah", alt: "Meridian Health Congress CPD certificate for Hannah Olsen" },
+];
+const useCases = [
+  { id: "associations", label: "Associations", title: "Recognise members, speakers and contributors", text: "Different certificates for members, speakers and volunteers from the same registration data.", fields: ["Attendance and ticket eligibility", "One PDF per recipient", "Email, WhatsApp or share link"], img: "cert-meridian-hannah.webp" },
+  { id: "training", label: "Training & CPD", title: "Proof of attendance for every learner", text: "Only people marked present receive a certificate, so records match who actually attended the training.", fields: ["Check-in based eligibility", "Course and event details on the PDF", "Download in the event app"], img: "cert-meridian-leila.webp" },
+  { id: "conferences", label: "Conferences", title: "Participation and speaker certificates together", text: "A common participation certificate for delegates and a specific one for speakers, sent from the same place.", fields: ["Common and ticket-specific designs", "Several certificates in one email", "Delivery log for every send"], img: "cert-ascend-priya.webp" },
+  { id: "webinars", label: "Webinars", title: "Certificates while the session is still fresh", text: "Online check-in marks attendance, then one send delivers every certificate to WhatsApp and email.", fields: ["Virtual check-in attendance", "WhatsApp delivery with PDF", "Resume if a send is interrupted"], img: "cert-ascend-yuki.webp" },
+  { id: "universities", label: "Universities", title: "Academic events with tidy records", text: "Certificates for presenters, attendees and committee members from one registration list.", fields: ["Ticket and participant-type rules", "Custom fonts and A4 or Letter sizes", "Secure share links"], img: "cert-meridian-arjun.webp" },
+];
+---
+<div class="bx-page bx-page--cert">
+  <section class="bx-hero">
+    <div class="bx-wrap bx-hero__grid bx-hero__grid--cert">
+      <div class="bx-hero__copy">
+        <span class="bx-hero__kicker">Event certificate builder</span>
+        <h1 class="bx-h1">A named certificate for everyone who attended. Sent in one go.</h1>
+        <p class="bx-lead">Design it once. EventHex creates a PDF with each attendee's name and delivers it by email, WhatsApp, app download or share link.</p>
+        <div class="bx-hero__actions">
+          <a class="bx-btn bx-btn--dark" href="/book-a-demo/">See it with your event →</a>
+          <a class="bx-btn bx-btn--line" href="#delivery">How delivery works</a>
+        </div>
+        <div class="bx-hero__trust"><span>Attendance-based</span><span>PDF per attendee</span><span>WhatsApp + email</span></div>
+      </div>
+      <div class="bx-stage bx-stage--cert" aria-label="Certificates generated for each attendee">
+        <div class="bx-deck" data-bx-deck tabindex="0" role="group" aria-roledescription="carousel" aria-label="Certificates generated for each attendee. Swipe or use arrow keys.">
+          {heroCerts.map((h, i) => <img class="bx-deck__card" data-pos={String(Math.min(i, 3))} src={`${IMG}/${h.img}`} alt={h.alt} width="1200" height="849" loading="eager" decoding="async" draggable="false" />)}
+          <div class="bx-deck__dots">{heroCerts.map((h, i) => <button class="bx-deck__dot" type="button" aria-label={`Show ${h.name}'s certificate`} aria-current={i === 0 ? "true" : "false"}></button>)}</div>
+          <span class="bx-deck__hint">Drag or swipe the certificate</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-rail" aria-label="Certificate workflow">
+    <div class="bx-wrap bx-rail__inner">
+      <span class="bx-rail__label">From attendance to inbox</span>
+      <ol class="bx-rail__steps">
+        <li><b>Design</b><span>Template or artwork</span></li>
+        <li><b>Eligibility</b><span>Attended + ticket</span></li>
+        <li><b>Generate</b><span>PDF per person</span></li>
+        <li><b>Deliver</b><span>Email, WhatsApp</span></li>
+        <li><b>Track</b><span>Delivery log</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Why teams switch</span>
+        <h2 class="bx-h2">No more mail merge the night after the event</h2>
+      </header>
+      <div class="bx-cross">
+        {reasons.map((r) => <div class="bx-cross__cell"><span class="bx-eyebrow">{r.kicker}</span><h3 class="bx-h3">{r.title}</h3><p class="bx-text">{r.text}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section" style="background:radial-gradient(60% 50% at 100% 0%,var(--bx-soft) 0%,#fff 70%)">
+    <div class="bx-wrap bx-row">
+      <div class="bx-row__copy">
+        <span class="bx-eyebrow">Design</span>
+        <h2 class="bx-h2 bx-h2--md">Start from a template or your own artwork</h2>
+        <p class="bx-text" style="font-size:17px">Upload your certificate background, place the attendee's name and a QR code, and pick A4, Letter, A3, A5 or square sizes.</p>
+        <span class="bx-use__label">STARTER TEMPLATES</span>
+        <div class="bx-chips"><span class="bx-chip">Classic Participation</span><span class="bx-chip">Modern Achievement</span><span class="bx-chip">Elegant Dark</span><span class="bx-chip">+2 more</span></div>
+      </div>
+      <div class="bx-frame"><img class="bx-shot" src={`${IMG}/cert-meridian-editor.webp`} alt="EventHex certificate editor with the attendee name and QR code on an A4 landscape certificate" width="1200" height="834" loading="lazy" decoding="async" /></div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Eligibility</span>
+        <h2 class="bx-h2 bx-h2--md">Only people who came, with the right certificate each</h2>
+      </header>
+      <div class="bx-split">
+        <div class="bx-split__side">
+          <div><span class="bx-eyebrow">Attendance</span><h3 class="bx-h3">Checked in = eligible</h3><p class="bx-text" style="margin-top:8px">Badge scans at the door or online check-in mark attendance. No-shows don't get a certificate.</p></div>
+          <div class="bx-split__photo"><img src={`${IMG}/registrations.webp`} alt="Registration list showing attendees and their tickets" width="1200" height="698" loading="lazy" decoding="async" /></div>
+        </div>
+        <div class="bx-split__side bx-split__side--warm">
+          <div><span class="bx-eyebrow">Ticket rules</span><h3 class="bx-h3">A certificate per audience</h3><p class="bx-text" style="margin-top:8px">Common for all tickets, or specific ones for speakers, volunteers or delegates.</p></div>
+          <div class="bx-split__stage">
+            <div class="bx-split__rule" style="height:240px"><img src={`${IMG}/certificate-type-setting.webp`} alt="Certificate settings with certificate type and size" width="640" height="860" loading="lazy" decoding="async" /></div>
+            <img src={`${IMG}/cert-pulse-nina.webp`} alt="Certificate for a specific audience" width="1200" height="849" style="width:52%;height:auto;border-radius:8px;box-shadow:0 16px 32px #1018281f" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft">
+    <div class="bx-wrap bx-row bx-row--flip">
+      <div class="bx-frame"><img class="bx-shot" src={`${IMG}/certificate-library.webp`} alt="Certificate library in the EventHex admin" width="900" height="675" loading="lazy" decoding="async" /></div>
+      <div class="bx-row__copy">
+        <span class="bx-eyebrow">Send at scale</span>
+        <h2 class="bx-h2 bx-h2--md">Send to every attendee at once</h2>
+        <ul class="bx-checks"><li>Runs in the background with live progress</li><li>Stopped halfway? Resume skips those already sent</li><li>Several certificates per person in one email</li><li>Download all as one PDF for print</li></ul>
+        <ul class="bx-files" aria-label="One certificate PDF per attendee">
+          <li><img src={`${IMG}/cert-ascend-priya.webp`} alt="Ascend Impact Summit certificate of participation for Priya Raman" width="1200" height="849" loading="lazy" decoding="async" /><span>Priya Raman</span></li>
+          <li><img src={`${IMG}/cert-meridian-hannah.webp`} alt="Meridian Health Congress CPD certificate for Hannah Olsen" width="1200" height="849" loading="lazy" decoding="async" /><span>Amara Okafor</span></li>
+          <li><img src={`${IMG}/cert-pulse-jordan.webp`} alt="Pulse Tech Expo certificate of attendance for Jordan Reyes" width="1200" height="849" loading="lazy" decoding="async" /><span>Daniel Mensah</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--dark" id="delivery">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-pill">✦ From eligibility to delivery</span>
+        <h2 class="bx-h2">Deliver every certificate, and see it arrive</h2>
+      </header>
+      <div class="bx-deliver">
+        <div class="bx-deliver__card"><span class="bx-glass__label">CHANNELS</span><div class="bx-deliver__shot bx-deliver__shot--tall"><img src={`${IMG}/delivery-channels.webp`} alt="Certificate delivery channels: email with PDF attachment and WhatsApp" width="720" height="840" loading="lazy" decoding="async" /></div></div>
+        <div class="bx-deliver__card"><span class="bx-glass__label">PUBLISH &amp; SHARE</span><div class="bx-deliver__shot"><img src={`${IMG}/publish-share-settings.webp`} alt="Publish and share settings with a share caption" width="1000" height="629" loading="lazy" decoding="async" /></div><p>Secure share links with a watermarked preview.</p></div>
+        <div class="bx-deliver__card"><span class="bx-glass__label">DELIVERY LOG</span><div class="bx-deliver__shot"><img src={`${IMG}/delivery-log.webp`} alt="Email delivery log with delivered, opened and bounced counts" width="1200" height="480" loading="lazy" decoding="async" /></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap bx-row">
+      <div class="bx-sheet">
+        <img src={`${IMG}/cert-ascend-amara.webp`} alt="Certificate file for a test recipient" width="1200" height="849" loading="lazy" decoding="async" />
+        <div class="bx-chips" style="justify-content:center"><span class="bx-chip">A4 landscape · 29.7 × 21 cm</span><span class="bx-chip">QR code</span><span class="bx-chip">Custom fonts</span></div>
+      </div>
+      <div class="bx-row__copy">
+        <h2 class="bx-h2 bx-h2--md">Test one file before you send hundreds</h2>
+        <p class="bx-text" style="font-size:17px">Check fonts, page size, long names, image quality, eligibility and the message before releasing certificates.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--glow-top">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Certificates + badges</span>
+        <h2 class="bx-h2">The badge scan at the door decides the certificate later</h2>
+      </header>
+      <ol class="bx-trio">
+        <li><b>1</b><h3 class="bx-h3">One set of attendee data</h3><p class="bx-text">Badges and certificates read the same registrations. No exports, no mail merge.</p></li>
+        <li><b>2</b><h3 class="bx-h3">Check-in marks attendance</h3><p class="bx-text">Scanning a badge records who came, so only attendees present get certificates.</p></li>
+        <li><b>3</b><h3 class="bx-h3">One brand from lanyard to PDF</h3><p class="bx-text">The same designer and event artwork for badges and certificates.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section" aria-labelledby="cx-use-title">
+    <div class="bx-wrap bx-use" data-bx-tabs>
+      <h2 class="bx-h2 bx-h2--plain" id="cx-use-title" style="text-align:center;max-width:860px">Recognition for every kind of programme</h2>
+      <div class="bx-use__tabs" role="tablist" aria-label="Programme types">
+        {useCases.map((u, i) => <button class="bx-use__tab" type="button" role="tab" id={`cx-tab-${u.id}`} aria-controls={`cx-panel-${u.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{u.label}</button>)}
+      </div>
+      {useCases.map((u, i) => (
+        <article class="bx-use__panel" role="tabpanel" id={`cx-panel-${u.id}`} aria-labelledby={`cx-tab-${u.id}`} hidden={i !== 0}>
+          <div class="bx-use__copy">
+            <h3>{u.title}</h3>
+            <p class="bx-text">{u.text}</p>
+            <span class="bx-use__label">BUILT WITH</span>
+            <ul class="bx-checks">{u.fields.map((f) => <li>{f}</li>)}</ul>
+          </div>
+          <div class="bx-use__visual"><img src={`${IMG}/${u.img}`} alt={`Example certificate for ${u.label.toLowerCase()}`} width="1200" height="849" style="width:100%" loading="lazy" decoding="async" /></div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="bx-section" style="padding-top:0">
+    <div class="bx-wrap">
+      <div class="bx-xlink">
+        <div class="bx-xlink__copy">
+          <span class="bx-eyebrow">On event day</span>
+          <h2>Check people in and print their badge at the door</h2>
+          <a class="bx-btn bx-btn--light" href="/badge-builder/">Explore Badge Builder →</a>
+        </div>
+        <div class="bx-xlink__media">
+          <img src={`${IMG}/asc-delegate-priya.webp`} alt="Delegate badge" width="600" height="901" style="width:150px;transform:rotate(-4deg)" loading="lazy" decoding="async" />
+          <img src={`${IMG}/mer-faculty-leila.webp`} alt="Faculty badge" width="600" height="901" style="width:150px;transform:rotate(4deg)" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft">
+    <div class="bx-wrap">
+      <header class="bx-head"><h2 class="bx-h2 bx-h2--md">Connect certificates to the event journey</h2></header>
+      <div class="bx-links">
+        <a href="/event-check-in/"><h3>Event Check-in</h3><p>Attendance that decides eligibility.</p></a>
+        <a href="/badge-builder/"><h3>Badge Builder</h3><p>Branded badges, printed at the door.</p></a>
+        <a href="/whatsapp-event-concierge/"><h3>WhatsApp Concierge</h3><p>Attendees ask for their certificate.</p></a>
+        <a href="/virtual-hybrid-events/"><h3>Virtual &amp; Hybrid</h3><p>Online check-in for remote attendees.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap bx-faq">
+      <aside>
+        <span class="bx-eyebrow">Quick answers</span>
+        <h2 class="bx-h2 bx-h2--md">Certificate questions, answered</h2>
+        <a class="bx-btn bx-btn--dark" href="/book-a-demo/" style="align-self:flex-start">Book a Demo →</a>
+      </aside>
+      <div class="bx-faq__list">
+        {faqs.map(([q, a], i) => <details class="bx-faq__item" open={i === 0}><summary>{q}</summary><p>{a}</p></details>)}
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  import "../../scripts/builder-motion";
+</script>

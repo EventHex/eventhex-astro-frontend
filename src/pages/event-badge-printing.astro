@@ -1,0 +1,24 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import BadgePrintingPage from "../components/event-badge-printing/BadgePrintingPage.astro";
+
+const title = "Event Badge Printing & Registration Desk Software | EventHex";
+const description = "Run the event registration desk from one screen: find attendees by QR or name, check them in, print your badge design on Zebra and thermal label printers, and watch arrivals live.";
+const url = "https://eventhex.ai/event-badge-printing/";
+const ogImage = "https://eventhex.ai/feature-images/event-badge-printing/og-event-badge-printing.jpg";
+const faqs: [string, string][] = [
+  ["How does onsite badge printing work?", "Staff open the EventHex Event Day Portal at the registration desk, scan the attendee's QR code or search their name, and the attendee is checked in while their badge prints on the connected label printer."],
+  ["Which printers are supported?", "Zebra and other thermal label printers, connected through the EventHex Print Agent on the desk computer or through QZ Tray. Badges can also be exported as a PDF from the admin for pre-printing. Always test a label on your exact printer and stock."],
+  ["Does it print the badge we designed?", "Yes. The portal uses the badge layouts from the Badge Builder, including ticket-specific designs, and fills them with each attendee's details."],
+  ["Which label sizes can we use?", "Label presets include 76 × 20, 76 × 38, 76 × 51 and 100 × 150 mm."],
+  ["What happens if the venue Wi-Fi drops?", "Check-ins are queued on the device and synced when the connection returns, so the desk keeps moving."],
+  ["Can we see who printed which badge?", "Yes. Every print is logged with who printed it and when, reprints are counted per attendee, and the portal has a print analytics view."],
+];
+const softwareSchema = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "EventHex Event Badge Printing", applicationCategory: "BusinessApplication", operatingSystem: "Web", url, description, creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" }, featureList: ["Scan-to-print onsite badge printing", "QR, camera and name search check-in", "Zebra and thermal label printer support", "EventHex Print Agent and QZ Tray", "Print logs and reprint counts", "Offline check-in queue"] };
+const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) };
+---
+<MarketingLayout title={title} description={description} canonical={url} ogImage={ogImage}>
+  <BadgePrintingPage faqs={faqs} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+</MarketingLayout>

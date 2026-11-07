@@ -1,0 +1,186 @@
+---
+import "../../styles/builder-pages.css";
+
+export interface Props { faqs: [string, string][] }
+const { faqs } = Astro.props;
+const IMG = "/feature-images/event-badge-printing";
+
+const desk = [
+  { title: "Confirm the attendee", text: "Name, company, ticket and QR on one card, with Print Badge and Preview right beside it.", img: "portal-attendee-card.webp", alt: "Attendee card in the Event Day Portal with company, designation, ticket and QR code", w: 900, h: 1224 },
+  { title: "Fix details on the spot", text: "Correct a name, company or designation at the desk, then Save & Print in one step.", img: "portal-update-details.webp", alt: "Update Information form with first name, last name, email, company and designation, and Save & Print", w: 900, h: 1080 },
+  { title: "Preview before it prints", text: "See the exact badge at its real size before it goes to the label printer.", img: "portal-badge-preview.webp", alt: "Badge Preview at 10 × 15 cm showing the attendee's Ascend Impact Summit badge with QR code", w: 900, h: 1462 },
+];
+const ways = [
+  { title: "Scan the QR code", text: "Use a handheld barcode scanner, or the device camera, to read the attendee's QR. They are found and checked in instantly.", img: "portal-scanner.webp", alt: "Event Day Portal barcode scanner screen ready to scan", w: 1000, h: 750 },
+  { title: "Search by name", text: "Lost their QR? Search by name or ticket, see the ticket type, and print with one tap.", img: "portal-search.webp", alt: "Event Day Portal attendee search with Print buttons", w: 1200, h: 900 },
+  { title: "Check in from the list", text: "Mark arrivals from the attendance list, with pending and checked-in counts as you go.", img: "portal-attendance.webp", alt: "Event Day Portal attendance list with Check in buttons", w: 1200, h: 900 },
+];
+---
+<div class="bx-page bx-page--print">
+  <section class="bx-hero">
+    <div class="bx-wrap bx-hero__grid">
+      <div class="bx-hero__copy">
+        <span class="bx-hero__kicker">Registration desk &amp; badge printing</span>
+        <h1 class="bx-h1">Run the registration desk from one screen.</h1>
+        <p class="bx-lead">Find any attendee in seconds, check them in, print the badge you designed and watch arrivals, all from the EventHex Event Day Portal.</p>
+        <div class="bx-hero__actions">
+          <a class="bx-btn bx-btn--dark" href="/book-a-demo/">See it with your event →</a>
+          <a class="bx-btn bx-btn--line" href="#printers">Printer setup</a>
+        </div>
+        <div class="bx-hero__trust"><span>Live arrival counts</span><span>Scan-to-print badges</span><span>Keeps going if Wi-Fi drops</span></div>
+      </div>
+      <div class="bx-stage" aria-label="Event Day Portal checking in an attendee while their badge prints">
+        <div class="bx-printstage">
+          <div class="bx-tablet"><img src={`${IMG}/portal-home.webp`} alt="EventHex Event Day Portal home with check-in counts, Scan Badge and Search Attendees" width="1200" height="900" loading="eager" decoding="async" /></div>
+          <div class="bx-printer">
+            <span class="bx-scanchip">Checked in · printing</span>
+            <div class="bx-printer__body" aria-hidden="true"></div>
+            <div class="bx-printer__out">
+              <img src={`${IMG}/asc-delegate-priya.webp`} alt="Printed Ascend Impact Summit delegate badge" width="600" height="901" loading="eager" />
+              <img src={`${IMG}/mer-faculty-leila.webp`} alt="" width="600" height="901" loading="lazy" />
+              <img src={`${IMG}/pul-visitor-jordan.webp`} alt="" width="600" height="901" loading="lazy" />
+              <img src={`${IMG}/asc-volunteer-hana.webp`} alt="" width="600" height="901" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-rail" aria-label="Badge printing workflow">
+    <div class="bx-wrap bx-rail__inner">
+      <span class="bx-rail__label">At the registration desk</span>
+      <ol class="bx-rail__steps">
+        <li><b>Find</b><span>Scan, search or list</span></li>
+        <li><b>Check in</b><span>Attendance marked</span></li>
+        <li><b>Print</b><span>Your badge design</span></li>
+        <li><b>Track</b><span>Who printed, when</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Event Day Portal</span>
+        <h2 class="bx-h2">Find anyone at the desk in seconds</h2>
+        <p class="bx-lead">Three ways in, one result: checked in and wearing their badge. Keyboard shortcuts jump straight to search or the scanner.</p>
+      </header>
+      <ol class="bx-ways">
+        {ways.map((w) => (
+          <li>
+            <div class="bx-ways__media"><img src={`${IMG}/${w.img}`} alt={w.alt} width={w.w} height={w.h} loading="lazy" decoding="async" /></div>
+            <h3 class="bx-h3" style="font-size:22px">{w.title}</h3>
+            <p class="bx-text">{w.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">At the desk</span>
+        <h2 class="bx-h2">Confirm, fix and print without leaving the screen</h2>
+        <p class="bx-lead">Everything staff need about one attendee is on one card, so the line keeps moving.</p>
+      </header>
+      <ol class="bx-ways bx-ways--contain">
+        {desk.map((d, i) => (
+          <li>
+            <div class="bx-ways__media"><img src={`${IMG}/${d.img}`} alt={d.alt} width={d.w} height={d.h} loading="lazy" decoding="async" /></div>
+            <span class="bx-eyebrow">Step {i + 1}</span>
+            <h3 class="bx-h3" style="font-size:22px">{d.title}</h3>
+            <p class="bx-text">{d.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap bx-row">
+      <div class="bx-row__copy">
+        <span class="bx-eyebrow">Your design, on the label</span>
+        <h2 class="bx-h2 bx-h2--md">Prints the badge you built, not a generic label</h2>
+        <p class="bx-text" style="font-size:17px">The portal loads the badge layouts from the <a href="/badge-builder/" style="color:var(--bx-accent)">Badge Builder</a>, so common and ticket-specific designs print with each attendee's name, title, company and QR.</p>
+        <ul class="bx-checks"><li>A default badge for all tickets, with overrides per ticket</li><li>Print style: full design, or text only for pre-printed badge stock</li><li>Names in any script (Arabic, Devanagari, CJK)</li></ul>
+      </div>
+      <div class="bx-frame bx-frame--tall"><img class="bx-shot" src={`${IMG}/portal-layout.webp`} alt="Layout Configure: a default badge for all tickets, overrides per ticket, and Full Design or Text Only print style" width="900" height="1548" loading="lazy" decoding="async" /></div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft" id="printers">
+    <div class="bx-wrap bx-row bx-row--flip">
+      <div class="bx-frame bx-frame--tall"><img class="bx-shot" src={`${IMG}/portal-printer-setup.webp`} alt="Printer settings with EventHex Agent setup in three steps and downloads for Windows, macOS and Linux" width="900" height="1548" loading="lazy" decoding="async" /></div>
+      <div class="bx-row__copy">
+        <span class="bx-eyebrow">Printer setup</span>
+        <h2 class="bx-h2 bx-h2--md">Works with the label printers events already use</h2>
+        <p class="bx-text" style="font-size:17px">Install the EventHex Print Agent on the desk computer in three steps. It runs only on that computer and sends badges straight to its installed printers, without a print dialog for every attendee. Already on QZ Tray? The portal prints through it too.</p>
+        <ul class="bx-checks"><li>Print Agent for Windows, macOS and Linux</li><li>Zebra and other thermal label printers</li><li>Mark attendance automatically when a badge prints</li></ul>
+        <span class="bx-use__label">LABEL SIZES (MM)</span>
+        <div class="bx-labels" style="justify-content:flex-start" aria-label="Supported label sizes">
+          <span class="bx-label" style="width:96px;height:26px">76 × 20</span>
+          <span class="bx-label" style="width:96px;height:48px">76 × 38</span>
+          <span class="bx-label" style="width:96px;height:64px">76 × 51</span>
+          <span class="bx-label" style="width:70px;height:105px">100 × 150</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--dark">
+    <div class="bx-wrap bx-row bx-row--flip">
+      <div class="bx-frame" style="background:linear-gradient(160deg,#ffffff1f,#ffffff08);border-color:#ffffff1f"><img class="bx-shot" src={`${IMG}/portal-bulk-print.webp`} alt="Bulk Print dialog to search, filter and select registrations, then print the batch" width="1000" height="1370" loading="lazy" decoding="async" /></div>
+      <div class="bx-row__copy">
+        <span class="bx-eyebrow" style="color:#7BE3B9">Busy doors</span>
+        <h2 class="bx-h2 bx-h2--md">Built for the morning rush</h2>
+        <ul class="bx-checks" style="color:#C7CCE0"><li>Every print is logged with who printed it, when, and the printer type</li><li>Reprints are counted per attendee</li><li>Check-ins queue and sync if Wi-Fi drops</li><li>Live total, checked-in and remaining counts on the home screen</li><li>Bulk print a selection: search, filter, select, print</li><li>A print analytics view for the whole team</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--glow-top">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Print + check-in + certificates</span>
+        <h2 class="bx-h2">One scan does three jobs</h2>
+      </header>
+      <ol class="bx-trio">
+        <li><b>1</b><h3 class="bx-h3">Badge printed</h3><p class="bx-text">The attendee leaves the desk with their own branded badge.</p></li>
+        <li><b>2</b><h3 class="bx-h3">Attendance recorded</h3><p class="bx-text">Check-in counts update for the event team.</p></li>
+        <li><b>3</b><h3 class="bx-h3">Certificate unlocked</h3><p class="bx-text">Only checked-in attendees are eligible for a <a href="/certificate-builder/" style="color:var(--bx-accent)">certificate</a> later.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft">
+    <div class="bx-wrap">
+      <header class="bx-head"><h2 class="bx-h2 bx-h2--md">Connect printing to the rest of the event</h2></header>
+      <div class="bx-links">
+        <a href="/badge-builder/"><h3>Badge Builder</h3><p>Design the badge that prints at the door.</p></a>
+        <a href="/event-check-in/"><h3>Event Check-in</h3><p>Arrivals, attendance and live counts.</p></a>
+        <a href="/certificate-builder/"><h3>Certificate Builder</h3><p>Certificates for attendees who checked in.</p></a>
+        <a href="/event-registration/"><h3>Event Registration</h3><p>The data every badge is printed from.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap bx-faq">
+      <aside>
+        <span class="bx-eyebrow">Quick answers</span>
+        <h2 class="bx-h2 bx-h2--md">Badge printing questions, answered</h2>
+        <p class="bx-text">Planning the desk setup? Read our <a class="inline" href="/blog/event-badge-printing-workflow-registration-check-in/">event badge printing workflow guide</a>.</p>
+        <a class="bx-btn bx-btn--dark" href="/book-a-demo/" style="align-self:flex-start">Book a Demo →</a>
+      </aside>
+      <div class="bx-faq__list">
+        {faqs.map(([q, a], i) => <details class="bx-faq__item" open={i === 0}><summary>{q}</summary><p>{a}</p></details>)}
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  import "../../scripts/builder-motion";
+</script>

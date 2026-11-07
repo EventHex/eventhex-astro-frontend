@@ -45,6 +45,7 @@ export const onRequest: MiddlewareHandler = async (_context, next) => {
     "/event-management": "/features/",
     "/features/registration": "/event-registration/",
     "/features/live-transcription": "/ai-session-recap/",
+    "/badge-certificate-designer": "/badge-builder/",
   };
   const orphanTarget = orphanRedirects[path.replace(/\/$/, "")];
   if (orphanTarget) return redirect301(orphanTarget);
