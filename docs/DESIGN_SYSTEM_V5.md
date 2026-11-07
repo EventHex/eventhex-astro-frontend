@@ -43,7 +43,9 @@ Then a desktop and a 390px mobile screenshot check.
 | 1 | Pilot: `/event-registration/` on the system | done (feat/design-system-v5) |
 | 2 | Site chrome: header, footer CTA, footer, sticky demo bar, cookie consent, WhatsApp widget on tokens | done (feat/design-system-v5) |
 | 3 | Templates: `FeatureEventTypePage` (about 60 sub-pages), `UseCaseLayout`, blog/news/glossary | next |
-| 4 | Home + top feature pages (ticketing, check-in, website builder, badges, certificates, printing) | |
+| 4a | Core Management feature pages (ticketing, check-in, badge printing, payments, virtual & hybrid, invoicing, white-label, dashboard) | done (feat/design-system-v5) |
+| 4b | Speakers & Content (speaker management, session management, call for papers) | done (feat/design-system-v5) |
+| 4c | Home + website builder, badge/certificate builder markup | |
 | 5 | Remaining feature pages (about 25) | |
 | 6 | Industries (16) | |
 | 7 | Integrations (20) + compare (11): one template each, then convert | |
