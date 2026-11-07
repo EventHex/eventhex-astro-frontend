@@ -1,0 +1,22 @@
+---
+/**
+ * Design-system screenshot frame: flat, thin border, soft shadow.
+ * Pass `browser` (a URL label) to show the browser bar used for hero demos.
+ * `height` + `position` crop tall captures with object-fit: cover.
+ */
+interface Props {
+  browser?: string;
+  height?: number;
+  position?: string;
+  class?: string;
+}
+
+const { browser, height, position = "50% 50%", class: className = "" } = Astro.props;
+const style = height ? `height:${height}px;--ds-pos:${position}` : undefined;
+---
+<div class:list={[browser ? "ds-browser" : "ds-shot", height && "ds-shot--crop", className]} style={style}>
+  {browser && (
+    <div class="ds-browser__bar" aria-hidden="true"><i></i><i></i><i></i><span>{browser}</span></div>
+  )}
+  <slot />
+</div>

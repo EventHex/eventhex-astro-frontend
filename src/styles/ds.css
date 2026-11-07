@@ -1,0 +1,202 @@
+/*
+ * EventHex design system (v5)
+ * Source: EventHex Brand Guidelines + the print brochure, applied to the web in the
+ * Event Registration v5 design (canvas "Core Management Page Redesigns").
+ *
+ * Rules
+ * - Pages use these tokens and classes. No raw hex values in page or component CSS.
+ * - Text gradients only on the key phrase of an H1/H2 (.ds-hl on light, .ds-hl-dark on dark).
+ *   H3s, numbers, buttons and body text stay solid.
+ * - Glass (.ds-glass) only sits on a colour stage (.ds-stage) so it reads; dark glass on .ds-night.
+ * - Screenshots use .ds-shot (flat, thin border, soft shadow). No 3D tilt, nothing overlapping them.
+ * - Buttons use weight 500. No floating "sticker" chips over screenshots.
+ */
+
+:root {
+  /* Brand */
+  --ds-blue: #375DFB;
+  --ds-blue-hover: #1C46D4;
+  --ds-indigo: #5B47EE;
+  --ds-violet: #9F81FF;
+  --ds-violet-soft: #AFA3FF;
+  --ds-cyan: #ABFFFF;
+
+  /* Ink */
+  --ds-ink: #22272F;
+  --ds-ink-2: #343B46;
+  --ds-sub: #475467;
+  --ds-body: #525866;
+  --ds-muted: #667085;
+  --ds-label: #868C98;
+
+  /* Surfaces and lines */
+  --ds-white: #FFFFFF;
+  --ds-surface: #F5F8FF;
+  --ds-surface-tint: #E5EBFF;
+  --ds-surface-stage: #EFF2FF;
+  --ds-surface-tab: #F0F2F5;
+  --ds-line: #E8ECF2;
+  --ds-line-strong: #E4E7EC;
+
+  /* Dark */
+  --ds-night: #0D0A2C;
+  --ds-night-2: #14151D;
+  --ds-night-card: #333864;
+  --ds-on-night: #FFFFFF;
+  --ds-on-night-body: #C9CBE8;
+  --ds-on-night-muted: #9A9CC0;
+  --ds-on-night-accent: #AFA3FF;
+
+  /* Semantic */
+  --ds-success: #12B76A;
+  --ds-whatsapp: #25D366;
+
+  /* Gradient system */
+  --ds-g1-text: linear-gradient(90deg, #375DFB 0%, #5B47EE 100%);
+  --ds-g2-text-dark: linear-gradient(90deg, #9DB2FF 0%, #C4B5FF 100%);
+  --ds-g3-band: radial-gradient(55% 90% at 0% 0%, rgba(91, 71, 238, .75) 0%, rgba(91, 71, 238, 0) 70%),
+    linear-gradient(120deg, #1E1670 0%, #3B32C9 55%, #6E4BE0 100%);
+  --ds-g4-stage: radial-gradient(38% 55% at 6% 16%, rgba(110, 138, 255, .50) 0%, rgba(110, 138, 255, 0) 70%),
+    radial-gradient(34% 50% at 94% 20%, rgba(186, 160, 255, .50) 0%, rgba(186, 160, 255, 0) 70%),
+    radial-gradient(40% 55% at 72% 96%, rgba(244, 182, 224, .42) 0%, rgba(244, 182, 224, 0) 70%),
+    var(--ds-surface-stage);
+  --ds-night-bg: radial-gradient(45% 60% at 8% 0%, rgba(91, 71, 238, .55) 0%, rgba(91, 71, 238, 0) 70%),
+    radial-gradient(35% 50% at 96% 100%, rgba(55, 93, 251, .38) 0%, rgba(55, 93, 251, 0) 70%),
+    var(--ds-night);
+
+  /* Glass */
+  --ds-glass-fill: linear-gradient(150deg, rgba(255, 255, 255, .76) 0%, rgba(255, 255, 255, .42) 100%);
+  --ds-glass-edge: rgba(255, 255, 255, .95);
+  --ds-glass-shadow: inset 0 1px 0 #FFFFFF, 0 28px 60px -30px rgba(30, 22, 112, .35);
+  --ds-glass-blur: blur(24px) saturate(150%);
+  --ds-glass-dark-fill: linear-gradient(150deg, rgba(255, 255, 255, .11) 0%, rgba(255, 255, 255, .04) 100%);
+  --ds-glass-dark-edge: rgba(255, 255, 255, .14);
+  --ds-glass-dark-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 30px 60px -30px rgba(0, 0, 0, .6);
+
+  /* Shadows */
+  --ds-shadow-shot: 0 12px 28px rgba(16, 24, 40, .08);
+  --ds-shadow-hero: 0 30px 60px rgba(16, 24, 40, .14);
+  --ds-shadow-btn: 0 12px 24px -10px rgba(55, 93, 251, .6);
+
+  /* Radius */
+  --ds-r-sm: 10px;
+  --ds-r-md: 14px;
+  --ds-r-lg: 18px;
+  --ds-r-xl: 28px;
+  --ds-r-2xl: 36px;
+
+  /* Type */
+  --ds-font-heading: 'Creato Display', system-ui, -apple-system, sans-serif;
+  --ds-font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --ds-h1: clamp(38px, 4.4vw, 60px);
+  --ds-h2: clamp(30px, 3.4vw, 48px);
+  --ds-h3: clamp(22px, 2vw, 30px);
+  --ds-h3-sm: clamp(20px, 1.7vw, 24px);
+
+  /* Layout */
+  --ds-container: 1200px;
+  --ds-gutter: clamp(16px, 4vw, 40px);
+  --ds-section-y: clamp(64px, 8vw, 120px);
+}
+
+/* ---------- Typography ---------- */
+.ds-h1, .ds-h2, .ds-h3 {
+  font-family: var(--ds-font-heading);
+  font-weight: 500;
+  color: var(--ds-ink);
+  margin: 0;
+}
+.ds-h1 { font-size: var(--ds-h1); line-height: 1.08; letter-spacing: -0.035em; }
+.ds-h2 { font-size: var(--ds-h2); line-height: 1.1; letter-spacing: -0.035em; }
+.ds-h3 { font-size: var(--ds-h3); line-height: 1.15; letter-spacing: -0.025em; }
+.ds-h3--sm { font-size: var(--ds-h3-sm); }
+
+.ds-hl, .ds-hl-dark {
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.ds-hl { background-image: var(--ds-g1-text); }
+.ds-hl-dark { background-image: var(--ds-g2-text-dark); }
+
+.ds-eyebrow { font-family: var(--ds-font-body); font-size: 14px; font-weight: 500; color: var(--ds-blue); letter-spacing: .01em; }
+.ds-lead { font-size: 18px; line-height: 1.6; color: var(--ds-body); margin: 0; }
+.ds-body { font-size: 16px; line-height: 1.6; color: var(--ds-body); margin: 0; }
+.ds-small { font-size: 14px; line-height: 1.5; color: var(--ds-muted); margin: 0; }
+.ds-num { font-family: var(--ds-font-heading); font-weight: 500; letter-spacing: -0.02em; color: var(--ds-blue); }
+
+/* ---------- Layout ---------- */
+.ds-container { width: 100%; max-width: calc(var(--ds-container) + var(--ds-gutter) * 2); margin-inline: auto; padding-inline: var(--ds-gutter); box-sizing: border-box; }
+.ds-section { padding-block: var(--ds-section-y); }
+
+/* ---------- Surfaces ---------- */
+.ds-stage { position: relative; background: var(--ds-g4-stage); }
+.ds-night { position: relative; background: var(--ds-night-bg); color: var(--ds-on-night); }
+.ds-band { position: relative; background: var(--ds-g3-band); color: var(--ds-on-night); }
+
+.ds-night .ds-h1, .ds-night .ds-h2, .ds-night .ds-h3,
+.ds-band .ds-h1, .ds-band .ds-h2, .ds-band .ds-h3 { color: var(--ds-on-night); }
+.ds-night .ds-lead, .ds-night .ds-body { color: var(--ds-on-night-body); }
+.ds-night .ds-small { color: var(--ds-on-night-muted); }
+.ds-night .ds-eyebrow { color: var(--ds-on-night-accent); }
+
+.ds-glass {
+  background: var(--ds-glass-fill);
+  border: 1px solid var(--ds-glass-edge);
+  border-radius: var(--ds-r-xl);
+  box-shadow: var(--ds-glass-shadow);
+  -webkit-backdrop-filter: var(--ds-glass-blur);
+  backdrop-filter: var(--ds-glass-blur);
+}
+.ds-glass-dark {
+  background: var(--ds-glass-dark-fill);
+  border: 1px solid var(--ds-glass-dark-edge);
+  border-radius: var(--ds-r-xl);
+  box-shadow: var(--ds-glass-dark-shadow);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+.ds-card { background: var(--ds-white); border: 1px solid var(--ds-line); border-radius: var(--ds-r-xl); }
+
+/* ---------- Media ---------- */
+.ds-shot {
+  border-radius: var(--ds-r-md);
+  overflow: hidden;
+  border: 1px solid var(--ds-line-strong);
+  background: var(--ds-white);
+  box-shadow: var(--ds-shadow-shot);
+}
+.ds-shot > img, .ds-shot > video { display: block; width: 100%; height: auto; }
+.ds-night .ds-shot { border-color: rgba(255, 255, 255, .12); }
+
+.ds-browser { border-radius: var(--ds-r-lg); overflow: hidden; border: 1px solid var(--ds-line-strong); background: var(--ds-white); box-shadow: var(--ds-shadow-hero); }
+.ds-browser__bar { height: 36px; display: flex; align-items: center; gap: 7px; padding: 0 14px; background: var(--ds-surface-tab); border-bottom: 1px solid var(--ds-line-strong); }
+.ds-browser__bar i { width: 10px; height: 10px; border-radius: 50%; background: #F97066; }
+.ds-browser__bar i:nth-child(2) { background: #FDB022; }
+.ds-browser__bar i:nth-child(3) { background: #32D583; }
+.ds-browser__bar span { margin-left: 10px; font-size: 12px; color: var(--ds-muted); background: var(--ds-white); padding: 4px 12px; border-radius: 999px; }
+.ds-browser > img, .ds-browser > video { display: block; width: 100%; height: auto; }
+
+/* ---------- Buttons ---------- */
+.ds-btn, .ds-btn--ghost, .ds-btn--light {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 24px; border-radius: 12px;
+  font-family: var(--ds-font-body); font-size: 16px; font-weight: 500; line-height: 1.2;
+  text-decoration: none; transition: background-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.ds-btn { background: var(--ds-blue); color: var(--ds-white); box-shadow: var(--ds-shadow-btn); }
+.ds-btn:hover { background: var(--ds-blue-hover); color: var(--ds-white); }
+.ds-btn--ghost { background: rgba(255, 255, 255, .75); color: var(--ds-ink); border: 1px solid var(--ds-line); }
+.ds-btn--ghost:hover { background: var(--ds-white); color: var(--ds-ink); }
+.ds-btn--light { background: var(--ds-white); color: #1E1670; }
+.ds-btn--light:hover { background: var(--ds-surface-tint); color: #1E1670; }
+.ds-btn:focus-visible, .ds-btn--ghost:focus-visible, .ds-btn--light:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(55, 93, 251, .3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-btn, .ds-btn--ghost, .ds-btn--light { transition: none; }
+}
+
+/* Cropped screenshots: fixed height, focus point via --ds-pos */
+.ds-shot--crop > img, .ds-shot--crop > video { width: 100%; height: 100%; object-fit: cover; object-position: var(--ds-pos, 50% 50%); }
