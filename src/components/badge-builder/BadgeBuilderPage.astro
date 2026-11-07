@@ -1,0 +1,283 @@
+---
+import "../../styles/builder-pages.css";
+
+export interface Props { faqs: [string, string][] }
+const { faqs } = Astro.props;
+const IMG = "/feature-images/badge-builder";
+
+const controls = [
+  { title: "Text and typography", text: "Size, line height, colour, family and alignment per field.", img: "panel-text.webp", alt: "Text element settings with font size, line height and colour" },
+  { title: "Images and backgrounds", text: "Upload the event artwork or set a colour, then layer fields on top.", img: "panel-background.webp", alt: "Badge background settings with image upload and colour" },
+  { title: "QR code and scan testing", text: "Colour, padding, size and exact position in centimetres.", img: "panel-qr.webp", alt: "QR code settings with colour, padding, size and position" },
+  { title: "Layers and sizes", text: "Preset or custom sizes in cm, fold-over badges, layer order.", img: "panel-layers.webp", alt: "Layers panel listing Full Name, Title, Company and QR code" },
+];
+const fields = [
+  ["Attendee identity", "Name, photo, designation, company, logo, contact."],
+  ["Event details", "Event name, location, dates, banner and logo."],
+  ["Ticket context", "Ticket name, number and ticket dates."],
+  ["Exhibitor context", "Booth number and exhibitor category."],
+  ["Registration answers", "Common and custom questions from the form builder."],
+  ["Custom content", "Static text or images that are not data-bound."],
+];
+const useCases = [
+  { id: "conferences", label: "Conferences", title: "Give every attendee the right event identity", text: "Role-aware badges for attendees, speakers, sponsors and staff without rebuilding the layout for each group.", fields: ["Ticket and participant-type targeting", "Names, titles, companies and QR codes", "One branded system across every role"], imgs: ["badge-delegate-amara.webp", "badge-speaker-sofia.webp"] },
+  { id: "exhibitions", label: "Exhibitions", title: "Make exhibitors and visitors easy to identify", text: "Keep access, booth and company information clear while preserving one consistent exhibition brand.", fields: ["Booth and exhibitor details", "Distinct visitor and vendor designs", "Scan-ready identification at the venue"], imgs: ["badge-delegate-lucas.webp", "badge-delegate-priya.webp"] },
+  { id: "corporate", label: "Corporate", title: "Keep internal and guest roles unmistakable", text: "Adapt the audience rule for employees, partners, VIPs and visitors while keeping production in one place.", fields: ["Clear access and audience labels", "Event and company branding", "Bulk-ready output for event day"], imgs: ["badge-delegate-priya.webp", "badge-speaker-daniel.webp"] },
+  { id: "tech", label: "Tech conferences", title: "Support complex programmes with clear credentials", text: "Distinct badges for attendees, mentors, judges, speakers and sponsors from the same event data.", fields: ["Role-specific designs and information", "Registration-answer data merge", "Fast updates without layout duplication"], imgs: ["badge-speaker-sofia.webp", "badge-delegate-lucas.webp"] },
+  { id: "multi-day", label: "Multi-day", title: "Carry the right access details across every day", text: "Use ticket dates and participant rules to produce badges that stay useful through the whole programme.", fields: ["Ticket and date-aware content", "Consistent identity across venues", "Reprints tracked per attendee"], imgs: ["badge-delegate-amara.webp", "badge-delegate-priya.webp"] },
+];
+---
+<div class="bx-page">
+  <section class="bx-hero">
+    <div class="bx-wrap bx-hero__grid">
+      <div class="bx-hero__copy">
+        <span class="bx-hero__kicker">Event badge builder &amp; onsite printing</span>
+        <h1 class="bx-h1">Design one badge. Print it at the door for every attendee.</h1>
+        <p class="bx-lead">Build a branded badge from attendee, ticket and registration fields, print in bulk before the event, or check people in and print on the spot.</p>
+        <div class="bx-hero__actions">
+          <a class="bx-btn bx-btn--dark" href="/book-a-demo/">See it with your event →</a>
+          <a class="bx-btn bx-btn--line" href="#printing">How onsite printing works</a>
+        </div>
+        <div class="bx-hero__trust"><span>Data-aware layouts</span><span>Scan, check in, print</span><span>Print counts</span></div>
+      </div>
+      <div class="bx-stage" aria-label="One badge template merged into badges for every attendee">
+        <div class="bx-stage__template">
+          <span class="bx-stage__label" style="position:static">1 TEMPLATE</span>
+          <div class="bx-stage__template-card"><img src={`${IMG}/badge-editor-template.webp`} alt="EventHex badge editor with the Horizon template and data fields" width="1200" height="1223" loading="eager" decoding="async" /></div>
+          <div class="bx-stage__chips"><span>Full Name</span><span>Designation</span><span>Company</span><span>QR</span></div>
+        </div>
+        <span class="bx-stage__merge" aria-hidden="true"></span>
+        <span class="bx-stage__label" style="right:36px;top:40px">EVERY ATTENDEE</span>
+        <div class="bx-fan" aria-hidden="true">
+          <img src={`${IMG}/badge-speaker-daniel.webp`} alt="" width="600" height="901" style="left:64%;top:110px;width:190px;transform:translateX(-100%) rotate(-9deg)" loading="eager" />
+          <img src={`${IMG}/badge-delegate-amara.webp`} alt="" width="600" height="901" style="left:64%;top:120px;width:190px;transform:translateX(8%) rotate(8deg)" loading="eager" />
+        </div>
+        <div class="bx-loop" style="left:64%;top:84px;width:214px;transform:translateX(-50%)">
+          <img src={`${IMG}/badge-delegate-priya.webp`} alt="Delegate badge for Priya Raman, merged from registration data" width="600" height="901" loading="eager" />
+          <img src={`${IMG}/badge-delegate-amara.webp`} alt="" width="600" height="901" loading="lazy" />
+          <img src={`${IMG}/badge-delegate-lucas.webp`} alt="" width="600" height="901" loading="lazy" />
+          <img src={`${IMG}/badge-speaker-daniel.webp`} alt="" width="600" height="901" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-rail" aria-label="Badge workflow">
+    <div class="bx-wrap bx-rail__inner">
+      <span class="bx-rail__label">From registration to lanyard</span>
+      <ol class="bx-rail__steps">
+        <li><b>Design</b><span>Badge layout</span></li>
+        <li><b>Target</b><span>Tickets</span></li>
+        <li><b>Merge</b><span>Attendee data</span></li>
+        <li><b>Print</b><span>Bulk or at the door</span></li>
+        <li><b>Track</b><span>Print counts</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--glow">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Visual canvas controls</span>
+        <h2 class="bx-h2">Build the badge from the elements your event uses</h2>
+        <p class="bx-lead">Place identity, branding, QR codes and data fields with the controls production needs.</p>
+      </header>
+      <div class="bx-cols">
+        {controls.map((c) => (
+          <article class="bx-cols__item">
+            <h3 class="bx-h3">{c.title}</h3>
+            <p class="bx-text">{c.text}</p>
+            <div class="bx-cols__media"><img src={`${IMG}/${c.img}`} alt={c.alt} width="640" height="880" loading="lazy" decoding="async" /></div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--dark">
+    <div class="bx-wrap">
+      <header class="bx-head"><h2 class="bx-h2">Place identity, event, ticket and registration answers where they belong</h2></header>
+      <div class="bx-darkgrid">
+        <ol class="bx-darkgrid__list">
+          {fields.map(([t, d], i) => <li><b>{String(i + 1).padStart(2, "0")}</b><div><strong>{t}</strong><span>{d}</span></div></li>)}
+        </ol>
+        <div class="bx-darkgrid__media">
+          <div class="bx-glass"><span class="bx-glass__label">USER FIELDS</span><div class="bx-glass__frame"><img src={`${IMG}/fields-user.webp`} alt="User Fields palette with QR code, full name, company, mobile and email fields" width="592" height="1672" loading="lazy" decoding="async" /></div></div>
+          <div class="bx-glass"><span class="bx-glass__label">EVENT FIELDS</span><div class="bx-glass__frame"><img src={`${IMG}/fields-event.webp`} alt="Event Fields palette with event name, location, dates, ticket name and number" width="592" height="1400" loading="lazy" decoding="async" /></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Apply the right design</span>
+        <h2 class="bx-h2 bx-h2--md">One badge for everyone, or a design for each audience</h2>
+      </header>
+      <div class="bx-split">
+        <div class="bx-split__side">
+          <div><span class="bx-eyebrow">Broad audience</span><h3 class="bx-h3">Common design</h3><p class="bx-text" style="margin-top:8px">One consistent badge across every ticket and participant type.</p></div>
+          <div class="bx-split__stage">
+            <div class="bx-split__tickets"><span>Speaker</span><span>General Admission</span><span>Free Pass</span></div>
+            <span class="bx-split__arrow" aria-hidden="true">→</span>
+            <img class="bx-split__render" src={`${IMG}/badge-delegate-priya.webp`} alt="Common delegate badge used for every ticket" width="600" height="901" loading="lazy" decoding="async" />
+          </div>
+        </div>
+        <div class="bx-split__side bx-split__side--warm">
+          <div><span class="bx-eyebrow">Targeted audience</span><h3 class="bx-h3">Specific design</h3><p class="bx-text" style="margin-top:8px">Pick a ticket or participant type when a role needs its own badge.</p></div>
+          <div class="bx-split__stage">
+            <div class="bx-split__rule"><img src={`${IMG}/rule-specific-ticket.webp`} alt="Badge settings set to Specific Ticket: Speaker" width="640" height="300" loading="lazy" decoding="async" /></div>
+            <span class="bx-split__arrow" aria-hidden="true">→</span>
+            <img class="bx-split__render" src={`${IMG}/badge-speaker-daniel.webp`} alt="Speaker-only badge" width="600" height="901" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft" id="printing">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Event badge printing</span>
+        <h2 class="bx-h2">Print before the event, or at the door in seconds</h2>
+      </header>
+      <div class="bx-modes">
+        <article class="bx-mode">
+          <div><span class="bx-eyebrow" style="color:#667085">Before the event</span><h3 class="bx-h3" style="margin-top:8px">Bulk print from the admin</h3></div>
+          <div class="bx-mode__media"><img src={`${IMG}/registrations.webp`} alt="Registration list with ticket types ready for badge printing" width="1200" height="698" loading="lazy" decoding="async" /></div>
+          <ul class="bx-checks"><li>Filter by ticket or pick registrations</li><li>One print-ready PDF for the run</li><li>Print and download counts per attendee</li></ul>
+        </article>
+        <article class="bx-mode bx-mode--dark">
+          <div><span class="bx-eyebrow">At the door · Event Day Portal</span><h3 class="bx-h3" style="margin-top:8px">Scan, check in, print</h3></div>
+          <ol class="bx-steps3">
+            <li><b>01</b>Scan the QR or search a name</li>
+            <li><b>02</b>Attendance is marked</li>
+            <li><b>03</b>Their badge prints<img src={`${IMG}/badge-delegate-priya.webp`} alt="" width="600" height="901" loading="lazy" /></li>
+          </ol>
+          <ul class="bx-mode__facts">
+            <li>Zebra and thermal label printers</li><li>EventHex Print Agent or QZ Tray</li>
+            <li>Prints the badge you designed</li><li>Names in any script (Arabic, Devanagari…)</li>
+            <li>Who printed, when, how many times</li><li>Check-ins queue if Wi-Fi drops</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <h2 class="bx-h2 bx-h2--md">Run a print sample before bulk production</h2>
+        <p class="bx-lead">Confirm names, spacing and QR scannability with real data.</p>
+      </header>
+      <div class="bx-cross">
+        <div class="bx-cross__cell"><h3 class="bx-h3">Badge print test</h3><p class="bx-text">Verify dimensions, long names, QR readability, printer path, media and reprint policy.</p></div>
+        <div class="bx-cross__cell bx-cross__cell--visual"><div class="bx-lanyard"><img src={`${IMG}/badge-delegate-lucas.webp`} alt="Printed delegate badge on a lanyard" width="600" height="901" loading="lazy" decoding="async" /></div></div>
+        <div class="bx-cross__cell bx-cross__cell--chips"><span class="bx-chip">76 × 38 mm label</span><span class="bx-chip">76 × 51 mm label</span><span class="bx-chip">100 × 150 mm</span><span class="bx-chip">A6 portrait</span><span class="bx-chip">Fold-over</span></div>
+        <div class="bx-cross__cell"><h3 class="bx-h3">Badge stock that fits</h3><p class="bx-text">Thermal label sizes at the door, card sizes for pre-printed badges.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--glow-top">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">Badges + certificates</span>
+        <h2 class="bx-h2">The badge scan at the door decides the certificate later</h2>
+      </header>
+      <ol class="bx-trio">
+        <li><b>1</b><h3 class="bx-h3">One set of attendee data</h3><p class="bx-text">Badges and certificates read the same registrations. No exports, no mail merge.</p></li>
+        <li><b>2</b><h3 class="bx-h3">Check-in marks attendance</h3><p class="bx-text">Scanning a badge records who actually came. Only attendees present get certificates.</p></li>
+        <li><b>3</b><h3 class="bx-h3">One brand from lanyard to PDF</h3><p class="bx-text">The same designer and event artwork for event-day badges and post-event certificates.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section" aria-labelledby="bx-use-title">
+    <div class="bx-wrap bx-use" data-bx-tabs>
+      <h2 class="bx-h2 bx-h2--plain" id="bx-use-title" style="text-align:center;max-width:860px">Built for every role that needs its own badge</h2>
+      <div class="bx-use__tabs" role="tablist" aria-label="Event types">
+        {useCases.map((u, i) => <button class="bx-use__tab" type="button" role="tab" id={`bx-tab-${u.id}`} aria-controls={`bx-panel-${u.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1}>{u.label}</button>)}
+      </div>
+      {useCases.map((u, i) => (
+        <article class="bx-use__panel" role="tabpanel" id={`bx-panel-${u.id}`} aria-labelledby={`bx-tab-${u.id}`} hidden={i !== 0}>
+          <div class="bx-use__copy">
+            <h3>{u.title}</h3>
+            <p class="bx-text">{u.text}</p>
+            <span class="bx-use__label">BUILT WITH</span>
+            <ul class="bx-checks">{u.fields.map((f) => <li>{f}</li>)}</ul>
+          </div>
+          <div class="bx-use__visual">
+            <img src={`${IMG}/${u.imgs[0]}`} alt="" width="600" height="901" style="width:190px" loading="lazy" decoding="async" />
+            <img src={`${IMG}/${u.imgs[1]}`} alt={`Example badges for ${u.label.toLowerCase()}`} width="600" height="901" style="width:220px" loading="lazy" decoding="async" />
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="bx-section" style="padding-top:0">
+    <div class="bx-wrap">
+      <div class="bx-xlink">
+        <div class="bx-xlink__copy">
+          <span class="bx-eyebrow">After the event</span>
+          <h2>Send personalised certificates to everyone who checked in</h2>
+          <a class="bx-btn bx-btn--light" href="/certificate-builder/">Explore Certificate Builder →</a>
+        </div>
+        <div class="bx-xlink__media"><img src={`${IMG}/certificate-preview.webp`} alt="Horizon certificate of participation" width="1200" height="849" style="width:100%;transform:rotate(2deg)" loading="lazy" decoding="async" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-section--soft">
+    <div class="bx-wrap">
+      <header class="bx-head"><h2 class="bx-h2 bx-h2--md">Connect badges to event operations</h2></header>
+      <div class="bx-links">
+        <a href="/event-registration/"><h3>Event Registration</h3><p>Collect the identity and custom fields badges use.</p></a>
+        <a href="/event-check-in/"><h3>Event Check-in</h3><p>Validate arrivals alongside badge printing.</p></a>
+        <a href="/certificate-builder/"><h3>Certificate Builder</h3><p>Named certificates for attendees who came.</p></a>
+        <a href="/event-ticketing/"><h3>Event Ticketing</h3><p>The tickets that decide which badge prints.</p></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section">
+    <div class="bx-wrap bx-faq">
+      <aside>
+        <span class="bx-eyebrow">Quick answers</span>
+        <h2 class="bx-h2 bx-h2--md">Badge questions, answered</h2>
+        <p class="bx-text">Planning event-day printing? Follow our <a class="inline" href="/blog/event-badge-printing-workflow-registration-check-in/">event badge printing workflow guide</a>.</p>
+        <a class="bx-btn bx-btn--dark" href="/book-a-demo/" style="align-self:flex-start">Book a Demo →</a>
+      </aside>
+      <div class="bx-faq__list">
+        {faqs.map(([q, a], i) => <details class="bx-faq__item" open={i === 0}><summary>{q}</summary><p>{a}</p></details>)}
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-bx-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls') || '');
+        if (!panel) return;
+        panel.hidden = !on;
+        if (on) { panel.classList.remove('is-entering'); void panel.offsetWidth; panel.classList.add('is-entering'); }
+      });
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        select(next); next.focus();
+      });
+    });
+  });
+</script>

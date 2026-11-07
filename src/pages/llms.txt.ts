@@ -23,7 +23,8 @@ EventHex provides an end-to-end event management platform with AI-powered tools 
 - [Call for Papers](https://eventhex.ai/call-for-papers/): Abstract submission and peer review management
 - [Event Analytics](https://eventhex.ai/event-analytics/): Real-time dashboards and post-event reporting
 - [Event Gamification](https://eventhex.ai/event-gamification/): Points, leaderboards, and challenges to boost engagement
-- [Badge & Certificate Designer](https://eventhex.ai/badge-certificate-designer/): Custom badge printing and digital certificates
+- [Badge Builder](https://eventhex.ai/badge-builder/): Event badge design, bulk printing and scan-to-print onsite badge printing
+- [Certificate Builder](https://eventhex.ai/certificate-builder/): Named certificate PDFs for attendees, delivered by email, WhatsApp and share link
 - [Event Marketing](https://eventhex.ai/event-marketing/): Email and WhatsApp campaign management
 - [Event Mobile App](https://eventhex.ai/event-mobile-app/): White-label mobile app for attendees
 - [Event Website Builder](https://eventhex.ai/event-website-builder/): No-code event website creation
