@@ -5,6 +5,11 @@ export interface Props { faqs: [string, string][] }
 const { faqs } = Astro.props;
 const IMG = "/feature-images/event-badge-printing";
 
+const desk = [
+  { title: "Confirm the attendee", text: "Name, company, ticket and QR on one card, with Print Badge and Preview right beside it.", img: "portal-attendee-card.webp", alt: "Attendee card in the Event Day Portal with company, designation, ticket and QR code", w: 900, h: 1224 },
+  { title: "Fix details on the spot", text: "Correct a name, company or designation at the desk, then Save & Print in one step.", img: "portal-update-details.webp", alt: "Update Information form with first name, last name, email, company and designation, and Save & Print", w: 900, h: 1080 },
+  { title: "Preview before it prints", text: "See the exact badge at its real size before it goes to the label printer.", img: "portal-badge-preview.webp", alt: "Badge Preview at 10 × 15 cm showing the attendee's Horizon badge with QR code", w: 900, h: 1462 },
+];
 const ways = [
   { title: "Scan the QR code", text: "Use a handheld barcode scanner, or the device camera, to read the attendee's QR. They are found and checked in instantly.", img: "portal-scanner.webp", alt: "Event Day Portal barcode scanner screen ready to scan", w: 1000, h: 750 },
   { title: "Search by name", text: "Lost their QR? Search by name or ticket, see the ticket type, and print with one tap.", img: "portal-search.webp", alt: "Event Day Portal attendee search with Print buttons", w: 1200, h: 900 },
@@ -74,6 +79,26 @@ const ways = [
   </section>
 
   <section class="bx-section bx-section--soft">
+    <div class="bx-wrap">
+      <header class="bx-head">
+        <span class="bx-eyebrow">At the desk</span>
+        <h2 class="bx-h2">Confirm, fix and print without leaving the screen</h2>
+        <p class="bx-lead">Everything staff need about one attendee is on one card, so the line keeps moving.</p>
+      </header>
+      <ol class="bx-ways bx-ways--contain">
+        {desk.map((d, i) => (
+          <li>
+            <div class="bx-ways__media"><img src={`${IMG}/${d.img}`} alt={d.alt} width={d.w} height={d.h} loading="lazy" decoding="async" /></div>
+            <span class="bx-eyebrow">Step {i + 1}</span>
+            <h3 class="bx-h3" style="font-size:22px">{d.title}</h3>
+            <p class="bx-text">{d.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="bx-section">
     <div class="bx-wrap bx-row">
       <div class="bx-row__copy">
         <span class="bx-eyebrow">Your design, on the label</span>
@@ -85,7 +110,7 @@ const ways = [
     </div>
   </section>
 
-  <section class="bx-section" id="printers">
+  <section class="bx-section bx-section--soft" id="printers">
     <div class="bx-wrap bx-row bx-row--flip">
       <div class="bx-frame bx-frame--tall"><img class="bx-shot" src={`${IMG}/portal-printer-setup.webp`} alt="Printer settings with EventHex Agent setup in three steps and downloads for Windows, macOS and Linux" width="900" height="1548" loading="lazy" decoding="async" /></div>
       <div class="bx-row__copy">
