@@ -31,6 +31,7 @@ The approved Event Registration v5 design (canvas "Core Management Page Redesign
 node scripts/ds/content-guard.mjs /page-path/ --local http://localhost:<port>   # must print ok for headings, links, image alts, body text
 node scripts/ds/hex-report.mjs <file>                                            # must be 0 for converted files
 node scripts/ds/tokenize.mjs <file...> [--write]                                 # maps brand/neutral hex to tokens, lists the rest
+node scripts/ds/grey-fade.mjs <file...>                                          # replaces legacy ink-to-grey heading fades with solid ink
 node --test test/*.test.ts
 ```
 Then a desktop and a 390px mobile screenshot check.
@@ -45,7 +46,8 @@ Then a desktop and a 390px mobile screenshot check.
 | 3 | Templates: `FeatureEventTypePage` (about 60 sub-pages), `UseCaseLayout`, blog/news/glossary | next |
 | 4a | Core Management feature pages (ticketing, check-in, badge printing, payments, virtual & hybrid, invoicing, white-label, dashboard) | done (feat/design-system-v5) |
 | 4b | Speakers & Content (speaker management, session management, call for papers) | done (feat/design-system-v5) |
-| 4c | Home + website builder, badge/certificate builder markup | |
+| 4c | AI Features (AI platform, copilot, smart-connect, photo gallery, session recap, form builder) | done (feat/design-system-v5) |
+| 4d | Marketing & Growth, Engagement, Design & Analytics, home | |
 | 5 | Remaining feature pages (about 25) | |
 | 6 | Industries (16) | |
 | 7 | Integrations (20) + compare (11): one template each, then convert | |

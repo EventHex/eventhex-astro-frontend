@@ -14,7 +14,7 @@ const walk = (dir) => {
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p);
     else if (/\.(astro|css|ts)$/.test(name) && !skip.has(p) && p.startsWith(prefix)) {
-      const n = (readFileSync(p, "utf8").match(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g) ?? []).length;
+      const n = (readFileSync(p, "utf8").replace(/href="#[^"]*"/g, "").match(/#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b/g) ?? []).length; // in-page anchors are not colours
       if (n) rows.push([n, p]);
     }
   }
