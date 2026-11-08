@@ -46,7 +46,7 @@ const tabs = [
   },
 ];
 
-const ICON = '<svg class="egb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>';
+const ICON = '<svg class="egb-card__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" style="fill:color-mix(in srgb, var(--ds-cat-slate) 50%, white)"/><rect x="18" y="2" width="12" height="12" rx="3" style="fill:color-mix(in srgb, var(--ds-cat-slate) 50%, white)"/><rect x="2" y="18" width="12" height="12" rx="3" style="fill:color-mix(in srgb, var(--ds-cat-slate) 50%, white)"/><rect x="18" y="18" width="12" height="12" rx="3" style="fill:color-mix(in srgb, var(--ds-cat-slate) 50%, white)"/></svg>';
 const layouts = ["a", "b", "c"];
 ---
 
@@ -140,16 +140,16 @@ const layouts = ["a", "b", "c"];
 
   .egb-nav {
     display: flex; justify-content: center; gap: 0;
-    background: #F0F2F5; border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
+    background: var(--ds-surface-tab); border-radius: 50px; padding: 4px; width: fit-content; margin: 0 auto 40px;
   }
   .egb-tab {
     background: transparent; border: none; border-radius: 50px; padding: 10px 32px;
-    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: #4D5A6B;
+    font-family: var(--font-body); font-size: 15px; font-weight: 500; color: color-mix(in srgb, var(--ds-muted) 80%, black);
     cursor: pointer; transition: all 0.3s cubic-bezier(.4,0,.2,1); white-space: nowrap;
   }
   .egb-tab:hover { background: rgba(55,93,251,.08); }
   .egb-tab--active {
-    background: var(--brand-blue) !important; color: #fff !important;
+    background: var(--brand-blue) !important; color: var(--ds-white) !important;
     box-shadow: 0 2px 8px rgba(55,93,251,0.3);
   }
 
@@ -180,17 +180,17 @@ const layouts = ["a", "b", "c"];
   @property --egb-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .egb-card {
     position: relative;
-    background: linear-gradient(180deg, #FFFFFF 0%, #F1F5FF 100%);
-    border: 1px solid #E8ECF2; border-radius: 20px; overflow: hidden;
+    background: linear-gradient(180deg, var(--ds-white) 0%, var(--ds-surface) 100%);
+    border: 1px solid var(--ds-line); border-radius: 20px; overflow: hidden;
     box-shadow: 0 2px 12px rgba(0,0,0,.03);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     opacity: 0; animation: egbCardIn 0.5s ease forwards;
   }
   .egb-card::after {
     content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
-    background: conic-gradient(from var(--egb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    background: conic-gradient(from var(--egb-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, color-mix(in srgb, var(--ds-blue) 70%, white) 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0); mask-composite: exclude;
     opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
   }
   .egb-card:hover {
@@ -215,7 +215,7 @@ const layouts = ["a", "b", "c"];
     color: var(--heading-dark); margin: 0 0 6px;
   }
   .egb-card--sm .egb-card__title { font-size: 17px; }
-  .egb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: #667085; margin: 0; }
+  .egb-card__desc { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: var(--ds-muted); margin: 0; }
   .egb-card--sm .egb-card__desc { font-size: 13px; }
 
   .egb-card__img {
