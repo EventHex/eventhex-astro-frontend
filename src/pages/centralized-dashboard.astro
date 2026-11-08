@@ -41,7 +41,7 @@ const softwareSchema = {
   footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
   footerCtaProofItems={["Portfolio visibility", "Selective cloning", "Event-scoped access"]}
-  footerCtaImageSrc="/feature-images/centralized-dashboard/event-portfolio-visual.svg"
+  footerCtaImageSrc="/feature-images/centralized-dashboard/v5/footer-portfolio.webp"
   footerCtaImageAlt="EventHex organization dashboard showing multiple events with status and metrics"
 >
   <Fragment slot="head">
@@ -56,6 +56,24 @@ const softwareSchema = {
     <FaqSection />
   </div>
 </MarketingLayout>
+
+<script>
+  // Play the demo loops only while they are on screen; keep them paused for reduced motion.
+  const cddLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.cdd-loop'));
+  const cddReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (cddReduced) {
+    cddLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const cddObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    cddLoops.forEach((video) => cddObserver.observe(video));
+  }
+</script>
 
 <style is:global>
   /* Sections carry their own backgrounds (white, tinted bands, dark band);
@@ -114,6 +132,14 @@ const softwareSchema = {
   .cdd-page-bg.cdd-page-bg .cdd-faq__item { background: var(--ds-surface); border-color: var(--ds-line); }
   .cdd-page-bg.cdd-page-bg .cdd-faq__item[open] { background: var(--ds-surface-tint); }
   .cdd-page-bg.cdd-page-bg .cdd-faq__heading { color: var(--ds-ink); font-weight: 500; letter-spacing: -0.035em; }
+
+  /* Real captures: flat frames, centred, width set per frame via --cdd-w */
+  .cdd-page-bg .cdd-media { width: min(var(--cdd-w, 1040px), 100%); margin: 0 auto 48px; }
+  .cdd-page-bg .cdd-shot--crop > img { aspect-ratio: var(--ar, 16 / 9); object-fit: cover; object-position: var(--pos, 50% 0%); }
+  .cdd-page-bg .cdd-bento-product-shot[style*="--ar"] { aspect-ratio: var(--ar); object-fit: cover; object-position: var(--pos, 50% 0%); }
+  .cdd-page-bg .cdd-darkband .ds-shot { border-color: var(--ds-glass-dark-edge); }
+  .cdd-page-bg .cdd-steps .cdd-media { margin-top: 0; }
+  .cdd-page-bg .cdd-flow-quad__cell--media .ds-shot { width: 100%; }
 
   /* Dark glass */
   .cdd-page-bg.cdd-page-bg .cdd-cap { border: 1px solid var(--ds-glass-dark-edge); border-radius: var(--ds-r-xl); background: var(--ds-glass-dark-fill); box-shadow: var(--ds-glass-dark-shadow); }

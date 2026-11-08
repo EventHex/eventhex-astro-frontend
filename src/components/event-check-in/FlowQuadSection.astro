@@ -18,10 +18,6 @@ interface Shot {
 
 interface Composite {
   primary: Shot;
-  secondary: Shot;
-  detail?: Shot;
-  status: string;
-  action: string;
 }
 
 interface Props {
@@ -65,46 +61,14 @@ const [firstComposite, secondComposite] = composites;
       class="ecx-flow__cell ecx-flow__cell--media animate-on-scroll"
       data-animation="fadeInRight"
     >
-      <div class="ecx-composite">
+      <div class="ds-shot ecx-flow__shot">
         <img
-          class="ecx-composite__screen ecx-composite__screen--primary"
           src={firstComposite.primary.src}
           alt={firstComposite.primary.alt}
           width={firstComposite.primary.width}
           height={firstComposite.primary.height}
           loading="lazy"
           decoding="async"
-        />
-        <img
-          class="ecx-composite__screen ecx-composite__screen--secondary"
-          src={firstComposite.secondary.src}
-          alt={firstComposite.secondary.alt}
-          width={firstComposite.secondary.width}
-          height={firstComposite.secondary.height}
-          loading="lazy"
-          decoding="async"
-        />
-        {firstComposite.detail && (
-          <img
-            class="ecx-composite__screen ecx-composite__screen--detail"
-            src={firstComposite.detail.src}
-            alt={firstComposite.detail.alt}
-            width={firstComposite.detail.width}
-            height={firstComposite.detail.height}
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-        <span class="ecx-composite__status">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
-          {firstComposite.status}
-        </span>
-        <span class="ecx-composite__action">{firstComposite.action}</span>
-        <img
-          class="ecx-composite__cursor"
-          src="/feature-images/event-registration/cursor.svg"
-          alt=""
-          aria-hidden="true"
         />
       </div>
     </div>
@@ -113,46 +77,14 @@ const [firstComposite, secondComposite] = composites;
       class="ecx-flow__cell ecx-flow__cell--media animate-on-scroll"
       data-animation="fadeInLeft"
     >
-      <div class="ecx-composite">
+      <div class="ds-shot ecx-flow__shot">
         <img
-          class="ecx-composite__screen ecx-composite__screen--primary"
           src={secondComposite.primary.src}
           alt={secondComposite.primary.alt}
           width={secondComposite.primary.width}
           height={secondComposite.primary.height}
           loading="lazy"
           decoding="async"
-        />
-        <img
-          class="ecx-composite__screen ecx-composite__screen--secondary"
-          src={secondComposite.secondary.src}
-          alt={secondComposite.secondary.alt}
-          width={secondComposite.secondary.width}
-          height={secondComposite.secondary.height}
-          loading="lazy"
-          decoding="async"
-        />
-        {secondComposite.detail && (
-          <img
-            class="ecx-composite__screen ecx-composite__screen--detail"
-            src={secondComposite.detail.src}
-            alt={secondComposite.detail.alt}
-            width={secondComposite.detail.width}
-            height={secondComposite.detail.height}
-            loading="lazy"
-            decoding="async"
-          />
-        )}
-        <span class="ecx-composite__status">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
-          {secondComposite.status}
-        </span>
-        <span class="ecx-composite__action">{secondComposite.action}</span>
-        <img
-          class="ecx-composite__cursor"
-          src="/feature-images/event-registration/cursor.svg"
-          alt=""
-          aria-hidden="true"
         />
       </div>
     </div>
@@ -175,6 +107,8 @@ const [firstComposite, secondComposite] = composites;
       </svg>
     </span>
   </div>
+
+  <slot />
 
   {note && <p class="ecx-flow__note">{note}</p>}
 </section>
@@ -298,101 +232,6 @@ const [firstComposite, secondComposite] = composites;
     background: var(--ds-success);
   }
 
-  .ecx-composite {
-    position: relative;
-    width: 100%;
-    height: 320px;
-  }
-
-  .ecx-composite__screen {
-    position: absolute;
-    display: block;
-    object-fit: cover;
-    object-position: top left;
-    border: 1px solid rgba(209, 214, 226, 0.92);
-    border-radius: 12px;
-    background: var(--ds-white);
-    box-shadow: 0 16px 34px rgba(31, 41, 72, 0.14);
-  }
-
-  .ecx-composite__screen--primary {
-    top: 42px;
-    left: 20px;
-    z-index: 1;
-    width: 74%;
-    height: 62%;
-  }
-
-  .ecx-composite__screen--secondary {
-    right: 18px;
-    bottom: 20px;
-    z-index: 2;
-    width: 64%;
-    height: 52%;
-  }
-
-  .ecx-composite__screen--detail {
-    left: 24px;
-    bottom: 12px;
-    z-index: 3;
-    width: 30%;
-    height: 48%;
-  }
-
-  .ecx-composite__status,
-  .ecx-composite__action {
-    position: absolute;
-    z-index: 5;
-    display: inline-flex;
-    align-items: center;
-    white-space: nowrap;
-    border-radius: 10px;
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 1;
-    box-shadow: 0 10px 24px rgba(31, 41, 72, 0.16);
-  }
-
-  .ecx-composite__status {
-    top: 14px;
-    left: 14px;
-    gap: 7px;
-    padding: 9px 11px;
-    border: 1px solid var(--ds-line-strong);
-    background: var(--ds-surface);
-    color: var(--ds-cat-green);
-  }
-
-  .ecx-composite__status svg {
-    width: 15px;
-    height: 15px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2.25;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  .ecx-composite__action {
-    right: 14px;
-    bottom: 14px;
-    padding: 10px 13px;
-    background: var(--ds-blue);
-    color: var(--ds-white);
-  }
-
-  .ecx-composite__cursor {
-    position: absolute;
-    right: 4px;
-    bottom: 34px;
-    z-index: 6;
-    width: 22px;
-    height: 26px;
-    filter: drop-shadow(0 3px 3px rgba(17, 24, 39, 0.25));
-    pointer-events: none;
-  }
-
   .ecx-flow__note {
     max-width: 920px;
     margin: 28px auto 0;
@@ -434,15 +273,6 @@ const [firstComposite, secondComposite] = composites;
     .ecx-flow__cell--media {
       padding: 16px 20px 32px;
     }
-    .ecx-composite {
-      height: 285px;
-    }
-    .ecx-composite__screen--primary {
-      width: 78%;
-    }
-    .ecx-composite__screen--secondary {
-      width: 68%;
-    }
   }
 
   /* ===== EventHex design system v5 overrides (tokens only) ===== */
@@ -461,9 +291,8 @@ const [firstComposite, secondComposite] = composites;
   .ecx-flow__cell-title { font-weight: 500; letter-spacing: -0.025em; color: var(--ds-ink); }
   .ecx-flow__cell-text { color: var(--ds-body); }
   .ecx-flow__cell-note { color: var(--ds-sub); font-weight: 500; }
-  .ecx-composite__screen { border-color: var(--ds-line-strong); box-shadow: var(--ds-shadow-shot); }
-  .ecx-composite__status, .ecx-composite__action { box-shadow: none; font-weight: 500; }
-  .ecx-composite__cursor { display: none; }
+  .ecx-flow__cell--media { padding: 22px; }
+  .ecx-flow__shot { width: 100%; }
   .ecx-flow__note { color: var(--ds-body); }
   @media (max-width: 768px) {
     .ecx-flow__cell, .ecx-flow__cell:nth-child(2n), .ecx-flow__cell:nth-child(n + 3), .ecx-flow__cell:nth-child(3), .ecx-flow__cell:nth-child(4) { border: 1px solid var(--ds-glass-edge); }

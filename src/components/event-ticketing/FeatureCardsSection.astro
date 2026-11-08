@@ -7,32 +7,33 @@ const featureCards = [
   {
     title: "Simplified Checkout for Higher Conversions",
     desc: "Provide attendees with a mobile-first, intuitive ticket booking flow. From selection to secure payment, the frictionless design minimizes drop-offs and boosts ticket completion rates across devices.",
-    image: "/feature-images/event-ticketing/simplified-checkout.svg",
-    alt: "EventHex checkout flow preview on desktop display",
+    shots: [{ src: "checkout-select", w: 1600, h: 983, alt: "Meridian Health Congress checkout: four ticket types with branded thumbnails, two selected, order summary with $680 total" }],
   },
   {
     title: "Secure Payment Processing",
     desc: "Get instant payouts with your own payment gateway at 0% platform fees, or use EventHex's competitive rates. Either way, payments are secure, fast, and fully transparent for organizers and attendees.",
-    image: "/feature-images/event-ticketing/secure-payment.svg",
-    alt: "Tablet preview of secure ticket payment processing",
+    shots: [{ src: "payment-options", w: 1600, h: 438, alt: "Payment configuration: EventHex Payment, Organization Payment, Custom Payment with your own Stripe, Razorpay or TapPay keys, and Manual Payment" }],
   },
   {
     title: "QR Code Scanning & Badge Printing",
     desc: "Generate QR-enabled tickets that streamline event check-ins. Pair them with on-demand badge printing for instant attendee identification — a hassle-free registration experience at the venue.",
-    image: "/feature-images/event-ticketing/qr-badge-cards.svg",
-    alt: "Printed badges and QR-enabled event tickets",
+    layout: "tickets",
+    shots: [
+      { src: "eticket-pulse", w: 420, h: 720, alt: "Pulse Tech Expo e-ticket with QR code" },
+      { src: "eticket-ascend", w: 420, h: 720, alt: "Ascend Impact Summit e-ticket with QR code" },
+      { src: "eticket-meridian", w: 420, h: 744, alt: "Meridian Health Congress e-ticket with QR code" },
+      { src: "event-day-portal", w: 900, h: 1224, alt: "Event Day Portal attendee card with QR code and Print Badge button" },
+    ],
   },
   {
     title: "Custom Ticketing with Brand Support",
     desc: "Create unlimited ticket types — early-bird, VIP, group bundles — with discounts, coupon codes, and campaign pricing. Every ticket carries your event branding for a professional, memorable experience.",
-    image: "/feature-images/event-ticketing/custom-ticketing-brand.svg",
-    alt: "Tablet preview of branded ticket customization",
+    shots: [{ video: "tk-edit", w: 1280, h: 800, alt: "Meridian Health Congress ticket list with the Member ticket at $290 and 412 registered, then the Edit Ticket panel with the sale window Nov 7 2026 to Jan 23 2027 and the $290 price" }],
   },
   {
     title: "Paid Add-Ons, Coupon Codes & Price Quotes",
     desc: "Offer paid add-ons like workshop seats, meal plans, or parking at checkout. Generate shareable price quotes for group buyers, and issue targeted coupon codes — percentage, flat, or early-bird — to drive conversions.",
-    image: "/feature-images/event-ticketing/simplified-checkout.svg",
-    alt: "Add-ons and coupon code management for event ticketing",
+    shots: [{ src: "coupons", w: 1600, h: 600, alt: "Discount coupons for Meridian Health Congress: MEMBER10 10 percent with 120 of 500 used, EARLY50 $50 with 64 of 200 used, FACULTY100 and GROUP15 with none used yet" }],
   },
 ];
 ---
@@ -58,8 +59,20 @@ const featureCards = [
             <p class="etf-card-desc">{card.desc}</p>
             <a href="/book-a-demo/" class="ds-btn--light">Explore More</a>
           </div>
-          <div class="etf-card-image">
-            <img src={card.image} alt={card.alt} loading="lazy" />
+          <div class={`etf-card-image${card.layout ? ` etf-card-image--${card.layout}` : ""}`}>
+            {card.shots.map((shot) => (
+              <div class="ds-shot etf-shot">
+                {shot.video ? (
+                  <video class="eth-loop" autoplay muted loop playsinline preload="metadata" width={shot.w} height={shot.h}
+                    poster={`/feature-images/event-ticketing/v5/${shot.video}-poster.webp`} aria-label={shot.alt}>
+                    <source src={`/feature-images/event-ticketing/v5/${shot.video}.webm`} type="video/webm" />
+                    <source src={`/feature-images/event-ticketing/v5/${shot.video}.mp4`} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={`/feature-images/event-ticketing/v5/${shot.src}.webp`} alt={shot.alt} width={shot.w} height={shot.h} loading="lazy" />
+                )}
+              </div>
+            ))}
           </div>
         </div>
       ))}
@@ -79,11 +92,16 @@ const featureCards = [
   .etf-card-title { font-family: var(--ds-font-heading); font-size: var(--ds-h3); font-weight: 500; letter-spacing: -0.025em; color: var(--ds-on-night); margin: 0; line-height: 1.2; }
   .etf-card-desc { font-family: var(--ds-font-body); font-size: 17px; font-weight: 400; color: var(--ds-on-night-body); margin: 0; line-height: 1.65; }
   .etf-card-content .ds-btn--light { align-self: flex-start; margin-top: 8px; }
-  .etf-card-image { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden; }
-  .etf-card-image img { max-width: 100%; max-height: 100%; object-fit: contain; animation: etfFloat 4s ease-in-out infinite; }
-  .etf-card[data-card-index="0"] .etf-card-image img, .etf-card[data-card-index="1"] .etf-card-image img { max-width: 80%; }
-  @keyframes etfFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-  @media (prefers-reduced-motion: reduce) { .etf-card-image img { animation: none; } }
+  .etf-card-image { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 20px 20px 20px 0; overflow: hidden; }
+  .etf-shot { width: 100%; min-height: 0; }
+  .etf-shot img, .etf-shot video { display: block; width: 100%; height: auto; }
+  .etf-card-image--stack { flex-direction: column; justify-content: center; gap: 12px; }
+  .etf-card-image--stack { align-self: stretch; }
+  .etf-card-image--stack .etf-shot { flex: 1 1 0; }
+  .etf-card-image--stack .etf-shot img { height: 100%; object-fit: cover; object-position: 0% 0%; }
+  .etf-card-image--tickets { gap: 10px; align-items: center; }
+  .etf-card-image--tickets .etf-shot { flex: 0 0 auto; width: 18%; }
+  .etf-card-image--tickets .etf-shot:last-child { width: 34%; }
 
   @media (max-width: 1024px) {
     .etf-header { width: 80%; }
@@ -93,9 +111,13 @@ const featureCards = [
   }
   @media (max-width: 767px) {
     .etf-header { width: 100%; }
-    .etf-card { flex-direction: column; height: 520px; }
-    .etf-card-content { flex: 0 0 50%; padding: 20px 20px 0; }
-    .etf-card-image { padding: 10px; }
+    .etf-card { flex-direction: column; height: auto; }
+    .etf-card-content { flex: 0 0 auto; padding: 20px 20px 0; }
+    .etf-card-image { padding: 20px; }
+    .etf-card-image--stack .etf-shot { flex: 0 0 auto; }
+    .etf-card-image--stack .etf-shot img { height: auto; }
+    .etf-card-image--tickets .etf-shot { width: 22%; }
+    .etf-card-image--tickets .etf-shot:last-child { width: 30%; }
     .etf-card-desc { font-size: 15px; }
     .etf-cards { padding-bottom: 40px; }
   }

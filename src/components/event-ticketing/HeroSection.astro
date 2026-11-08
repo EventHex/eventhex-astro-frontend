@@ -1,6 +1,4 @@
 ---
-import LottiePlayer from "../LottiePlayer.astro";
-
 // Hero — speaker-management pattern: split layout, lottie animation, floating info cards
 
 interface Props {
@@ -43,8 +41,17 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
       </div>
 
       <div class="eth-hero__visual animate-on-scroll" data-animation="fadeInRight">
-        <div class="eth-hero__visual-card">
-          <LottiePlayer src="/animations/event-ticketing-hero.json" class="eth-hero__lottie" />
+        <div class="ds-browser eth-browser">
+          <div class="ds-browser__bar" aria-hidden="true">
+            <i></i><i></i><i></i>
+            <span>meridian-health-congress.eventhex.ai/checkout</span>
+          </div>
+          <video class="eth-loop" autoplay muted loop playsinline preload="metadata" width="1280" height="786"
+            poster="/feature-images/event-ticketing/v5/tk-coupon-poster.webp"
+            aria-label="A buyer adds a Member and a Non-member ticket for Meridian Health Congress, applies the coupon MEMBER10, sees $29 off the Member ticket and a $651 total, then continues to attendee details">
+            <source src="/feature-images/event-ticketing/v5/tk-coupon.webm" type="video/webm" />
+            <source src="/feature-images/event-ticketing/v5/tk-coupon.mp4" type="video/mp4" />
+          </video>
         </div>
       </div>
 
@@ -85,9 +92,8 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
   .eth-hero__trust-item { position: relative; padding-left: 16px; font-family: var(--ds-font-body); font-size: 14px; font-weight: 500; line-height: 20px; color: var(--ds-muted); }
   .eth-hero__trust-item::before { content: ""; position: absolute; left: 0; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--ds-success); }
   .eth-hero__visual { position: relative; }
-  .eth-hero__visual-card { position: relative; padding: 20px 0 20px; }
-  .eth-hero__lottie { width: 100%; max-width: 520px; margin: 0 auto; }
-  .eth-hero__lottie svg { width: 100% !important; height: auto !important; }
+  .eth-browser { width: 100%; }
+  .eth-loop { display: block; width: 100%; height: auto; background: var(--ds-white); }
 
   .eth-trust-strip { background: var(--ds-white); border-bottom: 1px solid var(--ds-line); padding: 20px var(--ds-gutter); }
   .eth-trust-strip__inner { max-width: var(--ds-container); margin: 0 auto; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px 40px; }
@@ -107,3 +113,21 @@ const { eyebrow, titleHtml, description, ctaText, ctaHref, image, imageAlt } = A
     .eth-trust-strip__item { white-space: normal; }
   }
 </style>
+
+<script>
+  // Play the demo loops only while they are on screen; keep them paused for reduced motion.
+  const ethLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.eth-loop'));
+  const ethReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ethReduced) {
+    ethLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const ethObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    ethLoops.forEach((video) => ethObserver.observe(video));
+  }
+</script>

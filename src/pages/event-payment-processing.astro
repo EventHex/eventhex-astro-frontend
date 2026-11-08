@@ -6,6 +6,7 @@ import BentoGrid from "../components/event-payment-processing/BentoGrid.astro";
 import FeatureCards from "../components/event-payment-processing/FeatureCards.astro";
 import HowItWorksSection from "../components/event-payment-processing/HowItWorksSection.astro";
 import CoordinationTools from "../components/event-payment-processing/CoordinationTools.astro";
+import OrdersPaymentSection from "../components/event-payment-processing/OrdersPaymentSection.astro";
 import FaqSection from "../components/event-payment-processing/FaqSection.astro";
 
 const title = "Event Payment Processing for Ticket Sales | EventHex";
@@ -38,7 +39,7 @@ const softwareSchema = {
   footerCtaSubtitle="Show us the market, currency, ticket flow, supported provider account, refund process, and reporting needs for one event. We’ll walk through the matching EventHex path and call out anything that requires separate scoping."
   footerCtaButtonText="Book a Demo"
   footerCtaHref="/book-a-demo/"
-  footerCtaImageSrc="/feature-images/event-payment-processing/finance-view.png"
+  footerCtaImageSrc="/feature-images/event-payment-processing/v5/finance.webp"
   footerCtaImageAlt="EventHex event Finance view with gross collected, refunded, fees and charges, net payout, applied gateway rates, and breakdown by gateway"
 >
   <Fragment slot="head">
@@ -51,10 +52,29 @@ const softwareSchema = {
     <BentoGrid />
     <FeatureCards />
     <HowItWorksSection />
+    <OrdersPaymentSection />
     <CoordinationTools />
     <FaqSection />
   </div>
 </MarketingLayout>
+
+<script>
+  // Play the demo loop only while it is on screen; keep it paused for reduced motion.
+  const eppxLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.eppx-loop'));
+  const eppxReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (eppxReduced) {
+    eppxLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const eppxObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    eppxLoops.forEach((video) => eppxObserver.observe(video));
+  }
+</script>
 
 <style is:global>
   .eppx-page { overflow: clip; background: var(--ds-white); }
