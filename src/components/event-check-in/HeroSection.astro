@@ -1,7 +1,6 @@
 ---
 // Split product hero, borrowed from the Event Registration / Speaker Management
 // hero pattern and adapted to the check-in page content.
-import LottiePlayer from "../LottiePlayer.astro";
 
 const points = [
   "iOS and Android Scanner",
@@ -41,14 +40,17 @@ const points = [
     </div>
 
     <div class="ecx-hero__visual animate-on-scroll" data-animation="fadeInRight">
-      <div class="ecx-hero__visual-card">
-        <div class="ecx-hero__visual-inner">
-          <LottiePlayer
-            src="/animations/event-check-in-hero.json"
-            class="ecx-hero__lottie"
-            eager
-          />
+      <div class="ds-browser ecx-browser">
+        <div class="ds-browser__bar" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span>ascend-impact-summit.eventhex.ai/event-day-portal</span>
         </div>
+        <video class="ecx-loop" autoplay muted loop playsinline preload="metadata" width="1280" height="488"
+          poster="/feature-images/event-check-in/v5/ci-checkin-poster.webp"
+          aria-label="At the Ascend Impact Summit desk the team searches Priya, taps Check in on the Delegate record and the card changes to Checked in">
+          <source src="/feature-images/event-check-in/v5/ci-checkin.webm" type="video/webm" />
+          <source src="/feature-images/event-check-in/v5/ci-checkin.mp4" type="video/mp4" />
+        </video>
       </div>
     </div>
   </div>
@@ -252,4 +254,25 @@ const points = [
   .ecx-hero__desc { color: var(--ds-body); letter-spacing: 0; }
   .ecx-hero__visual-card { border-color: var(--ds-glass-edge); background: var(--ds-glass-fill); box-shadow: var(--ds-glass-shadow); -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur); }
   .ecx-hero__visual-inner { background: var(--ds-white); }
+  .ecx-hero__visual { margin-right: 0; }
+  .ecx-browser { width: 100%; }
+  .ecx-loop { display: block; width: 100%; height: auto; background: var(--ds-white); }
 </style>
+
+<script>
+  // Play the demo loop only while it is on screen; keep it paused for reduced motion.
+  const ecxLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.ecx-loop'));
+  const ecxReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ecxReduced) {
+    ecxLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const ecxObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    ecxLoops.forEach((video) => ecxObserver.observe(video));
+  }
+</script>

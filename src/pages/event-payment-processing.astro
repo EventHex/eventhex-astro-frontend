@@ -56,6 +56,24 @@ const softwareSchema = {
   </div>
 </MarketingLayout>
 
+<script>
+  // Play the demo loop only while it is on screen; keep it paused for reduced motion.
+  const eppxLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.eppx-loop'));
+  const eppxReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (eppxReduced) {
+    eppxLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const eppxObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    eppxLoops.forEach((video) => eppxObserver.observe(video));
+  }
+</script>
+
 <style is:global>
   .eppx-page { overflow: clip; background: var(--ds-white); }
 

@@ -5,10 +5,8 @@
 // a centred gradient headline over an ordered list of numbered rows that expand
 // into a plain-language point list beside a product view.
 //
-// All copy comes from the supplied content deck. The source rows carry real
-// organizer screenshots; the attendance-state screens already used further up
-// this page are not repeated here, so each product view holds a restrained coded
-// panel with the same visual language as the other mock panels on this page.
+// All copy comes from the supplied content deck; each row pairs with a real
+// organizer screenshot.
 interface Point {
   title: string;
   desc: string;
@@ -18,13 +16,8 @@ interface AttendanceStep {
   title: string;
   desc: string;
   points: Point[];
-  panel: {
-    label: string;
-    state: string;
-    stateTone: "ok" | "info" | "warn";
-    rows: { label: string; meta: string; tag: string; tone: "ok" | "info" | "warn" | "muted" }[];
-    note: string;
-  };
+  shot: { src: string; width: number; height: number; alt: string };
+  note: string;
 }
 
 const steps: AttendanceStep[] = [
@@ -45,17 +38,8 @@ const steps: AttendanceStep[] = [
         desc: "Understand who has not yet checked in.",
       },
     ],
-    panel: {
-      label: "Attendance summary",
-      state: "Live",
-      stateTone: "info",
-      rows: [
-        { label: "Checked in", meta: "Accepted attendance", tag: "Accepted", tone: "ok" },
-        { label: "Registered", meta: "Full eligible population", tag: "Eligible", tone: "info" },
-        { label: "Pending", meta: "Not yet checked in", tag: "Pending", tone: "warn" },
-      ],
-      note: "Kept for the selected event or scan point",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/cms-attendance.webp", width: 2880, height: 1500, alt: "CMS Attendance: No of check-in 9 / 20, Pending 11, Check-in rate 45%, No-show rate 55%, with a checked-in list showing check-in times" },
+    note: "Kept for the selected event or scan point",
   },
   {
     title: "Filter the count the question asks for",
@@ -70,16 +54,8 @@ const steps: AttendanceStep[] = [
         desc: "Separate entrance attendance from a meal, session, or other scanning point.",
       },
     ],
-    panel: {
-      label: "Count filters",
-      state: "2 applied",
-      stateTone: "info",
-      rows: [
-        { label: "Ticket filter", meta: "Participant group", tag: "Delegate Pass", tone: "info" },
-        { label: "Instance filter", meta: "Scanning point", tag: "Instance Check-In", tone: "info" },
-      ],
-      note: "Arrival by ticket or by scanning point",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/portal-home.webp", width: 2220, height: 1160, alt: "Event Day Portal home with 26 total users, 8 checked in and 18 remaining, Scan Badge and Search Attendees" },
+    note: "Arrival by ticket or by scanning point",
   },
   {
     title: "Open the record behind the number",
@@ -90,17 +66,8 @@ const steps: AttendanceStep[] = [
         desc: "Review the attendee, scan type, time, and related event context available to operations.",
       },
     ],
-    panel: {
-      label: "Attendance record",
-      state: "Reviewed",
-      stateTone: "ok",
-      rows: [
-        { label: "Attendee", meta: "Matched at scan", tag: "Record", tone: "ok" },
-        { label: "Scan type", meta: "Entrance or instance", tag: "Recorded", tone: "ok" },
-        { label: "Event context", meta: "Time and registration", tag: "Available", tone: "info" },
-      ],
-      note: "The detail behind each attendance entry",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/portal-attendance.webp", width: 2880, height: 1500, alt: "Event Day Portal attendance list: Checked in and Check in states per attendee with Pending 18 and Checked-In 8 filters" },
+    note: "The detail behind each attendance entry",
   },
 ];
 ---
@@ -153,26 +120,10 @@ const steps: AttendanceStep[] = [
               </summary>
 
               <div class="ecx-att__visual">
-                <div class="ecx-att__panel" aria-hidden="true">
-                  <div class="ecx-att__panel-head">
-                    <span class="ecx-att__panel-label">{step.panel.label}</span>
-                    <span class={`ecx-att__state ecx-att__state--${step.panel.stateTone}`}>
-                      {step.panel.state}
-                    </span>
-                  </div>
-                  <div class="ecx-att__rows">
-                    {step.panel.rows.map((row) => (
-                      <div class="ecx-att__row">
-                        <span class="ecx-att__cell">
-                          <span class="ecx-att__key">{row.label}</span>
-                          <span class="ecx-att__meta">{row.meta}</span>
-                        </span>
-                        <span class={`ecx-att__tag ecx-att__tag--${row.tone}`}>{row.tag}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p class="ecx-att__note">{step.panel.note}</p>
+                <div class="ds-shot ecx-att__shot">
+                  <img src={step.shot.src} alt={step.shot.alt} width={step.shot.width} height={step.shot.height} loading="lazy" decoding="async" />
                 </div>
+                <p class="ecx-att__note">{step.note}</p>
               </div>
             </details>
           </li>
@@ -517,117 +468,29 @@ const steps: AttendanceStep[] = [
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     padding: 40px 88px 40px 0;
     opacity: 1;
   }
 
-  .ecx-att__panel {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    padding: 18px;
-    border-radius: 12px;
-    background: var(--ds-white);
-    border: 1px solid var(--ds-line);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
-    font-family: var(--font-body);
-    color: var(--ds-night-2);
-  }
 
-  .ecx-att__panel-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-bottom: 12px;
-  }
 
-  .ecx-att__panel-label {
-    font-size: 13px;
-    font-weight: 600;
-  }
 
-  .ecx-att__state {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
 
-  .ecx-att__rows {
-    display: flex;
-    flex-direction: column;
-  }
 
-  .ecx-att__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 10px 0;
-    border-top: 1px dashed var(--ds-line-strong);
-  }
 
-  .ecx-att__cell {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
 
-  .ecx-att__key {
-    font-size: 13px;
-    font-weight: 600;
-  }
 
-  .ecx-att__meta {
-    font-size: 12px;
-    color: var(--ds-muted);
-  }
 
-  .ecx-att__tag {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    padding: 4px 9px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
 
-  .ecx-att__state--ok,
-  .ecx-att__tag--ok {
-    background: var(--ds-surface);
-    color: var(--ds-cat-green);
-  }
 
-  .ecx-att__state--warn,
-  .ecx-att__tag--warn {
-    background: rgba(245, 185, 66, 0.18);
-    color: var(--ds-cat-amber);
-  }
 
-  .ecx-att__state--info,
-  .ecx-att__tag--info {
-    background: var(--ds-surface-tab);
-    color: var(--ds-blue);
-  }
 
-  .ecx-att__tag--muted {
-    background: var(--ds-surface-tab);
-    color: var(--ds-muted);
-  }
 
   .ecx-att__note {
     margin: 0;
-    padding-top: 12px;
-    border-top: 1px dashed var(--ds-line-strong);
     font-size: 12px;
     line-height: 1.5;
     color: var(--ds-muted);
@@ -711,9 +574,6 @@ const steps: AttendanceStep[] = [
       padding: 0 24px 28px;
       margin: 0;
     }
-    .ecx-att__panel {
-      max-width: none;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -735,5 +595,5 @@ const steps: AttendanceStep[] = [
   }
   .ecx-att__steps details[open] .ecx-att__step-title { font-weight: 500; color: var(--ds-ink); }
   .ecx-att__steps details[open] .ecx-att__num { color: var(--ds-blue); }
-  .ecx-att__panel { box-shadow: var(--ds-shadow-shot); }
+  .ecx-att__shot { width: 100%; }
 </style>
