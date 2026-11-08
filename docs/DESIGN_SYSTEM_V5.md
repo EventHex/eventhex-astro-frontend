@@ -49,7 +49,7 @@ Then a desktop and a 390px mobile screenshot check.
 | 4c | AI Features (AI platform, copilot, smart-connect, photo gallery, session recap, form builder) | done (feat/design-system-v5) |
 | 4d | Marketing & Growth (event marketing, WhatsApp concierge, social advocacy, notifications, sponsors, exhibitors) | done (feat/design-system-v5) |
 | 4e | Engagement (live polling & Q&A, gamification, mobile app, appointments & meetings) | done (feat/design-system-v5) |
-| 4f | Design & Analytics, home | |
+| 4f | Design & Analytics (event analytics, badge builder, certificate builder, website builder) and home | done (feat/design-system-v5) |
 | 5 | Remaining feature pages (about 25) | |
 | 6 | Industries (16) | |
 | 7 | Integrations (20) + compare (11): one template each, then convert | |
