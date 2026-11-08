@@ -28,16 +28,12 @@ const featureCards = [
   {
     title: "Custom Ticketing with Brand Support",
     desc: "Create unlimited ticket types — early-bird, VIP, group bundles — with discounts, coupon codes, and campaign pricing. Every ticket carries your event branding for a professional, memorable experience.",
-    layout: "stack",
-    shots: [
-      { src: "ticket-list", w: 1600, h: 581, alt: "Meridian ticket list, every ticket with its own branded thumbnail" },
-      { src: "ticket-member", w: 1600, h: 550, alt: "Member ticket opened: branded thumbnail, $290, sale window Nov 7 2026 to Jan 23 2027, registrations, form builder and link" },
-    ],
+    shots: [{ video: "tk-edit", w: 1280, h: 800, alt: "Meridian Health Congress ticket list with the Member ticket at $290 and 412 registered, then the Edit Ticket panel with the sale window Nov 7 2026 to Jan 23 2027 and the $290 price" }],
   },
   {
     title: "Paid Add-Ons, Coupon Codes & Price Quotes",
     desc: "Offer paid add-ons like workshop seats, meal plans, or parking at checkout. Generate shareable price quotes for group buyers, and issue targeted coupon codes — percentage, flat, or early-bird — to drive conversions.",
-    shots: [{ src: "coupons", w: 1600, h: 961, alt: "Discount coupons list for Meridian Health Congress: MEMBER10, EARLY50, FACULTY100 and GROUP15" }],
+    shots: [{ src: "coupons", w: 1600, h: 600, alt: "Discount coupons for Meridian Health Congress: MEMBER10 10 percent with 120 of 500 used, EARLY50 $50 with 64 of 200 used, FACULTY100 and GROUP15 with none used yet" }],
   },
 ];
 ---
@@ -66,7 +62,15 @@ const featureCards = [
           <div class={`etf-card-image${card.layout ? ` etf-card-image--${card.layout}` : ""}`}>
             {card.shots.map((shot) => (
               <div class="ds-shot etf-shot">
-                <img src={`/feature-images/event-ticketing/v5/${shot.src}.webp`} alt={shot.alt} width={shot.w} height={shot.h} loading="lazy" />
+                {shot.video ? (
+                  <video class="eth-loop" autoplay muted loop playsinline preload="metadata" width={shot.w} height={shot.h}
+                    poster={`/feature-images/event-ticketing/v5/${shot.video}-poster.webp`} aria-label={shot.alt}>
+                    <source src={`/feature-images/event-ticketing/v5/${shot.video}.webm`} type="video/webm" />
+                    <source src={`/feature-images/event-ticketing/v5/${shot.video}.mp4`} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={`/feature-images/event-ticketing/v5/${shot.src}.webp`} alt={shot.alt} width={shot.w} height={shot.h} loading="lazy" />
+                )}
               </div>
             ))}
           </div>
@@ -90,7 +94,7 @@ const featureCards = [
   .etf-card-content .ds-btn--light { align-self: flex-start; margin-top: 8px; }
   .etf-card-image { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 20px 20px 20px 0; overflow: hidden; }
   .etf-shot { width: 100%; min-height: 0; }
-  .etf-shot img { width: 100%; height: auto; }
+  .etf-shot img, .etf-shot video { display: block; width: 100%; height: auto; }
   .etf-card-image--stack { flex-direction: column; justify-content: center; gap: 12px; }
   .etf-card-image--stack { align-self: stretch; }
   .etf-card-image--stack .etf-shot { flex: 1 1 0; }
