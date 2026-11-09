@@ -1,5 +1,6 @@
 ---
-import eventRegistrationSource from "../../pages/event-registration.astro?raw";
+import ergLegacyStyles from "./erg-legacy.css?raw";
+import ergV5Styles from "./erg-v5.css?raw";
 import speakerDeckSource from "../speaker-management/DeckSections.astro?raw";
 import speakerProgramContentSource from "../speaker-management/ProgramContentSections.astro?raw";
 import FeatureCards from "../speaker-management/FeatureCards.astro";
@@ -13,10 +14,7 @@ const { faqs } = Astro.props;
 
 // Keep this page tied to the actual Event Registration implementation instead of
 // maintaining a look-alike stylesheet that can drift from the master template.
-const eventRegistrationStyles = Array.from(
-  eventRegistrationSource.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
-  (match) => match[1],
-).join("\n");
+const eventRegistrationStyles = ergLegacyStyles;
 const speakerDeckStyles = Array.from(
   speakerDeckSource.matchAll(/<style(?:\s+is:global)?>([\s\S]*?)<\/style>/g),
   (match) => match[1],
@@ -27,10 +25,10 @@ const speakerProgramContentStyles = Array.from(
 ).join("\n");
 
 const crossSvg = `<svg width="18" height="18" viewBox="-14 -14 28 28" aria-hidden="true">
-  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
-  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
-  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
-  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="scale(1,-1)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="rotate(90)"></path>
+  <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="rotate(-90)"></path>
 </svg>`;
 
 const operatingStages = [
@@ -294,7 +292,7 @@ const featureLinks = [
     <div class="erg-hero__grid">
       <div class="erg-hero__content">
         <span class="erg-hero__badge animate-on-scroll" data-animation="fadeInDown">Event management software for media events</span>
-        <h1 id="media-hero-title" class="erg-hero__title animate-on-scroll" data-animation="fadeInUp">Turn submissions into a programme—and audiences into an event community</h1>
+        <h1 id="media-hero-title" class="erg-hero__title animate-on-scroll" data-animation="fadeInUp">Turn submissions into a programme—and <span class="ds-hl">audiences into an event community</span></h1>
         <p class="erg-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">Run film festivals, media conferences, creator summits, and awards events with configured submissions, review, programme, registration, badges, photo discovery, and reporting.</p>
         <div class="erg-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
           <a href="/book-a-demo/" class="erg-hero__btn">Book a Demo <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></a>
@@ -329,7 +327,7 @@ const featureLinks = [
   <section id="event-model" class="erg-flow-section" aria-labelledby="event-model-title">
     <div class="erg-flow-header">
       <span class="media-section-eyebrow">Choose the right event model</span>
-      <h2 id="event-model-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Start with the operating shape that fits the event</h2>
+      <h2 id="event-model-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Start with the <span class="ds-hl">operating shape</span> that fits the event</h2>
       <p class="erg-flow-subtitle animate-on-scroll" data-animation="fadeInUp">Start with one model, then add only the modules the event actually needs.</p>
     </div>
     <div class="erg-flow-quad">
@@ -362,14 +360,14 @@ const featureLinks = [
   <section id="core-workflow" class="erg-bento-section" aria-labelledby="core-workflow-title">
     <div class="erg-bento-container">
       <div class="erg-bento-header animate-on-scroll" data-animation="fadeInUp">
-        <h2 id="core-workflow-title">Keep the attendee journey connected <span class="erg-global-heading-gradient">from invitation to follow-up</span></h2>
+        <h2 id="core-workflow-title">Keep the attendee journey connected <span class="ds-hl">from invitation to follow-up</span></h2>
       </div>
       <div class="erg-bento-grid animate-on-scroll" data-animation="fadeInUp">
         <span class="erg-bento-notch erg-bento-notch--top" aria-hidden="true">
-          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path></svg>
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)"></path></svg>
         </span>
         <span class="erg-bento-notch erg-bento-notch--bottom" aria-hidden="true">
-          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path></svg>
+          <svg width="28" height="28" viewBox="-14 -14 28 28"><path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="scale(1,-1)"></path></svg>
         </span>
         {coreWorkflow.map((item, index) => (
           <div class:list={["erg-bento-row", index % 2 === 1 && "erg-bento-row--reverse"]}>
@@ -393,7 +391,7 @@ const featureLinks = [
     <div class="smp-content__inner smp-content__inner--narrow">
       <header class="smp-workflow__header">
         <div class="smp-workflow__heading">
-          <h2 id="team-title">Coordinate the moments that shape the experience</h2>
+          <h2 id="team-title">Coordinate the moments that <span class="ds-hl">shape the experience</span></h2>
         </div>
       </header>
 
@@ -443,7 +441,7 @@ const featureLinks = [
     <div class="erg-access-redesign__container">
       <div class="erg-access-redesign__left"><div class="erg-access-redesign__sticky animate-on-scroll" data-animation="fadeInUp">
         <div class="erg-access-redesign__eyebrow">During the event</div>
-        <h2 id="event-day-title">Keep event-day actions tied to the <span class="erg-global-heading-gradient">same event record</span></h2>
+        <h2 id="event-day-title">Keep event-day actions tied to the <span class="ds-hl">same event record</span></h2>
         <p>Keep programme access, arrival, audience updates, and approved photo discovery connected to the event.</p>
         <a class="erg-access-redesign__cta" href="/book-a-demo/">Book a Demo <span aria-hidden="true">→</span></a>
       </div></div>
@@ -464,7 +462,7 @@ const featureLinks = [
   <section id="configuration" class="erg-flow-section media-scope" aria-labelledby="scope-title">
     <div class="erg-flow-header">
       <span class="media-section-eyebrow">Build the right scope</span>
-      <h2 id="scope-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Keep EventHex responsibility separate from specialist requirements</h2>
+      <h2 id="scope-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Keep EventHex responsibility separate from <span class="ds-hl">specialist requirements</span></h2>
     </div>
     <div class="erg-flow-quad">
       <article class="erg-flow-quad__cell erg-flow-quad__cell--copy"><h3 class="erg-flow-quad__title">EventHex workflow</h3><p class="erg-flow-quad__text">Configure the supported event, audience, access, content, communication, engagement, and event-day mechanisms.</p></article>
@@ -490,7 +488,7 @@ const featureLinks = [
     <div class="smd-agent-suites__inner">
       <header class="erg-flow-header media-use-header">
         <span class="media-section-eyebrow">Where it fits</span>
-        <h2 id="media-use-case-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Configure EventHex around the event you are running</h2>
+        <h2 id="media-use-case-title" class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Configure EventHex around <span class="ds-hl">the event you are running</span></h2>
         <p class="erg-flow-subtitle animate-on-scroll" data-animation="fadeInUp">Start with the event format, then add only the modules it needs.</p>
       </header>
 
@@ -540,7 +538,7 @@ const featureLinks = [
 
   <section id="connected-features" class="erg-content-section erg-use-cases media-links" aria-labelledby="links-title">
     <div class="erg-content-shell"><div class="erg-content-heading animate-on-scroll" data-animation="fadeInUp" style="text-align:center;max-width:100%">
-      <span class="media-section-eyebrow">Go deeper</span><h2 id="links-title" class="erg-use-heading">Open the page that owns <span class="erg-use-gradient-text">each mechanism</span></h2>
+      <span class="media-section-eyebrow">Go deeper</span><h2 id="links-title" class="erg-use-heading">Open the page that owns <span class="ds-hl">each mechanism</span></h2>
     </div><div class="erg-use-grid">
       {featureLinks.map(([title, copy, href], index) => <a class="erg-use-card media-use-link animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 60)} href={href}><div class="erg-use-card__icon media-use-icon" aria-hidden="true">{String(index + 1).padStart(2, "0")}</div><h3>{title}</h3><p>{copy}</p><span class="media-link-more">Learn more →</span></a>)}
     </div></div>
@@ -551,15 +549,15 @@ const featureLinks = [
       <div class="smd-ai__left">
         <h2 id="demo-title" class="smd-ai__title animate-on-scroll" data-animation="fadeInUp">
           <span class="smd-ai__title-line">bring one real event workflow</span>
-          <span class="smd-ai__title-line">to the demo</span>
+          <span class="smd-ai__title-line"><span class="ds-hl-dark">to the demo</span></span>
         </h2>
         <p class="smd-ai__copy animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 100ms">
           Use the event format, audience groups, access rules, programme, communication channels, event-day plan, and required integrations to review the supported configuration.
         </p>
 
         <div class="smd-ai__actions animate-on-scroll" data-animation="fadeInUp" style="--anim-delay: 200ms">
-          <a href="/book-a-demo/" class="smd-ai__btn smd-ai__btn--dark">Book a Demo &rarr;</a>
-          <a href="/features/" class="smd-ai__btn smd-ai__btn--light">Explore Features &rarr;</a>
+          <a href="/book-a-demo/" class="smd-ai__btn smd-ai__btn--dark ds-btn">Book a Demo &rarr;</a>
+          <a href="/features/" class="smd-ai__btn smd-ai__btn--light ds-btn--ghost">Explore Features &rarr;</a>
         </div>
       </div>
 
@@ -585,7 +583,7 @@ const featureLinks = [
 
   <section id="faq" class="erg-faq" aria-labelledby="faq-title">
     <div class="erg-faq__inner">
-      <div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft"><span class="erg-faq__eyebrow">Media event software questions</span><h2 id="faq-title" class="erg-faq__heading">Review the questions<br />that shape the setup.</h2><p class="erg-faq__intro">Clear answers about submissions, programme handoff, accreditation boundaries, photos, and asset management.</p><a href="/book-a-demo/" class="erg-faq__cta">Ask us in a demo <span aria-hidden="true">→</span></a></div>
+      <div class="erg-faq__sidebar animate-on-scroll" data-animation="fadeInLeft"><span class="erg-faq__eyebrow">Media event software questions</span><h2 id="faq-title" class="erg-faq__heading">Review the questions<br />that <span class="ds-hl">shape the setup.</span></h2><p class="erg-faq__intro">Clear answers about submissions, programme handoff, accreditation boundaries, photos, and asset management.</p><a href="/book-a-demo/" class="erg-faq__cta">Ask us in a demo <span aria-hidden="true">→</span></a></div>
       <div class="erg-faq__list">{faqs.map(([question, answer], index) => <details class="erg-faq__item animate-on-scroll" data-animation="fadeInUp" data-delay={String(index * 50)} data-media-faq open={index === 0}><summary class="erg-faq__question"><strong>{question}</strong><span class="erg-faq__icon" aria-hidden="true"></span></summary><div class="erg-faq__answer"><p>{answer}</p></div></details>)}</div>
     </div>
   </section>
@@ -669,29 +667,21 @@ const featureLinks = [
 </script>
 
 <style is:global set:html={eventRegistrationStyles}></style>
+<style is:global set:html={ergV5Styles}></style>
 <style is:global set:html={speakerDeckStyles}></style>
 <style is:global set:html={speakerProgramContentStyles}></style>
 
 <style>
   .media-registration-replica { overflow: clip; }
-  :global(.media-registration-replica #attendee-journey) {
-    background-color: #000 !important;
-    background-image: radial-gradient(
-      130% 42% at 50% 0%,
-      rgba(92, 138, 255, 0.22) 0%,
-      rgba(124, 108, 255, 0.1) 45%,
-      rgba(0, 0, 0, 0) 72%
-    ) !important;
-  }
-  .media-use-suites { padding-block: clamp(64px, 7vw, 96px); }
+    .media-use-suites { padding-block: clamp(64px, 7vw, 96px); }
   .media-use-header { margin-bottom: 42px; }
   .media-use-header .erg-flow-subtitle { margin-inline: auto; }
   .media-hero-visual { padding: 18px; }
   .media-hero-visual picture { display: block; }
-  .media-hero-shot { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: top left; border: 1px solid #e4e8f1; border-radius: 14px; box-shadow: 0 18px 42px rgba(31, 41, 72, .16); }
-  .media-hero-status { top: auto; right: 28px; bottom: 28px; left: auto; }
+  .media-hero-shot { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: top left; border: 1px solid var(--ds-line-strong); border-radius: 14px; box-shadow: 0 18px 42px rgba(31, 41, 72, .16); }
+  .media-hero-status { position: static; display: inline-block; margin-top: 14px; }
   .media-section-eyebrow { display: inline-block; margin-bottom: 12px; color: var(--brand-blue); font: 700 .8125rem/1.35 var(--font-body); letter-spacing: .1em; text-transform: uppercase; }
-  .media-section-eyebrow--dark { color: #aebcff; }
+  .media-section-eyebrow--dark { color: var(--ds-violet-soft); }
   .media-registration-replica .erg-flow-title { max-width: 100%; white-space: normal; text-wrap: balance; }
   .media-registration-replica .erg-access-redesign__left,
   .media-registration-replica .erg-access-redesign__right { min-width: 0; }
@@ -709,15 +699,15 @@ const featureLinks = [
     position: absolute;
     z-index: 0;
     pointer-events: none;
-    background: #e8ecf2;
+    background: var(--ds-line);
   }
   .media-registration-replica .erg-flow-quad::before { top: 0; bottom: 0; left: 50%; width: 1px; transform: translateX(-.5px); }
   .media-registration-replica .erg-flow-quad::after { top: 50%; right: 0; left: 0; height: 1px; transform: translateY(-.5px); }
   .media-role-icon span, .media-use-icon { font: 700 12px/1 var(--font-body); letter-spacing: .08em; }
   .media-access-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top left; }
-  .media-scope-shot { display: block; width: min(420px, 100%); padding: 10px; overflow: hidden; border: 1px solid #dce4ff; border-radius: 20px; background: linear-gradient(145deg,#eef3ff,#fff); box-shadow: 0 18px 42px rgba(31,41,72,.12); }
-  .media-scope-shot--integrations { background: linear-gradient(145deg,#fff3fa,#fff); }
-  .media-scope-shot img { display: block; width: 100%; height: auto; border: 1px solid #e1e5ee; border-radius: 12px; background: #fff; }
+  .media-scope-shot { display: block; width: min(420px, 100%); padding: 10px; overflow: hidden; border: 1px solid var(--ds-surface-tint); border-radius: 20px; background: linear-gradient(145deg,var(--ds-surface-tab),var(--ds-white)); box-shadow: 0 18px 42px rgba(31,41,72,.12); }
+  .media-scope-shot--integrations { background: linear-gradient(145deg,var(--ds-surface),var(--ds-white)); }
+  .media-scope-shot img { display: block; width: 100%; height: auto; border: 1px solid var(--ds-line-strong); border-radius: 12px; background: var(--ds-white); }
   .media-use-link { color: inherit; text-decoration: none; }
   .media-link-more { margin-top: auto; padding-top: 20px; color: var(--brand-blue); font: 700 13px/1.3 var(--font-body); }
   @media (max-width: 768px) {

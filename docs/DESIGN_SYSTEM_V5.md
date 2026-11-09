@@ -51,7 +51,7 @@ Then a desktop and a 390px mobile screenshot check.
 | 4e | Engagement (live polling & Q&A, gamification, mobile app, appointments & meetings) | done (feat/design-system-v5) |
 | 4f | Design & Analytics (event analytics, badge builder, certificate builder, website builder) and home | done (feat/design-system-v5) |
 | 5 | Remaining feature pages: import graph showed all feature pages already converted in 4a–4f and package 3; left were `/features/` hub, footer CTA gradient, 2 certificate-builder values | done (feat/design-system-v5) |
-| 6 | Industries (16) | |
+| 6 | Industries (16 + hub); also restored the missing erg styles that left /industries/media/ and /industries/middle-east/ unstyled since b439514 | done (feat/design-system-v5) |
 | 7 | Integrations (20) + compare (11): one template each, then convert | |
 | 8 | About, contact, legal, book-a-demo | |
 | 9 | QA: visual pass, mobile speed (glass blur), SEO check | |

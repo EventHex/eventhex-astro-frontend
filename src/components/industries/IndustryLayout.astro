@@ -42,6 +42,11 @@ const {
   supportCta,
 } = Astro.props;
 
+const ctaWords = ctaTitle.split(" ");
+const ctaCut = Math.max(0, ctaWords.length - 3);
+const ctaLead = ctaCut ? ctaWords.slice(0, ctaCut).join(" ") + " " : "";
+const ctaKey = ctaWords.slice(ctaCut).join(" ");
+
 const platformStats = [
   { value: "400+", label: "Events Powered" },
   { value: "50+", label: "Countries Worldwide" },
@@ -71,7 +76,7 @@ const faqSchema = {
   </Fragment>
 
   <!-- ① HERO — centered gradient text with floating glows -->
-  <section class="ind-hero">
+  <section class="ind-hero ds-stage">
     <div class="ind-hero__bg-glow ind-hero__bg-glow--1"></div>
     <div class="ind-hero__bg-glow ind-hero__bg-glow--2"></div>
     <div class="ind-hero__inner">
@@ -81,7 +86,7 @@ const faqSchema = {
       </div>
       <h1 class="ind-hero__title animate-on-scroll" data-animation="fadeInUp">
         {heroTitleLine1}<br />
-        <span class="ind-hero__highlight">{heroTitleLine2}</span>
+        <span class="ind-hero__highlight ds-hl">{heroTitleLine2}</span>
       </h1>
       <p class="ind-hero__copy animate-on-scroll" data-animation="fadeInUp">{heroCopy}</p>
       <div class="ind-hero__ctas animate-on-scroll" data-animation="fadeInUp">
@@ -94,7 +99,7 @@ const faqSchema = {
       <div class="ind-hero__trust animate-on-scroll" data-animation="fadeIn">
         {trustItems.map((t) => (
           <span class="ind-hero__trust-item">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" style="fill:var(--ds-blue)" opacity=".15"/><path d="M5 8l2 2 4-4" style="stroke:var(--ds-blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             {t}
           </span>
         ))}
@@ -103,14 +108,14 @@ const faqSchema = {
   </section>
 
   <!-- ② STATS — dark band with bg-1.webp, colored headline + 4 stat cards -->
-  <section class="ind-stats">
+  <section class="ind-stats ds-night">
     <div class="ind-stats__engagement">
       <div class="ind-stats__engagement-text">
         <h2 class="ind-stats__heading animate-on-scroll" data-animation="fadeInDown">
           <span class="ind-stats--white">EventHex powers </span>
           <span class="ind-stats--purple">{industry} events </span>
           <span class="ind-stats--white">with </span>
-          <span class="ind-stats--cyan">AI-driven tools</span>
+          <span class="ind-stats--cyan ds-hl-dark">AI-driven tools</span>
         </h2>
       </div>
     </div>
@@ -125,12 +130,12 @@ const faqSchema = {
   </section>
 
   <!-- ③ CHALLENGES — dark bg with Bg.svg, numbered glass cards -->
-  <section class="ind-challenges">
+  <section class="ind-challenges ds-stage">
     <div class="ind-challenges__inner">
       <div class="ind-challenges__header">
         <span class="ind-challenges__tag animate-on-scroll" data-animation="fadeIn">Key Challenges</span>
         <h2 class="ind-challenges__title animate-on-scroll" data-animation="fadeInUp">
-          Common Event Challenges in <b>{industry}</b>
+          Common Event Challenges in <b class="ds-hl">{industry}</b>
         </h2>
         <p class="ind-challenges__desc animate-on-scroll" data-animation="fadeInUp">
           Understanding your pain points so we can solve them.
@@ -150,12 +155,12 @@ const faqSchema = {
   </section>
 
   <!-- ④ SOLUTIONS — dark bg with bg-2.webp, premium hover-glow cards -->
-  <section class="ind-solutions">
+  <section class="ind-solutions ds-night">
     <div class="ind-solutions__inner">
       <div class="ind-solutions__header">
         <span class="ind-solutions__eyebrow animate-on-scroll" data-animation="fadeIn">EventHex Solutions</span>
         <h2 class="ind-solutions__title animate-on-scroll" data-animation="fadeInUp">
-          How EventHex Solves <span class="ind-solutions__highlight">{industry}</span> Event Challenges
+          How EventHex Solves <span class="ind-solutions__highlight ds-hl-dark">{industry}</span> Event Challenges
         </h2>
       </div>
       <div class="ind-solutions__grid">
@@ -181,7 +186,7 @@ const faqSchema = {
       <div class="ind-usecases__header">
         <span class="ind-usecases__tag animate-on-scroll" data-animation="fadeIn">Use Cases</span>
         <h2 class="ind-usecases__title animate-on-scroll" data-animation="fadeInUp">
-          {industry} Event Use Cases
+          <span class="ds-hl">{industry}</span> Event Use Cases
         </h2>
         <p class="ind-usecases__desc animate-on-scroll" data-animation="fadeInUp">
           Real-world applications of EventHex for {industry.toLowerCase()} events.
@@ -201,12 +206,12 @@ const faqSchema = {
 
   <!-- ⑥ CTA — dark card with glows (feature-page pattern) -->
   <section class="ind-cta">
-    <div class="ind-cta__card">
+    <div class="ind-cta__card ds-night">
       <div class="ind-cta__glow ind-cta__glow--1"></div>
       <div class="ind-cta__glow ind-cta__glow--2"></div>
       <div class="ind-cta__content">
         <span class="ind-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Start Your Next Event Faster</span>
-        <h2 class="ind-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaTitle}</h2>
+        <h2 class="ind-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaLead}<span class="ds-hl-dark">{ctaKey}</span></h2>
         <p class="ind-cta__copy animate-on-scroll" data-animation="fadeInUp">{ctaCopy}</p>
         <div class="ind-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
           <span class="ind-cta__proof-pill">AI-powered platform</span>
@@ -223,7 +228,7 @@ const faqSchema = {
         <div class="ind-cta__trust animate-on-scroll" data-animation="fadeIn">
           {trustItems.map((t) => (
             <span class="ind-cta__trust-item">
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" fill="rgba(255,255,255,0.5)"/></svg>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 12.5l-4-4 1.4-1.4 2.6 2.6 5.6-5.6 1.4 1.4-7 7z" style="fill:var(--ds-on-night-muted)"/></svg>
               {t}
             </span>
           ))}
@@ -237,7 +242,7 @@ const faqSchema = {
     <div class="ind-faq__inner">
       <div class="ind-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
         <span class="ind-faq__eyebrow">Need a custom setup?</span>
-        <h2 class="ind-faq__sidebar-title">Frequently Asked Questions</h2>
+        <h2 class="ind-faq__sidebar-title">Frequently Asked <span class="ds-hl">Questions</span></h2>
         <p class="ind-faq__sidebar-desc">
           We help event teams in {industry.toLowerCase()} configure the perfect event workflow.
         </p>
@@ -276,11 +281,6 @@ const faqSchema = {
     justify-content: center;
     padding: 0;
     text-align: center;
-    background:
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat,
-      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
-      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
   }
   .ind-hero__bg-glow {
     display: none;
@@ -305,7 +305,7 @@ const faqSchema = {
     font-weight: 400;
     line-height: 24px;
     letter-spacing: -0.48px;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     background: none;
     border: none;
     padding: 0;
@@ -318,15 +318,14 @@ const faqSchema = {
   .ind-hero__title {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 5vw, 52px);
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.15;
     letter-spacing: -1px;
-    color: var(--heading-dark);
+    color: var(--ds-ink);
     margin-bottom: 1.25rem;
   }
   .ind-hero__highlight {
     display: block;
-    color: var(--brand-blue);
   }
   .ind-hero__copy {
     font-family: var(--font-body);
@@ -334,7 +333,7 @@ const faqSchema = {
     font-weight: 400;
     line-height: 28px;
     letter-spacing: -0.48px;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     max-width: 680px;
     margin: 0 auto 2rem;
   }
@@ -357,7 +356,7 @@ const faqSchema = {
     gap: 0.4rem;
     font-family: var(--font-body);
     font-size: 0.8125rem;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
   }
 
   /* ══════════════════════════════════════════
@@ -368,20 +367,6 @@ const faqSchema = {
     flex-direction: column;
     width: 100%;
     padding: 100px 1.5rem;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
   .ind-stats__engagement {
     width: 100%;
@@ -396,16 +381,16 @@ const faqSchema = {
   .ind-stats__heading {
     font-family: var(--font-heading);
     font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: 400;
+    font-weight: 500;
     line-height: 1.15;
     letter-spacing: -1px;
-    color: #fff;
+    color: var(--ds-white);
     text-align: center;
     margin: 0;
   }
-  .ind-stats--white { color: #fff; }
-  .ind-stats--purple { color: #AFA3FF; }
-  .ind-stats--cyan { color: #ABFFFF; }
+  .ind-stats--white { color: var(--ds-white); }
+  .ind-stats--purple { color: var(--ds-white); }
+  .ind-stats--cyan { font-weight: 500; }
   .ind-stats__grid {
     display: flex;
     justify-content: center;
@@ -421,23 +406,23 @@ const faqSchema = {
     align-items: center;
     gap: 8px;
     padding: 2rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
+    background: var(--ds-glass-dark-fill);
+    border: 1px solid var(--ds-glass-dark-edge);
+    border-radius: var(--ds-r-lg);
+    box-shadow: var(--ds-glass-dark-shadow);
     text-align: center;
   }
   .ind-stats__value {
     font-family: var(--font-heading);
     font-size: 2.5rem;
-    font-weight: 700;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-white);
     letter-spacing: -1px;
   }
   .ind-stats__label {
     font-family: var(--font-body);
     font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ds-on-night-muted);
   }
 
   /* ══════════════════════════════════════════
@@ -446,7 +431,6 @@ const faqSchema = {
   .ind-challenges {
     width: 100%;
     padding: 80px 1.5rem;
-    background: #fff;
   }
   .ind-challenges__inner {
     max-width: 1200px;
@@ -467,26 +451,25 @@ const faqSchema = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
     margin-bottom: 0.75rem;
   }
   .ind-challenges__title {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     line-height: 1.25;
     margin: 0 0 0.75rem;
   }
   .ind-challenges__title b {
-    color: var(--brand-blue);
-    font-weight: 700;
+    font-weight: 500;
   }
   .ind-challenges__desc {
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0;
   }
   .ind-challenges__cards {
@@ -497,16 +480,19 @@ const faqSchema = {
   }
   .ind-challenges__card {
     position: relative;
-    background: var(--surface-light);
-    border: 1px solid var(--surface-card-border);
-    border-radius: 16px;
+    background: var(--ds-glass-fill);
+    border: 1px solid var(--ds-glass-edge);
+    box-shadow: var(--ds-glass-shadow);
+    -webkit-backdrop-filter: var(--ds-glass-blur);
+    backdrop-filter: var(--ds-glass-blur);
+    border-radius: var(--ds-r-lg);
     padding: 2rem 1.5rem 1.75rem;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .ind-challenges__card:hover {
     transform: translateY(-6px);
-    border-color: var(--brand-blue);
-    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
+    border-color: var(--ds-blue);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--ds-blue) 10%, transparent);
   }
   .ind-challenges__card-num {
     position: absolute;
@@ -515,7 +501,7 @@ const faqSchema = {
     font-family: var(--font-heading);
     font-size: 0.75rem;
     font-weight: 700;
-    color: rgba(55, 93, 251, 0.2);
+    color: color-mix(in srgb, var(--ds-blue) 20%, transparent);
     letter-spacing: 0.05em;
   }
   .ind-challenges__card-icon {
@@ -524,21 +510,21 @@ const faqSchema = {
     justify-content: center;
     width: 48px;
     height: 48px;
-    background: rgba(55, 93, 251, 0.08);
+    background: color-mix(in srgb, var(--ds-blue) 8%, transparent);
     border-radius: 10px;
     margin-bottom: 1rem;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
   }
   .ind-challenges__card-icon svg {
     width: 28px;
     height: 28px;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
   }
   .ind-challenges__card-title {
     font-family: var(--font-heading);
     font-size: 1rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.5rem;
     line-height: 1.35;
   }
@@ -546,7 +532,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 0.875rem;
     line-height: 1.65;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0;
   }
 
@@ -556,11 +542,6 @@ const faqSchema = {
   .ind-solutions {
     width: 100%;
     padding: 80px 1.5rem;
-    background-color: #000;
-    background-image: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-size: cover;
   }
   .ind-solutions__inner {
     max-width: 1200px;
@@ -581,20 +562,19 @@ const faqSchema = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #ABFFFF;
+    color: var(--ds-cyan);
     margin-bottom: 0.75rem;
   }
   .ind-solutions__title {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-white);
     line-height: 1.25;
     margin: 0;
   }
   .ind-solutions__highlight {
-    color: #ABFFFF;
-    font-weight: 700;
+    font-weight: 500;
   }
   .ind-solutions__grid {
     display: grid;
@@ -604,9 +584,9 @@ const faqSchema = {
   }
   .ind-solutions__card {
     position: relative;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
+    background: var(--ds-glass-dark-fill);
+    border: 1px solid var(--ds-glass-dark-edge);
+    border-radius: var(--ds-r-lg);
     padding: 2rem;
     text-decoration: none;
     overflow: hidden;
@@ -614,14 +594,14 @@ const faqSchema = {
   }
   .ind-solutions__card:hover {
     transform: translateY(-6px);
-    border-color: rgba(55, 93, 251, 0.5);
+    border-color: color-mix(in srgb, var(--ds-blue) 50%, transparent);
   }
   .ind-solutions__card-glow {
     position: absolute;
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    background: rgba(55, 93, 251, 0.15);
+    background: color-mix(in srgb, var(--ds-blue) 15%, transparent);
     filter: blur(60px);
     top: -60px;
     right: -60px;
@@ -638,18 +618,18 @@ const faqSchema = {
     justify-content: center;
     margin-bottom: 1rem;
     position: relative;
-    color: var(--brand-blue);
+    color: var(--ds-on-night-accent);
   }
   .ind-solutions__card-icon svg {
     width: 28px;
     height: 28px;
-    color: var(--brand-blue);
+    color: var(--ds-on-night-accent);
   }
   .ind-solutions__card-title {
     font-family: var(--font-heading);
     font-size: 1.0625rem;
-    font-weight: 700;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-white);
     margin: 0 0 0.5rem;
     position: relative;
   }
@@ -657,7 +637,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 0.875rem;
     line-height: 1.65;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ds-on-night-muted);
     margin: 0 0 1rem;
     position: relative;
   }
@@ -667,8 +647,8 @@ const faqSchema = {
     gap: 4px;
     font-family: var(--font-body);
     font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--brand-blue);
+    font-weight: 500;
+    color: var(--ds-on-night-accent);
     position: relative;
     transition: gap 0.2s ease;
   }
@@ -682,7 +662,7 @@ const faqSchema = {
   .ind-usecases {
     width: 100%;
     padding: 80px 1.5rem;
-    background: #fff;
+    background: var(--ds-white);
   }
   .ind-usecases__inner {
     max-width: 1200px;
@@ -703,14 +683,14 @@ const faqSchema = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
     margin-bottom: 0.75rem;
   }
   .ind-usecases__title {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     line-height: 1.25;
     margin: 0 0 0.75rem;
   }
@@ -718,7 +698,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0;
   }
   .ind-usecases__cards {
@@ -729,30 +709,30 @@ const faqSchema = {
   }
   .ind-usecases__card {
     position: relative;
-    background: var(--surface-light);
-    border: 1px solid var(--surface-card-border);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line);
     border-radius: 16px;
     padding: 2rem 1.5rem 1.75rem;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .ind-usecases__card:hover {
     transform: translateY(-6px);
-    border-color: var(--brand-blue);
-    box-shadow: 0 12px 32px rgba(55, 93, 251, 0.1);
+    border-color: var(--ds-blue);
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--ds-blue) 10%, transparent);
   }
   .ind-usecases__card-num {
     font-family: var(--font-heading);
     font-size: 2rem;
-    font-weight: 800;
-    color: rgba(55, 93, 251, 0.2);
+    font-weight: 500;
+    color: color-mix(in srgb, var(--ds-blue) 20%, transparent);
     margin-bottom: 0.75rem;
     line-height: 1;
   }
   .ind-usecases__card-title {
     font-family: var(--font-heading);
     font-size: 1rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.5rem;
     line-height: 1.35;
   }
@@ -760,7 +740,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 0.875rem;
     line-height: 1.65;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0;
   }
 
@@ -781,7 +761,6 @@ const faqSchema = {
     align-items: center;
     text-align: center;
     overflow: hidden;
-    background: #0F1629;
   }
   .ind-cta__glow {
     position: absolute;
@@ -792,14 +771,14 @@ const faqSchema = {
   .ind-cta__glow--1 {
     width: 350px;
     height: 350px;
-    background: rgba(55, 93, 251, 0.3);
+    background: color-mix(in srgb, var(--ds-blue) 30%, transparent);
     top: -100px;
     right: -80px;
   }
   .ind-cta__glow--2 {
     width: 300px;
     height: 300px;
-    background: rgba(159, 129, 255, 0.2);
+    background: color-mix(in srgb, var(--ds-violet) 20%, transparent);
     bottom: -80px;
     left: -60px;
   }
@@ -815,14 +794,14 @@ const faqSchema = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--ds-on-night-muted);
     margin-bottom: 1rem;
   }
   .ind-cta__title {
     font-family: var(--font-heading);
     font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 700;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-white);
     margin: 0 0 1rem;
     line-height: 1.25;
   }
@@ -830,7 +809,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 1rem;
     line-height: 1.7;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--ds-on-night-body);
     margin: 0 0 1.5rem;
   }
   .ind-cta__proof-row {
@@ -847,7 +826,7 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 0.75rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--ds-on-night-body);
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.12);
     padding: 0.35rem 0.75rem;
@@ -872,14 +851,14 @@ const faqSchema = {
     gap: 0.35rem;
     font-family: var(--font-body);
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--ds-on-night-muted);
   }
 
   /* ══════════════════════════════════════════
      ⑦ FAQ — split layout sidebar + accordion
      ═══════════════════════════════════════════ */
   .ind-faq {
-    background: var(--surface-light, #f8f9fc);
+    background: var(--ds-surface);
     padding: 5rem 1.5rem;
   }
   .ind-faq__inner {
@@ -901,14 +880,14 @@ const faqSchema = {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
     margin-bottom: 0.5rem;
   }
   .ind-faq__sidebar-title {
     font-family: var(--font-heading);
     font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.75rem;
     line-height: 1.25;
   }
@@ -916,12 +895,12 @@ const faqSchema = {
     font-family: var(--font-body);
     font-size: 0.9375rem;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0 0 1.25rem;
   }
   .ind-faq__support-card {
-    background: #fff;
-    border: 1px solid var(--surface-card-border, #e8ecf4);
+    background: var(--ds-white);
+    border: 1px solid var(--ds-line);
     border-radius: 12px;
     padding: 1.25rem;
     margin-bottom: 1.25rem;
@@ -929,15 +908,15 @@ const faqSchema = {
   .ind-faq__support-title {
     font-family: var(--font-heading);
     font-size: 0.9375rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.35rem;
   }
   .ind-faq__support-desc {
     font-family: var(--font-body);
     font-size: 0.8125rem;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     margin: 0;
   }
   .ind-faq__list {
@@ -946,14 +925,14 @@ const faqSchema = {
     gap: 0.75rem;
   }
   .ind-faq__item {
-    background: #fff;
-    border: 1px solid var(--surface-card-border, #e8ecf4);
+    background: var(--ds-white);
+    border: 1px solid var(--ds-line);
     border-radius: 12px;
     overflow: hidden;
     transition: border-color 0.2s ease;
   }
   .ind-faq__item[open] {
-    border-color: var(--brand-blue);
+    border-color: var(--ds-blue);
   }
   .ind-faq__question {
     display: flex;
@@ -964,7 +943,7 @@ const faqSchema = {
     font-family: var(--font-heading);
     font-size: 0.9375rem;
     font-weight: 600;
-    color: var(--heading-dark);
+    color: var(--ds-ink);
     cursor: pointer;
     list-style: none;
   }
@@ -974,18 +953,18 @@ const faqSchema = {
   .ind-faq__chevron {
     flex-shrink: 0;
     transition: transform 0.25s ease;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
   }
   .ind-faq__item[open] .ind-faq__chevron {
     transform: rotate(180deg);
-    color: var(--brand-blue);
+    color: var(--ds-blue);
   }
   .ind-faq__answer {
     padding: 0 1.5rem 1.25rem;
     font-family: var(--font-body);
     font-size: 0.875rem;
     line-height: 1.7;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
   }
   .ind-faq__answer p { margin: 0; }
 
@@ -999,7 +978,7 @@ const faqSchema = {
     gap: 6px;
     font-family: var(--font-body);
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: 500;
     border-radius: 10px;
     padding: 0.75rem 1.75rem;
     text-decoration: none;
@@ -1008,34 +987,35 @@ const faqSchema = {
     border: none;
   }
   .ind-btn--primary {
-    background: var(--brand-blue);
-    color: #fff;
+    background: var(--ds-blue);
+    color: var(--ds-white);
+    box-shadow: var(--ds-shadow-btn);
   }
   .ind-btn--primary:hover {
-    filter: brightness(1.1);
+    background: var(--ds-blue-hover);
     transform: translateY(-2px);
   }
   .ind-btn--outline {
-    background: transparent;
-    color: var(--heading-dark);
-    border: 1.5px solid var(--surface-card-border, #e8ecf4);
+    background: rgba(255, 255, 255, .75);
+    color: var(--ds-ink);
+    border: 1.5px solid var(--ds-line);
   }
   .ind-btn--outline:hover {
-    border-color: var(--brand-blue);
-    color: var(--brand-blue);
+    border-color: var(--ds-blue);
+    color: var(--ds-blue);
   }
   .ind-btn--white {
-    background: #fff;
-    color: var(--heading-dark);
+    background: var(--ds-white);
+    color: var(--ds-band-ink);
   }
   .ind-btn--white:hover {
-    background: #f0f4ff;
+    background: var(--ds-surface-tab);
     transform: translateY(-2px);
   }
   .ind-btn--ghost {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.18);
+    color: var(--ds-white);
+    border: 1px solid rgba(255, 255, 255, 0.4);
   }
   .ind-btn--ghost:hover {
     background: rgba(255, 255, 255, 0.2);
