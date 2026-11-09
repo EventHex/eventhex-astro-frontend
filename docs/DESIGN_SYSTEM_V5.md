@@ -54,6 +54,13 @@ Then a desktop and a 390px mobile screenshot check.
 | 6 | Industries (16 + hub); also restored the missing erg styles that left /industries/media/ and /industries/middle-east/ unstyled since b439514 | done (feat/design-system-v5) |
 | 7 | Integrations (20 + hub) + compare (11) | done (feat/design-system-v5) |
 | 8 | About, contact, partnership, legal, book-a-demo + thank-you, shared form fields | done (feat/design-system-v5) |
-| 9 | QA: visual pass, mobile speed (glass blur), SEO check | |
+| 9 | QA: 189-route crawl (status, console, images, overflow, buttons, headings, black surfaces, H1 key phrase), SEO diff vs live (0 real diffs), content-guard sweep, blur scroll test (no cost), visual review of 107 pages desktop + mobile | done (feat/design-system-v5) |
 
 Start point on 2026-11-07: 20,283 raw hex values in 333 files.
+
+## QA notes (2026-11-09)
+
+- `/event-management/<city>/`: dev serves the static FeatureV2 pages (`dubai.astro` etc.), but the production build serves the prerendered `[city].astro` for the same paths, which is what live shows. Content-guard against live therefore diffs on these 7 pages in dev only; the built HTML matches live.
+- Core pages reworked in the screenshots track (ticketing, check-in, payments, virtual & hybrid, invoicing, white-label, dashboard) intentionally differ from live in headings, alts and body (new captures and proposed sections).
+- `/api/demo-slots` returns 500 on the local dev server (no Calendly credentials); the slot picker was checked with mocked slots.
+- Pre-existing content, not design: FeatureV2 pages (cities, CRM, localization, security, portals, developers) show an empty "How it works" video box and the same stock laptop photo on every stack card; `/cookie-policy/` renders a second H1 from WordPress content.
