@@ -8,30 +8,30 @@ const integrations = [
   {
     category: "Payments",
     items: [
-      { name: "Stripe", slug: "stripe", color: "#635BFF", tagline: "Accept card payments globally with 135+ currencies and 0% EventHex platform fees.", icon: "💳" },
-      { name: "Razorpay", slug: "razorpay", color: "#072654", tagline: "India's preferred gateway — UPI, cards, net banking & wallets with 0% EventHex fees.", icon: "🏦" },
-      { name: "Tap Payments", slug: "tap-payments", color: "#2ACFCF", tagline: "Accept mada, KNET, BENEFIT & Apple Pay across the GCC in local currencies.", icon: "💰" },
+      { name: "Stripe", slug: "stripe", color: "var(--ds-cat-indigo)", tagline: "Accept card payments globally with 135+ currencies and 0% EventHex platform fees.", icon: "💳" },
+      { name: "Razorpay", slug: "razorpay", color: "var(--ds-cat-blue)", tagline: "India's preferred gateway — UPI, cards, net banking & wallets with 0% EventHex fees.", icon: "🏦" },
+      { name: "Tap Payments", slug: "tap-payments", color: "var(--ds-cat-teal)", tagline: "Accept mada, KNET, BENEFIT & Apple Pay across the GCC in local currencies.", icon: "💰" },
     ],
   },
   {
     category: "CRM",
     items: [
-      { name: "HubSpot", slug: "hubspot", color: "#FF7A59", tagline: "Bidirectional CRM sync — attendee data, deals, and follow-up sequences in real time.", icon: "🔗" },
+      { name: "HubSpot", slug: "hubspot", color: "var(--ds-cat-orange)", tagline: "Bidirectional CRM sync — attendee data, deals, and follow-up sequences in real time.", icon: "🔗" },
     ],
   },
   {
     category: "Communication",
     items: [
-      { name: "WhatsApp", slug: "whatsapp", color: "#25D366", tagline: "Connect approved WhatsApp accounts and templates for event messages.", icon: "💬" },
-      { name: "Email / AWS SES", slug: "email", color: "#FF9900", tagline: "Transactional and campaign emails via Amazon SES with 99%+ deliverability.", icon: "✉️" },
-      { name: "Push Notifications", slug: "push-notifications", color: "#FFCA28", tagline: "Real-time alerts to iOS & Android via Firebase Cloud Messaging.", icon: "🔔" },
+      { name: "WhatsApp", slug: "whatsapp", color: "var(--ds-cat-green)", tagline: "Connect approved WhatsApp accounts and templates for event messages.", icon: "💬" },
+      { name: "Email / AWS SES", slug: "email", color: "var(--ds-cat-amber)", tagline: "Transactional and campaign emails via Amazon SES with 99%+ deliverability.", icon: "✉️" },
+      { name: "Push Notifications", slug: "push-notifications", color: "var(--ds-cat-amber)", tagline: "Real-time alerts to iOS & Android via Firebase Cloud Messaging.", icon: "🔔" },
     ],
   },
   {
     category: "Automation",
     items: [
-      { name: "Webhooks & Zapier", slug: "webhooks", color: "#FF4A00", tagline: "Trigger workflows with real-time webhooks or connect to 5,000+ apps via Zapier.", icon: "⚡" },
-      { name: "WordPress", slug: "wordpress", color: "#21759B", tagline: "Embed event listings, ticket checkout & attendee portals into any WordPress page.", icon: "🌐" },
+      { name: "Webhooks & Zapier", slug: "webhooks", color: "var(--ds-cat-orange)", tagline: "Trigger workflows with real-time webhooks or connect to 5,000+ apps via Zapier.", icon: "⚡" },
+      { name: "WordPress", slug: "wordpress", color: "var(--ds-cat-sky)", tagline: "Embed event listings, ticket checkout & attendee portals into any WordPress page.", icon: "🌐" },
     ],
   },
 ];
@@ -87,7 +87,7 @@ const itemListSchema = {
           <div class="inth-category__cards">
             {category.items.map((item, i) => (
               <a href={`/integrations/${item.slug}/`} class="inth-card animate-on-scroll" data-animation="fadeIn" data-delay={String(i * 80)}>
-                <div class="inth-card__icon" style={`background: ${item.color}15; border-color: ${item.color}30;`}>
+                <div class="inth-card__icon" style={`background: color-mix(in srgb, ${item.color} 8%, transparent); border-color: color-mix(in srgb, ${item.color} 19%, transparent);`}>
                   <span class="inth-card__emoji">{item.icon}</span>
                 </div>
                 <h3 class="inth-card__name">{item.name}</h3>
@@ -116,18 +116,9 @@ const itemListSchema = {
   .inth-hero {
     position: relative;
     padding: 120px 24px 80px;
-    background:
-      url("https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg") center / cover no-repeat,
-      linear-gradient(135deg, #0f1028 0%, #1a1d3a 50%, #0f1028 100%);
+    background: var(--ds-g4-stage), var(--ds-white);
     text-align: center;
     overflow: hidden;
-  }
-  .inth-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at 50% 0%, rgba(55, 93, 251, 0.15) 0%, transparent 70%);
-    pointer-events: none;
   }
   .inth-hero__inner {
     max-width: 800px;
@@ -139,9 +130,9 @@ const itemListSchema = {
     display: inline-block;
     padding: 6px 18px;
     border-radius: 50px;
-    background: rgba(55, 93, 251, 0.15);
-    border: 1px solid rgba(55, 93, 251, 0.3);
-    color: #7b9aff;
+    background: color-mix(in srgb, var(--ds-blue) 10%, white);
+    border: 1px solid color-mix(in srgb, var(--ds-blue) 25%, transparent);
+    color: var(--ds-blue);
     font-family: var(--font-body);
     font-size: 0.85rem;
     font-weight: 600;
@@ -151,19 +142,23 @@ const itemListSchema = {
   .inth-hero__title {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 800;
-    color: #fff;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--ds-ink);
     line-height: 1.15;
     margin: 0 0 24px;
   }
   .inth-hero__highlight {
-    color: var(--brand-blue);
-    font-weight: 800;
+    font-weight: 500;
+    background-image: var(--ds-g1-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .inth-hero__copy {
     font-family: var(--font-body);
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--ds-body);
     line-height: 1.7;
     max-width: 640px;
     margin: 0 auto;
@@ -172,7 +167,7 @@ const itemListSchema = {
   /* ── GRID SECTION ─────────────────────────────────────────── */
   .inth-grid {
     padding: 80px 24px 100px;
-    background: linear-gradient(180deg, #0f1028 0%, #141733 50%, #0f1028 100%);
+    background: var(--ds-white);
   }
   .inth-grid__inner {
     max-width: 1100px;
@@ -187,13 +182,13 @@ const itemListSchema = {
   .inth-category__title {
     font-family: var(--font-heading);
     font-size: 1.15rem;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    color: var(--ds-sub);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin: 0 0 24px;
     padding-bottom: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid var(--ds-line);
   }
   .inth-category__cards {
     display: grid;
@@ -208,24 +203,25 @@ const itemListSchema = {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
+    background: var(--ds-white);
+    border: 1px solid var(--ds-line);
+    box-shadow: var(--ds-shadow-shot);
+    border-radius: var(--ds-r-lg);
     padding: 32px 24px;
     text-decoration: none;
     transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
   }
   .inth-card::before {
     content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
-    background: conic-gradient(from var(--inth-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+    background: conic-gradient(from var(--inth-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, color-mix(in srgb, var(--ds-blue) 70%, white) 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0); mask-composite: exclude;
     opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 1;
   }
   .inth-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(55, 93, 251, 0.3);
-    background: rgba(255, 255, 255, 0.06);
+    border-color: color-mix(in srgb, var(--ds-blue) 40%, transparent);
+    box-shadow: var(--ds-shadow-hero);
   }
   .inth-card:hover::before { opacity: 1; animation: inthBorder 2.4s linear infinite; }
   @keyframes inthBorder { to { --inth-angle: 360deg; } }
@@ -246,14 +242,14 @@ const itemListSchema = {
   .inth-card__name {
     font-family: var(--font-heading);
     font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 10px;
   }
   .inth-card__tagline {
     font-family: var(--font-body);
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.58);
+    color: var(--ds-body);
     line-height: 1.6;
     margin: 0 0 auto;
     padding-bottom: 16px;
@@ -261,39 +257,40 @@ const itemListSchema = {
   .inth-card__link {
     font-family: var(--font-body);
     font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--brand-blue);
+    font-weight: 500;
+    color: var(--ds-blue);
     transition: color 0.2s ease;
   }
   .inth-card:hover .inth-card__link {
-    color: #7b9aff;
+    color: var(--ds-blue-hover);
   }
 
   /* ── CTA ──────────────────────────────────────────────────── */
   .inth-cta {
     padding: 80px 24px 100px;
-    background: linear-gradient(180deg, #0f1028 0%, #1a1d3a 100%);
+    background: var(--ds-night-bg);
     text-align: center;
   }
   .inth-cta__inner {
     max-width: 640px;
     margin: 0 auto;
-    background: rgba(55, 93, 251, 0.08);
-    border: 1px solid rgba(55, 93, 251, 0.2);
-    border-radius: 24px;
+    background: var(--ds-glass-dark-fill);
+    border: 1px solid var(--ds-glass-dark-edge);
+    box-shadow: var(--ds-glass-dark-shadow);
+    border-radius: var(--ds-r-xl);
     padding: 56px 40px;
   }
   .inth-cta__title {
     font-family: var(--font-heading);
     font-size: clamp(1.4rem, 3vw, 1.8rem);
-    font-weight: 800;
-    color: #fff;
+    font-weight: 500;
+    color: var(--ds-white);
     margin: 0 0 14px;
   }
   .inth-cta__copy {
     font-family: var(--font-body);
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ds-on-night-body);
     line-height: 1.6;
     margin: 0 0 28px;
   }
@@ -305,18 +302,18 @@ const itemListSchema = {
     border-radius: 12px;
     font-family: var(--font-body);
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     text-decoration: none;
     transition: all 0.25s ease;
   }
   .inth-btn--primary {
-    background: var(--brand-blue);
-    color: #fff;
+    background: var(--ds-blue);
+    color: var(--ds-white);
   }
   .inth-btn--primary:hover {
-    background: var(--brand-blue-hover);
+    background: var(--ds-blue-hover);
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(55, 93, 251, 0.35);
+    box-shadow: var(--ds-shadow-btn);
   }
 
   /* ── RESPONSIVE ───────────────────────────────────────────── */
