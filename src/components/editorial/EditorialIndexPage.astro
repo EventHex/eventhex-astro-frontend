@@ -20,6 +20,10 @@ const topics = getUniqueCategories(items);
 const activeCategorySlug = Astro.url.pathname.match(/^\/blog\/category\/([^/]+)\/?$/)?.[1] ?? "";
 const isBlogHome = kind === "blog" && !activeCategorySlug;
 const blogGridItems = isBlogHome ? archiveItems : items;
+const titleWords = pageTitle.split(" ");
+const titleSplit = Math.max(0, titleWords.length - 2);
+const titleLead = titleWords.slice(0, titleSplit).join(" ");
+const titleKey = titleWords.slice(titleSplit).join(" ");
 ---
 
 <section class:list={["editorial-shell", `editorial-shell--${kind}`]}>
@@ -28,7 +32,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     <div class="editorial-hero__inner">
       <header class="editorial-header">
         <p class="editorial-eyebrow">{eyebrow}</p>
-        <h1 class="editorial-title">{pageTitle}</h1>
+        <h1 class="editorial-title">{titleLead}{titleLead ? " " : ""}<span class="ds-hl">{titleKey}</span></h1>
         <p class="editorial-lead">{pageDescription}</p>
 
         {kind !== "blog" && topics.length > 0 && (
@@ -100,7 +104,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     <section class="editorial-cta">
       <div class="editorial-cta-content">
         <p class="editorial-cta-eyebrow">Ready to level up?</p>
-        <h2>Turn ideas into smoother event execution.</h2>
+        <h2>Turn ideas into <span class="ds-hl-dark">smoother event execution.</span></h2>
         <p>See how EventHex connects registration, ticketing, attendee experiences, and analytics in one AI-powered workflow.</p>
         <a class="editorial-cta-btn" href="/book-a-demo/">Schedule a walkthrough</a>
       </div>
@@ -111,7 +115,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
 <style>
   /* ── Shell ── */
   .editorial-shell {
-    background-color: #ffffff;
+    background-color: var(--ds-white);
   }
 
   /* ── Hero header with EventHex branded background ── */
@@ -119,33 +123,11 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     position: relative;
     margin-top: -90px;
     padding: 0;
-    background:
-      radial-gradient(circle at 18% 30%, rgba(175, 163, 255, 0.14), transparent 28%),
-      radial-gradient(circle at 80% 24%, rgba(171, 255, 255, 0.14), transparent 30%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+    background: var(--ds-g4-stage);
   }
 
   .editorial-hero__inner {
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat;
     padding: 180px 20px 80px;
-  }
-
-  .editorial-shell--blog .editorial-hero {
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
-  }
-
-  .editorial-shell--blog .editorial-hero__inner {
-    background: none;
-  }
-
-  .editorial-shell--blog .editorial-eyebrow,
-  .editorial-shell--blog .editorial-title,
-  .editorial-shell--blog .editorial-lead {
-    color: #181816;
-    background: linear-gradient(110deg, #11110f 8%, #4f4f4a 62%, #85857f 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
   }
 
   .editorial-header {
@@ -161,7 +143,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--subheading-gray, #475467);
+    color: var(--ds-sub);
     font-family: var(--font-body);
     font-weight: 400;
     font-size: 18px;
@@ -174,14 +156,10 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     font-family: var(--font-heading);
     font-size: 52px;
     line-height: 60px;
-    font-weight: 600;
-    letter-spacing: -1px;
-    color: var(--heading-dark, #22272F);
-    margin: 0 0 20px;
-  }
-
-  .editorial-shell--blog .editorial-title {
     font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--ds-ink);
+    margin: 0 0 20px;
   }
 
   .editorial-lead {
@@ -190,7 +168,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     line-height: 28px;
     font-weight: 400;
     letter-spacing: -0.48px;
-    color: var(--subheading-gray, #475467);
+    color: var(--ds-sub);
     margin: 0 0 32px;
     max-width: 580px;
   }
@@ -208,8 +186,8 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     padding: 9px 16px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--surface-blue-tint, #E5EBFF);
-    color: var(--subheading-gray, #475467);
+    border: 1px solid var(--surface-blue-tint, var(--ds-surface-tint));
+    color: var(--ds-sub);
     font-family: var(--font-body);
     font-size: 14px;
     font-weight: 500;
@@ -221,8 +199,8 @@ const blogGridItems = isBlogHome ? archiveItems : items;
   }
 
   .editorial-category-tag:hover {
-    background: #ffffff;
-    border-color: var(--brand-blue, #375DFB);
+    background: var(--ds-white);
+    border-color: var(--brand-blue, var(--ds-blue));
   }
 
   /* ── Content container ── */
@@ -263,7 +241,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     padding: 12px 2px;
     border: 1px solid transparent;
     border-radius: 999px;
-    color: #242422;
+    color: var(--ds-ink);
     font-family: var(--font-heading);
     font-size: 18px;
     font-weight: 500;
@@ -273,20 +251,20 @@ const blogGridItems = isBlogHome ? archiveItems : items;
   }
 
   .editorial-filter-link:hover {
-    color: var(--brand-blue, #375DFB);
+    color: var(--brand-blue, var(--ds-blue));
   }
 
   .editorial-filter-link.is-active {
     min-width: 70px;
     padding-inline: 22px;
-    border-color: #e1e1de;
-    background: #ffffff;
-    color: #181816;
+    border-color: var(--ds-line-strong);
+    background: var(--ds-white);
+    color: var(--ds-night-2);
     box-shadow: 0 3px 8px rgba(25, 25, 23, 0.1), 0 18px 34px rgba(25, 25, 23, 0.05);
   }
 
   .editorial-filter-link:focus-visible {
-    outline: 2px solid var(--brand-blue, #375DFB);
+    outline: 2px solid var(--brand-blue, var(--ds-blue));
     outline-offset: 3px;
   }
 
@@ -298,7 +276,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
 
   .editorial-featured {
     padding-bottom: 60px;
-    border-bottom: 1px solid var(--surface-card-border, #E8ECF2);
+    border-bottom: 1px solid var(--surface-card-border, var(--ds-line));
   }
 
   .editorial-grid {
@@ -321,9 +299,9 @@ const blogGridItems = isBlogHome ? archiveItems : items;
   .editorial-empty {
     text-align: center;
     padding: 80px 20px;
-    background: var(--surface-light, #F5F8FF);
+    background: var(--surface-light, var(--ds-surface));
     border-radius: 20px;
-    border: 1px dashed var(--surface-card-border, #E8ECF2);
+    border: 1px dashed var(--surface-card-border, var(--ds-line));
   }
 
   .editorial-empty h2 {
@@ -331,24 +309,21 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--heading-dark, #22272F);
+    color: var(--heading-dark, var(--ds-ink));
   }
 
   .editorial-empty p {
     font-family: var(--font-body);
-    color: var(--body-gray, #525866);
+    color: var(--body-gray, var(--ds-body));
   }
 
   /* ── CTA section ── */
   .editorial-cta {
     padding: 64px 40px;
-    background:
-      radial-gradient(circle at 20% 40%, rgba(159, 129, 255, 0.2), transparent 40%),
-      radial-gradient(circle at 80% 60%, rgba(171, 255, 255, 0.15), transparent 40%),
-      var(--dark-card-bg, #333864);
-    border-radius: 20px;
+    background: var(--ds-night-bg);
+    border-radius: var(--ds-r-xl);
     text-align: center;
-    border: 1px solid var(--dark-card-border, rgba(172, 161, 241, 0.51));
+    border: 1px solid var(--ds-glass-dark-edge);
   }
 
   .editorial-cta-content {
@@ -362,7 +337,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--accent-cyan, #ABFFFF);
+    color: var(--ds-on-night-accent);
     margin-bottom: 16px;
   }
 
@@ -370,9 +345,9 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     font-family: var(--font-heading);
     font-size: 36px;
     line-height: 44px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
-    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--ds-white);
     margin-bottom: 16px;
   }
 
@@ -380,7 +355,7 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     font-family: var(--font-body);
     font-size: 17px;
     line-height: 28px;
-    color: rgba(255, 255, 255, 0.65);
+    color: var(--ds-on-night-body);
     margin-bottom: 32px;
   }
 
@@ -389,21 +364,20 @@ const blogGridItems = isBlogHome ? archiveItems : items;
     align-items: center;
     justify-content: center;
     padding: 14px 36px;
-    background: var(--brand-blue, #375DFB);
-    color: #ffffff;
+    background: var(--brand-blue, var(--ds-blue));
+    color: var(--ds-white);
     font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 15px;
+    font-weight: 500;
+    font-size: 16px;
     line-height: 24px;
-    letter-spacing: -0.48px;
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     transition: background 0.2s, transform 0.3s;
   }
 
   .editorial-cta-btn:hover {
-    background: var(--brand-blue-hover, #1C46D4);
-    transform: scale(1.05);
+    background: var(--brand-blue-hover, var(--ds-blue-hover));
+    
   }
 
   /* ── Tablet ── */

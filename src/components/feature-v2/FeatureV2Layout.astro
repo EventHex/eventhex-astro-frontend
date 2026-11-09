@@ -99,6 +99,18 @@ const faqSchema = {
 
 /* alternate bento layouts: tab 0 = left tall, tab 1 = right tall, tab 2 = center tall */
 const layouts = ["a", "b", "c"];
+
+/* key phrase = last two words of a heading (words unchanged) */
+function hl(text: string) {
+  const words = text.split(" ");
+  const n = words.length >= 4 ? 2 : 1;
+  return { before: words.slice(0, -n).join(" "), key: words.slice(-n).join(" ") };
+}
+const hBento = hl(bentoHeading);
+const hHow = hl(howItWorksHeading);
+const hWhy = hl(whyHeading);
+const hEco = hl(ecosystemHeading ?? "");
+const hCta = hl(ctaTitle);
 ---
 
 <MarketingLayout
@@ -120,7 +132,7 @@ const layouts = ["a", "b", "c"];
         <span class="fv2-hero__badge animate-on-scroll" data-animation="fadeIn">{badge}</span>
         <h1 class="fv2-hero__title animate-on-scroll" data-animation="fadeInUp">
           {heroTitleLine1}<br />
-          <span class="fv2-hero__highlight">{heroTitleLine2}</span>
+          <span class="fv2-hero__highlight ds-hl">{heroTitleLine2}</span>
         </h1>
         <p class="fv2-hero__copy animate-on-scroll" data-animation="fadeInUp">{heroCopy}</p>
         <div class="fv2-hero__ctas animate-on-scroll" data-animation="fadeInUp">
@@ -149,7 +161,7 @@ const layouts = ["a", "b", "c"];
     <div class="fv2-trust-strip__inner">
       {trustItems.map((t) => (
         <span class="fv2-trust-strip__item">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" fill="#375DFB" opacity=".15"/><path d="M5 8l2 2 4-4" stroke="#375DFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="8" style="fill:var(--ds-blue)" opacity=".15"/><path d="M5 8l2 2 4-4" style="stroke:var(--ds-blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           {t}
         </span>
       ))}
@@ -162,7 +174,7 @@ const layouts = ["a", "b", "c"];
       <div class="fv2-stats__engagement-text">
         <h2 class="fv2-stats__heading animate-on-scroll" data-animation="fadeInDown">
           <span class="fv2-stats--white">{statsHeadline.white1} </span>
-          <span class="fv2-stats--purple">{statsHeadline.accent}</span>
+          <span class="fv2-stats--purple ds-hl-dark">{statsHeadline.accent}</span>
           <br />
           <span class="fv2-stats--white">{statsHeadline.white2} </span>
           <span class="fv2-stats--cyan">{statsHeadline.accent2}</span>
@@ -182,7 +194,7 @@ const layouts = ["a", "b", "c"];
   <!-- ③ BENTO GRID — tabbed, light bg -->
   <section class="fv2-bento-section" id="fv2-bento">
     <div class="fv2-bento">
-      <h2 class="fv2-bento__title">{bentoHeading}</h2>
+      <h2 class="fv2-bento__title">{hBento.before} <span class="ds-hl">{hBento.key}</span></h2>
       <p class="fv2-bento__subtitle">{bentoSubtitle}</p>
 
       <nav class="fv2-bento__nav">
@@ -198,7 +210,7 @@ const layouts = ["a", "b", "c"];
               <div class={`fv2-bento__card ${cardIdx === 0 ? "fv2-bento__card--tall" : "fv2-bento__card--sm"} fv2-bento__pos-${cardIdx}`} style={`animation-delay:${(cardIdx * 0.06).toFixed(2)}s`}>
                 <div class={`fv2-bento__card-inner ${cardIdx > 0 ? "fv2-bento__card-inner--row" : ""}`}>
                   <div class="fv2-bento__card-text">
-                    <svg class="fv2-bento__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="2" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="2" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/><rect x="18" y="18" width="12" height="12" rx="3" fill="#B4BAC6"/></svg>
+                    <svg class="fv2-bento__icon" width="24" height="24" viewBox="0 0 32 32" fill="none"><rect x="2" y="2" width="12" height="12" rx="3" style="fill:var(--ds-label)"/><rect x="18" y="2" width="12" height="12" rx="3" style="fill:var(--ds-label)"/><rect x="2" y="18" width="12" height="12" rx="3" style="fill:var(--ds-label)"/><rect x="18" y="18" width="12" height="12" rx="3" style="fill:var(--ds-label)"/></svg>
                     <h3 class="fv2-bento__card-title">{card.title}</h3>
                     <p class="fv2-bento__card-desc">{card.desc}</p>
                   </div>
@@ -218,7 +230,7 @@ const layouts = ["a", "b", "c"];
       <div class="fv2-stack-header">
         <span class="fv2-stack-subtitle">Feature-by-feature</span>
         <h2 class="fv2-stack-title">
-          {stackingHeading} <br/><span class="fv2-stack-hl">{stackingHighlight}</span>
+          {stackingHeading} <br/><span class="fv2-stack-hl ds-hl-dark">{stackingHighlight}</span>
         </h2>
       </div>
       <div class="fv2-stack-cards">
@@ -248,7 +260,7 @@ const layouts = ["a", "b", "c"];
     <div class="fv2-how__inner">
       <div class="fv2-how__header">
         <span class="fv2-how__eyebrow animate-on-scroll" data-animation="fadeIn">Step by Step</span>
-        <h2 class="fv2-how__heading animate-on-scroll" data-animation="fadeInUp">{howItWorksHeading}</h2>
+        <h2 class="fv2-how__heading animate-on-scroll" data-animation="fadeInUp">{hHow.before} <span class="ds-hl">{hHow.key}</span></h2>
       </div>
       <div class="fv2-how__split">
         <div class="fv2-how__left">
@@ -260,8 +272,8 @@ const layouts = ["a", "b", "c"];
             ) : (
               <div class="fv2-how__placeholder">
                 <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-                  <rect width="120" height="120" rx="24" fill="#F0F2F5"/>
-                  <path d="M40 85V35l45 25-45 25z" fill="#375DFB" opacity="0.3"/>
+                  <rect width="120" height="120" rx="24" style="fill:var(--ds-surface-tab)"/>
+                  <path d="M40 85V35l45 25-45 25z" style="fill:var(--ds-blue)" opacity="0.3"/>
                 </svg>
               </div>
             )}
@@ -285,7 +297,7 @@ const layouts = ["a", "b", "c"];
   <!-- ⑥ WHY CHOOSE — white section -->
   <section class="fv2-why">
     <div class="fv2-why__inner">
-      <h2 class="fv2-why__heading animate-on-scroll" data-animation="fadeInUp">{whyHeading}</h2>
+      <h2 class="fv2-why__heading animate-on-scroll" data-animation="fadeInUp">{hWhy.before} <span class="ds-hl">{hWhy.key}</span></h2>
       <div class="fv2-why__grid">
         {whyCards.map((card, i) => (
           <div class={`fv2-why__card fv2-why__card--${i} animate-on-scroll`} data-animation="fadeInUp" data-delay={String(i * 80)}>
@@ -306,7 +318,7 @@ const layouts = ["a", "b", "c"];
       <div class="fv2-eco__inner">
         <div class="fv2-eco__header">
           {ecosystemEyebrow && <span class="fv2-eco__eyebrow animate-on-scroll" data-animation="fadeIn">{ecosystemEyebrow}</span>}
-          <h2 class="fv2-eco__heading animate-on-scroll" data-animation="fadeInUp">{ecosystemHeading}</h2>
+          <h2 class="fv2-eco__heading animate-on-scroll" data-animation="fadeInUp">{hEco.before} <span class="ds-hl">{hEco.key}</span></h2>
           {ecosystemSubtitle && <p class="fv2-eco__subtitle animate-on-scroll" data-animation="fadeInUp">{ecosystemSubtitle}</p>}
         </div>
         <div class="fv2-eco__grid">
@@ -327,12 +339,10 @@ const layouts = ["a", "b", "c"];
   <!-- ⑦ CTA — dark card with glows -->
   <section class="fv2-cta">
     <div class="fv2-cta__card">
-      <div class="fv2-cta__glow fv2-cta__glow--1"></div>
-      <div class="fv2-cta__glow fv2-cta__glow--2"></div>
       <div class="fv2-cta__split">
         <div class="fv2-cta__content">
           <span class="fv2-cta__eyebrow animate-on-scroll" data-animation="fadeIn">Get Started Today</span>
-          <h2 class="fv2-cta__title animate-on-scroll" data-animation="fadeInUp">{ctaTitle}</h2>
+          <h2 class="fv2-cta__title animate-on-scroll" data-animation="fadeInUp">{hCta.before} <span class="ds-hl-dark">{hCta.key}</span></h2>
           <p class="fv2-cta__copy animate-on-scroll" data-animation="fadeInUp">{ctaCopy}</p>
           <div class="fv2-cta__proof-row animate-on-scroll" data-animation="fadeInUp">
             <span class="fv2-cta__proof-pill">AI-powered platform</span>
@@ -373,7 +383,7 @@ const layouts = ["a", "b", "c"];
     <div class="fv2-faq__inner">
       <div class="fv2-faq__sidebar animate-on-scroll" data-animation="fadeInLeft">
         <span class="fv2-faq__eyebrow">Need Help?</span>
-        <h2 class="fv2-faq__sidebar-title">Frequently Asked Questions</h2>
+        <h2 class="fv2-faq__sidebar-title">Frequently <span class="ds-hl">Asked Questions</span></h2>
         <p class="fv2-faq__sidebar-desc">
           Everything you need to know about this feature and how it works with EventHex.
         </p>
@@ -412,11 +422,7 @@ const layouts = ["a", "b", "c"];
     justify-content: center;
     padding: 0;
     text-align: center;
-    background:
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.webp') center center / cover no-repeat,
-      radial-gradient(circle at 16% 22%, rgba(175, 163, 255, 0.16), transparent 24%),
-      radial-gradient(circle at 82% 20%, rgba(171, 255, 255, 0.16), transparent 26%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11-1024x576.webp') center center / cover no-repeat;
+    background: var(--ds-g4-stage);
   }
   .fv2-hero__inner {
     position: relative;
@@ -472,7 +478,7 @@ const layouts = ["a", "b", "c"];
     align-items: flex-start;
     justify-content: center;
     text-align: left;
-    background: #fff;
+    background: var(--ds-g4-stage);
   }
   .fv2-hero__inner--showcase {
     display: grid;
@@ -495,13 +501,13 @@ const layouts = ["a", "b", "c"];
     width: fit-content;
     margin: 0;
     padding: 13px 24px;
-    border: 1px solid #d8dce8;
+    border: 1px solid var(--ds-line-strong);
     border-radius: 999px;
-    background: #fff;
+    background: var(--ds-white);
     box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
-    color: #111827;
+    color: var(--ds-night-2);
     font-size: clamp(15px, 1.1vw, 20px);
-    font-weight: 650;
+    font-weight: 500;
     line-height: 1.1;
     letter-spacing: 0;
     white-space: nowrap;
@@ -510,20 +516,17 @@ const layouts = ["a", "b", "c"];
     grid-column: 2;
     max-width: 1080px;
     margin: 0;
-    color: #05060a;
+    color: var(--ds-ink);
     font-size: clamp(54px, 7vw, 124px);
-    font-weight: 800;
+    font-weight: 500;
     line-height: 0.98;
     letter-spacing: 0;
-  }
-  .fv2-hero__inner--showcase .fv2-hero__highlight {
-    color: inherit;
   }
   .fv2-hero__inner--showcase .fv2-hero__copy {
     grid-column: 2;
     max-width: 720px;
     margin: 32px 0 0;
-    color: #3f4654;
+    color: var(--ds-ink-2);
     font-size: clamp(18px, 1.35vw, 24px);
     line-height: 1.45;
     letter-spacing: 0;
@@ -552,12 +555,12 @@ const layouts = ["a", "b", "c"];
     width: 100%;
     margin-top: 76px;
     padding: clamp(22px, 3.2vw, 54px);
-    border: 1px solid #e4e8f0;
+    border: 1px solid var(--ds-line-strong);
     border-radius: 12px;
-    background:
-      linear-gradient(90deg, rgba(55, 93, 251, 0.08), rgba(19, 201, 187, 0.08)),
-      #f7f9fc;
-    box-shadow: 0 22px 70px rgba(15, 23, 42, 0.08);
+    background: var(--ds-glass-fill);
+    -webkit-backdrop-filter: var(--ds-glass-blur);
+    backdrop-filter: var(--ds-glass-blur);
+    box-shadow: var(--ds-glass-shadow);
   }
   .fv2-hero__inner--showcase .fv2-hero__animation .lottie-container,
   .fv2-hero__inner--showcase .fv2-hero__svg {
@@ -571,34 +574,31 @@ const layouts = ["a", "b", "c"];
   }
   .fv2-hero__badge {
     display: inline-flex;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 18px;
-    font-weight: 400;
     line-height: 24px;
-    letter-spacing: -0.48px;
-    color: var(--subheading-gray);
+    letter-spacing: -0.01em;
+    color: var(--ds-blue);
+    font-weight: 500;
     margin-bottom: 1.5rem;
   }
   .fv2-hero__title {
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 5vw, 52px);
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: var(--heading-dark);
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h1);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.035em;
+    color: var(--ds-ink);
     margin: 0 0 1.25rem;
   }
-  .fv2-hero__highlight {
-    display: block;
-    color: var(--brand-blue);
-  }
+  .fv2-hero__highlight { display: block; }
   .fv2-hero__copy {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 18px;
     font-weight: 400;
     line-height: 28px;
     letter-spacing: -0.48px;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     max-width: 680px;
     margin: 0 auto 2rem;
   }
@@ -619,14 +619,15 @@ const layouts = ["a", "b", "c"];
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.8125rem;
-    color: var(--subheading-gray);
+    color: var(--ds-sub);
   }
 
   /* ── TRUST STRIP ─────────────────────────── */
   .fv2-trust-strip {
-    background: var(--surface-light);
+    background: var(--ds-white);
+    border-bottom: 1px solid var(--ds-line);
     padding: 1.25rem 1.5rem;
   }
   .fv2-trust-strip__inner {
@@ -641,10 +642,10 @@ const layouts = ["a", "b", "c"];
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.875rem;
     font-weight: 500;
-    color: var(--heading-dark);
+    color: var(--ds-ink);
   }
 
   /* ── BUTTONS ─────────────────────────────── */
@@ -653,23 +654,23 @@ const layouts = ["a", "b", "c"];
     align-items: center;
     justify-content: center;
     gap: 6px;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.9375rem;
-    font-weight: 600;
-    border-radius: 10px;
+    font-weight: 500;
+    border-radius: 12px;
     padding: 0.75rem 1.75rem;
     text-decoration: none;
     transition: all 0.25s ease;
     cursor: pointer;
     border: none;
   }
-  .fv2-btn--primary { background: var(--brand-blue); color: #fff; }
-  .fv2-btn--primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
-  .fv2-btn--outline { background: transparent; color: var(--heading-dark); border: 1.5px solid var(--surface-card-border, #e8ecf4); }
-  .fv2-btn--outline:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
-  .fv2-btn--white { background: #fff; color: var(--heading-dark); }
-  .fv2-btn--white:hover { background: #f0f4ff; transform: translateY(-2px); }
-  .fv2-btn--ghost { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+  .fv2-btn--primary { background: var(--ds-blue); color: var(--ds-white); box-shadow: var(--ds-shadow-btn); }
+  .fv2-btn--primary:hover { background: var(--ds-blue-hover); color: var(--ds-white); transform: translateY(-2px); }
+  .fv2-btn--outline { background: rgba(255, 255, 255, .75); color: var(--ds-ink); border: 1px solid var(--ds-line); }
+  .fv2-btn--outline:hover { border-color: var(--ds-blue); color: var(--ds-blue); }
+  .fv2-btn--white { background: var(--ds-white); color: var(--ds-band-ink); }
+  .fv2-btn--white:hover { background: var(--ds-surface-tint); transform: translateY(-2px); }
+  .fv2-btn--ghost { background: rgba(255,255,255,0.12); color: var(--ds-white); border: 1px solid rgba(255,255,255,0.2); }
   .fv2-btn--ghost:hover { background: rgba(255,255,255,0.2); }
   .fv2-btn--sm { font-size: 0.875rem; padding: 0.625rem 1.25rem; }
 
@@ -682,36 +683,22 @@ const layouts = ["a", "b", "c"];
     align-items: center;
     width: 100%;
     padding: 100px 1.5rem;
-    background-color: #000;
-    background-image:
-      radial-gradient(at 57% 33%, hsl(219 0% 0%) 0px, transparent 50%),
-      radial-gradient(at 46% 60%, hsl(219 100% 15%) 0px, transparent 50%),
-      radial-gradient(at 60% 56%, hsl(327 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 49% 0%, hsl(307 100% 11%) 0px, transparent 50%),
-      radial-gradient(at 96% 0%, hsl(195 97% 13%) 0px, transparent 50%),
-      radial-gradient(at 96% 97%, hsl(206 100% 24%) 0px, transparent 50%),
-      radial-gradient(at 8% 82%, hsl(293 96% 10%) 0px, transparent 50%),
-      radial-gradient(at 0% 0%, hsl(196 100% 21%) 0px, transparent 50%),
-      url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1.webp');
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: var(--ds-night-bg);
   }
   .fv2-stats__engagement { width: 100%; padding: 0 0 60px; display: flex; justify-content: center; }
   .fv2-stats__engagement-text { width: 65%; max-width: 800px; }
   .fv2-stats__heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.75rem, 4vw, 3rem);
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -1px;
-    color: #fff;
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    color: var(--ds-white);
     text-align: center;
     margin: 0;
   }
-  .fv2-stats--white { color: #fff; }
-  .fv2-stats--purple { color: #AFA3FF; }
-  .fv2-stats--cyan { color: #ABFFFF; }
+  .fv2-stats--white { color: var(--ds-white); }
+
   .fv2-stats__grid {
     display: flex;
     justify-content: center;
@@ -730,28 +717,28 @@ const layouts = ["a", "b", "c"];
     justify-content: center;
     gap: 10px;
     padding: 2.25rem 1.5rem;
-    background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px;
+    background: var(--ds-glass-dark-fill);
+    border: 1px solid var(--ds-glass-dark-edge);
+    border-radius: var(--ds-r-lg);
+    box-shadow: var(--ds-glass-dark-shadow);
     backdrop-filter: blur(12px);
     text-align: center;
     transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   }
   .fv2-stats__card:hover {
     transform: translateY(-6px);
-    border-color: rgba(159, 129, 255, 0.35);
-    box-shadow: 0 8px 32px rgba(159, 129, 255, 0.12);
+    border-color: color-mix(in srgb, var(--ds-violet) 35%, transparent);
   }
   .fv2-stats__value {
-    font-family: var(--font-heading);
-    font-size: 2.75rem;
-    font-weight: 700;
-    color: #fff;
+    font-family: var(--ds-font-heading);
+    font-size: 2.25rem;
+    font-weight: 500;
+    color: var(--ds-white);
     letter-spacing: -1.5px;
     line-height: 1;
   }
   .fv2-stats__label {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.875rem;
     font-weight: 400;
     color: rgba(255,255,255,0.55);
@@ -763,7 +750,7 @@ const layouts = ["a", "b", "c"];
      ═══════════════════════════════════════════ */
   .fv2-bento-section {
     padding: 80px 0 60px;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+    background: var(--ds-g4-stage);
   }
   .fv2-bento {
     max-width: 1260px;
@@ -771,21 +758,20 @@ const layouts = ["a", "b", "c"];
     padding: 0 24px;
   }
   .fv2-bento__title {
-    font-family: var(--font-heading);
-    font-size: 42px;
-    font-weight: 400;
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
     line-height: 1.1;
-    letter-spacing: -1px;
+    letter-spacing: -0.035em;
     text-align: center;
-    color: var(--heading-dark);
+    color: var(--ds-ink);
     margin: 0 0 12px;
   }
-  .fv2-bento__title b { font-weight: 700; }
   .fv2-bento__subtitle {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 18px;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-body);
     text-align: center;
     max-width: 620px;
     margin: 0 auto 32px;
@@ -793,7 +779,9 @@ const layouts = ["a", "b", "c"];
   .fv2-bento__nav {
     display: flex;
     justify-content: center;
-    background: #F0F2F5;
+    background: var(--ds-glass-fill);
+    border: 1px solid var(--ds-glass-edge);
+    box-shadow: var(--ds-glass-shadow);
     border-radius: 50px;
     padding: 4px;
     margin: 0 auto 32px;
@@ -806,17 +794,17 @@ const layouts = ["a", "b", "c"];
     border: none;
     border-radius: 50px;
     background: transparent;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 14px;
-    font-weight: 600;
-    color: #475467;
+    font-weight: 500;
+    color: var(--ds-sub);
     cursor: pointer;
     transition: background 0.25s, color 0.25s, box-shadow 0.25s;
   }
   .fv2-bento__tab--active {
-    background: var(--brand-blue);
-    color: #fff;
-    box-shadow: 0 2px 8px rgba(55,93,251,0.3);
+    background: var(--ds-blue);
+    color: var(--ds-white);
+    box-shadow: var(--ds-shadow-btn);
   }
   .fv2-bento__panel { display: none; }
   .fv2-bento__panel--active { display: block; animation: fv2BentoFade 0.4s ease; }
@@ -850,11 +838,13 @@ const layouts = ["a", "b", "c"];
   @property --fv2-angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
   .fv2-bento__card {
     position: relative;
-    background: #F5F8FF;
-    border: 1px solid #E8ECF2;
-    border-radius: 20px;
+    background: var(--ds-glass-fill);
+    border: 1px solid var(--ds-glass-edge);
+    border-radius: var(--ds-r-xl);
     overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,.03);
+    box-shadow: var(--ds-glass-shadow);
+    -webkit-backdrop-filter: var(--ds-glass-blur);
+    backdrop-filter: var(--ds-glass-blur);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     opacity: 0;
     animation: fv2BentoCardIn 0.5s ease forwards;
@@ -865,10 +855,10 @@ const layouts = ["a", "b", "c"];
     inset: 0;
     border-radius: inherit;
     padding: 1.5px;
-    background: conic-gradient(from var(--fv2-angle), transparent 0deg, transparent 280deg, var(--brand-blue) 320deg, #6F8BFF 345deg, transparent 360deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    background: conic-gradient(from var(--fv2-angle), transparent 0deg, transparent 280deg, var(--ds-blue) 320deg, color-mix(in srgb, var(--ds-blue) 70%, white) 345deg, transparent 360deg);
+    -webkit-mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0);
     -webkit-mask-composite: xor;
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(var(--ds-black) 0 0) content-box, linear-gradient(var(--ds-black) 0 0);
     mask-composite: exclude;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -876,8 +866,7 @@ const layouts = ["a", "b", "c"];
   }
   .fv2-bento__card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 32px rgba(55,93,251,0.12);
-    border-color: rgba(55,93,251,0.15);
+    border-color: color-mix(in srgb, var(--ds-blue) 25%, white);
   }
   .fv2-bento__card:hover::after { opacity: 1; animation: fv2BentoBorder 2.4s linear infinite; }
   @keyframes fv2BentoBorder { to { --fv2-angle: 360deg; } }
@@ -914,18 +903,18 @@ const layouts = ["a", "b", "c"];
 
   .fv2-bento__card-text { display: flex; flex-direction: column; gap: 6px; }
   .fv2-bento__card-title {
-    font-family: var(--font-heading);
+    font-family: var(--ds-font-heading);
     font-size: 22px;
-    font-weight: 700;
-    line-height: 1.3;
-    color: var(--heading-dark);
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--ds-ink);
     margin: 0 0 6px;
   }
   .fv2-bento__card-desc {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 14px;
     line-height: 1.6;
-    color: #667085;
+    color: var(--ds-muted);
     margin: 0;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -939,11 +928,7 @@ const layouts = ["a", "b", "c"];
      ═══════════════════════════════════════════ */
   .fv2-stack-shell {
     width: 100%;
-    background-color: #000;
-    background-image: url('https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-2.webp');
-    background-position: center left;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: var(--ds-night-bg);
   }
   .fv2-stack-section {
     display: flex;
@@ -964,23 +949,23 @@ const layouts = ["a", "b", "c"];
     text-align: center;
   }
   .fv2-stack-subtitle {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 18px;
-    font-weight: 400;
+    font-weight: 500;
     line-height: 24px;
-    letter-spacing: -0.48px;
-    color: #fff;
+    letter-spacing: -0.01em;
+    color: var(--ds-on-night-accent);
     margin: 0;
   }
   .fv2-stack-title {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    font-weight: 400;
-    color: #fff;
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
+    color: var(--ds-white);
     margin: 0;
-    line-height: 1.15;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
-  .fv2-stack-hl { color: #AFA3FF; }
   .fv2-stack-cards {
     width: 100%;
     padding: 30px 0 0;
@@ -991,11 +976,10 @@ const layouts = ["a", "b", "c"];
     position: sticky;
     display: flex;
     align-items: stretch;
-    background: rgba(18, 15, 40, 0.92);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(172, 161, 241, 0.51);
-    border-radius: 20px;
+    background: linear-gradient(150deg, color-mix(in srgb, var(--ds-night-card) 55%, var(--ds-night)) 0%, var(--ds-night) 100%);
+    border: 1px solid var(--ds-glass-dark-edge);
+    box-shadow: var(--ds-glass-dark-shadow);
+    border-radius: var(--ds-r-xl);
     overflow: hidden;
     height: 500px;
     margin-bottom: 60px;
@@ -1011,27 +995,27 @@ const layouts = ["a", "b", "c"];
   }
   .fv2-stack-card-eyebrow {
     display: inline-block;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.75rem;
-    font-weight: 700;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #ABFFFF;
+    color: var(--ds-cyan);
     margin-bottom: 4px;
   }
   .fv2-stack-card-title {
-    font-family: var(--font-heading);
+    font-family: var(--ds-font-heading);
     font-size: 32px;
     font-weight: 500;
-    color: #AFA3FF;
+    color: var(--ds-white);
     margin: 0;
     line-height: 1.2;
   }
   .fv2-stack-card-desc {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 17px;
     font-weight: 400;
-    color: #fff;
+    color: var(--ds-on-night-body);
     margin: 0;
     line-height: 1.65;
   }
@@ -1039,18 +1023,19 @@ const layouts = ["a", "b", "c"];
     display: inline-flex;
     align-items: center;
     align-self: flex-start;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 15px;
     font-weight: 500;
-    color: #0A0D14;
-    background: #D4CAFE;
-    border-radius: 10px;
+    color: var(--ds-white);
+    background: var(--ds-blue);
+    box-shadow: var(--ds-shadow-btn);
+    border-radius: 12px;
     padding: 10px 24px;
     text-decoration: none;
     transition: transform 0.3s, background 0.3s;
     margin-top: 8px;
   }
-  .fv2-stack-card-btn:hover { transform: scale(1.05); }
+  .fv2-stack-card-btn:hover { background: var(--ds-blue-hover); transform: translateY(-2px); }
   .fv2-stack-card-image {
     flex: 1;
     display: flex;
@@ -1077,7 +1062,7 @@ const layouts = ["a", "b", "c"];
   .fv2-how {
     width: 100%;
     padding: 80px 1.5rem;
-    background: #fff;
+    background: var(--ds-white);
   }
   .fv2-how__inner {
     max-width: 1200px;
@@ -1102,22 +1087,23 @@ const layouts = ["a", "b", "c"];
   }
   .fv2-how__eyebrow {
     display: inline-block;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
     margin-bottom: 12px;
   }
   .fv2-how__heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: var(--heading-dark);
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
+    color: var(--ds-ink);
     text-align: center;
     margin: 0;
-    line-height: 1.25;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
   .fv2-how__image {
     display: flex;
@@ -1141,7 +1127,7 @@ const layouts = ["a", "b", "c"];
     width: 100%;
     max-width: 520px;
     aspect-ratio: 4 / 3;
-    background: var(--surface-light);
+    background: var(--ds-surface);
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -1157,9 +1143,9 @@ const layouts = ["a", "b", "c"];
     align-items: flex-start;
     gap: 20px;
     padding: 20px 24px;
-    background: var(--surface-light);
-    border-radius: 16px;
-    border: 1px solid var(--surface-card-border);
+    background: var(--ds-white);
+    border-radius: var(--ds-r-lg);
+    border: 1px solid var(--ds-line);
     transition: transform 0.3s, box-shadow 0.3s;
   }
   .fv2-how__step:hover {
@@ -1174,18 +1160,18 @@ const layouts = ["a", "b", "c"];
     height: 44px;
     min-width: 44px;
     border-radius: 50%;
-    background: rgba(55,93,251,0.1);
-    border: 2px solid rgba(55,93,251,0.25);
-    color: var(--brand-blue);
-    font-family: var(--font-heading);
+    background: color-mix(in srgb, var(--ds-blue) 10%, transparent);
+    border: 2px solid color-mix(in srgb, var(--ds-blue) 25%, transparent);
+    color: var(--ds-blue);
+    font-family: var(--ds-font-heading);
     font-size: 0.95rem;
-    font-weight: 800;
+    font-weight: 500;
   }
   .fv2-how__step-text {
     flex: 1;
   }
-  .fv2-how__step-title { font-family: var(--font-heading); font-size: 1rem; font-weight: 700; color: var(--heading-dark); margin: 0 0 6px; }
-  .fv2-how__step-desc { font-family: var(--font-body); font-size: 0.875rem; color: var(--body-gray); line-height: 1.65; margin: 0; }
+  .fv2-how__step-title { font-family: var(--ds-font-heading); font-size: 1rem; font-weight: 500; color: var(--ds-ink); margin: 0 0 6px; }
+  .fv2-how__step-desc { font-family: var(--ds-font-body); font-size: 0.875rem; color: var(--ds-body); line-height: 1.65; margin: 0; }
 
   /* ══════════════════════════════════════════
      ⑥ WHY CHOOSE — white section
@@ -1193,30 +1179,8 @@ const layouts = ["a", "b", "c"];
   .fv2-why {
     width: 100%;
     padding: 80px 1.5rem;
-    background: url('https://cms.eventhex.ai/wp-content/uploads/2025/03/Bg.svg') center center / cover no-repeat;
+    background: var(--ds-g4-stage);
     position: relative;
-  }
-  .fv2-why::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(to bottom, #fff, transparent);
-    z-index: 0;
-    pointer-events: none;
-  }
-  .fv2-why::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(to top, #fff, transparent);
-    z-index: 0;
-    pointer-events: none;
   }
   .fv2-why__inner {
     max-width: 1280px;
@@ -1228,13 +1192,14 @@ const layouts = ["a", "b", "c"];
     z-index: 1;
   }
   .fv2-why__heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: var(--heading-dark);
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
+    color: var(--ds-ink);
     text-align: center;
     margin: 0 0 48px;
-    line-height: 1.3;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
   .fv2-why__grid {
     display: grid;
@@ -1243,29 +1208,29 @@ const layouts = ["a", "b", "c"];
     width: 100%;
   }
   .fv2-why__card {
-    background: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    border-radius: 16px;
+    background: var(--ds-glass-fill);
+    backdrop-filter: var(--ds-glass-blur);
+    -webkit-backdrop-filter: var(--ds-glass-blur);
+    border: 1px solid var(--ds-glass-edge);
+    border-radius: var(--ds-r-lg);
     padding: 1.5rem 1.25rem;
     text-align: left;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow: var(--ds-glass-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   .fv2-why__card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.5);
+    box-shadow: var(--ds-glass-shadow);
   }
   .fv2-why__icon {
     width: 52px;
     height: 52px;
     border-radius: 14px;
-    background: linear-gradient(135deg, #E8E0FF 0%, #F0E6FF 100%);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--ds-violet) 18%, white) 0%, var(--ds-line) 100%);
     border: 1px solid rgba(210, 215, 230, 0.3);
     display: flex;
     align-items: center;
@@ -1275,27 +1240,27 @@ const layouts = ["a", "b", "c"];
     font-size: 1.625rem;
     line-height: 1;
   }
-  .fv2-why__card--0 .fv2-why__icon { background: linear-gradient(135deg, #DBEAFE 0%, #E0E7FF 100%); }
-  .fv2-why__card--1 .fv2-why__icon { background: linear-gradient(135deg, #E0E7FF 0%, #EDE9FE 100%); }
-  .fv2-why__card--2 .fv2-why__icon { background: linear-gradient(135deg, #FCE7F3 0%, #EDE9FE 100%); }
-  .fv2-why__card--3 .fv2-why__icon { background: linear-gradient(135deg, #DBEAFE 0%, #CFFAFE 100%); }
-  .fv2-why__card--4 .fv2-why__icon { background: linear-gradient(135deg, #EDE9FE 0%, #FCE7F3 100%); }
+  .fv2-why__card--0 .fv2-why__icon { background: linear-gradient(135deg, color-mix(in srgb, var(--ds-blue) 14%, white) 0%, color-mix(in srgb, var(--ds-indigo) 14%, white) 100%); }
+  .fv2-why__card--1 .fv2-why__icon { background: linear-gradient(135deg, color-mix(in srgb, var(--ds-indigo) 14%, white) 0%, var(--ds-line) 100%); }
+  .fv2-why__card--2 .fv2-why__icon { background: linear-gradient(135deg, var(--ds-line) 0%, var(--ds-line) 100%); }
+  .fv2-why__card--3 .fv2-why__icon { background: linear-gradient(135deg, color-mix(in srgb, var(--ds-blue) 14%, white) 0%, color-mix(in srgb, var(--ds-cyan) 35%, white) 100%); }
+  .fv2-why__card--4 .fv2-why__icon { background: linear-gradient(135deg, var(--ds-line) 0%, var(--ds-line) 100%); }
   .fv2-why__icon :global(svg) {
     width: 24px;
     height: 24px;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
   }
   .fv2-why__card-title {
-    font-family: var(--font-heading);
+    font-family: var(--ds-font-heading);
     font-size: 1.125rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.5rem;
   }
   .fv2-why__card-desc {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.875rem;
-    color: var(--subheading-gray);
+    color: var(--ds-sub);
     line-height: 1.6;
     margin: 0;
   }
@@ -1303,32 +1268,33 @@ const layouts = ["a", "b", "c"];
   /* ══════════════════════════════════════════
      ⑥.5 ECOSYSTEM — cross-link grid
      ═══════════════════════════════════════════ */
-  .fv2-eco { width: 100%; padding: 20px 1.5rem 80px; background: #fff; }
+  .fv2-eco { width: 100%; padding: 20px 1.5rem 80px; background: var(--ds-white); }
   .fv2-eco__inner { max-width: 1200px; margin: 0 auto; }
   .fv2-eco__header { text-align: center; max-width: 640px; margin: 0 auto 40px; }
   .fv2-eco__eyebrow {
     display: inline-block;
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: var(--brand-blue);
+    color: var(--ds-blue);
     margin-bottom: 0.75rem;
   }
   .fv2-eco__heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
-    font-weight: 600;
-    color: var(--heading-dark);
+    font-family: var(--ds-font-heading);
+    font-size: var(--ds-h2);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.75rem;
-    line-height: 1.25;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
   .fv2-eco__subtitle {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 1rem;
     line-height: 1.6;
-    color: var(--subheading-gray);
+    color: var(--ds-sub);
     margin: 0;
   }
   .fv2-eco__grid {
@@ -1341,16 +1307,16 @@ const layouts = ["a", "b", "c"];
     align-items: flex-start;
     gap: 0.875rem;
     padding: 1.25rem;
-    background: var(--surface-light);
-    border: 1px solid var(--surface-card-border, #e8ecf4);
+    background: var(--ds-surface);
+    border: 1px solid var(--ds-line);
     border-radius: 14px;
     text-decoration: none;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   }
   .fv2-eco__card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
-    border-color: rgba(55, 93, 251, 0.25);
+    box-shadow: var(--ds-shadow-shot);
+    border-color: color-mix(in srgb, var(--ds-blue) 25%, transparent);
   }
   .fv2-eco__icon {
     flex-shrink: 0;
@@ -1360,21 +1326,21 @@ const layouts = ["a", "b", "c"];
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
+    color: var(--ds-white);
   }
   .fv2-eco__icon :global(svg) { width: 20px; height: 20px; }
   .fv2-eco__card-title {
-    font-family: var(--font-heading);
+    font-family: var(--ds-font-heading);
     font-size: 0.9375rem;
-    font-weight: 700;
-    color: var(--heading-dark);
+    font-weight: 500;
+    color: var(--ds-ink);
     margin: 0 0 0.2rem;
   }
   .fv2-eco__card-desc {
-    font-family: var(--font-body);
+    font-family: var(--ds-font-body);
     font-size: 0.8125rem;
     line-height: 1.5;
-    color: var(--subheading-gray);
+    color: var(--ds-sub);
     margin: 0;
   }
 
@@ -1384,27 +1350,24 @@ const layouts = ["a", "b", "c"];
   .fv2-cta { max-width: 1328px; margin: 0 auto; padding: 60px 24px 80px; }
   .fv2-cta__card {
     position: relative;
-    border-radius: 24px;
+    border-radius: var(--ds-r-2xl);
     padding: 80px 40px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     overflow: hidden;
-    background: #0F1629;
+    background: var(--ds-g3-band);
   }
   .fv2-cta__split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
-  .fv2-cta__glow { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
-  .fv2-cta__glow--1 { width: 350px; height: 350px; background: rgba(55,93,251,0.3); top: -100px; right: -80px; }
-  .fv2-cta__glow--2 { width: 300px; height: 300px; background: rgba(159,129,255,0.2); bottom: -80px; left: -60px; }
   .fv2-cta__content { position: relative; z-index: 1; text-align: left; }
-  .fv2-cta__eyebrow { display: inline-block; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-purple); margin-bottom: 1rem; }
-  .fv2-cta__title { font-family: var(--font-heading); font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; margin: 0 0 1rem; line-height: 1.25; }
-  .fv2-cta__copy { font-family: var(--font-body); font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); margin: 0 0 1.5rem; }
+  .fv2-cta__eyebrow { display: inline-block; font-family: var(--ds-font-body); font-size: 0.8125rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ds-on-night-accent); margin-bottom: 1rem; }
+  .fv2-cta__title { font-family: var(--ds-font-heading); font-size: var(--ds-h2); font-weight: 500; color: var(--ds-white); margin: 0 0 1rem; line-height: 1.1; letter-spacing: -0.035em; }
+  .fv2-cta__copy { font-family: var(--ds-font-body); font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.65); margin: 0 0 1.5rem; }
   .fv2-cta__proof-row { display: flex; gap: 0.5rem; justify-content: flex-start; flex-wrap: wrap; margin-bottom: 1.75rem; }
-  .fv2-cta__proof-pill { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-body); font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); padding: 0.35rem 0.75rem; border-radius: 100px; }
+  .fv2-cta__proof-pill { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--ds-font-body); font-size: 0.75rem; font-weight: 500; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); padding: 0.35rem 0.75rem; border-radius: 100px; }
   .fv2-cta__buttons { display: flex; gap: 0.75rem; justify-content: flex-start; flex-wrap: wrap; margin-bottom: 1.5rem; }
   .fv2-cta__trust { display: flex; gap: 1.25rem; justify-content: flex-start; flex-wrap: wrap; }
-  .fv2-cta__trust-item { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--font-body); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+  .fv2-cta__trust-item { display: inline-flex; align-items: center; gap: 0.35rem; font-family: var(--ds-font-body); font-size: 0.75rem; color: rgba(255,255,255,0.5); }
   .fv2-cta__animation { display: flex; align-items: center; justify-content: center; }
   .fv2-cta__lottie { width: 100%; max-width: 420px; }
   .fv2-cta__svg { width: 100%; max-width: 520px; height: auto; }
@@ -1414,24 +1377,24 @@ const layouts = ["a", "b", "c"];
   /* ══════════════════════════════════════════
      ⑧ FAQ — split layout sidebar + accordion
      ═══════════════════════════════════════════ */
-  .fv2-faq { background: var(--surface-light, #f8f9fc); padding: 5rem 1.5rem; }
+  .fv2-faq { background: var(--ds-surface); padding: 5rem 1.5rem; }
   .fv2-faq__inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 3rem; align-items: start; }
   .fv2-faq__sidebar { position: sticky; top: 6rem; }
-  .fv2-faq__eyebrow { display: inline-block; font-family: var(--font-body); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--brand-blue); margin-bottom: 0.5rem; }
-  .fv2-faq__sidebar-title { font-family: var(--font-heading); font-size: 1.75rem; font-weight: 700; color: var(--heading-dark); margin: 0 0 0.75rem; line-height: 1.25; }
-  .fv2-faq__sidebar-desc { font-family: var(--font-body); font-size: 0.9375rem; line-height: 1.6; color: var(--subheading-gray); margin: 0 0 1.25rem; }
-  .fv2-faq__support-card { background: #fff; border: 1px solid var(--surface-card-border, #e8ecf4); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
-  .fv2-faq__support-title { font-family: var(--font-heading); font-size: 0.9375rem; font-weight: 700; color: var(--heading-dark); margin: 0 0 0.35rem; }
-  .fv2-faq__support-desc { font-family: var(--font-body); font-size: 0.8125rem; line-height: 1.6; color: var(--subheading-gray); margin: 0; }
+  .fv2-faq__eyebrow { display: inline-block; font-family: var(--ds-font-body); font-size: 0.8125rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ds-blue); margin-bottom: 0.5rem; }
+  .fv2-faq__sidebar-title { font-family: var(--ds-font-heading); font-size: var(--ds-h3); font-weight: 500; color: var(--ds-ink); margin: 0 0 0.75rem; line-height: 1.15; letter-spacing: -0.025em; }
+  .fv2-faq__sidebar-desc { font-family: var(--ds-font-body); font-size: 0.9375rem; line-height: 1.6; color: var(--ds-sub); margin: 0 0 1.25rem; }
+  .fv2-faq__support-card { background: var(--ds-white); border: 1px solid var(--ds-line); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.25rem; }
+  .fv2-faq__support-title { font-family: var(--ds-font-heading); font-size: 0.9375rem; font-weight: 500; color: var(--ds-ink); margin: 0 0 0.35rem; }
+  .fv2-faq__support-desc { font-family: var(--ds-font-body); font-size: 0.8125rem; line-height: 1.6; color: var(--ds-sub); margin: 0; }
   .fv2-faq__list { display: flex; flex-direction: column; gap: 0.75rem; }
-  .fv2-faq__item { background: #fff; border: 1px solid var(--surface-card-border, #e8ecf4); border-radius: 12px; overflow: hidden; transition: border-color 0.2s ease; }
-  .fv2-faq__item[open] { border-color: var(--brand-blue); }
-  .fv2-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; font-family: var(--font-heading); font-size: 0.9375rem; font-weight: 600; color: var(--heading-dark); cursor: pointer; list-style: none; }
+  .fv2-faq__item { background: var(--ds-white); border: 1px solid var(--ds-line); border-radius: 12px; overflow: hidden; transition: border-color 0.2s ease; }
+  .fv2-faq__item[open] { border-color: var(--ds-blue); }
+  .fv2-faq__question { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; font-family: var(--ds-font-heading); font-size: 0.9375rem; font-weight: 500; color: var(--ds-ink); cursor: pointer; list-style: none; }
   .fv2-faq__question::-webkit-details-marker { display: none; }
-  .fv2-faq__chevron { flex-shrink: 0; transition: transform 0.25s ease; color: var(--subheading-gray); }
-  .fv2-faq__item[open] .fv2-faq__chevron { transform: rotate(180deg); color: var(--brand-blue); }
+  .fv2-faq__chevron { flex-shrink: 0; transition: transform 0.25s ease; color: var(--ds-sub); }
+  .fv2-faq__item[open] .fv2-faq__chevron { transform: rotate(180deg); color: var(--ds-blue); }
   .fv2-faq__answer { padding: 0 1.5rem 1.25rem; }
-  .fv2-faq__answer p { font-family: var(--font-body); font-size: 0.875rem; line-height: 1.7; color: var(--subheading-gray); margin: 0; }
+  .fv2-faq__answer p { font-family: var(--ds-font-body); font-size: 0.875rem; line-height: 1.7; color: var(--ds-sub); margin: 0; }
 
   /* ══════════════════════════════════════════
      ANIMATIONS

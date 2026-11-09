@@ -43,7 +43,7 @@ Then a desktop and a 390px mobile screenshot check.
 | 0 | Foundation: `ds.css`, Heading/Shot components, content guard, hex report | done (feat/design-system-v5) |
 | 1 | Pilot: `/event-registration/` on the system | done (feat/design-system-v5) |
 | 2 | Site chrome: header, footer CTA, footer, sticky demo bar, cookie consent, WhatsApp widget on tokens | done (feat/design-system-v5) |
-| 3 | Templates: `FeatureEventTypePage` (about 60 sub-pages), `UseCaseLayout`, blog/news/glossary | next |
+| 3 | Templates: `FeatureEventTypePage` (60 sub-pages), `UseCaseLayout` (12), use-cases hub, blog/news editorial, glossary, customers, case studies, `FeatureV2Layout` (12: cities, CRM, localization, security, portals, developers), city template | done (feat/design-system-v5) |
 | 4a | Core Management feature pages (ticketing, check-in, badge printing, payments, virtual & hybrid, invoicing, white-label, dashboard) | done (feat/design-system-v5) |
 | 4b | Speakers & Content (speaker management, session management, call for papers) | done (feat/design-system-v5) |
 | 4c | AI Features (AI platform, copilot, smart-connect, photo gallery, session recap, form builder) | done (feat/design-system-v5) |

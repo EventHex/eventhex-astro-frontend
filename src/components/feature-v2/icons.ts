@@ -1,10 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════
    Shared SVG Icons for FeatureV2 pages
-   All icons are 22×22, viewBox 0 0 24 24, stroke #375DFB.
+   All icons are 22×22, viewBox 0 0 24 24, stroke currentColor.
    Usage: import { icons } from "./icons"; then icons.users etc.
    ═══════════════════════════════════════════════════════════════ */
 
-const c = "#375DFB";
+const c = "currentColor";
 
 export const icons: Record<string, string> = {
   /* ── General / UI ── */
