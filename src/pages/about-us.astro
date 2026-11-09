@@ -23,10 +23,11 @@ const latestPosts = normalizeBlogPosts(rawPosts)
 ---
 
 <MarketingLayout {title} {description}>
+  <div class="about-top ds-stage">
   <section class="about-hero">
     <div class="about-hero__outer">
       <div class="about-hero__inner">
-        <h1 class="about-hero__title">Built To Keep Them Recurring</h1>
+        <h1 class="about-hero__title">Built To <span class="ds-hl">Keep Them Recurring</span></h1>
         <p class="about-hero__desc">At EventHex, we're transforming the ways event organizers and recurring events approach event personalisation, attendee retention, and event campaigning.</p>
       </div>
     </div>
@@ -44,11 +45,12 @@ const latestPosts = normalizeBlogPosts(rawPosts)
       />
     </div>
   </section>
+  </div>
 
-  <section class="about-editorial" aria-labelledby="about-editorial-title">
+  <section class="about-editorial ds-night" aria-labelledby="about-editorial-title">
     <div class="about-editorial__inner">
       <a href="/blog/" class="about-editorial__link">Explore More</a>
-      <h2 id="about-editorial-title" class="about-editorial__title">Your Countless Events Begin Here</h2>
+      <h2 id="about-editorial-title" class="about-editorial__title">Your Countless Events <span class="ds-hl-dark">Begin Here</span></h2>
 
       <div class="about-editorial__track">
         {latestPosts.map((post) => (
@@ -63,23 +65,19 @@ const latestPosts = normalizeBlogPosts(rawPosts)
 
 <style>
   .about-hero {
-    padding: 0 20px 20px;
+    padding: 0 20px;
   }
 
   .about-hero__outer {
-    background: url("https://cms.eventhex.ai/wp-content/uploads/2024/12/Untitled-design-11.png") center / cover no-repeat;
     max-width: 1140px;
     margin: 0 auto;
-    padding: clamp(88px, 10vw, 128px) clamp(20px, 3vw, 36px) clamp(110px, 14vw, 170px);
+    padding: clamp(112px, 12vw, 152px) clamp(20px, 3vw, 36px) clamp(40px, 5vw, 64px);
   }
 
   .about-hero__inner {
-    background: url("https://cms.eventhex.ai/wp-content/uploads/2024/12/Frame-48096154-1.png") center / cover no-repeat;
-    min-height: clamp(260px, 27vw, 300px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
     text-align: center;
     padding: 0 clamp(16px, 3vw, 28px);
   }
@@ -90,10 +88,9 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     font-family: "Creato Display", var(--font-heading);
     font-size: clamp(3rem, 6vw, 4.25rem);
     font-weight: 500;
-    line-height: 0.98;
+    line-height: 1.02;
     letter-spacing: -0.045em;
-    color: #22272f;
-    white-space: nowrap;
+    color: var(--ds-ink);
   }
 
   .about-hero__desc {
@@ -101,27 +98,26 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     width: 100%;
     max-width: 720px;
     font-family: var(--font-body);
-    font-size: clamp(1.125rem, 2vw, 1.75rem);
+    font-size: clamp(1.125rem, 2vw, 1.5rem);
     font-weight: 400;
     line-height: 1.5;
-    color: #475467;
+    color: var(--ds-sub);
     text-wrap: balance;
   }
 
   .about-showcase {
-    background: url("https://cms.eventhex.ai/wp-content/uploads/2024/12/bg-1-539x1024.png") center top / cover no-repeat;
-    padding: 0 20px 72px;
+    padding: 0 20px clamp(64px, 8vw, 104px);
   }
 
   .about-showcase__frame {
-    width: min(80vw, 960px);
+    width: min(100%, 960px);
     height: 500px;
-    margin: -315px auto 0;
-    border-radius: 40px;
-    border: 3px solid rgba(200, 168, 255, 0.5);
+    margin: 0 auto;
+    border-radius: var(--ds-r-lg);
+    border: 1px solid var(--ds-line-strong);
     overflow: hidden;
-    background: #f7f6fb;
-    box-shadow: 0 18px 48px rgba(32, 43, 67, 0.08);
+    background: var(--ds-surface);
+    box-shadow: var(--ds-shadow-hero);
   }
 
   .about-showcase__frame img {
@@ -133,7 +129,7 @@ const latestPosts = normalizeBlogPosts(rawPosts)
   }
 
   .about-editorial {
-    padding: 0 20px 90px;
+    padding: clamp(64px, 8vw, 104px) 20px clamp(64px, 8vw, 104px);
   }
 
   .about-editorial__inner {
@@ -148,7 +144,8 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     font-size: 18px;
     font-weight: 400;
     line-height: 1.5;
-    color: #302b3f;
+    color: var(--ds-on-night-accent);
+    font-weight: 500;
     text-decoration: none;
     margin-bottom: 12px;
   }
@@ -161,7 +158,7 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     font-weight: 500;
     line-height: 1.05;
     letter-spacing: -0.04em;
-    color: #000000;
+    color: var(--ds-on-night);
     text-wrap: balance;
   }
 
@@ -189,26 +186,8 @@ const latestPosts = normalizeBlogPosts(rawPosts)
   }
 
   @media (max-width: 1024px) {
-    .about-hero {
-      padding-bottom: 18px;
-    }
-
-    .about-hero__outer {
-      padding-bottom: clamp(96px, 14vw, 150px);
-    }
-
-    .about-showcase {
-      padding-bottom: 56px;
-    }
-
     .about-showcase__frame {
-      width: min(82vw, 920px);
       height: 460px;
-      margin-top: -250px;
-    }
-
-    .about-editorial {
-      padding-bottom: 72px;
     }
 
     .about-editorial__item {
@@ -222,15 +201,11 @@ const latestPosts = normalizeBlogPosts(rawPosts)
 
   @media (max-width: 767px) {
     .about-hero {
-      padding: 0 16px 16px;
+      padding: 0 16px;
     }
 
     .about-hero__outer {
-      padding: 64px 16px 92px;
-    }
-
-    .about-hero__inner {
-      min-height: 0;
+      padding: 104px 16px 36px;
     }
 
     .about-hero__title {
@@ -244,16 +219,13 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     }
 
     .about-showcase {
-      padding: 0 16px 44px;
-      background-size: 160% auto;
+      padding: 0 16px 48px;
     }
 
     .about-showcase__frame {
       width: 100%;
       height: auto;
-      margin-top: -84px;
-      border-radius: 24px;
-      border-width: 2px;
+      border-radius: var(--ds-r-md);
     }
 
     .about-showcase__frame img {
@@ -262,7 +234,7 @@ const latestPosts = normalizeBlogPosts(rawPosts)
     }
 
     .about-editorial {
-      padding: 0 16px 56px;
+      padding: 56px 16px;
     }
 
     .about-editorial__link {

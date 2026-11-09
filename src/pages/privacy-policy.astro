@@ -4,73 +4,62 @@ import { privacyPolicyContent } from "../lib/legal-page-content";
 
 const title = "Privacy Policy | EventHex";
 const description = "EventHex Privacy Policy — how we collect, use, and protect your personal data.";
+const legalTitle: string = "Privacy Policy";
+const legalWords = legalTitle.split(" ");
+const legalTailCount = legalWords.length > 2 ? 2 : 1;
+const legalTail = legalWords.slice(-legalTailCount).join(" ");
+const legalHead = legalWords.slice(0, -legalTailCount).join(" ");
 ---
 
 <MarketingLayout title={title} description={description}>
   <section class="legal-page">
+    <div class="legal-hero ds-stage">
+      <h1 class="legal-hero__title ds-h1">{legalHead}{legalHead ? " " : ""}<span class="ds-hl">{legalTail}</span></h1>
+    </div>
     <div class="legal-page__inner">
-      <h1 class="legal-page__title">Privacy Policy</h1>
       <div class="legal-page__content" set:html={privacyPolicyContent} />
     </div>
   </section>
 
   <style>
-    .legal-page {
-      padding: 6rem 1.5rem 4rem;
-    }
+    .legal-page { background: var(--ds-white); }
+    .legal-hero { padding: clamp(7rem, 10vw, 9rem) var(--ds-gutter) clamp(2.5rem, 5vw, 4rem); text-align: center; }
+    .legal-hero__title { font-size: clamp(2rem, 4vw, 3.25rem); max-width: 48rem; margin: 0 auto; }
     .legal-page__inner {
-      max-width: 48rem;
+      max-width: 46rem;
       margin: 0 auto;
-    }
-    .legal-page__title {
-      font-family: var(--font-heading, 'Creato Display', sans-serif);
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 2rem;
-      color: var(--heading-dark, #1a1a2e);
+      padding: clamp(2.5rem, 5vw, 4rem) var(--ds-gutter) clamp(3.5rem, 7vw, 6rem);
     }
     .legal-page__content {
-      font-family: var(--font-body, 'Creato Display', sans-serif);
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--text-secondary, #4a4a68);
+      font-family: var(--ds-font-body);
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      color: var(--ds-ink);
     }
     .legal-page__content :global(h2) {
+      font-family: var(--ds-font-heading);
       font-size: 1.5rem;
-      font-weight: 700;
+      font-weight: 500;
+      line-height: 1.25;
       margin-top: 2.5rem;
       margin-bottom: 0.75rem;
-      color: var(--heading-dark, #1a1a2e);
+      color: var(--ds-ink);
     }
     .legal-page__content :global(h3) {
+      font-family: var(--ds-font-heading);
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 500;
       margin-top: 2rem;
       margin-bottom: 0.5rem;
-      color: var(--heading-dark, #1a1a2e);
+      color: var(--ds-ink);
     }
-    .legal-page__content :global(p) {
-      margin-bottom: 1rem;
-    }
+    .legal-page__content :global(p) { margin-bottom: 1rem; }
     .legal-page__content :global(ul),
-    .legal-page__content :global(ol) {
-      margin-bottom: 1rem;
-      padding-left: 1.5rem;
-    }
-    .legal-page__content :global(li) {
-      margin-bottom: 0.5rem;
-    }
-    .legal-page__content :global(a) {
-      color: var(--primary, #6c5ce7);
-      text-decoration: underline;
-    }
-    .legal-page__content :global(strong) {
-      font-weight: 600;
-      color: var(--heading-dark, #1a1a2e);
-    }
-    @media (max-width: 640px) {
-      .legal-page { padding: 4rem 1rem 3rem; }
-      .legal-page__title { font-size: 1.75rem; }
-    }
+    .legal-page__content :global(ol) { margin-bottom: 1rem; padding-left: 1.5rem; }
+    .legal-page__content :global(li) { margin-bottom: 0.5rem; }
+    .legal-page__content :global(a) { color: var(--ds-blue); text-decoration: underline; text-underline-offset: 2px; }
+    .legal-page__content :global(a:hover) { color: var(--ds-blue-hover); }
+    .legal-page__content :global(strong) { font-weight: 600; color: var(--ds-ink); }
+    .legal-page__content :global(table) { display: block; max-width: 100%; overflow-x: auto; }
   </style>
 </MarketingLayout>
