@@ -54,12 +54,29 @@ const groups: { id: string; eyebrow: string; title: string; cards: Card[] }[] = 
   },
 ];
 
-const featureCards: Card[] = [
-  { name: "Registration and Ticketing", href: "/event-registration/", text: "Choose the attendee journey, ticket rules, and access products." },
-  { name: "Programme and Speakers", href: "/session-management/", text: "Build sessions, speakers, and submission handoffs." },
-  { name: "Exhibitors and Leads", href: "/exhibitor-management/", text: "Run the exhibitor portal, passes, badges, and lead workflow." },
-  { name: "Marketing and Notifications", href: "/event-marketing/", text: "Separate planned campaigns from operational alerts." },
+type Shot = { src: string; alt: string; w: number; h: number };
+
+const featureCards: (Card & { shot: Shot })[] = [
+  { name: "Registration and Ticketing", href: "/event-registration/", text: "Choose the attendee journey, ticket rules, and access products.", shot: { src: "/feature-images/event-ticketing/ticket-list.webp", alt: "EventHex ticket list showing price, status and registrations for event ticketing", w: 1400, h: 790 } },
+  { name: "Programme and Speakers", href: "/session-management/", text: "Build sessions, speakers, and submission handoffs.", shot: { src: "/feature-images/session-management/timeline-view.jpeg", alt: "EventHex multi-track session timeline for programme and speaker management", w: 1024, h: 480 } },
+  { name: "Exhibitors and Leads", href: "/exhibitor-management/", text: "Run the exhibitor portal, passes, badges, and lead workflow.", shot: { src: "/images/sponsor-management/exhibitor-list-web-806.webp", alt: "EventHex exhibitor list in the exhibitor management portal", w: 806, h: 696 } },
+  { name: "Marketing and Notifications", href: "/event-marketing/", text: "Separate planned campaigns from operational alerts.", shot: { src: "/feature-images/solutions/event-marketing-email-campaigns.jpg", alt: "EventHex email campaign list for event marketing", w: 1280, h: 720 } },
 ];
+
+const shots = {
+  appHub: { src: "/feature-images/industries/app-tiles.webp", alt: "EventHex attendee mobile app options: branded app, attendee access, networking and chat, agenda and schedule", w: 1400, h: 571 },
+  sessions: { src: "/feature-images/industries/sessions-card.webp", alt: "EventHex session card for a welcome speech with polls, questions, feedback and video tools", w: 1400, h: 449 },
+  timeline: { src: "/feature-images/session-management/timeline-view.jpeg", alt: "EventHex session timeline across tracks and stages", w: 1024, h: 480 },
+  sessionDetail: { src: "/feature-images/session-management/detail-panel.png", alt: "EventHex session detail panel with speakers and engagement tools", w: 424, h: 524 },
+  speakers: { src: "/feature-images/speaker-management/hero-dashboard.png", alt: "EventHex speaker list with designation and company columns", w: 718, h: 493 },
+  modules: { src: "/feature-images/industries/nav-modules.webp", alt: "EventHex event workspace navigation listing dashboard, setup, registrations, design, exhibitor and marketing modules", w: 640, h: 1120 },
+  exhibitors: { src: "/images/sponsor-management/exhibitor-list-web-806.webp", alt: "EventHex exhibitor list in the exhibitor management portal", w: 806, h: 696 },
+  packages: { src: "/images/sponsor-management/sponsor-packages-web-806.webp", alt: "EventHex sponsor and exhibitor package setup", w: 806, h: 696 },
+  netFeatures: { src: "/feature-images/ai-smart-connect/networking-settings-features.webp", alt: "EventHex networking features: meeting schedule, AI recommendations and similar people", w: 600, h: 550 },
+  netConnect: { src: "/feature-images/ai-smart-connect/networking-settings-connection-options.webp", alt: "EventHex networking connection options for connections, invitations and requests", w: 600, h: 550 },
+  payment: { src: "/feature-images/event-registration/hold-payment-settings.png", alt: "EventHex paid event and payment gateway configuration for regional payment choices", w: 760, h: 500 },
+  website: { src: "/feature-images/industries/website-options.webp", alt: "EventHex website mode options: EventHex landing page, WordPress, AI Gallery and InstaRecap", w: 1400, h: 538 },
+};
 
 const steps = [
   ["Choose the closest operating model", "Start with programme, expo, community, or regional requirements."],
@@ -150,14 +167,16 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
         <div class="erg-hero__visual animate-on-scroll" data-animation="fadeInRight">
           <div class="erg-hero__visual-card">
             <div class="erg-hero__visual-inner">
-              <div class="ind-map" role="img" aria-label="Illustration of the EventHex industry directory: start with the buyer job, choose an industry, open the owner page, then review the configuration in a demo">
-                <div class="ind-map__bar"><span></span><span></span><span></span><b>EventHex · Industries</b></div>
-                <div class="ind-map__grid">
-                  <div class="ind-map__card"><small>Start</small><strong>Buyer job</strong><span>What needs to happen</span></div>
-                  <div class="ind-map__card"><small>Choose</small><strong>Industries</strong><span>Best-fit path</span></div>
-                  <div class="ind-map__card"><small>Open</small><strong>Owner page</strong><span>Mechanism or model</span></div>
-                  <div class="ind-map__card ind-map__card--active"><small>Review</small><strong>Book a Demo</strong><span>Configuration</span></div>
-                </div>
+              <div class="erg-flow-composite ind-hero-composite">
+                <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src={shots.sessions.src} alt={shots.sessions.alt} width={shots.sessions.w} height={shots.sessions.h} fetchpriority="high" />
+                <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src={shots.appHub.src} alt={shots.appHub.alt} width={shots.appHub.w} height={shots.appHub.h} loading="eager" />
+                <img class="erg-flow-composite__screen erg-flow-composite__screen--detail" src={shots.modules.src} alt={shots.modules.alt} width={shots.modules.w} height={shots.modules.h} loading="eager" />
+                <span class="erg-flow-composite__status">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+                  One workspace
+                </span>
+                <span class="erg-flow-composite__action">Open owner page</span>
+                <img class="erg-flow-composite__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -176,59 +195,140 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
     </section>
 
     <!-- ===== CHOOSE BY OPERATING MODEL ===== -->
-    <div class="erg-dark-band" id="ind-model">
-      <div class="erg-heading erg-capabilities-heading">
-        <h2 class="erg-heading__title animate-on-scroll" data-animation="fadeInUp">
-          Start with the work <span class="erg-global-heading-gradient">the event creates</span>
-        </h2>
+    <section id="ind-model" class="erg-flow-section">
+      <div class="erg-flow-header">
+        <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">Choose by operating model</span>
+        <h2 class="erg-flow-title ind-wrap-title animate-on-scroll" data-animation="fadeInUp">Start with the work the event creates</h2>
       </div>
 
-      <section class="erg-grid-section">
-        <div class="erg-cap">
-          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" style="grid-column: span 3">
-            <h3 class="erg-cap__label">Programme and conference</h3>
-            <p class="erg-cap__desc">Submissions, speakers, sessions, registration, attendee agenda, engagement, and event day.</p>
-            <div class="erg-cap__visual">
-              <div class="erg-cap__chips">
-                <span class="is-active">Content-led</span><span>Submissions</span><span>Speakers</span><span>Sessions</span><span>Agenda</span>
-              </div>
-            </div>
-          </article>
-          <article class="erg-cap__cell animate-on-scroll" data-animation="fadeInUp" data-delay="60" style="grid-column: span 3">
-            <span class="erg-cap__petal erg-cap__petal--top" aria-hidden="true" set:html={petalTop} />
-            <span class="erg-cap__petal erg-cap__petal--bottom" aria-hidden="true" set:html={petalBottom} />
-            <h3 class="erg-cap__label">Expo and community</h3>
-            <p class="erg-cap__desc">Exhibitors, partners, audience access, communication, leads, mobile experience, and onsite operations.</p>
-            <div class="erg-cap__visual">
-              <div class="erg-cap__chips">
-                <span class="is-active">People-led</span><span>Exhibitors</span><span>Partners</span><span>Leads</span><span>Onsite</span>
-              </div>
-            </div>
-          </article>
+      <div class="erg-flow-quad">
+        <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3 class="erg-flow-quad__title">Programme and conference</h3>
+          <p class="erg-flow-quad__text">Submissions, speakers, sessions, registration, attendee agenda, engagement, and event day.</p>
+          <span class="ind-cue">Content-led</span>
+        </article>
+
+        <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInRight">
+          <div class="erg-flow-composite">
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src={shots.sessions.src} alt={shots.sessions.alt} width={shots.sessions.w} height={shots.sessions.h} loading="lazy" decoding="async" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src={shots.timeline.src} alt={shots.timeline.alt} width={shots.timeline.w} height={shots.timeline.h} loading="lazy" decoding="async" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--detail" src={shots.sessionDetail.src} alt={shots.sessionDetail.alt} width={shots.sessionDetail.w} height={shots.sessionDetail.h} loading="lazy" decoding="async" />
+            <span class="erg-flow-composite__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Agenda published
+            </span>
+            <span class="erg-flow-composite__action">Add session</span>
+            <img class="erg-flow-composite__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+          </div>
         </div>
-      </section>
-      <p class="ind-note">The Middle East page adds regional payment and communication configuration without turning geography into a product guarantee.</p>
+
+        <div class="erg-flow-quad__cell erg-flow-quad__cell--media animate-on-scroll" data-animation="fadeInLeft">
+          <div class="erg-flow-composite">
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--primary" src={shots.exhibitors.src} alt={shots.exhibitors.alt} width={shots.exhibitors.w} height={shots.exhibitors.h} loading="lazy" decoding="async" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--secondary" src={shots.packages.src} alt={shots.packages.alt} width={shots.packages.w} height={shots.packages.h} loading="lazy" decoding="async" />
+            <img class="erg-flow-composite__screen erg-flow-composite__screen--detail" src={shots.modules.src} alt={shots.modules.alt} width={shots.modules.w} height={shots.modules.h} loading="lazy" decoding="async" />
+            <span class="erg-flow-composite__status">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>
+              Exhibitors onboarded
+            </span>
+            <span class="erg-flow-composite__action">Add package</span>
+            <img class="erg-flow-composite__cursor" src="/feature-images/event-registration/cursor.svg" alt="" aria-hidden="true" />
+          </div>
+        </div>
+
+        <article class="erg-flow-quad__cell erg-flow-quad__cell--copy animate-on-scroll" data-animation="fadeInUp">
+          <h3 class="erg-flow-quad__title">Expo and community</h3>
+          <p class="erg-flow-quad__text">Exhibitors, partners, audience access, communication, leads, mobile experience, and onsite operations.</p>
+          <span class="ind-cue">People-led</span>
+        </article>
+        <span class="erg-flow-quad__cross" aria-hidden="true">
+          <svg width="18" height="18" viewBox="-14 -14 28 28">
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="scale(1,-1)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(90)" />
+            <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--surface-card-border)" transform="rotate(-90)" />
+          </svg>
+        </span>
+      </div>
+      <p class="erg-content-note">The Middle East page adds regional payment and communication configuration without turning geography into a product guarantee.</p>
+    </section>
+
+    <!-- ===== PROGRAMME: sticky split ===== -->
+    <section id="programme" class="ind-split">
+      <div class="ind-split__lead">
+        <span class="erg-faq__eyebrow">{groups[0].eyebrow}</span>
+        <h2 class="ind-split__title">{groups[0].title}</h2>
+        <img class="ind-split__shot" src={shots.speakers.src} alt={shots.speakers.alt} width={shots.speakers.w} height={shots.speakers.h} loading="lazy" decoding="async" />
+      </div>
+      <div class="ind-rows">
+        {groups[0].cards.map((c) => (
+          <a href={c.href} class="ind-row">
+            <span class="ind-card__icon" style={`background:${c.color}1a;color:${c.color}`} aria-hidden="true">{c.name.charAt(0)}</span>
+            <span class="ind-row__body"><strong>{c.name}</strong><span>{c.text}</span></span>
+            <span class="ind-row__go" aria-hidden="true"><Fragment set:html={arrow} /></span>
+            <span class="ind-sr">Learn more about {c.name} events</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== EXPO: dark band with cards ===== -->
+    <div class="erg-dark-band">
+      <div class="erg-heading erg-capabilities-heading">
+        <span class="erg-faq__eyebrow ind-eyebrow-dark">{groups[1].eyebrow}</span>
+        <h2 class="erg-heading__title ind-wrap-title animate-on-scroll" data-animation="fadeInUp">{groups[1].title}</h2>
+      </div>
+      <div class="ind-dark-grid">
+        {groups[1].cards.map((c, i) => (
+          <a href={c.href} class="ind-dark-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 60}>
+            <span class="ind-dark-card__num" aria-hidden="true">0{i + 1}</span>
+            <h3>{c.name}</h3>
+            <p>{c.text}</p>
+            <span class="ind-dark-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name} events</span></span>
+          </a>
+        ))}
+      </div>
+      <img class="ind-dark-shot" src={shots.website.src} alt={shots.website.alt} width={shots.website.w} height={shots.website.h} loading="lazy" decoding="async" />
     </div>
 
-    <!-- ===== DIRECTORY GROUPS ===== -->
-    {groups.map((g) => (
-      <section id={g.id} class="erg-flow-section ind-section">
-        <div class="erg-flow-header">
-          <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">{g.eyebrow}</span>
-          <h2 class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">{g.title}</h2>
-        </div>
-        <div class="ind-grid">
-          {g.cards.map((c, i) => (
-            <a href={c.href} class="ind-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
-              <span class="ind-card__icon" style={`background:${c.color}1a;color:${c.color}`} aria-hidden="true">{c.name.charAt(0)}</span>
-              <h3>{c.name}</h3>
-              <p>{c.text}</p>
-              <span class="ind-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name} events</span></span>
-            </a>
-          ))}
-        </div>
-      </section>
-    ))}
+    <!-- ===== COMMUNITY: image banner + cards ===== -->
+    <section id="community" class="erg-flow-section ind-section">
+      <div class="erg-flow-header">
+        <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">{groups[2].eyebrow}</span>
+        <h2 class="erg-flow-title ind-wrap-title animate-on-scroll" data-animation="fadeInUp">{groups[2].title}</h2>
+      </div>
+      <div class="ind-pair animate-on-scroll" data-animation="fadeInUp">
+        <img src={shots.netConnect.src} alt={shots.netConnect.alt} width={shots.netConnect.w} height={shots.netConnect.h} loading="lazy" decoding="async" />
+        <img src={shots.netFeatures.src} alt={shots.netFeatures.alt} width={shots.netFeatures.w} height={shots.netFeatures.h} loading="lazy" decoding="async" />
+      </div>
+      <div class="ind-grid">
+        {groups[2].cards.map((c, i) => (
+          <a href={c.href} class="ind-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
+            <span class="ind-card__icon" style={`background:${c.color}1a;color:${c.color}`} aria-hidden="true">{c.name.charAt(0)}</span>
+            <h3>{c.name}</h3>
+            <p>{c.text}</p>
+            <span class="ind-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name} events</span></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== REGIONAL: reversed split ===== -->
+    <section id="regional" class="ind-split ind-split--rev">
+      <div class="ind-split__lead">
+        <span class="erg-faq__eyebrow">{groups[3].eyebrow}</span>
+        <h2 class="ind-split__title">{groups[3].title}</h2>
+        {groups[3].cards.map((c) => (
+          <a href={c.href} class="ind-row ind-row--feature">
+            <span class="ind-card__icon" style={`background:${c.color}1a;color:${c.color}`} aria-hidden="true">{c.name.charAt(0)}</span>
+            <span class="ind-row__body"><strong>{c.name}</strong><span>{c.text}</span></span>
+            <span class="ind-row__go" aria-hidden="true"><Fragment set:html={arrow} /></span>
+            <span class="ind-sr">Learn more about {c.name} events</span>
+          </a>
+        ))}
+      </div>
+      <img class="ind-split__shot ind-split__shot--plain" src={shots.payment.src} alt={shots.payment.alt} width={shots.payment.w} height={shots.payment.h} loading="lazy" decoding="async" />
+    </section>
 
     <!-- ===== WORKFLOW ===== -->
     <section class="erg-content-section erg-use-cases">
@@ -260,11 +360,12 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
     <section id="feature-handoff" class="erg-flow-section ind-section">
       <div class="erg-flow-header">
         <span class="erg-faq__eyebrow animate-on-scroll" data-animation="fadeInUp">Need a specific workflow?</span>
-        <h2 class="erg-flow-title animate-on-scroll" data-animation="fadeInUp">Open the feature family instead</h2>
+        <h2 class="erg-flow-title ind-wrap-title animate-on-scroll" data-animation="fadeInUp">Open the feature family instead</h2>
       </div>
-      <div class="ind-grid ind-grid--4">
+      <div class="ind-grid">
         {featureCards.map((c, i) => (
-          <a href={c.href} class="ind-card animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
+          <a href={c.href} class="ind-card ind-card--thumb animate-on-scroll" data-animation="fadeInUp" data-delay={i * 50}>
+            <img class="ind-card__thumb" src={c.shot.src} alt={c.shot.alt} width={c.shot.w} height={c.shot.h} loading="lazy" decoding="async" />
             <h3>{c.name}</h3>
             <p>{c.text}</p>
             <span class="ind-card__link">Learn more<Fragment set:html={arrow} /><span class="ind-sr"> about {c.name}</span></span>
@@ -434,82 +535,207 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
 </script>
 
 <style>
-  .ind-map {
-    border: 1px solid #dbe4f3;
-    border-radius: 14px;
-    background: #fff;
-    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.1);
-    overflow: hidden;
+  .ind-wrap-title {
+    white-space: normal;
+    max-width: 900px;
   }
-  .ind-map__bar {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e8edf5;
-    font-size: 0.8rem;
-    color: #475467;
+  .ind-hero-composite {
+    height: 380px;
   }
-  .ind-map__bar span {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #d5dce8;
-  }
-  .ind-map__bar b {
-    margin-left: 8px;
-    font-weight: 600;
-  }
-  .ind-map__grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    padding: 22px;
-    background: #f7f9fd;
-  }
-  .ind-map__card {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 18px;
-    border: 1px solid #e2e8f2;
-    border-radius: 12px;
-    background: #fff;
-  }
-  .ind-map__card small {
-    color: #375dfb;
-    font-size: 0.68rem;
+  .ind-cue {
+    display: inline-flex;
+    margin-top: 14px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #e9f8f5;
+    color: #087a51;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .ind-map__card strong {
-    font-size: 1.05rem;
-    color: #182230;
-  }
-  .ind-map__card span {
-    font-size: 0.82rem;
-    color: #667085;
-  }
-  .ind-map__card--active {
-    border-color: #375dfb;
-    box-shadow: 0 0 0 3px rgba(55, 93, 251, 0.12);
-  }
-  .ind-note {
-    max-width: 760px;
-    margin: 28px auto 0;
-    padding: 0 24px 72px;
-    text-align: center;
-    color: #cbd5e4;
-    font-size: 0.95rem;
   }
   .ind-section {
     padding: 56px 24px;
   }
-  .ind-section .erg-flow-title {
-    white-space: normal;
-    max-width: 900px;
+  /* split layouts */
+  .ind-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 72px 24px;
   }
+  .ind-split--rev {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+  .ind-split--rev .ind-split__lead {
+    order: 2;
+    position: static;
+  }
+  .ind-split__lead {
+    position: sticky;
+    top: 110px;
+  }
+  .ind-split__title {
+    margin: 0 0 24px;
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 3.6vw, 44px);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    color: var(--heading-dark, #101828);
+  }
+  .ind-split__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+  }
+  .ind-split__shot--plain {
+    align-self: center;
+  }
+  /* programme rows */
+  .ind-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ind-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 42px 1fr 24px;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    border: 1px solid #e2e8f2;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.85);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .ind-row:hover,
+  .ind-row:focus-visible {
+    transform: translateX(4px);
+    border-color: #c5d2ee;
+    box-shadow: 0 12px 26px rgba(27, 50, 91, 0.09);
+  }
+  .ind-row--feature {
+    margin-top: 4px;
+  }
+  .ind-row__body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .ind-row__body strong {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #101828;
+  }
+  .ind-row__body span {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: #667085;
+  }
+  .ind-row__go {
+    color: #375dfb;
+  }
+  /* expo dark cards */
+  .ind-eyebrow-dark {
+    margin-bottom: 18px;
+    color: #fff;
+    border-color: #3b3a47;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .ind-dark-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    max-width: 1128px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .ind-dark-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 26px;
+    border: 1px solid #3b3a47;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  .ind-dark-card:hover,
+  .ind-dark-card:focus-visible {
+    border-color: #7c6cff;
+    background: rgba(124, 108, 255, 0.1);
+  }
+  .ind-dark-card__num {
+    color: #8e9bff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+  }
+  .ind-dark-card h3 {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #fff;
+  }
+  .ind-dark-card p {
+    margin: 0;
+    flex: 1;
+    font-size: 0.93rem;
+    line-height: 1.5;
+    color: #b8c0d4;
+  }
+  .ind-dark-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+  }
+  .ind-dark-shot {
+    display: block;
+    width: calc(100% - 48px);
+    max-width: 640px;
+    height: auto;
+    margin: 36px auto 0;
+    padding-bottom: 0;
+    border: 1px solid #3b3a47;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  }
+  .ind-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    width: 100%;
+    max-width: 760px;
+    margin: 12px 0 28px;
+  }
+  .ind-pair img {
+    display: block;
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid #e2e4e9;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 34px rgba(17, 24, 39, 0.12);
+  }
+  /* cards */
   .ind-grid {
     display: flex;
     flex-wrap: wrap;
@@ -532,6 +758,24 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
     color: inherit;
     text-decoration: none;
     transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .ind-card--thumb {
+    padding: 14px 14px 22px;
+  }
+  .ind-card--thumb h3,
+  .ind-card--thumb p,
+  .ind-card--thumb .ind-card__link {
+    padding: 0 8px;
+  }
+  .ind-card__thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: top left;
+    border: 1px solid #e8edf5;
+    border-radius: 12px;
+    background: #f7f9fd;
   }
   .ind-card:hover,
   .ind-card:focus-visible {
@@ -589,5 +833,20 @@ const arrow = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-
     color: #cbd5e4;
     font-size: 1.05rem;
     line-height: 1.6;
+  }
+  @media (max-width: 900px) {
+    .ind-split,
+    .ind-split--rev {
+      grid-template-columns: 1fr;
+      padding: 48px 20px;
+    }
+    .ind-split__lead,
+    .ind-split--rev .ind-split__lead {
+      position: static;
+      order: 0;
+    }
+    .ind-pair {
+      grid-template-columns: 1fr;
+    }
   }
 </style>
