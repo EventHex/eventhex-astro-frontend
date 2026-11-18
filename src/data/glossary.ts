@@ -345,7 +345,7 @@ export const glossary: GlossaryEntry[] = [
     short: "A CRM system that stores unified attendee histories — registrations, sessions attended, survey responses — across multiple events over time.",
     body: `<p>An event CRM (Customer Relationship Management) system stores unified attendee histories across every event an individual has attended: registrations, sessions selected, check-in timestamps, survey responses, sponsorships purchased, and communication interactions. Unlike a general CRM that stores contacts and deals, an event CRM understands event-specific concepts like ticket types, agenda selections, and check-in status — making attendee segmentation and personalisation far more precise.</p>
 <p>The compound value of an event CRM grows with each event run. A contact who has attended three annual conferences is a very different prospect than someone who attended one webinar; the event CRM makes that distinction automatically and enables the marketing team to act on it with targeted re-engagement campaigns.</p>
-<p>EventHex maintains persistent attendee profiles enriched by every event, and connects via API to leading CRMs (Salesforce, HubSpot) to complete the revenue attribution loop — allowing sales teams to see which pipeline deals were influenced by event attendance.</p>`,
+<p>EventHex maintains persistent attendee profiles enriched by every event, and syncs contacts to HubSpot through a native integration (more CRMs are on the roadmap) to complete the revenue attribution loop — allowing sales teams to see which pipeline deals were influenced by event attendance.</p>`,
     related: [
       "attendee-management",
       "event-lead-generation",

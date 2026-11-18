@@ -1,0 +1,24 @@
+---
+import MarketingLayout from "../layouts/MarketingLayout.astro";
+import CertificateBuilderPage from "../components/certificate-builder/CertificateBuilderPage.astro";
+
+const title = "Event Certificate Generator & Builder | EventHex";
+const description = "Create a named certificate PDF for every attendee who checked in and deliver it by email, WhatsApp, app download or share link. Ticket rules, bulk send and a delivery log.";
+const url = "https://eventhex.ai/certificate-builder/";
+const ogImage = "https://eventhex.ai/feature-images/certificate-builder/og-certificate-builder.jpg";
+const faqs: [string, string][] = [
+  ["Who receives a certificate?", "Attendees marked present, through a badge scan at the door or online check-in. You can give everyone the same certificate or set specific certificates for chosen tickets or participant types."],
+  ["How are certificates delivered?", "By email with the PDF attached, by WhatsApp with the PDF, as a download in the event app, or through a secure share link. Every email send is recorded in the delivery log."],
+  ["Can we give a certificate to a guest who wasn't registered in advance?", "Yes. Once the guest is added as a registration, send their certificate on its own from the admin, to WhatsApp and email, without re-sending everyone else's."],
+  ["Can attendees get their certificate themselves?", "Yes. Attendees can message the WhatsApp concierge to ask for their certificate, download it in the event app, or open a share link."],
+  ["What happens if a bulk send is interrupted?", "Bulk sending runs in the background with live progress. If it stops, resume it and EventHex skips the attendees who already received their certificate."],
+  ["Which certificate sizes and designs are supported?", "Start from a starter template or upload your own artwork, then place the name and other fields. Sizes include A4, Letter, A3, A5 and square, with custom fonts."],
+];
+const softwareSchema = { "@context": "https://schema.org", "@type": "SoftwareApplication", name: "EventHex Certificate Builder", applicationCategory: "BusinessApplication", operatingSystem: "Web", url, description, creator: { "@type": "Organization", name: "EventHex", url: "https://eventhex.ai" }, featureList: ["Personalised certificate PDF per attendee", "Attendance-based eligibility", "Ticket-specific certificates", "Email and WhatsApp delivery with PDF", "Secure share links", "Bulk send with resume"] };
+const faqSchema = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map(([name, text]) => ({ "@type": "Question", name, acceptedAnswer: { "@type": "Answer", text } })) };
+---
+<MarketingLayout title={title} description={description} canonical={url} ogImage={ogImage}>
+  <CertificateBuilderPage faqs={faqs} />
+  <script type="application/ld+json" set:html={JSON.stringify(softwareSchema)}></script>
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)}></script>
+</MarketingLayout>

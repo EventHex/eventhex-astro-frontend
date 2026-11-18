@@ -1,0 +1,25 @@
+---
+/**
+ * Design-system heading. `text` is rendered exactly; `highlight` (a phrase inside it)
+ * gets the brand text gradient. Use on H1/H2 only; `dark` switches to the on-dark gradient.
+ */
+import { splitHighlight } from "../../lib/ds/highlight";
+
+interface Props {
+  level?: 1 | 2 | 3;
+  text: string;
+  highlight?: string;
+  dark?: boolean;
+  size?: "default" | "sm";
+  class?: string;
+  [key: string]: unknown;
+}
+
+const { level = 2, text, highlight, dark = false, size = "default", class: className = "", ...rest } = Astro.props;
+const Tag = `h${level}` as "h1" | "h2" | "h3";
+const parts = level === 3 ? null : splitHighlight(text, highlight);
+const classes = [`ds-h${level}`, level === 3 && size === "sm" ? "ds-h3--sm" : "", className].filter(Boolean).join(" ");
+---
+<Tag class={classes} {...rest}>{parts ? (
+  <Fragment>{parts.before}<span class={dark ? "ds-hl-dark" : "ds-hl"}>{parts.highlight}</span>{parts.after}</Fragment>
+) : text}</Tag>

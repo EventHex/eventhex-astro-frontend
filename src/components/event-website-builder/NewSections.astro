@@ -1,0 +1,103 @@
+---
+// New sections A-D of the Event Website Builder page. Styles live in EventWebsiteBuilderRevamp.astro (global, ewb- prefix).
+interface Props { section: "A" | "B" | "C" | "D"; }
+const { section } = Astro.props;
+const V = "/feature-images/event-website-builder/v5/";
+
+const events = [
+  {
+    title: "Meridian Health Congress 2027",
+    body: "Editorial Journal style kit · agenda, faculty, four ticket types and a call for abstracts.",
+    desktop: { src: "meridian-site-desktop-hero.webp", alt: "Meridian Health Congress 2027 website: editorial serif headline, call for abstracts and Register button" },
+    mobile: { src: "meridian-site-mobile-hero.webp", alt: "Meridian Health Congress website on a phone" },
+  },
+  {
+    title: "Pulse Tech Expo 2027",
+    body: "A dark expo look · two halls, main-stage programme, free visitor pass and paid passes.",
+    desktop: { src: "pulse-site-desktop-hero.webp", alt: "Pulse Tech Expo 2027 website: dark poster headline with an orange free visitor pass button" },
+    mobile: { src: "pulse-site-mobile-hero.webp", alt: "Pulse Tech Expo website on a phone" },
+  },
+  {
+    title: "Ascend Impact Summit 2026",
+    body: "Blue and cream · keynotes, workshops and investor meetings, free passes, English and Arabic.",
+    desktop: { src: "ascend-site-desktop-hero.webp", alt: "Ascend Impact Summit 2026 website: deep blue hero with Register and See agenda, and an English language switcher" },
+    mobile: { src: "ascend-site-mobile-hero.webp", alt: "Ascend Impact Summit website on a phone" },
+  },
+];
+const templates = ["Conference", "Summit", "Gala & Awards", "Community meetup", "Workshop", "Expo"];
+const languageTicks = ["Translate website in one click", "Translate new content automatically", "Header language switcher", "Right-to-left layout for Arabic", "Edit any translation by hand"];
+---
+
+{section === "A" && (
+  <section class="ewb-sec ds-night ewb-sec--a" aria-labelledby="ewb-a-title">
+    <div class="ewb-in">
+      <header class="ewb-head">
+        <span class="ds-eyebrow">Built with EventHex</span>
+        <h2 class="ds-h2" id="ewb-a-title">One builder, <span class="ds-hl-dark">three very different events</span></h2>
+        <p class="ds-body ewb-head__p">A calm medical congress, a loud tech expo and a free impact summit in two languages: each designed, filled with its own speakers, sessions and tickets, and published from the same builder.</p>
+      </header>
+      <div class="ewb-grid3">
+        {events.map((e) => (
+          <article class="ds-glass-dark ewb-card ewb-card--event">
+            <div class="ewb-duo">
+              <div class="ds-shot"><img src={V + e.desktop.src} alt={e.desktop.alt} width="2880" height="1800" loading="lazy" decoding="async" /></div>
+              <div class="ds-shot"><img src={V + e.mobile.src} alt={e.mobile.alt} width="780" height="1688" loading="lazy" decoding="async" /></div>
+            </div>
+            <h3 class="ds-h3 ds-h3--sm">{e.title}</h3>
+            <p class="ds-small">{e.body}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "B" && (
+  <section class="ewb-sec ewb-sec--b" aria-labelledby="ewb-b-title">
+    <div class="ewb-in ewb-b">
+      <div class="ewb-stack">
+        <span class="ds-eyebrow">Templates and style kits</span>
+        <h2 class="ds-h2" id="ewb-b-title">Start from a template, <span class="ds-hl">make it yours</span></h2>
+        <p class="ds-lead">Pick a site template for the kind of event you run: Conference, Summit, Gala &amp; Awards, Community meetup, Workshop or Expo. Then choose one of 11 style kits, from Editorial Journal to Midnight Luxe, or keep your own brand colours.</p>
+        <div class="ewb-pills">{templates.map((t) => <span class="ewb-pill">{t}</span>)}</div>
+        <a class="ewb-lnk" href="/white-label/">See branding across EventHex <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="ewb-b__shots">
+        <div class="ds-shot"><img src={V + "site-templates.webp"} alt="Site templates: Conference, Summit, Gala and Awards, Community meetup, Workshop and Expo, each with its pages listed" width="2880" height="1800" loading="lazy" decoding="async" /></div>
+        <div class="ds-shot"><img src={V + "style-kit-panel.webp"} alt="Change kit panel: Your brand kit, Editorial Journal and Swiss Modernist, with Keep my brand colors" width="636" height="1388" loading="lazy" decoding="async" /></div>
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "C" && (
+  <section class="ewb-sec ewb-sec--c" aria-labelledby="ewb-c-title">
+    <div class="ewb-in ewb-c">
+      <div class="ds-shot"><img src={V + "ascend-languages-panel.webp"} alt="Ascend languages panel: Arabic and English, Translate website, Translate new content automatically and Header language switcher" width="2880" height="1800" loading="lazy" decoding="async" /></div>
+      <div class="ewb-stack">
+        <span class="ds-eyebrow">Multi-language websites</span>
+        <h2 class="ds-h2" id="ewb-c-title">Your site in <span class="ds-hl">every event language</span></h2>
+        <p class="ds-lead">Turn on the languages your event runs in, then translate the whole website in one step: pages, header, footer and menu. New sections can be translated automatically, visitors switch language from the header, and Arabic pages read right to left.</p>
+        <ul class="ewb-ticks ewb-ticks--one">{languageTicks.map((t) => <li><i aria-hidden="true">✓</i>{t}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+)}
+
+{section === "D" && (
+  <section class="ewb-sec ds-stage ewb-sec--d" aria-labelledby="ewb-d-title">
+    <div class="ewb-in">
+      <header class="ewb-head">
+        <span class="ds-eyebrow">Registration built in</span>
+        <h2 class="ds-h2" id="ewb-d-title">Registration and checkout <span class="ds-hl">inside your site</span></h2>
+        <p class="ds-lead ewb-head__p">Every website comes with its own registration and checkout pages, styled by the same kit. Add sections before or after the form, and visitors pick a ticket, pay and get their QR ticket without leaving your event site.</p>
+      </header>
+      <div class="ewb-grid3">
+        <article class="ds-glass ewb-card"><div class="ds-shot"><img src={V + "studio-registration-system-page.webp"} alt="Registration page in the builder with sections before and after the form" width="2880" height="1800" loading="lazy" decoding="async" /></div><p class="ds-small">Shape the registration page in the builder.</p></article>
+        <article class="ds-glass ewb-card"><div class="ds-shot"><img src={V + "site-checkout.webp"} alt="Meridian checkout: Virtual Pass USD 120, Student / Resident USD 95, Non-member USD 390, Member USD 290" width="2880" height="1800" loading="lazy" decoding="async" /></div><p class="ds-small">Visitors choose from the event's real tickets.</p></article>
+        <article class="ds-glass ewb-card"><div class="ds-shot"><img src={V + "site-register-member.webp"} alt="Meridian Member registration, $290, with Quick Register" width="2880" height="1800" loading="lazy" decoding="async" /></div><p class="ds-small">One form, then payment and the QR ticket.</p></article>
+      </div>
+      <div class="ewb-links2"><a class="ewb-lnk" href="/event-registration/">Event registration <span aria-hidden="true">→</span></a><a class="ewb-lnk" href="/event-ticketing/">Event ticketing <span aria-hidden="true">→</span></a></div>
+    </div>
+  </section>
+)}

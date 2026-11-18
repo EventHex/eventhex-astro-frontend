@@ -2,8 +2,8 @@
 // Scanning-instance bento, borrowed from the Event Registration
 // "Confirmations That Reach People" alternating product-evidence grid
 // (event-registration.astro, .erg-bento-*): hairline stack with corner
-// notches, alternating visual/content rows, a pastel shot stage per row and
-// floating status chips over real EventHex portal screens.
+// notches, alternating visual/content rows and a pastel shot stage per row
+// holding a real EventHex portal screen.
 interface Row {
   id: string;
   eyebrow: string;
@@ -15,8 +15,6 @@ interface Row {
     width: number;
     height: number;
   };
-  floatTop: { label: string; note: string };
-  floatBottom: string;
 }
 
 interface Props {
@@ -32,13 +30,11 @@ const rows: Row[] = [
     title: "Meals and refreshments",
     body: "Confirm who received an included meal or entered an F&B area.",
     image: {
-      src: "/feature-images/event-check-in/instance-management.png",
-      alt: "EventHex instance management list showing named scanning instances with applicable tickets and edit actions",
-      width: 757,
-      height: 300,
+      src: "/feature-images/event-check-in/v5/cms-instance-list.webp",
+      alt: "CMS Instance list: Lunch (General, All Tickets), Impact Measurement Workshop (Session, Delegate) and Speaker Dinner (General, Speaker)",
+      width: 2880,
+      height: 1300,
     },
-    floatTop: { label: "Scan point named", note: "Meals and refreshments" },
-    floatBottom: "Attendance kept separate",
   },
   {
     id: "sessions",
@@ -46,13 +42,11 @@ const rows: Row[] = [
     title: "Sessions and workshops",
     body: "Record entry for a ticket-based room or programmed activity.",
     image: {
-      src: "/feature-images/event-check-in/instance-ticket-access.png",
-      alt: "EventHex Add Instance access control step limiting an instance to selected ticket types",
-      width: 600,
-      height: 530,
+      src: "/feature-images/event-check-in/v5/cms-add-instance.webp",
+      alt: "CMS Add Instance dialog: Instance Details and Access Control steps, Instance Name, types General, Session, Meal / Break",
+      width: 1760,
+      height: 800,
     },
-    floatTop: { label: "Ticket access set", note: "Eligible ticket types" },
-    floatBottom: "Room entry recorded",
   },
   {
     id: "merchandise",
@@ -60,13 +54,11 @@ const rows: Row[] = [
     title: "Merchandise collection",
     body: "Track whether an eligible attendee received the configured item.",
     image: {
-      src: "/feature-images/event-check-in/instance-counts.png",
-      alt: "EventHex instance check-in header with check-in total, pending count, check-in rate and no-show rate",
-      width: 768,
-      height: 300,
+      src: "/feature-images/event-check-in/v5/cms-instance-checkin.webp",
+      alt: "CMS Instance Check-In for Lunch with the Download the Scanner app banner, 9 of 20 checked in, and a list with token, name, phone, email, ticket and check-in time",
+      width: 2880,
+      height: 1650,
     },
-    floatTop: { label: "Item counted", note: "Per-instance attendance" },
-    floatBottom: "Duplicate checked",
   },
   {
     id: "custom",
@@ -74,13 +66,11 @@ const rows: Row[] = [
     title: "Your own entitlement",
     body: "Name the instance for the activity your operations team needs to count.",
     image: {
-      src: "/feature-images/event-check-in/instance-name-field.png",
-      alt: "EventHex Add Instance dialog with the instance name field on the instance details step",
-      width: 602,
-      height: 215,
+      src: "/feature-images/event-check-in/v5/cms-add-instance.webp",
+      alt: "CMS Add Instance dialog with the instance name field on the Instance Details step",
+      width: 1760,
+      height: 800,
     },
-    floatTop: { label: "Instance created", note: "Name the scan point" },
-    floatBottom: "Ready for Scanner",
   },
 ];
 ---
@@ -101,12 +91,12 @@ const rows: Row[] = [
     <div class="ecx-bento__grid animate-on-scroll" data-animation="fadeInUp">
       <span class="ecx-bento__notch ecx-bento__notch--top" aria-hidden="true">
         <svg width="28" height="28" viewBox="-14 -14 28 28">
-          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)"></path>
         </svg>
       </span>
       <span class="ecx-bento__notch ecx-bento__notch--bottom" aria-hidden="true">
         <svg width="28" height="28" viewBox="-14 -14 28 28">
-          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
+          <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="scale(1,-1)"></path>
         </svg>
       </span>
 
@@ -127,7 +117,7 @@ const rows: Row[] = [
             ) : (
               <div class:list={["ecx-bento__stage", `ecx-bento__stage--${row.id}`]}>
                 <img
-                  class="ecx-bento__shot"
+                  class="ds-shot ecx-bento__shot"
                   src={row.image.src}
                   alt={row.image.alt}
                   width={row.image.width}
@@ -135,14 +125,6 @@ const rows: Row[] = [
                   loading="lazy"
                   decoding="async"
                 />
-                <span class="ecx-bento__float ecx-bento__float--top">
-                  <b>&#10003; {row.floatTop.label}</b>
-                  <small>{row.floatTop.note}</small>
-                </span>
-                <span class="ecx-bento__float ecx-bento__float--bottom">
-                  <i></i>
-                  <b>{row.floatBottom}</b>
-                </span>
               </div>
             )}
           </div>
@@ -156,7 +138,7 @@ const rows: Row[] = [
             {index % 2 === 1 ? (
               <div class:list={["ecx-bento__stage", `ecx-bento__stage--${row.id}`]}>
                 <img
-                  class="ecx-bento__shot"
+                  class="ds-shot ecx-bento__shot"
                   src={row.image.src}
                   alt={row.image.alt}
                   width={row.image.width}
@@ -164,14 +146,6 @@ const rows: Row[] = [
                   loading="lazy"
                   decoding="async"
                 />
-                <span class="ecx-bento__float ecx-bento__float--top">
-                  <b>&#10003; {row.floatTop.label}</b>
-                  <small>{row.floatTop.note}</small>
-                </span>
-                <span class="ecx-bento__float ecx-bento__float--bottom">
-                  <i></i>
-                  <b>{row.floatBottom}</b>
-                </span>
               </div>
             ) : (
               <>
@@ -184,10 +158,10 @@ const rows: Row[] = [
 
           <span class="ecx-bento__cross" aria-hidden="true">
             <svg width="28" height="28" viewBox="-14 -14 28 28">
-              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb"></path>
-              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="scale(1,-1)"></path>
-              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(90)"></path>
-              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="#e5e7eb" transform="rotate(-90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="scale(1,-1)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="rotate(90)"></path>
+              <path d="M-14,0 A14,14 0 0,1 0,14 A14,14 0 0,1 14,0 Z" fill="var(--ds-line-strong)" transform="rotate(-90)"></path>
             </svg>
           </span>
         </div>
@@ -216,10 +190,10 @@ const rows: Row[] = [
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.03em;
-    color: #111827;
+    color: var(--ds-night-2);
   }
   .ecx-bento__gradient {
-    background: linear-gradient(to right, #111827 0%, #111827 45%, #9ca3af 100%);
+    background: linear-gradient(90deg, var(--ds-ink), var(--ds-ink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -230,12 +204,12 @@ const rows: Row[] = [
     margin: 18px auto 0;
     font-size: 1.0625rem;
     line-height: 1.55;
-    color: #6b7280;
+    color: var(--ds-muted);
   }
 
   .ecx-bento__grid {
     position: relative;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--ds-line-strong);
     border-radius: 16px;
     overflow: hidden;
     background: transparent;
@@ -262,7 +236,7 @@ const rows: Row[] = [
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--ds-line-strong);
   }
   .ecx-bento__row:last-child {
     border-bottom: none;
@@ -274,7 +248,7 @@ const rows: Row[] = [
     padding: 4rem;
   }
   .ecx-bento__row .ecx-bento__cell:first-child {
-    border-right: 1px solid #e5e7eb;
+    border-right: 1px solid var(--ds-line-strong);
   }
   .ecx-bento__content {
     background: transparent;
@@ -296,84 +270,25 @@ const rows: Row[] = [
     border-radius: 22px;
   }
   .ecx-bento__stage--meals {
-    background: linear-gradient(180deg, #fdefb8 0%, #fdf7dd 45%, #f5f6f9 100%);
+    background: linear-gradient(180deg, var(--ds-warning-soft) 0%, var(--ds-warning-soft) 45%, var(--ds-surface) 100%);
   }
   .ecx-bento__stage--sessions {
-    background: linear-gradient(180deg, #cdf3de 0%, #e6f8ee 45%, #f5f6f9 100%);
+    background: linear-gradient(180deg, var(--ds-cat-teal-bg) 0%, var(--ds-surface-tab) 45%, var(--ds-surface) 100%);
   }
   .ecx-bento__stage--merchandise {
-    background: linear-gradient(180deg, #dbe1fb 0%, #eceffd 45%, #f5f6f9 100%);
+    background: linear-gradient(180deg, var(--ds-surface-tint) 0%, var(--ds-surface-tab) 45%, var(--ds-surface) 100%);
   }
   .ecx-bento__stage--custom {
-    background: linear-gradient(180deg, #fbdde4 0%, #fdecf0 45%, #f5f6f9 100%);
+    background: linear-gradient(180deg, var(--ds-line-strong) 0%, var(--ds-surface-tab) 45%, var(--ds-surface) 100%);
   }
   .ecx-bento__shot {
     display: block;
     width: 100%;
-    border: 1px solid #dfe4ec;
+    border: 1px solid var(--ds-line-strong);
     border-radius: 14px;
-    background: #fff;
-    animation: ecxBentoShotBreathe 7s ease-in-out infinite;
-    will-change: transform;
-  }
-  .ecx-bento__row:nth-child(even) .ecx-bento__shot {
-    animation-delay: -3.5s;
-  }
-  .ecx-bento__visual:hover .ecx-bento__shot {
-    animation-play-state: paused;
-    transform: scale(1.018);
+    background: var(--ds-white);
   }
 
-  .ecx-bento__float {
-    position: absolute;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 11px 14px;
-    border: 1px solid rgba(206, 215, 232, 0.9);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.96);
-    color: #111827;
-    box-shadow: 0 14px 34px rgba(30, 45, 88, 0.2);
-    font-family: var(--font-body);
-    line-height: 1.15;
-    animation: ecxBentoFloat 4.8s ease-in-out infinite;
-    backdrop-filter: blur(10px);
-  }
-  .ecx-bento__float b {
-    font-size: 0.78rem;
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .ecx-bento__float small {
-    display: block;
-    color: #7b8497;
-    font-size: 0.65rem;
-    white-space: nowrap;
-  }
-  .ecx-bento__float i {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #19b874;
-    box-shadow: 0 0 0 5px rgba(25, 184, 116, 0.13);
-  }
-  .ecx-bento__float--top {
-    top: 12px;
-    right: 3px;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .ecx-bento__float--bottom {
-    bottom: 12px;
-    left: 3px;
-    animation-delay: -2.4s;
-  }
-  .ecx-bento__row:nth-child(even) .ecx-bento__float--top {
-    animation-delay: -1.2s;
-  }
 
   .ecx-bento__cross {
     position: absolute;
@@ -393,7 +308,7 @@ const rows: Row[] = [
   .ecx-bento__eyebrow {
     display: block;
     margin-bottom: 1rem;
-    color: #5b21b6;
+    color: var(--ds-cat-violet);
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -406,35 +321,16 @@ const rows: Row[] = [
     font-weight: 500;
     line-height: 1.02;
     letter-spacing: -0.02em;
-    color: #111827;
+    color: var(--ds-night-2);
   }
   .ecx-bento__content p {
     margin-bottom: 1rem;
     font-size: 1.125rem;
     line-height: 1.45;
-    color: #4b5563;
+    color: var(--ds-sub);
   }
   .ecx-bento__content p:last-child {
     margin-bottom: 0;
-  }
-
-  @keyframes ecxBentoShotBreathe {
-    0%,
-    100% {
-      transform: translateY(3px) scale(0.985);
-    }
-    50% {
-      transform: translateY(-3px) scale(1);
-    }
-  }
-  @keyframes ecxBentoFloat {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0);
-    }
-    50% {
-      transform: translate3d(0, -9px, 0);
-    }
   }
 
   @media (max-width: 900px) {
@@ -450,7 +346,7 @@ const rows: Row[] = [
     }
     .ecx-bento__content {
       order: 1;
-      border-bottom: 1px solid #e5e7eb;
+      border-bottom: 1px solid var(--ds-line-strong);
     }
     .ecx-bento__visual {
       order: 2;
@@ -477,25 +373,18 @@ const rows: Row[] = [
       padding: 20px 12px;
       border-radius: 18px;
     }
-    .ecx-bento__float {
-      padding: 8px 10px;
-    }
-    .ecx-bento__float b {
-      font-size: 0.7rem;
-    }
-    .ecx-bento__float small {
-      font-size: 0.6rem;
-    }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .ecx-bento__shot,
-    .ecx-bento__float {
-      animation: none;
-      will-change: auto;
-    }
-    .ecx-bento__visual:hover .ecx-bento__shot {
-      transform: none;
-    }
-  }
+  /* ===== EventHex design system v5 overrides (tokens only) ===== */
+  .ecx-bento { background: var(--ds-white); }
+  .ecx-bento__header h2 { color: var(--ds-ink); letter-spacing: -0.035em; font-size: clamp(30px, 3.4vw, 48px); line-height: 1.1; }
+  .ecx-bento__gradient { background: var(--ds-g1-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .ecx-bento__lead { color: var(--ds-body); }
+  .ecx-bento__grid { border-color: var(--ds-line); border-radius: var(--ds-r-xl); box-shadow: var(--ds-shadow-shot); }
+  .ecx-bento__row { border-bottom-color: var(--ds-line); }
+  .ecx-bento__notch, .ecx-bento__cross { display: none; }
+  .ecx-bento__eyebrow { color: var(--ds-blue); font-weight: 500; letter-spacing: 0.01em; text-transform: none; font-size: 14px; }
+  .ecx-bento__content h3 { font-weight: 500; letter-spacing: -0.025em; color: var(--ds-ink); line-height: 1.15; }
+  .ecx-bento__content p { color: var(--ds-body); }
+  .ecx-bento__shot { border-color: var(--ds-line-strong); box-shadow: var(--ds-shadow-shot); }
 </style>

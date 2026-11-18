@@ -1,7 +1,7 @@
 ---
 // Split product hero, borrowed from the Event Registration / Speaker Management
 // hero pattern and adapted to the check-in page content.
-import LottiePlayer from "../LottiePlayer.astro";
+import StoreLinks from "./StoreLinks.astro";
 
 const points = [
   "iOS and Android Scanner",
@@ -17,7 +17,7 @@ const points = [
         Event check-in app
       </span>
       <h1 class="ecx-hero__title animate-on-scroll" data-animation="fadeInUp">
-        Event check-in software that keeps arrivals moving.
+        Event check-in software that <span class="ds-hl">keeps arrivals moving.</span>
       </h1>
       <p class="ecx-hero__desc animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 800ms">
         Give event-day teams the EventHex Scanner app on iOS or Android, validate
@@ -28,27 +28,33 @@ const points = [
         {points.map((point) => <span>{point}</span>)}
       </div>
       <div class="ecx-hero__cta-row animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1100ms">
-        <a href="/book-a-demo/" class="ecx-hero__btn">
+        <a href="/book-a-demo/" class="ds-btn">
           Book a Demo
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
         </a>
-        <a href="#checkin-rail" class="ecx-hero__btn ecx-hero__btn--outline">
+        <a href="#checkin-rail" class="ds-btn--ghost">
           See the check-in workflow
         </a>
+      </div>
+      <div class="animate-on-scroll" data-animation="fadeInUp" style="--anim-duration: 1200ms">
+        <StoreLinks />
       </div>
     </div>
 
     <div class="ecx-hero__visual animate-on-scroll" data-animation="fadeInRight">
-      <div class="ecx-hero__visual-card">
-        <div class="ecx-hero__visual-inner">
-          <LottiePlayer
-            src="/animations/event-check-in-hero.json"
-            class="ecx-hero__lottie"
-            eager
-          />
+      <div class="ds-browser ecx-browser">
+        <div class="ds-browser__bar" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span>ascend-impact-summit.eventhex.ai/event-day-portal</span>
         </div>
+        <video class="ecx-loop" autoplay muted loop playsinline preload="metadata" width="1280" height="488"
+          poster="/feature-images/event-check-in/v5/ci-checkin-poster.webp"
+          aria-label="At the Ascend Impact Summit desk the team searches Priya, taps Check in on the Delegate record and the card changes to Checked in">
+          <source src="/feature-images/event-check-in/v5/ci-checkin.webm" type="video/webm" />
+          <source src="/feature-images/event-check-in/v5/ci-checkin.mp4" type="video/mp4" />
+        </video>
       </div>
     </div>
   </div>
@@ -63,9 +69,9 @@ const points = [
     margin-top: -90px;
     padding: 140px 24px 72px;
     background:
-      radial-gradient(ellipse 700px 500px at -5% -10%, #375dfb24, #375dfb0f 40%, #375dfb00 75%),
-      radial-gradient(ellipse 800px 600px at 100% 105%, #74b0ff3d, #74b0ff1a 45%, #74b0ff00 78%),
-      #fff;
+      radial-gradient(ellipse 700px 500px at -5% -10%, color-mix(in srgb, var(--ds-blue) 14%, transparent), transparent 75%),
+      radial-gradient(ellipse 800px 600px at 100% 105%, color-mix(in srgb, var(--ds-violet-soft) 24%, transparent), transparent 78%),
+      var(--ds-white);
   }
 
   .ecx-hero::after {
@@ -75,7 +81,7 @@ const points = [
     z-index: 2;
     width: 220px;
     max-width: 30vw;
-    background: linear-gradient(to right, #fff0, #ffffff73 70%, #ffffffbf);
+    background: linear-gradient(to right, transparent, color-mix(in srgb, var(--ds-white) 75%, transparent));
     pointer-events: none;
   }
 
@@ -112,7 +118,7 @@ const points = [
     line-height: 1.1;
     letter-spacing: -2.1px;
     color: transparent;
-    background: linear-gradient(98deg, var(--heading-dark) 43.06%, #8f8f8f 91.81%);
+    background: linear-gradient(90deg, var(--ds-ink), var(--ds-ink));
     background-clip: text;
     -webkit-background-clip: text;
   }
@@ -134,7 +140,7 @@ const points = [
   .ecx-hero__points span {
     position: relative;
     padding-left: 16px;
-    color: #475467;
+    color: var(--ds-sub);
     font: 500 14px/20px var(--font-body);
   }
 
@@ -146,7 +152,7 @@ const points = [
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #10b981;
+    background: var(--ds-success);
   }
 
   .ecx-hero__cta-row {
@@ -165,7 +171,7 @@ const points = [
     border: 1px solid transparent;
     border-radius: 12px;
     background: var(--heading-dark);
-    color: #fff;
+    color: var(--ds-white);
     font: 650 15px/22px var(--font-body);
     letter-spacing: -0.3px;
     text-decoration: none;
@@ -174,7 +180,7 @@ const points = [
 
   .ecx-hero__btn:hover {
     transform: translateY(-2px);
-    background: #000;
+    background: var(--ds-blue-hover);
   }
 
   .ecx-hero__btn--outline {
@@ -199,7 +205,7 @@ const points = [
     border: 1px solid rgba(255, 255, 255, 0.62);
     border-right: 0;
     border-radius: 22px 0 0 22px;
-    background: linear-gradient(180deg, #ffffff9e, #ffffff47), #ffffff57;
+    background: var(--ds-glass-fill);
     backdrop-filter: blur(16px);
   }
 
@@ -211,7 +217,7 @@ const points = [
     justify-content: center;
     padding: 22px;
     border-radius: 16px 0 0 16px;
-    background: linear-gradient(135deg, #e6efff, #f2f7ff 45%, #fff);
+    background: linear-gradient(135deg, var(--ds-line), var(--ds-surface) 45%, var(--ds-white));
   }
 
   .ecx-hero__lottie {
@@ -243,4 +249,34 @@ const points = [
     .ecx-hero__visual-inner { padding: 14px; }
     .ecx-hero__lottie { max-width: 100%; }
   }
+
+  /* ===== EventHex design system v5 overrides (tokens only) ===== */
+  .ecx-hero { background: var(--ds-g4-stage); }
+  .ecx-hero::after { display: none; }
+  .ecx-hero__title { color: var(--ds-ink); background: none; -webkit-background-clip: border-box; background-clip: border-box; letter-spacing: -0.035em; line-height: 1.08; }
+  .ecx-hero__badge { color: var(--ds-blue); text-transform: none; font-size: 14px; }
+  .ecx-hero__desc { color: var(--ds-body); letter-spacing: 0; }
+  .ecx-hero__visual-card { border-color: var(--ds-glass-edge); background: var(--ds-glass-fill); box-shadow: var(--ds-glass-shadow); -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur); }
+  .ecx-hero__visual-inner { background: var(--ds-white); }
+  .ecx-hero__visual { margin-right: 0; }
+  .ecx-browser { width: 100%; }
+  .ecx-loop { display: block; width: 100%; height: auto; background: var(--ds-white); }
 </style>
+
+<script>
+  // Play the demo loop only while it is on screen; keep it paused for reduced motion.
+  const ecxLoops = Array.from(document.querySelectorAll<HTMLVideoElement>('.ecx-loop'));
+  const ecxReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (ecxReduced) {
+    ecxLoops.forEach((video) => { video.removeAttribute('autoplay'); video.pause(); video.controls = true; });
+  } else if ('IntersectionObserver' in window) {
+    const ecxObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const video = entry.target as HTMLVideoElement;
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: 0.25 });
+    ecxLoops.forEach((video) => ecxObserver.observe(video));
+  }
+</script>

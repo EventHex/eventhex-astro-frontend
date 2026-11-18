@@ -5,10 +5,8 @@
 // a centred gradient headline over an ordered list of numbered rows that expand
 // into a plain-language point list beside a product view.
 //
-// All copy comes from the supplied content deck. The source rows carry real
-// organizer screenshots; the attendance-state screens already used further up
-// this page are not repeated here, so each product view holds a restrained coded
-// panel with the same visual language as the other mock panels on this page.
+// All copy comes from the supplied content deck; each row pairs with a real
+// organizer screenshot.
 interface Point {
   title: string;
   desc: string;
@@ -18,13 +16,8 @@ interface AttendanceStep {
   title: string;
   desc: string;
   points: Point[];
-  panel: {
-    label: string;
-    state: string;
-    stateTone: "ok" | "info" | "warn";
-    rows: { label: string; meta: string; tag: string; tone: "ok" | "info" | "warn" | "muted" }[];
-    note: string;
-  };
+  shot: { src: string; width: number; height: number; alt: string };
+  note: string;
 }
 
 const steps: AttendanceStep[] = [
@@ -45,17 +38,8 @@ const steps: AttendanceStep[] = [
         desc: "Understand who has not yet checked in.",
       },
     ],
-    panel: {
-      label: "Attendance summary",
-      state: "Live",
-      stateTone: "info",
-      rows: [
-        { label: "Checked in", meta: "Accepted attendance", tag: "Accepted", tone: "ok" },
-        { label: "Registered", meta: "Full eligible population", tag: "Eligible", tone: "info" },
-        { label: "Pending", meta: "Not yet checked in", tag: "Pending", tone: "warn" },
-      ],
-      note: "Kept for the selected event or scan point",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/cms-attendance.webp", width: 2880, height: 1500, alt: "CMS Attendance: No of check-in 9 / 20, Pending 11, Check-in rate 45%, No-show rate 55%, with a checked-in list showing check-in times" },
+    note: "Kept for the selected event or scan point",
   },
   {
     title: "Filter the count the question asks for",
@@ -70,16 +54,8 @@ const steps: AttendanceStep[] = [
         desc: "Separate entrance attendance from a meal, session, or other scanning point.",
       },
     ],
-    panel: {
-      label: "Count filters",
-      state: "2 applied",
-      stateTone: "info",
-      rows: [
-        { label: "Ticket filter", meta: "Participant group", tag: "Delegate Pass", tone: "info" },
-        { label: "Instance filter", meta: "Scanning point", tag: "Instance Check-In", tone: "info" },
-      ],
-      note: "Arrival by ticket or by scanning point",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/portal-home.webp", width: 2220, height: 1160, alt: "Event Day Portal home with 26 total users, 8 checked in and 18 remaining, Scan Badge and Search Attendees" },
+    note: "Arrival by ticket or by scanning point",
   },
   {
     title: "Open the record behind the number",
@@ -90,17 +66,8 @@ const steps: AttendanceStep[] = [
         desc: "Review the attendee, scan type, time, and related event context available to operations.",
       },
     ],
-    panel: {
-      label: "Attendance record",
-      state: "Reviewed",
-      stateTone: "ok",
-      rows: [
-        { label: "Attendee", meta: "Matched at scan", tag: "Record", tone: "ok" },
-        { label: "Scan type", meta: "Entrance or instance", tag: "Recorded", tone: "ok" },
-        { label: "Event context", meta: "Time and registration", tag: "Available", tone: "info" },
-      ],
-      note: "The detail behind each attendance entry",
-    },
+    shot: { src: "/feature-images/event-check-in/v5/portal-attendance.webp", width: 2880, height: 1500, alt: "Event Day Portal attendance list: Checked in and Check in states per attendee with Pending 18 and Checked-In 8 filters" },
+    note: "The detail behind each attendance entry",
   },
 ];
 ---
@@ -110,7 +77,7 @@ const steps: AttendanceStep[] = [
     <header class="ecx-att__header">
       <span class="ecx-att__eyebrow">Live attendance visibility</span>
       <div class="ecx-att__heading">
-        <h2 id="attendance-heading">See who has arrived&#8212;and who is still expected</h2>
+        <h2 id="attendance-heading">See who has arrived&#8212;<span class="ecx-att__hl">and who is still expected</span></h2>
       </div>
       <p class="ecx-att__lead">
         Keep arrival state connected to the same registration and ticket records used
@@ -153,26 +120,10 @@ const steps: AttendanceStep[] = [
               </summary>
 
               <div class="ecx-att__visual">
-                <div class="ecx-att__panel" aria-hidden="true">
-                  <div class="ecx-att__panel-head">
-                    <span class="ecx-att__panel-label">{step.panel.label}</span>
-                    <span class={`ecx-att__state ecx-att__state--${step.panel.stateTone}`}>
-                      {step.panel.state}
-                    </span>
-                  </div>
-                  <div class="ecx-att__rows">
-                    {step.panel.rows.map((row) => (
-                      <div class="ecx-att__row">
-                        <span class="ecx-att__cell">
-                          <span class="ecx-att__key">{row.label}</span>
-                          <span class="ecx-att__meta">{row.meta}</span>
-                        </span>
-                        <span class={`ecx-att__tag ecx-att__tag--${row.tone}`}>{row.tag}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p class="ecx-att__note">{step.panel.note}</p>
+                <div class="ds-shot ecx-att__shot">
+                  <img src={step.shot.src} alt={step.shot.alt} width={step.shot.width} height={step.shot.height} loading="lazy" decoding="async" />
                 </div>
+                <p class="ecx-att__note">{step.note}</p>
               </div>
             </details>
           </li>
@@ -226,7 +177,7 @@ const steps: AttendanceStep[] = [
 
   .ecx-att__eyebrow {
     display: block;
-    color: #7b68ee;
+    color: var(--ds-cat-indigo);
     font: 700 13px/1.3 var(--font-body);
     letter-spacing: 0.08em;
   }
@@ -244,7 +195,7 @@ const steps: AttendanceStep[] = [
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.045em;
-    background: linear-gradient(to right, #111827 0%, #111827 60%, #9ca3af 100%);
+    background: linear-gradient(90deg, var(--ds-ink), var(--ds-ink));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -281,7 +232,7 @@ const steps: AttendanceStep[] = [
     overflow: hidden;
     border: 1px solid var(--ecx-att-border);
     border-radius: 18px;
-    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, #fff 82%);
+    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, var(--ds-white) 82%);
     box-shadow: 0 8px 24px rgba(31, 41, 55, 0.04);
     transition:
       border-radius 0.35s ease,
@@ -317,7 +268,7 @@ const steps: AttendanceStep[] = [
 
   .ecx-att__num {
     display: block;
-    color: #111;
+    color: var(--ds-night-2);
     font: 500 15px/1.1 var(--font-heading);
     letter-spacing: -0.05em;
   }
@@ -329,7 +280,7 @@ const steps: AttendanceStep[] = [
 
   .ecx-att__step-title {
     margin: 0;
-    color: #111;
+    color: var(--ds-night-2);
     font: 500 22px/1.2 var(--font-body);
     letter-spacing: -0.02em;
   }
@@ -352,7 +303,7 @@ const steps: AttendanceStep[] = [
     overflow: hidden;
     max-width: 460px;
     margin: 0;
-    color: #5f6673;
+    color: var(--ds-muted);
     font: 400 14.5px/1.5 var(--font-body);
   }
 
@@ -372,7 +323,7 @@ const steps: AttendanceStep[] = [
     border: 1px solid rgba(17, 24, 39, 0.2);
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.78);
-    color: #111827;
+    color: var(--ds-night-2);
     cursor: pointer;
     transition:
       transform 0.25s ease,
@@ -382,7 +333,7 @@ const steps: AttendanceStep[] = [
 
   .ecx-att__arrow:hover {
     border-color: rgba(17, 24, 39, 0.42);
-    background: #fff;
+    background: var(--ds-white);
   }
 
   .ecx-att__arrow:focus-visible {
@@ -405,7 +356,7 @@ const steps: AttendanceStep[] = [
     display: flex;
     align-items: stretch;
     border-radius: 28px;
-    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, #fff 72%);
+    background: linear-gradient(135deg, var(--ecx-att-tint) 0%, var(--ds-white) 72%);
     margin: 0;
   }
 
@@ -428,7 +379,7 @@ const steps: AttendanceStep[] = [
   .ecx-att__steps details[open] .ecx-att__num {
     font-size: 26px;
     line-height: 1;
-    color: #050505;
+    color: var(--ds-black);
   }
 
   .ecx-att__steps details[open] .ecx-att__step-title {
@@ -437,14 +388,14 @@ const steps: AttendanceStep[] = [
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: 16px;
-    color: #050505;
+    color: var(--ds-black);
   }
 
   .ecx-att__steps details[open] .ecx-att__step-desc {
     display: block;
     max-width: 90%;
     margin: 0 0 32px;
-    color: #333;
+    color: var(--ds-ink-2);
     font-size: 17px;
     line-height: 1.6;
   }
@@ -465,7 +416,7 @@ const steps: AttendanceStep[] = [
     border: none;
     padding: 0;
     background: transparent;
-    color: #111;
+    color: var(--ds-night-2);
     font-size: 16px;
     font-weight: 500;
   }
@@ -487,22 +438,22 @@ const steps: AttendanceStep[] = [
   }
 
   .ecx-att__point span {
-    color: #5f6673;
+    color: var(--ds-muted);
     font-weight: 400;
   }
 
   /* Per-row tints, first three from the source sequence */
   .ecx-att__steps > li:nth-child(1) {
-    --ecx-att-tint: #fff8dc;
-    --ecx-att-border: #f0dfa6;
+    --ecx-att-tint: var(--ds-warning-soft);
+    --ecx-att-border: var(--ds-line-strong);
   }
   .ecx-att__steps > li:nth-child(2) {
-    --ecx-att-tint: #edf7ff;
-    --ecx-att-border: #d4e7f7;
+    --ecx-att-tint: var(--ds-surface);
+    --ecx-att-border: var(--ds-cat-sky-bg);
   }
   .ecx-att__steps > li:nth-child(3) {
-    --ecx-att-tint: #f3efff;
-    --ecx-att-border: #e2d8fa;
+    --ecx-att-tint: var(--ds-surface-tab);
+    --ecx-att-border: var(--ds-surface-tint);
   }
 
   /* Product view beside the open row */
@@ -517,120 +468,32 @@ const steps: AttendanceStep[] = [
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     padding: 40px 88px 40px 0;
     opacity: 1;
   }
 
-  .ecx-att__panel {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 400px;
-    padding: 18px;
-    border-radius: 12px;
-    background: #fff;
-    border: 1px solid #ececf2;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
-    font-family: var(--font-body);
-    color: #111;
-  }
 
-  .ecx-att__panel-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-bottom: 12px;
-  }
 
-  .ecx-att__panel-label {
-    font-size: 13px;
-    font-weight: 600;
-  }
 
-  .ecx-att__state {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
 
-  .ecx-att__rows {
-    display: flex;
-    flex-direction: column;
-  }
 
-  .ecx-att__row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 10px 0;
-    border-top: 1px dashed #e6e8ee;
-  }
 
-  .ecx-att__cell {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
 
-  .ecx-att__key {
-    font-size: 13px;
-    font-weight: 600;
-  }
 
-  .ecx-att__meta {
-    font-size: 12px;
-    color: #6b7280;
-  }
 
-  .ecx-att__tag {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-    padding: 4px 9px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
-  }
 
-  .ecx-att__state--ok,
-  .ecx-att__tag--ok {
-    background: #edfbf3;
-    color: #18864b;
-  }
 
-  .ecx-att__state--warn,
-  .ecx-att__tag--warn {
-    background: rgba(245, 185, 66, 0.18);
-    color: #a2680b;
-  }
 
-  .ecx-att__state--info,
-  .ecx-att__tag--info {
-    background: #f1f3ff;
-    color: #4b65f6;
-  }
 
-  .ecx-att__tag--muted {
-    background: #f2f3f6;
-    color: #6b7280;
-  }
 
   .ecx-att__note {
     margin: 0;
-    padding-top: 12px;
-    border-top: 1px dashed #e6e8ee;
     font-size: 12px;
     line-height: 1.5;
-    color: #6b7280;
+    color: var(--ds-muted);
   }
 
   @media (max-width: 960px) {
@@ -711,9 +574,6 @@ const steps: AttendanceStep[] = [
       padding: 0 24px 28px;
       margin: 0;
     }
-    .ecx-att__panel {
-      max-width: none;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -722,4 +582,18 @@ const steps: AttendanceStep[] = [
       transition: none;
     }
   }
+
+  /* ===== EventHex design system v5 overrides (tokens only) ===== */
+  .ecx-att { background: var(--ds-g4-stage); }
+  .ecx-att__eyebrow { color: var(--ds-blue); font-weight: 500; letter-spacing: 0.01em; font-size: 14px; }
+  .ecx-att__heading h2 { background: none; -webkit-text-fill-color: currentColor; color: var(--ds-ink); letter-spacing: -0.035em; line-height: 1.1; font-size: clamp(34px, 4vw, 48px); }
+  .ecx-att__hl { background-image: var(--ds-g1-text); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .ecx-att__lead { color: var(--ds-body); }
+  .ecx-att__steps details, .ecx-att__steps details[open] {
+    background: var(--ds-glass-fill); border-color: var(--ds-glass-edge); box-shadow: var(--ds-glass-shadow);
+    -webkit-backdrop-filter: var(--ds-glass-blur); backdrop-filter: var(--ds-glass-blur);
+  }
+  .ecx-att__steps details[open] .ecx-att__step-title { font-weight: 500; color: var(--ds-ink); }
+  .ecx-att__steps details[open] .ecx-att__num { color: var(--ds-blue); }
+  .ecx-att__shot { width: 100%; }
 </style>
