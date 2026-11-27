@@ -429,11 +429,16 @@ function safeStorage(kind: "localStorage" | "sessionStorage"): Storage | undefin
   }
 }
 
+/** True when we must not persist across sessions: an explicit opt-out, or no choice yet from a
+ *  visitor whose timezone is in Europe (EEA/UK/CH need opt-in before non-essential storage). */
 function consentDenied(): boolean {
   try {
-    return analyticsExplicitlyDenied(safeStorage("localStorage")?.getItem(CONSENT_KEY) ?? null);
+    const saved = safeStorage("localStorage")?.getItem(CONSENT_KEY) ?? null;
+    if (analyticsExplicitlyDenied(saved)) return true;
+    if (saved) return false;
+    return /^Europe\//.test(Intl.DateTimeFormat().resolvedOptions().timeZone || "");
   } catch {
-    return false;
+    return true;
   }
 }
 
