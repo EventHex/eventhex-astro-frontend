@@ -159,6 +159,8 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
 
     <!-- Google Consent Mode v2 (region-based) + GTM loader + event helper. -->
     <script>
+      import { getAttributionParams, initAttribution } from '../lib/attribution';
+
       type TrackParams = Record<string, unknown>;
       const eventHexWindow = window as typeof window & {
         dataLayer?: unknown[];
@@ -245,8 +247,13 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
           eventHexWindow.gtag?.('event', name, { ...params, send_to: GA4_ID }),
         );
       };
-      eventHexWindow.ehTrack = (event, params = {}) => {
+      // Classify this visit (channel, first/last touch) before any event fires.
+      try { initAttribution(); } catch { /* attribution must never break the page */ }
+
+      eventHexWindow.ehTrack = (event, eventParams = {}) => {
         if (!isProductionHost) return;
+        // Every event carries the visit's attribution; explicit params win.
+        const params = { ...getAttributionParams(), ...eventParams };
         eventHexWindow.dataLayer?.push({ event, ...params });
         eventHexWindow.clarity?.('event', event);
         pendingEvents.push([event, params]);
@@ -265,9 +272,14 @@ const breadcrumbSchema = buildBreadcrumbs(Astro.url.pathname, siteOrigin);
         const section = link.closest('header') ? 'header'
           : link.closest('footer') ? 'footer'
           : link.closest('[id]')?.id || '';
+        // cta_location: explicit data-cta-location, else the section id, else the nearest section heading.
+        const tagged = (link.closest('[data-cta-location]') as HTMLElement | null)?.dataset.ctaLocation;
+        const heading = link.closest('section, article, aside')?.querySelector('h1, h2, h3')?.textContent;
+        const ctaLocation = (tagged || section || heading || '').replace(/\s+/g, ' ').trim().slice(0, 80);
         eventHexWindow.ehTrack?.('demo_cta_click', {
           cta_text: (link.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 80),
           cta_section: section,
+          cta_location: ctaLocation,
           page_path: location.pathname,
         });
       }, { capture: true });

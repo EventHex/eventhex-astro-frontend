@@ -42,6 +42,23 @@ export function requestMaskedIp(request: Request): string {
   return maskIp(request.headers.get("cf-connecting-ip") || "");
 }
 
+type TouchPrefix = "firstTouch" | "lastTouch";
+
+// "ai_assistant · chatgpt / referral / 2026-11-launch · AI: chatgpt · Landing: /blog/x · 2026-11-20"
+function formatTouch(meta: Partial<SubmissionMetadata>, prefix: TouchPrefix): string {
+  const field = (name: string, max = 100) => clean((meta as Record<string, unknown>)[`${prefix}${name}`], max);
+  const channel = field("Channel", 30);
+  if (!channel) return "Unavailable";
+  const sourceMediumCampaign = [field("Source"), field("Medium"), field("Campaign")].filter(Boolean).join(" / ");
+  return [
+    channel,
+    sourceMediumCampaign,
+    field("AiSource", 30) && `AI: ${field("AiSource", 30)}`,
+    field("Landing", 150) && `Landing: ${field("Landing", 150)}`,
+    field("Date", 10),
+  ].filter(Boolean).join(" · ");
+}
+
 export function formatSubmissionContext(
   metadata: Partial<SubmissionMetadata> | null | undefined,
   request: Request,
@@ -68,6 +85,8 @@ export function formatSubmissionContext(
     `UTM: ${campaign || "Unavailable"}`,
     `UTM Content: ${clean(meta.utmContent, 150) || "Unavailable"}`,
     `UTM Term: ${clean(meta.utmTerm, 150) || "Unavailable"}`,
+    `First Touch: ${formatTouch(meta, "firstTouch")}`,
+    `Last Touch: ${formatTouch(meta, "lastTouch")}`,
     `IP: ${requestMaskedIp(request)}`,
   ];
 

@@ -51,3 +51,31 @@ test("formats a sanitized submission context with backend-owned IP and country",
   assert.match(context, /IP: 103\.\*\*\*\.\*\*\*\.42/);
   assert.doesNotMatch(context, /103\.21\.244\.42/);
 });
+
+test("includes first and last touch attribution in the submission context", () => {
+  const request = new Request("https://eventhex.ai/api/book-demo");
+  const context = formatSubmissionContext(
+    {
+      submissionId: "EH-test",
+      firstTouchChannel: "ai_assistant",
+      firstTouchSource: "chatgpt",
+      firstTouchMedium: "referral",
+      firstTouchAiSource: "chatgpt",
+      firstTouchLanding: "/blog/ai-check-in/",
+      firstTouchDate: "2026-11-20",
+      lastTouchChannel: "organic_social",
+      lastTouchSource: "linkedin",
+      lastTouchMedium: "social",
+      lastTouchCampaign: "2026-11-ai-checkin",
+      lastTouchLanding: "/\nInjected",
+    },
+    request,
+  );
+
+  assert.match(
+    context,
+    /First Touch: ai_assistant · chatgpt \/ referral · AI: chatgpt · Landing: \/blog\/ai-check-in\/ · 2026-11-20/,
+  );
+  assert.match(context, /Last Touch: organic_social · linkedin \/ social \/ 2026-11-ai-checkin · Landing: \/ Injected/);
+  assert.match(formatSubmissionContext({}, request), /First Touch: Unavailable\nLast Touch: Unavailable/);
+});

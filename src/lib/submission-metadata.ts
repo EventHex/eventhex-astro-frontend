@@ -1,4 +1,6 @@
-export type SubmissionMetadata = {
+import { getAttributionSummary, type AttributionSummary } from "./attribution";
+
+export type SubmissionMetadata = Partial<AttributionSummary> & {
   submissionId: string;
   claritySessionId: string;
   clarityStatus: "requested" | "consent-denied" | "unavailable" | "failed";
@@ -106,5 +108,7 @@ export async function collectSubmissionMetadata(): Promise<SubmissionMetadata> {
     utmCampaign: params.get("utm_campaign") || "",
     utmContent: params.get("utm_content") || "",
     utmTerm: params.get("utm_term") || "",
+    // First touch + last non-direct touch (channel, source, medium, campaign, AI source, landing page, date).
+    ...getAttributionSummary(),
   };
 }

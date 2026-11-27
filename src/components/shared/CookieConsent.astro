@@ -84,6 +84,8 @@ const { compact = false } = Astro.props;
     function saveAndHide(choice: { analytics: boolean; marketing: boolean }) {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify(choice)); } catch (e) {}
       updateConsent(choice.analytics, choice.marketing);
+      // Lets attribution move its storage to match the new choice.
+      window.dispatchEvent(new CustomEvent('eh:consent', { detail: choice }));
       if (banner) banner.style.display = 'none';
     }
 
